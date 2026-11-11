@@ -1328,7 +1328,7 @@ switch to hide one theme.
 
 There are two public weekly meetings on Zoom: AA Grapevine's **Weekly Open** (Wednesdays, English),
 read from its web page, and La Viña's **Reunión Abierta** (Thursdays, Spanish), written from your
-settings because it has no page of its own to read (La Viña's podcast page, www.aalavina.org/podcast, describes it).
+settings: its page, La Viña's podcast page www.aalavina.org/podcast, is linked from its card but not read.
 Both are recorded, and each meeting's recordings are a podcast on the site: the shows `wo` and `lvo` under
 `sources.podcasts` ([3.4](#34-podcasts)) — each card on `/meetings/#weekly-open` links its own
 (**Listen to past meetings**, `/listen/?show=wo#episodes` · `/listen/?show=lvo#episodes`).

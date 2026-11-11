@@ -193,9 +193,9 @@ calendar feeds write `STATUS:TENTATIVE` (every other event `STATUS:CONFIRMED`). 
 1. id `weekly_open` — the **Grapevine Weekly Open** (Wednesdays), read from aagrapevine.org/grapevine-weekly-open.
    Always the FIRST item of `data/site/weekly_open.json`: templates read `db.weekly_open.items[0]`.
 2. id `weekly_open_lv` — **La Viña's weekly open meeting** in Spanish (Thursdays, from Nov 5, 2026), written
-   from `config/site.yml` → `lavina_weekly_open` (an official La Viña flyer; there is no web page to read), on
-   every run — also when the Grapevine page cannot be read. `lang` "es", `source` "lavina", `url` "" until
-   La Viña publishes a page (config `url`). Same `extra` fields as the Grapevine item (no `player_url`,
+   from `config/site.yml` → `lavina_weekly_open` (an official La Viña flyer; its page is linked, never read), on
+   every run — also when the Grapevine page cannot be read. `lang` "es", `source` "lavina", `url` the config's
+   `url` ("https://www.aalavina.org/podcast"; "" when none). Same `extra` fields as the Grapevine item (no `player_url`,
    `sentence`) plus `starts` (first meeting, "2026-11-05") and `source_note`; `next_start` is never before
    `starts`. Title and summary are the config's own words in both languages (`extra.own_i18n` → `i18n.title`,
    `i18n.summary`, never machine-translated); `i18n.day/time/time_central/when/sentence` are written by rules as

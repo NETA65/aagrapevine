@@ -749,7 +749,7 @@ informational)" and the `/status/` box); it never opens the "stopped updating" i
 
 ### 3.7 `lavina_weekly_open:` — La Viña's weekly open meeting
 
-Written from La Viña's official flyer (there is no web page to read yet). It becomes the second weekly open
+Written from La Viña's official flyer (its page, www.aalavina.org/podcast, is linked, never read). It becomes the second weekly open
 meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
 
 | Key | Today | Accepted values |
@@ -762,7 +762,7 @@ meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
 | `starts` | `"2026-11-05"` | The first meeting. Until then `/meetings/` says "Starts Thursday, November 5, 2026" (`/es/meetings/`: "Comienza el jueves 5 de noviembre de 2026") and the toolkit "starting …". A date on another weekday is moved to the first real one. |
 | `zoom_id` / `passcode` | `"871 2036 8287"` / `"238047"` | 9–11 digits: the formatted ID and a Join link `https://zoom.us/j/<digits>`. Otherwise no Zoom ID (and a test fails). |
 | `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. |
-| `url` | `""` | La Viña's page for it, once there is one (the card's details link). |
+| `url` | `"https://www.aalavina.org/podcast"` | La Viña's page for it: the card's **Details on aalavina.org** (`""` for none). Written exactly so, with no `/` at the end. |
 | `source` | flyer note | Stored, **not shown** on any page. |
 | `flyer_match` | `"reuni[oó]n abierta de la vi[nñ]a\|la vi[nñ]a open meeting"` | The newest Drive file whose title or name matches → "View flyer" ("Ver volante") on the La Viña card. Matched by the page: capitals ignored, accents **not** folded (write `vi[nñ]a`). |
 
