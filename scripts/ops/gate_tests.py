@@ -85,6 +85,10 @@ CONTENT_TESTS: dict[str, str] = {
         "content/bulletin: its README and _example.md, the committee's template, as they are",
     "test_bulletin_publish.Header.test_the_template_parses":
         "content/bulletin/_example.md, the committee's template: a valid post that shows publish:",
+    "test_r24_retired_room.TheRetiredRoom.":
+        "content/, config/ (and the code): the committee's retired Zoom room (its meeting ID and passcode before Google "
+        "Meet) written nowhere — the October 3, 2026 workshop's file names only its place; nor in a build of the event "
+        "pages",
     # ---- config/
     "test_settings_used.SettingsAreRead.test_every_setting_in_site_yml_is_read":
         "config/site.yml: a setting the committee added that no code reads yet",

@@ -381,7 +381,7 @@ export function meetingTitle(site, lang = "en") {
 const oneLine = (v) => (v === null || v === undefined || typeof v === "object" || typeof v === "boolean" ? "" : String(v).replace(/\s+/g, " ").trim());
 
 // The label of what people type into the meeting app: "Meeting code" for one with letters (a Google Meet code,
-// "rva-tmst-vdb"), else "Meeting ID" (a Zoom ID, "949 476 7497") — its i18n key.
+// "rva-tmst-vdb"), else "Meeting ID" (a Zoom ID, "815 9593 1777") — its i18n key.
 export function meetingIdKey(id) {
   return /[a-z]/i.test(String(id ?? "")) ? "committee.meeting.code" : "committee.meeting.id";
 }
@@ -390,7 +390,7 @@ export function meetingIdKey(id) {
  * How to join one of our meetings (config/site.yml `meeting:`): THE reading every page, calendar and deck uses —
  *   platform  where it is held, in the pages' words ("Google Meet"; "Zoom" when left out, as site.js gives it)
  *   url       the link (`online_url`; an older `zoom_url` still counts)
- *   id        what people type into the app: a Google Meet code ("rva-tmst-vdb") or a Zoom ID ("949 476 7497")
+ *   id        what people type into the app: a Google Meet code ("rva-tmst-vdb") or a Zoom ID ("815 9593 1777")
  *   idKey, idLabel  its label's i18n key and words: "Meeting code" for a code with letters, "Meeting ID" for digits
  *   copyId    what a Copy button copies: a code as it is written, a Zoom ID's digits
  *   passcode  "" without one (Google Meet has none)
@@ -881,16 +881,24 @@ function shapeEvent(it, site, lang, now, descOverride) {
     ? (link.startsWith("/") ? siteAbs(site, link) : link)
     : siteAbs(site, localPath("/events/", lang)) + (onEventsPage ? "#" + anchor : "");
   if (selfLink) link = "";
+  // An event that is over (the calendar files keep it 90 days, for their subscribers) still says where it was — its
+  // place, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of its summary's
+  // sentences that give one (withoutJoinDetails). A room is not kept once its event is over: the committee's old
+  // Zoom room, retired with the move to Google Meet, stayed in the files with the workshop of October 3, 2026 that
+  // had used it. (The committee meeting's own dates that are over come as "Online": normalizeEvents.)
+  const onlineLabel = platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang);
+  const joinLink = past ? "" : online || "";
   const descLines = [];
   if (descOverride) descLines.push(descOverride);
   else {
     // Google / Outlook links cannot say "tentative" — the first line of the description does.
     if (tentative) descLines.push(`${t("committee.events.tentative", lang)}. ${t("committee.events.tentative_help", lang)}`, "");
-    if (summary) descLines.push(summary);
+    const calSummary = past ? withoutJoinDetails(summary) : summary;
+    if (calSummary) descLines.push(calSummary);
     if (recurrence) descLines.push(recurrence);
     if (locationTba) descLines.push(location);
-    if (online) descLines.push("", `${platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang)}: ${online}`);
-    if (meetingId) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
+    if (online) descLines.push("", joinLink ? `${onlineLabel}: ${joinLink}` : onlineLabel);
+    if (meetingId && !past) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
     if (contact) descLines.push(`${t("committee.events.contact", lang)}: ${contact}`);
     if (flyerView) descLines.push(`${t("committee.events.flyer", lang)}: ${flyerView}`);
     // Date-only outside event: the calendar shows it as all-day, so the note says the time was not listed.
@@ -898,7 +906,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
   }
   const calDescription = descLines.join("\n").trim();
   const place = locationTba ? "" : location;
-  const calLocation = committee ? (online || location) : [place, !place && online ? online : ""].filter(Boolean).join("");
+  const calLocation = committee ? (joinLink || location) : [place, !place && online ? joinLink || onlineLabel : ""].filter(Boolean).join("");
 
   const ev = {
     id: it.id,
@@ -1164,11 +1172,20 @@ export function eventPlace(text, extra = {}) {
 
 // A summary as one plain line for search engines: no HTML (its few common entities read), single spaces, at most
 // `n` characters (cut at a word, "…" — as the share pages cut theirs) — and without its sentences that say how to
-// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 949 476
-// 7497, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
+// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 815 9593
+// 1777, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
 // them to people; a copy made for machines only helps those who look for meetings to disrupt.
 const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
-const JOIN_DETAILS = /meeting\s*id|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+const JOIN_DETAILS = /meeting\s*id|zoom\s*id\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+// A summary for the calendars of an event that is over (shapeEvent): its lines as written, without the sentences that
+// say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too many.
+function withoutJoinDetails(s) {
+  return String(s ?? "").split("\n").flatMap((line) => {
+    if (!line.trim()) return [""];
+    const kept = line.split(/(?<=[.!?])\s+/).filter((sentence) => !JOIN_DETAILS.test(sentence)).join(" ").trimEnd();
+    return kept.trim() ? [kept] : [];
+  }).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
 function plainLine(s, n = 300) {
   const t = String(s ?? "").replace(/<[^>]*>/g, " ").replace(/&(?:nbsp|quot|#39|apos|lt|gt|amp);/g, (e) => PLAIN_ENTITIES[e])
     .replace(/\s+/g, " ").trim()

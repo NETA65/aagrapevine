@@ -755,8 +755,10 @@ are as before.
 
 #### f) Hybrid (a place and Zoom)
 
-The real [`2026-10-03-gv-writing-workshop-arlington.md`](../content/events/2026-10-03-gv-writing-workshop-arlington.md)
-(the Zoom password token is shortened here):
+The Arlington workshop of October 3, 2026
+([`2026-10-03-gv-writing-workshop-arlington.md`](../content/events/2026-10-03-gv-writing-workshop-arlington.md))
+was one. Its file before the day, with an example Zoom room in place of the one it gave (the committee's Zoom room
+of then, retired with the move to Google Meet — now that the workshop is over, its file names only the place):
 
 ```markdown
 ---
@@ -767,21 +769,26 @@ end: 2026-10-03T17:00:00-05:00
 location: "Primary Purpose Group – Arlington, 1802 West Division Street, Arlington, TX 76012"
 url: "https://neta65.org/event/grapevine-writing-workshop-6/"
 flyer: "https://drive.google.com/file/d/1n8FzYA1h3DeamjI9Pp5mxCyrZFz0Oweu/view"
-online_url: "https://us02web.zoom.us/j/9494767497?pwd=…"
-meeting_id: "949 476 7497"
+online_url: "https://us02web.zoom.us/j/1234567890"
+meeting_id: "123 456 7890"
 confirmed: true
 lang: en
-summary_es: "Aprende a escribir tu historia para Grapevine y La Viña … Es un taller híbrido: ven en persona o conéctate por Zoom …"
+summary_es: "Aprende a escribir tu historia para Grapevine y La Viña … Es un taller híbrido: ven en persona o conéctate por Zoom."
 ---
-Learn how to write your story for Grapevine and La Viña … A hybrid workshop: come in person or join on Zoom …
+Learn how to write your story for Grapevine and La Viña … A hybrid workshop: come in person or join on Zoom.
 ```
 
 You get **both** lines on the card — the address (map pin) and "Online on Zoom" — plus **Join online**,
-"Meeting ID 949 476 7497", **View flyer** and the flyer picture. The calendar LOCATION is the address and the
+"Meeting ID 123 456 7890", **View flyer** and the flyer picture. The calendar LOCATION is the address and the
 description has "Online on Zoom: <link>". Search engines get its place, with the street, city, state and ZIP
 code read from `location:`, as a "mixed attendance" event; they get no online location (Google reads none, and
 the Zoom link, the meeting ID and any sentence with a passcode stay off the structured data). **The home page card
 shows only the address.**
+
+Once an event is over, the calendar files (which keep it 90 days for their subscribers) still say where it
+was — the address, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of
+the description's sentences that give one. A link, an ID or a passcode in a sentence of their own is what lets
+the calendars leave them out while the rest of the description stays.
 
 #### g) Other platforms
 

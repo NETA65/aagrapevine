@@ -40,7 +40,7 @@ The post's title is the biggest heading on the page, so these come out one size 
 1. A numbered list
 2. Second step
 
-**Bold**, *italic*, ~~crossed out~~, an emoji 🎉 and `code` like a Zoom ID: `949 476 7497`.
+**Bold**, *italic*, ~~crossed out~~, an emoji 🎉 and `code` like a meeting code: `rva-tmst-vdb`.
 
 Links: [a web page](https://www.aagrapevine.org), [one of our pages](/meetings/) (the Spanish page
 links to the Spanish version by itself) or a plain address: https://www.aalavina.org.

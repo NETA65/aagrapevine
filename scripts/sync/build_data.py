@@ -625,7 +625,7 @@ def _recurring_url(v: Any, site_path: bool = False) -> str | None:
     return s if re.match(r"(?i)^https?://[^\s/]+\.[^\s]+$", s) else None
 
 
-# `meeting_id:` — what people type into the Zoom app (or a phone): "815 9593 1777", "949-476-7497", a Google Meet
+# `meeting_id:` — what people type into the Zoom app (or a phone): "815 9593 1777", "815-9593-1777", a Google Meet
 # code "abc-defg-hij". Letters, digits, spaces, dots and dashes; anything else is left out (and noted).
 _MEETING_ID = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]")
 # `contact:` — a plain e-mail address ("lveditorial@aagrapevine.org"); the pages show it as a mailto: link, so

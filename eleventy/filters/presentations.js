@@ -1115,7 +1115,7 @@ const clean = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 const limitOf = (o, dflt) => (Number.isInteger(o && o.limit) && o.limit >= 1 && o.limit <= 24 ? o.limit : dflt);
 const eachOf = (o) => (Number.isInteger(o && o.limit_each) && o.limit_each >= 1 && o.limit_each <= 12 ? o.limit_each : null);
 const pubsOf = (o) => (o && (o.pub === "gv" || o.pub === "lv") ? [o.pub] : ["gv", "lv"]);
-// A Zoom meeting ID or passcode kept on one line wherever it is shown ("949 476 7497" never breaks after "949"),
+// A Zoom meeting ID or passcode kept on one line wherever it is shown ("815 9593 1777" never breaks after "815"),
 // and a time range too: "7:00 – 8:00 PM" with the clock's spaces made no-break (narrow) ones and a word joiner
 // (U+2060) after the dash — a line may still break after an en dash before a no-break space (UAX #14: the dash
 // "breaks after", LB12a), "7:00 –" / "8:00 PM" — and a time's AM / PM never on the next line ("3:00 PM Eastern").
