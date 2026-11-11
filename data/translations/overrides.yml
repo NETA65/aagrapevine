@@ -459,9 +459,9 @@
 "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom": { en: "La Viña Open Meeting - Every Thursday at 12 PM Eastern on Zoom" }
 # La Viña's open-meeting podcast (config sources.podcasts "lvo", from 2026-11-09) and its YouTube copies: the show's
 # name (its episodes' and videos' titles are that name and a " [Temporada 1, episodio 1]" tail — the machine wrote
-# "Weekly Open Meeting of Alcoholics Anonymous La Viña") and its description, which already carries its own English
+# "Weekly Open Meeting of Alcoholics Anonymous La Viña"). Its description needs no line here: it carries its own
+# English in parentheses, and each page shows its own half (scripts/sync/build_data.py given_translation).
 "Reunión abierta semanal de Alcohólicos Anónimos de La Viña": { en: "La Viña Weekly Open Meeting of Alcoholics Anonymous" }
-"Cada semana grabamos nuestra reunión abierta en línea y creamos este pódcast. (Each week we record our online open meeting and create this podcast.)": { en: "Each week we record our online open meeting and create this podcast." }
 # …La Viña's monthly workshop flyer (renamed 2026-10-01) and its holiday cards flyer ("tarjetas de ocasión" are
 # greeting cards, not "occasional cards"; Grapevine sells them as "Holiday Greeting Cards - 12 pack")
 "Taller Mensual y Virtual de La Viña - jueves, 3 p. m. (hora del Este), por Zoom": { en: "La Viña Monthly Virtual Workshop - Thursday, 3 PM Eastern, on Zoom" }

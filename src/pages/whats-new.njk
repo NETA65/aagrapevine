@@ -297,11 +297,14 @@ pageScripts: ["/assets/js/community.js"]
             {%- set href = (("/listen/?ep=" + it.id) | lurl(lang)) if isEp else (it | cmHref(lang)) -%}
             {%- set ext = it._ext and not isEp -%}
             {%- set ex = it.extra or {} -%}
+            {#- kindLang: the label's language where it can differ from the page's — a show's name is in the show's own
+                language (La Viña's on /en/), the Grapevine Weekly Open's label stays English on /es/ -#}
+            {%- set kindLang = "" -%}
             {%- if it._isGroup -%}{%- set kindLabel = "community.wn.photo_group" | t(lang) -%}
             {#- a flyer from the committee's Drive "flyers" folder is a flyer, not a photo (Portfolio keeps "Image": its file type) -#}
             {%- elif it.source == "drive" and it.category == "flyers" -%}{%- set kindLabel = "kind.flyer" | t(lang) -%}
-            {%- elif it.kind == "episode" and ex.show_name -%}{%- set kindLabel = ex.show_name -%}
-            {%- elif it.kind == "video" and (it | mediaVideoKind) == "weekly" -%}{%- set kindLabel = it | mediaMeetingLabel(lang) -%}
+            {%- elif it.kind == "episode" and ex.show_name -%}{%- set kindLabel = ex.show_name -%}{%- set kindLang = it.lang if (it.lang in ["en", "es"] and it.lang != lang) else "" -%}
+            {%- elif it.kind == "video" and (it | mediaVideoKind) == "weekly" -%}{%- set kindLabel = it | mediaMeetingLabel(lang) -%}{%- set kindLang = it | mediaMeetingLang(lang) -%}
             {%- elif it.kind == "post" and igProfiles[ex.account] -%}{%- set kindLabel = igProfiles[ex.account].name -%}
             {%- elif it.kind == "article" and ex.section -%}{%- set kindLabel = it | tx("section", lang) -%}
             {%- elif it.kind == "pdf" -%}{%- set kindLabel = ("library.cat." + ((it.tags or []) | first or it.category)) | cmTOr(lang, "kind.pdf" | t(lang)) -%}
@@ -321,7 +324,7 @@ pageScripts: ["/assets/js/community.js"]
                   {{ badge(it._twin, lang) }}{% endif %}
                   {% if se %}<span class="badge-gv">{{ se }}</span>{% endif %}
                   {#- kind · time: a meta-row (the "·" is drawn by CSS and never starts a line) -#}
-                  {% if kindLabel or it._hasTime %}<span class="meta-row min-w-0">{% if kindLabel %}<span class="min-w-0 whitespace-normal!">{{ kindLabel }}</span>{% endif %}{% if it._hasTime %}<time datetime="{{ it.date | isoDate }}">{{ it.date | fmtDate(lang, "time") }}</time>{% endif %}</span>{% endif %}
+                  {% if kindLabel or it._hasTime %}<span class="meta-row min-w-0">{% if kindLabel %}<span class="min-w-0 whitespace-normal!"{% if kindLang %} lang="{{ kindLang }}"{% endif %}>{{ kindLabel }}</span>{% endif %}{% if it._hasTime %}<time datetime="{{ it.date | isoDate }}">{{ it.date | fmtDate(lang, "time") }}</time>{% endif %}</span>{% endif %}
                   {{ langPill(it, lang) }}
                 </div>
                 <h3 class="mt-1 text-[0.98rem] font-semibold leading-snug text-ink">

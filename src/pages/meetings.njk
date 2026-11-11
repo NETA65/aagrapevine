@@ -250,8 +250,8 @@ pageScripts: ["/assets/js/committee.js"]
           </details>
           {% endif %}
           {#- Its recordings on /listen/: the show that records this meeting (config sources.podcasts[].weekly_open —
-              the Grapevine Weekly Open's "wo", La Viña's "lvo"), filtered to its episodes -#}
-          {%- set woShowKey = (site.sources.podcasts or []) | mediaMeetingShow("lavina" if w.isLv else "grapevine") %}
+              the Grapevine Weekly Open's "wo", La Viña's "lvo"), filtered to its episodes — once it has one there -#}
+          {%- set woShowKey = (site.sources.podcasts or []) | mediaMeetingShow("lavina" if w.isLv else "grapevine", db.episodes or {}) %}
           {% if woShowKey %}<a class="btn-secondary" href="{{ ('/listen/?show=' + woShowKey + '#episodes') | lurl(lang) }}" aria-label="{{ 'committee.weekly.listen_name' | t(lang, { name: w.title or ('committee.weekly.title' | t(lang)) }) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
           {% if w.detailsUrl %}<a class="btn-ghost" href="{{ w.detailsUrl }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span>{{ ("committee.weekly.details_" + key) | t(lang) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span></a>{% endif %}
         </div>

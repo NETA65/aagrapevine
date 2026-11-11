@@ -129,8 +129,8 @@
     "es": "Los episodios están grabados en inglés; los títulos y descripciones se traducen automáticamente."
   },
   "media.mixed_audio_note": {
-    "en": "Each show is in its own language (its card says which); descriptions in the other language are translated automatically.",
-    "es": "Cada programa está en su propio idioma (lo indica su tarjeta); las descripciones en el otro idioma se traducen automáticamente."
+    "en": "Each show is in its own language (its card says which); titles and descriptions in the other language are translated automatically.",
+    "es": "Cada programa está en su propio idioma (lo indica su tarjeta); los títulos y las descripciones en el otro idioma se traducen automáticamente."
   },
   "media.full_archive": { "en": "Full archive on the AA Grapevine website", "es": "Archivo completo en el sitio de AA Grapevine" },
 

@@ -14,9 +14,13 @@ updating when one feed fails:
   * MeetingDate  — meeting_date(): the title's own date wins (the Grapevine Weekly Open's — even when its description
                    names another day, as the real "May 6, 2026" episode does); else the description's date said to be
                    the meeting's ("del …", "held on …"), else the latest before publication; Spanish and English
-                   forms, abbreviations, "1.º" and "primero", a date without its year (the year that puts it just
-                   before publication); a date after publication (the next meeting), long before it (an
-                   anniversary) or impossible is never the meeting's.
+                   forms, abbreviations, "1.º", "1ro", "1er", "1ero" and "primero", a date without its year (the year
+                   that puts it just before publication); a date after publication (the next meeting), long before it
+                   (an anniversary), impossible or in figures only ("05/11/2026": either way round) is never the
+                   meeting's.
+  * BuildData    — build_data: episodes out at the same moment (AA Grapevine's Podcast and La Viña's meeting, Mondays
+                   00:15 Eastern) in config order, whatever their ids (sort_episodes); a show description that carries
+                   its own translation in parentheses is split into its two languages (given_translation).
   * GenericTitle — is_generic_title(): only the show's name (accents, case, the numbering tail aside) — never a title
                    with words of its own ("Introducing The Grapevine Open AA Meeting").
   * OneShowFails — main(): one show's feed failing keeps the source ok (its `updated` moves with the other shows'
@@ -26,17 +30,22 @@ updating when one feed fails:
                    ok again.
   * RunSummary   — .github/workflows/update.yml "Write run summary": a show failing names itself on the run page
                    (a warning) and, once it has failed for 7 days, is a source that stopped updating ("Podcasts —
-                   <show>"), never twice when the whole source failed; the report issue's advice for it.
+                   <show>") — also in a run where every show failed (the source's own last good read is recent), never
+                   twice when the whole source stopped; the report issue's advice for it.
   * Display      — eleventy/filters/media.js (Node.js): La Viña's episode is "Meeting of November 5, 2026" / "Reunión del
                    5 de noviembre de 2026" (and that is what its Share sends), "<title>, episode 2" without a date;
                    the Grapevine Weekly Open's titles as before; the shows: language (config first), meeting, label
                    ("Grapevine Weekly Open" / "La Viña Open Meeting"); each meeting's own day; a weekly video's badge
-                   by its meeting; the show that records a meeting (/meetings/' "Listen to past meetings"); the feed's
-                   and the search's title; a failing show on /status/ (community.js statusView partsDown).
+                   by its meeting, and its lang attribute; the show that records a meeting (/meetings/' "Listen to past
+                   meetings" — only once it has an episode); the feed's and the search's title; which titles name the
+                   meeting's date (mediaTitleDated); the episodes' order per page language (/episodes-index.json: one
+                   day's episodes in the page's language first); a failing show on /status/ (statusView partsDown).
   * Pages        — /listen/, /meetings/ and Home built by Eleventy with this file's episodes: three show cards (the
                    first across the row from 1024px, the two meetings side by side), each meeting's own day,
-                   language and "How to join" name, "1 episode", the language note; La Viña's card on /meetings/
-                   links its episodes; Home's row names La Viña's meeting.
+                   language and "How to join" name, "1 episode", the language note; the "Latest episode" on a Monday
+                   when two shows came out at once (AA Grapevine's on /listen/, La Viña's on /es/listen/); La Viña's
+                   card on /meetings/ links its episodes; Home's rows name La Viña's meeting and say an episode's
+                   language where it is not the page's; the e-mail's title of a dateless meeting episode.
 
     python -m unittest tests.test_r25_lavina_podcast -v        (or: python -m unittest discover -s tests)
 """
@@ -61,6 +70,8 @@ from test_sync_health import NOW, RunSummary, iso, src  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from scripts.notify import send_digest as D  # noqa: E402
+from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import common  # noqa: E402
 from scripts.sync import podcasts as P  # noqa: E402
 
@@ -183,6 +194,10 @@ class MeetingDate(unittest.TestCase):
             ("", "la reunión abierta del jueves 12 de noviembre de 2026", "2026-11-16T05:15:00Z", "2026-11-12"),
             ("", "Reunión celebrada el 1.º de diciembre del 2026.", "2026-12-07T05:15:00Z", "2026-12-01"),
             ("", "la reunión del primero de enero de 2027", "2027-01-04T05:15:00Z", "2027-01-01"),
+            ("", "la reunión del 1ro de enero de 2027", "2027-01-04T05:15:00Z", "2027-01-01"),
+            ("", "la reunión del 1er de enero de 2027", "2027-01-04T05:15:00Z", "2027-01-01"),
+            ("", "la reunión del 1ero de enero de 2027", "2027-01-04T05:15:00Z", "2027-01-01"),
+            ("", "la reunión del 05/11/2026", "2026-11-09T05:15:00Z", None),             # figures: never read
             ("", "la grabación del 5 de nov. de 2026", "2026-11-09T05:15:00Z", "2026-11-05"),
             ("", "the meeting on the 4th of November, 2026", "2026-11-06T05:15:00Z", "2026-11-04"),
             ("", "recorded on Nov. 4th 2026", "2026-11-06T05:15:00Z", "2026-11-04"),
@@ -220,6 +235,35 @@ class GenericTitle(unittest.TestCase):
         ]:
             with self.subTest(title=title):
                 self.assertIs(P.is_generic_title(title, *names), want)
+
+
+class BuildData(unittest.TestCase):
+    def test_episodes_out_at_the_same_moment_are_in_config_order(self):
+        cfg = {"sources": {"podcasts": CFG_SHOWS}}
+        at = "2026-11-09T05:15:00Z"                      # Monday 00:15 Eastern: both shows' episodes
+        items = [{"id": "pod:gv:aaaaaaaaaaaa", "category": "gv", "date": at},
+                 {"id": "pod:lvo:bbbbbbbbbbbb", "category": "lvo", "date": at},
+                 {"id": "pod:wo:cccccccccccc", "category": "wo", "date": "2026-11-06T05:15:00Z"},
+                 {"id": "pod:gv:dddddddddddd", "category": "gv", "date": "2026-11-02T06:15:00Z"},
+                 {"id": "pod:zz:eeeeeeeeeeee", "category": "zz", "date": at}]       # a show no longer in config: last
+        self.assertEqual([i["id"] for i in B.sort_newest(items)][:2], ["pod:zz:eeeeeeeeeeee", "pod:lvo:bbbbbbbbbbbb"],
+                         "(by id alone, La Viña's would come first every Monday)")
+        self.assertEqual([i["id"] for i in B.sort_episodes(items, cfg)],
+                         ["pod:gv:aaaaaaaaaaaa", "pod:lvo:bbbbbbbbbbbb", "pod:zz:eeeeeeeeeeee", "pod:wo:cccccccccccc",
+                          "pod:gv:dddddddddddd"])
+
+    def test_a_description_with_its_own_translation(self):
+        es = "Cada semana grabamos nuestra reunión abierta en línea y creamos este pódcast."
+        en = "Each week we record our online open meeting and create this podcast."
+        self.assertEqual(B.given_translation(f"{es} ({en})", "es"), (es, en), "La Viña's show")
+        self.assertEqual(B.given_translation(f"{en} ({es})", "en"), (en, es))
+        for text, src in ((f"{es} ({en})", "en"),                     # (the text is not in the show's language)
+                          ("Interviews with AA members from all over (en español)", "en"),
+                          ("AA members interview AA members about their sobriety (Season 2)", "en"),
+                          (f"{es} (Cada semana grabamos nuestra reunión abierta en línea.)", "es"),
+                          (es, "es"), ("", "es")):
+            with self.subTest(text=text[:50], src=src):
+                self.assertIsNone(B.given_translation(text, src))
 
 
 # ------------------------------------------------------------------------------------------- one show failing
@@ -351,6 +395,20 @@ class RunSummaryShows(RunSummary):
         self.assertIn("Podcasts", line)
         self.assertNotIn(NAME, line)
 
+    def test_one_bad_run_of_every_show_keeps_a_week_old_failure(self):
+        # La Viña's feed has failed for 9 days; today every feed failed once (one host): the source failed, but its
+        # own last good read was yesterday — the show still counts, so the report issue is not closed for a day
+        st = self.podcasts({"ok": False, "updated": iso(NOW - timedelta(days=9)), "failing_since": iso(NOW - timedelta(days=9))},
+                           ok=False, updated_days=1)
+        st["sources"][0]["stats"]["shows"]["gv"] = {"ok": False, "name": "AA Grapevine's Podcast", "error": "HTTP 503",
+                                                    "updated": iso(NOW - timedelta(days=1))}
+        text, out = self.summary(st)
+        self.assertIn("**Not updating for 7+ days:**", text, "(the issue would close for a day, and reopen tomorrow)")
+        line = next(ln for ln in text.splitlines() if ln.startswith("**Not updating for"))
+        self.assertIn(f"Podcasts — {NAME}", line)
+        self.assertNotIn("AA Grapevine's Podcast", line, "a day is not a week")
+        self.assertNotIn("the other shows still update", out, "they did not, this time: the source's own warning says so")
+
     def test_the_report_issue_says_what_to_do(self):
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["report"]["steps"] if s.get("name") == "Open, update or close the report issue")
@@ -379,8 +437,9 @@ WO_EP = episode("pod:wo:aaaaaaaaaaaa", "wo", "Grapevine Weekly Open AA Meeting, 
                 "2026-11-06T05:15:00Z", es="Grapevine Weekly Open AA Meeting, 4 de noviembre de 2026 [Temporada 2 Episodio 19]",
                 show_name="Grapevine Weekly Open AA Meeting", season=2, episode=19, weekly_open="grapevine",
                 meeting_date="2026-11-04", generic_title=False)
+# AA Grapevine's Podcast: its newest episode came out at the same moment as La Viña's (Mondays 00:15 Eastern)
 GV_EPS = [episode(f"pod:gv:{n:012d}", "gv", f"Story {n} [Season 11, Episode {n}]", f"2026-11-0{n}T05:15:00Z",
-                  show_name="AA Grapevine's Podcast", season=11, episode=n) for n in (2, 8)]
+                  show_name="AA Grapevine's Podcast", season=11, episode=n) for n in (2, 9)]
 EPISODES = {
     "updated": "2026-11-11T15:00:00Z",
     "shows": [  # as build_data writes them; La Viña's as an older sync wrote it (the feed's "en")
@@ -420,23 +479,34 @@ class Display(unittest.TestCase):
               const eps = filters.mediaItems(input.episodes, "episodes");
               const by = {};
               for (const e of eps) by[e.extra.show] ??= e;      // each show's newest
-              const res = { titles: {}, shows: {}, days: {}, labels: {}, meetingShow: {} };
+              const res = { titles: {}, shows: {}, days: {}, labels: {}, labelLangs: {}, meetingShow: {}, dated: {}, order: {} };
               for (const L of ["en", "es"]) {
                 res.titles[L] = Object.fromEntries(Object.entries(by).map(([k, e]) => [k, filters.mediaTitle(e, L)]));
                 res.titles[L].share = filters.mediaOrigTitle(by.lvo, L);
                 const noDate = { ...by.lvo, extra: { ...by.lvo.extra, meeting_date: "" } };
                 res.titles[L].noDate = filters.mediaTitle(noDate, L);
                 res.titles[L].ownTitle = filters.mediaTitle({ ...by.lvo, extra: { ...by.lvo.extra, generic_title: false } }, L);
+                res.dated[L] = { ...Object.fromEntries(Object.entries(by).map(([k, e]) => [k, filters.mediaTitleDated(e, L)])),
+                                 noDate: filters.mediaTitleDated(noDate, L) };
                 res.shows[L] = filters.mediaShowList(input.episodes, input.cfg, eps, L)
-                  .map((s) => ({ key: s.key, lang: s.lang, meeting: s.meeting, weekly: s.weekly, short: s.short, count: s.count }));
+                  .map((s) => ({ key: s.key, lang: s.lang, meeting: s.meeting, weekly: s.weekly, short: s.short, shortLang: s.shortLang, count: s.count }));
+                // the page's order (/listen/'s rows, /episodes-index.json) — one day's episodes in the page's language first
+                res.order[L] = { page: filters.mediaEpisodeOrder(eps, input.cfg, L).map((e) => e.id),
+                                 index: JSON.parse(filters.mediaIndexJson(input.episodes ? { episodes: input.episodes } : {}, "episodes", L, input.cfg)).items.map((e) => e.id) };
                 res.days[L] = { gv: filters.mediaWeeklyDays(input.weekly, L, "grapevine"), lv: filters.mediaWeeklyDays(input.weekly, L, "lavina") };
                 const vid = (cat, lang, title) => ({ id: "yt:x", kind: "video", category: cat, lang, title, extra: { video_id: "abcdefghijk", playlists: [] } });
                 res.labels[L] = [vid("lv", "es", "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 1]"),
                                  vid("gv", "en", "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2, Episode 18]"),
                                  vid("gv", "en", "Sober Insurance")].map((v) => filters.mediaMeetingLabel(v, L));
+                res.labelLangs[L] = [vid("lv", "es", "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 1]"),
+                                     vid("gv", "en", "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2, Episode 18]"),
+                                     vid("gv", "en", "Sober Insurance")].map((v) => filters.mediaMeetingLang(v, L));
               }
               res.meetingShow = { lavina: filters.mediaMeetingShow(input.cfg, "lavina"), grapevine: filters.mediaMeetingShow(input.cfg, "grapevine"),
-                                  none: filters.mediaMeetingShow(input.cfg, "other") };
+                                  none: filters.mediaMeetingShow(input.cfg, "other"),
+                                  withEps: filters.mediaMeetingShow(input.cfg, "lavina", input.episodes),
+                                  noEpsYet: filters.mediaMeetingShow(input.cfg, "lavina", { ...input.episodes, items: input.episodes.items.filter((i) => i.category !== "lvo") }),
+                                  noFile: filters.mediaMeetingShow(input.cfg, "grapevine", {}) };
               res.parts = { lvo: media.meetingTitleParts(by.lvo), wo: media.meetingTitleParts(by.wo) };
               const v = { id: "yt:49LzrLRT4k0", kind: "video", category: "lv", lang: "es", status: "ok", date: "2026-11-09T14:31:49Z",
                           title: "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 1]",
@@ -457,7 +527,7 @@ class Display(unittest.TestCase):
         self.assertEqual(t["en"]["ownTitle"], "La Viña Weekly Open Meeting of Alcoholics Anonymous", "a title of its own stays")
         # as before: the Grapevine Weekly Open's and the podcast's
         self.assertEqual((t["en"]["wo"], t["es"]["wo"]), ("Meeting of November 4, 2026", "Reunión del 4 de noviembre de 2026"))
-        self.assertEqual(t["en"]["gv"], "Story 8")
+        self.assertEqual(t["en"]["gv"], "Story 9")
 
     def test_the_shows(self):
         en = {s["key"]: s for s in self.r["shows"]["en"]}
@@ -480,7 +550,32 @@ class Display(unittest.TestCase):
         self.assertEqual((self.r["video"]["k"], self.r["video"].get("w")), ("weekly", "lv"), "Watch's list: its own badge")
 
     def test_the_show_that_records_a_meeting(self):
-        self.assertEqual(self.r["meetingShow"], {"lavina": "lvo", "grapevine": "wo", "none": ""})
+        self.assertEqual(self.r["meetingShow"], {"lavina": "lvo", "grapevine": "wo", "none": "", "withEps": "lvo",
+                                                 "noEpsYet": "", "noFile": ""},
+                         "with the episodes: only a show that has one (/listen/ filters only by a show it lists)")
+
+    def test_which_titles_name_the_meetings_date(self):
+        for lang in ("en", "es"):
+            with self.subTest(lang=lang):
+                self.assertEqual(self.r["dated"][lang], {"lvo": True, "wo": True, "gv": False, "noDate": False},
+                                 "Home leaves the date out only where the title names it")
+
+    def test_one_days_episodes_in_the_pages_language_first(self):
+        # AA Grapevine's Podcast and La Viña's meeting came out at the same moment (Monday 00:15 Eastern)
+        gv, lvo = "pod:gv:000000000009", "pod:lvo:667729784075"
+        for lang, first in (("en", [gv, lvo]), ("es", [lvo, gv])):
+            with self.subTest(lang=lang):
+                self.assertEqual(self.r["order"][lang]["page"][:2], first)
+                self.assertEqual(self.r["order"][lang]["index"], self.r["order"][lang]["page"],
+                                 "/episodes-index.json in the same order as the page's own rows")
+                self.assertEqual(self.r["order"][lang]["page"][2:], ["pod:wo:aaaaaaaaaaaa", "pod:gv:000000000002"])
+
+    def test_the_labels_language(self):
+        en = {s["key"]: s["shortLang"] for s in self.r["shows"]["en"]}
+        es = {s["key"]: s["shortLang"] for s in self.r["shows"]["es"]}
+        self.assertEqual(en, {"gv": "en", "wo": "en", "lvo": "en"})
+        self.assertEqual(es, {"gv": "en", "wo": "en", "lvo": "es"}, "the Grapevine Weekly Open's name stays English on /es/")
+        self.assertEqual(self.r["labelLangs"], {"en": ["", "", ""], "es": ["", "en", ""]})
 
     def test_the_feeds_and_the_searchs_title(self):
         self.assertEqual(self.r["parts"], {"lvo": {"label": "media.show_short_weekly_lv", "date": "2026-11-05"}, "wo": None})
@@ -598,6 +693,56 @@ class Pages(unittest.TestCase):
                 li = page[page.rindex("<li", 0, i):i]
                 self.assertIn(label, visible(li))
                 self.assertIn(title, visible(li))
+
+    def test_the_latest_episode_on_a_monday(self):
+        # AA Grapevine's Podcast and La Viña's meeting came out at the same moment: each page features its own language's
+        for lang, want_id, want in (("en", "pod:gv:000000000009", "Story 9"),
+                                    ("es", "pod:lvo:667729784075", "Reunión del 5 de noviembre de 2026")):
+            with self.subTest(lang=lang):
+                page = self.built["/es/listen/" if lang == "es" else "/listen/"]
+                h2 = re.search(r'<h2 id="featured-ep-title"[^>]*>(.*?)</h2>', page, re.S).group(1)
+                self.assertEqual(visible(re.search(r'<span x-show="!alt">(.*?)</span>', h2, re.S).group(1)), want)
+                initial = json.loads(re.search(r'<script type="application/json" id="media-initial">(.*?)</script>', page, re.S).group(1))
+                self.assertEqual(initial["items"][0]["id"], want_id, "the player's epAt(0) is the same episode")
+                rows = page[page.index('<section id="episodes"'):]
+                self.assertEqual(re.search(r'data-ep="(pod:[^"]+)"', rows).group(1), want_id, "and the episode list starts with it")
+
+    def test_home_says_an_episodes_language(self):
+        def row(lang: str, iid: str) -> str:
+            page = self.built["/es/" if lang == "es" else "/"]
+            i = page.index(f'data-id="{iid}"')
+            return page[page.rindex("<li", 0, i):i]
+        pill = r'<span class="badge-muted uppercase"[^>]*>{}</span>'
+        self.assertRegex(row("en", "pod:lvo:667729784075"), pill.format("es"), "La Viña's Spanish meeting on English Home")
+        self.assertRegex(row("es", "pod:wo:aaaaaaaaaaaa"), pill.format("en"), "the English meeting on Spanish Home")
+        self.assertIn('lang="en">Grapevine Weekly Open</p>', row("es", "pod:wo:aaaaaaaaaaaa"), "its English name, marked")
+        self.assertNotIn("badge-muted", row("en", "pod:gv:000000000002"), "an English episode on English Home: none")
+        self.assertNotIn("badge-muted", row("es", "pod:lvo:667729784075"))
+        # the featured episode (AA Grapevine's Podcast, English): its language on Spanish Home only
+        for lang, has in (("en", False), ("es", True)):
+            page = self.built["/es/" if lang == "es" else "/"]
+            head = page[page.index('class="home-episode'):page.index('id="ep-title"')]
+            self.assertEqual(bool(re.search(pill.format("en"), head)), has, lang)
+        # a row whose title names the meeting's date has no date of its own; the others keep theirs
+        self.assertNotIn("Nov", visible(row("en", "pod:lvo:667729784075")).replace("November 5, 2026", ""))
+        self.assertIn("Nov ", visible(row("en", "pod:gv:000000000002")))
+
+
+class EmailTitle(unittest.TestCase):
+    ITEM = {"kind": "episode", "lang": "es", "title": f"{NAME} [Temporada 1, episodio 3]",
+            "i18n": {"title": {"es": f"{NAME} [Temporada 1, episodio 3]",
+                               "en": "La Viña Weekly Open Meeting of Alcoholics Anonymous [Season 1, Episode 3]"}},
+            "extra": {"weekly_open": "lavina", "generic_title": True, "episode": 3}}
+
+    def test_a_meeting_episode_in_the_monthly_email(self):
+        it = self.ITEM
+        self.assertEqual(D.media_title(it, "es"), f"{NAME}, episodio 3", "no date found: its title and number, as on the site")
+        self.assertEqual(D.media_title(it, "en"), "La Viña Weekly Open Meeting of Alcoholics Anonymous, episode 3")
+        dated = {**it, "extra": {**it["extra"], "meeting_date": "2026-11-19"}}
+        self.assertEqual((D.media_title(dated, "es"), D.media_title(dated, "en")),
+                         ("Reunión del 19 de noviembre de 2026", "Meeting of November 19, 2026"))
+        own = {**it, "extra": {**it["extra"], "generic_title": False}}
+        self.assertEqual(D.media_title(own, "es"), NAME, "a title of its own: as before")
 
 
 if __name__ == "__main__":

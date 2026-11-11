@@ -42,7 +42,23 @@ const WO_PREFIXES = ["Grapevine Weekly Open AA Meeting", "Grapevine Weekly Open 
    Each has its own short label (a row's badge, a video's): media.show_short_weekly / media.show_short_weekly_lv. */
 const MEETINGS = ["grapevine", "lavina"];
 const MEETING_LABEL = { grapevine: "media.show_short_weekly", lavina: "media.show_short_weekly_lv" };
+/* The language a meeting's label is written in when it is not the page's: the Grapevine Weekly Open keeps its English
+   name on /es/ too (lang="en" there); La Viña's is translated. */
+const MEETING_LABEL_LANG = { grapevine: "en" };
 const isYmd = (v) => /^\d{4}-\d{2}-\d{2}$/.test(String(v || ""));
+/* An episode's day in the site's time zone (YYYY-MM-DD) — episodeOrder */
+const DAY_FMT = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });
+function dayOf(v) {
+  const t = toTime(v); // (a bare date is its own day: toTime reads it as noon UTC)
+  return t ? DAY_FMT.format(new Date(t)) : "";
+}
+
+/** The lang attribute a meeting's label needs on a page in `lang` ("en" for the Grapevine Weekly Open's on /es/),
+    "" when it is in the page's language. */
+function meetingLabelLang(meeting, lang) {
+  const own = MEETING_LABEL_LANG[meeting] || "";
+  return own && own !== lang ? own : "";
+}
 
 /** The weekly open meeting a show records: its config `weekly_open`, else (a show set up before that setting) the
     Grapevine Weekly Open's key "wo", or a name like a weekly open meeting's (WEEKLY_OPEN) — La Viña's when the show
@@ -117,6 +133,25 @@ function mediaItems(dbFile, name) {
       seen.add(key);
       return true;
     });
+}
+
+/** Episodes (mediaItems, newest first) in /listen/'s order for a page in `lang`: by day (the site's time zone), and
+    among one day's episodes the page's language first, then the newest, then config order (sources.podcasts — the
+    first show is Home's featured one). AA Grapevine's Podcast and La Viña's open meeting both come out on Mondays at
+    00:15 Eastern: /listen/'s "Latest episode" (the list's first — media.js epAt(0)) is then AA Grapevine's on /listen/
+    and La Viña's on /es/listen/, never whichever the bot happened to notice last. The same order for the server-rendered
+    rows and /episodes-index.json (+ /es/), which the page's "Newest first" list follows. Undated episodes stay last, in
+    the order they came. */
+function episodeOrder(items, cfgShows, lang) {
+  const rank = new Map((cfgShows || []).filter((s) => s && s.key).map((s, n) => [String(s.key), n]));
+  const keyOf = (i) => String((i.extra && i.extra.show) || i.category || "");
+  return (items || [])
+    .map((it, n) => ({ it, n, d: dayOf(it.date), t: toTime(it.date), l: it.lang === lang ? 0 : 1, r: rank.has(keyOf(it)) ? rank.get(keyOf(it)) : rank.size }))
+    .sort((a, b) => {
+      if (!a.d || !b.d) return (a.d ? 0 : 1) - (b.d ? 0 : 1) || a.n - b.n;
+      return (a.d < b.d ? 1 : a.d > b.d ? -1 : 0) || a.l - b.l || b.t - a.t || a.r - b.r || a.n - b.n;
+    })
+    .map((x) => x.it);
 }
 
 function num(v) {
@@ -291,23 +326,25 @@ export default function (eleventyConfig, helpers) {
     return { t, made: false };
   }
 
-  /** Display title in the page language: numbering bracket and show-name prefix removed → { t, made } (made: the
-      site's own short form, stripShowPrefix). A weekly open meeting's episode whose title is only its show's name
+  /** Display title in the page language: numbering bracket and show-name prefix removed → { t, made, dated } (made:
+      the site's own short form, stripShowPrefix; dated: that form is "Meeting of <the meeting's date>", so a row that
+      shows it needs no date of its own). A weekly open meeting's episode whose title is only its show's name
       (extra.generic_title — La Viña's "<show name> [Temporada 1, episodio 1]", scripts/sync/podcasts.py) is called by
       its meeting's date (extra.meeting_date, from its description): "Meeting of November 5, 2026" / "Reunión del 5 de
       noviembre de 2026", as the Grapevine Weekly Open's are; without a date, "<title>, episode 1". */
   function titleOf(item, lang) {
-    if (!item) return { t: "", made: false };
+    if (!item) return { t: "", made: false, dated: false };
     const { se, ep } = seOf(item);
     const x = item.extra || {};
     let r = { t: stripNumbering(tx(item, "title", lang), se, ep), made: false };
     const weekly = item.kind === "episode" ? !!itemMeeting(item) : videoKind(item) === "weekly";
     if (weekly && item.kind === "episode" && x.generic_title === true) {
-      if (isYmd(x.meeting_date)) return { t: translateKey("media.meeting_of", lang, { date: helpers.fmtDate(x.meeting_date, lang, "medium") }), made: true };
-      if (ep !== null) return { t: translateKey("media.title_ep", lang, { t: softCaps(r.t, lang), e: ep }), made: true };
+      if (isYmd(x.meeting_date)) return { t: translateKey("media.meeting_of", lang, { date: helpers.fmtDate(x.meeting_date, lang, "medium") }), made: true, dated: true };
+      if (ep !== null) return { t: translateKey("media.title_ep", lang, { t: softCaps(r.t, lang), e: ep }), made: true, dated: false };
     }
     if (weekly) r = stripShowPrefix(r.t, [x.show_name, ...WO_PREFIXES], lang);
-    return { t: softCaps(r.t, lang), made: r.made };
+    // (stripShowPrefix's only short form is "Meeting of <date>")
+    return { t: softCaps(r.t, lang), made: r.made, dated: r.made };
   }
   function displayTitle(item, lang) { return titleOf(item, lang).t; }
   /** The title as its maker published it (the item's own language, cleaned the same way) — what a Share button sends
@@ -334,7 +371,8 @@ export default function (eleventyConfig, helpers) {
   /** Shows in config order, merged from episodes.json `shows`, config sources.podcasts
       and the items themselves. Only shows that have at least one episode. Each one's `lang` is the config's `lang`
       first (a feed can say the wrong one), else the language its texts are translated from, else its feed's;
-      `meeting` the weekly open meeting it records (showMeeting) and `weekly` whether it records one. */
+      `meeting` the weekly open meeting it records (showMeeting) and `weekly` whether it records one; `shortLang` the
+      language its `short` label is written in (a lang attribute where it is not the page's). */
   function showList(epFile, cfgShows, items, lang) {
     const f = fileOf(epFile, "episodes");
     const env = Array.isArray(f.shows) ? f.shows : f.shows && typeof f.shows === "object" ? Object.values(f.shows) : [];
@@ -369,12 +407,15 @@ export default function (eleventyConfig, helpers) {
       const cfg = cfgByKey.get(key) || {};
       const sLang = String(cfg.lang || s.lang || s.language || latest.lang || "en").toLowerCase().slice(0, 2);
       const meeting = showMeeting({ ...s, weekly_open: cfg.weekly_open || s.weekly_open || x.weekly_open, name, lang: sLang });
+      const showLang = sLang === "es" ? "es" : "en";
       out.push({
         key,
         name,
-        lang: sLang === "es" ? "es" : "en",
+        lang: showLang,
         meeting,
         short: showShort(key, name, lang, meeting),
+        // a meeting's label is ours (in the page's language, the Grapevine Weekly Open's always English); a name, the show's
+        shortLang: meeting ? meetingLabelLang(meeting, lang) || lang : showLang,
         weekly: !!meeting,
         desc: s.i18n ? tx(s, "description", lang) : String(s.description || ""),
         descMachine: machine(s, lang),
@@ -403,7 +444,8 @@ export default function (eleventyConfig, helpers) {
   /** {gv: {name, short, i}} for media.js (mini-player subtitle, row badges, artwork fallback). */
   function showsMeta(shows) {
     const out = {};
-    for (const s of shows) out[s.key] = { name: s.name, short: s.short, i: s.image || null };
+    // sl: the language of its short label (media.js badgeLang: a lang attribute where it is not the page's)
+    for (const s of shows) out[s.key] = { name: s.name, short: s.short, sl: s.shortLang || null, i: s.image || null };
     return out;
   }
 
@@ -545,9 +587,15 @@ export default function (eleventyConfig, helpers) {
   /* ------------------------------------------------------------ filters */
 
   eleventyConfig.addFilter("mediaItems", mediaItems);
+  /** /listen/'s episodes in its order for the page language (episodeOrder):
+      {{ db.episodes | mediaItems("episodes") | mediaEpisodeOrder(site.sources.podcasts, lang) }} */
+  eleventyConfig.addFilter("mediaEpisodeOrder", (items, cfgShows, lang) => episodeOrder(items, cfgShows, lang));
   eleventyConfig.addFilter("mediaCleanTitle", (s) => stripNumbering(s));
   /** Item title in the page language, numbering/show prefix removed: {{ item | mediaTitle(lang) }} */
   eleventyConfig.addFilter("mediaTitle", (item, lang) => displayTitle(item, lang));
+  /** Whether that title names the meeting's date ("Meeting of November 5, 2026"): a row showing it needs no date of
+      its own (Home). A dateless one ("<show name>, episode 3", "Introducing …") does. */
+  eleventyConfig.addFilter("mediaTitleDated", (item, lang) => titleOf(item, lang).dated);
   /** The title as published, for a Share button: {{ item | mediaOrigTitle(lang) }} (see origTitle) */
   eleventyConfig.addFilter("mediaOrigTitle", (item, lang) => origTitle(item, lang));
   eleventyConfig.addFilter("mediaVideoKind", videoKind);
@@ -565,12 +613,19 @@ export default function (eleventyConfig, helpers) {
     const m = itemMeeting(item);
     return MEETING_LABEL[m] ? translateKey(MEETING_LABEL[m], lang) : "";
   });
+  /** …and the lang attribute that label needs on a page in `lang`: "en" for the Grapevine Weekly Open's on /es/ (its
+      name stays English), else "": {% set ll = v | mediaMeetingLang(lang) %}{% if ll %} lang="{{ ll }}"{% endif %} */
+  eleventyConfig.addFilter("mediaMeetingLang", (item, lang) => meetingLabelLang(itemMeeting(item), lang));
   /** The configured show that records a weekly open meeting (config sources.podcasts[].weekly_open — `source`
       "grapevine" | "lavina" of data/site/weekly_open.json): its key, for /meetings/' "Listen to past meetings"
-      (/listen/?show=<key>#episodes); "" when no show records it. {{ site.sources.podcasts | mediaMeetingShow("lavina") }} */
-  eleventyConfig.addFilter("mediaMeetingShow", (cfgShows, source) => {
+      (/listen/?show=<key>#episodes); "" when no show records it — and, given the episodes file, when it has no episode
+      on the site yet (/listen/ only filters by a show it lists).
+      {{ site.sources.podcasts | mediaMeetingShow("lavina", db.episodes) }} */
+  eleventyConfig.addFilter("mediaMeetingShow", (cfgShows, source, epFile) => {
     const s = (cfgShows || []).find((c) => c && c.key && c.feed && showMeeting(c) === String(source || ""));
-    return s ? String(s.key) : "";
+    if (!s) return "";
+    if (epFile !== undefined && !mediaItems(epFile, "episodes").some((i) => showKeyOf(i) === String(s.key))) return "";
+    return String(s.key);
   });
 
   /** Season chips over all episodes: [{key:"11", count}] newest season first. */
@@ -719,7 +774,8 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("mediaIndexJson", (db, kind, lang, cfgShows) => {
     const updated = new Date().toISOString();
     if (kind === "episodes") {
-      const items = mediaItems(db && db.episodes, "episodes");
+      // (in the page's order: the same as /listen/'s server-rendered rows — episodeOrder)
+      const items = episodeOrder(mediaItems(db && db.episodes, "episodes"), cfgShows, lang);
       const shows = showList(db && db.episodes, cfgShows, items, lang);
       return JSON.stringify({ v: 2, kind, lang, updated, total: items.length, shows: showsMeta(shows), items: items.map((i) => epCompact(i, lang, shows)) });
     }

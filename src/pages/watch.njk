@@ -75,14 +75,15 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       {% if srv %}
         {% if vl == "lv" %}<span class="badge-lv">{% micon "grapes", "size-3" %} La Viña</span>{% else %}<span class="badge-gv">{% micon "grapes", "size-3" %} Grapevine</span>{% endif %}
         {#- a weekly open meeting's recording: its own meeting's name (Grapevine's or La Viña's) -#}
-        {% if kind == "weekly" %}<span class="badge-grape">{% micon "users", "size-3" %} {{ item | mediaMeetingLabel(lang) }}</span>
+        {%- set kLang = item | mediaMeetingLang(lang) %}
+        {% if kind == "weekly" %}<span class="badge-grape"{% if kLang %} lang="{{ kLang }}"{% endif %}>{% micon "users", "size-3" %} {{ item | mediaMeetingLabel(lang) }}</span>
         {% elif kind == "podcast" %}<span class="badge-grape">{% micon "headphones", "size-3" %} {{ "media.kind_podcast_badge" | t(lang) }}</span>{% endif %}
         {% if item.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
         {{ ui.langPill(item, lang) }}
       {% else %}
         <span class="badge-lv" x-show="v.c === 'lv'">{% micon "grapes", "size-3" %} La Viña</span>
         <span class="badge-gv" x-show="v.c !== 'lv'">{% micon "grapes", "size-3" %} Grapevine</span>
-        <span class="badge-grape" x-show="v.k === 'weekly' && v.w !== 'lv'">{% micon "users", "size-3" %} {{ "media.show_short_weekly" | t(lang) }}</span>
+        <span class="badge-grape" x-show="v.k === 'weekly' && v.w !== 'lv'"{% if lang != "en" %} lang="en"{% endif %}>{% micon "users", "size-3" %} {{ "media.show_short_weekly" | t(lang) }}</span>
         <span class="badge-grape" x-show="v.k === 'weekly' && v.w === 'lv'">{% micon "users", "size-3" %} {{ "media.show_short_weekly_lv" | t(lang) }}</span>
         <span class="badge-grape" x-show="v.k === 'podcast'">{% micon "headphones", "size-3" %} {{ "media.kind_podcast_badge" | t(lang) }}</span>
         <span class="badge-new" x-show="v.n">{{ "common.new" | t(lang) }}</span>
@@ -188,7 +189,8 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <p class="flex flex-wrap items-center gap-2">
             <span class="eyebrow text-gv">{{ "media.latest_video" | t(lang) }}</span>
             {% if f.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
-            {% if fKind == "weekly" %}<span class="badge-grape">{{ f | mediaMeetingLabel(lang) }}</span>{% elif fKind == "podcast" %}<span class="badge-grape">{{ "media.kind_podcast_badge" | t(lang) }}</span>{% endif %}
+            {%- set fLabelLang = f | mediaMeetingLang(lang) %}
+            {% if fKind == "weekly" %}<span class="badge-grape"{% if fLabelLang %} lang="{{ fLabelLang }}"{% endif %}>{{ f | mediaMeetingLabel(lang) }}</span>{% elif fKind == "podcast" %}<span class="badge-grape">{{ "media.kind_podcast_badge" | t(lang) }}</span>{% endif %}
             {% if fSE %}<span class="badge-gv">{{ fSE }}</span>{% endif %}
             {{ ui.langPill(f, lang) }}
           </p>

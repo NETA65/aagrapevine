@@ -220,6 +220,7 @@ T = {
         "weekly_open": "Grapevine Weekly Open",    # the pill of the Grapevine Weekly Open's recordings
         "weekly_open_lv": "La Viña Open Meeting",   # … and of La Viña's open meeting's (media.show_short_weekly[_lv])
         "meeting_of": "Meeting of {date}",          # a meeting episode called only by its show's name (media.meeting_of)
+        "title_ep": "{t}, episode {e}",             # … when no date was found (media.title_ep)
     },
     "es": {
         "lang_name": "Español",
@@ -295,6 +296,7 @@ T = {
         "weekly_open": "Grapevine Weekly Open",
         "weekly_open_lv": "Reunión Abierta de La Viña",
         "meeting_of": "Reunión del {date}",
+        "title_ep": "{t}, episodio {e}",
     },
 }
 
@@ -597,16 +599,21 @@ def media_title(item: dict, lang: str) -> str:
     """A podcast episode / video title without its "[Season 11, Episode 12]" tail (the badge says it),
     like the website's media titles. A weekly open meeting's episode that its feed calls only by its show's name
     (extra.generic_title: La Viña's — scripts/sync/podcasts.py) is called by its meeting's date, as on the site
-    (eleventy/filters/media.js titleOf): "Meeting of November 5, 2026" / "Reunión del 5 de noviembre de 2026"."""
+    (eleventy/filters/media.js titleOf): "Meeting of November 5, 2026" / "Reunión del 5 de noviembre de 2026" — or,
+    with no date found, by its title and number, "<title>, episode 3", so no two of them read the same."""
     ex = item.get("extra") or {}
+    generic = item.get("kind") == "episode" and ex.get("generic_title") is True
     md = str(ex.get("meeting_date") or "")
-    if item.get("kind") == "episode" and ex.get("generic_title") is True and re.fullmatch(r"\d{4}-\d{2}-\d{2}", md):
+    if generic and re.fullmatch(r"\d{4}-\d{2}-\d{2}", md):
         y, m, d = (int(x) for x in md.split("-"))
         if 1 <= m <= 12:
             day = f"{d} de {MONTHS['es'][m - 1]} de {y}" if lang == "es" else f"{MONTHS['en'][m - 1]} {d}, {y}"
             return T[lang]["meeting_of"].format(date=day)
     t = tx(item, "title", lang)
     s = ONE_SUFFIX.sub("", SE_SUFFIX.sub("", t)).strip()
+    e = ex.get("episode")
+    if generic and s and isinstance(e, int) and not isinstance(e, bool) and e > 0:
+        return T[lang]["title_ep"].format(t=s, e=e)
     return s or t
 
 

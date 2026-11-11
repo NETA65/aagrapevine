@@ -32,7 +32,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
 {% import "macros/media.njk" as media with context %}
 {% mediaSprite %}
 {%- set cfgShows = site.sources.podcasts or [] -%}
-{%- set eps = db.episodes | mediaItems("episodes") -%}
+{#- newest first; one day's episodes in the page's language first (AA Grapevine's Podcast and La Viña's meeting
+    both come out on Mondays): the "Latest episode" below is the list's first — media.js episodeOrder -#}
+{%- set eps = db.episodes | mediaItems("episodes") | mediaEpisodeOrder(cfgShows, lang) -%}
 {%- set shows = db.episodes | mediaShowList(cfgShows, eps, lang) -%}
 {%- set multi = shows.length > 1 -%}
 {%- set primary = shows[0].key if shows.length else "" -%}
@@ -91,14 +93,14 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
   <div class="min-w-0 flex-1">
     <p class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
       {%- if srv %}
-      {% if multi and sh and sh.key != primary %}<span class="badge-grape">{% micon "users", "size-3" %} {{ sh.short }}</span>{% endif %}
+      {% if multi and sh and sh.key != primary %}<span class="badge-grape"{% if sh.shortLang != lang %} lang="{{ sh.shortLang }}"{% endif %}>{% micon "users", "size-3" %} {{ sh.short }}</span>{% endif %}
       {% if se %}<span class="font-semibold text-gv">{{ se }}</span>{% endif %}
       {% if e.date %}<time datetime="{{ e.date | isoDate }}">{{ e.date | fmtDate(lang, "short") }}</time>{% endif %}
       {% if mins %}<span class="inline-flex items-center gap-1">{% micon "clock-3", "size-3.5" %}{{ mins }}</span>{% endif %}
       {% if e.is_new %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
       {% if mixedLangs %}{{ ui.langPill(e, lang) }}{% endif %}
       {%- else %}
-      <span class="badge-grape" x-show="showBadge(ep)">{% micon "users", "size-3" %} <span x-text="showBadge(ep)"></span></span>
+      <span class="badge-grape" x-show="showBadge(ep)">{% micon "users", "size-3" %} <span x-text="showBadge(ep)" :lang="badgeLang(ep)"></span></span>
       <span class="font-semibold text-gv" x-show="seLabel(ep)" x-text="seLabel(ep)"></span>
       <time x-show="ep.d" :datetime="ep.d" x-text="date(ep.d)"></time>
       <span class="inline-flex items-center gap-1" x-show="ep.du">{% micon "clock-3", "size-3.5" %}<span x-text="mins(ep.du)"></span></span>

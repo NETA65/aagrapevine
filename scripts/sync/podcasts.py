@@ -163,9 +163,10 @@ def _lang_text(s: str) -> str:
 
 # --------------------------------------------------------------------------- weekly open meetings
 # A meeting's date in the words of its title or description: "5 de noviembre de 2026", "1.º de
-# diciembre del 2026", "November 4, 2026", "4 November 2026" (abbreviations too: "nov.", "Sept."). A
-# date without its year ("del 5 de noviembre") is only used when nothing better is there, with the
-# year that puts it closest before the episode's publication.
+# diciembre del 2026" ("1ro", "1er", "1ero", "primero" too), "November 4, 2026", "4 November 2026"
+# (abbreviations too: "nov.", "Sept."). A date without its year ("del 5 de noviembre") is only used
+# when nothing better is there, with the year that puts it closest before the episode's publication.
+# A date in figures ("05/11/2026") is never read: day and month could be either way round.
 _MONTHS = {
     "enero": 1, "ene": 1, "febrero": 2, "feb": 2, "marzo": 3, "mar": 3, "abril": 4, "abr": 4,
     "mayo": 5, "may": 5, "junio": 6, "jun": 6, "julio": 7, "jul": 7, "agosto": 8, "ago": 8,
@@ -176,7 +177,7 @@ _MONTHS = {
     "december": 12, "dec": 12,
 }
 _MON = "|".join(sorted(_MONTHS, key=len, reverse=True))
-_DAY_ES = r"(?P<d>\d{1,2}|primero)(?:\s*(?:\.?º|°|\.?o(?![a-zñ])))?"
+_DAY_ES = r"(?P<d>\d{1,2}|primero)(?:\s*(?:\.?º|°|\.?(?:o|ro|er|ero)(?![a-zñ])))?"
 _DATE_RES = (
     # 5 de noviembre de 2026 · 1.º de diciembre del 2026 · 5 de nov. de 2026 · 5 de noviembre, 2026
     re.compile(rf"(?i)(?<![\w.]){_DAY_ES}\s+de\s+(?P<m>{_MON})\.?(?:\s*,?\s+(?:de\s+|del\s+)?(?P<y>\d{{4}})(?!\d))?(?![a-zñ])"),

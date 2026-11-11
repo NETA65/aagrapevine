@@ -189,6 +189,21 @@ def sort_newest(items: list[dict]) -> list[dict]:
     return sorted(items, key=lambda i: (ts(i.get("date")) or ts(i.get("first_seen")) or 0.0, i["id"]), reverse=True)
 
 
+def sort_episodes(items: list[dict], cfg: dict) -> list[dict]:
+    """Podcast episodes newest first (sort_newest), and episodes that came out at the same moment in the order of
+    config sources.podcasts — AA Grapevine's Podcast and La Viña's open meeting both come out on Mondays at 00:15
+    Eastern: the first show (Home's featured one) comes first, not whichever show's id sorts last. (The pages then
+    put the page's language first among one day's episodes: eleventy/filters/media.js episodeOrder.)"""
+    shows = [s for s in ((cfg.get("sources") or {}).get("podcasts") or []) if isinstance(s, dict)]
+    rank = {str(s.get("key")): n for n, s in enumerate(shows)}
+
+    def show_rank(i: dict) -> int:
+        return rank.get(str(i.get("category") or (i.get("extra") or {}).get("show") or ""), len(rank))
+    # (a stable sort: episodes of one show at the same moment keep sort_newest's order)
+    return sorted(sort_newest(items),
+                  key=lambda i: (-(ts(i.get("date")) or ts(i.get("first_seen")) or 0.0), show_rank(i)))
+
+
 def city_state(location: str | None) -> tuple[str | None, str | None]:
     m = re.search(r"([A-Za-zÀ-ÿ .'-]+),\s*(TX|Texas|[A-Z]{2})\b", location or "")
     if not m:
@@ -2084,6 +2099,26 @@ def other(lang: str) -> str:
     return "es" if lang == "en" else "en"
 
 
+_PAREN_TAIL_RE = re.compile(r"^(?P<main>.*\S)\s*\((?P<tail>[^()]+)\)\s*$", re.S)
+
+
+def given_translation(text: str, src: str) -> tuple[str, str] | None:
+    """A text that ends with its own translation in parentheses — La Viña's podcast's description "Cada semana
+    grabamos nuestra reunión abierta en línea y creamos este pódcast. (Each week we record our online open meeting
+    and create this podcast.)" → (the text in `src`, its writer's translation into the other language); None for
+    any other text. Only a parenthesis about as long as the text before it, in the other language, counts — so
+    "… (en español)" or "(Season 2)" is never taken for one."""
+    m = _PAREN_TAIL_RE.match(text or "")
+    if not m or src not in LANGS:
+        return None
+    main, tail = m["main"].strip(), m["tail"].strip()
+    if len(tail) < 20 or not 0.5 <= len(tail) / max(1, len(main)) <= 2:
+        return None
+    if T.detect_language(tail, src) != other(src) or T.detect_language(main, other(src)) != src:
+        return None
+    return main, tail
+
+
 # Short labels inside `extra` that get their own i18n entry (item kind → extra keys).
 LABEL_FIELDS = {"article": ("section", "topic", "issue_theme", "department")}
 # Fields that are titles: their machine English (from Spanish) is written in Title Case, like the
@@ -2453,7 +2488,13 @@ def build_meta(ctx: Ctx, i18n: I18n) -> tuple[dict[str, dict], list[tuple[dict, 
             r["description"] = clean_text(strip_html(s.get("description") or ""))
             lang = cfg_lang.get(s["key"]) or str(s.get("language") or "")[:2].lower()
             r["_src"] = lang if lang in LANGS else T.detect_language(f"{r['title']}. {r['description']}", "en")
-            for f in ("title", "description"):
+            # a description that carries its own translation in parentheses (La Viña's) is shown in each language
+            # as its writer gave it — not with the other language's sentence on the page — and is not machine-made
+            given = given_translation(r["description"], r["_src"])
+            if given:
+                r["description"] = given[0]
+                r["i18n"] = {"description": {r["_src"]: given[0], other(r["_src"]): given[1]}}
+            for f in ("title",) if given else ("title", "description"):
                 wanted.append((r, f, r[f], r["_src"]))
             rows.append(r)
         rows.sort(key=lambda r: (order.index(r["key"]) if r["key"] in order else 99, str(r["key"])))
@@ -3889,7 +3930,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         cols: dict[str, list[dict]] = {
             "videos": simple(ctx, "youtube", ("video",)),
-            "episodes": simple(ctx, "podcasts", ("episode",)),
+            "episodes": sort_episodes(simple(ctx, "podcasts", ("episode",)), ctx.cfg),
             "instagram": simple(ctx, "instagram", ("post",)),
             "articles": simple(ctx, "articles", ("article",)),
             # official AA sources only (config library.official_hosts) — see pdf_curate.py
