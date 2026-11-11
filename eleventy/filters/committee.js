@@ -271,12 +271,22 @@ function meetingEnd(cfg = {}) {
 const skipDates = (cfg = {}) => (cfg.skip_dates || []).map((d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d)));
 
 /**
+ * The months of committee meetings the pages list: this month (Central time) and the MEETING_MONTHS_AHEAD after it —
+ * normalizeEvents' window (/events/, /events.ics, the event share pages, the month pages' calendar files). Each date's
+ * flyer comes from its events.json record, and the sync writes one for every date of these months
+ * (scripts/sync/meeting.py MEETING_MONTHS_AHEAD → build_data.committee_meetings): the same number on both sides, which
+ * a unit test keeps in step (tests/test_r24_meeting_window.py) — a sync that counted 12 dates left the 13th date the
+ * pages list (Nov 17, 2027 on Nov 11, 2026) without its flyer.
+ */
+export const MEETING_MONTHS_AHEAD = 12;
+
+/**
  * Committee meeting dates between `monthsBack` months ago and `monthsAhead`
  * months ahead, from config/site.yml `meeting` (same rule as src/_data/meeting.js).
  * The months are counted from `now`'s month in Central time: the caller's clock (normalizeEvents' opt.now — the
  * build's one moment, MONTHLY_NOW in a preview build or a test), else the real one.
  */
-export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = 12, now = new Date()) {
+export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = MEETING_MONTHS_AHEAD, now = new Date()) {
   cfg = meetingCfg(cfg);
   const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
   const n = Number(cfg.week_of_month || 3);
@@ -681,7 +691,7 @@ export function calendarLinks(ev) {
  * @param {object[]} items   db.events.items
  * @param {object}   site    `site` global (config)
  * @param {string}   lang    "en" | "es"
- * @param {object}   [opt]   { monthsBack: 3, monthsAhead: 12, now: Date }
+ * @param {object}   [opt]   { monthsBack: 3, monthsAhead: MEETING_MONTHS_AHEAD (12), now: Date }
  * @returns {object[]} sorted by start (soonest first)
  */
 export function normalizeEvents(items, site, lang = "en", opt = {}) {
@@ -702,7 +712,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   const synced = new Map((items || []).filter((it) => it && it.category === "committee" && it.extra).map((it) => [it.id, it.extra]));
   //    A date that is over (the calendar files keep 90 days) was held "Online", with no link or meeting code: the
   //    move to Google Meet changed the platform for the dates before it.
-  for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? 12, new Date(now))) {
+  for (const d of meetingDates(m, opt.monthsBack ?? 3, opt.monthsAhead ?? MEETING_MONTHS_AHEAD, new Date(now))) {
     const id = `ev:committee:${d.ymd}`;
     seen.add(id);
     const speaker = meetingSpeaker(m, d.ymd, lang);

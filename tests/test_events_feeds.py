@@ -1098,7 +1098,8 @@ class MeetingSkipDates(unittest.TestCase):
         ms = B.committee_meetings(ctx_with(cfg, now=datetime(2030, 1, 1, 12, tzinfo=timezone.utc)))
         self.assertEqual([m["id"] for m in ms[:2]], ["ev:committee:2030-01-10", "ev:committee:2030-02-14"])
         self.assertEqual((ms[0]["extra"]["start"], ms[0]["extra"]["end"]), ("2030-01-11T00:30:00Z", "2030-01-11T01:30:00Z"))
-        self.assertEqual(len(ms), 12)
+        # the pages' months (meeting.window_meetings): Jan 1 is before January's meeting — Jan 10, 2030 … Jan 9, 2031
+        self.assertEqual((len(ms), ms[-1]["id"]), (13, "ev:committee:2031-01-09"))
         # the real clock no longer matters: TODAY's first meeting, even a year after the last one in the horizon
         later = datetime(2027, 10, 1, 12, tzinfo=timezone.utc)
 

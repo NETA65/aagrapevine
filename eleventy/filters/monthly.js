@@ -75,6 +75,9 @@ let H = { translateKey: (k) => k };
 
 // (TZ: config/site.yml site.timezone — America/Chicago — from eleventy.config.js)
 const LOC = { en: "en-US", es: "es-US" };
+// The month pages: this month and the 12 after it. Each one's committee meeting takes its flyer (its calendar file's
+// ATTACH: monthIcs → normalizeEvents) from its events.json record, which the sync writes for this month and the
+// committee.js MEETING_MONTHS_AHEAD (12) after it — so no month page lies beyond them (tests/test_r24_meeting_window.py).
 const WINDOW = 13;
 // A printed poster stays on a corkboard for months: its QR code (the month's page) keeps working for a year.
 const PAST_MONTHS = 12;

@@ -10,7 +10,7 @@
 // with the Zoom link), Drive flyer events, manual events, the Texas GV/LV
 // calendar events and any extra .ics feeds — everything on /events/.
 // Past events are kept for ~90 days so subscribers keep a little history.
-import { normalizeEvents, buildIcs } from "../../eleventy/filters/committee.js";
+import { normalizeEvents, buildIcs, MEETING_MONTHS_AHEAD } from "../../eleventy/filters/committee.js";
 
 export const data = {
   pagination: { data: "languages", size: 1, alias: "lang" },
@@ -28,7 +28,7 @@ export function render(data) {
   const items = process.env.COMMITTEE_EMPTY ? [] : data.db?.events?.items || [];
   const now = new Date();
   const cutoff = now.getTime() - KEEP_PAST_DAYS * 864e5;
-  const events = normalizeEvents(items, site, lang, { monthsBack: 3, monthsAhead: 12, now }).filter((e) => e.endMs >= cutoff);
+  const events = normalizeEvents(items, site, lang, { monthsBack: 3, monthsAhead: MEETING_MONTHS_AHEAD, now }).filter((e) => e.endMs >= cutoff);
   const base = String(site.url || "").replace(/\/$/, "");
   return buildIcs(events, {
     lang,

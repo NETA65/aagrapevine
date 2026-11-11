@@ -1629,13 +1629,15 @@ itself after each meeting), the Area report's committee meetings (`/monthly/#rep
 meeting deck's *Agenda & minutes* ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes)).
 
 **Code pointers.** [`scripts/sync/meeting.py`](../scripts/sync/meeting.py) → `meeting_rule`,
-`parse_hhmm`, `check_skip_dates`, `check_starts`, `upcoming_rule_dates`, `meeting_speakers`, `speaker_until`;
-`build_data.py` → `committee_meetings` (12 months into `events.json`, with `speaker_sentences` and the flyers),
+`parse_hhmm`, `check_skip_dates`, `check_starts`, `upcoming_rule_dates`, `window_meetings`, `meeting_speakers`,
+`speaker_until`; `build_data.py` → `committee_meetings` (into `events.json`, with `speaker_sentences` and the
+flyers: every date the pages list — this month and the `MEETING_MONTHS_AHEAD` (12) after it, the same number as
+`committee.js` `MEETING_MONTHS_AHEAD`, so the last date listed has its flyer too),
 `meeting_notes` (`problems.meeting`), `_speaker_reminders`; `src/_data/meeting.js` (each upcoming date's
 `speaker`); `eleventy/filters/committee.js` → `meetingDates`, `meetingJoin` (the filter `cmJoin`: platform, link,
 the code or ID with its label, a passcode, dial-in), `meetingSpeakers`, `meetingSpeaker`, `meetingSpeakerUntil`,
 `meetingSpeakerNotes`. Tests: `tests/test_build_times.py`, `tests/test_recurring_events.py`,
-`tests/test_events_feeds.py`, `tests/test_r20_meeting.py`.
+`tests/test_events_feeds.py`, `tests/test_r20_meeting.py`, `tests/test_r24_meeting_window.py`.
 
 ---
 

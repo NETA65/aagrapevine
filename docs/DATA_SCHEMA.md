@@ -314,7 +314,7 @@ visitor's device](#on-the-visitors-device--browser-storage-never-sent-anywhere),
 visit". Nothing about a visit is ever sent anywhere.
 
 Files: `episodes.json`, `videos.json`, `instagram.json`, `articles.json`, `pdfs.json`,
-`drive.json`, `events.json` (committee meetings auto-generated for 12 months + recurring events from
+`drive.json`, `events.json` (committee meetings auto-generated for this month and the 12 after it — every date the pages list, `MEETING_MONTHS_AHEAD` — + recurring events from
 `recurring_events:` in the config + Drive flyers + TX calendar events + manual + the optional
 `sources.ics_feeds` calendars — each real event ONCE, see *Events from several places* in §5), `announcements.json`, `editorial.json`, `weekly_open.json`,
 `whatsnew.json` (newest 150 across all sources, sorted by date desc),
