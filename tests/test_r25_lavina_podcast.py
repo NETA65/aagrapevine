@@ -90,9 +90,14 @@ from scripts.notify import send_digest as D  # noqa: E402
 from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import common  # noqa: E402
 from scripts.sync import podcasts as P  # noqa: E402
+from scripts.sync import weekly_open as W  # noqa: E402
 
 FIXTURE = ROOT / "tests" / "fixtures" / "podcasts" / "reunin-abierta-semanal.xml"
-CFG_SHOWS = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))["sources"]["podcasts"]
+SITE_CFG = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))
+CFG_SHOWS = SITE_CFG["sources"]["podcasts"]
+# La Viña's page for its meeting (the committee's choice, 2026-11-11): its podcast's page. Exactly so: with a "/" at
+# the end, aalavina.org sends it on to another address
+LV_MEETING_PAGE = "https://www.aalavina.org/podcast"
 LVO = next(s for s in CFG_SHOWS if s.get("weekly_open") == "lavina")
 GUID = "7d2cc913-c2b5-46d6-b176-d347a12913c3"
 NAME = "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
@@ -189,6 +194,17 @@ class Sync(unittest.TestCase):
         self.assertNotIn("amazon", LVO)
         self.assertEqual(next(s for s in CFG_SHOWS if s["key"] == "wo").get("weekly_open"), "grapevine")
         self.assertTrue(all(s.get("weekly_open") in (None, "grapevine", "lavina") for s in CFG_SHOWS))
+
+
+class LaVinaMeetingPage(unittest.TestCase):
+    """config/site.yml lavina_weekly_open.url: La Viña's page for its meeting, written exactly, in the sync's item."""
+
+    def test_the_setting(self):
+        self.assertEqual(SITE_CFG["lavina_weekly_open"]["url"], LV_MEETING_PAGE)
+
+    def test_the_sync_writes_it(self):
+        it = W.lavina_item(SITE_CFG["lavina_weekly_open"])
+        self.assertEqual(it["url"], LV_MEETING_PAGE)
 
 
 class MeetingDate(unittest.TestCase):
@@ -567,7 +583,7 @@ WEEKLY = [
      "i18n": {"title": {"en": "Grapevine Weekly Open AA Meeting", "es": "Grapevine Weekly Open AA Meeting"},
               "day": {"en": "Wednesdays", "es": "Miércoles"}}},
     {"id": "weekly_open_lv", "source": "lavina", "kind": "meeting", "lang": "es", "status": "ok", "title": "Reunión Abierta de La Viña",
-     "extra": {"weekday": "thursday", "zoom_id": "834 5678 9012", "passcode": "975310", "next_start": "2026-11-12T17:00:00Z",
+     "url": LV_MEETING_PAGE, "extra": {"weekday": "thursday", "zoom_id": "834 5678 9012", "passcode": "975310", "next_start": "2026-11-12T17:00:00Z",
                "start_local": "12:00", "timezone": "America/New_York", "time_central": "11 AM Central", "starts": "2026-11-05"},
      "i18n": {"title": {"en": "La Viña Open Meeting (in Spanish)", "es": "Reunión Abierta de La Viña"},
               "day": {"en": "Thursdays", "es": "Jueves"}}},
@@ -769,7 +785,15 @@ class Pages(unittest.TestCase):
                 for k in ("wo", "lvo"):
                     self.assertNotIn("lg:col-span-2", cards[k].split(">", 1)[0], "the two meetings side by side")
                 self.assertIn("is-weekly is-lv", cards["lvo"].split(">", 1)[0])
-                self.assertIn(self.T["media.show_episodes_one"][lang], visible(cards["lvo"]))
+                one = self.T["media.show_episodes_one"][lang]
+                # "1 episode", never "1 episodes" / "1 episodios" (assertIn alone would take those too)
+                self.assertRegex(visible(cards["lvo"]), re.escape(one) + r"(?![\w])", "the singular form")
+                # a show name in the other language keeps its lang attribute on the show chips
+                chip = re.search(r'<span lang="(\w+)">' + re.escape(html.escape(NAME, quote=False)) + "</span>",
+                                 self.built[("/es" if lang == "es" else "") + "/listen/"])
+                if lang == "en":
+                    self.assertIsNotNone(chip, "La Viña's show name is marked Spanish on /listen/")
+                    self.assertEqual(chip.group(1), "es")
 
     def test_each_meeting_card_says_its_day_language_and_name(self):
         want = {"en": {"wo": ("Live on Zoom: Wednesdays", "In English", "How to join: Grapevine Weekly Open AA Meeting"),
@@ -812,6 +836,15 @@ class Pages(unittest.TestCase):
                 self.assertIn(f'href="{pre}/listen/?show=wo#episodes"', page)
                 name = "La Viña Open Meeting (in Spanish)" if lang == "en" else "Reunión Abierta de La Viña"
                 self.assertIn('aria-label="' + self.T["committee.weekly.listen_name"][lang].replace("{name}", name) + '"', page)
+
+    def test_la_vinas_card_links_its_page(self):
+        # the La Viña card's "Details on aalavina.org" opens its meeting's page, in both languages
+        for lang, words in (("en", "Details on "), ("es", "Detalles en ")):
+            pre = "/es" if lang == "es" else ""
+            with self.subTest(lang=lang):
+                page = self.built[pre + "/meetings/"]
+                i = page.index(f'href="{LV_MEETING_PAGE}"')
+                self.assertIn(words, visible(page[i:page.index("</a>", i)]))
 
     def test_home_names_la_vinas_meeting(self):
         for lang, label, title in (("en", "La Viña Open Meeting", "Meeting of November 5, 2026"),
