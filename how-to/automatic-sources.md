@@ -1354,8 +1354,8 @@ is a Zoom join link (`https://<server>.zoom.us/j/<digits>`, optionally `?pwd=…
 the meeting's ID —
 Grapevine's as the page gives it that day, La Viña's `zoom_id`; otherwise the plain `https://zoom.us/j/<ID>`, and
 the source's notes on `/status/` say why (the link cut at its first `?`, `#` or `&`, so never its `pwd=` part; a
-link with more after its `?pwd=…`, such as Zoom's `&omn=…` or Google Calendar's `&from=addon`, gets its own note:
-keep only `https://….zoom.us/j/<ID>?pwd=…` and delete the rest). So if the meeting moves to another Zoom room,
+link with more after its meeting ID or its `?pwd=…`, such as Zoom's `&omn=…` or Google Calendar's `&from=addon`,
+gets its own note: keep only `https://….zoom.us/j/<ID>?pwd=…` and delete the rest). So if the meeting moves to another Zoom room,
 Join still opens the right room (people type the passcode) until the new full link is pasted in the settings (for
 La Viña, together with the new room's `zoom_id` and `passcode`).
 `grapevine_weekly_open: flyer_match` finds AA Grapevine's flyer on the Drive for the Grapevine cards of `/meetings/`

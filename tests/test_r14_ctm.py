@@ -239,9 +239,11 @@ class Pages(unittest.TestCase):
     def test_the_card_says_its_words(self):
         for url, lang, html in self.places():
             if "/shop/" in url:
-                with self.subTest(url=url):  # the band's "How it works" card ends with the cash sentence
+                with self.subTest(url=url):  # the band's "How it works" card says the cash sentence after its three steps
                     how = html[html.index(READ["read.subs.ctm_how_title"][lang]):]
-                    self.assertIn(READ["read.subs.ctm_cash"][lang].replace("'", "&#39;"), how)
+                    cash, step3 = (READ[k][lang].replace("'", "&#39;") for k in ("read.subs.ctm_cash", "read.subs.ctm_how3"))
+                    self.assertIn(cash, how)
+                    self.assertGreater(how.index(cash), how.index(step3))
                 continue
             other = "en" if lang == "es" else "es"
             with self.subTest(url=url):

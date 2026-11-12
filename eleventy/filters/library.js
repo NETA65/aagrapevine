@@ -572,6 +572,12 @@ function slug(s, max = 60) {
   return String(s || "").normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "").slice(0, max).replace(/-+$/, "") || "item";
 }
+// An event's title as /events/ shows it: without the spaces a calendar left inside its brackets (committee.js
+// tidyBrackets: "… ( A.A. Un camino a la vida )" → "… (A.A. Un camino a la vida)"), its original's too
+function tidyTitle(s) {
+  if (typeof committee.tidyBrackets === "function") { try { return committee.tidyBrackets(s); } catch { /* fall back */ } }
+  return String(s ?? "").replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
+}
 
 // How many past events /events/ lists (keep in sync with `past | limit(40)` in src/pages/events.njk).
 const PAST_EVENTS_SHOWN = 40;
@@ -1045,7 +1051,7 @@ export function searchIndex(db, nav, lang, helpers, site) {
       // meetings list (the AA groups that read Grapevine: committee.gvm.search_kw), which it is not part of
       const ownOnline = recurring && !host && online && !(ev.location || ex.location);
       push({
-        id: it.id, k: "event", t: P(it, "title") || ev.title, o: it.title, ol: it.lang,
+        id: it.id, k: "event", t: tidyTitle(P(it, "title") || ev.title), o: tidyTitle(it.title), ol: it.lang,
         s: [recurring ? (ev.recurrence || P(it, "recurrence_label")) : when, where].filter(Boolean).join(" · "),
         // A series' next date left the line shown above (for a phone's sake), but it must still find the series —
         // "october", "oct 22", "22 octubre" find a one-off event by the date in its line. The meta line's `d` is

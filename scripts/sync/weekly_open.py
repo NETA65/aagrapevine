@@ -102,8 +102,9 @@ def join_link(configured, zoom_id, setting: str, notes: list[str] | None = None)
     (JOIN_LINK_RE) whose meeting number is this meeting's `zoom_id` ("871 2036 8287"); else the plain
     https://zoom.us/j/<zoom_id> (None without a usable ID). A link that is set but not used is logged and added to
     `notes` (→ the source's stats.warnings, shown on /status/), the link cut at its first "?", "#" or "&" (a note
-    never shows the passcode part). A join link with more after its "?pwd=…" (Zoom's "&omn=…", Google Calendar's
-    "&from=addon", a "#…") gets its own note: keep only https://….zoom.us/j/<ID>?pwd=… and delete the rest.
+    never shows the passcode part). A join link with more after its meeting ID or its "?pwd=…" (Zoom's "&omn=…",
+    Google Calendar's "&from=addon", a "#…") gets its own note: keep only https://….zoom.us/j/<ID>?pwd=… and delete
+    the rest.
     `setting` names its block in config/site.yml ("grapevine_weekly_open")."""
     digits = re.sub(r"\D", "", str(zoom_id or ""))
     plain = f"https://zoom.us/j/{digits}" if 9 <= len(digits) <= 11 else None

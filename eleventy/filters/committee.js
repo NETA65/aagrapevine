@@ -771,7 +771,8 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
 /** An event's title without the spaces a calendar left inside its brackets: "XLII … ( A.A. Un camino a la vida )"
  *  → "XLII … (A.A. Un camino a la vida)" (also after "¿" / "¡"), so no ")" sits on a line of its own. The one rule
  *  for every place an event's title shows: /events/ and /events.ics (shapeEvent), the month pages — the poster,
- *  the Dates row, the message (monthly.js dateRow) — and the month's calendar file (monthIcs, from shapeEvent). */
+ *  the Dates row, the message (monthly.js dateRow) — and the month's calendar file (monthIcs, from shapeEvent), the
+ *  site search (library.js tidyTitle: the title and its original) and the Tracker's list of events (cmTidyTitle). */
 export function tidyBrackets(s) {
   return String(s ?? "").replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
 }
@@ -2354,6 +2355,9 @@ export default function (eleventyConfig, helpers) {
   // A weekly open meeting's flyer: {% set wf = w | cmWeeklyFlyer(site, db.drive.items) %} → { view, preview, thumb }
   // or null (weeklyFlyer) — for ui.flyerThumb / ui.flyerButton, as an event's ev.flyer
   eleventyConfig.addFilter("cmWeeklyFlyer", (w, site, items) => weeklyFlyer(w, site, EMPTY ? [] : items));
+  // An event's title without the spaces a calendar left inside its brackets (tidyBrackets) — where a page takes
+  // an event's title straight from the data (the Tracker's list of events)
+  eleventyConfig.addFilter("cmTidyTitle", (s) => tidyBrackets(s));
   // A weekly open meeting's "Add to calendar": {% set wc = w | cmWeeklyCal(site, lang) %} → { gcal, ics } (weeklyCalendar)
   eleventyConfig.addFilter("cmWeeklyCal", (w, site, lang) => weeklyCalendar(w, site, lang));
   // "7:00 – 8:00 PM CDT" from two instants (an end after midnight: "7:00 PM – 1:00 AM CST") — clockRange

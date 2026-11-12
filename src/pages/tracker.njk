@@ -2072,7 +2072,8 @@ pageStyles: ["/assets/css/expenses.css"]
 
 {#- the app's words (this page's language), its defaults and the site's events (suggestions) -#}
 {%- set evTitles = [] -%}
-{%- for e in ((db.events.items if db.events) or []) %}{% set tt = (e.i18n.title[lang] if (e.i18n and e.i18n.title and e.i18n.title[lang]) else e.title) %}{% if tt and not (tt in evTitles) %}{% set _n = evTitles.push(tt) %}{% endif %}{% endfor -%}
+{#- (each title as /events/ shows it: cmTidyTitle drops the spaces a calendar left inside its brackets) -#}
+{%- for e in ((db.events.items if db.events) or []) %}{% set tt = (e.i18n.title[lang] if (e.i18n and e.i18n.title and e.i18n.title[lang]) else e.title) | cmTidyTitle %}{% if tt and not (tt in evTitles) %}{% set _n = evTitles.push(tt) %}{% endif %}{% endfor -%}
 <script type="application/json" id="xp-config">{{ expenses.config | jsonScript | safe }}</script>
 <script type="application/json" id="xp-ui">{{ expenses.ui[lang] | jsonScript | safe }}</script>
 <script type="application/json" id="xp-events">{{ evTitles | jsonScript | safe }}</script>
