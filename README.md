@@ -50,8 +50,8 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   los precios por cantidad) e imprime una **hoja informativa** de una página para la conciencia de grupo (en
   inglés, en español o bilingüe). Para quien quiere **ayudar económicamente**, la tarjeta *¿Quieres ayudar
   económicamente?* (en *Quiénes somos* y en la página «no encontrada», donde está también en inglés) dice que quien
-  prefiere pagar en efectivo puede entregarlo en nuestra mesa en el próximo evento, y el comité lo usa para comprar
-  suscripciones de regalo de Lleva el Mensaje; esa tarjeta y *Lleva el Mensaje* (`/es/shop/#carry`) enlazan los dos
+  prefiere pagar en efectivo puede entregar el efectivo en nuestra mesa de La Viña y Grapevine en el próximo evento, y
+  que el comité lo usa para comprar suscripciones de regalo de Lleva el Mensaje y Carry the Message; esa tarjeta y *Lleva el Mensaje* (`/es/shop/#carry`) enlazan los dos
   programas oficiales: Lleva el Mensaje de La Viña y Carry the Message de Grapevine (`links:` → `lleva_el_mensaje`,
   `carry_the_message`). **Kit del mes** (`/es/monthly/`): todo lo de este mes — la reunión del comité, los eventos,
   las fechas límite para historias, las revistas del mes y el libro del mes —, un cartel para cada mes (descargar en

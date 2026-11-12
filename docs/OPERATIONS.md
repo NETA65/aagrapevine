@@ -469,17 +469,22 @@ both columns where only two fit), nothing scrolling sideways; `ProgramButtons` �
 404 page, About and Shop at 390–1920 px and 150 % text: at least 44 px tall, one width, side by side or one under
 the other, the page language's first; `MissingSpanishAddress` — a missing address answered with the root 404 page
 (status 404, as on GitHub Pages): La Viña's button first under `/es/…`, Grapevine's elsewhere, and the card's words
-in Spanish too, under the English ones at 390 / 1440 px and beside them at 1920 px) and `test_r26_chat_message.py`
+in Spanish too, under the English ones at 390 / 1440 px and beside them at 1920 px), `test_r26_chat_message.py`
 (`ChatMessageCopy`: Customize → Prepare of the Grapevine Meeting, the Copy button of "Chat message for Google Meet",
 the only Copy in that tab, beside View and Print; the clipboard holds 7 plain lines with every address written out
 in full, the day's facts filled in, and no `{live:`, `[ ]` or `**` marks; on `/es/` the button says "Copiar" and
-copies the same English text). Each file takes
+copies the same English text) and `test_r26b_posters.py` (`EveryDateFits`: every month's poster, English and Spanish,
+once fitted (`data-mp-fit`) holds the page's dates and the offers and price change in the message's words, with
+nothing overflowing and type of at least 15 px; `PrintOnePage`: the busiest month prints on one Letter page;
+`MastheadClear`: the month's name never touches the year or tagline; `UnfittedClipped`: before the fit, or with
+monthly.js blocked, no text sits on another block and every date is whole). Each file takes
 `setUpModule` / `tearDownModule` (and the helpers `new_context`, `open_page`, `url`, `S`) from
 `test_site_in_browser.py`, so each file starts the site server and the browser once and stops them after its last
 check; they are written not to depend on the day they run (a stopped clock, or what the built pages say). A new
-file must be named `test*.py` (discover's pattern) and take the same set-up. All 96 checks (the 15 files, with
-`test_site_in_browser.py`; none skipped on a build with both magazines' suggested topics) took about 8 minutes on a
-Windows PC with Microsoft Edge (`GV_BROWSER_CHANNEL=msedge`, October 16, 2026); on GitHub's runner the 84 checks before them took 6¾ minutes, and
+file must be named `test*.py` (discover's pattern) and take the same set-up. All 105 checks (the 17 files, with
+`test_site_in_browser.py`; none skipped on a build with both magazines' suggested topics) took about 11 minutes on a
+Windows PC with Microsoft Edge (`GV_BROWSER_CHANNEL=msedge`, November 12, 2026, while another job ran; the poster
+file alone about 1 minute; 96 checks took about 8 minutes on October 16, 2026); on GitHub's runner the 84 checks before them took 6¾ minutes, and
 the step's limit is 15 minutes (`check.yml`; it was 10 until October 16, 2026).
 
 Job `tests` (25 min since October 2026, 15 before; about 10 minutes with `GateLists`, the

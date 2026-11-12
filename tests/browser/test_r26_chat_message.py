@@ -75,7 +75,7 @@ class ChatMessageCopy(unittest.TestCase):
         self.assertEqual(lines[2], "• Our table at CityWide Dallas: every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church")
         self.assertRegex(lines[3], rf"^• Grapevine Meeting: every 1st Wednesday, .+, on this Google Meet \(next: {DATE}\)$")
         self.assertRegex(lines[4], rf"^• Committee meeting: every 3rd Wednesday, .+, the same link \(next: {DATE}\)$")
-        self.assertEqual(lines[5], "• Write for Grapevine: https://www.aagrapevine.org/submit-your-story")
+        self.assertEqual(lines[5], "• Have a story? AA Grapevine: https://www.aagrapevine.org/submit-your-story · La Viña: https://www.aalavina.org/comparte")
         site = built_site_url()
         self.assertTrue(site.startswith("https://"), site)
         self.assertEqual(lines[6], f"• Dates and flyers: {site} · NETA 65: https://neta65.org")
@@ -85,6 +85,7 @@ class ChatMessageCopy(unittest.TestCase):
         self.assertEqual(re.findall(r"https://\S+", clip), ["https://www.aagrapevine.org/carry-the-message",
                                                              "https://www.aalavina.org/lleva-el-mensaje",
                                                              "https://www.aagrapevine.org/submit-your-story",
+                                                             "https://www.aalavina.org/comparte",
                                                              site, "https://neta65.org"])
 
     def test_the_spanish_page(self):

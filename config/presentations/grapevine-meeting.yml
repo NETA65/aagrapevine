@@ -324,7 +324,7 @@ slides:
       - "Next Grapevine Meeting: **{live:grapevine_meeting_after}** · {live:grapevine_meeting_time}, the same link"
       - "Our committee meeting: every 3rd Wednesday, {live:meeting_time}, the same link · next: {live:meeting_day}, {live:speaker_note}"
       - "This meeting's flyer, to share with your home group and sponsees: [{live:site}/meetings/](/meetings/#grapevine-meeting)"
-      - "Write for Grapevine: the next deadline, {live:next_deadline_gv}"
+      - "Next story deadline (AA Grapevine): {live:next_deadline_gv}"
       - "Every date and flyer: [{live:site}/events/](/events/) · the Area's website: [neta65.org](https://neta65.org)"
     takeaway: "Any other Grapevine, La Viña or Area 65 announcements from the floor?"
     minutes: 3
@@ -332,7 +332,7 @@ slides:
       TIP (timekeeping): about 3 minutes, from about 7:52 to 7:55.
       SAY: We also have a few announcements. Our next Grapevine Meeting is on {live:grapevine_meeting_after}, at seven, right here on this same Google Meet link. Its flyer is on our committee's website, on the Meetings page: please share it with your home group and sponsees.
       SAY: On the third Wednesday of each month, also at seven Central, our Area's Grapevine and La Viña Committee meets on this exact same link: next on {live:meeting_day}, {live:speaker_note}. Whether you're a GVR or an RLV, or just curious about Grapevine and La Viña service across Area 65, please join us: any AA member is welcome.
-      SAY: Grapevine is always looking for stories: the next deadline is on the screen. Every date and flyer is on our committee website, and the Area's website, neta65.org, has our committee's page too. Are there any other Grapevine, La Viña or Area 65 announcements from the floor tonight?
+      SAY: The next Grapevine story deadline is on the screen. Every date and flyer is on our committee website, and the Area's website, neta65.org, has our committee's page too. Are there any other Grapevine, La Viña or Area 65 announcements from the floor tonight?
       DO: Paste the chat message into the Google Meet chat now ({ui:customize} → {ui:prepare}: 'Chat message for Google Meet', its Copy button): the links and dates of these announcements. Add any announcement from the room that is AA's (a group's anniversary, a district workshop); keep outside events out.
       GUEST SPEAKER: the slide names the committee meeting's guest speaker, or says 'no guest speaker this month' for a meeting that has none (every meeting before the guest speakers start on January 20, 2027; on December 2's slide, that is December 16, 2026). On a night without one, the members share on a topic until 7:30, then the usual second half.
       IF IT SAYS TO BE ANNOUNCED: the slide says 'guest speaker: to be announced' when the committee's list doesn't name that month's speaker yet, or on a copy opened long after the website made it. Say that the speaker will be on the committee's Meetings page.
@@ -348,7 +348,7 @@ slides:
     title: "Before we close"
     items:
       - "Have a story? Send it to AA Grapevine or La Viña: your experience may help another alcoholic · [{live:site}/contribute/](/contribute/)"
-      - "Your story, a joke, a photo or art: [aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) · For La Viña, your story, a photo or art: [aalavina.org/comparte](https://www.aalavina.org/comparte)"
+      - "AA Grapevine: a story, a joke, a photo or art, [www.aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) · La Viña: a story, a photo or art, [www.aalavina.org/comparte](https://www.aalavina.org/comparte)"
       - "Who you see here, what you hear here, when you leave here, let it stay here"
       - "See you at our CityWide Dallas table on the 2nd Saturday, at the committee meeting on the 3rd Wednesday, and back here on the 1st Wednesday of next month"
     minutes: 1.5
@@ -445,7 +445,7 @@ slides:
       • Our table at CityWide Dallas: every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church
       • Grapevine Meeting: every 1st Wednesday, {live:grapevine_meeting_time}, on this Google Meet (next: {live:grapevine_meeting_after})
       • Committee meeting: every 3rd Wednesday, {live:meeting_time}, the same link (next: {live:meeting_next})
-      • Write for Grapevine: https://www.aagrapevine.org/submit-your-story
+      • Have a story? AA Grapevine: https://www.aagrapevine.org/submit-your-story · La Viña: https://www.aalavina.org/comparte
       • Dates and flyers: {live:site_url} · NETA 65: https://neta65.org
     notes: |
       WHEN: paste it in the Google Meet chat during the announcements ({slide:announcements}); paste it again near the end if many people joined late.

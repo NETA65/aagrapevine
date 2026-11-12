@@ -114,7 +114,7 @@ def join_link(configured, zoom_id, setting: str, notes: list[str] | None = None)
     shown = re.split(r"[?#&]", link, maxsplit=1)[0][:120]
     head = None if m else JOIN_LINK_RE.match(link)
     if head and link[head.end():head.end() + 1] in ("?", "#", "&"):
-        why = (f"{setting}: zoom_url has more after its ?pwd=… part (such as &omn=… or &from=addon). Keep only "
+        why = (f"{setting}: zoom_url has more after its meeting ID or its ?pwd=… part (such as &omn=… or &from=addon). Keep only "
                "https://….zoom.us/j/<meeting ID>?pwd=… and delete the rest. The plain link is used.")
     elif not m:
         why = (f"{setting}: zoom_url {shown!r} is not a Zoom join link (https://….zoom.us/j/<meeting ID>?pwd=…) — "

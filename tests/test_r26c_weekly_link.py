@@ -126,7 +126,7 @@ class JoinLink(unittest.TestCase):
                 self.assertEqual(W.join_link(link, ZOOM_ID, "grapevine_weekly_open", notes), PLAIN)
                 self.assertEqual(len(notes), 1)
                 note = notes[0]
-                self.assertIn("grapevine_weekly_open: zoom_url has more after its ?pwd=… part", note)
+                self.assertIn("grapevine_weekly_open: zoom_url has more after its meeting ID or its ?pwd=… part", note)
                 self.assertIn("Keep only https://….zoom.us/j/<meeting ID>?pwd=… and delete the rest", note)
                 self.assertNotIn("not a Zoom join link", note)
                 for token in ("VYskKcQbHB4KtZiTk0EmDcMuJO95kV", "pwd=abc", "omn=8", "omn=1", "success", "uname",

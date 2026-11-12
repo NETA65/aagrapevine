@@ -108,6 +108,15 @@ class Words(unittest.TestCase):
         # the one-program button is gone (both are shown now)
         self.assertNotIn("read.subs.ctm_btn", READ)
 
+    def test_the_shop_says_cash_at_our_table_in_the_cards_words(self):
+        """The Shop's "How it works" says the cash option too (owner, November 12, 2026: "site too"): word for word
+        the last sentence of the card's ctm.text, no receipt line, no amount, no appeal."""
+        cash = READ["read.subs.ctm_cash"]
+        for lang in ("en", "es"):
+            with self.subTest(lang=lang):
+                self.assertTrue(COMMON["ctm.text"][lang].endswith(" " + cash[lang]))
+                self.assertNotRegex(cash[lang], r"(?i)receipt|recibo|\$|\d|!|¡|please|por favor|donat|donativo")
+
 
 # --------------------------------------------------------------------------------------------- the macro
 class Macro(unittest.TestCase):
@@ -230,6 +239,9 @@ class Pages(unittest.TestCase):
     def test_the_card_says_its_words(self):
         for url, lang, html in self.places():
             if "/shop/" in url:
+                with self.subTest(url=url):  # the band's "How it works" card ends with the cash sentence
+                    how = html[html.index(READ["read.subs.ctm_how_title"][lang]):]
+                    self.assertIn(READ["read.subs.ctm_cash"][lang].replace("'", "&#39;"), how)
                 continue
             other = "en" if lang == "es" else "es"
             with self.subTest(url=url):
