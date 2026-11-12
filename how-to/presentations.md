@@ -50,8 +50,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
 
 - The six short GVR / RLV 101 sessions on the same page (`/orientation/magazines/` …) come from
   `config/orientation.yml`. See [Settings](settings.md).
-- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed snapshots,
-  made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026. Changing a YAML file never
+- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides`, one for each of the five web
+  decks, are separate, fixed snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet
+  details on November 11, 2026, the Grapevine Meeting's added in November 2026. Changing a YAML file never
   changes them, and changing them never changes the web decks. A card links its copy as "PowerPoint copy" through
   its `drive_title`.
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
@@ -1092,7 +1093,7 @@ them, but update them as well so the record stays true.
 The `{live:…}` facts follow `config/site.yml` by themselves (`meeting:` for the committee, `recurring_events:` for
 the booth and La Viña's workshop; see [Settings](settings.md)). But some sentences in the decks were typed by hand.
 After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:30`, `five`, `seven` and
-`p.m.`, and fix what you find, in the slides and in the notes. Real examples:
+`p.m.` (and `PM`, `7:`, `eight`), and fix what you find, in the slides and in the notes. Real examples:
 
 | File, slide | Typed by hand |
 |---|---|
@@ -1102,7 +1103,8 @@ After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursda
 | `orientation-workshop.yml`, `thank-you` | "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Google Meet." |
 | `committee-meeting.yml`, `next-meeting`, `open-meetings`, `coming-up` | "Every 3rd Wednesday · …" and "Usually the 4th Thursday, …"; in the notes "third Wednesday", "at seven", "second Saturday … from 5:30 to 7:30 p.m.", "first Wednesday" |
 | `committee-meeting.yml`, the guest speaker's slides, `welcome`, `agenda` | the evening's plan: 7:02, 7:22, "done by 7:30", 7:30 to 8:00 (and the agenda's typed times) |
-| `grapevine-meeting.yml`, `announcements` | "every 2nd Saturday, 5:30 to 7:30 PM, Lovers Lane United Methodist Church"; in the notes "first Wednesday", "third Wednesday", "at seven" |
+| `grapevine-meeting.yml`, `card`, `welcome`, `seventh-tradition`, `announcements`, `before-we-close`, `chat-message` | "the first Wednesday of each month at 7:00 PM Central" (and the card's "first Wednesday of the month", in English and Spanish); "every 2nd Saturday, 5:30 to 7:30 PM"; "every 3rd Wednesday"; "on the 2nd Saturday, … the 3rd Wednesday, and back here on the 1st Wednesday of next month"; the chat message's "every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church", "every 1st Wednesday", "every 3rd Wednesday"; in the notes "first / second / third" Wednesday or Saturday, "from 5:30 to 7:30 PM", "Lovers Lane United Methodist Church", "at seven", "7:00 PM" |
+| `grapevine-meeting.yml`, `title`, `how-it-works`, `last-shares`, `before-the-meeting`, and each TIP (timekeeping) line | the hour's plan: "by 6:50 p.m. Central", "at 7:00", "at about 7:50", "by 8:00" ("by eight"), and the TIP lines' times (7:05 to 7:08 … 7:55 to 7:57) |
 | `information-workshop.yml`, `lv-workshop` | "Usually the **4th Thursday**", and "fourth Thursday" in its notes |
 
 Where the sentence allows it, use the fact instead: "Our committee meets {live:meeting_rule}, {live:meeting_time},

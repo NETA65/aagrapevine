@@ -13,7 +13,7 @@
    [names](#41-name-a-file-so-its-title-and-date-come-out-right) ·
    [reports](#42-reports--area-and-committee-reports) ·
    [notes](#43-notes--minutes-agendas-and-meeting-notes) ·
-   [slides](#44-slides--presentations-and-the-four-deck-copies) ·
+   [slides](#44-slides--presentations-and-the-deck-copies) ·
    [workshops](#45-workshops--workshop-materials) ·
    [forms](#46-forms--google-forms-for-sign-ups) ·
    [photos](#47-photos--photo-albums) ·
@@ -265,7 +265,7 @@ the second one stays in the title).
   longer matches, and the link quietly disappears — see [Settings](settings.md).
 - Library: type "Meeting notes" / "Notas de reunión" and the collection **Committee reports**.
 
-### 4.4 `slides/` — presentations and the four deck copies
+### 4.4 `slides/` — presentations and the deck copies
 
 **Folder names:** `slides`, `slide`, `presentaciones`, `presentación`, `presentations`, `presentation`,
 `diapositivas`, `diapositiva`, `powerpoint`, `decks`, `deck` (also `Slide deck`, `PowerPoint`).
@@ -282,12 +282,12 @@ the second one stays in the title).
 | `Information Workshop handout.pdf` | a Document card in the Slides tab |
 | `Committee overview.ppsx` in a folder named `PowerPoint` | Slides tab: "Committee overview" |
 
-#### The four deck copies
+#### The deck copies
 
 The site has five **web presentations** on GVR / RLV 101 (`/orientation/#presentations`), written in
-[config/presentations/](../config/presentations/README.md). The four `.pptx` files in `slides/` are fixed PowerPoint
-copies of four of them (the Grapevine Meeting has none), made on October 1, 2026 and rebuilt with the Google Meet
-details on November 11, 2026. The site links each copy to its web presentation **by the copy's title**: the title
+[config/presentations/](../config/presentations/README.md). The five `.pptx` files in `slides/` are fixed PowerPoint
+copies of them: the first four made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026,
+the Grapevine Meeting's added in November 2026. The site links each copy to its web presentation **by the copy's title**: the title
 must be exactly the deck's `drive_title`.
 
 | File in `slides/` today | `drive_title` is set in | The web presentation |
@@ -296,6 +296,7 @@ must be exactly the deck's `drive_title`.
 | `Grapevine and La Viña Information Workshop.pptx` | `config/presentations/information-workshop.yml` | `/orientation/?present=information-workshop` |
 | `Grapevine and La Viña Writing Workshop.pptx` | `config/presentations/writing-workshop.yml` | `/orientation/?present=writing-workshop` |
 | `Grapevine and La Viña Monthly Committee Meeting.pptx` | `config/presentations/committee-meeting.yml` | `/orientation/?present=committee-meeting` |
+| `Grapevine Meeting.pptx` | `config/presentations/grapevine-meeting.yml` | `/orientation/?present=grapevine-meeting` |
 
 What the match gives:
 
@@ -906,7 +907,7 @@ real Drive: `python -m scripts.sync.drive --dry-run` (prints the stats and three
 | A grey tile or an icon instead of the picture | the file is not public (sharing changed), Drive has not made its preview yet, or an unusual format | check the sharing; wait a day; save the picture as JPG |
 | A video does not play | Drive is still processing it, or it is not public | wait; check the sharing |
 | A sign-up form disappeared | it stopped accepting responses | turn "Accepting responses" back on; it returns at the next update |
-| "Present on the web" or "PowerPoint copy" is gone | the deck's `drive_title:` line is missing or a comment ([4.4](#44-slides--presentations-and-the-four-deck-copies)), or the deck file was renamed ("v2", other capitals) | put the line back; rename the file back to the exact `drive_title`, or change `drive_title` in `config/presentations/<id>.yml` |
+| "Present on the web" or "PowerPoint copy" is gone | the deck's `drive_title:` line is missing or a comment ([4.4](#44-slides--presentations-and-the-deck-copies)), or the deck file was renamed ("v2", other capitals) | put the line back; rename the file back to the exact `drive_title`, or change `drive_title` in `config/presentations/<id>.yml` |
 | "Full editorial calendar" is gone from `/monthly/` | the file name lost "editorial calendar" / "calendario editorial" | rename the file |
 | A PDF in `photos/` is not on the Portfolio | `photos/` is for pictures and videos only | move it to the right folder |
 | Run summary note "&lt;path&gt; has N entries — add a GOOGLE_API_KEY secret (or split the folder) so none are missed" | 500+ files in one folder; the public folder view may not list them all | split the album, or ask the NETA65 admin to add the `GOOGLE_API_KEY` secret (README §10a) |

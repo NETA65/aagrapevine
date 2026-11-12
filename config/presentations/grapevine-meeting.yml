@@ -153,7 +153,7 @@ slides:
       SAY: A few housekeeping notes. To keep the meeting free of background noise, please stay muted when you're not speaking. When it's time to share, use the Raise hand button at the bottom of your Google Meet screen, or simply unmute when I call on you. On Google Meet your name is the one your Google account shows: a first name is all we need. Cameras are up to you; if yours is on, please be mindful of what's behind you, to help protect everyone's anonymity. Please don't take photos or screenshots, and please don't record. We aren't recording tonight either.
       SAY: One more thing: we read from AA Grapevine, but this is our committee's meeting. We don't speak for AA Grapevine, Inc., and this isn't an official AA Grapevine meeting.
       DO: Before you say 'we aren't recording', make sure nobody is recording. A member who would rather not show their full name can join from a private browser window, as a guest, with a first name only: you admit them like everyone else.
-      TRANSITION: Let's open our meeting with a moment of silence and the Serenity Prayer.
+      TRANSITION: Let's open the meeting the way many AA meetings do.
 
   # The opening's prayer, as the committee meeting says it: the deck's grape quote slide.
   - id: "serenity-prayer"
@@ -203,7 +203,7 @@ slides:
     minutes: 3
     notes: |
       TIP (timekeeping): about 3 minutes, from about 7:05 to 7:08.
-      SAY: Since this meeting brings together AA members from all across Northeast Texas Area 65, and sometimes from further away, let's take a brief moment to say hello and get to know who is with us tonight. Is anyone here at the Grapevine Meeting for the very first time, or visiting from another district, and would like to unmute, introduce yourself by your first name, and tell us the city, district or home group you're joining from?
+      SAY: Since this meeting brings together AA members from all across Northeast Texas Area 65, and sometimes from further away, let's take a brief moment to say hello and get to know who is with us tonight. If you're here at the Grapevine Meeting for the very first time, or visiting from another district, would you like to unmute and introduce yourself? Your first name, and the city, district or home group you're joining from.
       DO: Pause, so people have time to unmute and greet the group. In a small room, you can go down the participant list and welcome each one by first name; in a large one, invite them to type their first name and where they're from in the chat. Never put anyone on the spot: wait a few seconds, then move on.
       SAY: Welcome to each and every one of you! We're so glad you're here with us tonight. And if tonight is your first AA meeting: you don't have to share; listening is plenty.
       DO: If a newcomer stays after the meeting with questions, give them the committee's address, and the Meetings page of the committee website for meetings near them; never ask for their phone number or e-mail in the chat.
@@ -220,7 +220,7 @@ slides:
     notes: |
       SAY: Here's how our hour works. Tonight's reader reads a story from AA Grapevine, our meeting in print, and then starts us off by sharing on it. Then the floor is open for your experience, strength and hope on the story's topic: about three to five minutes each, so everyone who wishes has a turn. At about 7:50 we wrap up the sharing: a word about Carry the Message in place of a basket, our announcements, and we close with the Responsibility Statement by eight.
       DO: Tell the room who the timekeeper is (first name), and how they'll signal: a short '1 minute' in the chat, or a raised hand on screen.
-      TRANSITION: Now it's time for the heart of our meeting: tonight's story.
+      TRANSITION: Here's tonight's story.
 
   # ------------------------------------------------------------------ THE STORY
   - id: "tonights-story"
@@ -235,7 +235,7 @@ slides:
     minutes: 0.75
     notes: |
       SAY: Now it is time for the heart of our meeting. Tonight we'll hear a story from AA Grapevine: '{fill:story_title}', from the {fill:story_issue} issue. Our topic: {fill:story_topic}. I've asked (first name) to read the story for us and to kick off our sharing. Take it away, (first name)!
-      WHICH STORY: one from this month's issue ({live:gv_issue}) is a good start, but any issue works: the chair chooses. Choose a story of about 500 to 1,200 words, so it reads in under ten minutes and leaves the reader a few minutes to start the sharing.
+      WHICH STORY: one from this month's issue ({live:gv_issue}) is a good start, but any issue works: the chair chooses. Choose a story of about 500 to 1,200 words, so it reads in nine minutes or less and leaves the reader about three minutes to start the sharing.
       DO: Ask the reader a week ahead, agree on the story, and ask them to share first after reading it. They read from their own copy, the printed magazine, the app or the website.
       UPDATE ({ui:customize} → {ui:your_details}): the story's title, the issue it is in, and tonight's topic.
 
@@ -248,7 +248,7 @@ slides:
     body: "Read aloud from AA Grapevine, the {fill:story_issue} issue; then our reader starts the sharing"
     minutes: 12
     notes: |
-      TIP (timekeeping): about 12 minutes, from about 7:10 to 7:22: the story (under ten minutes), then the reader's own share to start us off (about 3 minutes). A shorter story leaves more time for sharing.
+      TIP (timekeeping): about 12 minutes, from about 7:10 to 7:22: the story (nine minutes at most), then the reader's own share to start us off (about 3 minutes). A shorter story leaves more time for sharing.
       DO: Leave this slide up while the reader reads and shares. Keep everyone muted. If the reader's connection drops, read on from your own copy, or ask them to rejoin and pick up where they stopped.
       NEVER ON THE SCREEN: don't share the story's page on the screen, and don't paste its text in the chat: the stories are AA Grapevine's, and its copyright policy doesn't allow it without permission. The story's title and issue, or a link to it on aagrapevine.org, may go in the chat.
       ANONYMITY: Grapevine stories are signed with a first name and last initial, or a first name and a town. Read the byline as it is printed.
@@ -267,7 +267,7 @@ slides:
     note: "About 3 to 5 minutes each, so everyone who wishes has a turn. Raise your hand, or unmute when there's a pause."
     minutes: 23.5
     notes: |
-      TIP (timekeeping): about 23½ minutes, from about 7:22 to 7:45: five to seven shares at three to five minutes each. When many hands are up, ask for three minutes each. The timekeeper types '1 minute' in the chat a minute before a share's time is up; thank the member when the time is up.
+      TIP (timekeeping): about 23½ minutes, from about 7:22 to 7:45: five to seven shares at three to five minutes each. When many hands are up, ask for three minutes each. The timekeeper types '1 minute' in the chat at four minutes (at two minutes once you've asked for three minutes each); thank the member when the time is up.
       SAY: The floor is now open for discussion. We invite you to share your experience, strength and hope on tonight's story and its topic, {fill:story_topic}, or on how AA Grapevine or La Viña has touched your own recovery and your service. Here's a question to start us off: {fill:share_question}
       SAY: Please be mindful of your time, around three to five minutes, so everyone who wishes to share has a turn. You can raise your hand, or unmute when there's a pause. Who would like to share next?
       DO: Call on raised hands in order, by first name. Wait through the silence; someone usually speaks within ten seconds. If two people unmute at once, call on one by first name and the other next. Members who can't find the raise-hand button may type 'hand' in the chat. After each share, say 'thank you, (first name)'.
@@ -299,18 +299,18 @@ slides:
     eyebrow: "Closing"
     title: "Instead of a basket: Carry the Message"
     items:
-      - "This meeting has no expenses, so we pass no basket: your Seventh Tradition goes to your home group"
-      - "AA Grapevine, Inc. accepts no contributions: subscriptions, books and other items support the magazines, and the General Service Board covers La Viña's shortfall"
-      - "**Carry the Message**: a gift certificate bought in the official store becomes a subscription for an alcoholic in need, in treatment, in a correctional facility, a detox or a hospital"
+      - "This meeting has no expenses, so no basket: your Seventh Tradition goes to your home group"
+      - "AA Grapevine, Inc. accepts no contributions: its magazines support it, and the General Service Board covers La Viña's shortfall"
+      - "**Carry the Message**: a gift certificate from the official store becomes a subscription for an alcoholic in need, in treatment, corrections, a detox or a hospital"
       - "Online: [aagrapevine.org/carry-the-message](https://www.aagrapevine.org/carry-the-message) · La Viña's {lang:es}Lleva el Mensaje{/lang}: [aalavina.org/lleva-el-mensaje](https://www.aalavina.org/lleva-el-mensaje)"
-      - "In person: see our display and ask about it at our table at CityWide Dallas, every 2nd Saturday"
-    takeaway: "A purchase in the official stores, not a donation, and each of us decides. Our committee doesn't collect money."
-    source: "Sources: The A.A. Service Manual, 2024–2026 Edition, p. 66 · Self-Support (F-3) · aagrapevine.org/carry-the-message · aalavina.org/lleva-el-mensaje"
+      - "In person: see our display and ask about it at our CityWide Dallas table, every 2nd Saturday, 5:30 to 7:30 PM"
+    takeaway: "A purchase in the official stores, not a donation; each of us decides. Our committee doesn't collect money."
+    source: "Sources: The A.A. Service Manual, 2024–2026 Edition, p. 66 · Self-Support (F-3) · aagrapevine.org · aalavina.org"
     minutes: 2
     notes: |
       TIP (timekeeping): about 2 minutes, from about 7:50 to 7:52.
       SAY: Our Seventh Tradition says every AA group ought to be fully self-supporting. Our online meeting has no expenses, so we don't pass a basket tonight: please give your Seventh Tradition at your home group. AA Grapevine is different: it accepts no contributions from groups or members. Grapevine pays its way through the magazines, books and other items we buy and use, and La Viña, which isn't self-supporting yet, is supported by the General Service Board.
-      SAY: So in place of a basket, we mention Carry the Message. Anyone who wishes can buy a Carry the Message gift certificate in Grapevine's or La Viña's official store, and the office turns it into a subscription for an alcoholic in need, such as someone in a treatment center, a correctional facility, a detox or a hospital. The addresses are on the screen and in the chat, and on the second Saturday of each month you can see our display and ask us about it at our Grapevine and La Viña table at CityWide Dallas.
+      SAY: So in place of a basket, we mention Carry the Message. Anyone who wishes can buy a Carry the Message gift certificate in Grapevine's or La Viña's official store, and the office turns it into a subscription for an alcoholic in need, such as someone in a treatment center, a correctional facility, a detox or a hospital. The addresses are on the screen and in the chat. And on the second Saturday of each month, from 5:30 to 7:30 PM, you can see our display and ask us about it at our Grapevine and La Viña table at CityWide Dallas, at Lovers Lane United Methodist Church.
       TIP: Keep it to these sentences: describe, never sell. Never call a purchase a 'contribution to Grapevine' or a donation, and never ask anyone to buy: each member decides. Our committee collects no money, at its table either: members buy from the official stores. The committee website's Shop page ({live:site}/shop/#carry) has both programs.
 
   - id: "announcements"
@@ -366,8 +366,9 @@ slides:
     minutes: 1
     notes: |
       TIP (timekeeping): even when the sharing ran over, keep this closing: it takes a minute, and the meeting still ends by eight.
-      SAY: Please feel free to unmute your microphones and join me in closing with the Responsibility Statement. (Read it slowly.)
-      DO: As with the prayer, in a room of more than four or five, ask everyone to say it along with you muted ('stay muted and say it with me'), and say it aloud yourself, to avoid an echo.
+      SAY: Those who wish, please join me in closing with the Responsibility Statement: stay muted and say it along with me. (Read it slowly.)
+      SAY (in a small room of four or five): Please feel free to unmute your microphones and join me in closing with the Responsibility Statement. (Read it slowly.)
+      DO: As with the prayer, say it aloud yourself: unmuting a larger room all at once makes an echo.
       TIP: Read the words exactly as they appear on the slide. The wording shouldn't be changed or shortened.
       AFTER THE MEETING: stay on the Meet for a few minutes for newcomers' questions (on a free Google account the call ends at the hour: offer to answer by e-mail instead, from grapevine@neta65.org).
 
