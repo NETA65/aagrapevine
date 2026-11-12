@@ -2839,17 +2839,22 @@ time, its Google Meet link and meeting code, and that meeting's guest speaker fr
    listed yet — and in *No guest speaker*), the agenda's times (from the version of the agenda slide chosen: *With a
    guest speaker*, whose 7:02 row reads "Guest speaker: none at this meeting" for a meeting with none — November 18
    and December 16 in the first version, which the panel warns about — and "Guest speaker: to be announced" for one
-   not listed yet; or *No guest speaker*, with no speaker's row, for a business-only month such as those two),
-   last month's minutes, old and new business, the order of the district
-   reports, the online / no-photos reminder and a signature.
+   not listed yet; or *No guest speaker*, with tonight's topic in place of the speaker's rows, for a night such as
+   those two), tonight's topic when one is filled in, the second half (7:30–8:00: coming events, workshop requests,
+   special offers, magazine topics, GVR and RLV sharing), the volunteers wanted, the parking lot after the close,
+   the online / no-photos reminder and a signature. The committee meeting is not a business meeting (November
+   2026): no minutes to approve, no reports, no old or new business.
 2. **Reminder** — a short note for an e-mail or a group chat: the date, time, guest speaker and Google Meet details
-   in English, then a paragraph in Spanish with the date, time and meeting code that also says the meeting is in
-   English ("La reunión es en inglés"); then the link to the meeting's details and the signature. There is no
-   phone line: our Google Meet room has no number to call.
-3. **Draft minutes** — for the *last meeting held*: an outline with the chair and minutes-taker **by service
-   position**, "Attended: about ___ members", every part of the meeting with what was typed, the action items and
-   the next meeting. Service positions and counts only: no names, phone numbers or e-mail addresses, and no
-   attendance list. Make it right after the meeting.
+   in English, the second half and the parking lot in one line, then a paragraph in Spanish with the date, time,
+   meeting code and the same line ("la reunión después de la reunión" for the parking lot) that also says the
+   meeting is in English ("La reunión es en inglés"); then the link to the meeting's details and the signature.
+   There is no phone line: our Google Meet room has no number to call.
+3. **Draft minutes** (the committee's short *draft notes*) — for the *last meeting held*: the chair **by service
+   position**, "Attended: about ___ members", the opening, the guest speaker by service position and topic (or
+   tonight's topic), the events and workshop requests, the volunteers, the stories mentioned, the sharing's
+   highlights, the follow-ups (what · who, by service position · by when) and the next meeting; "Closed with the
+   Responsibility Statement; the parking lot followed." Service positions and counts only: no names, phone numbers
+   or e-mail addresses, and no attendance list. Make it right after the meeting.
 
 Each text has **Copy**, **Copy the subject** and **Open in my e-mail** (the chair's own e-mail app opens with no
 address: every address goes in BCC). A long text is copied first and the e-mail opens with "(Paste the text here:
@@ -2858,13 +2863,13 @@ text by hand. The minutes also have **Print** (named with the meeting's date; th
 document). A line whose details are all blank is left out; a blank left empty beside a filled one shows in
 [brackets].
 
-4. **Start next month** — after the meeting, once the minutes are drafted. The chair ticks what to carry (the
-   night's action items come ticked; old business still open comes unticked; up to 4, the deck's old-business
-   lines): they become next month's **old business**; the details that were for that meeting only are cleared;
-   the presenter, the order of districts and the treasurer's budget and reimbursement process are kept (the
-   panel lists them); the minutes' month moves on, the week-before checklist (Customize → Prepare) is
-   unticked, and the agenda and reminder move on to the next meeting. It asks first, and **Undo “Start next
-   month”** stays until the next meeting begins.
+4. **Start next month** — after the meeting, once the notes are drafted. Nothing is carried over (the committee
+   meeting has no old business: the panel says "Nothing to carry over."); the details that were for that meeting
+   only are cleared (tonight's topic, the volunteers, the stories mentioned); the presenter is kept; the
+   week-before checklist (Customize → Prepare) is unticked, and the agenda and reminder move on to the next
+   meeting. It asks first, and **Undo “Start next month”** stays until the next meeting begins. (A deck with
+   `actions` and `old_business` rows — the sample deck in `tests/fixtures/presentations/` — still carries the
+   ticked items into old business.)
 
 Everything stays on the chair's device; nothing is sent from the site and no e-mail address is stored. The texts
 are in English like the slides; the buttons are in the page's language. **To change the wording**, edit

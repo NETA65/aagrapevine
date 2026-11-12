@@ -46,7 +46,7 @@ import { normalizeEvents, meetingDates, meetingJoin, meetingSpeakers, recurrence
   weeklyOpenAll } from "./committee.js";
 import { editorialFor, issueLabel } from "./read.js";
 import { monthModel, monthLabel, nowDate, chicagoYmd, issueTheme, addMonths } from "./monthly.js";
-import { shopPlanPrice, shopNextChange, shopPriceChangeIn, shopBotm, money, dayLabel } from "./shop.js";
+import { shopPlanPrice, shopNextChange, shopPriceChangeIn, shopBotm, shopOffers, money, dayLabel } from "./shop.js";
 import { qrSvg, issueLabelOf } from "./community.js";
 import { eventTone } from "./event-tone.js";
 import { axPhone } from "./access.js";
@@ -89,7 +89,7 @@ export const LIVE_KEYS = [
   "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
   "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
   "gv_issue", "lv_issue", "gv_next_issue", "lv_next_issue", "gv_theme", "lv_theme", "next_deadline_gv", "next_deadline_lv",
-  "botm", "botm_lv", "gv_audio_phone", "lv_audio_phone",
+  "botm", "botm_lv", "store_offers", "gv_audio_phone", "lv_audio_phone",
   "assembly_next", "gv_open_meeting", "lv_open_meeting", "open_meeting_zoom",
 ];
 export const LIVE_KINDS = {
@@ -1177,6 +1177,7 @@ export const FALLBACKS = {
   next_deadline_lv: "see aalavina.org for La Viña's themes",
   botm: "see aagrapevine.org's Book of the Month",
   botm_lv: "see aalavina.org's Libro del mes",
+  store_offers: "see the Shop page",
   gv_audio_phone: "see the Share your story page",
   lv_audio_phone: "see the Share your story page",
   assembly_next: "see the Events page",
@@ -1201,7 +1202,7 @@ export const NO_SPEAKER = {
   speaker_line: "none tonight",
   speaker_note: "no guest speaker this month",
   speaker_after: "none this time",
-  speaker_slides: "No guest speaker is listed for tonight: choose the version 'No guest speaker', the committee's business for the whole hour.",
+  speaker_slides: "No guest speaker is listed for tonight: choose the version 'No guest speaker', with a topic to share on until 7:30.",
 };
 
 /**
@@ -1623,6 +1624,22 @@ const botmList = (c) => c.once("botm", () =>
     until: b.ends ? iso(chicagoDayEndMs(b.ends)) : null,
   })));
 
+/**
+ * The stores' offers as one fact ({live:store_offers}): the offers of config/site.yml store_offers that are on at
+ * a moment (shop.js shopOffers: first day first, as /shop/#offers lists them), each "Title (its days)" — "Holiday
+ * gift offers at the Grapevine and La Viña stores (through December 31, 2026)" — joined with "; ". The value is
+ * today's, and it steps at every offer's first day (00:00 Central; an offer the site shows from a later day) and
+ * at the midnight after its last, so a copy opened later stays right; with none on, the fallback ("see the Shop
+ * page"). In English, as the decks are.
+ */
+function storeOffers(c) {
+  const offers = shopOffers(c.site, "en", [], (k, l, v) => H.translateKey(k, l, v), c.now)
+    .map((o) => ({ text: `${o.title} (${o.dateRange})`, from: o.win.from ? Date.parse(o.win.from) : -Infinity, until: Date.parse(o.win.until) }));
+  const at = (ms) => offers.filter((o) => o.from <= ms && !(o.until <= ms)).map((o) => o.text).join("; ");
+  const moments = [...new Set(offers.flatMap((o) => [o.from, o.until]).filter((ms) => Number.isFinite(ms) && ms > c.nowMs))].sort((a, b) => a - b);
+  return fact(at(c.nowMs), moments.map((ms) => ({ from: iso(ms), value: at(ms) })), null, FALLBACKS.store_offers);
+}
+
 /** A date as the decks write it in a sentence (AP style): "Nov. 5, 2026", "March 4, 2027". */
 const AP_MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 const apDate = (ymd) => {
@@ -1776,6 +1793,9 @@ export function liveFacts(ctx) {
     const b = books.find((x) => x.pub === pub);
     out[key] = fact(b ? b.title : "", [], b ? b.until : null, FALLBACKS[key]);
   }
+  // the stores' offers (config/site.yml store_offers, as /shop/#offers lists them: shop.js shopOffers): each one
+  // "Title (its days)", joined with "; " — switching at each offer's first day and at the midnight after its last
+  out.store_offers = storeOffers(c);
   // the magazines' story lines — record your story by phone (/contribute/#record), as their official pages give them
   const ap = c.db.audio_project || {};
   out.gv_audio_phone = fact(clean(ap.gv && ap.gv.phone), [], null, FALLBACKS.gv_audio_phone);

@@ -41,7 +41,7 @@ LIVE_KEYS = {
     "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
     "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
     "gv_issue", "lv_issue", "gv_next_issue", "lv_next_issue", "gv_theme", "lv_theme", "next_deadline_gv", "next_deadline_lv",
-    "botm", "botm_lv", "gv_audio_phone", "lv_audio_phone",
+    "botm", "botm_lv", "store_offers", "gv_audio_phone", "lv_audio_phone",
     "assembly_next", "gv_open_meeting", "lv_open_meeting", "open_meeting_zoom",
 }
 LIVE_KINDS = {
