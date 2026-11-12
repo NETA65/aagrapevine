@@ -117,7 +117,7 @@ def join_link(configured, zoom_id, setting: str, notes: list[str] | None = None)
         why = f"{setting}: zoom_url not used — the meeting's Zoom ID is not known"
     elif m[1] != digits:
         why = (f"{setting}: zoom_url is for Zoom meeting {_format_zoom_id(m[1])}, not this meeting's "
-               f"{_format_zoom_id(digits)} — the plain link is used (paste the new room's full link)")
+               f"{_format_zoom_id(digits)} — the plain link is used (zoom_url and the meeting ID must be the same Zoom meeting)")
     else:
         return link
     log.warning(why)

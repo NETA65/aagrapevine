@@ -778,7 +778,7 @@ meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
 | `starts` | `"2026-11-05"` | The first meeting. Until then `/meetings/` says "Starts Thursday, November 5, 2026" (`/es/meetings/`: "Comienza el jueves 5 de noviembre de 2026") and the toolkit "starting …". A date on another weekday is moved to the first real one. |
 | `zoom_id` / `passcode` | `"871 2036 8287"` / `"238047"` | 9–11 digits: the formatted ID (and, without `zoom_url`, a plain Join link `https://zoom.us/j/<digits>`). Otherwise no Zoom ID (and a test fails). |
 | `zoom_url` | `"https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"` | The meeting's **full** Zoom link, pasted exactly as Zoom gives it: the card's **Join on Zoom** and its **Add to calendar** (Google's link and the `.ics` file) open the meeting without asking for the passcode. Used only when it is `https://<server>.zoom.us/j/<digits>` (or `https://zoom.us/j/…`), optionally with `?pwd=…` and nothing else, **and** its digits are `zoom_id`'s; otherwise the plain link, and `/status/` says why (the box *Grapevine Weekly Open meeting*, which holds both weekly meetings' notes). `""` = the plain link. |
-| `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. |
+| `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. At most 400 characters each, the sign-off included: a longer one is cut off on the site. |
 | `url` | `"https://www.aalavina.org/podcast"` | La Viña's page for it: the card's **Details on aalavina.org** (`""` for none). Written exactly so, with no `/` at the end. |
 | `source` | flyer note | Stored, **not shown** on any page. |
 | `flyer_match` | `"reuni[oó]n abierta de la vi[nñ]a\|la vi[nñ]a open meeting"` | The newest file in the Drive's `flyers/` folder whose title or name matches → "View flyer" ("Ver volante") on the La Viña card (since November 12, 2026: "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"). Matched by the page: capitals ignored, accents **not** folded (write `vi[nñ]a`). |
@@ -809,7 +809,8 @@ meeting ID the page gives that day), and `flyer_match`, which finds AA Grapevine
 Drive's `flyers/` folder for a "View flyer" link on the Grapevine card (today `"grapevine weekly open"`: the file
 "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom"). Everything else about
 it — day, time, meeting ID, passcode — is still read from aagrapevine.org. Both meetings use the same room today,
-but each has its own `zoom_url` line: if the room changes, paste the new full link in both. A renamed flyer needs
+but each has its own `zoom_url` line: if the room changes, paste the new full link in both, and in `lavina_weekly_open`
+also change `zoom_id` and `passcode` to the new room's (Grapevine's come from aagrapevine.org). A renamed flyer needs
 its `flyer_match` changed too, and its title in the other language in `data/translations/overrides.yml`
 ([Translations](translations.md)).
 
@@ -1528,7 +1529,7 @@ Where problems show up:
 | An edit to `sources: crawler`, `magazine_hub` or the shop's pages changed nothing | Read only by the full daily update | Wait for it, or start one ([section 4](#4-what-happens-after-you-save)). |
 | An edit to `lavina_weekly_open:`, `sources: youtube / instagram`, `meetings:` or `content/instagram.yml` changed nothing | The push run could not tell which files the push changed, or could not compare `config/site.yml` with its earlier copy (a blue notice *Push run* says so), or the source failed in that run | Look at the run's summary (**Also run for this push**); otherwise the next full update reads it. |
 | No flyer link on a weekly open card (Grapevine's or La Viña's), or no letter link in the price notice | The flyer is not in the Drive's `flyers/` folder, or the file's name does not match `flyer_match` (the notice's: `doc_match`); accents are not ignored | Put the flyer in `flyers/`; write both letters: `vi[nñ]a`, `actualizaci[oó]n`. |
-| Join on Zoom asks for the passcode | `zoom_url` is empty or is another meeting's link (the meeting moved to a new Zoom room) | Paste the meeting's full link from Zoom into `grapevine_weekly_open` / `lavina_weekly_open` → `zoom_url`; `/status/`, box *Grapevine Weekly Open meeting*, says which. |
+| Join on Zoom asks for the passcode | `zoom_url` is empty or is another meeting's link (the meeting moved to a new Zoom room) | Paste the meeting's full link from Zoom into `grapevine_weekly_open` / `lavina_weekly_open` → `zoom_url` (for La Viña, also `zoom_id` and `passcode`); `/status/`, box *Grapevine Weekly Open meeting*, says which. |
 | Code check red after deleting the `listen:` or `watch:` lines | A test expects both ids | Put them back, or change the test. |
 | Code check red after adding a milestone or a session | The counts 40 and 6 are pinned | Change the test in the same commit. |
 | Code check red with "settings … that no code reads" | `tests/test_settings_used.py`: a key no code reads (misspelled, or one that does nothing) | Fix its name, or delete it; Website update published the rest meanwhile. |

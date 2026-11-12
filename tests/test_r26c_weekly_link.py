@@ -449,11 +449,15 @@ class RealSettings(unittest.TestCase):
                                                      "(noon Eastern), on Zoom"})
 
     def test_la_vinas_summaries_follow_its_newest_flyer(self):
+        item = W.lavina_item(self.lv)
+        self.assertTrue(item["summary"].endswith(T["committee.weekly.closing"]["es"]), "the synced summary, not cut off")
         for lang in ("en", "es"):
             with self.subTest(lang=lang):
                 s = self.lv[f"summary_{lang}"]
                 self.assertTrue(s.endswith(" " + T["committee.weekly.closing"][lang]), "the sign-off last, word for word")
                 self.assertEqual(s.count(T["committee.weekly.closing"][lang]), 1)
+                self.assertLessEqual(len(s), 400, "make_item cuts a summary at 400 characters: the sign-off would be lost")
+                self.assertTrue(item["extra"]["own_i18n"]["summary"][lang].endswith(T["committee.weekly.closing"][lang]))
                 self.assertNotRegex(s, r"(?i)\bpdf\b|automatic|\bnuevo pódcast|\bnew podcast")
                 self.assertIn("La Viña", s)
                 self.assertIn("YouTube", s)

@@ -778,15 +778,16 @@ lavina_weekly_open:
   # Zoom" button and its "Add to calendar" entries. Used only while its meeting number (the digits after /j/) is
   # zoom_id above; otherwise the plain link https://zoom.us/j/<zoom_id>, and the Status page says why. "" = the
   # plain link. The QR code on La Viña's newest flyer opens this very link. The same Zoom room as the Grapevine
-  # Weekly Open today (grapevine_weekly_open above), but each meeting has its own line: if the room changes,
-  # change both.
+  # Weekly Open today (grapevine_weekly_open above), but each meeting has its own line. If La Viña's meeting moves
+  # to another Zoom room, change zoom_id, passcode and zoom_url here together (and grapevine_weekly_open's zoom_url
+  # too if the Grapevine meeting moved).
   zoom_url: "https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"
   # In our words, from La Viña's newest flyer (no month on it; every Thursday in the four U.S. time zones; Drive
   # flyers/, 2026-11-12): a coordinator and two speakers who are AA members each week, among them La Viña story
   # authors and trusted servants; the meetings are recorded for La Viña's podcast and YouTube. The last sentence
   # (the first flyer's) is /meetings/' sign-off: the card leaves it out (committee.weekly.closing) — keep it last,
-  # word for word.
-  summary_es: "Una reunión abierta virtual de AA en español. Cada semana la guía un coordinador, con dos oradores que son miembros de AA; entre quienes participan hay autores de historias de La Viña y servidores de confianza. Todas las reuniones quedan grabadas, así que puedes escucharlas después en el pódcast de La Viña, en tus plataformas de pódcast favoritas o en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  # word for word. At most 400 characters each, the sign-off included: a longer one is cut off on the site.
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana la guía un coordinador, con dos oradores que son miembros de AA; entre quienes participan hay autores de historias de La Viña y servidores de confianza. Las reuniones se graban: puedes escucharlas en el pódcast de La Viña, en tus plataformas de pódcast favoritas o en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
   summary_en: "A virtual open AA meeting in Spanish. Each week a chairperson leads it, with two speakers who are AA members; among those taking part are La Viña story authors and trusted servants. Every meeting is recorded, so you can listen to it later on La Viña's podcast, on your favorite podcast platforms or on YouTube. Let's keep extending this powerful lifeline together!"
   # La Viña's page for the meeting ("Details on aalavina.org" on its card): its podcast's page describes the
   # meeting and plays its recordings (the committee's choice, 2026-11-11). Written exactly so: with a "/" at the

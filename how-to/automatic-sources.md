@@ -1353,7 +1353,8 @@ meeting without asking for the passcode. `join_link` uses a link only when it is
 (`https://<server>.zoom.us/j/<digits>`, optionally `?pwd=…`, nothing else) whose digits are the meeting's ID —
 Grapevine's as the page gives it that day, La Viña's `zoom_id`; otherwise the plain `https://zoom.us/j/<ID>`, and
 the source's notes on `/status/` say why (without the `pwd=` part). So if the meeting moves to another Zoom room,
-Join still opens the right room (people type the passcode) until the new full link is pasted in the settings.
+Join still opens the right room (people type the passcode) until the new full link is pasted in the settings (for
+La Viña, together with the new room's `zoom_id` and `passcode`).
 `grapevine_weekly_open: flyer_match` finds AA Grapevine's flyer on the Drive for the Grapevine card ("View flyer"),
 as La Viña's `flyer_match` does for its card ([Settings §3.7](settings.md#37-lavina_weekly_open--la-viñas-weekly-open-meeting-and-grapevine_weekly_open)).
 
