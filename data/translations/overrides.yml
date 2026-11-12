@@ -118,6 +118,9 @@
 "SP Letter to the Fellowahip Retrofit Completion and Return to Office": { es: "Carta a la Comunidad: fin de la remodelación y regreso a la oficina" }
 "Back Issue 30 Packs Form": { es: "Formulario de paquetes de 30 ediciones anteriores" }
 "SETA (Southeast Texas Are 67) Correctional Facilities Conference": { es: "Conferencia de Instituciones Correccionales de SETA (Área 67, Sureste de Texas)" }
+# January 2027 (the Spanish monthly poster, /es/events/), checked by hand 2026-11-12: the machine wrote "64.º Convenio
+# SETA" ("convenio" is an agreement; a convention is "convención", feminine)
+"64th SETA Convention": { es: "64.ª Convención de SETA" }
 "Park County Intergroup Campout": { es: "Campamento del Intergrupo del Condado de Park" }
 
 # Reviewed 2026-09-24 (2): magazine stories and podcast episodes, titles and summary sentences

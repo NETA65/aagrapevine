@@ -621,7 +621,7 @@ class Consumers(unittest.TestCase):
         self.assertTrue(fill[0]["topics"], fill)
         self.assertIn(False, [f["topics"] for f in fill if f["without"] == "roomy"], "the guard: roomy without, no room with")
         self.assertEqual(next(f for f in fill if f["dates"] == 7)["topics"], False)
-        story = re.search(r'<section class="mp-b mp-story">(.*?)</section>', r["html"]["en"], re.S).group(1)
+        story = re.search(r'<section class="mp-b mp-story"[^>]*>(.*?)</section>', r["html"]["en"], re.S).group(1)
         self.assertIn(f'<p class="mp-sub">{words["en"]}</p>', story)
         self.assertEqual(re.findall(r'<ul class="mp-topics">\s*(.*?)\s*</ul>', story, re.S),
                          ["".join(f"<li>{t}</li>" for t in r["topics"]).replace("&", "&amp;")])

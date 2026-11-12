@@ -165,6 +165,8 @@ CONTENT_TESTS: dict[str, str] = {
         "config/orientation.yml: the facts the sessions teach",
     "test_orientation.OrientationStringsTest.test_aa_wording_of_the_sessions":
         "config/orientation.yml: no classroom word in the sessions' texts",
+    "test_monthly.Strings.test_put_it_to_work_never_says_donate":
+        "config/carry.yml: no donation words in the 'Put this issue to work' tips (month pages and posters), as written",
     "test_history.HistoryFileTest.":
         "config/history.yml: the milestones complete, oldest first, their wording and the official links",
     "test_expenses_page.Config.":

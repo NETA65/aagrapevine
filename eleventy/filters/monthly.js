@@ -31,11 +31,12 @@
 //   db.weekly_open the Weekly Open meetings (La Viña's from its extra.starts date)
 //   db.shop.botm   Book of the Month offers (starts / ends window)
 //   db.shop.price_changes  a price change AA Grapevine announced (config/site.yml price_changes): the months
-//                  from its announcement through its notice pass it on in their message (model `price`), and
-//                  the current month's "Keep up all month" has its line (monthly-month.njk)
+//                  from its announcement through its notice pass it on in their message (model `price`) and on
+//                  their poster (posterExtras), and the current month's "Keep up all month" has its line
+//                  (monthly-month.njk)
 //   site.store_offers  an offer the stores announced (config/site.yml store_offers: free shipping …): the months
-//                  its days meet name it in their message (model `offers`), and the current month's "Keep up all
-//                  month" has its line
+//                  its days meet name it in their message (model `offers`) and on their poster (posterExtras), and
+//                  the current month's "Keep up all month" has its line
 //   site.meeting   the committee meeting rule (used when a month's meeting is not in events.json:
 //                  the current month once its meeting is over, or the 13th month)
 //   live extras    db.quote, db.whatsnew, db.announcements, db.instagram, db.meetings, db.shop,
@@ -52,6 +53,8 @@
 //                                                         the /read/ links (monthIssueLinks)
 //            mpMessage(key, db, carry, site, langs, style) → the month as a WhatsApp / e-mail text
 //                                                         (monthMessage; langs ["en"] or ["en", "es"])
+//            mpPosterExtras(m)                          → the poster's rows after its dates: the stores' offers and
+//                                                         the price change of the month (posterExtras)
 //            mpQr(url, label)                           → QR code SVG (qrSvg from community.js)
 //            mpGuides(pdfs, lang)                       → the GVR / RLV guides in the Library (repGuides)
 //            mpIcs(key, db, carry, site, lang)          → the month's dates as an iCalendar file (monthIcs)
@@ -694,13 +697,21 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   const weekdays = Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(LOC[L], { weekday: "narrow", timeZone: "UTC" }).format(new Date(Date.UTC(2026, 1, 1 + i))));
   const calendar = { offset, days: lastDay(key), marks, weekdays };
 
-  /* Density: how much the poster holds (the CSS tightens type for busy months). La Viña's deadlines are on the
-     Spanish poster only (one compact line each), with its topics; Grapevine's topics on the English poster
+  /* Density: how much the poster holds (the CSS tightens type for busy months; every date of the month is on the
+     poster — round 26b —, and the page's fit, assets/js/monthly.js, sizes the type and places the blocks so they
+     all fit). La Viña's deadlines are on the Spanish poster only (one compact line each), with its topics;
+     Grapevine's topics on the English poster
      (posterGvTopics: macros/monthly.njk story()) where its deadlines leave room — fewer than two (each comes with
      its prompt) — and the poster stays "roomy" with them: three more lines on a fuller poster would make all of
      its type smaller (the poster's fit, assets/js/monthly.js: December 2026's 21.75px → 18.25px), and a "snug" one
-     loses La Viña's invitation (monthly.lv_nudge) and a "Put it to work" tip — never for Grapevine's topics */
-  const base = deadlines.length * 3 + Math.min(tips.length, 3) * 2 + botm.length * 1.5 + dates.length * 1.2 + weekly.length
+     loses La Viña's invitation (monthly.lv_nudge) and a "Put it to work" tip — never for Grapevine's topics. The
+     stores' offers and the price change of the month are rows of the poster's Dates block too (posterExtras): each
+     counts as a date */
+  const price = priceMention(db.shop, first, last);
+  const offers = shopOfferIn(site, first, last, L, today);
+  const isCurrent = key === today.slice(0, 7);
+  const extras = offers.filter((o) => !(isCurrent && o.past)).length + (price ? 1 : 0);
+  const base = deadlines.length * 3 + Math.min(tips.length, 3) * 2 + botm.length * 1.5 + (dates.length + extras) * 1.2 + weekly.length
     + (L === "es" ? 2 + lvDeadlines.length * 2 : 0);
   const posterGvTopics = L !== "es" && gvTopicList.length > 0 && deadlines.length < 2 && base + 2 <= 15;
   const load = base + (posterGvTopics ? 2 : 0);
@@ -712,15 +723,16 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     key, lang: L, year, month: mNum, first, last,
     name: cap(monthName(key, L)), monthName: monthName(key, L), label: monthLabel(key, L), title: cap(monthLabel(key, L)),
     design: design.id, layout: design.layout, density,
-    isCurrent: key === today.slice(0, 7),
+    isCurrent,
     gv, lv, tips, deadlines, lvDeadlines, lvTopics: lvTopicList, gvTopics: gvTopicList, posterGvTopics, botm, botmOffer,
     committee, recurring, events: other, dates, weekly, calendar,
     // a price change AA Grapevine announced whose notice meets this month (shop.js shopPriceChangeIn): { kind
-    // "before" | "after", effective } — the month's message passes it on (monthMessage)
-    price: priceMention(db.shop, first, last),
+    // "before" | "after", effective } — the month's message passes it on (monthMessage), and its poster (posterExtras)
+    price,
     // the offers the stores announced whose days meet this month (config/site.yml store_offers, shop.js shopOfferIn):
-    // [{ key, title, titleLang, starts, ends, showStarts, icon, past }] — the month's message names them (monthMessage)
-    offers: shopOfferIn(site, first, last, L, today),
+    // [{ key, title, titleLang, starts, ends, showStarts, icon, past }] — the month's message names them (monthMessage),
+    // and its poster (posterExtras)
+    offers,
     url, absUrl: String(site.url || "").replace(/\/$/, "") + url,
     prev: addMonths(key, -1), next: addMonths(key, 1),
     fileName: `neta65-grapevine-${key}-${L}.png`,
@@ -728,21 +740,6 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     icsUrl: icsPath(key, L),
     slug: slug(key),
   };
-}
-
-// The most dates a poster's Dates block shows (macros/monthly.njk dates(): 4 in every layout, one fewer on a "dense"
-// month); the rest are "+N more on the website".
-const POSTER_DATES = 4;
-
-/** The dates a poster has room for (`lim`): the first ones by day, but never without the month's committee meeting —
- *  a busy month leaves out the last other date instead (the committee meeting comes later in the month than the
- *  dates before it, so the order stays the days' order). */
-export function posterDates(dates = [], lim = POSTER_DATES) {
-  const list = Array.isArray(dates) ? dates : [];
-  const shown = list.slice(0, Math.max(0, Number(lim) || 0));
-  const cm = list.find((d) => d && d.kind === "committee");
-  if (cm && shown.length && !shown.includes(cm)) shown[shown.length - 1] = cm;
-  return shown;
 }
 
 /* ------------------------------------------------------------------ */
@@ -878,6 +875,33 @@ export function monthIssueLinks(db = {}, m = {}) {
     });
   }
   return out;
+}
+
+/**
+ * The poster's rows after the month's dates, in its Dates block (round 26b, the owner: "add all the happenings and
+ * events of that month to those posters") — in the words of the month's message (monthMessage), so the two never
+ * disagree: each offer the stores announced whose days meet the month (its title, its days: "November 1 – December
+ * 31, 2026", "Through December 31, 2026"), then AA Grapevine's price change ("Grapevine and La Viña prices change on
+ * January 1, 2027"). The current month leaves out an offer already over, as its message does. Described, never sold:
+ * no price, no link (the poster is a picture). → [{ kind: "offer" | "price", key, icon, title, titleLang, meta }]
+ * (icon: the offer's own — the truck, the gift — as on the page's "Keep up all month"; the price change's
+ * calendar-clock, as there). t: (key, lang, vars) → the site's words.
+ */
+export function posterExtras(m, t) {
+  const L = m && m.lang === "es" ? "es" : "en";
+  const rows = [];
+  for (const o of (m && m.offers) || []) {
+    if (m.isCurrent && o.past) continue;
+    const d = offerDates(o.showStarts === false ? "" : o.starts, o.ends, L, t);
+    rows.push({ kind: "offer", key: o.key, icon: o.icon || "truck", title: o.title, titleLang: o.titleLang || L,
+      meta: d.charAt(0).toUpperCase() + d.slice(1) });
+  }
+  if (m && m.price) {
+    const key = m.price.kind === "before" ? "shop.pc_line_before" : "shop.pc_line_after";
+    rows.push({ kind: "price", key: "price", icon: "calendar-clock", title: t(key, L, { date: dayLabel(m.price.effective, L) }),
+      titleLang: L, meta: "" });
+  }
+  return rows;
 }
 
 /**
@@ -1341,9 +1365,9 @@ export default function (eleventyConfig, helpers) {
     }
     return msgCache.get(k);
   });
+  // The poster's rows after its dates (macros/monthly.njk dates()): {% for x in m | mpPosterExtras %}
+  eleventyConfig.addFilter("mpPosterExtras", (m) => posterExtras(m, (key2, lang, vars) => H.translateKey(key2, lang, vars)));
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
-  // the dates a poster shows: the first `lim`, never without the committee meeting (posterDates)
-  eleventyConfig.addFilter("mpPosterDates", (dates, lim) => posterDates(dates, lim));
   // A month page's share picture (its ogImage, monthly-month.njk): {{ mpage.key | mpShareImage(mpage.lang) }} — the
   // site path of its share.png in a build asked for it (POSTER_SHARE=1), else "" (the page keeps the committee's card)
   eleventyConfig.addFilter("mpShareImage", (key, lang) => (posterShareOn() && /^\d{4}-\d{2}$/.test(String(key || ""))

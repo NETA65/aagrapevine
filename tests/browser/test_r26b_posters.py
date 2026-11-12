@@ -1,0 +1,259 @@
+"""Round 26b · the monthly posters in a real browser (tests/browser/__init__.py says how to run these; they share
+test_site_in_browser.py's site server and browser). The owner: "every event of the month on the poster, with smaller
+borders":
+
+  * EveryDateFits — every month page the build has (poster_months: this month and the next 12), English and Spanish:
+                    once the page has fitted its poster (src/assets/js/monthly.js: data-mp-fit), the poster holds every
+                    date of the page's Dates list and, after them, the month's other happenings its message names (the
+                    stores' offers, the price change: the same words), nothing overflows its column or the 1080 × 1350
+                    sheet (the fit's own measure), each block is there once and in the reading order of its column, and
+                    the type is 15px at least (7.5 pt on a Letter page).
+  * PrintOnePage  — the busiest month's poster prints on one US Letter page, English and Spanish, every date on it.
+  * MastheadClear — every month's masthead at its real size, fitted: the month's name, its year and the tagline never
+                    touch (the y of July, the p of April, the g of August hang into the line below; the fit's measure
+                    sees boxes, not letters — this compares what each one draws).
+  * UnfittedClipped — the poster before its fit (or without JavaScript: the page's script blocked) has the build's
+                    arrangement at the stylesheet's type: a busy month's column may lose its last lines, but no text
+                    is drawn over another block's, and every date is whole inside its column (a Spanish poster starts
+                    at a smaller type for it).
+
+Nothing here depends on today's date: the months are the build's, the dates are each page's own.
+"""
+from __future__ import annotations
+
+import re
+import unittest
+from io import BytesIO
+
+from .test_site_in_browser import S, new_context, open_page, poster_months, setUpModule, tearDownModule  # noqa: F401
+
+FITTED = "() => { const p = document.querySelector('[data-mp-poster]'); return !!p && p.hasAttribute('data-mp-fit'); }"
+
+# The fitted poster against the page: its dates, its size and type, and the fit's own overflow measure (offsets: no
+# scale, no tilt of the cork's cards) on every block, column and band.
+CHECK = r"""() => {
+  const p = document.querySelector("[data-mp-poster]");
+  const BLOCKS = ".mp-b, .mp-foot, .mp-head, .mp-row, .mp-col, .mp-body, .mp-board, .mp-cover, .mp-strip, .mp-page, .mp-main, .mp-stub, .mp-side, .mp-content, .mp-top, .mp-feature, .mp-rail, .mp-band";
+  const box = (el) => { let t = 0, l = 0, e = el; while (e && e !== p) { t += e.offsetTop; l += e.offsetLeft; e = e.offsetParent; } return { t, b: t + el.offsetHeight, r: l + el.offsetWidth }; };
+  const over = [];
+  p.querySelectorAll(BLOCKS).forEach((b) => {
+    if (getComputedStyle(b).display === "none") return;
+    const par = b.parentElement, bb = box(b);
+    const pad = parseFloat(getComputedStyle(par).paddingBottom) || 0;
+    const limit = par === p ? p.clientHeight - pad : box(par).t + par.clientTop + par.clientHeight - pad;
+    if (bb.b > limit + 2) over.push(b.className + " +" + Math.round(bb.b - limit) + "px");
+    if (bb.r > p.clientWidth + 2) over.push(b.className + " → +" + Math.round(bb.r - p.clientWidth) + "px");
+  });
+  // (a row's words without what only a screen reader hears: " (external)" after an outside link)
+  const text = (el) => { const c = el.cloneNode(true); c.querySelectorAll(".sr-only, .mp-sr").forEach((s) => s.remove()); return c.textContent.replace(/\s+/g, " ").trim(); };
+  const order = [];
+  p.querySelectorAll("[data-mp-slot]").forEach((s) => {
+    const o = [...s.children].filter((k) => k.hasAttribute("data-mp-order")).map((k) => Number(k.getAttribute("data-mp-order")));
+    if (o.some((v, i) => i && v < o[i - 1])) order.push(s.getAttribute("data-mp-slot") + ": " + o.join(","));
+  });
+  const kinds = [...p.querySelectorAll(".mp-b")].map((b) => [...b.classList].find((c) => c !== "mp-b" && c !== "mp-dates--cols"));
+  return {
+    size: p.offsetWidth + " x " + p.offsetHeight, font: parseFloat(getComputedStyle(p).fontSize),
+    poster: [...p.querySelectorAll(".mp-dlist > li:not(.mp-date--offer, .mp-date--price) .mp-date-t")].map(text).sort(),
+    page: [...document.querySelectorAll("#mp-dates li.mp-drow .mp-drow-t")].map(text).sort(),
+    // the rows after the dates (macros/monthly.njk dates(), mpPosterExtras): "title | days" — and what the month's
+    // message (WhatsApp, the page's language) names: 📦 / 🎁 an offer's heading and its days, 📢 the price change
+    extras: [...p.querySelectorAll(".mp-dlist > li:is(.mp-date--offer, .mp-date--price)")].map((li) =>
+      [li.querySelector(".mp-date-t"), li.querySelector(".mp-date-m")].filter(Boolean).map(text).join(" | ")),
+    message: (() => {
+      const msg = (document.getElementById("mp-msg-wa-one") || {}).textContent || "";
+      return [...[...msg.matchAll(/^(?:📦|🎁) \*(.+)\*\n(.+): \S+$/gmu)].map((x) => x[1] + " | " + x[2]),
+              ...[...msg.matchAll(/^📢 (.+): \S+$/gmu)].map((x) => x[1])];
+    })(),
+    more: !!p.querySelector(".mp-more"), over, order,
+    twice: kinds.filter((k, i) => kinds.indexOf(k) !== i),
+  };
+}"""
+
+
+class EveryDateFits(unittest.TestCase):
+    def test_every_months_poster_holds_every_date(self):
+        months = poster_months()
+        self.assertGreaterEqual(len(months), 1, "month pages with their poster")
+        problems: list[str] = []
+        errors: list[str] = []
+        ctx = new_context(1280, 900)
+        try:
+            for month in months:
+                for lang in ("en", "es"):
+                    path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
+                    page = open_page(ctx, path, errors)
+                    page.wait_for_function(FITTED, timeout=30_000)
+                    r = page.evaluate(CHECK)
+                    page.close()
+                    where = f"/{path}"
+                    if r["size"] != "1080 x 1350":
+                        problems.append(f"{where}: the poster is {r['size']}")
+                    if r["poster"] != r["page"]:
+                        problems.append(f"{where}: the poster's dates {r['poster']} are not the page's {r['page']}")
+                    if r["extras"] != r["message"]:
+                        problems.append(f"{where}: the poster's offers and price change {r['extras']} are not the "
+                                        f"message's {r['message']}")
+                    if month in ("2026-11", "2026-12") and len(r["extras"]) != 3:
+                        problems.append(f"{where}: the two offers and the price change of the season — {r['extras']}")
+                    if r["more"]:
+                        problems.append(f"{where}: \"more on the website\"")
+                    if r["over"]:
+                        problems.append(f"{where}: overflows at {r['font']}px — {r['over'][:4]}")
+                    if r["font"] < 15:
+                        problems.append(f"{where}: type {r['font']}px")
+                    if r["order"]:
+                        problems.append(f"{where}: out of the reading order — {r['order']}")
+                    if r["twice"]:
+                        problems.append(f"{where}: twice on the poster — {r['twice']}")
+        finally:
+            ctx.close()
+        self.assertEqual(errors, [])
+        self.assertEqual(problems, [], "\n".join(problems))
+
+
+class PrintOnePage(unittest.TestCase):
+    def test_the_busiest_months_poster_prints_on_one_letter_page(self):
+        months = poster_months()
+        self.assertTrue(months)
+        rows = {m: (S["site"] / "monthly" / m / "index.html").read_text(encoding="utf-8").count('class="mp-date mp-date--')
+                for m in months}
+        busiest = max(months, key=lambda m: (rows[m], m))
+        for lang in ("en", "es"):
+            ctx = new_context(1280, 900, lang=lang)
+            try:
+                page = open_page(ctx, ("es/" if lang == "es" else "") + f"monthly/{busiest}/")
+                page.wait_for_function(FITTED, timeout=30_000)
+                shown = page.evaluate("document.querySelectorAll('[data-mp-poster] .mp-dlist > li').length")
+                page.emulate_media(media="print")
+                pdf = page.pdf(prefer_css_page_size=True, print_background=True)
+            finally:
+                ctx.close()
+            with self.subTest(month=busiest, lang=lang):
+                self.assertEqual(shown, rows[busiest])
+                self.assertEqual(len(re.findall(rb"/Type\s*/Page(?!s)", pdf)), 1, "one Letter page")
+                self.assertIn(b"/MediaBox [0 0 612 792]", pdf.replace(b"  ", b" "))
+
+
+def _isolate(wait_for_fit: bool) -> str:
+    """The share picture's script (scripts/ops/poster_share.py ISOLATE): the poster out of its scaled frame, at its real
+    size at the top left — without waiting for the fit when there is none."""
+    from scripts.ops.poster_share import ISOLATE
+    return ISOLATE if wait_for_fit else ISOLATE.replace('!poster.hasAttribute("data-mp-fit") &&', "false &&")
+
+
+# Shows one part of the masthead (the others keep their place, hidden; "none": all hidden) → the masthead's box.
+SHOW = """(only) => {
+  const h = document.querySelector("[data-mp-poster] .mp-head");
+  for (const s of [".mp-mname", ".mp-year", ".mp-tag"]) { const e = h.querySelector(s); if (e) e.style.visibility = only === s ? "visible" : "hidden"; }
+  const r = h.getBoundingClientRect();
+  return { x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 8), width: Math.min(1080, r.width + 16), height: r.height + 16 };
+}"""
+
+
+class MastheadClear(unittest.TestCase):
+    def test_the_months_name_never_touches_the_line_under_it(self):
+        from PIL import Image, ImageChops, ImageFilter
+
+        def ink(shot, bare):          # what one part draws: where the masthead with it differs from the one without
+            d = ImageChops.difference(shot.convert("RGB"), bare.convert("RGB")).convert("L")
+            return d.point(lambda v: 255 if v > 40 else 0)
+
+        def touching(a, b) -> int:    # pixels of b within a pixel of a
+            return sum(ImageChops.multiply(a.filter(ImageFilter.MaxFilter(3)), b).histogram()[1:])
+
+        problems: list[str] = []
+        ctx = new_context(1280, 1400)
+        try:
+            for month in poster_months():
+                for lang in ("en", "es"):
+                    path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
+                    page = open_page(ctx, path)
+                    page.wait_for_function(FITTED, timeout=30_000)
+                    page.evaluate(_isolate(True))
+                    clip = page.evaluate(SHOW, "none")
+                    bare = Image.open(BytesIO(page.screenshot(clip=clip)))
+                    parts = {}
+                    for part in (".mp-mname", ".mp-year", ".mp-tag"):
+                        page.evaluate(SHOW, part)
+                        parts[part] = ink(Image.open(BytesIO(page.screenshot(clip=clip))), bare)
+                    page.close()
+                    for a, b in ((".mp-mname", ".mp-tag"), (".mp-mname", ".mp-year"), (".mp-year", ".mp-tag")):
+                        n = touching(parts[a], parts[b])
+                        if n:
+                            problems.append(f"/{path}: {a} touches {b} ({n} px)")
+        finally:
+            ctx.close()
+        self.assertEqual(problems, [], "\n".join(problems))
+
+
+# Every line of text the poster draws (and its QR, chips and logo), cut to what its ancestors' overflow lets show
+# (overflow-clip-margin included); two of them from different blocks drawn on the same spot = an overlap.
+DRAWN = r"""() => {
+  const p = document.querySelector("[data-mp-poster]");
+  const P = p.getBoundingClientRect();
+  const R = (r) => ({ l: r.left, t: r.top, r: r.right, b: r.bottom });
+  const cut = (a, b) => ({ l: Math.max(a.l, b.l), t: Math.max(a.t, b.t), r: Math.min(a.r, b.r), b: Math.min(a.b, b.b) });
+  const area = (a) => Math.max(0, a.r - a.l) * Math.max(0, a.b - a.t);
+  const clipOf = (el) => {
+    let c = R(P);
+    for (let e = el.parentElement; e && e !== p.parentElement; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.overflowX === "visible" && cs.overflowY === "visible") continue;
+      const r = e.getBoundingClientRect(), m = cs.overflowX === "clip" || cs.overflowY === "clip" ? parseFloat(cs.overflowClipMargin) || 0 : 0;
+      c = cut(c, { l: r.left + (parseFloat(cs.borderLeftWidth) || 0) - m, t: r.top + (parseFloat(cs.borderTopWidth) || 0) - m,
+                   r: r.right - (parseFloat(cs.borderRightWidth) || 0) + m, b: r.bottom - (parseFloat(cs.borderBottomWidth) || 0) + m });
+    }
+    return c;
+  };
+  const blocks = [...p.querySelectorAll(".mp-b, .mp-foot, .mp-head")], drawn = [];
+  blocks.forEach((b, bi) => {
+    const w = document.createTreeWalker(b, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      if (!n.textContent.trim() || n.parentElement.closest(".mp-sr, .sr-only")) continue;
+      const g = document.createRange(); g.selectNodeContents(n);
+      const c = clipOf(n.parentElement);
+      for (const r of g.getClientRects()) { const v = cut(R(r), c); if (area(v) >= 1) drawn.push({ bi, v, s: n.textContent.trim().slice(0, 30) }); }
+    }
+    b.querySelectorAll(".mp-qr, .mp-chip, .mp-logo").forEach((q) => { const v = cut(R(q.getBoundingClientRect()), clipOf(q)); if (area(v) >= 1) drawn.push({ bi, v, s: q.className }); });
+  });
+  const over = [];
+  for (let i = 0; i < drawn.length; i++) for (let j = i + 1; j < drawn.length; j++) {
+    const a = drawn[i], b = drawn[j];
+    if (a.bi === b.bi || blocks[a.bi].contains(blocks[b.bi]) || blocks[b.bi].contains(blocks[a.bi])) continue;
+    if (area(cut(a.v, b.v)) > 6) over.push(a.s + " / " + b.s);
+  }
+  // a date (or an offer, the price change) cut by its column: its row not whole inside what its ancestors show
+  const hidden = [...p.querySelectorAll(".mp-dlist > li")].filter((li) => {
+    const r = R(li.getBoundingClientRect()), c = clipOf(li);
+    return r.t < c.t - 1 || r.b > c.b + 1 || r.l < c.l - 1 || r.r > c.r + 1;
+  }).map((li) => (li.querySelector(".mp-date-t") || li).textContent.trim().slice(0, 40));
+  return { fitted: p.hasAttribute("data-mp-fit"), over, hidden };
+}"""
+
+
+class UnfittedClipped(unittest.TestCase):
+    def test_no_text_over_another_block_before_the_fit(self):
+        problems: list[str] = []
+        ctx = new_context(1280, 1400)
+        ctx.route(re.compile(r".*/assets/js/monthly\.js(\?.*)?$"), lambda route: route.abort())
+        try:
+            for month in poster_months():
+                for lang in ("en", "es"):
+                    path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
+                    page = open_page(ctx, path)
+                    page.evaluate(_isolate(False))
+                    r = page.evaluate(DRAWN)
+                    page.close()
+                    self.assertFalse(r["fitted"], "the page's script was blocked: no fit")
+                    if r["over"]:
+                        problems.append(f"/{path}: {r['over'][:4]}")
+                    if r["hidden"]:
+                        problems.append(f"/{path}: dates cut by their column — {r['hidden']}")
+        finally:
+            ctx.close()
+        self.assertEqual(problems, [], "\n".join(problems))
+
+
+if __name__ == "__main__":
+    unittest.main()
