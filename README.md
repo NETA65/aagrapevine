@@ -60,8 +60,11 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   sección [10 c](#c-monthly-e-mail-digest-keep-every-district-informed), es la misma edición). Nuestras
   reuniones son por **Google Meet** (código de la reunión `rva-tmst-vdb`, la misma sala para las dos, sin código
   de acceso ni número para llamar): la **reunión del comité** (tercer miércoles, de 7 a 8 p. m., hora del Centro;
-  desde el 20 de enero de 2027 cada una empieza con la charla de un **orador invitado o una oradora invitada**,
-  que termina a más tardar a las 7:30, y luego siguen los asuntos del comité) y la nueva **Reunión de Grapevine
+  no es una reunión de trabajo: desde el 20 de enero de 2027 cada una empieza con la charla de un **orador
+  invitado o una oradora invitada**, que termina a más tardar a las 7:30; luego, hasta las 8:00, eventos próximos,
+  solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR, y después
+  del cierre, la reunión después de la reunión; el 18 de noviembre y el 16 de diciembre de 2026, sin orador(a)
+  invitado(a), compartimos sobre un tema hasta las 7:30) y la nueva **Reunión de Grapevine
   (en inglés)** (primer miércoles, de 7 a 8 p. m., desde el 2 de diciembre de 2026; en inglés: leemos una historia
   de AA Grapevine y compartimos sobre su tema), en `/es/meetings/#grapevine-meeting`. Los oradores del año (nombre e inicial del
   apellido, servicio y tema) están en `config/site.yml` → `meeting:` → `speakers:`. La **reunión
@@ -416,7 +419,9 @@ What the newer pages do:
   Area, the Spanish-speaking office first on `/es/`) — the 404 page shows a short version in both languages,
   and Home has one line to it ([New to AA?](#new-to-aa-meetings-the-404-page-home)) —, the committee meeting
   (`#committee-meeting`, on Google Meet: its link and meeting code, the next meeting's guest speaker, *How the
-  evening runs* and the year's speakers — [Changing settings](#the-committee-meeting-google-meet-and-the-guest-speakers)),
+  evening runs* — the speaker until 7:30, then events, offers, magazine topics and sharing until 8:00, the
+  Responsibility Statement and the parking lot; without a speaker, a topic to share on — and the year's
+  speakers — [Changing settings](#the-committee-meeting-google-meet-and-the-guest-speakers)),
   our own **Grapevine Meeting** (`#grapevine-meeting`: the 1st Wednesday, online, in English), the **Grapevine
   meetings** of local groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place,
   day, in person / online and "include nearby areas"; each card links to the meeting's page on the office's site, which has the
@@ -607,6 +612,16 @@ breaks while you decide.
   must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether November 18 and
   December 16, 2026 may show the committee flyer that says each meeting opens with a guest speaker; and whether
   there will be speakers in 2028.
+- **The committee meeting is not a business meeting (November 2026):** the words of its new hour on `/meetings/`
+  (*How the evening runs*: "Events, offers, topics and sharing", "Close, then the parking lot"; without a speaker:
+  "we share on a topic until 7:30" and its six steps), in every calendar entry and the GV/LV report ("The guest
+  speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR
+  and RLV sharing until 8:00 PM."), on the booth's guest-speaker slide and on `/orientation/role/`; the Spanish
+  "la reunión después de la reunión" for the parking lot; and the Grapevine Meeting's five steps (a welcome to
+  members from across the Area, the reader shares first, 3 to 5 minutes each, Carry the Message in place of a
+  basket; your Seventh Tradition goes to your home group). A free Google account ends a call of three or more
+  people after 60 minutes: the site says "stay on" for the parking lot; the chair's deck tells the room to rejoin
+  the same link if the call drops at 8:00.
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
@@ -778,7 +793,7 @@ meeting:
   online_url: "https://meet.google.com/rva-tmst-vdb"   # every Join button (an older zoom_url: line still counts)
   meeting_id: "rva-tmst-vdb"        # letters: "Meeting code"; digits only (a Zoom ID): "Meeting ID"
   flyer_match: "committee meeting *[-–—] *(flyer|guest speaker)"   # its flyers on our Drive (section 2)
-  speaker_until: "19:30"            # the guest speaker's part ends by then
+  speaker_until: "19:30"            # the guest speaker's part ends by then; the second half until `end`
   speakers:
     - date: "2027-01-20"            # that month's 3rd Wednesday
       name: "Rick W."               # first name and last initial only
@@ -789,10 +804,13 @@ meeting:
       topic_es: "Grapevine como herramienta del Paso Doce: …"
 ```
 
-- **The evening, from January 20, 2027:** 7:00 a moment of silence, the Serenity Prayer and the speaker's
-  introduction; about 7:02 the talk (about 20 minutes); about 7:22 questions; the speaker is thanked and done
-  **by 7:30**; 7:30–8:00 committee business. **November 18 and December 16, 2026** have no guest speaker (no block
-  for those dates): the usual business hour.
+- **The evening, from January 20, 2027** (not a business meeting, owner's decision of November 2026): 7:00 a
+  moment of silence, the Serenity Prayer, the speaker's welcome and the topic's introduction; about 7:02 the talk
+  (about 20 minutes); about 7:22 questions; the speaker is thanked and done **by 7:30**; 7:30–8:00 coming events
+  and workshop requests, special offers (the stores' offers, both Books of the Month, Carry the Message), magazine
+  topics and GVR and RLV sharing; 8:00 the Responsibility Statement; then the parking lot (an open "meeting after
+  the meeting"). **November 18 and December 16, 2026** have no guest speaker (no block for those dates): a topic
+  to share on until 7:30, then the same second half.
 - **All 12 speakers of 2027 are shown** — first name and last initial, service position and topic: on Meetings (the
   next meeting's speaker, *How the evening runs*, the year's schedule), the home page's meeting card, each
   meeting's card on Events and its calendar entry, the monthly toolkit and posters, the GV/LV report, the monthly
@@ -971,7 +989,11 @@ meeting's Google Meet room:
 - **Its script** is a presentation of its own (`config/presentations/grapevine-meeting.yml`,
   [how-to/presentations.md](how-to/presentations.md)): it opens with a moment of silence, the Serenity Prayer and
   the **AA Grapevine Statement of Purpose** — named, never printed on the site (AA Grapevine's text: it is read
-  aloud from the current issue or from aagrapevine.org) — where the committee meeting reads the AA Preamble.
+  aloud from the current issue or from aagrapevine.org) — in place of the AA Preamble; then a welcome to
+  first-timers and members from across the Area, a story read aloud (its reader shares first), sharing (3 to 5
+  minutes each), Carry the Message in place of a basket (the meeting has no expenses; your Seventh Tradition goes
+  to your home group), the announcements and the Responsibility Statement. (The committee meeting no longer reads
+  the Preamble either: its deck keeps the slide, switched off, since November 2026.)
 - **Its name** is "the Grapevine Meeting". Never "Grapevine meetings": that is the list of AA groups that read
   Grapevine (`/meetings/#grapevine-meetings`).
 

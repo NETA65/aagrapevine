@@ -2,8 +2,10 @@
 Spanish), with the committee meeting's guest speakers and our new Grapevine Meeting:
 
   * how the evening runs (eleventy/filters/committee.js meetingEvening — cmEvening): the opening, about 2 minutes
-    later the guest speaker's talk, about 20 minutes later the questions, committee business from `speaker_until`,
-    the close at the end — the times from the settings; without a speaker the hour of committee business;
+    later the guest speaker's talk, about 20 minutes later the questions, from `speaker_until` the events, offers,
+    magazine topics and sharing (never "committee business": it is not a business meeting), the close at the end,
+    then the parking lot — the times from the settings; without a speaker a topic to share on, then the same
+    second half;
   * the speakers to come (meetingSpeakerDates — cmSpeakers): each with that meeting's calendar text, word for word
     the one /events/ and /events.ics give it, and the text of a meeting without one; a meeting that is over drops off;
   * one of our monthly series from the settings (seriesNext — cmSeriesNext): the Grapevine Meeting's own section
@@ -63,19 +65,19 @@ class Evening(unittest.TestCase):
         """, data={"yaml": YAML})
         rows = lambda e: [(r["key"], plain(r["at"]), r["about"]) for r in e["speaker"]]     # noqa: E731
         self.assertEqual(rows(got["en"]), [("opening", "7:00 PM", False), ("talk", "7:02 PM", True),
-                                           ("questions", "7:22 PM", True), ("business", "7:30 PM", False),
+                                           ("questions", "7:22 PM", True), ("sharing", "7:30 PM", False),
                                            ("close", "8:00 PM", False)])
         self.assertEqual((plain(got["en"]["until"]), plain(got["en"]["end"]), got["en"]["talkMin"]), ("7:30 PM", "8:00 PM", 20))
         self.assertEqual([plain(r["at"]) for r in got["es"]["speaker"]], ["7:00 p. m.", "7:02 p. m.", "7:22 p. m.", "7:30 p. m.", "8:00 p. m."])
         # another start and speaker_until: the times follow
         self.assertEqual(rows(got["late"]), [("opening", "6:30 PM", False), ("talk", "6:32 PM", True),
-                                             ("questions", "6:52 PM", True), ("business", "7:15 PM", False),
+                                             ("questions", "6:52 PM", True), ("sharing", "7:15 PM", False),
                                              ("close", "8:00 PM", False)])
         # questions that would start at or after speaker_until are left out
-        self.assertEqual([r[0] for r in rows(got["short"])], ["opening", "talk", "business", "close"])
-        # no speaker_until: no speaker's evening; the business hour stays
+        self.assertEqual([r[0] for r in rows(got["short"])], ["opening", "talk", "sharing", "close"])
+        # no speaker_until: no speaker's evening; the hour of a night without a speaker stays
         self.assertEqual(got["none"]["speaker"], [])
-        self.assertEqual([(r["key"], plain(r["at"])) for r in got["en"]["plain"]], [("business_hour", "7:00 – 8:00 PM")])
+        self.assertEqual([(r["key"], plain(r["at"])) for r in got["en"]["plain"]], [("topic_hour", "7:00 – 8:00 PM")])
         self.assertEqual(got["filter"], got["en"])
 
 
@@ -377,7 +379,7 @@ class BuiltPages(Untranslated):
                 self.assertEqual([s["ymd"] for s in cfg["speakers"]], ["2027-01-20", "2027-02-17"])
                 self.assertNotIn("Ann", cfg["plain"])
                 self.assertIn("x-cloak", opening_tag(board, 'class="cm-count-speaker"'))
-                # what happens: the business hour shown, the speaker's evening ready for the browser (x-cloak)
+                # what happens: the topic-sharing hour shown, the speaker's evening ready for the browser (x-cloak)
                 self.assertIn('x-show="speaker" x-cloak', board)
                 self.assertNotIn('x-show="!speaker" x-cloak', board)
                 # no number to call; the meeting code, copied as written; no passcode
@@ -385,20 +387,41 @@ class BuiltPages(Untranslated):
                 self.assertIn('data-copy="abc-defg-hij"', board)
                 self.assertNotRegex(board, r"(?i)passcode|código de acceso")
         en = text(part(p["/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
-        self.assertIn("7:00 – 8:00 PM Central time: committee business, with no guest speaker at this meeting.", en)
+        # Dec 16: no guest speaker — a topic to share on until 7:30, then the same second half, in six steps
+        self.assertIn("7:00 – 8:00 PM Central time: no guest speaker at this meeting; we share on a topic until 7:30 PM.", en)
+        self.assertIn("1 Welcome & opening We open with a moment of silence and the Serenity Prayer. People who are here for the "
+                      "first time or new to service are especially welcome. 2 A topic to share on The chair introduces a topic, and "
+                      "members share their experience on it. 3 Coming up & workshop requests", en)
+        for s in ("4 Special offers & magazine topics", "5 GVR and RLV sharing", "experience, not reports",
+                  "6 Close at 8:00 PM, then the parking lot We close with the Responsibility Statement. Then the parking lot: "
+                  "stay on for whatever is on your mind."):
+            self.assertIn(s, en)
+        # the evening with a guest speaker, for the browser: not a business meeting
         for s in ("How the evening runs", "Each meeting opens with a guest speaker: the talk and questions, done by 7:30 PM. Then "
-                  "committee business until 8:00 PM.", "7:00 PM Opening", "about 7:02 PM Our guest speaker", "About 20 minutes.",
-                  "about 7:22 PM Questions for the speaker", "who is done by 7:30 PM.", "7:30 PM Committee business", "8:00 PM Close",
+                  "events, offers, magazine topics and sharing until 8:00 PM.", "7:00 PM Opening A moment of silence and the "
+                  "Serenity Prayer, then we welcome our guest speaker and introduce the topic.", "about 7:02 PM Our guest speaker",
+                  "About 20 minutes.", "about 7:22 PM Questions for the speaker", "who is done by 7:30 PM.",
+                  "7:30 PM Events, offers, topics and sharing Coming events and workshop requests, special offers from the stores, "
+                  "the magazines' topics and deadlines, then GVRs and RLVs share what's working.",
+                  "8:00 PM Close, then the parking lot We close at 8:00 PM with the Responsibility Statement. Then the parking lot: "
+                  "stay on for whatever is on your mind.",
                   "No phone number to call in: this meeting is online only.",
                   "On a computer, open the link in your browser; on a phone or tablet, use the Google Meet app.",
                   "Open the Google Meet link a few minutes before we start"):
             self.assertIn(s, en)
         self.assertNotIn("15 minutes", en)
+        self.assertNotRegex(en, r"(?i)committee business|business hour|reports from|the minutes|old business|new business")
         es = text(part(p["/es/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
-        for s in ("7:00–8:00 p. m., hora del Centro: asuntos del comité, sin orador(a) invitado(a) en esta reunión.",
-                  "Cómo transcurre la reunión", "hacia las 7:02 p. m. Nuestro(a) orador(a) invitado(a)", "Sin número de teléfono para llamar"):
+        for s in ("7:00–8:00 p. m., hora del Centro: en esta reunión no hay orador(a) invitado(a); hasta las 7:30 p. m. "
+                  "compartimos sobre un tema.", "2 Un tema para compartir", "5 Lo que comparten los RLV y GVR",
+                  "6 Cierre a las 8:00 p. m. y la reunión después de la reunión",
+                  "Cómo transcurre la reunión", "hacia las 7:02 p. m. Nuestro(a) orador(a) invitado(a)",
+                  "7:30 p. m. Eventos, ofertas, temas y compartir", "después, hasta las 8:00 p. m., eventos, ofertas, temas de las "
+                  "revistas y lo que comparten los RLV y GVR.", "A las 8:00 p. m. cerramos con la Declaración de Responsabilidad.",
+                  "Sin número de teléfono para llamar"):
             self.assertIn(s, es)
         self.assertNotIn("p. m..", es)
+        self.assertNotRegex(es, r"(?i)asuntos del comité|informes de distritos")
 
     def test_the_guest_speakers_list(self):
         p = self.pages(NOV26)
@@ -444,8 +467,11 @@ class BuiltPages(Untranslated):
                 words = text(sec)
                 self.assertIn(date, words)
                 for s in ("Grapevine Meeting", "Our monthly online meeting · In English", "The AA Grapevine Statement of Purpose",
-                          "in place of the AA Preamble", "A story from the current Grapevine", "Sharing on its topic",
-                          "We close on time, at 8:00 PM.", "Meeting code abc-defg-hij", "Join on Google Meet",
+                          "in place of the AA Preamble", "A story from the current Grapevine", "and starts the sharing.",
+                          "Sharing on its topic", "3 to 5 minutes each.", "your Seventh Tradition goes to your home group. "
+                          "In place of the basket, a word about Carry the Message.",
+                          "we close on time with the Responsibility Statement, at 8:00 PM.",
+                          "Meeting code abc-defg-hij", "Join on Google Meet",
                           "The same Google Meet room as our committee meeting."):
                     self.assertIn(s, words)
                 # "First meeting" on its first date, "Next meeting" after
@@ -455,7 +481,9 @@ class BuiltPages(Untranslated):
                 self.assertNotIn("Grapevine meetings", words)
         es = text(part(self.pages(NOV26)["/es/meetings/"], 'aria-labelledby="grapevine-meeting-h"', "</section>"))
         for s in ("Nuestra reunión mensual en línea Reunión de Grapevine (en inglés)", "La Declaración de Propósito de AA Grapevine",
-                  "A las 8:00 p. m. cerramos a tiempo.", "Código de la reunión abc-defg-hij", "Primera reunión"):
+                  "a las 8:00 p. m. cerramos a tiempo con la Declaración de Responsabilidad.", "hablamos de Lleva el Mensaje",
+                  "tu Séptima Tradición es para tu grupo base.",
+                  "Código de la reunión abc-defg-hij", "Primera reunión"):
             self.assertIn(s, es)
         self.assertNotIn("En inglés", es, "the title says it: the eyebrow does not again")
 

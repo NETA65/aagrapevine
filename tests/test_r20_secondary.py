@@ -196,6 +196,11 @@ class Booth(unittest.TestCase):
         self.assertIn("online", committee["text_en"])
         self.assertEqual(rows["message-committee-guest-speakers"]["from"], "2026-12-17", "December 16 has no speaker")
         self.assertIn("done by 7:30 p.m.", rows["message-committee-guest-speakers"]["text_en"])
+        # not a business meeting: the second half's words
+        self.assertIn("Then events, workshop requests, special offers, magazine topics and sharing until 8.",
+                      rows["message-committee-guest-speakers"]["text_en"])
+        self.assertNotRegex(rows["message-committee-guest-speakers"]["text_en"] + rows["message-committee-guest-speakers"]["text_es"],
+                            r"(?i)committee business|asuntos del comité")
         gvm = rows["fact-online-grapevine-meeting"]
         self.assertIn("Google Meet", gvm["text_en"] + gvm["text_es"])
         self.assertNotRegex(gvm["text_en"], r"(?i)grapevine meetings")
@@ -367,9 +372,19 @@ class Report(unittest.TestCase):
         nb = lambda s: s.replace(" ", " ").replace(" ", " ").replace(" ", " ")   # noqa: E731
         en, es = nb(r["jan"]["en"]), nb(r["jan"]["es"])
         self.assertIn("Guest speaker: Ann B., Past delegate, Area 99 — “How the Conference works”.", en)
-        self.assertIn("The talk and questions are done by 7:30 PM; then committee business until 8:00 PM.", en)
+        self.assertIn("The talk and questions are done by 7:30 PM; then coming events, workshop requests, special offers, "
+                      "magazine topics and GVR and RLV sharing until 8:00 PM.", en)
         self.assertIn("Orador(a) invitado(a): Ann B., Ex delegada del Área 99 — “Cómo trabaja la Conferencia”.", es)
-        self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, los asuntos del comité hasta las 8:00 p. m.", es)
+        self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de "
+                      "talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR.", es)
+        # what we do there: not a business meeting
+        self.assertIn("What we do there: from January 2027, a guest speaker and questions (until then, and on any night "
+                      "without one, we share on a topic); then coming events and workshop requests, special offers, the "
+                      "magazines' topics and deadlines, and sharing by GVRs and RLVs; after the close, the “parking lot”: "
+                      "anyone can stay on to talk.", en)
+        self.assertIn("Lo que hacemos: desde enero de 2027, la charla de una persona invitada y las preguntas (hasta "
+                      "entonces, y en cualquier reunión sin persona invitada, compartimos sobre un tema); luego,", es)
+        self.assertNotRegex(en + es, r"(?i)committee business|asuntos del comité|reports from the districts|informes de los distritos")
         self.assertNotIn("p. m..", es, "one period after a time in Spanish")
         self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/#committee-meeting", en)
         self.assertNotIn("meeting ID and passcode", en)
@@ -395,7 +410,8 @@ class Report(unittest.TestCase):
         self.assertEqual(nb(jan["t"]["en"][1]).split("\n"), [
             "Next NETA 65 Grapevine / La Viña committee meeting: Wednesday, January 20, 7–8 PM Central time, on Google Meet.",
             "Guest speaker: Ann B., Past delegate, Area 99 — “How the Conference works”.",
-            "The talk and questions are done by 7:30 PM; then committee business until 8:00 PM."])
+            "The talk and questions are done by 7:30 PM; then coming events, workshop requests, special offers, magazine topics "
+            "and GVR and RLV sharing until 8:00 PM."])
         self.assertEqual(len(next(m for m in a["mt"] if m["y"] == "2026-12-16")["t"]["en"][1].split("\n")), 1)
         self.assertNotIn("p. m..", nb(json.dumps(jan["t"]["es"], ensure_ascii=False)))
 

@@ -87,7 +87,8 @@ function clockLabel(hhmm, lang) {
 }
 /** A committee meeting's guest speaker ({ name, position, topic } in the report's language, committee.js meetingSpeaker)
  *  in the report's words: "Guest speaker: Rick W., Past delegate … — “…”." and when the talk and its questions end
- *  (config/site.yml meeting.speaker_until; committee business follows until the meeting's end) → [lines] */
+ *  (config/site.yml meeting.speaker_until; then coming events, workshop requests, special offers, magazine topics and
+ *  GVR and RLV sharing until the meeting's end) → [lines] */
 function speakerLines(sp, site, L) {
   if (!sp || !sp.name) return [];
   const who = sp.name + (sp.position ? `, ${sp.position}` : "") + (sp.topic ? ` — “${sp.topic}”` : "");

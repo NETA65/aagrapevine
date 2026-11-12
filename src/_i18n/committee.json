@@ -208,8 +208,8 @@
     "es": "Tema: “{topic}”"
   },
   "committee.meeting.speaker_until": {
-    "en": "The guest speaker's part ends by {until}; committee business follows until {end}.",
-    "es": "La charla de la persona invitada termina a más tardar a las {until}; luego, hasta las {end}, siguen los asuntos del comité."
+    "en": "The guest speaker's part ends by {until}; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until {end}.",
+    "es": "La charla de la persona invitada termina a más tardar a las {until}; luego, hasta las {end}, eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
   },
   "committee.meeting.copy_link": {
     "en": "Copy {platform} link",
@@ -296,56 +296,56 @@
     "es": "Bienvenida y apertura"
   },
   "committee.meeting.step_welcome_text": {
-    "en": "We usually open with a moment of silence and the Serenity Prayer, then introductions — people new to service are especially welcome.",
-    "es": "Normalmente abrimos con un momento de silencio y la Oración de la Serenidad, y luego nos presentamos — quienes son nuevos en el servicio son especialmente bienvenidos."
+    "en": "We open with a moment of silence and the Serenity Prayer. People who are here for the first time or new to service are especially welcome.",
+    "es": "Abrimos con un momento de silencio y la Oración de la Serenidad. Quienes vienen por primera vez o son nuevos en el servicio son especialmente bienvenidos."
   },
-  "committee.meeting.step_reports": {
-    "en": "District & group reports",
-    "es": "Informes de distritos y grupos"
+  "committee.meeting.step_topic": {
+    "en": "A topic to share on",
+    "es": "Un tema para compartir"
   },
-  "committee.meeting.step_reports_text": {
-    "en": "GVRs and RLVs share what's happening in their districts: new subscriptions, story drives, literature tables.",
-    "es": "Los RLV y GVR comparten lo que pasa en sus distritos: nuevas suscripciones, campañas de historias, mesas de literatura."
+  "committee.meeting.step_topic_text": {
+    "en": "The chair introduces a topic, and members share their experience on it.",
+    "es": "Quien coordina presenta un tema y los miembros comparten su experiencia sobre él."
+  },
+  "committee.meeting.step_events": {
+    "en": "Coming up & workshop requests",
+    "es": "Eventos próximos y solicitudes de talleres"
+  },
+  "committee.meeting.step_events_text": {
+    "en": "Events coming up (our CityWide table, the Grapevine Meeting, workshops, assemblies), requests for a workshop, and volunteers to help.",
+    "es": "Los eventos próximos (nuestra mesa en CityWide, la Reunión de Grapevine, talleres, asambleas), las solicitudes de talleres y quién se ofrece a ayudar."
   },
   "committee.meeting.step_news": {
-    "en": "Grapevine & La Viña news",
-    "es": "Noticias de La Viña y Grapevine"
+    "en": "Special offers & magazine topics",
+    "es": "Ofertas especiales y temas de las revistas"
   },
   "committee.meeting.step_news_text": {
-    "en": "Upcoming issues, story themes and deadlines, new books, podcasts and apps.",
-    "es": "Próximos números, temas y fechas límite para historias, libros nuevos, podcasts y aplicaciones."
+    "en": "The current offers at the Grapevine and La Viña stores, both Books of the Month and Carry the Message; then this month's issues, the next themes and the story deadlines.",
+    "es": "Las ofertas actuales de las tiendas de La Viña y Grapevine, el Libro del mes de cada revista y Lleva el Mensaje; luego, los números de este mes, los próximos temas y las fechas límite para historias."
   },
-  "committee.meeting.step_plan": {
-    "en": "Plan workshops & booths",
-    "es": "Planeamos talleres y mesas"
+  "committee.meeting.step_sharing": {
+    "en": "GVR and RLV sharing",
+    "es": "Lo que comparten los RLV y GVR"
   },
-  "committee.meeting.step_plan_text": {
-    "en": "We organize writing workshops, assembly booths and new ways to carry the message across the Area.",
-    "es": "Organizamos talleres de escritura, mesas en las asambleas y nuevas formas de llevar el mensaje por toda el Área."
-  },
-  "committee.meeting.step_questions": {
-    "en": "Questions & ideas",
-    "es": "Preguntas e ideas"
-  },
-  "committee.meeting.step_questions_text": {
-    "en": "Bring your questions — new GVRs and RLVs get practical help and resources.",
-    "es": "Trae tus preguntas — los nuevos RLV y GVR reciben ayuda práctica y recursos."
+  "committee.meeting.step_sharing_text": {
+    "en": "GVRs and RLVs share what's working, a challenge, or the help they need: experience, not reports. New GVRs and RLVs get practical help.",
+    "es": "Los RLV y GVR comparten lo que les funciona, algún desafío o la ayuda que necesitan: experiencia, no informes. Los nuevos RLV y GVR reciben ayuda práctica."
   },
   "committee.meeting.step_close": {
-    "en": "Close in about an hour",
-    "es": "Cerramos en más o menos una hora"
+    "en": "Close at {end}, then the parking lot",
+    "es": "Cierre a las {end} y la reunión después de la reunión"
   },
   "committee.meeting.step_close_text": {
-    "en": "We close on time with the Responsibility Statement. Notes and slides are shared in our Portfolio.",
-    "es": "Cerramos a tiempo con la Declaración de Responsabilidad. Las notas y presentaciones se comparten en nuestro Portafolio."
+    "en": "We close with the Responsibility Statement. Then the parking lot: stay on for whatever is on your mind.",
+    "es": "Cerramos con la Declaración de Responsabilidad. Después, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
   },
   "committee.meeting.evening_title": {
     "en": "How the evening runs",
     "es": "Cómo transcurre la reunión"
   },
   "committee.meeting.evening_sub": {
-    "en": "Each meeting opens with a guest speaker: the talk and questions, done by {until}. Then committee business until {end}.",
-    "es": "Cada reunión empieza con un(a) orador(a) invitado(a): la charla y las preguntas terminan a más tardar a las {until}; después, hasta las {end}, siguen los asuntos del comité."
+    "en": "Each meeting opens with a guest speaker: the talk and questions, done by {until}. Then events, offers, magazine topics and sharing until {end}.",
+    "es": "Cada reunión empieza con un(a) orador(a) invitado(a): la charla y las preguntas terminan a más tardar a las {until}; después, hasta las {end}, eventos, ofertas, temas de las revistas y lo que comparten los RLV y GVR."
   },
   "committee.meeting.evening_about": {
     "en": "about {time}",
@@ -356,8 +356,8 @@
     "es": "Apertura"
   },
   "committee.meeting.evening_opening_text": {
-    "en": "A moment of silence and the Serenity Prayer, then we introduce our guest speaker.",
-    "es": "Un momento de silencio y la Oración de la Serenidad; luego presentamos a nuestro(a) orador(a) invitado(a)."
+    "en": "A moment of silence and the Serenity Prayer, then we welcome our guest speaker and introduce the topic.",
+    "es": "Un momento de silencio y la Oración de la Serenidad; luego damos la bienvenida a nuestro(a) orador(a) invitado(a) y presentamos el tema."
   },
   "committee.meeting.evening_talk": {
     "en": "Our guest speaker",
@@ -375,25 +375,25 @@
     "en": "Bring your questions. We thank our speaker, who is done by {until}.",
     "es": "Trae tus preguntas. Quien nos visita termina su parte a más tardar a las {until}, y le damos las gracias."
   },
-  "committee.meeting.evening_business": {
-    "en": "Committee business",
-    "es": "Asuntos del comité"
+  "committee.meeting.evening_sharing": {
+    "en": "Events, offers, topics and sharing",
+    "es": "Eventos, ofertas, temas y compartir"
   },
-  "committee.meeting.evening_business_text": {
-    "en": "District and group reports, Grapevine and La Viña news, plans for workshops and booths, your questions and ideas.",
-    "es": "Informes de distritos y grupos, noticias de Grapevine y La Viña, planes de talleres y mesas, y tus preguntas e ideas."
+  "committee.meeting.evening_sharing_text": {
+    "en": "Coming events and workshop requests, special offers from the stores, the magazines' topics and deadlines, then GVRs and RLVs share what's working.",
+    "es": "Los eventos próximos y las solicitudes de talleres, las ofertas especiales de las tiendas, los temas y las fechas límite de las revistas; luego, los RLV y GVR comparten lo que les funciona."
   },
   "committee.meeting.evening_close": {
-    "en": "Close",
-    "es": "Cierre"
+    "en": "Close, then the parking lot",
+    "es": "Cierre y la reunión después de la reunión"
   },
   "committee.meeting.evening_close_text": {
-    "en": "We close on time with the Responsibility Statement.",
-    "es": "Cerramos a tiempo con la Declaración de Responsabilidad."
+    "en": "We close at {end} with the Responsibility Statement. Then the parking lot: stay on for whatever is on your mind.",
+    "es": "A las {end} cerramos con la Declaración de Responsabilidad. Después, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
   },
-  "committee.meeting.evening_business_hour": {
-    "en": "{time} Central time: committee business, with no guest speaker at this meeting.",
-    "es": "{time}, hora del Centro: asuntos del comité, sin orador(a) invitado(a) en esta reunión."
+  "committee.meeting.evening_topic_hour": {
+    "en": "{time} Central time: no guest speaker at this meeting; we share on a topic until {until}.",
+    "es": "{time}, hora del Centro: en esta reunión no hay orador(a) invitado(a); hasta las {until} compartimos sobre un tema."
   },
   "committee.meeting.speakers_title": {
     "en": "Our guest speakers, {years}",
@@ -1484,8 +1484,8 @@
     "es": "Bienvenida"
   },
   "committee.gvmeeting.step_open_text": {
-    "en": "We open with a moment of silence and the Serenity Prayer.",
-    "es": "Abrimos con un momento de silencio y la Oración de la Serenidad."
+    "en": "A moment of silence and the Serenity Prayer, and a welcome to first-timers and to members from across the Area.",
+    "es": "Un momento de silencio y la Oración de la Serenidad, y la bienvenida a quienes vienen por primera vez y a los miembros de toda el Área."
   },
   "committee.gvmeeting.step_purpose": {
     "en": "The AA Grapevine Statement of Purpose",
@@ -1500,24 +1500,24 @@
     "es": "Una historia del Grapevine del mes"
   },
   "committee.gvmeeting.step_story_text": {
-    "en": "A member reads a story from this month's issue aloud.",
-    "es": "Un miembro lee en voz alta una historia del número de este mes."
+    "en": "A member reads a story from this month's issue aloud and starts the sharing.",
+    "es": "Un miembro lee en voz alta una historia del número de este mes y comparte primero."
   },
   "committee.gvmeeting.step_share": {
     "en": "Sharing on its topic",
     "es": "Compartimos sobre su tema"
   },
   "committee.gvmeeting.step_share_text": {
-    "en": "Members share their experience, strength and hope on the story's topic.",
-    "es": "Los miembros comparten su experiencia, fortaleza y esperanza sobre el tema de la historia."
+    "en": "Members share their experience, strength and hope on the story's topic, or on how Grapevine and La Viña have touched their recovery and service: 3 to 5 minutes each.",
+    "es": "Los miembros comparten su experiencia, fortaleza y esperanza sobre el tema de la historia, o sobre lo que La Viña y Grapevine han significado en su recuperación y su servicio: de 3 a 5 minutos cada uno."
   },
   "committee.gvmeeting.step_close": {
     "en": "Close",
     "es": "Cierre"
   },
   "committee.gvmeeting.step_close_text": {
-    "en": "We close on time, at {end}.",
-    "es": "A las {end} cerramos a tiempo."
+    "en": "No basket: the meeting has no expenses, and your Seventh Tradition goes to your home group. In place of the basket, a word about Carry the Message. Then the announcements, and we close on time with the Responsibility Statement, at {end}.",
+    "es": "No pasamos canasta: la reunión no tiene gastos, y tu Séptima Tradición es para tu grupo base. En lugar de la canasta, hablamos de Lleva el Mensaje. Luego, los anuncios, y a las {end} cerramos a tiempo con la Declaración de Responsabilidad."
   },
   "committee.gvmeeting.same_room": {
     "en": "The same {platform} room as our committee meeting.",

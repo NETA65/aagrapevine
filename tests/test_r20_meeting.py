@@ -333,11 +333,13 @@ class Speakers(Untranslated):
             "topic": {"en": "How the Conference works", "es": "Cómo trabaja la Conferencia"}})        # never "confirmed"
         self.assertEqual(jan["i18n"]["summary"], {
             "en": base + " Guest speaker: Ann B. — “How the Conference works”. The guest speaker's part ends by 7:30 PM; "
-                         "committee business follows until 8:00 PM.",
+                         "then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing "
+                         "until 8:00 PM.",
             "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace "
                   "falta registrarse. Orador(a) invitado(a): Ann B. — “Cómo trabaja la Conferencia”. La charla de la "
                   "persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las "
-                  "8:00 p. m., siguen los asuntos del comité."})
+                  "8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo "
+                  "que comparten los RLV y GVR."})
         self.assertEqual(feb["extra"]["speaker"]["position"], {"en": "Delegate, Area 98", "es": "Delegate, Area 98"})
         # the title, the times and the id as without a speaker; joining: the Meet link and code, no passcode
         for e in (dec, jan):
@@ -437,10 +439,11 @@ class SpeakersOnPages(unittest.TestCase):
         self.assertEqual(jan["speaker"], {"name": "Ann B.", "position": "Past delegate, Area 99", "topic": "How the Conference works"})
         self.assertTrue(jan["summary"].endswith(
             "committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest "
-            "speaker: Ann B. — “How the Conference works”. The guest speaker's part ends by 7:30 PM; committee business "
-            "follows until 8:00 PM."), jan["summary"])
+            "speaker: Ann B. — “How the Conference works”. The guest speaker's part ends by 7:30 PM; then coming events, "
+            "workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM."), jan["summary"])
         self.assertIn("\n\nGuest speaker: Ann B. — Past delegate, Area 99\nTopic: “How the Conference works”\nThe guest "
-                      "speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.\n\nJoin on Google Meet: "
+                      "speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics "
+                      "and GVR and RLV sharing until 8:00 PM.\n\nJoin on Google Meet: "
                       f"{ROOM}\nMeeting code: abc-defg-hij\n\nDetails: https://example.org/gv/meetings/#committee-meeting", jan["desc"])
         # the same title, times and calendar uid with or without a speaker
         self.assertEqual((jan["uid"], jan["title"], jan["start"], jan["end"]),
@@ -449,7 +452,9 @@ class SpeakersOnPages(unittest.TestCase):
         es = {e["ymd"]: e for e in got["es"]}["2027-01-20"]
         self.assertIn("Orador(a) invitado(a): Ann B. — Ex delegada del Área 99\nTema: “Cómo trabaja la Conferencia”\nLa charla "
                       "de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las "
-                      "8:00 p. m., siguen los asuntos del comité.", es["desc"])
+                      "8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo "
+                      "que comparten los RLV y GVR.", es["desc"])
+        self.assertNotRegex(jan["desc"] + es["desc"], r"(?i)committee business|asuntos del comité")
         # never in a calendar alarm (the title alone), never in what search engines read (no committee meeting there)
         self.assertTrue(got["alarms"])
         for line in got["alarms"]:
@@ -462,7 +467,8 @@ class SpeakersOnPages(unittest.TestCase):
         # in the sync's summary (speaker_sentences) and in the pages' card and calendar text (normalizeEvents)
         pat = {"name": "Pat E.", "topic": {"en": "", "es": ""}}
         self.assertEqual(B.speaker_sentences(pat, (19, 30), (20, 0), "en"),
-                         "Guest speaker: Pat E. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.")
+                         "Guest speaker: Pat E. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, "
+                         "special offers, magazine topics and GVR and RLV sharing until 8:00 PM.")
         self.assertTrue(B.speaker_sentences(pat, (19, 30), (20, 0), "es").startswith("Orador(a) invitado(a): Pat E. La charla"))
         self.assertEqual(B.speaker_sentences(pat, None, (20, 0), "en"), "Guest speaker: Pat E.")
         cfg = yaml.safe_load(YAML)

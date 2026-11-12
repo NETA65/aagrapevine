@@ -505,7 +505,8 @@ export function meetingSpeaker(m, ymd, lang = "en") {
 }
 
 /** When the guest speaker's part ends ("19:30", config/site.yml meeting.speaker_until), "" when it is not set (or not
- *  between the meeting's start and end); committee business follows until the meeting's end. */
+ *  between the meeting's start and end); then coming events, workshop requests, special offers, magazine topics and
+ *  GVR and RLV sharing until the meeting's end. */
 export function meetingSpeakerUntil(m) {
   return readSpeakers(m).until;
 }
@@ -513,7 +514,8 @@ export function meetingSpeakerUntil(m) {
 // "7:30 PM" / "7:30 p. m." of an "HH:MM" (Central wall clock)
 const clockLabel = (s, lang) => fmt(atChicago(2026, 0, 21, s), lang, { hour: "numeric", minute: "2-digit" });
 
-// "The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM." — "" without speaker_until
+// "The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics
+// and GVR and RLV sharing until 8:00 PM." — "" without speaker_until
 function speakerUntilLine(m, lang) {
   const until = meetingSpeakerUntil(m);
   return until ? t("committee.meeting.speaker_until", lang, { until: clockLabel(until, lang), end: clockLabel(meetingEnd(meetingCfg(m)), lang) }) : "";
@@ -556,8 +558,8 @@ function meetingDescription(site, lang, pageUrl, ymd, over = false) {
 }
 
 // "How the evening runs" at a meeting with a guest speaker: the opening (a moment of silence, the Serenity Prayer,
-// the speaker's introduction) takes about 2 minutes, the talk about 20 (the chair's deck: "2 minutes" in the chat at
-// 18), then the questions until `speaker_until`.
+// the speaker's welcome and the topic's introduction) takes about 2 minutes, the talk about 20 (the chair's deck: "2
+// minutes" in the chat at 18), then the questions until `speaker_until`.
 const SPEAKER_OPENING_MIN = 2;
 const SPEAKER_TALK_MIN = 20;
 const minutesHhmm = (n) => `${pad2(Math.floor(n / 60) % 24)}:${pad2(n % 60)}`;
@@ -567,16 +569,19 @@ const minutesHhmm = (n) => `${pad2(Math.floor(n / 60) % 24)}:${pad2(n % 60)}`;
  * config/site.yml `meeting:` start, speaker_until and end — the times the decks and flyers give:
  *   speaker  a meeting with a guest speaker: [{ key, at, about }] — "opening" at the start, "talk" about 2 minutes
  *            later, "questions" about 20 minutes after that (left out when that is not before speaker_until),
- *            "business" (committee business) at speaker_until, "close" at the end; `about`: an approximate time.
+ *            "sharing" at speaker_until (coming events and workshop requests, special offers, the magazines'
+ *            topics, GVR and RLV sharing — never committee business: the meeting is not a business meeting),
+ *            "close" at the end (the Responsibility Statement, then the parking lot); `about`: an approximate time.
  *            [] without speaker_until (meetingSpeakerUntil: not set, or not between the start and the end)
- *   plain    a meeting without one (Dec 16, 2026): [{ key: "business_hour", at: "7:00 – 8:00 PM" }]
+ *   plain    a meeting without one (Nov 18 and Dec 16, 2026: a topic to share on until speaker_until, then the same
+ *            second half): [{ key: "topic_hour", at: "7:00 – 8:00 PM" }]
  *   until, end  "7:30 PM" ("" without speaker_until), "8:00 PM"; talkMin: the talk's minutes (about 20)
  * `at` is the page language's clock ("7:02 PM", "7:02 p. m."); which one a date has is meetingSpeaker's.
  */
 export function meetingEvening(m, lang = "en") {
   const cfg = meetingCfg(m);
   const start = meetingStart(cfg), end = meetingEnd(cfg), until = meetingSpeakerUntil(m);
-  const plain = [{ key: "business_hour", at: meetingTimeRange(cfg, lang) }];
+  const plain = [{ key: "topic_hour", at: meetingTimeRange(cfg, lang) }];
   const out = { speaker: [], plain, until: until ? clockLabel(until, lang) : "", end: clockLabel(end, lang), talkMin: SPEAKER_TALK_MIN };
   if (!until) return out;
   const s = hhmmMinutes(start), u = hhmmMinutes(until);
@@ -585,7 +590,7 @@ export function meetingEvening(m, lang = "en") {
   out.speaker.push({ key: "opening", at: at(s), about: false });
   if (talk < u) out.speaker.push({ key: "talk", at: at(talk), about: true });
   if (questions < u) out.speaker.push({ key: "questions", at: at(questions), about: true });
-  out.speaker.push({ key: "business", at: out.until, about: false }, { key: "close", at: out.end, about: false });
+  out.speaker.push({ key: "sharing", at: out.until, about: false }, { key: "close", at: out.end, about: false });
   return out;
 }
 
