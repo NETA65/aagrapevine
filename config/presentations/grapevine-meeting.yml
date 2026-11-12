@@ -25,8 +25,8 @@
 #   · Carry the Message is described, never sold (the draft's "we ask that you help support" is an appeal): a
 #     gift certificate bought in the official store, which AA Grapevine or La Viña turns into a subscription for an
 #     alcoholic in need; AA Grapevine, Inc. takes no contributions, but La Viña is not yet self-supporting (the
-#     draft's "entirely self-supporting" is true of Grapevine only); and our committee collects no money, at its
-#     CityWide table either (the members buy from the official stores);
+#     draft's "entirely self-supporting" is true of Grapevine only); and our committee collects no money, not even
+#     at its CityWide table (the members buy from the official stores);
 #   · the prayers' words are the other decks' (the Serenity Prayer as the committee meeting says it, "courage …
 #     wisdom"; the Responsibility Statement's "hand of A.A."), and the chair says them aloud while the room says
 #     them muted, unless the room is small (an echo);
@@ -153,7 +153,6 @@ slides:
       SAY: A few housekeeping notes. To keep the meeting free of background noise, please stay muted when you're not speaking. When it's time to share, use the Raise hand button at the bottom of your Google Meet screen, or simply unmute when I call on you. On Google Meet your name is the one your Google account shows: a first name is all we need. Cameras are up to you; if yours is on, please be mindful of what's behind you, to help protect everyone's anonymity. Please don't take photos or screenshots, and please don't record. We aren't recording tonight either.
       SAY: One more thing: we read from AA Grapevine, but this is our committee's meeting. We don't speak for AA Grapevine, Inc., and this isn't an official AA Grapevine meeting.
       DO: Before you say 'we aren't recording', make sure nobody is recording. A member who would rather not show their full name can join from a private browser window, as a guest, with a first name only: you admit them like everyone else.
-      TRANSITION: Let's open the meeting the way many AA meetings do.
 
   # The opening's prayer, as the committee meeting says it: the deck's grape quote slide.
   - id: "serenity-prayer"
@@ -165,8 +164,9 @@ slides:
     source: "Said at many AA meetings. A.A. World Services does not hold its copyright (aa.org, Terms of Use)."
     minutes: 1
     notes: |
-      SAY: Let's open our meeting with a moment of silence to remember the alcoholic who still suffers, inside and outside the rooms. (Pause for about ten seconds.) Thank you. Those who wish, please join me in the Serenity Prayer. (Read it slowly, following the words on the screen.)
-      DO: Online, unmuting everyone at once creates an echo. It usually works best if the chair says the prayer aloud and everyone else says it along with their microphones muted: say so ('please stay muted and say it along with me'). In a small room of four or five, you can invite everyone to unmute and join in instead.
+      SAY: Let's open our meeting with a moment of silence to remember the alcoholic who still suffers, inside and outside the rooms. (Pause for about ten seconds.) Thank you. Those who wish, please join me in the Serenity Prayer: stay muted and say it along with me. (Read it slowly, following the words on the screen.)
+      SAY (in a small room of four or five, instead of 'stay muted and say it along with me'): Please unmute if you'd like to join in.
+      DO: Online, unmuting everyone at once creates an echo: say the prayer aloud yourself while the room says it muted.
       TIP: 'Those who wish' keeps the invitation open: some members prefer not to pray, and silence is always welcome.
       TRANSITION: Now let's hear the AA Grapevine Statement of Purpose.
 
@@ -189,7 +189,7 @@ slides:
       DO: Ask a reader ahead of time, by e-mail or a private chat, so nobody is put on the spot, and send them the link on the slide. They read it from their own copy: the printed issue, the app, or aagrapevine.org/about-us. Rotate readers from month to month.
       WHY IT IS NOT ON THE SLIDE: the Statement of Purpose is AA Grapevine's own text, and AA Grapevine, Inc. holds the copyright of its magazine's words. The committee's website never puts Grapevine or La Viña material on a slide (the AA Preamble, which AA Grapevine lets AA entities reprint with its credit line, is the one exception the committee uses), and never shows a paraphrase as if it were the text. If the committee asks AA Grapevine for written permission (licensing@aagrapevine.org) and gets it, this slide can show the Statement of Purpose word for word, with AA Grapevine's credit line exactly as they give it.
       IN PLACE OF THE PREAMBLE: many AA meetings open with the AA Preamble; this one reads the Statement of Purpose, which says what AA Grapevine is for.
-      TRANSITION: Before we hear tonight's story, let's say hello to each other.
+      TRANSITION: Before we hear tonight's story, a special welcome.
 
   - id: "newcomers"
     layout: "bullets"
@@ -218,7 +218,7 @@ slides:
       - "At about 7:50 we wrap up: Carry the Message, announcements, and the Responsibility Statement by 8:00"
     minutes: 0.75
     notes: |
-      SAY: Here's how our hour works. Tonight's reader reads a story from AA Grapevine, our meeting in print, and then starts us off by sharing on it. Then the floor is open for your experience, strength and hope on the story's topic: about three to five minutes each, so everyone who wishes has a turn. At about 7:50 we wrap up the sharing: a word about Carry the Message in place of a basket, our announcements, and we close with the Responsibility Statement by eight.
+      SAY: Here's how our hour works. Tonight's reader reads a story from AA Grapevine, our meeting in print, and then starts us off by sharing on it. Then the floor is open for your experience, strength and hope on the story's topic: about three to five minutes each, so everyone who wishes has a turn. At about 7:50 we wrap up the sharing; then a word about Carry the Message in place of a basket, our announcements, and the Responsibility Statement, so we close by eight.
       DO: Tell the room who the timekeeper is (first name), and how they'll signal: a short '1 minute' in the chat, or a raised hand on screen.
       TRANSITION: Here's tonight's story.
 
@@ -268,7 +268,7 @@ slides:
     minutes: 23.5
     notes: |
       TIP (timekeeping): about 23½ minutes, from about 7:22 to 7:45: five to seven shares at three to five minutes each. When many hands are up, ask for three minutes each. The timekeeper types '1 minute' in the chat at four minutes (at two minutes once you've asked for three minutes each); thank the member when the time is up.
-      SAY: The floor is now open for discussion. We invite you to share your experience, strength and hope on tonight's story and its topic, {fill:story_topic}, or on how AA Grapevine or La Viña has touched your own recovery and your service. Here's a question to start us off: {fill:share_question}
+      SAY: The floor is now open for discussion. We invite you to share your experience, strength and hope on tonight's story and its topic, {fill:story_topic}, or on how AA Grapevine or La Viña has touched your own recovery and your service. Here's a question, if it helps: {fill:share_question}
       SAY: Please be mindful of your time, around three to five minutes, so everyone who wishes to share has a turn. You can raise your hand, or unmute when there's a pause. Who would like to share next?
       DO: Call on raised hands in order, by first name. Wait through the silence; someone usually speaks within ten seconds. If two people unmute at once, call on one by first name and the other next. Members who can't find the raise-hand button may type 'hand' in the chat. After each share, say 'thank you, (first name)'.
       TIP: Keep it to experience, strength and hope. If a share drifts into outside issues, such as politics, treatment methods, other fellowships or commercial apps, gently bring the meeting back to the topic. No cross-talk: we don't comment on each other's shares.
@@ -301,7 +301,7 @@ slides:
     items:
       - "This meeting has no expenses, so no basket: your Seventh Tradition goes to your home group"
       - "AA Grapevine, Inc. accepts no contributions: its magazines support it, and the General Service Board covers La Viña's shortfall"
-      - "**Carry the Message**: a gift certificate from the official store becomes a subscription for an alcoholic in need, in treatment, corrections, a detox or a hospital"
+      - "**Carry the Message**: a gift certificate from the official store becomes a subscription for an alcoholic in need (in treatment, prison, a detox or a hospital)"
       - "Online: [aagrapevine.org/carry-the-message](https://www.aagrapevine.org/carry-the-message) · La Viña's {lang:es}Lleva el Mensaje{/lang}: [aalavina.org/lleva-el-mensaje](https://www.aalavina.org/lleva-el-mensaje)"
       - "In person: see our display and ask about it at our CityWide Dallas table, every 2nd Saturday, 5:30 to 7:30 PM"
     takeaway: "A purchase in the official stores, not a donation; each of us decides. Our committee doesn't collect money."
@@ -310,8 +310,8 @@ slides:
     notes: |
       TIP (timekeeping): about 2 minutes, from about 7:50 to 7:52.
       SAY: Our Seventh Tradition says every AA group ought to be fully self-supporting. Our online meeting has no expenses, so we don't pass a basket tonight: please give your Seventh Tradition at your home group. AA Grapevine is different: it accepts no contributions from groups or members. Grapevine pays its way through the magazines, books and other items we buy and use, and La Viña, which isn't self-supporting yet, is supported by the General Service Board.
-      SAY: So in place of a basket, we mention Carry the Message. Anyone who wishes can buy a Carry the Message gift certificate in Grapevine's or La Viña's official store, and the office turns it into a subscription for an alcoholic in need, such as someone in a treatment center, a correctional facility, a detox or a hospital. The addresses are on the screen and in the chat. And on the second Saturday of each month, from 5:30 to 7:30 PM, you can see our display and ask us about it at our Grapevine and La Viña table at CityWide Dallas, at Lovers Lane United Methodist Church.
-      TIP: Keep it to these sentences: describe, never sell. Never call a purchase a 'contribution to Grapevine' or a donation, and never ask anyone to buy: each member decides. Our committee collects no money, at its table either: members buy from the official stores. The committee website's Shop page ({live:site}/shop/#carry) has both programs.
+      SAY: So in place of a basket, we mention Carry the Message. Anyone who wishes can buy a Carry the Message gift certificate in Grapevine's or La Viña's official store, and AA Grapevine or La Viña turns it into a subscription for an alcoholic in need, such as someone in a treatment center, a correctional facility, a detox or a hospital. The addresses are on the screen, and they'll be in the chat in a moment. And on the second Saturday of each month, from 5:30 to 7:30 PM, you can see our display and ask us about it at our Grapevine and La Viña table at CityWide Dallas, at Lovers Lane United Methodist Church.
+      TIP: Keep it to these sentences: describe, never sell. Never call a purchase a 'contribution to Grapevine' or a donation, and never ask anyone to buy: each member decides. Our committee collects no money, not even at its table: members buy from the official stores. The committee website's Shop page ({live:site}/shop/#carry) has both programs.
 
   - id: "announcements"
     layout: "bullets"
@@ -336,7 +336,8 @@ slides:
       STAYS CURRENT: the next Grapevine Meeting and its time, the committee meeting and its guest speaker, and the deadline fill in by themselves from the committee website, and so do the dates in the chat message.
 
   # Writing for the magazines (aagrapevine.org/submit-your-story asks for "your story … your joke or … your art",
-  # its form takes a photo or art: read November 11, 2026), the anonymity reminder with Tradition Twelve said word
+  # its form takes a photo or art; aalavina.org/comparte takes stories, photos, illustrations and audio, but no
+  # jokes: both read November 11, 2026), the anonymity reminder with Tradition Twelve said word
   # for word from its short form (P-52, p. 17: credited here and on the credits page), and where we meet next.
   - id: "before-we-close"
     layout: "bullets"
@@ -344,17 +345,17 @@ slides:
     title: "Before we close"
     items:
       - "Write for AA Grapevine: our meeting in print exists because members write"
-      - "Your story, a joke or your art: [aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) · La Viña: [aalavina.org/comparte](https://www.aalavina.org/comparte)"
+      - "Your story, a joke, a photo or art: [aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) · For La Viña, your story, a photo or art: [aalavina.org/comparte](https://www.aalavina.org/comparte)"
       - "Who you see here, what you hear here, when you leave here, let it stay here"
       - "See you at our CityWide Dallas table on the 2nd Saturday, at the committee meeting on the 3rd Wednesday, and back here on the 1st Wednesday of next month"
     minutes: 1.5
     notes: |
       TIP (timekeeping): about 1½ minutes, from about 7:55 to 7:57.
-      SAY: Thank you to everyone who joined us tonight, to our readers, and to everyone who shared! Remember, you can also send your own recovery story, a joke or your art to AA Grapevine at aagrapevine.org, and to La Viña at aalavina.org: our meeting in print exists because AA members like us write and share our experience.
+      SAY: Thank you to everyone who joined us tonight, to our readers, and to everyone who shared! Remember, you can also send your own recovery story, a joke, a photo or your art to AA Grapevine at aagrapevine.org, and your story, a photo or art to La Viña at aalavina.org: our meeting in print exists because AA members like us write and share our experience.
       SAY: As we prepare to close, let us remember Tradition Twelve: “Anonymity is the spiritual foundation of all our Traditions, ever reminding us to place principles before personalities.” Who you see here, what you hear here, when you leave here, let it stay here.
       SAY: We look forward to seeing you at our Grapevine and La Viña table at CityWide Dallas on the second Saturday, at our committee meeting on the third Wednesday at 7:00 PM, and back here on the first Wednesday of next month!
       SOURCE: Tradition Twelve (short form), word for word: reprinted from AA Grapevine and La Viña: Our Meetings in Print (P-52), p. 17, with permission of Alcoholics Anonymous World Services, Inc. Read it exactly as written here.
-      TIP: A photo for Grapevine (its 'Submit your story' form takes one) keeps everyone's anonymity when nobody is in it: a meeting room, a coffee pot, a sunrise.
+      TIP: A photo for Grapevine or La Viña (both magazines' pages take one) keeps everyone's anonymity when nobody is in it: a meeting room, a coffee pot, a sunrise. Jokes go to Grapevine only: La Viña's page doesn't ask for them.
 
   # The closing, word for word, as the committee meeting says it.
   - id: "responsibility"
@@ -464,7 +465,7 @@ slides:
       - "Tonight's story: AA Grapevine, read aloud from the reader's own copy"
       - "Self-support: The A.A. Service Manual, 2024–2026 Edition, p. 66; Self-Support (F-3, June 2026)"
       - "Carry the Message: aagrapevine.org/carry-the-message; La Viña's Lleva el Mensaje: aalavina.org/lleva-el-mensaje"
-      - "Writing for the magazines: aagrapevine.org/submit-your-story (stories, jokes and art; read November 11, 2026); aalavina.org/comparte"
+      - "Writing for the magazines: aagrapevine.org/submit-your-story (stories, jokes, photos and art; read November 11, 2026); aalavina.org/comparte (stories, photos, illustrations, audio; read November 11, 2026)"
       - "The order of the meeting: the committee's draft script (November 2026), with the committee website's rules"
       - "Dates, the issue, the deadline and the committee meeting on the slides: the committee website, {live:site}, as of the date on the title slide"
     note: |-

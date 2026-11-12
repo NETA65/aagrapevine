@@ -50,9 +50,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
 
 - The six short GVR / RLV 101 sessions on the same page (`/orientation/magazines/` …) come from
   `config/orientation.yml`. See [Settings](settings.md).
-- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides`, one for each of the five web
-  decks, are separate, fixed snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet
-  details on November 11, 2026, the Grapevine Meeting's added in November 2026. Changing a YAML file never
+- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed
+  snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026,
+  and the Grapevine Meeting's copy being added in November 2026. Changing a YAML file never
   changes them, and changing them never changes the web decks. A card links its copy as "PowerPoint copy" through
   its `drive_title`.
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
@@ -163,8 +163,8 @@ the Statement of Purpose could become a `quote` slide with their credit line). F
 has the checklist "Before the meeting", the credits, and "Chat message for Google Meet": the links and dates to paste
 in the Google Meet chat during the announcements, with its **Copy** button
 ([3.14](#314-facilitator-pages-and-handouts)). Its dates come from `recurring_events:` → `grapevine-meeting`, as
-`/events/` lists them. Its PowerPoint copy is the Drive file `Grapevine Meeting.pptx` (`drive_title: "Grapevine
-Meeting"`).
+`/events/` lists them. Its PowerPoint copy, the Drive file `Grapevine Meeting.pptx` (`drive_title: "Grapevine
+Meeting"`), is being added to `slides` in November 2026: the card links it once it is there.
 
 Also in the folder: `README.md`, the committee's writing guide (saving it does not rebuild the site). Two sample
 decks are in [`tests/fixtures/presentations/`](../tests/fixtures/presentations/): `sample-workshop.yml` uses every

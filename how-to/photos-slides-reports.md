@@ -285,10 +285,10 @@ the second one stays in the title).
 #### The deck copies
 
 The site has five **web presentations** on GVR / RLV 101 (`/orientation/#presentations`), written in
-[config/presentations/](../config/presentations/README.md). The five `.pptx` files in `slides/` are fixed PowerPoint
+[config/presentations/](../config/presentations/README.md). The `.pptx` files in `slides/` are fixed PowerPoint
 copies of them: the first four made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026,
-the Grapevine Meeting's added in November 2026. The site links each copy to its web presentation **by the copy's title**: the title
-must be exactly the deck's `drive_title`.
+and the Grapevine Meeting's copy being added in November 2026. The site links each copy to its web presentation **by
+the copy's title**: the title must be exactly the deck's `drive_title`.
 
 | File in `slides/` today | `drive_title` is set in | The web presentation |
 |---|---|---|
@@ -296,7 +296,7 @@ must be exactly the deck's `drive_title`.
 | `Grapevine and La Viña Information Workshop.pptx` | `config/presentations/information-workshop.yml` | `/orientation/?present=information-workshop` |
 | `Grapevine and La Viña Writing Workshop.pptx` | `config/presentations/writing-workshop.yml` | `/orientation/?present=writing-workshop` |
 | `Grapevine and La Viña Monthly Committee Meeting.pptx` | `config/presentations/committee-meeting.yml` | `/orientation/?present=committee-meeting` |
-| `Grapevine Meeting.pptx` | `config/presentations/grapevine-meeting.yml` | `/orientation/?present=grapevine-meeting` |
+| `Grapevine Meeting.pptx` (being added in November 2026; until then the card has no "PowerPoint copy" link) | `config/presentations/grapevine-meeting.yml` | `/orientation/?present=grapevine-meeting` |
 
 What the match gives:
 
