@@ -314,7 +314,8 @@ class MorningWorkflow(unittest.TestCase):
 
 # --------------------------------------------------------------------------- the fast path (bash)
 class _Serve:
-    """build.json from a local web server: `body` None = 404."""
+    """build.json from a local web server: `body` None = 404; /old/… forwards (301) to the same path without
+    /old, as GitHub Pages forwards the github.io address to the custom domain."""
 
     def __init__(self):
         self.body: str | None = None
@@ -322,6 +323,12 @@ class _Serve:
 
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_GET(self):  # noqa: N802
+                if self.path.startswith("/old/"):
+                    self.send_response(301)
+                    self.send_header("Location", self.path[len("/old"):])
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
                 if urlsplit(self.path).path != "/build.json" or owner.body is None:
                     self.send_response(404)
                     self.end_headers()
@@ -406,6 +413,9 @@ class FastPathParity(unittest.TestCase):
                 else:
                     self.assertEqual(summary, "")
         self.assertEqual(self.look("")[0], "false", "no site address: the next job looks closer")
+        # an address that forwards (github.io → the custom domain, http:// → https://) is followed
+        self.server.body = json.dumps(variants["done"])
+        self.assertEqual(self.look(self.server.url + "/old")[0], "true")
 
     def test_the_full_update_rule_is_full_run_reason(self):
         # The same build.json at fixed moments (a stand-in `date` answers FAKE_NOW unless it is asked about

@@ -123,11 +123,13 @@ jobs:
           # due when build.json "full" (when the last one ran) is before midnight on the 1st of the month
           # (Central), or more than 30 hours ago; not known → never. Then the next job runs even when
           # today's update is there, and starts it.
-          # ?check=… keeps GitHub's cache from answering with an older copy.
+          # ?check=… keeps GitHub's cache from answering with an older copy. -L: an address that forwards (the
+          # github.io address to the custom domain, http:// to https:// once "Enforce HTTPS" is ticked) is followed,
+          # a few hops at most.
           set -uo pipefail
           today="$(TZ=America/Chicago date +%F)"
           info=""
-          if [ -n "$SITE" ]; then info="$(curl -fsS --max-time 20 --retry 2 "${SITE}/build.json?check=$(date +%s)" 2>/dev/null || true)"; fi
+          if [ -n "$SITE" ]; then info="$(curl -fsSL --max-redirs 3 --max-time 20 --retry 2 "${SITE}/build.json?check=$(date +%s)" 2>/dev/null || true)"; fi
           day="$(jq -r '.day // empty' <<<"$info" 2>/dev/null || true)"
           gv="$(jq -r '.quotes.gv // empty' <<<"$info" 2>/dev/null || true)"
           lv="$(jq -r '.quotes.lv // empty' <<<"$info" 2>/dev/null || true)"
