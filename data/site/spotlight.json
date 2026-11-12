@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T08:30:40Z",
+ "updated": "2026-11-12T21:04:14Z",
  "fixture": false,
  "today": "2026-11-12",
  "home_days": 60,
@@ -12,12 +12,12 @@
   "60": {
    "neta65": 3,
    "texas": 7,
-   "all": 80
+   "all": 82
   },
   "90": {
    "neta65": 4,
    "texas": 11,
-   "all": 130
+   "all": 132
   }
  },
  "items": [
@@ -904,6 +904,75 @@
    "is_new": false
   },
   {
+   "id": "gv:2026-11:bouncing-and-out",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/bouncing-and-out",
+   "title": "Bouncing In and Out",
+   "summary": "To stay sober, stay active",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-12T21:01:06Z",
+   "image": "/assets/cache/articles/54b448e096a8857d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Rob O.",
+    "author_location": "Everrett, Wash.",
+    "subtitle": "To stay sober, stay active",
+    "teaser": "By 2006 or earlier, I knew there was a problem with my drinking. If I didn’t have a drink in my hand, there was one very close. I tried to quit twice on my own before the I got a D.W.I.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Everrett",
+     "county": null,
+     "counties": [],
+     "state": "WA",
+     "country": "US",
+     "label_en": "Everrett, Washington",
+     "label_es": "Everrett, Washington"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Bouncing In and Out",
+     "es": "Rebotando dentro y fuera"
+    },
+    "summary": {
+     "en": "To stay sober, stay active",
+     "es": "Para mantenerse sobrio, mantenerse activo"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Everrett, Washington",
+     "es": "Everrett, Washington"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
    "id": "gv:2026-11:getting-ready-my-first-drink",
    "source": "grapevine",
    "kind": "article",
@@ -965,6 +1034,75 @@
     "author_location": {
      "en": "Montrose, Colorado",
      "es": "Montrose, Colorado"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-11:giving-it-away",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/giving-it-away",
+   "title": "Giving It Away",
+   "summary": "She discovers the program anew with every sponsee",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-12T21:01:06Z",
+   "image": "/assets/cache/articles/bee6cf6bdd6dbfcc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Lana W.",
+    "author_location": "Saint Helens, Ore.",
+    "subtitle": "She discovers the program anew with every sponsee",
+    "teaser": "My experience with sponsoring, truthfully? I think I get more out of it then the person I am sponsoring does.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Saint Helens",
+     "county": null,
+     "counties": [],
+     "state": "OR",
+     "country": "US",
+     "label_en": "Saint Helens, Oregon",
+     "label_es": "Saint Helens, Oregón"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Giving It Away",
+     "es": "Dandole un paso"
+    },
+    "summary": {
+     "en": "She discovers the program anew with every sponsee",
+     "es": "Ella descubre el programa de nuevo con cada ahijado"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Saint Helens, Oregon",
+     "es": "Saint Helens, Oregón"
     }
    },
    "machine": [

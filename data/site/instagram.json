@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T16:03:03Z",
+ "updated": "2026-11-12T20:59:01Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -10,7 +10,7 @@
    "followers": 17012,
    "posts": 4007,
    "owner_id": "48108439509",
-   "checked": "2026-11-12T16:02:44Z",
+   "checked": "2026-11-12T20:58:44Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -21,7 +21,7 @@
    "followers": 2434,
    "posts": 3029,
    "owner_id": "48275839129",
-   "checked": "2026-11-12T16:02:47Z",
+   "checked": "2026-11-12T20:58:47Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },

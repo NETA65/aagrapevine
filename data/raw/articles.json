@@ -1,28 +1,28 @@
 {
  "source": "articles",
- "updated": "2026-11-12T16:04:34Z",
- "attempted": "2026-11-12T16:04:34Z",
+ "updated": "2026-11-12T21:01:06Z",
+ "attempted": "2026-11-12T21:01:06Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 2,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "hub_articles": 57,
-  "details_fetched": 0,
+  "details_fetched": 2,
   "details_failed": 0,
-  "thumbs": 0,
-  "archive_pages": 13,
-  "archive_new": 0,
+  "thumbs": 2,
+  "archive_pages": 14,
+  "archive_new": 2,
   "covers": 0,
-  "details_pending": 0,
+  "details_pending": 2,
   "byline_pending": 0,
   "details_left": 0,
-  "new": 0,
-  "total": 297,
-  "requests": 15
+  "new": 2,
+  "total": 299,
+  "requests": 20
  },
  "items": [
   {
@@ -152,6 +152,72 @@
     "author_location": "Hernando, Fla.",
     "subtitle": "Stepping outside himself and into AA",
     "teaser": "During my years of drinking and drugging, I searched for a place where I felt comfortable.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-11:giving-it-away",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/giving-it-away",
+   "title": "Giving It Away",
+   "summary": "She discovers the program anew with every sponsee",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-12T21:01:06Z",
+   "last_seen": "2026-11-12T21:01:06Z",
+   "image": "/assets/cache/articles/bee6cf6bdd6dbfcc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Lana W.",
+    "author_location": "Saint Helens, Ore.",
+    "subtitle": "She discovers the program anew with every sponsee",
+    "teaser": "My experience with sponsoring, truthfully? I think I get more out of it then the person I am sponsoring does.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false
+   }
+  },
+  {
+   "id": "gv:2026-11:bouncing-and-out",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/bouncing-and-out",
+   "title": "Bouncing In and Out",
+   "summary": "To stay sober, stay active",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-12T21:01:06Z",
+   "last_seen": "2026-11-12T21:01:06Z",
+   "image": "/assets/cache/articles/54b448e096a8857d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Rob O.",
+    "author_location": "Everrett, Wash.",
+    "subtitle": "To stay sober, stay active",
+    "teaser": "By 2006 or earlier, I knew there was a problem with my drinking. If I didn’t have a drink in my hand, there was one very close. I tried to quit twice on my own before the I got a D.W.I.",
     "free": false,
     "online_exclusive": true,
     "department": false
@@ -9838,7 +9904,7 @@
    "key": "2026-11",
    "publication": "gv",
    "hub": "https://www.aagrapevine.org/magazine",
-   "seen": "2026-11-12T16:03:08Z",
+   "seen": "2026-11-12T20:59:08Z",
    "cover": "/assets/cache/articles/bfc7d6fa631e6757.webp"
   },
   "lv:2026-11": {
@@ -9850,7 +9916,7 @@
    "key": "2026-11",
    "publication": "lv",
    "hub": "https://www.aalavina.org/la-revista",
-   "seen": "2026-11-12T16:03:18Z",
+   "seen": "2026-11-12T20:59:20Z",
    "cover": "/assets/cache/articles/f516ec1fbfd667f4.webp"
   },
   "gv:2026-10": {
@@ -9900,15 +9966,15 @@
  },
  "archive_state": {
   "gv": {
-   "last_run": "2026-11-12T16:03:58Z",
-   "pages_last_run": 7,
-   "new_last_run": 0,
+   "last_run": "2026-11-12T21:00:08Z",
+   "pages_last_run": 8,
+   "new_last_run": 2,
    "oldest_seen": "2026-09",
    "backfilled": "2026-09-23T23:07:47Z",
    "backfill_days": 120
   },
   "lv": {
-   "last_run": "2026-11-12T16:04:34Z",
+   "last_run": "2026-11-12T21:00:44Z",
    "pages_last_run": 6,
    "new_last_run": 0,
    "oldest_seen": "2026-07",

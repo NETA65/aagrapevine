@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T20:49:32Z",
+ "updated": "2026-11-12T21:04:14Z",
  "fixture": false,
  "items": [
   {
@@ -691,6 +691,65 @@
     "title": {
      "en": "September 2027 Committee Meeting - guest speaker",
      "es": "Reunión del comité de septiembre de 2027 - orador invitado"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+   "title": "Grapevine and La Viña Writing Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Writing Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "12:49 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine and La Viña Writing Workshop",
+     "es": "Taller de escritura de Grapevine y La Viña"
     },
     "summary": {
      "en": "",
@@ -1754,65 +1813,6 @@
    "wn_date": "2026-11-11T12:00:00Z"
   },
   {
-   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-   "source": "drive",
-   "kind": "slides",
-   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
-   "title": "Grapevine and La Viña Writing Workshop",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-11",
-   "first_seen": "2026-10-02T04:55:24Z",
-   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
-   "tags": [
-    "panel-77",
-    "pptx"
-   ],
-   "category": "slides",
-   "status": "ok",
-   "extra": {
-    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "name": "Grapevine and La Viña Writing Workshop.pptx",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "slides"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
-    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PPTX",
-    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
-    ],
-    "modified_text": "Nov 11"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine and La Viña Writing Workshop",
-     "es": "Taller de escritura de Grapevine y La Viña"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-11T12:00:00Z"
-  },
-  {
    "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
    "source": "drive",
    "kind": "photo",
@@ -2136,7 +2136,7 @@
     "duration_sec": null,
     "playlists": [],
     "is_short": false,
-    "views": 107,
+    "views": 113,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -2358,7 +2358,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 154,
+    "views": 159,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3138,7 +3138,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 238,
+    "views": 243,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3913,7 +3913,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 197,
+    "views": 198,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4515,6 +4515,76 @@
    "wn_date": "2026-11-01T12:30:15Z"
   },
   {
+   "id": "gv:2026-11:bouncing-and-out",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/bouncing-and-out",
+   "title": "Bouncing In and Out",
+   "summary": "To stay sober, stay active",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-12T21:01:06Z",
+   "image": "/assets/cache/articles/54b448e096a8857d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Rob O.",
+    "author_location": "Everrett, Wash.",
+    "subtitle": "To stay sober, stay active",
+    "teaser": "By 2006 or earlier, I knew there was a problem with my drinking. If I didn’t have a drink in my hand, there was one very close. I tried to quit twice on my own before the I got a D.W.I.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Everrett",
+     "county": null,
+     "counties": [],
+     "state": "WA",
+     "country": "US",
+     "label_en": "Everrett, Washington",
+     "label_es": "Everrett, Washington"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Bouncing In and Out",
+     "es": "Rebotando dentro y fuera"
+    },
+    "summary": {
+     "en": "To stay sober, stay active",
+     "es": "Para mantenerse sobrio, mantenerse activo"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Everrett, Washington",
+     "es": "Everrett, Washington"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T12:00:00Z"
+  },
+  {
    "id": "gv:2026-11:getting-ready-my-first-drink",
    "source": "grapevine",
    "kind": "article",
@@ -4646,6 +4716,76 @@
     "author_location": {
      "en": "Hernando, Florida",
      "es": "Hernando, Florida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-01T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-11:giving-it-away",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/nov/giving-it-away",
+   "title": "Giving It Away",
+   "summary": "She discovers the program anew with every sponsee",
+   "lang": "en",
+   "date": "2026-11-01",
+   "first_seen": "2026-11-12T21:01:06Z",
+   "image": "/assets/cache/articles/bee6cf6bdd6dbfcc.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "November 2026",
+    "issue_key": "2026-11",
+    "issue_date": "2026-11-01",
+    "issue_theme": "AA Members & Mental Health",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/november-2026",
+    "topic": null,
+    "section": null,
+    "author": "Lana W.",
+    "author_location": "Saint Helens, Ore.",
+    "subtitle": "She discovers the program anew with every sponsee",
+    "teaser": "My experience with sponsoring, truthfully? I think I get more out of it then the person I am sponsoring does.",
+    "free": false,
+    "online_exclusive": true,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Saint Helens",
+     "county": null,
+     "counties": [],
+     "state": "OR",
+     "country": "US",
+     "label_en": "Saint Helens, Oregon",
+     "label_es": "Saint Helens, Oregón"
+    },
+    "pub_date": "2026-11-01"
+   },
+   "i18n": {
+    "title": {
+     "en": "Giving It Away",
+     "es": "Dandole un paso"
+    },
+    "summary": {
+     "en": "She discovers the program anew with every sponsee",
+     "es": "Ella descubre el programa de nuevo con cada ahijado"
+    },
+    "issue_theme": {
+     "en": "AA Members & Mental Health",
+     "es": "Los miembros de AA y la salud mental"
+    },
+    "issue_label": {
+     "en": "November 2026",
+     "es": "Noviembre 2026"
+    },
+    "author_location": {
+     "en": "Saint Helens, Oregon",
+     "es": "Saint Helens, Oregón"
     }
    },
    "machine": [
@@ -5325,7 +5465,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 289,
+    "views": 291,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -7061,7 +7201,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 336,
+    "views": 337,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7311,94 +7451,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-22T11:30:15Z"
-  },
-  {
-   "id": "ig:DexN0JlDhyO",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DexN0JlDhyO/",
-   "title": "¡Taller Mensual y Virtual de La Viña!",
-   "summary": "¡Taller Mensual y Virtual de La Viña! ¡Únete a nosotros! El próximo taller será el jueves 22 de octubre de 2026 a las 3:00 p.m. (EST). ID de la reunión Zoom: 815 9593 1777 Para obtener más información, por favor escribe a lveditorial@aagrapevine.org",
-   "lang": "es",
-   "date": "2026-10-21T20:00:14Z",
-   "first_seen": "2026-10-22T13:02:42Z",
-   "image": "/assets/cache/ig/DexN0JlDhyO.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DexN0JlDhyO",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DexN0JlDhyO.webp",
-    "embed_url": "https://www.instagram.com/p/DexN0JlDhyO/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DexN0JlDhyO/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Monthly and Virtual Workshop!",
-     "es": "¡Taller Mensual y Virtual de La Viña!"
-    },
-    "summary": {
-     "en": "La Viña Monthly and Virtual Workshop! Join us! The next workshop will be on Thursday October 22, 2026 at 3:00 p.m. (EST). Meeting ID Zoom: 815 9593 1777 For more information, please write to lveditorial@aagrapevine.org",
-     "es": "¡Taller Mensual y Virtual de La Viña! ¡Únete a nosotros! El próximo taller será el jueves 22 de octubre de 2026 a las 3:00 p.m. (EST). ID de la reunión Zoom: 815 9593 1777 Para obtener más información, por favor escribe a lveditorial@aagrapevine.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-21T20:00:14Z"
-  },
-  {
-   "id": "ig:DewhTx7RbH_",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DewhTx7RbH_/",
-   "title": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…",
-   "summary": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información.",
-   "lang": "es",
-   "date": "2026-10-21T13:31:32Z",
-   "first_seen": "2026-10-22T13:02:42Z",
-   "image": "/assets/cache/ig/DewhTx7RbH_.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DewhTx7RbH_",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "video",
-    "thumb": "/assets/cache/ig/DewhTx7RbH_.webp",
-    "embed_url": "https://www.instagram.com/p/DewhTx7RbH_/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DewhTx7RbH_/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two …",
-     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos…"
-    },
-    "summary": {
-     "en": "Soon! La Viña will hold a virtual open meeting of AA with one coordinator and two speakers. The podcast will respect anonymity and will be available on the main platforms. Very soon more information.",
-     "es": "¡Pronto! La Viña celebrará una reunión abierta virtual de AA con un coordinador y dos oradores. El pódcast respetará el anonimato y estará disponible en las principales plataformas. Muy pronto más información."
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-21T13:31:32Z"
   }
  ]
 }

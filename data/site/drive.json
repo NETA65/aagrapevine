@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T20:49:06Z",
+ "updated": "2026-11-12T20:57:57Z",
  "fixture": false,
  "items": [
   {
@@ -764,6 +764,64 @@
    "is_new": true
   },
   {
+   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+   "source": "drive",
+   "kind": "slides",
+   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+   "title": "Grapevine and La Viña Writing Workshop",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-10-02T04:55:24Z",
+   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+   "tags": [
+    "panel-77",
+    "pptx"
+   ],
+   "category": "slides",
+   "status": "ok",
+   "extra": {
+    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "name": "Grapevine and La Viña Writing Workshop.pptx",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "slides"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PPTX",
+    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
+    ],
+    "modified_text": "12:49 pm"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine and La Viña Writing Workshop",
+     "es": "Taller de escritura de Grapevine y La Viña"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
    "id": "drive:1WrBipT0UH0dAG2QbO__idbg1igNam49v",
    "source": "drive",
    "kind": "photo",
@@ -1292,64 +1350,6 @@
    "machine": [
     "es"
    ],
-   "is_new": true
-  },
-  {
-   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-   "source": "drive",
-   "kind": "slides",
-   "url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
-   "title": "Grapevine and La Viña Writing Workshop",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-11",
-   "first_seen": "2026-10-02T04:55:24Z",
-   "image": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
-   "tags": [
-    "panel-77",
-    "pptx"
-   ],
-   "category": "slides",
-   "status": "ok",
-   "extra": {
-    "file_id": "1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-    "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "name": "Grapevine and La Viña Writing Workshop.pptx",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "slides"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
-    "preview_url": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f=w600",
-    "image_url": null,
-    "is_image": false,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PPTX",
-    "folder_id": "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_url": "https://drive.google.com/drive/folders/1uOtbv5oBKKx67J8UbBknIVgkuBHj475A",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
-    ],
-    "modified_text": "Nov 11"
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine and La Viña Writing Workshop",
-     "es": "Taller de escritura de Grapevine y La Viña"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
    "is_new": true
   },
   {
