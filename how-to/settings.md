@@ -482,7 +482,7 @@ yet: a notice from the day the change is announced, and the new 1-year prices fr
 | `key` | Short name (letters, numbers, dashes). Default: the effective month, `"2027-01"`. | Used twice: the second block is skipped. |
 | `effective` | **Required.** `"YYYY-MM-DD"`: the new prices start at 00:00 Central that day. | Missing or not a date: skipped. |
 | `announced` | The day the notice starts. Default: `effective` (no advance notice). | After `effective`: the notice starts on `effective` (noted). |
-| `notice_until` | The last day of "New prices since …". Default: `effective` + 30 days. | Before `effective`: the default (noted). |
+| `notice_until` | The last day of "New prices as of …". Default: `effective` + 30 days. | Before `effective`: the default (noted). |
 | `source` / `source_es` | Where it was announced, shown in the notice. | — |
 | `doc_match` | A pattern that finds AA Grapevine's notice on the Drive → the "Read AA Grapevine's notice" link. Matched by the page itself: capitals ignored, accents **not** folded (write `[oó]`). | Not a valid pattern: no link (noted). |
 | `yearly` | The new **1-year** prices in U.S. dollars: `gv` / `lv` → `print` / `digital` / `complete`. `39`, `"39.00"` and `"$39.00"` all work (more than 0, at most 1000). | A word or an absurd amount: that price is left out (noted). |
@@ -510,7 +510,7 @@ price_changes:
 each 1-year plan's price today and its new one ("From Jan 1, 2027: $39.00"), the books line, AA Grapevine's
 letter linked (`doc_match` finds the Drive file `notes/2026-10-01 Grapevine & La Viña Pricing Update -
 Effective January 1, 2027.pdf`). On January 1 at midnight Central the new prices show by themselves, then
-"New prices since …" until January 31. The 2- and 3-year, monthly and Complete plans keep the stores' prices.
+"New prices as of …" until January 31. The 2- and 3-year, monthly and Complete plans keep the stores' prices.
 
 To add the next announcement: copy the block (from `- key:` down), paste it under the last one, change the
 values. Leave a block in place until the stores show the new prices; after that it may be deleted.

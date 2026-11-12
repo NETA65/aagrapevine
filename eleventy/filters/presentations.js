@@ -1599,7 +1599,7 @@ function planPrice(c, pub, type) {
 const noticeOf = (c) => shopPriceChangeIn(c.db.shop || {}, c.today);
 
 /** The notice's words: "Prices change on January 1, 2027: Grapevine, 1 year: print $39.00, digital $34.00; …" before
- *  its day, "New prices since January 1, 2027." from it (the Shop's and the district report's own strings). */
+ *  its day, "New prices as of January 1, 2027." from it (the Shop's and the district report's own strings). */
 function noticeText(ch, kind) {
   const date = dayLabel(ch.effective, "en");
   if (kind === "after") return `${t("shop.pc_title_after", { date })}.`;
@@ -1765,7 +1765,7 @@ export function liveFacts(ctx) {
       out[`price_${pub}_${type}`] = fact(p.value, p.from ? [{ from: p.from, value: p.then }] : [], null, FALLBACKS[`price_${pub}_${type}`]);
     }
   }
-  // the notice while it is on — before its day, then "New prices since …" until it ends; empty otherwise
+  // the notice while it is on — before its day, then "New prices as of …" until it ends; empty otherwise
   const hit = noticeOf(c);
   const noticeEnd = hit ? instantIso(hit.c.at.notice_end) : null;
   if (hit && hit.kind === "before") {

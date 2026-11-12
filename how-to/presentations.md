@@ -711,7 +711,7 @@ those show exactly what you type.
 | `lv_workshop_next` | Thursday, October 22, 2026 | the `recurring_events:` entry with `host: lv` | "see La Viña's events calendar at aalavina.org" |
 | `lv_workshop_time`, `lv_workshop_zoom_id` | 2:00 – 3:00 PM Central time (3:00 PM Eastern) · its Zoom ID | same | — |
 | `price_gv_print`, `price_gv_digital`, `price_lv_print`, `price_lv_digital` | $36.00, $29.99, $18.00, $14.99, then $39.00, $34.00, $19.50, $17.00 from January 1, 2027 | the Shop's data, and `config/site.yml` → `price_changes:` | "see the Shop page" |
-| `price_change_note` | "Prices change on January 1, 2027: Grapevine, 1 year: print $39.00, digital $34.00; …", from that day "New prices since January 1, 2027." | `price_changes:` (from `announced` through `notice_until`) | empty outside a notice |
+| `price_change_note` | "Prices change on January 1, 2027: Grapevine, 1 year: print $39.00, digital $34.00; …", from that day "New prices as of January 1, 2027." | `price_changes:` (from `announced` through `notice_until`) | empty outside a notice |
 | `price_change_date` | January 1, 2027 | same | empty outside a notice |
 | `gv_issue`, `gv_next_issue`, `gv_theme` | October 2026 · Loneliness / November 2026 · Classic Grapevine / Loneliness | the magazines' data (as on `/monthly/`) | "see aagrapevine.org" |
 | `lv_issue`, `lv_next_issue`, `lv_theme` | September–October 2026 · Servicio en AA / November–December 2026 · La alegría de vivir (The Joy of Living) / Servicio en AA | same | "see aalavina.org" |

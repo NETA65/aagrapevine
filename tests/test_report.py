@@ -535,7 +535,7 @@ class DatedOffers(unittest.TestCase):
                 self.assertNotIn("No Matter What", texts[at])
                 self.assertNotIn("Into Action", texts[at])
                 self.assertNotIn("Book of the Month", texts[at])
-        self.assertIn("New prices since January 1, 2027", texts["2027-01-01T06:00:00.000Z"])
+        self.assertIn("New prices as of January 1, 2027", texts["2027-01-01T06:00:00.000Z"])
         self.assertNotIn("New prices", texts["2027-02-01T06:00:00.000Z"])
         # the Spanish report: the same moments, but only where its words change ("Nuevos precios desde el 1 de enero"
         # reads the same before and after the day)

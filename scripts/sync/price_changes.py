@@ -14,7 +14,7 @@ One change, as the settings give it (README → "When Grapevine announces new pr
     effective      the day the new prices start (Central time)                       — required
     announced      the day AA Grapevine announced them: the notice shows from this day — default: the effective day
                    (no advance notice)
-    notice_until   the last day of the "New prices since …" notice                   — default: 30 days after `effective`
+    notice_until   the last day of the "New prices as of …" notice                   — default: 30 days after `effective`
     source         where they were announced ("AA Grapevine's letter …"); source_es in Spanish
     doc_match      finds AA Grapevine's notice among the committee's Drive files (a regular expression, capitals
                    ignored — like lavina_weekly_open.flyer_match)
@@ -40,7 +40,7 @@ PUBS = ("gv", "lv")
 TYPES = ("print", "digital", "complete")
 YEARLY_MONTHS = 12
 MAX_PRICE = 1000.0          # a price above this is a typo (the dearest plan, 3-year Complete, is $130)
-NOTICE_DAYS = 30            # no notice_until: the "New prices since …" notice shows for this many days
+NOTICE_DAYS = 30            # no notice_until: the "New prices as of …" notice shows for this many days
 KEY_MAX = 32
 # How long the price memory of a change that is no longer in the settings is kept (a block that a typo made
 # unreadable must not lose the prices read before its day: they cannot be read again afterwards).

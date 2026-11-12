@@ -1086,7 +1086,7 @@ export function monthMessage(ctx, langs, style, site, t) {
   }
   if (cur && nw.subsFrom) out.push(`${wa ? "📬 " : ""}${both("shop.subs_from", (l) => ({ amount: money(nw.subsFrom, l) }))}: ${url("/shop/#subscriptions")}`);
   // 📢 a price change AA Grapevine announced, in the months its notice meets (monthModel `price`): "Grapevine and La
-  // Viña prices change on January 1, 2027" before it, "New … prices since …" in its month — a heads-up for the
+  // Viña prices change on January 1, 2027" before it, "New … prices as of …" in its month — a heads-up for the
   // groups' budget for Grapevine and La Viña books and subscriptions; what changes is on /shop/ (#price-changes)
   if (m.price) {
     const key = m.price.kind === "before" ? "shop.pc_line_before" : "shop.pc_line_after";

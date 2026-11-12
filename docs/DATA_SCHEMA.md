@@ -631,7 +631,7 @@ hard-code a price, percent or date; other pages show at most a compact teaser th
   around the effective day — `at` holds the moments — and switch in the browser (eleventy/filters/shop.js
   `shopWindow` → `data-gv-from` / `data-gv-expire`, app.js `GV.expire`, base.njk before the first paint), so a page
   built — or saved for offline use — the day before is right on the day; without JavaScript the build's state shows.
-  The notice ("Prices change on …") shows from `announced` to the day before `effective`, "New prices since …" from
+  The notice ("Prices change on …") shows from `announced` to the day before `effective`, "New prices as of …" from
   `effective` through `notice_until`; `/shop/`, the Book of the Month cards, the monthly toolkit (its message and
   "Keep up all month"), the GV/LV report, the monthly digest and its e-mail (one pointer row) and GVR / RLV 101
   (the Book of the Month example) all follow them. So, since October 2026, does `/shop/`'s **"What it would cost"**

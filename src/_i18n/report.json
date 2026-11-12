@@ -159,7 +159,7 @@
   "report.pc_before": { "en": "New prices from {date}, as announced by AA Grapevine:", "es": "Nuevos precios desde el {date}, según el anuncio de AA Grapevine:" },
   "report.pc_pub": { "en": "{pub}, 1 year: {list}", "es": "{pub}, 1 año: {list}" },
   "report.pc_books": { "en": "Grapevine and La Viña books: {amount} more each", "es": "Libros de La Viña y Grapevine: {amount} más cada uno" },
-  "report.pc_after": { "en": "New prices since {date}, as announced by AA Grapevine:", "es": "Nuevos precios desde el {date}, según el anuncio de AA Grapevine:" },
+  "report.pc_after": { "en": "New prices as of {date}, as announced by AA Grapevine:", "es": "Nuevos precios desde el {date}, según el anuncio de AA Grapevine:" },
   "report.s_group": { "en": "Home-group idea: the group buys one subscription and passes each issue around, or keeps it on the literature table.", "es": "Idea para el grupo base: el grupo compra una suscripción y hace circular cada ejemplar, o lo deja en la mesa de literatura." },
   "report.s_ctm": { "en": "Carry the Message: give a subscription to an alcoholic who can't get one — in hospitals, treatment and corrections: {url}", "es": "Lleva el Mensaje: regala una suscripción a un alcohólico que no puede obtenerla — en hospitales, centros de tratamiento e instituciones correccionales: {url}" },
   "report.s_more": { "en": "Prices, order forms and how to order: {url}", "es": "Precios, formularios y cómo pedir: {url}" },

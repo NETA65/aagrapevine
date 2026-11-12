@@ -236,7 +236,7 @@ function termKey(m) {
      "after"  from the change's day on (the page switches to it in the browser, app.js GV.expire) — the announced
               price while the store data is stale.
    → { price, subst (the announced price stands in for the store's), note: { text, win, tone } | null — "From Jan 1,
-   2027: $39.00" before the day (from the day it was announced), "New price since Jan 1, 2027" after it: for good
+   2027: $39.00" before the day (from the day it was announced), "New price as of Jan 1, 2027" after it: for good
    while the announced price stands in, else until the notice ends }. */
 function planState(p, changes, state, lang, t, now) {
   const price = Number(p.price);
@@ -404,7 +404,7 @@ export function shopSubs(shop, lang = "en", t = (k) => k, now = nowDate()) {
   const types = pubs.flatMap((p) => p.regions.flatMap((r) => r.types));
   const now0 = types.find((tp) => tp.stoodIn);
   const later = types.find((tp) => tp.swap && tp.swap.stoodIn);
-  // (the date as the plans' own mark writes it: "New price since Jan 1, 2027")
+  // (the date as the plans' own mark writes it: "New price as of Jan 1, 2027")
   const pcNote = now0 ? { date: dayLabel(now0.stoodIn.effective, lang, true), win: null }
     : later ? { date: dayLabel(later.swap.stoodIn.effective, lang, true), win: { from: later.swap.at, until: "", hidden: true } } : null;
   return { pubs, regions: regionList, first: pubs.length ? pubs[0].pub : "", avail, pcNote };
@@ -509,7 +509,7 @@ export function shopFromMonthly(shop) {
  *   key, effective, at, date ("January 1, 2027"), dateShort ("Jan 1, 2027"),
  *   before: { win, rows, books } | null   "Prices change on …": from the day it was announced to the day before
  *                                          (books: "$2.00" more each, or "")
- *   after:  { win, rows, books } | null    "New prices since …": from the day through notice_until (books: true when
+ *   after:  { win, rows, books } | null    "New prices as of …": from the day through notice_until (books: true when
  *                                          book prices changed — the amount is said only before the day)
  *   source, sourceLang, docMatch (finds AA Grapevine's notice among the Drive files: committee.js driveMatch)
  * }]. Rows (shop.json price_changes[].yearly, the page language's magazine first): { pub, isLv, mag, type, typeName,

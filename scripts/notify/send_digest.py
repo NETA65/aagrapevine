@@ -192,7 +192,7 @@ T = {
         # a price change AA Grapevine announced (price_change): the same words as the website (src/_i18n/shop.json
         # shop.pc_line_*, community.json community.digest.price_link_*)
         "pc_before": "Grapevine and La Viña prices change on {date}",
-        "pc_after": "New Grapevine and La Viña prices since {date}",
+        "pc_after": "New Grapevine and La Viña prices as of {date}",
         "pc_link_before": "What changes, and why",
         "pc_link_after": "See the new prices",
         "see_all": "See all",

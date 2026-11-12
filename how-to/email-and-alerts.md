@@ -294,7 +294,7 @@ same address. Google Groups usually adds its own unsubscribe line as well.
 | `digest.per_section` | `5` | How many rows each list shows before *"→ and N more on the website"*. | `8` shows 8 rows. `0`, `-1` or `"many"` fall back to 5. |
 | `digest.highlights` | `3` | How many stories each magazine issue shows. | `2` |
 | `meeting:` (`week_of_month`, `weekday`, `skip_dates`, `speakers`) | 3rd Wednesday | The *"Committee meeting — Wed, Dec 16 · Online"* row under "Events in December", which the code works out from this rule when the events data has no record. The row always says "Online", never the platform: `platform` does not change the e-mail. `speakers:` gives the guest speaker under "Coming up" (row 8 in [3.13](#313-what-is-in-the-e-mail)). | `skip_dates: ["2026-12-16"]` removes December's row. |
-| `price_changes:` | a change on January 1, 2027 | One extra row after "Coming up", shown while the price notice is on. It is judged on the day the e-mail is **built**. | E-mails built October 1 to December 31 say *"Grapevine and La Viña prices change on January 1, 2027"*. Those built in January say *"New Grapevine and La Viña prices since January 1, 2027"*. From February 1 the row is gone. |
+| `price_changes:` | a change on January 1, 2027 | One extra row after "Coming up", shown while the price notice is on. It is judged on the day the e-mail is **built**. | E-mails built October 1 to December 31 say *"Grapevine and La Viña prices change on January 1, 2027"*. Those built in January say *"New Grapevine and La Viña prices as of January 1, 2027"*. From February 1 the row is gone. |
 
 For example, to show fewer stories per issue and more rows per list:
 

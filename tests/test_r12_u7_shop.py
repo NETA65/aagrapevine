@@ -33,7 +33,7 @@ from nodejs import run_js  # noqa: E402
 
 A_AT = "2026-10-01T05:00:00Z"          # 00:00 Central on October 1, 2026: AA Grapevine's notice
 E_AT = "2027-01-01T06:00:00Z"          # 00:00 Central (CST) on January 1, 2027: the new prices
-N_AT = "2027-02-01T06:00:00Z"          # the "New prices since …" notice is over
+N_AT = "2027-02-01T06:00:00Z"          # the "New prices as of …" notice is over
 OCT15 = "2026-10-15T15:00:00Z"
 DEC31_2359 = "2027-01-01T05:59:00Z"    # 11:59 PM Central on December 31
 JAN1_0800 = "2027-01-01T14:00:00Z"
@@ -311,7 +311,7 @@ class Sums(unittest.TestCase):
         self.assertEqual((one["copies"], one["unit"], one["unitAmt"], one["next"]), ("1 copy", "", "$36.00", "From January 1, 2027: $39.00"))
         jan1 = self.r["words"]["enJan1"]
         self.assertEqual((jan1["total"], jan1["unit"], jan1["since"], jan1["next"]),
-                         ("$390.00", "$39.00 a copy (volume prices: see the store)", "New price since January 1, 2027", ""))
+                         ("$390.00", "$39.00 a copy (volume prices: see the store)", "New price as of January 1, 2027", ""))
         two = self.r["words"]["enTwo"]
         self.assertEqual((two["total"], two["totalFor"], two["perMonth"], two["perYear"], two["unit"]),
                          ("$2,640.00", "for 2 years", "≈ $110.00 a month", "≈ $1,320.00 a year", "$66.00 a copy (volume price for 40 or more)"))
@@ -348,7 +348,7 @@ class Sums(unittest.TestCase):
         self.assertEqual(c["during"], "both")
         self.assertEqual(c["after"], {"attr": None, "title": "Shop", "listeners": 0}, "after printing the page is as it was")
         self.assertEqual(c["query"], "lv", "?pub=lv preselects, as for the price switch")
-        self.assertEqual(c["jan1"], {"total": "$390.00", "since": "New price since January 1, 2027",
+        self.assertEqual(c["jan1"], {"total": "$390.00", "since": "New price as of January 1, 2027",
                                      "unit": "$39.00 a copy (volume prices: see the store)", "hint": ""})
 
 
@@ -410,7 +410,7 @@ class Clock(unittest.TestCase):
         self.assertEqual(len(r["writes"]), 1, r["writes"])
         self.assertGreaterEqual(r["writes"][0], E_AT.replace("Z", ".000Z"))
         self.assertEqual(r["sums"], ["$355.00", "$355.00", "$355.00", "$390.00", "$390.00", "$390.00"])
-        self.assertEqual(r["since"], "New price since January 1, 2027")
+        self.assertEqual(r["since"], "New price as of January 1, 2027")
 
 
 # =========================================================================== the page

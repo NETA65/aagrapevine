@@ -129,7 +129,7 @@ def sample_deck():
             "meeting_next": {"value": "Wednesday, October 21, 2026", "from": "2026-10-22T01:00:00.000Z",
                              "then": "Wednesday, November 18, 2026"},
             "price_change_note": {"value": "Prices change on January 1, 2027.", "from": "2027-01-01T06:00:00.000Z",
-                                  "then": "New prices since January 1, 2027.", "until": "2027-02-01T06:00:00.000Z"},
+                                  "then": "New prices as of January 1, 2027.", "until": "2027-02-01T06:00:00.000Z"},
             "meeting_after": "Wednesday, November 18, 2026",
             "handle": "@alcoholicsanonymous_gv",
         },
@@ -170,8 +170,8 @@ class Facts(unittest.TestCase):
         self.assertEqual(r["plain"], "Panel 77")
         self.assertEqual(r["before"], "Wednesday, October 21, 2026")
         self.assertEqual(r["after"], "Wednesday, November 18, 2026")
-        self.assertEqual(r["note"], ["Prices change on January 1, 2027.", "New prices since January 1, 2027.",
-                                     "New prices since January 1, 2027.", ""])
+        self.assertEqual(r["note"], ["Prices change on January 1, 2027.", "New prices as of January 1, 2027.",
+                                     "New prices as of January 1, 2027.", ""])
         self.assertEqual(r["odd"], ["", "42", "a", "", ""])
         # generic over the map: keys the build adds later (SPEC UPDATE 2: meeting_after …) come through
         self.assertEqual(r["all"]["meeting_after"], "Wednesday, November 18, 2026")
@@ -187,7 +187,7 @@ class Facts(unittest.TestCase):
         base = ["title", "agenda", "part-1", "basics", "extra-1", "extra-2"]
         self.assertEqual(r["oct"], base + ["prices", "closing"])         # the notice is on (the build said so)
         self.assertEqual(r["nov"], base + ["holiday", "prices", "closing"])
-        self.assertEqual(r["jan"], base + ["prices", "closing"])          # holidays over; the notice says "New prices since …"
+        self.assertEqual(r["jan"], base + ["prices", "closing"])          # holidays over; the notice says "New prices as of …"
         self.assertEqual(r["feb"], base + ["closing"])                    # the notice is over
         self.assertEqual([r["first"], r["last"], r["gone"]], [True, True, False])
 

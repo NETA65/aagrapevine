@@ -1239,7 +1239,7 @@ class Facts(unittest.TestCase):
         self.assertEqual(live["price_change_note"], {
             "value": "Prices change on January 1, 2100: Grapevine, 1 year: print $39.00, digital $34.00; La Viña, 1 year: "
                      "print $19.50, digital $17.00; Grapevine and La Viña books: $2.00 more each.",
-            "steps": [{"from": JAN1, "value": "New prices since January 1, 2100."}], "until": FEB1})
+            "steps": [{"from": JAN1, "value": "New prices as of January 1, 2100."}], "until": FEB1})
         self.assertEqual(live["price_change_date"], {"value": "January 1, 2100", "until": FEB1})
         p = self.oct["kinds"]["prices"]
         self.assertEqual(p["rows"], [
@@ -1257,10 +1257,10 @@ class Facts(unittest.TestCase):
         self.assertEqual((sep["live"]["price_change_note"], sep["live"]["price_change_date"]), ("", ""))
         self.assertIsNone(sep["kinds"]["prices"]["change"])
         self.assertTrue(all(r["then"] is None for r in sep["kinds"]["prices"]["rows"]))
-        # from the day: the announced price stands in for the store's old one; "New prices since …" until the notice ends
+        # from the day: the announced price stands in for the store's old one; "New prices as of …" until the notice ends
         self.assertEqual(jan["live"]["price_gv_print"], "$39.00")
         self.assertEqual(jan["live"]["price_lv_digital"], "$17.00")
-        self.assertEqual(jan["live"]["price_change_note"], {"value": "New prices since January 1, 2100.", "until": FEB1})
+        self.assertEqual(jan["live"]["price_change_note"], {"value": "New prices as of January 1, 2100.", "until": FEB1})
         self.assertEqual(jan["live"]["price_change_date"], {"value": "January 1, 2100", "until": FEB1})
         self.assertTrue(all(r["then"] is None for r in jan["kinds"]["prices"]["rows"]))
         self.assertIsNotNone(jan["kinds"]["prices"]["change"])
@@ -1272,7 +1272,7 @@ class Facts(unittest.TestCase):
         # a copy opened after the notice ended says nothing of it either
         note = self.oct["live"]["price_change_note"]
         self.assertEqual(live_at(note, "2100-02-02T00:00:00.000Z"), "")
-        self.assertEqual(live_at(note, "2100-01-02T00:00:00.000Z"), "New prices since January 1, 2100.")
+        self.assertEqual(live_at(note, "2100-01-02T00:00:00.000Z"), "New prices as of January 1, 2100.")
 
     def test_the_meeting(self):
         live = self.oct["live"]

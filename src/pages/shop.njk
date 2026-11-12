@@ -185,7 +185,7 @@ pageScripts: ["/assets/js/shop.js"]
 
 {#- One plan type's terms. A type a price change still to come affects holds two lists — the store's prices
     until that day, the new ones from it (tp.swap) — each with its window (ui.when: the browser switches at
-    midnight Central). tm.note: "From Jan 1, 2027: $39.00" before the day, "New price since …" after it. -#}
+    midnight Central). tm.note: "From Jan 1, 2027: $39.00" before the day, "New price as of …" after it. -#}
 {% macro termList(tp, terms, lang, isLv, mag, w) %}
 <ul class="border-t border-line" role="list" aria-label="{{ 'shop.plans_label' | t(lang, { type: tp.name }) }}"{{ ui.when(w) }}>
   {% for tm in terms %}
@@ -261,7 +261,7 @@ pageScripts: ["/assets/js/shop.js"]
 {% endmacro %}
 
 {#- An announced price change (shop | shopPriceChanges), by the subscription prices: "Prices change on …" from the
-    day AA Grapevine announced it to the day before, "New prices since …" from that day through its notice_until —
+    day AA Grapevine announced it to the day before, "New prices as of …" from that day through its notice_until —
     both written into the page, each with its window (ui.when), so the page switches by itself at midnight
     Central. Calm and informative: what changes (the store's price today → the new one), books, AA Grapevine's
     reason in one sentence, where it was announced and a link to AA Grapevine's notice (the Drive document that

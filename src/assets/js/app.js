@@ -244,7 +244,7 @@
                                          has passed (data-gv-started) — unless its own data-gv-expire has passed
                                          too. The second state of a part that changes at a set moment
                                          (eleventy/filters/shop.js shopWindow, macros/ui.njk ui.when: the new price
-                                         from midnight Central on the day, "New prices since …"). Such parts also
+                                         from midnight Central on the day, "New prices as of …"). Such parts also
                                          carry data-gv-when: base.njk applies both attributes to them while the
                                          page loads, before the first paint, so a page opened after the moment
                                          never shows the old state first (nothing moves). A page left open over

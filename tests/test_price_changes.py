@@ -58,7 +58,7 @@ from scripts.sync.common import load_config  # noqa: E402
 from scripts.sync.drive_listing import Entry  # noqa: E402
 
 E_AT = "2027-01-01T06:00:00Z"          # 00:00 Central (CST) on January 1, 2027: the new prices
-N_AT = "2027-02-01T06:00:00Z"          # 00:00 Central on February 1: the "New prices since …" notice is over
+N_AT = "2027-02-01T06:00:00Z"          # 00:00 Central on February 1: the "New prices as of …" notice is over
 DEC31_2359 = "2027-01-01T05:59:00Z"    # 11:59 PM Central on December 31
 JAN1_0000 = E_AT
 NEW_NAME = "2026-10-01 Grapevine & La Viña Pricing Update - Effective January 1, 2027.pdf"
@@ -437,7 +437,7 @@ class Pages(unittest.TestCase):
         self.assertEqual(pr["terms"][1]["save"], "Save $4.00 vs. renewing yearly")
         self.assertEqual(pr["swap"]["at"], E_AT)
         self.assertEqual([t["price"] for t in pr["swap"]["terms"]], ["$39.00", "$68.00", "$90.00"])
-        self.assertEqual(pr["swap"]["terms"][0]["note"]["text"], "New price since Jan 1, 2027")
+        self.assertEqual(pr["swap"]["terms"][0]["note"]["text"], "New price as of Jan 1, 2027")
         self.assertEqual([t["save"] for t in pr["swap"]["terms"]], [None, None, None],
                          "no saving set against an announced price (the store may change the others the same day)")
         self.assertEqual(pr["volume"]["cols"], ["1 year", "2 years"])
@@ -480,7 +480,7 @@ class Pages(unittest.TestCase):
         pr = r["types"]["print"]
         self.assertIsNone(pr["swap"])
         self.assertEqual([t["price"] for t in pr["terms"]], ["$39.00", "$68.00", "$90.00"])
-        self.assertEqual(pr["terms"][0]["note"], {"text": "New price since Jan 1, 2027", "win": {"from": "", "until": "", "hidden": False}, "tone": "new"})
+        self.assertEqual(pr["terms"][0]["note"], {"text": "New price as of Jan 1, 2027", "win": {"from": "", "until": "", "hidden": False}, "tone": "new"})
         self.assertEqual([t["save"] for t in pr["terms"]], [None, None, None])
         self.assertEqual(r["types"]["digital"]["terms"][1]["price"], "$34.00")
         self.assertEqual(r["pcNote"], {"date": "Jan 1, 2027", "win": None})
@@ -527,7 +527,7 @@ class Pages(unittest.TestCase):
         self.assertIsNone(r["types"]["print"]["terms"][0]["note"])
         stale = views(self, self.jan1, "2027-02-02T14:00:00Z")["en"]
         self.assertEqual(stale["types"]["print"]["terms"][0]["price"], "$39.00")
-        self.assertEqual(stale["types"]["print"]["terms"][0]["note"]["text"], "New price since Jan 1, 2027",
+        self.assertEqual(stale["types"]["print"]["terms"][0]["note"]["text"], "New price as of Jan 1, 2027",
                          "the announced price still stands in: it keeps saying so")
 
     def test_windows(self):
@@ -703,12 +703,12 @@ class Report(unittest.TestCase):
         self.assertIn("• Grapevine: “No Matter What”\n", after, "from the day: the book without its old prices")
         # from the day: AA Grapevine's own list again — never "the prices above are the new ones" (the lowest price
         # above is the monthly digital plan, which the letter does not name)
-        self.assertIn("New prices since January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00\n"
+        self.assertIn("New prices as of January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00\n"
                       "• La Viña, 1 year: print $19.50, digital $17.00\n• Grapevine and La Viña books: $2.00 more each", after)
         self.assertNotIn("prices above", after)
         self.assertNotIn("No Matter What", steps["2027-01-15T06:00:00Z"], "the offer ended on January 14: never quoted after it")
-        self.assertIn("New prices since January 1, 2027", steps["2027-01-15T06:00:00Z"])
-        self.assertNotIn("New prices since", steps[N_AT], "the notice is over")
+        self.assertIn("New prices as of January 1, 2027", steps["2027-01-15T06:00:00Z"])
+        self.assertNotIn("New prices as of", steps[N_AT], "the notice is over")
         self.assertIn("• Grapevine: $39.00 a year in print", steps[N_AT])
         self.assertIn("Nuevos precios desde el 1 de enero de 2027, según el anuncio de AA Grapevine:\n• La Viña, 1 año: impresa $19.50, digital $17.00",
                       r["dec"]["es"]["text"])
@@ -724,7 +724,7 @@ class Report(unittest.TestCase):
         self.assertNotIn("after", jan)
         self.assertEqual(list(self.steps(jan)), ["2027-01-15T06:00:00Z", N_AT])   # the offer's end, the notice's end
         self.assertIn("• Grapevine: $39.00 a year in print", jan["text"])
-        self.assertIn("New prices since January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00", jan["text"])
+        self.assertIn("New prices as of January 1, 2027, as announced by AA Grapevine:\n• Grapevine, 1 year: print $39.00, digital $34.00", jan["text"])
         self.assertNotIn("$14.99", jan["text"])
 
     def test_the_editor_switches_at_midnight_central(self):
@@ -765,7 +765,7 @@ class Monthly(unittest.TestCase):
         line = "📢 Grapevine and La Viña prices change on January 1, 2027: https://example.org/site/shop/#price-changes"
         for k in ("2026-10", "2026-11", "2026-12"):
             self.assertIn(line, r[k]["wa"])
-        self.assertIn("📢 New Grapevine and La Viña prices since January 1, 2027: https://example.org/site/shop/#price-changes", r["2027-01"]["wa"])
+        self.assertIn("📢 New Grapevine and La Viña prices as of January 1, 2027: https://example.org/site/shop/#price-changes", r["2027-01"]["wa"])
         for k in ("2026-09", "2027-02"):
             self.assertNotIn("📢", r[k]["wa"])
         self.assertIn("Los precios de La Viña y Grapevine cambian el 1 de enero de 2027 / Grapevine and La Viña prices change on January 1, 2027: "
@@ -834,7 +834,7 @@ class Digest(SD.DigestCase):
         self.assertIn(f"Grapevine and La Viña prices change on January 1, 2027: {SD.SITE}/shop/#price-changes", en)
         self.assertIn(f"Los precios de La Viña y Grapevine cambian el 1 de enero de 2027: {SD.SITE}/es/shop/#price-changes", es)
         html, text = self.preview("2027-01-01")
-        self.assertIn("New Grapevine and La Viña prices since January 1, 2027", html)
+        self.assertIn("New Grapevine and La Viña prices as of January 1, 2027", html)
         self.assertIn("See the new prices →", html)
         html, text = self.preview("2027-02-01")
         self.assertNotIn("#price-changes", html + text)

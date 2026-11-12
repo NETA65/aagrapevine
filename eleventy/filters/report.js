@@ -163,7 +163,7 @@ export function upcomingEvents(db, now, days = EVENT_DAYS) {
  * before `next`, in the "after" state — is left out (its percent stays), and a 1-year plan shows its announced price
  * while the store data still has the old one (shopPlanPrice). An announced change is passed on to the district in AA
  * Grapevine's own list — the 1-year prices it names and the books — under "New prices from …" before its day and
- * "New prices since …" from it through its notice_until (never "the prices above are the new ones": the lowest
+ * "New prices as of …" from it through its notice_until (never "the prices above are the new ones": the lowest
  * price above may be a plan the announcement does not name, like a monthly one).
  */
 function shopSection(L, T, ctx, at, next = null) {

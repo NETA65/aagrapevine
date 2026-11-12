@@ -307,7 +307,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `lv_workshop_next` | Thursday, October 22, 2026 — the next one, until it ends | "see La Viña's events calendar at aalavina.org" |
 | `lv_workshop_time`, `lv_workshop_zoom_id` | 2:00 – 3:00 PM Central time (3:00 PM Eastern) · its Zoom ID | — |
 | `price_gv_print`, `price_gv_digital`, `price_lv_print`, `price_lv_digital` | $36.00 … — the 1-year price in effect on the day the slide is shown | "see the Shop page" |
-| `price_change_note` | "Prices change on January 1, 2027: …", then "New prices since January 1, 2027." — empty when no notice is current | — |
+| `price_change_note` | "Prices change on January 1, 2027: …", then "New prices as of January 1, 2027." — empty when no notice is current | — |
 | `price_change_date` | January 1, 2027 (while a notice is current; empty otherwise) | — |
 | `gv_issue` | October 2026 · Loneliness — this month's issue | "see aagrapevine.org" |
 | `gv_next_issue` | November 2026 · Classic Grapevine — the next issue | "see aagrapevine.org" |

@@ -1063,7 +1063,7 @@ price_changes:
   - key: "2027-01"                 # short name: letters, numbers and dashes
     effective: "2027-01-01"        # the day the new prices start (Central time)
     announced: "2026-10-01"        # the notice shows from this day
-    notice_until: "2027-01-31"     # the last day of the "New prices since …" notice
+    notice_until: "2027-01-31"     # the last day of the "New prices as of …" notice
     source: "AA Grapevine's letter to Intergroups and Central Offices, October 1, 2026"
     source_es: "Carta de AA Grapevine a las oficinas intergrupales y centrales, 1 de octubre de 2026"
     doc_match: "pricing update.*2027|actualizaci[oó]n de precios.*2027"
@@ -1094,7 +1094,7 @@ price_changes:
 - **Jan 1, 2027 at midnight Central** (`effective`): the new 1-year prices show. The page switches by
   itself in the visitor's browser, even between updates. 2- and 3-year, monthly and other plans keep
   the stores' prices.
-- **Until Jan 31, 2027** (`notice_until`): the notice reads "New prices since January 1, 2027".
+- **Until Jan 31, 2027** (`notice_until`): the notice reads "New prices as of January 1, 2027".
 - **Afterwards:** delete the block once the stores show the new prices. A bulletin post about the
   change is written by hand ([Bulletin](bulletin.md)).
 

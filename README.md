@@ -1056,7 +1056,7 @@ the stores show it. What a block under `price_changes:` in `config/site.yml` add
 - **From the day it takes effect** (`effective`): the new 1-year prices show **by themselves** — even while a
   store's own page still shows the old price, and even in a page built (or saved on a phone) the day before:
   it switches at midnight Central. As soon as a store shows anything else after that day, the store's price
-  wins. "New prices since …" shows until `notice_until`. A Book of the Month price read before the day — or
+  wins. "New prices as of …" shows until `notice_until`. A Book of the Month price read before the day — or
   read after it while the store still shows the book's old price — is not shown (no "you save" on an old
   price); the store's own prices show again once it shows the new price, or a new book starts on the 15th.
 
@@ -1068,7 +1068,7 @@ price_changes:
   - key: "2027-01"                 # short name: letters, numbers and dashes
     effective: "2027-01-01"        # the day the new prices start (Central time)
     announced: "2026-10-01"        # the notice shows from this day
-    notice_until: "2027-01-31"     # the last day of the "New prices since …" notice
+    notice_until: "2027-01-31"     # the last day of the "New prices as of …" notice
     source: "AA Grapevine's letter to Intergroups and Central Offices, October 1, 2026"
     source_es: "Carta de AA Grapevine a las oficinas intergrupales y centrales, 1 de octubre de 2026"
     doc_match: "pricing update.*2027|actualizaci[oó]n de precios.*2027"   # finds the letter on Drive

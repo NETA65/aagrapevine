@@ -132,7 +132,7 @@
 /* ---------- A price change AA Grapevine announced (shop.njk priceNotice; config/site.yml price_changes) ----------
    A calm note right above the prices, not an alert: a softly tinted card with an icon, the 1-year plans' table
    (today → from the day, or since the day), the books line, the reason and the source with AA Grapevine's
-   notice. The small lines under a term ("From Jan 1, 2027: $39.00", "New price since …") and on the Book of the
+   notice. The small lines under a term ("From Jan 1, 2027: $39.00", "New price as of …") and on the Book of the
    Month cards share its color. Both states of the page are in the HTML; the one outside its time is hidden
    (ui.when → app.js GV.expire), and the hidden attribute must stay stronger than the display rules here. */
 :is(.shop-pc, .shop-pc-term, .shop-pc-note, .shop-pc-line, .shop-term, .shop-vol, .shop-plan ul)[hidden] { display: none !important; }
@@ -176,7 +176,7 @@
   /* a price that has to go under its column's name stays in the prices' column, on the right */
   :root:is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .shop-pc-price { margin-left: auto; }
 }
-/* Under a term: "From Jan 1, 2027: $39.00" / "New price since Jan 1, 2027" */
+/* Under a term: "From Jan 1, 2027: $39.00" / "New price as of Jan 1, 2027" */
 .shop-pc-term {
   display: flex; align-items: flex-start; gap: 0.3rem; margin-top: 0.3rem;
   font-size: 0.78rem; font-weight: 600; line-height: 1.35; color: var(--c-gv-strong);

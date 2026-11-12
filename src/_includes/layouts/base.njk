@@ -181,7 +181,7 @@
     })();
     window.SITE = { lang: "{{ L }}", base: "{{ '/' | url }}", tz: "{{ site.timezone }}" };
     // A part of the page that changes at a set moment (macros/ui.njk ui.when: data-gv-when with data-gv-from /
-    // data-gv-expire — the price an announced change brings at midnight Central, "New prices since …") is set
+    // data-gv-expire — the price an announced change brings at midnight Central, "New prices as of …") is set
     // right while the page loads, before the first paint: a page built — or saved for offline use — before
     // that moment and opened after it never shows the old state first, so nothing moves. app.js GV.expire does
     // the same once the page is ready, every minute and when it is shown again (a page left open over the
