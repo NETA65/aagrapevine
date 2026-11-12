@@ -43,11 +43,23 @@
 
   /* Fill the canvas: the poster's type (all in em) is sized to the largest step at which every
      block still fits its column — busy months (many events, long Spanish titles) step down,
-     quiet months step up, so no poster is left with a half-empty page. Binary search, ~8 layouts,
-     done on a hidden copy one step per task (the page never freezes, the visible poster changes
-     once) and only for the full-size poster of a month page (the hub shows the months in miniature —
-     macros/monthly.njk posterMini, never fitted). The PNG and the print use this DOM. */
-  var BLOCKS = ".mp-b, .mp-foot, .mp-head, .mp-row, .mp-col, .mp-body, .mp-board, .mp-cover, .mp-strip, .mp-page, .mp-main, .mp-stub, .mp-side, .mp-content, .mp-top";
+     quiet months step up, so no poster is left with a half-empty page. Every date of the month is on
+     the poster (round 26b), so a busy month's blocks also take the room another column leaves: a block
+     that may sit in another column (data-mp-move="b a", the build's place first; the columns are
+     [data-mp-slot]) is tried in each, in its place in the reading order (data-mp-order), and the
+     arrangement whose type is largest wins (the build's own unless another is larger). A very busy
+     month whose type would still be under 18px also tries each arrangement with its dates in one more
+     column (.mp-dates--cols: two in a column, four in a band across the poster). Binary search,
+     ~8 layouts an arrangement (one that cannot beat the best so far is dropped after one), done on a
+     hidden copy one step per task (the page never freezes, the visible poster changes once) and only
+     for the full-size poster of a month page (the hub shows the months in miniature — macros/monthly.njk
+     posterMini, never fitted). The PNG and the print use this DOM; once it is done the poster carries
+     data-mp-fit (the share pictures wait for it: scripts/ops/poster_share.py) and fitDone resolves (the
+     PNG waits for it). */
+  var BLOCKS = ".mp-b, .mp-foot, .mp-head, .mp-row, .mp-col, .mp-body, .mp-board, .mp-cover, .mp-strip, .mp-page, .mp-main, .mp-stub, .mp-side, .mp-content, .mp-top, .mp-feature, .mp-rail, .mp-band";
+  var MIN_PX = 15, MAX_PX = 28;            // the type's range (poster px; 15px prints at 7.5 pt on Letter)
+  var COLS_BELOW_PX = 18;                  // the dates in two columns only when one column leaves the type under this
+  var toArray = function (list) { return Array.prototype.slice.call(list); };
   // Layout boxes in poster px (offset* ignore the scale and the tilted cork cards' rotation).
   function box(el, p) {
     var t = 0, l = 0, e = el;
@@ -65,7 +77,36 @@
     }
     return false;
   }
-  function fit(p) {
+  // A block into a column, before the first block that comes after it in the reading order (data-mp-order).
+  function place(slot, el) {
+    var ord = Number(el.getAttribute("data-mp-order")) || 0, before = null;
+    for (var k = 0; k < slot.children.length; k++) {
+      var ch = slot.children[k];
+      if (ch !== el && (Number(ch.getAttribute("data-mp-order")) || 0) > ord) { before = ch; break; }
+    }
+    if (el.parentNode !== slot || el.nextElementSibling !== before) slot.insertBefore(el, before);
+  }
+  // Every arrangement of the movable blocks (each in one of its columns), the build's own first; at most 24 —
+  // then the same with the dates in one more column ({ slots, cols }).
+  function arrangements(root, movers) {
+    var all = [[]];
+    movers.forEach(function (m) {
+      var opts = (m.getAttribute("data-mp-move") || "").split(/\s+/).filter(Boolean), next = [];
+      all.forEach(function (a) { opts.forEach(function (o) { if (next.length < 24) next.push(a.concat([o])); }); });
+      all = next;
+    });
+    var one = all.map(function (s) { return { slots: s, cols: false }; });
+    return one.concat(root.querySelector(".mp-dates .mp-dlist") ? all.map(function (s) { return { slots: s, cols: true }; }) : []);
+  }
+  function arrange(root, movers, combo) {
+    movers.forEach(function (m, i) {
+      var slot = root.querySelector('[data-mp-slot="' + combo.slots[i] + '"]');
+      if (slot) place(slot, m);
+    });
+    var d = root.querySelector(".mp-dates");
+    if (d) d.classList.toggle("mp-dates--cols", !!combo.cols);
+  }
+  function fit(p, done) {
     // the copy: same classes and content, unscaled, positioned (so offsetParent stops at it), out of sight
     var holder = document.createElement("div");
     holder.className = "mp-measure";
@@ -79,23 +120,54 @@
     c.style.fontSize = "";
     holder.appendChild(c);
     document.body.appendChild(holder);
-    var base = parseFloat(getComputedStyle(c).fontSize) || 23;
-    var lo = 16, hi = Math.min(base * 1.25, 28), n = 0;
-    if (overflowing(c)) hi = base; else lo = base;
+    // the type in quarter pixels (k / 4 px): the largest k at which nothing overflows, for each arrangement
+    var base = Math.floor((parseFloat(getComputedStyle(c).fontSize) || 23) * 4);
+    var minK = MIN_PX * 4, topK = Math.floor(Math.min(base / 4 * 1.25, MAX_PX) * 4);
+    var cm = toArray(c.querySelectorAll("[data-mp-move]")), pm = toArray(p.querySelectorAll("[data-mp-move]"));
+    var combos = arrangements(c, cm), ci = -1, best = -1, bestCombo = combos[0], lo = 0, hi = 0, searching = false;
+    var fits = function (k) { c.style.fontSize = k / 4 + "px"; return !overflowing(c); };
     (function step() {
-      if (n++ < 7) {
-        var mid = (lo + hi) / 2;
-        c.style.fontSize = mid + "px";
-        if (overflowing(c)) hi = mid; else lo = mid;
-        setTimeout(step, 0); // one layout per task
+      if (searching) {
+        if (hi - lo > 1) {
+          var mid = (lo + hi) >> 1;
+          if (fits(mid)) lo = mid; else hi = mid;
+        } else {
+          searching = false;
+          // (lo below minK: nothing fits even at the smallest type — another arrangement may still)
+          if (lo > best) { best = lo; bestCombo = combos[ci]; }
+        }
+      } else if (++ci < combos.length) {
+        // (the dates in two columns: only for a month that needs them — no layout spent otherwise)
+        if (combos[ci].cols && best >= COLS_BELOW_PX * 4) { setTimeout(step, 0); return; }
+        arrange(c, cm, combos[ci]);
+        if (best < 0) {
+          // the build's arrangement: from the type the stylesheet gives it (the month's density)
+          lo = minK - 1; hi = topK + 1; searching = true;
+          if (Math.min(base, topK) >= minK) { if (fits(Math.min(base, topK))) lo = Math.min(base, topK); else hi = Math.min(base, topK); }
+        } else if (best < topK && fits(best + 1)) {
+          // another: only when it holds the next step up (else it is dropped after this one layout)
+          lo = best + 1; hi = topK + 1; searching = true;
+        }
+      } else {
+        holder.remove();
+        arrange(p, pm, bestCombo);
+        p.style.fontSize = Math.max(best, minK) / 4 + "px";
+        p.setAttribute("data-mp-fit", "");
+        if (done) done();
         return;
       }
-      holder.remove();
-      p.style.fontSize = Math.floor(lo * 4) / 4 + "px";
+      setTimeout(step, 0); // one layout per task
     })();
   }
-  var fitAll = function () { Array.prototype.forEach.call(document.querySelectorAll(".mp-stage:not(.mp-stage--thumb) [data-mp-poster]"), fit); };
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll); else fitAll();
+  // Resolves once every poster of the page is fitted (the PNG is made from the fitted poster).
+  var fitDone = new Promise(function (resolve) {
+    var fitAll = function () {
+      var posters = document.querySelectorAll(".mp-stage:not(.mp-stage--thumb) [data-mp-poster]"), left = posters.length;
+      if (!left) { resolve(); return; }
+      Array.prototype.forEach.call(posters, function (p) { fit(p, function () { if (--left === 0) resolve(); }); });
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll); else fitAll();
+  });
 
   /* ---------- 2. "Over" marks and the new-month notice ---------- */
   var each = function (sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); };
@@ -222,7 +294,8 @@
   function render() {
     if (blobPromise) return blobPromise;
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-    blobPromise = Promise.all([loadLib(), fontsReady]).then(function (r) {
+    // (the poster fitted first: its type and the places of its blocks)
+    blobPromise = Promise.all([loadLib(), fontsReady, fitDone]).then(function (r) {
       var h2i = r[0];
       inlineIcons(poster);
       var opts = {

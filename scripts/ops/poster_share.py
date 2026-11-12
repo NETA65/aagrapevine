@@ -36,11 +36,15 @@ CLIP_H = round(HEIGHT / SCALE)               # 567: the top of the poster that f
 OG_IMAGE = re.compile(r'<meta property="og:image" content="([^"]*)"')
 MONTH = re.compile(r"\d{4}-\d{2}")
 
-# The poster, taken out of its scaled frame on the page into a box at the top left at its real size (its own
-# styles and the page's icon sprite still apply); then the fonts and two frames, so everything is drawn.
+# The poster once the page has fitted it (assets/js/monthly.js: its type and the places of its blocks, then
+# data-mp-fit; at most FIT_WAIT_MS), taken out of its scaled frame on the page into a box at the top left at its real
+# size (its own styles and the page's icon sprite still apply); then the fonts and two frames, so everything is drawn.
+FIT_WAIT_MS = 15_000
 ISOLATE = """async () => {
   const poster = document.querySelector("[data-mp-poster]");
   if (!poster) return "no poster on the page";
+  for (const t0 = Date.now(); !poster.hasAttribute("data-mp-fit") && Date.now() - t0 < FIT_WAIT_MS; )
+    await new Promise((done) => setTimeout(done, 50));
   const box = document.createElement("div");
   box.style.cssText = "position:fixed;left:0;top:0;width:1080px;height:1350px;margin:0;padding:0;border:0;"
     + "overflow:hidden;z-index:2147483647;background:#fff";
@@ -52,7 +56,7 @@ ISOLATE = """async () => {
   await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
   const r = poster.getBoundingClientRect();
   return Math.round(r.width) + " x " + Math.round(r.height);
-}"""
+}""".replace("FIT_WAIT_MS", str(FIT_WAIT_MS))
 
 
 def wanted(site: Path) -> list[tuple[str, Path]]:

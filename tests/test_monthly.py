@@ -19,6 +19,10 @@ keeps it true between builds.
                 original words and note, the pages' marks); Spanish words in the middle of a line.
   * PosterNote — the Spanish poster's "translated automatically" note sits beside the italic originals it explains
                 (under Grapevine's deadlines, else under the theme), once — never under La Viña's own topics.
+  * PosterEveryDate — round 26b: every date of the month on the poster, in each of the six layouts and both
+                languages (no "+N more on the website"); its blocks name the columns they may move to and their place
+                in the reading order (the page's fit, src/assets/js/monthly.js); the share picture and the PNG wait
+                for the fit.
   * MonthCalendar — "Add this month's dates to my calendar": the month's .ics file (monthIcs) — RFC 5545
                 as /events.ics writes it, the same UIDs, the story deadlines as all-day entries.
   * PastMonths — the 12 months before keep a redirect page for printed posters' QR codes, out of the sitemap.
@@ -33,10 +37,12 @@ I18N_STRICT=1) and are skipped without Node.js or the site's npm packages.
 from __future__ import annotations
 
 import glob
+import html
 import json
 import re
 import sys
 import unittest
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -902,7 +908,7 @@ class PosterNote(unittest.TestCase):
     def notes(html: str) -> dict:
         """Where the note is: {section: count} (mp-story, mp-issue …), and how many in the story's Grapevine block."""
         out = {}
-        for kind, body in re.findall(r'<section class="mp-b (mp-[\w-]+)">(.*?)</section>', html, re.S):
+        for kind, body in re.findall(r'<section class="mp-b (mp-[\w-]+)"[^>]*>(.*?)</section>', html, re.S):
             n = body.count('<p class="mp-mtnote">')
             if n:
                 out[kind] = out.get(kind, 0) + n
@@ -937,6 +943,160 @@ class PosterNote(unittest.TestCase):
         for case in ("none", "english"):
             with self.subTest(case=case):
                 self.assertEqual(self.notes(self.r[case])["total"], 0)
+
+
+# ------------------------------------------------------------------ every date on the poster (round 26b)
+# The poster of a busy October (10 dates: the data set's 7 and 3 more) in each of the six layouts, English and Spanish,
+# and a month without a date — made by the build's own Eleventy and filters (no page of src/pages: ONLY).
+POSTER_DATES_JS = r"""
+process.env.ONLY = "-none-";
+const M = await imp("eleventy/filters/monthly.js");
+const os = await import("node:os");
+const { Eleventy } = await import("@11ty/eleventy");
+const { db, site, carry } = input;
+const now = new Date(input.now);
+const LAYOUTS = { editorial: "frost", ticket: "rose", split: "sprout", cork: "rain", cover: "bloom", notebook: "notebook" };
+const cases = {}, models = {};
+for (const lang of ["en", "es"]) {
+  const m = M.monthModel("2026-10", db, carry, site, lang, now);
+  models[lang] = { density: m.density, dates: m.dates.map((d) => ({ kind: d.kind, title: d.title })) };
+  for (const [layout, design] of Object.entries(LAYOUTS)) cases[`${layout}-${lang}`] = { m: { ...m, layout, design }, lang };
+}
+cases["empty-en"] = { m: { ...M.monthModel("2026-10", db, carry, site, "en", now), dates: [] }, lang: "en" };
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gv-poster-dates-"));
+try {
+  const elev = new Eleventy("src", dir, { quietMode: true, configPath: "eleventy.config.js", config(cfg) {
+    for (const [name, c] of Object.entries(cases)) {
+      cfg.addTemplate(`mp-dates-${name}.njk`, '{% import "macros/monthly.njk" as mp with context %}{{ mp.poster(m, lang, site, "t") }}',
+                      { ...c, layout: false, permalink: `/mp-dates-${name}/index.html`, eleventyExcludeFromCollections: true, sitemap: false });
+    }
+  } });
+  const pages = await elev.toJSON();
+  out({ models, html: Object.fromEntries(pages.filter((p) => /^\/mp-dates-/.test(p.url || "")).map((p) => [p.url.slice(10, -1), p.content])) });
+} finally {
+  fs.rmSync(dir, { recursive: true, force: true });
+}
+"""
+
+
+class _Places(HTMLParser):
+    """The poster's columns (data-mp-slot) and its blocks: each block that may move (data-mp-move) with the column it
+    is built in, and the reading order (data-mp-order) of each column's blocks."""
+    VOID = {"area", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "wbr"}
+
+    def __init__(self):
+        super().__init__()
+        self.stack: list[tuple[str, str | None]] = []
+        self.slots: dict[str, list[float]] = {}
+        self.movers: list[tuple[str, list[str], str | None]] = []
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in self.VOID:
+            return
+        here = next((s for _t, s in reversed(self.stack) if s), None)
+        if self.stack and self.stack[-1][1] and a.get("data-mp-order") is not None:
+            self.slots[self.stack[-1][1]].append(float(a["data-mp-order"]))
+        if a.get("data-mp-move") is not None:
+            self.movers.append((a.get("class", ""), a["data-mp-move"].split(), here))
+        slot = a.get("data-mp-slot")
+        if slot:
+            self.slots.setdefault(slot, [])
+        self.stack.append((tag, slot))
+
+    def handle_endtag(self, tag):
+        while self.stack:
+            if self.stack.pop()[0] == tag:
+                break
+
+
+class PosterEveryDate(unittest.TestCase):
+    """Round 26b (the owner: "every event of the month on the poster, with smaller borders"): the poster shows EVERY
+    date of the month — the page's Dates list — in every layout and language, however busy the month: no "+N more on
+    the website". Its blocks say where they may go (data-mp-move: the column the build puts them in first, every
+    column named in the poster) and their place in the reading order (data-mp-order, rising down each column), so the
+    page's fit (assets/js/monthly.js) can give a busy month's dates the room another column leaves; the share picture
+    and the PNG wait for that fit."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.r = None
+
+    def setUp(self):
+        if PosterEveryDate.r is None:
+            db = full_db()
+            db["events"]["items"] += [
+                event("ev:x1", "2026-10-08T00:00:00Z", "2026-10-08T01:00:00Z", "District 12 Open House", extra={"city": "Denton"}),
+                event("ev:x2", "2026-10-14T23:00:00Z", "2026-10-15T01:00:00Z", "La Viña Writing Workshop — Garland",
+                      extra={"city": "Garland"}),
+                event("ev:x3", "2026-10-28T00:00:00Z", "2026-10-28T01:00:00Z", "Delegate's Report", extra={"online": True}),
+            ]
+            PosterEveryDate.r = run_js(self, POSTER_DATES_JS, data={"db": db, "site": SITE, "carry": CARRY, "now": NOW_A},
+                                       timeout=300)
+        self.r = PosterEveryDate.r
+        self.s = i18n_all()
+
+    def test_every_date_in_every_layout(self):
+        self.assertEqual(len(self.r["html"]), 13)
+        for name, page in self.r["html"].items():
+            if name.startswith("empty"):
+                continue
+            lang = name.rsplit("-", 1)[1]
+            want = self.r["models"][lang]["dates"]
+            with self.subTest(poster=name):
+                self.assertEqual(len(want), 10)
+                self.assertEqual(self.r["models"][lang]["density"], "dense", "the busiest kind of month")
+                rows = re.findall(r'<li class="mp-date mp-date--(\w+)">.*?<strong class="mp-date-t">(.*?)</strong>', page, re.S)
+                self.assertEqual([k for k, _t in rows], [d["kind"] for d in want])
+                self.assertEqual([html.unescape(t) for _k, t in rows],
+                                 [self.s["monthly.committee"][lang] if d["kind"] == "committee" else d["title"] for d in want])
+                self.assertEqual(page.count('class="mp-b mp-dates"'), 1)
+                for gone in ("mp-more", "more on the website", "más en el sitio web"):
+                    self.assertNotIn(gone, page)
+        self.assertNotIn("monthly.more_dates", self.s)
+
+    def test_a_month_without_a_date_says_so(self):
+        page = self.r["html"]["empty-en"]
+        self.assertIn(f'<p class="mp-note">{self.s["monthly.no_dates"]["en"]}</p>', page)
+        self.assertNotIn('<ul class="mp-dlist">', page)
+
+    def test_the_blocks_know_their_places(self):
+        moving = {"editorial": {"mp-issue", "mp-dates", "mp-weekly", "mp-botm"}, "ticket": {"mp-issue", "mp-dates", "mp-weekly", "mp-botm"},
+                  "split": {"mp-story", "mp-dates", "mp-weekly", "mp-botm"}, "cork": {"mp-issue", "mp-dates", "mp-weekly", "mp-botm"},
+                  "cover": {"mp-weekly", "mp-botm"}, "notebook": {"mp-weekly", "mp-botm"}}
+        for name, page in self.r["html"].items():
+            if name.startswith("empty"):
+                continue
+            p = _Places()
+            p.feed(page)
+            with self.subTest(poster=name):
+                kinds = set()
+                for cls, opts, built_in in p.movers:
+                    kind = next(c for c in cls.split() if c.startswith("mp-") and c != "mp-b")
+                    kinds.add(kind)
+                    self.assertEqual(opts[0], built_in, f"{kind}: the build's own column comes first")
+                    self.assertEqual(len(opts), len(set(opts)))
+                    for o in opts:
+                        self.assertIn(o, p.slots, f"{kind}: no column {o!r}")
+                self.assertEqual(kinds, moving[name.rsplit("-", 1)[0]])
+                self.assertEqual(len(kinds), len(p.movers), "each block once")
+                for slot, orders in p.slots.items():
+                    self.assertEqual(orders, sorted(orders), f"column {slot}: the reading order")
+                # the dates are a block of their own wherever they go (the cover's strip and the notebook's row hold them)
+                self.assertRegex(page, r'<section class="mp-b mp-dates" data-mp-order="30"')
+
+    def test_the_share_picture_and_the_png_wait_for_the_fit(self):
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.ops import poster_share as PS
+        self.assertIn('poster.hasAttribute("data-mp-fit")', PS.ISOLATE)
+        self.assertIn(f"Date.now() - t0 < {PS.FIT_WAIT_MS}", PS.ISOLATE)
+        js = (ROOT / "src" / "assets" / "js" / "monthly.js").read_text(encoding="utf-8")
+        self.assertIn('p.setAttribute("data-mp-fit", "");', js)
+        self.assertIn("Promise.all([loadLib(), fontsReady, fitDone])", js)
+        css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
+        self.assertIn("width: 1080px; height: 1350px;", css)          # the poster's size is kept
+        self.assertNotIn(".mp-more", css)
 
 
 # ------------------------------------------------------------------ "Add this month's dates to my calendar"

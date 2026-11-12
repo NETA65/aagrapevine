@@ -694,8 +694,10 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   const weekdays = Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(LOC[L], { weekday: "narrow", timeZone: "UTC" }).format(new Date(Date.UTC(2026, 1, 1 + i))));
   const calendar = { offset, days: lastDay(key), marks, weekdays };
 
-  /* Density: how much the poster holds (the CSS tightens type for busy months). La Viña's deadlines are on the
-     Spanish poster only (one compact line each), with its topics; Grapevine's topics on the English poster
+  /* Density: how much the poster holds (the CSS tightens type for busy months; every date of the month is on the
+     poster — round 26b —, and the page's fit, assets/js/monthly.js, sizes the type and places the blocks so they
+     all fit). La Viña's deadlines are on the Spanish poster only (one compact line each), with its topics;
+     Grapevine's topics on the English poster
      (posterGvTopics: macros/monthly.njk story()) where its deadlines leave room — fewer than two (each comes with
      its prompt) — and the poster stays "roomy" with them: three more lines on a fuller poster would make all of
      its type smaller (the poster's fit, assets/js/monthly.js: December 2026's 21.75px → 18.25px), and a "snug" one
@@ -728,21 +730,6 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
     icsUrl: icsPath(key, L),
     slug: slug(key),
   };
-}
-
-// The most dates a poster's Dates block shows (macros/monthly.njk dates(): 4 in every layout, one fewer on a "dense"
-// month); the rest are "+N more on the website".
-const POSTER_DATES = 4;
-
-/** The dates a poster has room for (`lim`): the first ones by day, but never without the month's committee meeting —
- *  a busy month leaves out the last other date instead (the committee meeting comes later in the month than the
- *  dates before it, so the order stays the days' order). */
-export function posterDates(dates = [], lim = POSTER_DATES) {
-  const list = Array.isArray(dates) ? dates : [];
-  const shown = list.slice(0, Math.max(0, Number(lim) || 0));
-  const cm = list.find((d) => d && d.kind === "committee");
-  if (cm && shown.length && !shown.includes(cm)) shown[shown.length - 1] = cm;
-  return shown;
 }
 
 /* ------------------------------------------------------------------ */
@@ -1342,8 +1329,6 @@ export default function (eleventyConfig, helpers) {
     return msgCache.get(k);
   });
   eleventyConfig.addFilter("mpQr", (url, label = "") => qrSvg(url, { label, cls: "mp-qr-svg", margin: 2 }));
-  // the dates a poster shows: the first `lim`, never without the committee meeting (posterDates)
-  eleventyConfig.addFilter("mpPosterDates", (dates, lim) => posterDates(dates, lim));
   // A month page's share picture (its ogImage, monthly-month.njk): {{ mpage.key | mpShareImage(mpage.lang) }} — the
   // site path of its share.png in a build asked for it (POSTER_SHARE=1), else "" (the page keeps the committee's card)
   eleventyConfig.addFilter("mpShareImage", (key, lang) => (posterShareOn() && /^\d{4}-\d{2}$/.test(String(key || ""))

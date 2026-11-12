@@ -261,23 +261,14 @@ class Monthly(unittest.TestCase):
         self.assertNotIn("Grapevine Meeting", [x[2] for x in r["2026-11"]["dates"]])
 
     def test_a_poster_never_leaves_out_the_committee_meeting(self):
-        # one more date a month (the Grapevine Meeting): a busy month's poster shows one date fewer, and the one it
-        # leaves out is never the committee meeting's
-        r = run_js(self, """
-            const M = await imp("eleventy/filters/monthly.js");
-            const d = (kind, ymd) => ({ kind, ymd });
-            const dates = [d("recurring", "2027-02-03"), d("recurring", "2027-02-13"), d("event", "2027-02-14"),
-                           d("committee", "2027-02-17"), d("event", "2027-02-20")];
-            const ymds = (list) => list.map((x) => x.ymd);
-            out({ three: ymds(M.posterDates(dates, 3)), four: ymds(M.posterDates(dates, 4)), five: ymds(M.posterDates(dates, 5)),
-                  none: ymds(M.posterDates(dates.filter((x) => x.kind !== "committee"), 3)) });
-        """)
-        self.assertEqual(r["three"], ["2027-02-03", "2027-02-13", "2027-02-17"])
-        self.assertEqual(r["four"], ["2027-02-03", "2027-02-13", "2027-02-14", "2027-02-17"])
-        self.assertEqual(r["five"], ["2027-02-03", "2027-02-13", "2027-02-14", "2027-02-17", "2027-02-20"])
-        self.assertEqual(r["none"], ["2027-02-03", "2027-02-13", "2027-02-14"])
+        # round 26b: the poster shows EVERY date of the month (the committee meeting's among them) — no "+N more on the
+        # website", no limit by the month's density (tests/test_monthly.py PosterEveryDate builds them)
         poster = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
-        self.assertIn("{%- set shown = m.dates | mpPosterDates(lim) -%}", poster)
+        dates = poster[poster.index("{% macro dates("):poster.index("{% endmacro %}", poster.index("{% macro dates("))]
+        self.assertIn("{% for d in m.dates %}", dates)
+        self.assertNotIn("mpPosterDates", poster)
+        self.assertNotIn("more_dates", poster)
+        self.assertIn('("monthly.committee" | t(lang)) if d.kind == "committee"', dates)
 
     def test_the_templates(self):
         page = (ROOT / "src" / "pages" / "monthly-month.njk").read_text(encoding="utf-8")
