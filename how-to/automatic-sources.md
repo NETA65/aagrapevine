@@ -1610,7 +1610,7 @@ meeting:
   note_es: "Todos los miembros de AA pueden asistir. No hace falta registrarse."
   skip_dates: []            # e.g. ["2026-12-16"] — dates that do not happen
   flyer_match: "committee meeting *[-–—] *(flyer|guest speaker)"   # its flyers (the Drive's flyers/ folder)
-  speaker_until: "19:30"    # the guest speaker's part ends by then
+  speaker_until: "19:30"    # the guest speaker's part ends by then (then events, offers, topics and sharing)
   speakers:                 # one block per meeting, from January 2027
     - date: "2027-01-20"
       name: "Rick W."       # first name and last initial only
@@ -1657,9 +1657,10 @@ the pages (`committee.js` `meetingSpeakers`) read the list with the same rules a
 next 45 days (`SPEAKER_CONFIRM_DAYS`) without `confirmed: true` is a reminder for the chair (*Reminders* in the run
 summary, `status.json` → `reminders`, `build_data._speaker_reminders`). Each committee meeting in `events.json` then
 carries its speaker (`extra.speaker`: name, position and topic in both languages — never `confirmed`) and two more
-sentences in its summary ("Guest speaker: Rick W. — “…”. The guest speaker's part ends by 7:30 PM; committee
-business follows until 8:00 PM."); its title, its times (7:00–8:00 PM) and its id (`ev:committee:<date>`) stay as
-they are. Never in what search engines read, never in a calendar reminder. Every key:
+sentences in its summary ("Guest speaker: Rick W. — “…”. The guest speaker's part ends by 7:30 PM; then coming
+events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM." — the words of
+`committee.meeting.speaker_until`, `build_data._SPEAKER_UNTIL`); its title, its times (7:00–8:00 PM) and its id
+(`ev:committee:<date>`) stay as they are. Never in what search engines read, never in a calendar reminder. Every key:
 [Settings §3.2](settings.md#the-guest-speakers-speakers).
 
 **The meeting's flyers** (`flyer_match:`): the newest file of the Drive's `flyers/` folder whose name matches —
@@ -1692,7 +1693,7 @@ them too.
 Google Meet have no number to call), and the booth display ("Meetings you can join": its monthly rule, Google Meet
 and the meeting code). Since October 2026 also: the *Pass it on* welcome message on `/gvr/#pass-it-on` (the next date, moving on by
 itself after each meeting), the Area report's committee meetings (`/monthly/#report` → For: Area) and the committee
-meeting deck's *Agenda & minutes* ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes)).
+meeting deck's *Agenda & notes* ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--notes)).
 
 **Code pointers.** [`scripts/sync/meeting.py`](../scripts/sync/meeting.py) → `meeting_rule`,
 `parse_hhmm`, `check_skip_dates`, `check_starts`, `upcoming_rule_dates`, `window_meetings`, `meeting_speakers`,

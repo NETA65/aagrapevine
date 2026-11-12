@@ -18,7 +18,8 @@ What a presenter relies on, checked against values worked out by hand:
                             [label](url) with checked addresses only (never javascript:), [hint] blanks; a
                             notes_only blank never on a slide; nothing ever becomes HTML; {lang:es} spans; {ui:…}
                             in the page's language; notes lines {only:…} / {not:…}; "(not in this version)" read
-                            as one; {fill:constructor} and friends are unknown tokens
+                            as one; {fill:constructor} and friends are unknown tokens; a page's text as plain lines
+                            to copy (Prepare → Copy)
   * the presenter's state — normState never throws on garbage; edits remember the slide's hash ("Changed since you
                             edited it"); added slides; moving; an updated deck (reconcile)
   * "my version" files    — export → import gives the same version back; strict refusal of foreign, broken,
@@ -384,6 +385,28 @@ class Text(unittest.TestCase):
         self.assertEqual(r["lines"][0]["text"], "hi")
         self.assertEqual(r["lines"][5]["text"], "I'm here: yes")
         self.assertEqual(r["show"], ["aagrapevine.org/podcasts", "x.org/aagrapevine/events/", "grapevine@neta65.org", "aalavina.org"])
+
+    def test_plain_lines_to_copy(self):
+        """A `text` page for the presenter as plain text to paste (Customize → Prepare → Copy: the Grapevine
+        Meeting's message for the Google Meet chat): its facts filled in by the viewer's clock, its marks gone (a
+        link keeps its words: the page writes addresses out in full), its line breaks kept, one empty line at most
+        between paragraphs, a blank as "[hint]" and a notes_only blank never filled in, the build's word joiners
+        gone and its narrow no-break spaces plain no-break ones (as the paperwork's texts)."""
+        r = core(self, r"""
+          const st = G.emptyState();
+          st.shared.fill.first_name = "Ana";
+          st.shared.fill.presenter = "District 22 GVR";
+          const body = "**🍇 Links 🍇**\n• Next: {live:meeting_next} · {live:email}\n• Site: https://x.org/aagrapevine/  \n\n\n"
+            + "• [Shop](/shop/) · _now_ · {lang:es}Lleva el Mensaje{/lang}\n{fill:first_name} {fill:presenter} {fill:date}\n"
+            + "5:30 –⁠ 7:30 PM\n\n";
+          const at = (iso) => { const cur = G.current(D, st, "", ms(iso));
+                                return G.plainLines(body, { deck: D, state: st, live: cur.live, cur, where: "slide", base: "/aagrapevine/", lang: "en" }); };
+          out({ before: at("2026-10-02T15:00:00Z"), after: at("2026-10-23T15:00:00Z"), empty: G.plainLines("", {}), none: G.plainLines(null, {}) });""")
+        self.assertEqual(r["before"], "🍇 Links 🍇\n• Next: Wednesday, October 21, 2026 · grapevine@neta65.org\n"
+                                      "• Site: https://x.org/aagrapevine/\n\n• Shop · now · Lleva el Mensaje\n"
+                                      "[first name] District 22 GVR [Month DD, YYYY]\n5:30 – 7:30 PM")
+        self.assertIn("• Next: Wednesday, November 18, 2026 ·", r["after"], "the fact of the moment it is copied")
+        self.assertEqual((r["empty"], r["none"]), ("", ""))
 
 
 class Details(unittest.TestCase):

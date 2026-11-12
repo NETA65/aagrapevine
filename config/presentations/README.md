@@ -12,14 +12,15 @@ view, versions, printing, and the presenter's own changes kept on their own devi
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting |
-| `grapevine-meeting.yml` | Grapevine Meeting (our online AA meeting on the first Wednesday; no PowerPoint copy) |
+| `grapevine-meeting.yml` | Grapevine Meeting (our online AA meeting on the first Wednesday; its PowerPoint copy, `Grapevine Meeting.pptx`, is being added to the Drive) |
 
 The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
 Spanish, and each presentation is marked "(en inglés)".
 
-**The PowerPoint copies are separate.** The four `.pptx` files in the committee's Drive folder (`slides`, listed on
-the Portfolio page) are snapshots, made on October 1, 2026 and rebuilt with the Google Meet details on November 11,
-2026. Changing a file here does not change them, and changing them does not change the presentations on the site.
+**The PowerPoint copies are separate.** The `.pptx` files in the committee's Drive folder (`slides`, listed on the
+Portfolio page) are snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet details on
+November 11, 2026, and the Grapevine Meeting's copy being added in November 2026. Changing a file here does not
+change them, and changing them does not change the presentations on the site.
 The card's "PowerPoint copy" link opens the Drive file whose title is the presentation's `drive_title`.
 
 ## What stays current by itself
@@ -55,8 +56,10 @@ data, the same facts the other pages show:
   issue" never skip a month, even on a copy opened after the month changed;
 - the 1-year subscription prices and an announced price change (`config/site.yml`, `price_changes:`): before the
   day, the slides show today's price and switch to the new one at midnight Central on the day itself;
-- Grapevine's Book of the Month and La Viña's Libro del mes, the story lines for recording a story by phone (the
-  Share your story page), the committee bulletin's newest posts, and QR codes.
+- Grapevine's Book of the Month and La Viña's Libro del mes, and the stores' offers of the day (`config/site.yml`,
+  `store_offers:`, as the Shop page lists them, each with its days);
+- the story lines for recording a story by phone (the Share your story page), the committee bulletin's newest posts,
+  and QR codes.
 
 **A copy opened later stays right.** A presenter may open a presentation that was saved days earlier (offline, or on a
 slow connection at the venue). So each fact comes with what it will say next — the next four meetings, workshops,
@@ -183,7 +186,7 @@ new slide for them.
 | `version_fields` | the slide's own text in one version: `{ short: { title: "Today's plan (about 60 minutes)" } }` — any field of its layout (below), its `title`, `eyebrow`, `source` or `takeaway` (an activity's `duration`, a break's `body` …). Not `kind`, `options` or `qr`, which are the same in every version. The checker holds the slide as each version shows it to the same rules. A presenter's own change (Customize → Edit) of a field that has words of its own in any version stays in the version they changed it in: it is stored for that version alone, so the other versions keep their words (typing the version's own words back removes the change; "Reset this slide to the original" removes the changes of every version). A change of any other field, and of `minutes`, applies to every version |
 | `optional` | `true`: a slide that can go when running late |
 | `starts_off` | `true`: an optional slide that starts switched off (the presenter turns it on in Customize → Slides) |
-| `facilitator` | `true`: never shown to the room; it is in Customize → Prepare (checklists, timing plans, pages for the chair). No `minutes` |
+| `facilitator` | `true`: never shown to the room; it is in Customize → Prepare (checklists, timing plans, pages for the chair). No `minutes`. A `text` page there also has a **Copy** button: it copies the page's `body` as plain text, line by line, with the facts of the moment and the presenter's blanks filled in (a `notes_only` blank, like the first name, never: it copies as `[hint]`), for a message to paste somewhere (the Grapevine Meeting's `chat-message`, for the Google Meet chat). A copy keeps only the words of a `[label](url)` link, so write the web addresses of such a page out in full (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`) |
 | `handout` | `true`: a page printed for the participants — a `facilitator` page (Prepare → Print), or a slide that is shown AND printed |
 | `print` | on a `handout` page: `"portrait"` to print it upright. Left out: it prints `"landscape"` (sideways) |
 | `accent` | a colour: `gv` `lv` `vine` `grape` `navy`. On a `section` slide, the colour of its part: the slides after it take it. On any other slide, the colour of that slide only |
@@ -211,7 +214,7 @@ new slide for them.
 | `resources` | `links`: `{ label, url, note }` |
 | `credits` | `sources` (a list), `note`, `disclaimer: true` |
 | `closing` | `message`, `lines` (a list), `qr: "/"` (a QR code for a page of the site or an https address) |
-| `text` | `body`: paragraphs separated by an empty line; a line starting with "- " is a list item. `style: "script"`: an announcement to read aloud, on a tinted card (parts the reader fills in written ‹like this›); `style: "break"`: a pause, centred on the slide |
+| `text` | `body`: paragraphs separated by an empty line; a line starting with "- " is a list item. `style: "script"`: an announcement to read aloud, on a tinted card (parts the reader fills in written ‹like this›); `style: "break"`: a pause, centred on the slide. A line starting with "• " is a list item too. On a `facilitator` page: a **Copy** button in Customize → Prepare (see `facilitator`) |
 | `flow` | `steps`: 2 to 6 boxes `{ title, text }` with arrows between them |
 | `live` | `kind` (below), `intro` (a sentence above it), `options` |
 
@@ -295,7 +298,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position ("none tonight" without a speaker) | "to be announced" |
 | `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no guest speaker (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting); "none this time" for a meeting with no guest speaker (December 16, 2026, on November 18's slides) | "to be announced" |
-| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`); on a night with no guest speaker, "No guest speaker is listed for tonight: choose the version 'No guest speaker', …" | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
+| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`); on a night with no guest speaker, "No guest speaker is listed for tonight: choose the version 'No guest speaker', with a topic to share on until 7:30." | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
 | `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
 | `grapevine_meeting_day` | Wednesday, December 2, 2026 — its own date until midnight Central after it (its title slide) | "see the Events page" |
 | `grapevine_meeting_after` | Wednesday, January 6, 2027 — the one after `grapevine_meeting_day`, moving on with it | "see the Events page" |
@@ -316,6 +319,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `next_deadline_lv` | October 17, 2026 — May–June 2027: Recaídas (Relapses) — the English as in `lv_issue` | "see aalavina.org for La Viña's themes" |
 | `botm` | the title of Grapevine's Book of the Month, until its offer ends | "see aagrapevine.org's Book of the Month" |
 | `botm_lv` | the title of La Viña's Libro del mes, until its offer ends | "see aalavina.org's Libro del mes" |
+| `store_offers` | Free shipping at the Grapevine and La Viña stores (November 1 – December 31, 2026); Holiday gift offers at the Grapevine and La Viña stores (through December 31, 2026) — the stores' offers on the day (`config/site.yml`, `store_offers:`, as the Shop page lists them, first day first), each with its days; it switches when an offer starts or ends (the committee meeting's "Special offers") | "see the Shop page" |
 | `gv_audio_phone`, `lv_audio_phone` | (559) 726-1216 · (559) 670-1601 — the story lines for recording a story by phone | "see the Share your story page" |
 | `assembly_next` | NETA 65 Spring Assembly 2027 · Fri, Mar 19 – Sun, Mar 21, 2027 — the next NETA 65 assembly until it is over, then the one after it ("(details to be confirmed)" while the Events page says so) | "see the Events page" |
 | `gv_open_meeting` | Wednesdays, 11:00 AM Central (noon Eastern) — the Grapevine Weekly Open | "see the Meetings page" |
@@ -334,17 +338,20 @@ meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "t
 speaker), `speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with
 `grapevine_meeting_after` on the Grapevine Meeting's own slides.
 
-In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
-minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
-for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
-the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
+In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the short
+draft notes of the meeting — its `minutes` text), `{paper:speaker}` (the name and position),
+`{paper:speaker_position}` and `{paper:speaker_topic}` — and for a Spanish paragraph `{paper:speaker_es}` and
+`{paper:speaker_topic_es}` (the position and topic in Spanish, as the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
 keys in the agenda's rows there ("none at this meeting" for a meeting with no guest speaker, "to be announced" for
 one whose speaker isn't listed yet). A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker)
 is left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
 committee meeting's "No guest speaker", for a speaker who can't come). The panel warns when the version leaves out a
 listed speaker, or keeps the speaker's part for a meeting with none, and "Start next month" picks the version for
-the next meeting: the first one when it has a speaker, "No guest speaker" when the list gives it none. The minutes
-name the speaker by service position only.
+the next meeting: the first one when it has a speaker, "No guest speaker" when the list gives it none. The notes
+name the speaker by service position only. The committee meeting is not a business meeting: its block has no
+minutes to approve, no old business and no action items, so its "Start next month" carries nothing over (it clears
+the blanks of one night: tonight's topic, the volunteers, the stories mentioned). A deck may still have `actions`
+and `old_business` rows (the sample deck in `tests/fixtures/presentations/` does).
 
 Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
 never as digits: the checker takes digits for a phone number.

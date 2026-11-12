@@ -13,7 +13,7 @@ change the code.
 3. [Full reference with examples](#3-full-reference-with-examples) — the files, versions, blanks, slides, layouts,
    notes, live facts, tokens, dates, handouts, the checker, common edits, presenting, printing, presenters' own
    versions and Reset, offline use, the JSON file, the chair's paperwork
-   ([Agenda & minutes](#322-the-chairs-paperwork-agenda--minutes))
+   ([Agenda & notes](#322-the-chairs-paperwork-agenda--notes))
 4. [What happens after you save](#4-what-happens-after-you-save)
 5. [Where it shows on the website](#5-where-it-shows-on-the-website)
 6. [Going further: change the code](#6-going-further-change-the-code)
@@ -31,8 +31,8 @@ is made from **one YAML text file** in `config/presentations/`. Every build turn
 a slide show that opens in a pop-up player, with speaker notes, a presenter view, shorter versions, four ways to
 print, and facts that stay current by themselves (meeting dates, story deadlines, prices, events). Presenters can
 make their own version of a deck; it stays on their own device. The committee meeting's deck also makes the
-chair's monthly paperwork: the agenda e-mail, a reminder and the draft minutes, from the chair's own details
-(Customize → **Agenda & minutes**, [3.22](#322-the-chairs-paperwork-agenda--minutes)).
+chair's monthly paperwork: the agenda e-mail, a reminder and the draft notes, from the chair's own details
+(Customize → **Agenda & notes**, [3.22](#322-the-chairs-paperwork-agenda--notes)).
 
 **Where it shows** (full addresses start with `https://neta65.github.io/aagrapevine`):
 
@@ -50,8 +50,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
 
 - The six short GVR / RLV 101 sessions on the same page (`/orientation/magazines/` …) come from
   `config/orientation.yml`. See [Settings](settings.md).
-- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed snapshots,
-  made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026. Changing a YAML file never
+- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed
+  snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026,
+  and the Grapevine Meeting's copy being added in November 2026. Changing a YAML file never
   changes them, and changing them never changes the web decks. A card links its copy as "PowerPoint copy" through
   its `drive_title`.
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
@@ -125,35 +126,53 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `orientation-workshop.yml` | GVR and RLV Orientation Workshop / Taller de orientación para RLV y GVR | 1 | 90 | `vine` (green) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop / Taller informativo de Grapevine y La Viña | 2 | 60 | `gv` (blue) | `book-open` | 53 / 49 | `full` (60), `late` (48), `visit` (20) |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
-| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 47 / 32 | `full` (60: with a guest speaker), `no-speaker` (60), `topic` (60) |
-| `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 17 / 14 | `full` (60) |
+| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 40 / 23 | `full` (60: with a guest speaker), `no-speaker` (60) |
+| `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 19 / 15 | `full` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
-why the committee meeting shows 32 of its 47 slides (13 pages for the chair, and the sharing and the topic of the
-month, which start off).
+why the committee meeting shows 23 of its 40 slides (14 pages for the chair, and the AA Preamble and the two
+"Tonight's topic" slides, which start off).
 
-**The committee meeting from January 2027.** Its first version, "With a guest speaker", is the hour as the
-committee now holds it: the opening (moment of silence, Serenity Prayer), four "Guest speaker" slides (the
-introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by 7:30), then
-the committee's business from 7:30 to 8:00, opened by the Preamble, each part shorter. The speaker's name, service
-position and topic come from `config/site.yml` → `meeting: speakers:` (the same list as `/meetings/`) and switch at
-midnight after each meeting. A meeting the list gives no speaker (November 18 and December 16, 2026: the guest
-speakers start on January 20, 2027) says so: "none tonight" on the speaker's slides, "Guest
-speaker: none this time" on "Next meeting"; "to be announced" is only for a speaker the list doesn't name yet (a
-month after its last one, or an entry the site leaves out). "No guest speaker" is the committee's business for the
-whole hour, as before (the meetings before January 20, 2027, or a month whose speaker can't come), and
-"No guest speaker, with a topic of the month" adds the topic: both give each slide its time of before
-(`version_minutes`) and the agenda its rows of before (`version_fields`). The slide ids stayed the same.
+**The committee meeting (November 2026).** It is not a business meeting (the committee's decision): no minutes to
+approve, no reports, no old or new business. Its first version, "With a guest speaker", is the hour from January
+2027: the opening (a moment of silence, the Serenity Prayer), four "Guest speaker" slides (the welcome and the
+topic's introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by
+7:30), then the second half until 8:00 — coming up (events) and workshop requests, special offers (the stores'
+offers, both Books of the Month, the 2027 prices until January 31, 2027, Carry the Message described), magazine
+topics (the issues, the next ones, the deadlines), and GVR and RLV sharing (experience, not reports) — then the
+Responsibility Statement at 8:00 and, after the close, "The parking lot: what's on your mind?" (informal, at the
+least time a slide can have). The speaker's name, service position and topic come from `config/site.yml` →
+`meeting: speakers:` (the same list as `/meetings/`) and switch at midnight after each meeting. A meeting the list
+gives no speaker (November 18 and December 16, 2026: the guest speakers start on January 20, 2027) says so: "none
+tonight" on the speaker's slides, "Guest speaker: none this time" on "Next meeting"; "to be announced" is only for a
+speaker the list doesn't name yet (a month after its last one, or an entry the site leaves out). "No guest speaker"
+is the version for those nights: the chair introduces a topic and the members share on it until 7:30 (the slides
+`topic-of-the-month` and `topic-sharing`, which start off and are in its `only` list), then the same second half;
+its welcome and prayer get a minute each (`version_minutes`), its welcome and agenda their own words
+(`version_fields`). The AA Preamble's slide stays, switched off and in no version (`starts_off`, `optional`), for a
+night the committee asks for it. The Google Meet chat message is a page for the chair (`chat-message`, in Customize →
+Prepare). The ids of the slides that kept their role stayed the same; the business slides and their blanks were
+deleted (a chair's device that still keeps those blanks never shows them).
 
-**The Grapevine Meeting** (first Wednesday, 7–8 PM Central, from December 2, 2026) is an English-language AA meeting:
-the Serenity Prayer, the AA Grapevine Statement of Purpose in place of the Preamble, a story from AA Grapevine read
-aloud, sharing on its topic, the Seventh Tradition (no basket: the meeting has no expenses, and AA Grapevine, Inc.
-takes no contributions), announcements and the Responsibility Statement. The Statement of Purpose and the story are
-AA Grapevine's words: the slides name them and the readers read them from their own copy; neither is ever put on a
-slide (the site never quotes Grapevine material; with AA Grapevine's written permission, licensing@aagrapevine.org,
-the Statement of Purpose could become a `quote` slide with their credit line). Its dates come from
-`recurring_events:` → `grapevine-meeting`, as `/events/` lists them.
+**The Grapevine Meeting** (first Wednesday, 7–8 PM Central, from December 2, 2026) is an English-language AA meeting,
+in the order of the committee's draft script (November 2026), about 58 minutes: the welcome and housekeeping (muted,
+Raise hand, mind what's behind your camera, no photos or recordings), a moment of silence and the Serenity Prayer, the
+AA Grapevine Statement of Purpose in place of the Preamble, a welcome from across Area 65 (a first name and the city,
+district or home group), a story from AA Grapevine read aloud by a member who then starts the sharing, open sharing
+on its topic (3 to 5 minutes each) until about 7:50, Carry the Message in place of a Seventh Tradition basket (the
+meeting has no expenses, AA Grapevine, Inc. takes no contributions and the committee collects no money: described,
+never sold), the announcements (and any from the floor), "Before we close" (writing for Grapevine, Tradition Twelve
+said word for word from its short form with the A.A.W.S. credit, "who you see here…"), the Responsibility Statement
+and "Keep coming back!". The Statement of Purpose and the story are AA Grapevine's words: the slides name them and
+the readers read them from their own copy; neither is ever put on a slide, shared on the screen or pasted in the
+chat (the site never quotes Grapevine material; with AA Grapevine's written permission, licensing@aagrapevine.org,
+the Statement of Purpose could become a `quote` slide with their credit line). For the chair, Customize → Prepare
+has the checklist "Before the meeting", the credits, and "Chat message for Google Meet": the links and dates to paste
+in the Google Meet chat during the announcements, with its **Copy** button
+([3.14](#314-facilitator-pages-and-handouts)). Its dates come from `recurring_events:` → `grapevine-meeting`, as
+`/events/` lists them. Its PowerPoint copy, the Drive file `Grapevine Meeting.pptx` (`drive_title: "Grapevine
+Meeting"`), is being added to `slides` in November 2026: the card links it once it is there.
 
 Also in the folder: `README.md`, the committee's writing guide (saving it does not rebuild the site). Two sample
 decks are in [`tests/fixtures/presentations/`](../tests/fixtures/presentations/): `sample-workshop.yml` uses every
@@ -223,7 +242,7 @@ card:
 | `card` | `title`, `summary`, `audience`, each with `en` AND `es` | The card on `/orientation/` (English) and `/es/orientation/` (Spanish): title, one or two sentences, and "Who it's for" / "Para quién es". |
 | `presets` | at least one | The versions: [3.4](#34-versions-presets). |
 | `fillins` | optional | The presenter's blanks: [3.5](#35-the-presenters-blanks-fillins). |
-| `paperwork` | optional (today only in `committee-meeting.yml`, between `fillins:` and `slides:`) | The chair's agenda e-mail, reminder and draft minutes, and what "Start next month" does: [3.22](#322-the-chairs-paperwork-agenda--minutes). A deck without it has no **Agenda & minutes** tab. |
+| `paperwork` | optional (today only in `committee-meeting.yml`, between `fillins:` and `slides:`) | The chair's agenda e-mail, reminder and draft notes, and what "Start next month" does: [3.22](#322-the-chairs-paperwork-agenda--notes). A deck without it has no **Agenda & notes** tab. |
 | `slides` | at least 5 | [3.6](#36-slides-the-fields-every-slide-can-have). |
 
 > **Note:** `README.md` says `order` is 1–4. The checker accepts 1–9; the test `tests/test_presentations.py` only
@@ -305,7 +324,7 @@ version's:
 |---|---|
 | "60-minute version" | `Also: 60-minute version` |
 | "Running late (about 48 minutes)", "20-minute version (a district or group visit)" | `Also: running late (48 min) · 20-minute version (a district or group visit)` |
-| "A month with a topic of the month (about 60 minutes)" (same length as the full one) | `Also: a month with a topic of the month` |
+| "No guest speaker (about 60 minutes)" (same length as the full one) | `Also: no guest speaker` |
 
 **Example: add a 20-minute visit to the orientation workshop.** Put this after the `short` version. It passes the
 checker: its twelve slides add up to 14¼ minutes, and a 20-minute version may add up to anything from 14 to 26.
@@ -697,6 +716,7 @@ those show exactly what you type.
 | `next_deadline_gv` | November 1, 2026 — June 2027: Emotional Sobriety | the editorial calendar (as on `/contribute/#deadlines`) | "see aagrapevine.org for Grapevine's themes" |
 | `next_deadline_lv` | October 17, 2026 — May–June 2027: Recaídas (Relapses) | same | "see aalavina.org for La Viña's themes" |
 | `botm`, `botm_lv` | No Matter What: Dealing With Adversity in Sobriety / Frente a Frente: El apadrinamiento en acción (each until its offer ends) | the Shop's data | "see aagrapevine.org's Book of the Month" / "see aalavina.org's Libro del mes" |
+| `store_offers` | Free shipping at the Grapevine and La Viña stores (November 1 – December 31, 2026); Holiday gift offers at the Grapevine and La Viña stores (through December 31, 2026) — the offers on at the moment, first day first, switching at each offer's first day and at the midnight after its last | `config/site.yml` `store_offers:` (as on `/shop/#offers`) | "see the Shop page" |
 | `gv_audio_phone`, `lv_audio_phone` | (559) 726-1216 / (559) 670-1601 | the magazines' story-line pages (as on `/contribute/#record`) | "see the Share your story page" |
 | `assembly_next` | NETA 65 Spring Assembly 2027 · Fri, Mar 19 – Sun, Mar 21, 2027 (an assembly whose details are not final adds "(details to be confirmed)") | NETA 65's assemblies on `/events/` | "see the Events page" |
 | `gv_open_meeting` | Wednesdays, 11:00 AM Central (noon Eastern) | the weekly open meetings (as on `/meetings/#weekly-open`) | "see the Meetings page" |
@@ -860,7 +880,7 @@ The `{ui:…}` names:
 | `print` | Print | Imprimir |
 | `full_screen` | Full screen | Pantalla completa |
 | `black_screen` | Black screen | Pantalla en negro |
-| `paperwork` | Agenda & minutes | Agenda y acta |
+| `paperwork` | Agenda & notes | Agenda y notas |
 
 `{lang:…}` rules: open and close it on the same line, one at a time, with `es` or `en` only. A slide written all in
 Spanish takes `lang: "es"` instead. Mistakes: `{lang:es} without its {/lang} on the same line`,
@@ -927,6 +947,14 @@ Mistakes: `show_until must be a quoted "YYYY-MM-DD"`, `show_from is after show_u
 - `facilitator: true`: a page for the presenter, never projected. It is listed in **Customize → Prepare** with the
   handouts, and can be viewed and printed there. No `minutes`. A `checklist: true` page has tick boxes whose ticks
   stay on the device. The orientation workshop has two: `before-you-present` and `sixty-minute-plan`.
+- A facilitator page with `layout: "text"` also has a **Copy** button there: it puts the page's `body` on the
+  clipboard as plain text, line by line (an empty line between paragraphs), with its `{live:…}` facts as they are
+  when Copy is pressed and the presenter's blanks filled in (an empty one as `[hint]`; a `notes_only` blank, like the
+  first name, never: it copies as `[hint]`); bold and italic marks go, and
+  a link keeps only its words, so a page made to be pasted writes its web addresses out in full
+  (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`). The Grapevine Meeting's `chat-message` is
+  one: the links and dates its chair pastes into the Google Meet chat. A browser that doesn't let the page copy
+  says so ("Press View, select the message and copy it"): then **View** the page, select its text and copy it.
 - `handout: true`: a page printed for the participants (**Prepare → Print**). On a facilitator page it is printed
   only; on a slide of the show it is shown AND printed (the writing workshop's `checklist` slide).
 - `print: "portrait"`: on a handout, prints the page upright (otherwise sideways).
@@ -1018,9 +1046,9 @@ See the [quick start](#2-quick-start-change-the-words-on-a-slide). Two things to
 | Off after a date | `show_until: "2027-01-31"` | It leaves the show by itself after that day. |
 | For the presenter, never projected | `facilitator: true`, delete its `minutes:` line (and any `optional` / `starts_off`), and take its id out of every version's `hide` and `only` | It moves to Customize → Prepare. |
 
-Real example of the third row (`committee-meeting.yml`): the slide `topic-of-the-month` has `starts_off: true`, and
-the version `topic` ("A month with a topic of the month") lists it in its `only` list, so choosing that version
-shows it.
+Real example of the third row (`committee-meeting.yml`): the slides `topic-of-the-month` and `topic-sharing` have
+`starts_off: true`, and the version `no-speaker` ("No guest speaker") lists them in its `only` list, so choosing
+that version shows them; the AA Preamble (`preamble`) starts off too, and no version lists it.
 
 > **Note:** a presenter's own switch wins over the version. If a presenter had turned a slide on in
 > Customize → Slides, it stays on for them even after you give it `starts_off: true`. The date rules
@@ -1075,7 +1103,7 @@ them, but update them as well so the record stays true.
 The `{live:…}` facts follow `config/site.yml` by themselves (`meeting:` for the committee, `recurring_events:` for
 the booth and La Viña's workshop; see [Settings](settings.md)). But some sentences in the decks were typed by hand.
 After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:30`, `five`, `seven` and
-`p.m.`, and fix what you find, in the slides and in the notes. Real examples:
+`p.m.` (and `PM`, `7:`, `eight`), and fix what you find, in the slides and in the notes. Real examples:
 
 | File, slide | Typed by hand |
 |---|---|
@@ -1084,8 +1112,9 @@ After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursda
 | `orientation-workshop.yml`, `district-and-area` | "3rd Wednesday, {live:meeting_time}", "1st Wednesday: our Grapevine Meeting, online" |
 | `orientation-workshop.yml`, `thank-you` | "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Google Meet." |
 | `committee-meeting.yml`, `next-meeting`, `open-meetings`, `coming-up` | "Every 3rd Wednesday · …" and "Usually the 4th Thursday, …"; in the notes "third Wednesday", "at seven", "second Saturday … from 5:30 to 7:30 p.m.", "first Wednesday" |
-| `committee-meeting.yml`, the guest speaker's slides, `welcome`, `agenda` | the evening's plan: 7:02, 7:22, "done by 7:30", 7:30 to 8:00 (and the agenda's typed times) |
-| `grapevine-meeting.yml`, `announcements` | "every 2nd Saturday, 5:30 to 7:30 PM, Lovers Lane United Methodist Church"; in the notes "first Wednesday", "third Wednesday", "at seven" |
+| `committee-meeting.yml`, the guest speaker's and the topic's slides, `welcome`, `part-1`, `agenda`, `sharing`, `responsibility`, `parking-lot`, and the paperwork | the evening's plan: 7:02, 7:22, "done by 7:30", 7:30 to 8:00, "After 8:00: the parking lot" (and the agenda's typed times) |
+| `grapevine-meeting.yml`, `card`, `welcome`, `seventh-tradition`, `announcements`, `before-we-close`, `chat-message` | "the first Wednesday of each month at 7:00 PM Central" (and the card's "first Wednesday of the month", in English and Spanish); "every 2nd Saturday, 5:30 to 7:30 PM"; "every 3rd Wednesday"; "on the 2nd Saturday, … the 3rd Wednesday, and back here on the 1st Wednesday of next month"; the chat message's "every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church", "every 1st Wednesday", "every 3rd Wednesday"; in the notes "first / second / third" Wednesday or Saturday, "from 5:30 to 7:30 PM", "Lovers Lane United Methodist Church", "at seven", "7:00 PM" |
+| `grapevine-meeting.yml`, `title`, `how-it-works`, `last-shares`, `before-the-meeting`, and each TIP (timekeeping) line | the hour's plan: "by 6:50 PM Central", "at 7:00", "at about 7:50", "by 8:00" ("by eight"), and the TIP lines' times (7:05 to 7:08 … 7:55 to 7:57) |
 | `information-workshop.yml`, `lv-workshop` | "Usually the **4th Thursday**", and "fourth Thursday" in its notes |
 
 Where the sentence allows it, use the fact instead: "Our committee meets {live:meeting_rule}, {live:meeting_time},
@@ -1192,8 +1221,8 @@ computer, another browser or a private window does not have it.
 | Edit (Editar) | Change the words of the slide on the screen: its title, small line, the layout's fields, highlighted box, sources line, minutes and notes. `{fill:…}`, `{live:…}`, bold, italic and links work. "Reset this slide to the original" undoes it. |
 | Add (Agregar) | Add their own slide after the current one: Title and points, Text, Section break, or Discussion question (up to 60 per deck). Marked "Yours". |
 | Your details (Tus datos) | Fill in the blanks, grouped by slide. |
-| Prepare (Preparar) | The facilitator pages and handouts: view, tick, print. |
-| Agenda & minutes (Agenda y acta) — the committee meeting only | The chair's agenda e-mail, reminder and draft minutes, made from Your details; Start next month ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
+| Prepare (Preparar) | The facilitator pages and handouts: view, tick, print; a page of text for the presenter also has Copy (the Grapevine Meeting's chat message, [3.14](#314-facilitator-pages-and-handouts)). |
+| Agenda & notes (Agenda y notas) — the committee meeting only | The chair's agenda e-mail, reminder and draft notes, made from Your details; Start next month ([3.22](#322-the-chairs-paperwork-agenda--notes)). |
 | Save & share (Guardar y compartir) | Save my version (.json), open a saved version, print, Reset to the original. |
 
 Under each card, a status line sums it up: "Changed on this device: version “60-minute version”, 3 slides hidden,
@@ -1291,37 +1320,38 @@ Trimmed real example (build of October 2, 2026):
 | `slides[].n_default` | Its number in the full version on the build day (`null`: not in that show, such as a facilitator page). |
 | `slides[].part`, `accent`, `eyebrow` | Its part, the colour and the small line it shows, worked out from the `section` slides. |
 | `slides[].data` | For a `live` slide: its rows (about a year of them) and its `limit`; for a closing slide with `qr`: the QR code. |
-| `paperwork` | Only in a deck with a `paperwork:` block (the committee meeting): the block's texts as written, plus `meetings` (the meetings the texts can be for: the last two held and the year ahead, each with its date in English and Spanish and its month), `time_es` and `committee_es` ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
+| `paperwork` | Only in a deck with a `paperwork:` block (the committee meeting): the block's texts as written, plus `meetings` (the meetings the texts can be for: the last two held and the year ahead, each with its date in English and Spanish and its month), `time_es` and `committee_es` ([3.22](#322-the-chairs-paperwork-agenda--notes)). |
 
 Tokens such as `{fill:…}` and `{live:…}` stay in the slides' texts: the player fills them in when it shows them.
 
 **Use it to check a change:** after the run, open the file in the browser, press Ctrl+F and search for your slide's
 id. If your words are there, the build has them.
 
-### 3.22 The chair's paperwork (Agenda & minutes)
+### 3.22 The chair's paperwork (Agenda & notes)
 
 Since October 2026 the **Grapevine and La Viña Monthly Committee Meeting** deck has one more tab in Customize:
-**Agenda & minutes** (Spanish page: **Agenda y acta**). The three workshops and the Grapevine Meeting do not have
-it. It makes the chair's monthly texts from what is already typed in **Customize → Your details** (chair's report,
-old and new business, the order of the districts, action items …) and from the site's own facts (the meeting's date
-and time, its guest speaker, the Google Meet link and its code, the committee's e-mail).
+**Agenda & notes** (Spanish page: **Agenda y notas**). The three workshops and the Grapevine Meeting do not have
+it. It makes the chair's monthly texts from what is already typed in **Customize → Your details** (tonight's topic
+on a night without a guest speaker, the volunteers wanted, the stories to mention) and from the site's own facts
+(the meeting's date and time, its guest speaker, the Google Meet link and its code, the committee's e-mail). Since
+November 2026 the committee meeting is not a business meeting, so there are no minutes to approve and no old
+business: the third text (`minutes:` in the file) is short draft notes.
 
 | Text | For which meeting | What is in it |
 |---|---|---|
-| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic; the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); last month's minutes; old and new business; the order of the district reports; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
-| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish, "La reunión es en inglés", all AA members welcome) |
-| **Draft minutes** (*Borrador del acta*) | the **last meeting held**, from the moment it starts | "DRAFT, for the committee's approval at its next meeting. Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair and the minutes-taker by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic
-(never by name), the Preamble opening the business; every part of the meeting with what you typed (old business with its status, new business with "Decision: ___", the action items as what · who · by when); the next meeting |
+| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic (or the topic for sharing, when one is filled in); the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); the second half (7:30–8:00) and what to bring; "Volunteers wanted" (the volunteer lines); the parking lot after the close; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
+| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic (or the topic for sharing, when one is filled in), the second half and the parking lot in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish or the topic for sharing, the same line about the second half and "la reunión después de la reunión", "La reunión es en inglés", all AA members welcome) |
+| **Draft notes** (*Borrador de las notas*) | the **last meeting held**, from the moment it starts | "DRAFT NOTES of the meeting, for the committee's records (this is not a business meeting: nothing to approve). Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic (never by name) or the topic shared on; the events and workshop requests, the volunteers, the stories mentioned, the sharing's highlights and the follow-ups (what · who · by when) as blanks (___) to finish by hand; the next meeting; "Closed with the Responsibility Statement; the parking lot followed." |
 
 Each text has **Copy**, **Copy the subject** and **Open in my e-mail**. Open in my e-mail opens your own e-mail app
-with the subject and the text and **no address**: put every address in BCC. A long text (the agenda, the minutes)
+with the subject and the text and **no address**: put every address in BCC. A long text (the agenda, the notes)
 is too long for some e-mail apps, so it is copied first and the e-mail opens with "(Paste the text here: it's on
 your clipboard.)". If the browser does not let the page copy, no e-mail opens: a message says to select the text,
-copy it and paste it into a new e-mail. The minutes also have **Print**; the print window can save them as a
-document, named with the meeting's date ("Monthly Committee Meeting – Draft minutes – 2026-10-21").
+copy it and paste it into a new e-mail. The notes also have **Print**; the print window can save them as a
+document, named with the meeting's date ("Monthly Committee Meeting – Draft notes – 2026-10-21").
 
-A line whose details are all blank is left out, and so is a heading left with nothing under it ("Old business"
-with no items), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
+A line whose details are all blank is left out, and so is a heading left with nothing under it ("Volunteers"
+with no events), so a text never shows empty orange blanks. The guest speaker's lines are left out for a meeting with
 no speaker listed (November 18 and December 16, 2026), and in the version "No guest speaker" (a speaker who can't
 come: the texts then agree with that version's agenda, even before the website's list is changed). When the website lists a speaker
 for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
@@ -1332,21 +1362,21 @@ meeting") and names the version to choose, and "Start next month" switches to "N
 website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
-**Start next month**, at the bottom of the tab, is pressed after the meeting, once the minutes are drafted. You
-tick what to carry (tonight's action items come ticked; old business still open comes unticked), up to 4 items:
-the deck has four old-business lines. It asks first. Then:
+**Start next month**, at the bottom of the tab, is pressed after the meeting, once the notes are drafted. The
+committee meeting has nothing to carry over (no old business, no action items), so the tab shows no "Carry to next
+month" box. It asks first. Then:
 
-- the ticked items become next month's **old business** ("Ask the Area for a table (the alternate chair, by
-  Nov 1)"), old business still open first, their status empty;
-- the details that were for that one meeting are **cleared**: minutes sent / approved / taker, the chair's report,
-  the stories mentioned, more news, the topic of the month, what was spent, "since we last met", old and new
-  business, volunteers, action items;
-- what stays from month to month is **kept**: the presenter, the order of the districts, the treasurer's budget and
-  reimbursement process (the tab lists them);
-- the **minutes' month** becomes the month of the meeting just held, and the **week-before checklist** (Customize
-  → Prepare) is unticked;
+- the details that were for that one meeting are **cleared**: tonight's topic and its three lines, the volunteers,
+  the stories mentioned;
+- the **presenter** (shared by every presentation) is kept;
+- the **week-before checklist** (Customize → Prepare) is unticked;
 - the agenda and the reminder move on to the **next meeting date** at once, even if pressed before 8 PM on the
-  meeting night.
+  meeting night; and the version follows the next meeting ("With a guest speaker" when it has one, "No guest
+  speaker" when the website lists none).
+
+A deck whose `next_month` has `actions` and `old_business` rows (the sample deck in `tests/fixtures/presentations/`)
+still shows tick boxes: the ticked items become next month's old business, and its `minutes_month` blank takes the
+month of the meeting just held.
 
 It can be undone: right away (the notice's **Undo**), and later with the button **Undo "Start next month"**, which
 stays in the tab until the next meeting begins, also after the page is closed. After that the details are that
@@ -1354,15 +1384,16 @@ meeting's own, so the Undo is gone. It can be pressed once per meeting.
 
 **The chair's month, in short.**
 
-1. Right after the meeting: Customize → Agenda & minutes → **Draft minutes** → Copy or Print, then **Start next
-   month**. Started too soon? Undo it before the next meeting begins.
+1. Right after the meeting: Customize → Agenda & notes → **Draft notes** → Copy or Print, finish the ___
+   lines in your own document, then **Start next month**. Started too soon? Undo it before the next meeting
+   begins.
 2. About a week before the next meeting: **Agenda e-mail** and **Reminder** → Copy, or Open in my e-mail, every
-   address in BCC. Send the draft minutes with the agenda.
+   address in BCC.
 
 Everything stays on the chair's device, in the same storage as Your details. Nothing is sent from the site, and no
 e-mail address is ever stored. The texts are in English like the slides (the reminder adds its Spanish paragraph);
-the buttons and explanations are in the page's language. The deck's own notes point to the tab (the "Action items"
-and "Thank you" slides, and Customize → Prepare: "The week before each meeting", STEP 5).
+the buttons and explanations are in the page's language. The deck's own notes point to the tab (the title,
+"Next meeting" and "Thank you" slides, and Customize → Prepare: "The week before each meeting", STEP 5).
 
 **Where the words are.** In `committee-meeting.yml`, the block `paperwork:` between `fillins:` and `slides:`. Edit
 it like a slide's words (keep the spaces at the start of each line), then run the checker
@@ -1374,14 +1405,14 @@ above `paperwork:` in the file sums up the rules below:
 | `agenda_slide` | the id of the `agenda` slide whose rows `{paper:agenda}` lists (`"agenda"`) |
 | `speaker_slide` | the id of the guest speaker's first slide (`"speaker-intro"`): in a version that leaves it out ("No guest speaker", for a speaker who can't come) the texts name no speaker, whatever `meeting: speakers:` still says (the panel warns when the site lists one; "Start next month" goes back to the first version when the next meeting has a speaker) |
 | `agenda`, `reminder`, `minutes` | each `{ subject: "…", body: \| … }`: plain text, in English like the slides; the subject on one line |
-| `next_month` | what Start next month does: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`), `old_business` (rows `<row>_item`, `_status`), `minutes_month` (the blank set to the month of the meeting held), `clear` (the blanks it clears; `chair_*` = every blank whose name starts with `chair_`; never a blank shared by every deck), `untick` (checklist pages it unticks) |
+| `next_month` | what Start next month does: `clear` (the blanks it clears; `topic_*` = every blank whose name starts with `topic_`; never a blank shared by every deck), `untick` (checklist pages it unticks); optional, and not in the committee meeting since November 2026: `actions` (rows of blanks named `<row>_what`, `_who`, `_when`) and `old_business` (rows `<row>_item`, `_status`), both or neither, and `minutes_month` (the blank set to the month of the meeting held) |
 
 Inside the texts: `{fill:…}` (never a `notes_only` blank), `{live:…}`, `{lang:es}…{/lang}` (a paragraph in
 Spanish), and the paperwork's own facts: `{paper:meeting}` (the date of the meeting the text is for), `{paper:month}`,
 `{paper:after}` (the meeting after it), `{paper:agenda}` (the agenda's rows, on a line of its own),
 `{paper:meeting_es}` and `{paper:time_es}` (that date and the time in Spanish), `{paper:committee_es}` (the
 committee's name as the Spanish pages give it: `site: committee_es` in `config/site.yml`), and that meeting's guest
-speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the minutes: never a name),
+speaker: `{paper:speaker}` (name and service position), `{paper:speaker_position}` (the notes: never a name),
 `{paper:speaker_topic}`, and for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the
 position and topic in Spanish, `position_es` / `topic_es`, as `/es/meetings/` gives them) — empty for a meeting
 with none, and a line whose `{paper:…}` facts are all empty is left out. In the paperwork the speaker keys
@@ -1407,15 +1438,16 @@ still publishes your words (those tests are in `CONTENT_TESTS`).
    interpretation (for example "si necesitas interpretación, escríbenos a grapevine@neta65.org")? Nothing was
    added without your OK.
 2. Check what Start next month clears and what it keeps (lists above). To change them, edit `clear:` in the YAML.
-3. Read the agenda e-mail and the minutes, especially "All AA members are welcome: GVRs, RLVs, GSRs, DCMs and anyone
-   interested in the magazines", "Opened with a moment of silence, the Serenity Prayer and the AA Preamble", "Closed
-   with the Responsibility Statement" and "DRAFT, for the committee's approval at its next meeting". Say if the
-   committee opens or closes differently.
-4. Confirm the order when carrying: old business still open first, then the new action items, at most 4.
-5. Confirm that the minutes go with the last meeting that has started (drafted before the meeting starts on the
+3. Read the agenda e-mail and the notes (November 2026: not a business meeting), especially "All AA members are
+   welcome: GVRs, RLVs, GSRs, DCMs and anyone interested in the magazines", "From 7:30 to 8:00: coming events,
+   workshop requests, special offers, magazine topics and GVR and RLV sharing", "After we close at 8:00, the
+   parking lot: stay on for whatever is on your mind", "Opened with a moment of silence and the Serenity Prayer",
+   "Closed with the Responsibility Statement; the parking lot followed." and "DRAFT NOTES of the meeting, for the
+   committee's records". Say if the committee opens or closes differently.
+4. Confirm that the notes go with the last meeting that has started (drafted before the meeting starts on the
    meeting day, they are for last month's meeting).
-6. Glance at the Spanish names of the controls: "Agenda y acta", "Correo con la agenda", "Recordatorio", "Borrador
-   del acta", "Empezar el mes siguiente", "Abrir en mi correo", "Copiar el asunto" (CCO for BCC).
+5. Glance at the Spanish names of the controls: "Agenda y notas", "Correo con la agenda", "Recordatorio", "Borrador
+   de las notas", "Empezar el mes siguiente", "Abrir en mi correo", "Copiar el asunto" (CCO for BCC).
 
 ---
 
@@ -1531,7 +1563,7 @@ In the browser:
 | same | `export const FALLBACKS`, `export function liveFacts` | every `{live:…}` value, and what it says when empty |
 | same | `export function liveData`, `const EVENT_FILTERS` | the rows of each live slide |
 | same | `function driveCopy`, `export function deckJson` | the PowerPoint copy; the whole JSON file |
-| same | `PAPER_KEYS`, `function paperworkProblems`, `const paperMeetings`, `function shapePaper` | the chair's paperwork: the `{paper:…}` facts, the block's rules, the meetings the JSON carries ([3.22](#322-the-chairs-paperwork-agenda--minutes)) |
+| same | `PAPER_KEYS`, `function paperworkProblems`, `const paperMeetings`, `function shapePaper` | the chair's paperwork: the `{paper:…}` facts, the block's rules, the meetings the JSON carries ([3.22](#322-the-chairs-paperwork-agenda--notes)) |
 | [`tests/test_presentations.py`](../tests/test_presentations.py) | `DECKS = (`, `LIVE_KEYS = {`, `LIVE_KINDS = {`, `EVENT_FILTERS = (`, `BANNED = re.compile(`, `def check_deck` | the Python checker: the same lists, kept in step |
 | [`src/_data/presentations.js`](../src/_data/presentations.js) | `PRESENTATIONS_DIR`, `I18N_STRICT` | which folder is read; stop or warn |
 | [`src/pages/presentations-json.11ty.js`](../src/pages/presentations-json.11ty.js) | `permalink` | the JSON's address |
@@ -1539,9 +1571,9 @@ In the browser:
 | [`src/assets/js/presentations-core.js`](../src/assets/js/presentations-core.js) | `var EN = {` | the English words the player writes on slides ("Current as of {date}", "Details to be confirmed", "Online on {platform}", the TIME line) |
 | same | `var LIMIT =`, `var LIMITS =`, `ADD_LAYOUTS`, `LAYOUT_FIELDS` | default list lengths; size limits; what Customize → Add and → Edit offer |
 | same | `function current`, `function schedule`, `function agendaRows`, `function subst`, `function reconcile`, `function validateImport` | what is in the show; times; tokens; updated decks; imported files |
-| same | `function paperMeetings`, `function paperText`, `function nextMonthPlan`, `function startNextMonth`, `function undoNextMonth`, `function lastStart` | Agenda & minutes: which meeting a text is for, the texts, Start next month and its Undo (kept in the deck's stored state as `prev`) |
+| same | `function paperMeetings`, `function paperText`, `function nextMonthPlan`, `function startNextMonth`, `function undoNextMonth`, `function lastStart` | Agenda & notes: which meeting a text is for, the texts, Start next month and its Undo (kept in the deck's stored state as `prev`) |
 | [`src/assets/js/presentations.js`](../src/assets/js/presentations.js) | `function renderSlide`, `function buildPrint`, `OLD_COPY_DAYS`, `var UI =` | how each layout is drawn; the four print modes; the "old copy" notice (14 days); the `{ui:…}` names |
-| same | `function panelPaper`, `MAIL_MAX`, `function mailOut`, `function printPaper` | the Agenda & minutes tab; the longest e-mail link it opens (1,800 characters for the whole `mailto:` link, subject and text once encoded — a space or an accented letter takes 3 or more, so the text that fits is well under 1,800); Open in my e-mail; Print |
+| same | `function panelPaper`, `MAIL_MAX`, `function mailOut`, `function printPaper` | the Agenda & notes tab; the longest e-mail link it opens (1,800 characters for the whole `mailto:` link, subject and text once encoded — a space or an accented letter takes 3 or more, so the text that fits is well under 1,800); Open in my e-mail; Print |
 | `src/_i18n/presentations.json` | `pres.` | every word of the player, English and Spanish |
 | `src/_i18n/orientation.json` | `orientation.pres_` | the cards, the print box, "How presenting works" |
 | `src/_i18n/committee.json` | `committee.docs.present_web` | the Portfolio button and its note |
@@ -1585,6 +1617,12 @@ one commit:
 Nothing changes in the player: it fills in any key it finds in the JSON's `live` map. Because the key starts with
 `meeting_`, a deck that uses it gets the "Committee meeting dates" chip (`KIND_OF_KEY`). Then run the tests
 ([6.8](#68-tests)).
+
+A real one, added this way in November 2026: `store_offers` (the committee meeting's "Special offers"). Its value
+changes with the days of the offers, so `liveFacts` gives it as a fact with steps (`storeOffers`, next to
+`botmList`: one step at each offer's first day and at the midnight after its last), its fallback is in `FALLBACKS`
+("see the Shop page"), and `tests/test_presentations_build.py` (`Facts.test_the_stores_offers`) checks the steps
+on made-up offers. It has no chip.
 
 ### 6.4 Example: another presentation
 
@@ -1652,6 +1690,7 @@ See [Pages and code](pages-and-code.md) for the i18n files in general.
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_build -v` | the build side: the JavaScript checker gives the same lines as the Python one; the sample decks use everything; the JSON's shape; the facts at fixed dates; the README lists every fallback (builds the sample decks in a temporary folder) |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the five real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
 | `.venv\Scripts\python.exe -m unittest tests.test_r12_u9_meeting -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_r12_u9_meeting_browser.py`) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core.Text -v` | `test_plain_lines_to_copy`: what Prepare's **Copy** puts on the clipboard (a page's text, line by line). In a real browser (a built site: `tests/browser/__init__.py`): `ChatMessageCopy` (`tests/browser/test_r26_chat_message.py`), the Grapevine Meeting's chat message copied with its addresses in full and its facts filled in, English and Spanish pages |
 | `python -m unittest discover -s tests` | everything (what Code check runs) |
 
 The `_core` tests need Node.js; the `_build` tests and the real-decks test of `_core` also need the site's tools
@@ -1698,9 +1737,9 @@ See [Automation and troubleshooting](automation-and-troubleshooting.md) for sett
 | "Changed since you edited it" on a slide | the committee changed a slide the presenter had edited | Use the new version, or Keep mine. |
 | The card shows fewer slides than the file has | facilitator pages, slides that start off and slides outside their dates are not counted | Nothing to fix. |
 | "Reset all 5 to the original" is not there | nothing was changed on this device yet | Expected: it appears after the first change. |
-| No **Agenda & minutes** tab in Customize | only a deck with a `paperwork:` block has it: today the committee meeting | Expected for the three workshops and the Grapevine Meeting ([3.22](#322-the-chairs-paperwork-agenda--minutes)). |
+| No **Agenda & notes** tab in Customize | only a deck with a `paperwork:` block has it: today the committee meeting | Expected for the three workshops and the Grapevine Meeting ([3.22](#322-the-chairs-paperwork-agenda--notes)). |
 | **Open in my e-mail** opened an e-mail that says "(Paste the text here: it's on your clipboard.)" | the text is too long for an e-mail link, so it was copied instead | Click in the e-mail, paste (Ctrl+V, or a long press on a phone), put every address in BCC. |
-| The draft minutes say "You started next month on …" and show next month's details | Start next month was pressed before the minutes were drafted | Undo "Start next month" (in the tab, until the next meeting begins), draft the minutes, then start next month again. |
+| The draft notes say "You started next month on …" and show next month's details | Start next month was pressed before the notes were drafted | Undo "Start next month" (in the tab, until the next meeting begins), draft the notes, then start next month again. |
 
 **Where problems are reported:** the "Website update" run (step "Build the website"), the two Code check jobs,
 the checker on the PC, and a local build's console. Deck problems never appear on `/status/` or in the run summary.

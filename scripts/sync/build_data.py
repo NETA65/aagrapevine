@@ -485,9 +485,11 @@ def _local_iso(day: str, hhmm: str | None, tz: ZoneInfo) -> str | None:
 # the topic, and says until when the speaker talks — the words of the web pages' calendar text (src/_i18n/
 # committee.json committee.meeting.speaker / speaker_until; a unit test keeps the two in step).
 _SPEAKER = {"en": "Guest speaker: {name}", "es": "Orador(a) invitado(a): {name}"}
-_SPEAKER_UNTIL = {"en": "The guest speaker's part ends by {until}; committee business follows until {end}.",
+_SPEAKER_UNTIL = {"en": "The guest speaker's part ends by {until}; then coming events, workshop requests, special offers, "
+                        "magazine topics and GVR and RLV sharing until {end}.",
                   "es": "La charla de la persona invitada termina a más tardar a las {until}; luego, hasta las {end}, "
-                        "siguen los asuntos del comité."}
+                        "eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que "
+                        "comparten los RLV y GVR."}
 
 
 def _meeting_clock(hm: tuple[int, int], lang: str) -> str:
@@ -499,9 +501,10 @@ def _meeting_clock(hm: tuple[int, int], lang: str) -> str:
 
 def speaker_sentences(speaker: dict | None, until: tuple[int, int] | None, end: tuple[int, int], lang: str) -> str:
     """A committee meeting's guest speaker in a sentence or two (its summary), "" without one: "Guest speaker: Rick
-    W. — “From NETA 65 to the Conference table: …”. The guest speaker's part ends by 7:30 PM; committee business
-    follows until 8:00 PM." The name and the topic only — the service position is in extra.speaker. (A name alone
-    gets no period of its own: it ends in its initial's — "Guest speaker: Rick W.")"""
+    W. — “From NETA 65 to the Conference table: …”. The guest speaker's part ends by 7:30 PM; then coming events,
+    workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM."
+    The name and the topic only — the service position is in extra.speaker. (A name alone gets no period of its
+    own: it ends in its initial's — "Guest speaker: Rick W.")"""
     if not speaker:
         return ""
     topic = speaker["topic"][lang]

@@ -204,7 +204,7 @@ the document search and translation use all their time; "Full update (started by
 |---|---|
 | change the words on a slide of the five web presentations | [Presentations §2](presentations.md#2-quick-start-change-the-words-on-a-slide) |
 | present or print a web presentation | [Presentations §3.17](presentations.md#317-presenting-the-player-keys-and-presenter-view) and [§3.18](presentations.md#318-printing) |
-| draft the committee meeting's agenda e-mail, reminder and minutes, and start next month | [Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes) |
+| draft the committee meeting's agenda e-mail, reminder and draft notes, and start next month | [Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--notes) |
 | lead the Grapevine Meeting with its script (`grapevine-meeting.yml`), or pick the committee meeting's version for a month with or without a guest speaker | [Presentations](presentations.md) |
 | change a setting: names, contact address, the meeting link, official links … | [Settings §2](settings.md#2-quick-start-change-a-setting-on-github) |
 | undo a settings change | [Settings: undo a change](settings.md#undo-a-change) |
@@ -297,7 +297,7 @@ practice and AA principles → see also.
 | [photos-slides-reports.md](photos-slides-reports.md) | photo albums, reports, minutes, slides, workshop material and sign-up forms: naming, and where they show (Portfolio, Photos, What's New …) |
 | [booth.md](booth.md) | the booth display on the About page: running it at an event, every setting, the Drive booth folder's naming convention, the CSV of quizzes and facts, offline use; the question of the day its CSV feeds |
 | [writers-archive.md](writers-archive.md) | the two exports of the magazines' online archives in `content/archive/` behind "Texas writers through the years" on `/published/`: names, columns, replacing a file, the safety checks, how Area 65 is decided |
-| [presentations.md](presentations.md) | the five web presentations on the GVR / RLV 101 page (`config/presentations/`): editing slides, facts that stay current, versions, printing; the chair's agenda e-mail, reminder and draft minutes |
+| [presentations.md](presentations.md) | the five web presentations on the GVR / RLV 101 page (`config/presentations/`): editing slides, facts that stay current, versions, printing; the chair's agenda e-mail, reminder and draft notes |
 | [settings.md](settings.md) | `config/site.yml` section by section, and the other settings files, with examples and where each setting shows |
 | [translations.md](translations.md) | English and Spanish: fix a machine translation, one word everywhere, the words on buttons and headings, your own Spanish for a post or an event |
 | [email-and-alerts.md](email-and-alerts.md) | the monthly digest e-mail (SMTP, its secrets, previews, recipients, sending once or again), GitHub's "run failed" e-mails, the three automatic issues, the morning alarm |

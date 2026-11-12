@@ -1287,15 +1287,18 @@ kept per visitor is `localStorage["gv-orientation-v1"]` = `{ v: 1, done: [lesson
 One file per deck of `presentations.decks`, fetched by the player on `/orientation/` (`src/pages/presentations-json.11ty.js`,
 whose header lists the fields every deck has — `app` … `slides`, not `paperwork`, which `eleventy/filters/presentations.js`
 describes at `shapePaper` and `paperMeetings`; `deckJson` makes them all). Since October 2026 a deck with a
-`paperwork:` block — today only `committee-meeting.yml`: the chair's Customize → Agenda & minutes; the checker,
+`paperwork:` block — today only `committee-meeting.yml`: the chair's Customize → Agenda & notes; the checker,
 `paperworkProblems`, names any mistake in it — also has a top-level `paperwork` (`shapePaper` + `paperMeetings`):
 ```json
 "paperwork": { "agenda_slide": "agenda",              // the agenda slide whose rows the agenda e-mail lists
   "speaker_slide": "speaker-intro",                   // a version that leaves it out names no guest speaker
   "agenda": { "subject": "…", "body": "…" },          // also "reminder" and "minutes"; null when the checker refused one
-  "next_month": { "actions": ["action_1", "…"], "old_business": ["old_1", "…"], "minutes_month": "minutes_month",
-                  "clear": ["minutes_sent", "…"],       // every blank "Start next month" clears ("chair_*" written out;
-                                                        // never a blank shared by every deck)
+  "next_month": { "actions": [], "old_business": [], "minutes_month": "",
+                                                        // only a deck with action items and old business rows (the
+                                                        // sample in tests/fixtures/presentations) fills these three
+                  "clear": ["topic", "topic_why", "…", "gv_story", "lv_story"],
+                                                        // every blank "Start next month" clears ("topic_*",
+                                                        // "volunteer_*" written out; never a blank shared by every deck)
                   "untick": ["week-before"] },          // the checklist pages it unticks
   "meetings": [ { "ymd": "2026-08-19", "start": "2026-08-20T00:00:00.000Z", "end": "2026-08-20T01:00:00.000Z",
                   "label": "Wednesday, August 19, 2026", "label_es": "miércoles, 19 de agosto de 2026",

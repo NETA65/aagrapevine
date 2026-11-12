@@ -956,6 +956,14 @@ SITE_X = {
     # the passcode has letters and no phone passcode is set yet: a caller's passcode is unknown ("")
     "phone_access": {"numbers": [{"number": "+1 346 248 7799", "city": "Houston"}, {"number": "+1 312 626 6799", "city": "Chicago"}],
                      "committee": {"phone_passcode": ""}},
+    # the stores' offers (config/site.yml store_offers): a gift offer the stores give no first day for (shown from
+    # October 10: "through December 31"), and free shipping from November 1, both to December 31
+    "store_offers": [
+        {"key": "free-shipping-2099", "title": "Free shipping at the Grapevine and La Viña stores", "starts": "2099-11-01",
+         "ends": "2099-12-31", "gv": {"text": "Free shipping on all Grapevine products."}, "lv": {"text": "Free shipping on all La Viña products."}},
+        {"key": "gifts-2099", "title": "Holiday gift offers at the Grapevine and La Viña stores", "starts": "2099-10-10", "show_starts": False,
+         "ends": "2099-12-31", "icon": "gift", "gv": {"text": "A second 1-year print subscription as a gift."}},
+    ],
 }
 # The same meeting on Google Meet (no passcode, no number to call), with its guest speakers: October's confirmed and
 # sharing slides, November's not confirmed yet, December's one the site must leave out (a full last name)
@@ -1644,6 +1652,21 @@ class Facts(unittest.TestCase):
         self.assertEqual((live["site"], live["site_url"], live["email"], live["panel"]),
                          ("neta65.github.io/aagrapevine", "https://neta65.github.io/aagrapevine/", "grapevine@neta65.org", "Panel 77 (2027–2028)"))
         self.assertEqual((live["as_of"], live["month"]["value"], live["year"]["value"]), ("October 15, 2099", "October 2099", "2099"))
+
+    def test_the_stores_offers(self):
+        """{live:store_offers}: the offers on at the moment, first day first, each "Title (its days)" as /shop/#offers
+        gives them; a step at each offer's first day and at the midnight after its last; none on: the Shop page."""
+        gifts = "Holiday gift offers at the Grapevine and La Viña stores (through December 31, 2099)"
+        both = gifts + "; Free shipping at the Grapevine and La Viña stores (November 1 – December 31, 2099)"
+        fb = "see the Shop page"
+        self.assertEqual(self.oct["live"]["store_offers"], {"value": gifts, "steps": [{"from": NOV1, "value": both}, {"from": JAN1, "value": ""}],
+                                                            "fallback": fb})
+        self.assertEqual(live_at(self.oct["live"]["store_offers"], NOV1), both, "a copy opened on November 1")
+        self.assertEqual(live_at(self.oct["live"]["store_offers"], JAN1), fb, "both over")
+        self.assertEqual(self.r["november"]["live"]["store_offers"], {"value": both, "steps": [{"from": JAN1, "value": ""}], "fallback": fb})
+        self.assertEqual(self.r["september"]["live"]["store_offers"]["value"], "", "none on yet: where to look")
+        self.assertEqual(self.r["september"]["live"]["store_offers"]["steps"][0]["value"], gifts, "from October 10")
+        self.assertEqual(self.r["january"]["live"]["store_offers"], {"value": "", "fallback": fb})
 
     def test_the_deck_file_drive_copy_and_closing_qr(self):
         d = self.r["deck"]

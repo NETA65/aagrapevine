@@ -342,7 +342,7 @@ input.sr-only:focus-visible + .gvp-filelabel { outline: 3px solid #0a5fa8; outli
 .gvp-check input:checked + .gvp-check-t { color: #57526a; text-decoration: line-through; }
 .gvp-check .gvp-blank { color: #b8430b; font-weight: 700; }
 
-/* Agenda & minutes (the chair's paperwork): each text as it will go out — its line breaks kept, long words broken —
+/* Agenda & notes (the chair's paperwork): each text as it will go out — its line breaks kept, long words broken —
    in a box of its own that scrolls; "Start next month"'s choices (tick boxes, never struck through: a choice, not a
    task done) */
 .gvp-out { max-height: 18rem; overflow-y: auto; margin-top: 0.6rem; padding: 0.65rem 0.8rem; border: 1px solid #857f95; border-radius: 0.6rem;
@@ -366,7 +366,7 @@ input.sr-only:focus-visible + .gvp-filelabel { outline: 3px solid #0a5fa8; outli
   .gvp:not([data-mode="presenter"]).has-drawer .gvp-main { flex: 0 0 38%; }
   .gvp-drawer { flex: 1; width: auto; border-left: 0; border-top: 1px solid #d9d2c4; }
   .gvp.has-drawer .gvp-notes { display: none; }
-  /* the tabs: one row that scrolls sideways, so however many tabs a deck has (eight with Agenda & minutes) and
+  /* the tabs: one row that scrolls sideways, so however many tabs a deck has (eight with Agenda & notes) and
      however large the text, they never push the panel down out of the drawer or under the control bar (the chosen
      tab is scrolled into sight: presentations.js tabInSight). Room above and beside them for the focus ring. */
   .gvp-tabs { flex: none; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
@@ -818,7 +818,7 @@ input.sr-only:focus-visible + .gvp-filelabel { outline: 3px solid #0a5fa8; outli
   .gvp-s-tkline.is-rule { display: block; min-height: 0.46in; border-bottom: 1pt solid #6e6980; }
   /* a facilitator's page keeps its instructions (its notes) under it */
   .gvp-pp-notes--page { margin-top: 12pt; padding-top: 7pt; border-top: 0.75pt solid #bbb; }
-  /* the chair's draft minutes (Customize → Agenda & minutes → Print): a page of text, portrait */
+  /* the chair's draft notes (Customize → Agenda & notes → Print): a page of text, portrait */
   .gvp-print--paper { page: gvp-port; font-size: 10.5pt; line-height: 1.45; }
   .gvp-paper-h { font-family: var(--font-display); font-size: 16pt; font-weight: 600; color: #0b2f55; }
   .gvp-paper-sec { margin-top: 9pt; break-inside: avoid; }

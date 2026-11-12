@@ -80,8 +80,11 @@ site:
 # ---------------------------------------------------------------------
 #  Committee meeting (next date + countdown are computed automatically)
 #  Online on Google Meet, in the same room as our Grapevine Meeting (see
-#  recurring_events below). From January 2027 each meeting opens with a
-#  guest speaker (`speakers:` at the end of this block).
+#  recurring_events below). Not a business meeting: from January 2027 each
+#  meeting opens with a guest speaker (`speakers:` at the end of this
+#  block) until `speaker_until`; then coming events, workshop requests,
+#  special offers, magazine topics and GVR and RLV sharing until `end`, the
+#  Responsibility Statement, and the parking lot after the close.
 # ---------------------------------------------------------------------
 meeting:
   # Recurrence: which weekday of the month (1-5, or -1 for "last").
@@ -111,18 +114,20 @@ meeting:
   # month, "January 2027 Committee Meeting - guest speaker", is that month's. Never start the name with a
   # day ("2027-01-20 …"): a flyer named with its date becomes an event of its own.
   flyer_match: "committee meeting *[-–—] *(flyer|guest speaker)"
-  # The guest speaker's part ends by this time (24h, Central); committee business follows until `end`.
+  # The guest speaker's part ends by this time (24h, Central); then coming events, workshop requests, special
+  # offers, magazine topics and GVR and RLV sharing until `end`. A night without a guest speaker shares on a
+  # topic until this time, then the same second half.
   speaker_until: "19:30"
   # Guest speakers — one block per meeting: its date (a 3rd Wednesday), the speaker's first name and last
   # initial only ("Rick W." — never a full last name, an e-mail or a phone number), their service position
   # and the topic, each with its Spanish (`_es`). Every speaker listed here shows on the site (/meetings/,
   # the Events page, the calendars, the decks). `confirmed:` is for the chair only, never shown: a speaker
   # of the next 45 days who is not confirmed yet is listed in the Actions run summary. A meeting with no
-  # block, up to the list's last one, has no guest speaker (Nov 18 and Dec 16, 2026): the decks say "none
-  # tonight". After the last block, the decks say "to be announced" until the next speakers are listed
-  # (/meetings/ names no guest speaker for those dates). A block with a mistake (a date that is not a
-  # meeting day, a full name) is left out (the decks say "to be announced" for its meeting), and the run
-  # summary says why.
+  # block, up to the list's last one, has no guest speaker (Nov 18 and Dec 16, 2026: a topic to share on
+  # instead): the decks say "none tonight". After the last block, the decks say "to be announced" until the
+  # next speakers are listed (/meetings/ names no guest speaker for those dates). A block with a mistake (a
+  # date that is not a meeting day, a full name) is left out (the decks say "to be announced" for its
+  # meeting), and the run summary says why.
   speakers:
     - date: "2027-01-20"
       name: "Rick W."
@@ -368,7 +373,10 @@ price_changes:
 #   · on /shop/ (#offers, right under the page's menu): the offer's days,
 #     what each store says, its banner and a button to the store;
 #   · in the monthly toolkit (/monthly/: "Keep up all month" and the
-#     month's message, in the months the offer runs).
+#     month's message, in the months the offer runs);
+#   · on the committee meeting's "Special offers" slide
+#     ({live:store_offers}: its title and days, read aloud by the chair,
+#     so write a title that reads well in a sentence).
 #  It shows from 00:00 Central on `starts` and is gone by itself the day
 #  after `ends` (also on a page that is open, or saved for offline use);
 #  after that the block may be deleted.

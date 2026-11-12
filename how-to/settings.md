@@ -226,7 +226,7 @@ built, so they stay right even on a day the daily sync fails.
 | `note` / `note_es` | "All AA members are welcome to attend. No registration required." / "Todos los miembros de AA pueden asistir. No hace falta registrarse." | Who may come, in a line (since October 2026): the first sentence of the *Who can come* card on `/meetings/` (`note_es` on `/es/meetings/`), the end of the meeting's calendar descriptions (`/events.ics`, the Google and Outlook links, the home page's add-to-calendar) and the Area report's *Next committee meeting*. Write both: without `note_es` the Spanish pages show the English line (the entries in `data/site/events.json` get a machine translation). |
 | `skip_dates` | `[]` | Meeting days that do not happen, `["YYYY-MM-DD", …]`. Only that month's real meeting day counts; any other date is ignored and reported. |
 | `flyer_match` | `"committee meeting *[-–—] *(flyer\|guest speaker)"` | Finds the meeting's flyers on our Drive (the `flyers` folder only): "Committee Meeting - flyer" is every meeting's, "January 2027 Committee Meeting - guest speaker" is January's. The flyer shows on the meeting's `/events/` card ("View flyer") and goes into its calendar entry. See [The meeting's flyers](#the-meetings-flyers-flyer_match) below. |
-| `speaker_until` | `"19:30"` | When the guest speaker's part ends (24-hour, Central). The calendar text and the Events page then say "The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM." It must be between `start` and `end`; anything else is left out, with a Settings problem. |
+| `speaker_until` | `"19:30"` | When the guest speaker's part ends (24-hour, Central) — on a night without one, when the topic sharing ends. The meeting's calendar text (also behind the Events page's add-to-calendar) then says "The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM." It must be between `start` and `end`; anything else is left out, with a Settings problem. |
 | `speakers` | 12 blocks, Jan 20 – Dec 15, 2027 | The guest speakers, one block per meeting: see [The guest speakers](#the-guest-speakers-speakers) below. |
 
 Examples (checked; "today" = October 2, 2026):
@@ -258,8 +258,8 @@ Where the meeting shows:
   **`/monthly/`** (toolkit, posters, messages), **`/digest/`** and the monthly e-mail, the GV/LV report (the
   district report, and the Area report's committee meetings, worked out from the rule with the skip dates), and
   the presentations (`{live:meeting_next}`, `meeting_rule`, `meeting_time`, the meeting's link and code, the next
-  guest speaker; the committee meeting deck's *Agenda & minutes* uses the same dates:
-  [presentations.md](presentations.md#322-the-chairs-paperwork-agenda--minutes)). (The search lists the Meetings
+  guest speaker; the committee meeting deck's *Agenda & notes* uses the same dates:
+  [presentations.md](presentations.md#322-the-chairs-paperwork-agenda--notes)). (The search lists the Meetings
   page, not each meeting.)
 
 > **Note — the rest of the words are the site's own.** After `note`, the *Who can come* card goes on with
@@ -286,11 +286,16 @@ Where the meeting shows:
 
 #### The guest speakers (`speakers:`)
 
-From January 20, 2027, every committee meeting opens with a guest speaker. The evening: at 7:00 a moment of
-silence, the Serenity Prayer and the speaker's introduction; at about 7:02 the talk (about 20 minutes); at about
-7:22 questions; the speaker is thanked and done **by 7:30** (`speaker_until`); from 7:30 to 8:00 committee
-business. November 18 and December 16, 2026 have no guest speaker. One block per meeting, at the end of
-`meeting:`:
+From January 20, 2027, every committee meeting opens with a guest speaker. The committee meeting is **not a
+business meeting** (no minutes, reports, treasurer or old and new business). The evening: at 7:00 a moment of
+silence, the Serenity Prayer, the speaker's welcome and the topic's introduction; at about 7:02 the talk (about 20
+minutes); at about 7:22 questions; the speaker is thanked and done **by 7:30** (`speaker_until`); from 7:30 to
+8:00 coming events and workshop requests, special offers (the stores' current offers, both Books of the Month,
+Carry the Message), magazine topics (this month's issues, the next themes and deadlines) and GVR and RLV sharing
+(experience, not reports); at 8:00 the Responsibility Statement; then the parking lot, an open "meeting after the
+meeting" for whatever is on your mind. November 18 and December 16, 2026 have no guest speaker: the chair
+introduces a topic and members share on it until 7:30, then the same second half. One block per meeting, at the
+end of `meeting:`:
 
 ```yaml
   speakers:
@@ -313,11 +318,13 @@ business. November 18 and December 16, 2026 have no guest speaker. One block per
 
 Where the speakers show — the name, the position and the topic, never `confirmed`:
 - `/meetings/`: the next meeting's speaker, "How the evening runs" (7:00 opening · 7:02 guest speaker · 7:22
-  questions · 7:30 committee business · 8:00 close) and the year's speaker schedule (date, name, position, topic);
+  questions · 7:30 events, offers, topics and sharing · 8:00 close, then the parking lot) and the year's speaker
+  schedule (date, name, position, topic); a date without a speaker shows "What happens at our committee meeting"
+  instead (a topic to share on until 7:30, then the same second half, in six steps);
 - the home page's next-meeting card and each committee card on `/events/` ("Guest speaker: Rick W.");
 - each meeting's calendar entry (`/events.ics`, the Google and Outlook links, the downloaded `.ics` file): "Guest
-  speaker: Rick W. — <position>", "Topic: “…”" and "The guest speaker's part ends by 7:30 PM; committee business
-  follows until 8:00 PM.";
+  speaker: Rick W. — <position>", "Topic: “…”" and "The guest speaker's part ends by 7:30 PM; then coming events,
+  workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.";
 - the `/monthly/` toolkit, posters and messages, the GV/LV report, the booth display and the committee meeting's
   presentation (its speaker slides, agenda rows and paperwork).
 
@@ -451,8 +458,13 @@ events"; the calendar feeds; the `/monthly/` toolkit, posters and messages; the 
 taken place; the Area report; the booth display's "Meetings you can join"; and its own section,
 `/meetings/#grapevine-meeting`. Search engines are not told about it (an online-only event). Its chair's script is
 the presentation `config/presentations/grapevine-meeting.yml` ([presentations.md](presentations.md)): it opens
-with a moment of silence, the Serenity Prayer and **the AA Grapevine Statement of Purpose**, read aloud from the
-current issue or from aagrapevine.org — named on the site, never printed there (AA Grapevine's text).
+with a moment of silence, the Serenity Prayer and **the AA Grapevine Statement of Purpose** in place of the AA
+Preamble, read aloud from the current issue or from aagrapevine.org — named on the site, never printed there (AA
+Grapevine's text); then a welcome to first-timers and members from across the Area, a story from the current
+Grapevine (its reader shares first), sharing (3 to 5 minutes each), Carry the Message in place of a basket (the
+meeting has no expenses; your Seventh Tradition goes to your home group), the announcements and the Responsibility
+Statement at 8:00. Its section on `/meetings/` says so in five steps (`committee.gvmeeting.*` in
+`src/_i18n/committee.json`).
 
 The two meetings share one room on different Wednesdays (1st and 3rd), and the site keeps them apart: an outside
 calendar that lists the committee meeting in that room is never taken for a moved Grapevine Meeting. **Never call
@@ -557,7 +569,10 @@ it shows:
   The menu has no chip for it (a chip cannot come and go by date);
 - in the monthly toolkit, in each month the offer runs: a line in *Keep up all month* (this month's page) and in
   the month's message (WhatsApp and e-mail; in WhatsApp its heading starts with 📦, or 🎁 for an offer with
-  `icon: gift`), both linking the offer's own section, `/shop/#offers-<key>`.
+  `icon: gift`), both linking the offer's own section, `/shop/#offers-<key>`;
+- in the committee meeting's presentation, the *Special offers* slide (`{live:store_offers}`): each offer's `title`
+  and its days, joined with "; ", from its first day to the midnight after its last. The chair reads it aloud, so
+  write the title so it reads well in a sentence.
 
 The day after `ends` it is gone by itself — also on a page that is open, or saved for offline use — so there is
 nothing to switch off; the block may then be deleted. While a block is here, Home's *Shared by the committee*
@@ -1179,8 +1194,8 @@ One YAML file per deck (`orientation-workshop`, `information-workshop`, `writing
 address, `meeting:` (its Google Meet link and code, and each meeting's guest speaker), `phone_access:`,
 `price_changes:`, the La Viña workshop and the Grapevine Meeting in `recurring_events:` and
 `lavina_weekly_open:`. The committee meeting deck's `paperwork:` block (the
-chair's agenda e-mail, reminder and draft minutes) follows `meeting:` and `site: committee_es` too
-([presentations.md §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes)). One deck problem stops the
+chair's agenda e-mail, reminder and draft notes) follows `meeting:` and `site: committee_es` too
+([presentations.md §3.22](presentations.md#322-the-chairs-paperwork-agenda--notes)). One deck problem stops the
 build. Everything else: [presentations.md](presentations.md) and
 [config/presentations/README.md](../config/presentations/README.md) (editing that README does not start a
 rebuild).
@@ -1304,7 +1319,7 @@ search (faster). Write access is enough (MKP715).
 | `/status/` | `site: repository` (Actions button), `morning_goal` (the daily quote's mornings); `sources: ics_feeds` ("Other calendars") |
 | RSS `/feed.xml`, `/es/feed.xml` | `site: url`, `contact_email` |
 | Search engines: every page's structured data (README → "Search engines") | `site: committee`, `committee_es`, `area`, `area_website`, `committee_page`, `contact_email`, `title`; `site: search_engines` (`bing_verification` / `yandex_verification`: home page only; `indexnow_key`: the key file and Website update's IndexNow step) |
-| The presentations | `{live:…}` facts from `contact_email`, the site address, `meeting:`, `phone_access:`, `price_changes:`, `recurring_events:`, `lavina_weekly_open:`; the committee meeting's *Agenda & minutes* also `meeting:` (its dates) and `site: committee_es` (the reminder's Spanish paragraph, `{paper:committee_es}`) |
+| The presentations | `{live:…}` facts from `contact_email`, the site address, `meeting:`, `phone_access:`, `price_changes:`, `store_offers:` (the committee meeting's *Special offers* slide, `{live:store_offers}`: each offer with its days, switching when an offer starts or ends), `recurring_events:`, `lavina_weekly_open:`; the committee meeting's *Agenda & notes* also `meeting:` (its dates) and `site: committee_es` (the reminder's Spanish paragraph, `{paper:committee_es}`) |
 
 ---
 
@@ -1445,7 +1460,7 @@ update* still publishes it:
 | `tests/test_presentations.py`, `tests/test_presentations_core.py` | Exactly the five decks, each passing the checker |
 | `tests/test_r12_u6_newcomers.py` (class `RealSettings`) | `links: aa_find`, `aa_is_aa_for_you`, `aa_meeting_guide` on www.aa.org, each `_es` twin the same page under `/es/`; the *New to AA?* offices are exactly the `meetings: feeds` offices with `in_area: true`, Alcohólicos Anónimos Dallas first on `/es/` |
 | `tests/test_r12_u5_gvr.py` (class `OfficeAddresses`) | `links: gvr_office_email` and `rlv_office_email` are e-mail addresses (any domain) |
-| `tests/test_r12_u9_meeting.py` (classes `RealDeck`, `Texts`, `NextMonth`) | The committee meeting deck's `paperwork:` block passes the checker, its texts word for word, and what *Start next month* clears and keeps ([presentations.md](presentations.md#322-the-chairs-paperwork-agenda--minutes)) |
+| `tests/test_r12_u9_meeting.py` (classes `RealDeck`, `Texts`, `NextMonth`) | The committee meeting deck's `paperwork:` block passes the checker, its texts word for word, and what *Start next month* clears and keeps ([presentations.md](presentations.md#322-the-chairs-paperwork-agenda--notes)) |
 | `tests/test_r20_meeting.py` (class `RealSettings`) | The committee meeting on Google Meet (a `meet.google.com` link, its code as `meeting_id`, no `zoom_url` or `passcode`, no `phone_access: committee:`); the Grapevine Meeting on the 1st Wednesday, 7–8 PM, from `2026-12-02`, in that room, linking `/meetings/#grapevine-meeting`; the CityWide booth 5:30–7:30 PM at "Lovers Lane" (no apostrophe); the 12 guest speakers of 2027 on the 3rd Wednesdays ("First L." names, a position and a topic in both languages, no e-mail or phone number, no "A.A."), `speaker_until` 19:30; the Drive flyer names ([3.2](#the-meetings-flyers-flyer_match)) each found by the right `flyer_match` |
 
 Other tests read the real settings without a fixed value (`test_digest_parity.py`, `test_morning.py`,

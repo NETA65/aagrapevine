@@ -65,8 +65,8 @@
    deck_version, exported, preset, hidden, shown, order, edits, added, fill, shared, checks }. validateImport()
    is strict — the right app and deck, sizes, known layouts and fields, strings (never HTML) — and says why not.
 
-   THE CHAIR'S PAPERWORK (a deck with a `paperwork:` block — the committee meeting's Customize → Agenda & minutes):
-   paperText() makes its agenda e-mail, reminder and draft minutes from the blanks and the day's facts (plain text;
+   THE CHAIR'S PAPERWORK (a deck with a `paperwork:` block — the committee meeting's Customize → Agenda & notes):
+   paperText() makes its agenda e-mail, reminder and draft notes from the blanks and the day's facts (plain text;
    a line whose blanks are all empty is left out), for the meeting each one is for (paperMeetings: the next one, or
    the last one held); nextMonthPlan() / startNextMonth() / undoNextMonth() carry the open action items into next
    month's old business, clear the one-night blanks and keep what they replaced (ds.prev) for an Undo — offered
@@ -158,7 +158,7 @@
     ui: {
       customize: "Customize", version: "Version", slides: "Slides", edit: "Edit", add: "Add", your_details: "Your details",
       prepare: "Prepare", save_share: "Save & share", notes: "Notes", overview: "Overview", presenter_view: "Presenter view",
-      print: "Print", full_screen: "Full screen", black_screen: "Black screen", paperwork: "Agenda & minutes",
+      print: "Print", full_screen: "Full screen", black_screen: "Black screen", paperwork: "Agenda & notes",
     },
     // the chair's paperwork (paperText): a meeting the site has no date for; the committee's name in Spanish when
     // the deck's file has none (config/site.yml site.committee_es); an action item carried to old business
@@ -1055,6 +1055,23 @@
     });
     return out;
   }
+  /** A page's text as plain text to paste somewhere (Customize → Prepare: Copy, on a `text` page for the presenter —
+   *  the Grapevine Meeting's message for the Google Meet chat): line by line, its tokens filled in and its marks
+   *  gone — a link keeps its words only, so such a page writes its addresses out in full —, its line breaks kept
+   *  (plain() alone would make them spaces) and at most one empty line between its paragraphs; the build's word
+   *  joiners go, as in the paperwork's texts (plainSpaces). Each line is filled in on its own, so on such a page a
+   *  mark opens and closes on the same line ({lang:es}…{/lang}, **bold**, a [label](url)): one that crosses a line
+   *  break would be copied with its marks left over. */
+  function plainLines(text, ctx) {
+    var out = [];
+    String(isStr(text) ? text : "").replace(/\r\n?/g, "\n").split("\n").forEach(function (l) {
+      var s = plainSpaces(plain(rich(l, ctx))).replace(/\s+$/, "");
+      if (s.trim()) out.push(s);
+      else if (out.length && out[out.length - 1] !== "") out.push("");
+    });
+    while (out.length && out[out.length - 1] === "") out.pop();
+    return out.join("\n");
+  }
   // A notes line's label: SAY: · DO: · IF TIME, ASK: · FACILITATOR TIP: · RUNNING LATE? · 20-MINUTE VERSION (…):
   // · EN ESPAÑOL (…): — capitals with Spanish accents too
   var LABEL = /^((?:[A-Z0-9ÁÉÍÓÚÑÜ][A-Z0-9ÁÉÍÓÚÑÜ'’.&\/]*)(?:[ ,–-]+[A-Z0-9ÁÉÍÓÚÑÜ][A-Z0-9ÁÉÍÓÚÑÜ'’.&\/]*)*(?:\s+\([^)\n]{1,90}\))?[:?])\s+([\s\S]*)$/;
@@ -1550,7 +1567,7 @@
   }
 
   /* ------------------------------------------------------------------ the chair's paperwork
-     A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
+     A deck's `paperwork` (the committee meeting's Customize → Agenda & notes; eleventy/filters/presentations.js
      shapePaper, the deck JSON's `paperwork`): { agenda_slide, speaker_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
      start, end, label, label_es, month, speaker?: { name, position, topic, position_es, topic_es }, no_speaker?: true
@@ -1844,7 +1861,7 @@
   }
   /**
    * The last "Start next month" (ds.prev) as the paperwork sees it at nowMs → null (none), or { at, held, current }.
-   * `current`: no meeting has begun since the one it closed (`held`) — the draft minutes are still that meeting's,
+   * `current`: no meeting has begun since the one it closed (`held`) — the draft notes are still that meeting's,
    * made from next month's details (its own are gone: the Undo brings them back). Once the next meeting has begun,
    * the details are that meeting's own: the minutes are for it, and an Undo would replace its details with the ones
    * from before the start — so the player no longer offers it (the next "Start next month" replaces ds.prev).
@@ -1873,7 +1890,7 @@
     // blanks
     fillDefs: fillDefs, fillValue: fillValue, fillsIn: fillsIn, fillGroups: fillGroups, emptyBlanks: emptyBlanks,
     // text
-    subst: subst, inline: inline, rich: rich, plain: plain, safeHref: safeHref, showUrl: showUrl, noteLines: noteLines,
+    subst: subst, inline: inline, rich: rich, plain: plain, plainLines: plainLines, safeHref: safeHref, showUrl: showUrl, noteLines: noteLines,
     fmt: fmt, BLANK_OPEN: BLANK_OPEN, BLANK_CLOSE: BLANK_CLOSE,
     // editing
     fieldsOf: fieldsOf, kindOf: kindOf, toText: toText, fromText: fromText, setField: setField, resetSlide: resetSlide,
