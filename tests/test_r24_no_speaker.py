@@ -12,8 +12,9 @@ The others judge what the committee edits (scripts/ops/gate_tests.py CONTENT_TES
 committee's deck and the lessons —
   * Deck       — the committee meeting's deck as the build writes it (deckJson) and the player draws it
                  (presentations-core.js): the "Next meeting" slide on November 11 and 18 says "Guest speaker: none
-                 this time" (December 16), in every version, and January's speaker from midnight after November 18
-                 (a copy opened later too); the version notes name every meeting before January 20, 2027, in
+                 this time" (December 16), in both versions, and January's speaker from midnight after November 18
+                 (a copy opened later too); "No guest speaker" shows tonight's topic and the sharing on it in place
+                 of the speaker's slides; the version notes name every meeting before January 20, 2027, in
                  English and Spanish; on January 10, 2027 no slide or note of any version reads "Rick W.." (a
                  name ends with its own period) — every text of a slide (an agenda row's too), and with next
                  month's speaker a bare name ("Greg G.", listed without a topic).
@@ -247,13 +248,15 @@ class Deck(unittest.TestCase):
         r = self.run_deck("""
             const st = G.emptyState();
             out({ full: draw(st, "", input.now, "next-meeting"), none: draw(st, "no-speaker", input.now, "next-meeting"),
-                  topic: draw(st, "topic", input.now, "next-meeting"), later: draw(st, "", input.later, "next-meeting"),
+                  later: draw(st, "", input.later, "next-meeting"),
+                  topic: draw(st, "no-speaker", input.now, "topic-of-the-month"), sharing: draw(st, "no-speaker", input.now, "topic-sharing"),
+                  offTopic: draw(st, "", input.now, "topic-of-the-month"), ns: draw(st, "no-speaker", input.now, "speaker-intro"),
                   intro: draw(st, "", input.now, "speaker-intro"), talk: draw(st, "", input.now, "speaker-talk"),
                   title: draw(st, "", input.now, "title", "notes"),
                   thanks: draw(st, "", input.now, "speaker-thanks", "notes"),
                   presets: D.presets.map((p) => ({ id: p.id, note: p.note })) });""",
             NOV11, later=NOV19)
-        for v in ("full", "none", "topic"):
+        for v in ("full", "none"):
             self.assertTrue(r[v]["shown"], v)
             self.assertTrue(r[v]["items"][0].startswith("Wednesday, December 16, 2026"), r[v]["items"][0])
             self.assertEqual(r[v]["items"][1], "Guest speaker: none this time", v)
@@ -271,6 +274,12 @@ class Deck(unittest.TestCase):
         self.assertIn("No guest speaker is listed for tonight: choose the version 'No guest speaker'", notes)
         self.assertNotIn("December 16, 2026, or the speaker", notes)
         self.assertIn("Next month's guest speaker: none this time; we hope to see you all then.", " ".join(r["thanks"]["notes"]))
+        # "No guest speaker": tonight's topic and the sharing on it in place of the speaker's slides (they start switched
+        # off, so the first version leaves them out)
+        self.assertTrue(r["topic"]["shown"] and r["sharing"]["shown"])
+        self.assertFalse(r["offTopic"]["shown"], "the first version: the speaker's talk takes its place")
+        self.assertFalse(r["ns"] and r["ns"]["shown"], "no speaker's slide in 'No guest speaker'")
+        self.assertEqual(r["topic"]["title"], "Tonight's topic: [topic]")
         # the version notes: every meeting before January 20, 2027, in English and Spanish
         notes = {p["id"]: p["note"] for p in r["presets"]}
         for pid in ("full", "no-speaker"):
@@ -356,7 +365,7 @@ class Paperwork(unittest.TestCase):
             out({ full: texts(""), none: texts("no-speaker"), without: plain(G.noSpeakerPreset(D)).id });""", now=NOV11)
         full, none = r["full"], r["none"]
         self.assertEqual(full["agenda"]["meeting"]["ymd"], "2026-11-18")
-        self.assertIn("\n7:02  Guest speaker: none at this meeting\n", full["agenda"]["text"])
+        self.assertIn("\n7:01  Guest speaker: none at this meeting\n", full["agenda"]["text"])
         self.assertTrue(full["agenda"]["speakerNone"], "the panel warns: the first version keeps the speaker's part")
         self.assertFalse(full["reminder"]["speakerNone"], "the agenda e-mail's word only: the reminder names no speaker")
         self.assertFalse(full["minutes"]["speakerNone"])

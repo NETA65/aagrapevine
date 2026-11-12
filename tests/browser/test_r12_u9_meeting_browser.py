@@ -1,17 +1,18 @@
-"""Round 12 · the committee meeting's paperwork (Customize → Agenda & minutes) on the built site, in a real browser
+"""Round 12 · the committee meeting's paperwork (Customize → Agenda & notes) on the built site, in a real browser
 (tests/browser/__init__.py says how to run these; they share test_site_in_browser.py's site server and browser):
 
   * MeetingPaperwork — the tab is there for the committee meeting only; its three texts (the agenda e-mail, the
-                       reminder with its paragraph in Spanish, the draft minutes) show the chair's details and never
-                       the first name kept for the notes; "Copy" puts the text on the clipboard; "Start next month"
-                       carries the ticked items into old business, clears tonight's blanks and the checklist, and its
-                       Undo is still there after a reload and puts everything back. In Spanish on a 360-pixel phone at
+                       reminder with its paragraph in Spanish, the draft notes) show the chair's details and never
+                       the first name kept for the notes, nor a blank of the old business slides kept on the device;
+                       "Copy" puts the text on the clipboard; "Start next month" (nothing to carry: the committee
+                       meeting has no old business) clears tonight's blanks and the checklist, says so without any
+                       "0 items", and its Undo is still there after a reload and puts everything back. In Spanish on a 360-pixel phone at
                        150 % text: Spanish controls and dates, the English texts marked English, nothing wider than
                        the drawer, no sideways scroll, and no script error anywhere; the drawer's tabs (one row that
                        scrolls sideways) never push its panel off the screen or under the control bar, and each tab,
                        reached with the arrow keys, is whole on the screen and takes a tap — the workshops' too.
-                       Once the next meeting has begun, the draft minutes no longer say to undo "Start next month"
-                       and its Undo is gone (it would replace that meeting's details); minutes printed the morning
+                       Once the next meeting has begun, the draft notes no longer say to undo "Start next month"
+                       and its Undo is gone (it would replace that meeting's details); notes printed the morning
                        after are named with their meeting's date. A text too long for a mailto: link opens no e-mail
                        when the page cannot copy it (its "paste here" would paste whatever the clipboard held), and
                        the long message saying so stays as long as it takes to read it, with an OK the keyboard
@@ -35,11 +36,11 @@ from urllib.parse import unquote
 from .test_site_in_browser import S, new_context, open_page, setUpModule, tearDownModule  # noqa: F401 (its site server)
 
 STATE_KEY = "gv-presentations-v1"
-# What the chair typed (presentations-core.js state); the first name is notes_only: never in a text
+# What the chair typed (presentations-core.js state); the first name is notes_only: never in a text, and so is a blank
+# of the old business slides a chair's device may still keep from before November 2026 ("chair_since")
 SEED = {"v": 1, "shared": {"fill": {"first_name": "Pat"}}, "decks": {"committee-meeting": {
-    "fill": {"old_1_item": "Booth schedule for 2027", "action_1_what": "Ask the Area for a table",
-             "action_1_who": "the alternate chair", "action_1_when": "Nov 1", "district_order": "3, 22, 91",
-             "chair_since": "Two group visits"},
+    "fill": {"volunteer_1_event": "CityWide booth, Nov 14", "volunteer_1_helpers": "two helpers",
+             "gv_story": "The Long Way Home", "gv_section": "Dear Grapevine", "chair_since": "Two group visits"},
     "checks": {"week-before": ["0"]}}}}
 # Anything inside the drawer's panel wider than the panel, and the page's own sideways scroll
 OVERFLOW = """(sel) => {
@@ -160,22 +161,24 @@ class MeetingPaperwork(unittest.TestCase):
             page = self.open_paper(ctx, "en", errors)
             origin = page.evaluate("() => location.origin")
             ctx.grant_permissions(["clipboard-read", "clipboard-write"], origin=origin)
-            self.assertEqual(page.locator('[data-gvp-tab="paper"]').inner_text().strip(), "Agenda & minutes")
+            self.assertEqual(page.locator('[data-gvp-tab="paper"]').inner_text().strip(), "Agenda & notes")
             self.show_tab(page)
             boxes = page.locator('[data-gvp-panel="paper"] .gvp-out')
             self.assertEqual(boxes.count(), 3)
             self.assertEqual([boxes.nth(i).get_attribute("aria-label") for i in range(3)],
-                             ["Agenda e-mail: the text", "Reminder: the text", "Draft minutes: the text"])
+                             ["Agenda e-mail: the text", "Reminder: the text", "Draft notes: the text"])
             agenda, reminder, minutes = (boxes.nth(i).inner_text() for i in range(3))
             self.assertIn("Subject: Agenda: Grapevine and La Viña Committee meeting,", agenda)
-            self.assertIn("Agenda (Central time)\n7:00  Welcome and opening", agenda)
-            self.assertIn("Old business\n- Booth schedule for 2027", agenda)
-            self.assertIn("District reports, in this order: 3, 22, 91.", agenda)
+            self.assertIn("Agenda (Central time)\n7:00  Opening: a moment of silence and the Serenity Prayer", agenda)
+            self.assertIn("Help wanted\n- CityWide booth, Nov 14: two helpers", agenda)
+            self.assertIn("After we close at 8:00, the parking lot: stay on for whatever is on your mind.", agenda)
             self.assertTrue(reminder.split("Subject:", 1)[1].count("Recordatorio"), "the Spanish paragraph")
             self.assertEqual(boxes.nth(1).locator('p[lang="es"]').count(), 1)
             self.assertIn("Attended: about ___ members (by district: ___)", minutes)
+            self.assertIn("A Grapevine story mentioned: The Long Way Home, in Dear Grapevine", minutes)
             for text in (agenda, reminder, minutes):
                 self.assertNotIn("Pat", text, "the first name kept for the notes is never in a text")
+                self.assertNotIn("Two group visits", text, "a blank of the old business slides is never shown")
             # Copy: the agenda's text (without its subject) on the clipboard, and said
             page.locator('[data-gvp-key="paper:agenda:copy"]').click()
             page.wait_for_function("() => /Copied/.test((document.querySelector('[data-gvp-toast]') || {}).textContent || '')", timeout=5000)
@@ -185,22 +188,24 @@ class MeetingPaperwork(unittest.TestCase):
             # every mailto: link opens with no address (checked offline too: tests/test_r12_u9_meeting.py)
             self.assertEqual(page.locator('[data-gvp-panel="paper"] [data-gvp-key$=":mail"]').count(), 3)
 
-            # Start next month: tonight's action item comes ticked, old business unticked (tick it: still open)
-            action = page.locator('[data-gvp-key="carry:action_1"]')
-            old = page.locator('[data-gvp-key="carry:old_1"]')
-            self.assertTrue(action.is_checked())
-            self.assertFalse(old.is_checked())
-            old.check()
-            page.once("dialog", lambda d: d.accept())
+            # Start next month: nothing to carry (no old business, no action items), and no "0 items" anywhere
+            self.assertEqual(page.locator('[data-gvp-key^="carry:"]').count(), 0)
+            section = page.locator('[data-gvp-panel="paper"] .gvp-sec').last.inner_text()
+            self.assertIn("Nothing to carry over.", section)
+            self.assertNotIn("old business", section)
+            asked = []
+            page.once("dialog", lambda d: (asked.append(d.message), d.accept()))
             page.locator('[data-gvp-key="paper:start"]').click()
             page.wait_for_function("(k) => { const s = JSON.parse(localStorage.getItem(k) || 'null'); return !!(s && s.decks['committee-meeting'].prev); }",
                                    arg=STATE_KEY, timeout=5000)
+            self.assertEqual(len(asked), 1, "it asks first")
+            self.assertIn("details that were for this meeting only are cleared", asked[0])
+            self.assertNotIn("0 items", asked[0])
+            toast = page.locator("[data-gvp-toast] .gvp-toast-text").inner_text()
+            self.assertTrue(toast.startswith("Next month started. Next meeting: "), toast)
             deck = stored(page)["decks"]["committee-meeting"]
-            self.assertEqual(deck["fill"].get("old_1_item"), "Booth schedule for 2027")
-            self.assertEqual(deck["fill"].get("old_2_item"), "Ask the Area for a table (the alternate chair, by Nov 1)")
-            self.assertNotIn("action_1_what", deck["fill"])
-            self.assertNotIn("chair_since", deck["fill"])
-            self.assertEqual(deck["fill"].get("district_order"), "3, 22, 91", "kept month to month")
+            for gone in ("volunteer_1_event", "volunteer_1_helpers", "gv_story", "gv_section"):
+                self.assertNotIn(gone, deck["fill"], gone)
             self.assertNotIn("week-before", deck.get("checks", {}), "the checklist starts over")
             self.assertEqual(stored(page)["shared"]["fill"], {"first_name": "Pat"})
             self.assertTrue(page.locator("[data-gvp-toast] .gvp-toast-btn").is_visible(), "an Undo right away")
@@ -228,7 +233,7 @@ class MeetingPaperwork(unittest.TestCase):
             seeded(ctx)
             page = self.open_paper(ctx, "es", errors)
             tab = page.locator('[data-gvp-tab="paper"]')
-            self.assertEqual(tab.inner_text().strip(), "Agenda y acta")
+            self.assertEqual(tab.inner_text().strip(), "Agenda y notas")
             # eight tabs: none pushes the panel off the screen or under the control bar, each one whole and tappable
             self.assertEqual(self.assert_drawer_usable(page, "committee-meeting"),
                              ["version", "slides", "edit", "add", "details", "prepare", "paper", "save"])
@@ -265,14 +270,13 @@ class MeetingPaperwork(unittest.TestCase):
 
     def test_the_undo_ends_when_the_next_meeting_begins(self):
         """The chair started next month after one meeting and typed the next month's details. The morning after,
-        the draft minutes (that meeting's) say its details are gone and the Undo is offered; printed, they are named
-        with that meeting's date. Once the next meeting has begun, the minutes are its own: no such word, no Undo
+        the draft notes (that meeting's) say its details are gone and the Undo is offered; printed, they are named
+        with that meeting's date. Once the next meeting has begun, the notes are its own: no such word, no Undo
         (it would put the details from before over that meeting's)."""
         held, after = built_meetings()
         self.assertGreater(after["ymd"], held["ymd"])
         state = {"v": 1, "shared": {"fill": {}}, "decks": {"committee-meeting": {
-            "fill": {"old_1_item": "Ask the Area for a table", "minutes_month": held["month"], "district_order": "3, 22, 91",
-                     "chair_since": "Next month's visits"},
+            "fill": {"gv_story": "Next month's story", "volunteer_1_event": "Next month's booth"},
             "checks": {},
             "prev": {"at": instant(held["end"], minutes=30), "held": held["ymd"],
                      "fill": SEED["decks"]["committee-meeting"]["fill"], "checks": {"week-before": ["0"]}}}}}
@@ -290,21 +294,21 @@ class MeetingPaperwork(unittest.TestCase):
                     undo = page.locator('[data-gvp-key="paper:undo"]')
                     if current:
                         self.assertIn(f"the meeting of {held['label']}", minutes.inner_text())
-                        self.assertEqual(word.count(), 1, "the minutes of the meeting it closed: their details are gone")
+                        self.assertEqual(word.count(), 1, "the notes of the meeting it closed: their details are gone")
                         self.assertEqual(undo.count(), 1)
                         # printed (or saved as a document) the morning after: named with the meeting's date
                         page.evaluate("() => { window.print = () => { window.__printed = document.title; }; }")
                         page.locator('[data-gvp-key="paper:minutes:print"]').click()
                         page.wait_for_function("() => typeof window.__printed === 'string'", timeout=5000)
                         self.assertEqual(page.evaluate("() => window.__printed"),
-                                         f"Monthly Committee Meeting – Draft minutes – {held['ymd']}")
+                                         f"Monthly Committee Meeting – Draft notes – {held['ymd']}")
                         page.evaluate("() => window.dispatchEvent(new Event('afterprint'))")
                     else:
                         self.assertIn(f"the meeting of {after['label']}", minutes.inner_text())
-                        self.assertEqual(word.count(), 0, "the minutes are the meeting's own, from its own details")
+                        self.assertEqual(word.count(), 0, "the notes are the meeting's own, from its own details")
                         self.assertEqual(undo.count(), 0, "an Undo would replace this meeting's details")
                         self.assertTrue(page.locator('[data-gvp-key="paper:start"]').is_enabled(), "next month can start again")
-                        self.assertIn("Next month's visits", minutes.inner_text())
+                        self.assertIn("A Grapevine story mentioned: Next month's story", minutes.inner_text())
                 finally:
                     ctx.close()
         self.assertEqual(errors, [])
@@ -350,7 +354,7 @@ class MeetingPaperwork(unittest.TestCase):
         Undo's question. English keeps "8:30 PM." with its period."""
         held, _after = built_meetings()
         state = {"v": 1, "shared": {"fill": {}}, "decks": {"committee-meeting": {
-            "fill": {"minutes_month": held["month"], "district_order": "3, 22, 91"}, "checks": {},
+            "fill": {"volunteer_1_event": "CityWide booth, Nov 14"}, "checks": {},
             "prev": {"at": instant(held["end"], minutes=30), "held": held["ymd"],
                      "fill": SEED["decks"]["committee-meeting"]["fill"], "checks": {"week-before": ["0"]}}}}}
         errors: list[str] = []

@@ -245,9 +245,9 @@ it becomes its own tab (see [§4.8](#48-any-other-folder-name-other)).
 | `Notas privadas.pdf` | **published** — "privadas" does not contain "PRIVADO" |
 | `privately funded literature.pdf` | **not published** — "privately" contains "PRIVATE" (the check is a plain substring, capitals ignored) |
 
-The committee meeting's agenda e-mail and draft minutes can be drafted on the site, from the chair's own details:
-GVR / RLV 101 → the committee meeting's presentation → Customize → **Agenda & minutes**; its **Print** can save the
-draft minutes as a document ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes)).
+The committee meeting's agenda e-mail and draft notes can be drafted on the site, from the chair's own details:
+GVR / RLV 101 → the committee meeting's presentation → Customize → **Agenda & notes**; its **Print** can save the
+draft notes as a document ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--notes)).
 
 Real files today: `2026-08-11 Grapevine Area Chair Meeting Agenda.pdf`, and
 `2026-10-01 Grapevine & La Viña Pricing Update - Effective January 1, 2027.pdf` →

@@ -46,7 +46,7 @@ import { normalizeEvents, meetingDates, meetingJoin, meetingSpeakers, recurrence
   weeklyOpenAll } from "./committee.js";
 import { editorialFor, issueLabel } from "./read.js";
 import { monthModel, monthLabel, nowDate, chicagoYmd, issueTheme, addMonths } from "./monthly.js";
-import { shopPlanPrice, shopNextChange, shopPriceChangeIn, shopBotm, money, dayLabel } from "./shop.js";
+import { shopPlanPrice, shopNextChange, shopPriceChangeIn, shopBotm, shopOffers, money, dayLabel } from "./shop.js";
 import { qrSvg, issueLabelOf } from "./community.js";
 import { eventTone } from "./event-tone.js";
 import { axPhone } from "./access.js";
@@ -89,7 +89,7 @@ export const LIVE_KEYS = [
   "grapevine_meeting_link", "lv_workshop_next", "lv_workshop_time", "lv_workshop_zoom_id",
   "price_gv_print", "price_gv_digital", "price_lv_print", "price_lv_digital", "price_change_note", "price_change_date",
   "gv_issue", "lv_issue", "gv_next_issue", "lv_next_issue", "gv_theme", "lv_theme", "next_deadline_gv", "next_deadline_lv",
-  "botm", "botm_lv", "gv_audio_phone", "lv_audio_phone",
+  "botm", "botm_lv", "store_offers", "gv_audio_phone", "lv_audio_phone",
   "assembly_next", "gv_open_meeting", "lv_open_meeting", "open_meeting_zoom",
 ];
 export const LIVE_KINDS = {
@@ -159,7 +159,7 @@ const UI_TAG = /\{ui:([^}]*)\}/g;
 const VERSION_TAG = /\{(only|not):([^}]*)\}/g;
 const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 const HTML = /<[A-Za-z/!]/;
-// The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & minutes): its
+// The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & notes): its
 // texts (plain text, in the deck's language), their own facts {paper:…} (the meeting a text is for, its month, the
 // meeting after it, the agenda's rows, the date and time in Spanish for a Spanish paragraph, the committee's name as
 // the Spanish pages give it — config/site.yml site.committee_es —, that meeting's guest speaker: name and service
@@ -430,7 +430,7 @@ function fieldProblems(s, layout, w, idset) {
  * tests/test_presentations.py check_deck, line for line (its YAML reading is loadDecks' job here).
  */
 /**
- * The rules of a deck's `paperwork:` block (the committee meeting's agenda e-mail, reminder, draft minutes and
+ * The rules of a deck's `paperwork:` block (the committee meeting's agenda e-mail, reminder, draft notes and
  * "Start next month"; config/presentations/README.md) as lines that start with "paperwork". Its texts keep the
  * slides' wording and privacy rules — they go out by e-mail and into minutes that may be posted — and are plain
  * text: blanks ({fill:…}, never a notes_only one), facts ({live:…}), its own facts ({paper:…}) and Spanish spans.
@@ -789,7 +789,7 @@ export function checkDeck(d, stem) {
     if (layout === "quote" && isStr(s.credit) && !s.credit.trim()) out.push(`${w}: a quote needs its credit line`);
   });
 
-  // the chair's paperwork (Customize → Agenda & minutes)
+  // the chair's paperwork (Customize → Agenda & notes)
   out.push(...paperworkProblems(d, fillKeys, idset, byId));
 
   if (!hasDisclaimer) out.push('no slide says "Not an official AA Grapevine, Inc. presentation" (keep it, as in the deck)');
@@ -1033,7 +1033,7 @@ function shapeDeck(d, id, now, notice) {
     footer: String(d.footer || ""),
     version: hash(slides.map((s) => s.h).join("\n")),
     slides,
-    // the chair's paperwork (Customize → Agenda & minutes), or null
+    // the chair's paperwork (Customize → Agenda & notes), or null
     paperwork: shapePaper(d, fillins, new Set(raw.map((s) => s.id))),
   };
 }
@@ -1177,6 +1177,7 @@ export const FALLBACKS = {
   next_deadline_lv: "see aalavina.org for La Viña's themes",
   botm: "see aagrapevine.org's Book of the Month",
   botm_lv: "see aalavina.org's Libro del mes",
+  store_offers: "see the Shop page",
   gv_audio_phone: "see the Share your story page",
   lv_audio_phone: "see the Share your story page",
   assembly_next: "see the Events page",
@@ -1201,7 +1202,7 @@ export const NO_SPEAKER = {
   speaker_line: "none tonight",
   speaker_note: "no guest speaker this month",
   speaker_after: "none this time",
-  speaker_slides: "No guest speaker is listed for tonight: choose the version 'No guest speaker', the committee's business for the whole hour.",
+  speaker_slides: "No guest speaker is listed for tonight: choose the version 'No guest speaker', with a topic to share on until 7:30.",
 };
 
 /**
@@ -1623,6 +1624,22 @@ const botmList = (c) => c.once("botm", () =>
     until: b.ends ? iso(chicagoDayEndMs(b.ends)) : null,
   })));
 
+/**
+ * The stores' offers as one fact ({live:store_offers}): the offers of config/site.yml store_offers that are on at
+ * a moment (shop.js shopOffers: first day first, as /shop/#offers lists them), each "Title (its days)" — "Holiday
+ * gift offers at the Grapevine and La Viña stores (through December 31, 2026)" — joined with "; ". The value is
+ * today's, and it steps at every offer's first day (00:00 Central; an offer the site shows from a later day) and
+ * at the midnight after its last, so a copy opened later stays right; with none on, the fallback ("see the Shop
+ * page"). In English, as the decks are.
+ */
+function storeOffers(c) {
+  const offers = shopOffers(c.site, "en", [], (k, l, v) => H.translateKey(k, l, v), c.now)
+    .map((o) => ({ text: `${o.title} (${o.dateRange})`, from: o.win.from ? Date.parse(o.win.from) : -Infinity, until: Date.parse(o.win.until) }));
+  const at = (ms) => offers.filter((o) => o.from <= ms && !(o.until <= ms)).map((o) => o.text).join("; ");
+  const moments = [...new Set(offers.flatMap((o) => [o.from, o.until]).filter((ms) => Number.isFinite(ms) && ms > c.nowMs))].sort((a, b) => a - b);
+  return fact(at(c.nowMs), moments.map((ms) => ({ from: iso(ms), value: at(ms) })), null, FALLBACKS.store_offers);
+}
+
 /** A date as the decks write it in a sentence (AP style): "Nov. 5, 2026", "March 4, 2027". */
 const AP_MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 const apDate = (ymd) => {
@@ -1776,6 +1793,9 @@ export function liveFacts(ctx) {
     const b = books.find((x) => x.pub === pub);
     out[key] = fact(b ? b.title : "", [], b ? b.until : null, FALLBACKS[key]);
   }
+  // the stores' offers (config/site.yml store_offers, as /shop/#offers lists them: shop.js shopOffers): each one
+  // "Title (its days)", joined with "; " — switching at each offer's first day and at the midnight after its last
+  out.store_offers = storeOffers(c);
   // the magazines' story lines — record your story by phone (/contribute/#record), as their official pages give them
   const ap = c.db.audio_project || {};
   out.gv_audio_phone = fact(clean(ap.gv && ap.gv.phone), [], null, FALLBACKS.gv_audio_phone);
@@ -1981,7 +2001,7 @@ export function deckJson(deck, ctx) {
     fillins: deck.fillins,
     live: liveFacts(c),
     slides,
-    // the chair's paperwork (Customize → Agenda & minutes; only a deck that has a `paperwork:` block): the deck's
+    // the chair's paperwork (Customize → Agenda & notes; only a deck that has a `paperwork:` block): the deck's
     // block, with the meetings it can be for and the committee's name as the Spanish pages give it
     ...(deck.paperwork ? { paperwork: { ...deck.paperwork, meetings: paperMeetings(c).rows, time_es: paperMeetings(c).time_es,
       committee_es: clean(c.site.committee_es) } } : {}),

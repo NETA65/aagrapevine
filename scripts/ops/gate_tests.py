@@ -178,10 +178,10 @@ CONTENT_TESTS: dict[str, str] = {
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
     "test_r12_u9_meeting.RealDeck.":
-        "config/presentations/committee-meeting.yml: its paperwork passes the checker; the minutes' and the reminder's "
+        "config/presentations/committee-meeting.yml: its paperwork passes the checker; the notes' and the reminder's "
         "wording; what its Start next month clears and keeps",
     "test_r12_u9_meeting.Texts.":
-        "config/presentations/committee-meeting.yml: the agenda e-mail, the reminder and the draft minutes, word for word",
+        "config/presentations/committee-meeting.yml: the agenda e-mail, the reminder and the draft notes, word for word",
     "test_r12_u9_meeting.NextMonth.":
         "config/presentations/committee-meeting.yml: Start next month on the committee's own blanks",
     "test_orientation.HubBuild.test_no_fact_twice_on_a_card":

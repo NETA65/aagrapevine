@@ -1287,7 +1287,7 @@ kept per visitor is `localStorage["gv-orientation-v1"]` = `{ v: 1, done: [lesson
 One file per deck of `presentations.decks`, fetched by the player on `/orientation/` (`src/pages/presentations-json.11ty.js`,
 whose header lists the fields every deck has — `app` … `slides`, not `paperwork`, which `eleventy/filters/presentations.js`
 describes at `shapePaper` and `paperMeetings`; `deckJson` makes them all). Since October 2026 a deck with a
-`paperwork:` block — today only `committee-meeting.yml`: the chair's Customize → Agenda & minutes; the checker,
+`paperwork:` block — today only `committee-meeting.yml`: the chair's Customize → Agenda & notes; the checker,
 `paperworkProblems`, names any mistake in it — also has a top-level `paperwork` (`shapePaper` + `paperMeetings`):
 ```json
 "paperwork": { "agenda_slide": "agenda",              // the agenda slide whose rows the agenda e-mail lists

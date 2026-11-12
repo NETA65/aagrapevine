@@ -65,8 +65,8 @@
    deck_version, exported, preset, hidden, shown, order, edits, added, fill, shared, checks }. validateImport()
    is strict — the right app and deck, sizes, known layouts and fields, strings (never HTML) — and says why not.
 
-   THE CHAIR'S PAPERWORK (a deck with a `paperwork:` block — the committee meeting's Customize → Agenda & minutes):
-   paperText() makes its agenda e-mail, reminder and draft minutes from the blanks and the day's facts (plain text;
+   THE CHAIR'S PAPERWORK (a deck with a `paperwork:` block — the committee meeting's Customize → Agenda & notes):
+   paperText() makes its agenda e-mail, reminder and draft notes from the blanks and the day's facts (plain text;
    a line whose blanks are all empty is left out), for the meeting each one is for (paperMeetings: the next one, or
    the last one held); nextMonthPlan() / startNextMonth() / undoNextMonth() carry the open action items into next
    month's old business, clear the one-night blanks and keep what they replaced (ds.prev) for an Undo — offered
@@ -158,7 +158,7 @@
     ui: {
       customize: "Customize", version: "Version", slides: "Slides", edit: "Edit", add: "Add", your_details: "Your details",
       prepare: "Prepare", save_share: "Save & share", notes: "Notes", overview: "Overview", presenter_view: "Presenter view",
-      print: "Print", full_screen: "Full screen", black_screen: "Black screen", paperwork: "Agenda & minutes",
+      print: "Print", full_screen: "Full screen", black_screen: "Black screen", paperwork: "Agenda & notes",
     },
     // the chair's paperwork (paperText): a meeting the site has no date for; the committee's name in Spanish when
     // the deck's file has none (config/site.yml site.committee_es); an action item carried to old business
@@ -1550,7 +1550,7 @@
   }
 
   /* ------------------------------------------------------------------ the chair's paperwork
-     A deck's `paperwork` (the committee meeting's Customize → Agenda & minutes; eleventy/filters/presentations.js
+     A deck's `paperwork` (the committee meeting's Customize → Agenda & notes; eleventy/filters/presentations.js
      shapePaper, the deck JSON's `paperwork`): { agenda_slide, speaker_slide, agenda | reminder | minutes: { subject, body },
      next_month: { actions, old_business, minutes_month, clear: [keys], untick: [slide ids] }, meetings: [{ ymd,
      start, end, label, label_es, month, speaker?: { name, position, topic, position_es, topic_es }, no_speaker?: true
@@ -1844,7 +1844,7 @@
   }
   /**
    * The last "Start next month" (ds.prev) as the paperwork sees it at nowMs → null (none), or { at, held, current }.
-   * `current`: no meeting has begun since the one it closed (`held`) — the draft minutes are still that meeting's,
+   * `current`: no meeting has begun since the one it closed (`held`) — the draft notes are still that meeting's,
    * made from next month's details (its own are gone: the Undo brings them back). Once the next meeting has begun,
    * the details are that meeting's own: the minutes are for it, and an Undo would replace its details with the ones
    * from before the start — so the player no longer offers it (the next "Start next month" replaces ds.prev).

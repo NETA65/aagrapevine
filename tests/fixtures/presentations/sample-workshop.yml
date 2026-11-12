@@ -509,6 +509,7 @@ slides:
     notes: |
       SAY: Around the holidays, many members give a Grapevine or a La Viña subscription as a gift: to a sponsee, to a newcomer, or to a family member who wants to understand AA. Some groups send one to a treatment center or a jail. It's one more way a story can reach someone who needs it.
       FACILITATOR TIP: This slide is in the show only from November 15 to December 31; the player leaves it out at other times.
+      DO: Name the stores' current offers, as the Shop page lists them: {live:store_offers}.
 
   - id: "new-panel"
     layout: "bullets"

@@ -55,8 +55,10 @@ data, the same facts the other pages show:
   issue" never skip a month, even on a copy opened after the month changed;
 - the 1-year subscription prices and an announced price change (`config/site.yml`, `price_changes:`): before the
   day, the slides show today's price and switch to the new one at midnight Central on the day itself;
-- Grapevine's Book of the Month and La Viña's Libro del mes, the story lines for recording a story by phone (the
-  Share your story page), the committee bulletin's newest posts, and QR codes.
+- Grapevine's Book of the Month and La Viña's Libro del mes, and the stores' offers of the day (`config/site.yml`,
+  `store_offers:`, as the Shop page lists them, each with its days);
+- the story lines for recording a story by phone (the Share your story page), the committee bulletin's newest posts,
+  and QR codes.
 
 **A copy opened later stays right.** A presenter may open a presentation that was saved days earlier (offline, or on a
 slow connection at the venue). So each fact comes with what it will say next — the next four meetings, workshops,
@@ -295,7 +297,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `speaker_line` | Rick W. — Past delegate, Area 65 Northeast Texas (Panel 73); … — the name and the position ("none tonight" without a speaker) | "to be announced" |
 | `speaker_note` | guest speaker: Rick W. — or "no guest speaker this month" for a meeting with no guest speaker (December 16, 2026): for another meeting's slides (the Grapevine Meeting's announcements), with `meeting_day` | "guest speaker: to be announced" |
 | `speaker_after` | Jeannie M. — “Grapevine and La Viña as Public Information tools” — the guest speaker of `meeting_after`'s meeting (next month's, on a slide shown during the meeting); "none this time" for a meeting with no guest speaker (December 16, 2026, on November 18's slides) | "to be announced" |
-| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`); on a night with no guest speaker, "No guest speaker is listed for tonight: choose the version 'No guest speaker', …" | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
+| `speaker_slides` | for the chair's notes: "Tonight's guest speaker shares slides: …" (the speaker's `slides: true`); on a night with no guest speaker, "No guest speaker is listed for tonight: choose the version 'No guest speaker', with a topic to share on until 7:30." | "No slides are listed for tonight's guest speaker; if they bring some, check their screen sharing at the sound check too." |
 | `grapevine_meeting_next` | Wednesday, December 2, 2026 — our Grapevine Meeting, the next one until it ends | "see the Events page" |
 | `grapevine_meeting_day` | Wednesday, December 2, 2026 — its own date until midnight Central after it (its title slide) | "see the Events page" |
 | `grapevine_meeting_after` | Wednesday, January 6, 2027 — the one after `grapevine_meeting_day`, moving on with it | "see the Events page" |
@@ -316,6 +318,7 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 | `next_deadline_lv` | October 17, 2026 — May–June 2027: Recaídas (Relapses) — the English as in `lv_issue` | "see aalavina.org for La Viña's themes" |
 | `botm` | the title of Grapevine's Book of the Month, until its offer ends | "see aagrapevine.org's Book of the Month" |
 | `botm_lv` | the title of La Viña's Libro del mes, until its offer ends | "see aalavina.org's Libro del mes" |
+| `store_offers` | Free shipping at the Grapevine and La Viña stores (November 1 – December 31, 2026); Holiday gift offers at the Grapevine and La Viña stores (through December 31, 2026) — the stores' offers on the day (`config/site.yml`, `store_offers:`, as the Shop page lists them, first day first), each with its days; it switches when an offer starts or ends (the committee meeting's "Special offers") | "see the Shop page" |
 | `gv_audio_phone`, `lv_audio_phone` | (559) 726-1216 · (559) 670-1601 — the story lines for recording a story by phone | "see the Share your story page" |
 | `assembly_next` | NETA 65 Spring Assembly 2027 · Fri, Mar 19 – Sun, Mar 21, 2027 — the next NETA 65 assembly until it is over, then the one after it ("(details to be confirmed)" while the Events page says so) | "see the Events page" |
 | `gv_open_meeting` | Wednesdays, 11:00 AM Central (noon Eastern) — the Grapevine Weekly Open | "see the Meetings page" |
@@ -334,8 +337,8 @@ meeting" in a workshop ("Next meeting: {live:meeting_next}"). Never mix them: "t
 speaker), `speaker_after` with `meeting_after` (next month's); and `grapevine_meeting_day` with
 `grapevine_meeting_after` on the Grapevine Meeting's own slides.
 
-In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the draft
-minutes), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
+In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the short
+draft notes of the meeting — its `minutes` text), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
 for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
 the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
 keys in the agenda's rows there ("none at this meeting" for a meeting with no guest speaker, "to be announced" for
@@ -343,8 +346,11 @@ one whose speaker isn't listed yet). A line whose `{paper:…}` facts are all em
 is left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the
 committee meeting's "No guest speaker", for a speaker who can't come). The panel warns when the version leaves out a
 listed speaker, or keeps the speaker's part for a meeting with none, and "Start next month" picks the version for
-the next meeting: the first one when it has a speaker, "No guest speaker" when the list gives it none. The minutes
-name the speaker by service position only.
+the next meeting: the first one when it has a speaker, "No guest speaker" when the list gives it none. The notes
+name the speaker by service position only. The committee meeting is not a business meeting: its block has no
+minutes to approve, no old business and no action items, so its "Start next month" carries nothing over (it clears
+the blanks of one night: tonight's topic, the volunteers, the stories mentioned). A deck may still have `actions`
+and `old_business` rows (the sample deck in `tests/fixtures/presentations/` does).
 
 Write a meeting code or a Zoom meeting ID as `{live:meeting_code}` (or its older name `{live:meeting_zoom_id}`),
 never as digits: the checker takes digits for a phone number.

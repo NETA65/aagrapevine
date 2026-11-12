@@ -69,7 +69,7 @@ fillins:
   - key: "action_1_when"
     label: { en: "Action item · by when", es: "Tarea · para cuándo" }
     hint: "Date"
-# The chair's paperwork (Customize → Agenda & minutes), every part of it: the three texts with each {paper:…} fact
+# The chair's paperwork (Customize → Agenda & notes), every part of it: the three texts with each {paper:…} fact
 # and a paragraph in Spanish, the guest speaker's slide (the short meeting leaves it out: its texts name no
 # speaker) and "Start next month" (config/presentations/README.md; the committee meeting's own block is the full
 # example)

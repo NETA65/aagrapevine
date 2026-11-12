@@ -1692,7 +1692,7 @@ them too.
 Google Meet have no number to call), and the booth display ("Meetings you can join": its monthly rule, Google Meet
 and the meeting code). Since October 2026 also: the *Pass it on* welcome message on `/gvr/#pass-it-on` (the next date, moving on by
 itself after each meeting), the Area report's committee meetings (`/monthly/#report` → For: Area) and the committee
-meeting deck's *Agenda & minutes* ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--minutes)).
+meeting deck's *Agenda & notes* ([Presentations §3.22](presentations.md#322-the-chairs-paperwork-agenda--notes)).
 
 **Code pointers.** [`scripts/sync/meeting.py`](../scripts/sync/meeting.py) → `meeting_rule`,
 `parse_hhmm`, `check_skip_dates`, `check_starts`, `upcoming_rule_dates`, `window_meetings`, `meeting_speakers`,
