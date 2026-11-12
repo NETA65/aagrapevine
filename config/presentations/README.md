@@ -12,7 +12,7 @@ view, versions, printing, and the presenter's own changes kept on their own devi
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting |
-| `grapevine-meeting.yml` | Grapevine Meeting (our online AA meeting on the first Wednesday; no PowerPoint copy) |
+| `grapevine-meeting.yml` | Grapevine Meeting (our online AA meeting on the first Wednesday; its PowerPoint copy is `Grapevine Meeting.pptx`) |
 
 The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
 Spanish, and each presentation is marked "(en inglés)".
@@ -183,7 +183,7 @@ new slide for them.
 | `version_fields` | the slide's own text in one version: `{ short: { title: "Today's plan (about 60 minutes)" } }` — any field of its layout (below), its `title`, `eyebrow`, `source` or `takeaway` (an activity's `duration`, a break's `body` …). Not `kind`, `options` or `qr`, which are the same in every version. The checker holds the slide as each version shows it to the same rules. A presenter's own change (Customize → Edit) of a field that has words of its own in any version stays in the version they changed it in: it is stored for that version alone, so the other versions keep their words (typing the version's own words back removes the change; "Reset this slide to the original" removes the changes of every version). A change of any other field, and of `minutes`, applies to every version |
 | `optional` | `true`: a slide that can go when running late |
 | `starts_off` | `true`: an optional slide that starts switched off (the presenter turns it on in Customize → Slides) |
-| `facilitator` | `true`: never shown to the room; it is in Customize → Prepare (checklists, timing plans, pages for the chair). No `minutes` |
+| `facilitator` | `true`: never shown to the room; it is in Customize → Prepare (checklists, timing plans, pages for the chair). No `minutes`. A `text` page there also has a **Copy** button: it copies the page's `body` as plain text, line by line, with the facts of the moment and the presenter's blanks filled in, for a message to paste somewhere (the Grapevine Meeting's `chat-message`, for the Google Meet chat). A copy keeps only the words of a `[label](url)` link, so write the web addresses of such a page out in full (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`) |
 | `handout` | `true`: a page printed for the participants — a `facilitator` page (Prepare → Print), or a slide that is shown AND printed |
 | `print` | on a `handout` page: `"portrait"` to print it upright. Left out: it prints `"landscape"` (sideways) |
 | `accent` | a colour: `gv` `lv` `vine` `grape` `navy`. On a `section` slide, the colour of its part: the slides after it take it. On any other slide, the colour of that slide only |
@@ -211,7 +211,7 @@ new slide for them.
 | `resources` | `links`: `{ label, url, note }` |
 | `credits` | `sources` (a list), `note`, `disclaimer: true` |
 | `closing` | `message`, `lines` (a list), `qr: "/"` (a QR code for a page of the site or an https address) |
-| `text` | `body`: paragraphs separated by an empty line; a line starting with "- " is a list item. `style: "script"`: an announcement to read aloud, on a tinted card (parts the reader fills in written ‹like this›); `style: "break"`: a pause, centred on the slide |
+| `text` | `body`: paragraphs separated by an empty line; a line starting with "- " is a list item. `style: "script"`: an announcement to read aloud, on a tinted card (parts the reader fills in written ‹like this›); `style: "break"`: a pause, centred on the slide. A line starting with "• " is a list item too. On a `facilitator` page: a **Copy** button in Customize → Prepare (see `facilitator`) |
 | `flow` | `steps`: 2 to 6 boxes `{ title, text }` with arrows between them |
 | `live` | `kind` (below), `intro` (a sentence above it), `options` |
 

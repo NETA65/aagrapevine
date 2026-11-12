@@ -1055,6 +1055,21 @@
     });
     return out;
   }
+  /** A page's text as plain text to paste somewhere (Customize → Prepare: Copy, on a `text` page for the presenter —
+   *  the Grapevine Meeting's message for the Google Meet chat): line by line, its tokens filled in and its marks
+   *  gone — a link keeps its words only, so such a page writes its addresses out in full —, its line breaks kept
+   *  (plain() alone would make them spaces) and at most one empty line between its paragraphs; the build's word
+   *  joiners go, as in the paperwork's texts (plainSpaces). */
+  function plainLines(text, ctx) {
+    var out = [];
+    String(isStr(text) ? text : "").replace(/\r\n?/g, "\n").split("\n").forEach(function (l) {
+      var s = plainSpaces(plain(rich(l, ctx))).replace(/\s+$/, "");
+      if (s.trim()) out.push(s);
+      else if (out.length && out[out.length - 1] !== "") out.push("");
+    });
+    while (out.length && out[out.length - 1] === "") out.pop();
+    return out.join("\n");
+  }
   // A notes line's label: SAY: · DO: · IF TIME, ASK: · FACILITATOR TIP: · RUNNING LATE? · 20-MINUTE VERSION (…):
   // · EN ESPAÑOL (…): — capitals with Spanish accents too
   var LABEL = /^((?:[A-Z0-9ÁÉÍÓÚÑÜ][A-Z0-9ÁÉÍÓÚÑÜ'’.&\/]*)(?:[ ,–-]+[A-Z0-9ÁÉÍÓÚÑÜ][A-Z0-9ÁÉÍÓÚÑÜ'’.&\/]*)*(?:\s+\([^)\n]{1,90}\))?[:?])\s+([\s\S]*)$/;
@@ -1873,7 +1888,7 @@
     // blanks
     fillDefs: fillDefs, fillValue: fillValue, fillsIn: fillsIn, fillGroups: fillGroups, emptyBlanks: emptyBlanks,
     // text
-    subst: subst, inline: inline, rich: rich, plain: plain, safeHref: safeHref, showUrl: showUrl, noteLines: noteLines,
+    subst: subst, inline: inline, rich: rich, plain: plain, plainLines: plainLines, safeHref: safeHref, showUrl: showUrl, noteLines: noteLines,
     fmt: fmt, BLANK_OPEN: BLANK_OPEN, BLANK_CLOSE: BLANK_CLOSE,
     // editing
     fieldsOf: fieldsOf, kindOf: kindOf, toText: toText, fromText: fromText, setField: setField, resetSlide: resetSlide,
