@@ -96,7 +96,7 @@ presets:
 # The chair's blanks (Customize → Your details), in slide order: each one is an orange [fill-in], and `hint` is
 # its text in the brackets (what an empty blank shows, in orange). They stay on the chair's device from month to
 # month until changed — the week-before checklist (Customize → Prepare) says what to fill in, and "Start next
-# month" (Customize → Agenda & minutes) clears the ones that were for one night only.
+# month" (Customize → Agenda & notes) clears the ones that were for one night only.
 fillins:
   - key: "presenter"
     label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
@@ -148,7 +148,7 @@ fillins:
   # business slides a chair's device may still keep — minutes, reports, old and new business, action items — are
   # simply never shown.)
 
-# The chair's paperwork (Customize → Agenda & minutes): the agenda e-mail, the reminder and short draft notes of
+# The chair's paperwork (Customize → Agenda & notes): the agenda e-mail, the reminder and short draft notes of
 # the meeting, made from the blanks above and the site's facts, to copy, open in an e-mail app (every address in
 # BCC: none is ever filled in) or print — and "Start next month". Everything stays on the chair's device, like the
 # blanks. The texts are plain text, in English like the slides (the reminder adds a paragraph in Spanish). Inside
@@ -187,7 +187,7 @@ paperwork:
       When: {paper:meeting}, {live:meeting_time}
       Guest speaker: {paper:speaker}
       Topic: {paper:speaker_topic}
-      Tonight's topic for sharing: {fill:topic}
+      Topic for sharing: {fill:topic}
       Join on {live:meeting_platform}: {live:meeting_url} (meeting code {live:meeting_code})
 
       Agenda (Central time)
@@ -235,7 +235,7 @@ paperwork:
       Opened with a moment of silence and the Serenity Prayer.
       Guest speaker: {paper:speaker_position}
       Topic: {paper:speaker_topic}, then the members' questions
-      Tonight's topic for sharing: {fill:topic}
+      Topic shared on: {fill:topic}
 
       Coming up and workshop requests
       - Events announced: ___
@@ -350,7 +350,7 @@ slides:
       SAY: Please join me in a moment of silence for the alcoholic who still suffers, inside and outside our rooms. (Pause for about ten seconds.) Thank you. Those who wish, please join me in the Serenity Prayer. (Read it slowly, following the words on the screen.)
       DO: Online, unmuting everyone at once creates an echo. It usually works best if the chair says the prayer aloud and everyone else says it along with their microphones muted.
       TIP: 'Those who wish' keeps the invitation open: some members prefer not to pray, and silence is always welcome. How the committee opens its meeting is the committee's own decision. If its group conscience chooses a different opening, change this slide ({ui:customize} → {ui:edit}).
-      {not:no-speaker} TRANSITION: Now it's my pleasure to welcome our guest speaker.
+      {not:no-speaker} TRANSITION: Now let's welcome our guest speaker.
       {only:no-speaker} TRANSITION: Now let's turn to tonight's topic.
 
   # The Preamble, word for word, with AA Grapevine's credit line exactly as on the slide. Since November 2026 the
@@ -371,7 +371,7 @@ slides:
       SAY: Could I have a volunteer to read the AA Preamble for us tonight? (Wait a moment; if nobody offers, read it yourself.) Thank you.
       DO: If you can, ask a reader ahead of time by private chat, so nobody is put on the spot.
       WHY THIS TEXT: The Preamble first appeared in the Grapevine in June 1947. AA Grapevine, Inc. holds its copyright and lets AA entities reprint it word for word with this credit line (SMF-101, Q4; Service Manual, p. 23). Read it exactly as written. This is the 2021 wording ('a fellowship of people').
-      {not:no-speaker} TRANSITION: Now it's my pleasure to welcome our guest speaker.
+      {not:no-speaker} TRANSITION: Now let's welcome our guest speaker.
       {only:no-speaker} TRANSITION: Now let's turn to tonight's topic.
 
   # ------------------------------------------------------------------ GUEST SPEAKER (7:01 – 7:30)
@@ -472,7 +472,7 @@ slides:
     notes: |
       WHEN: a night with no guest speaker (every meeting before January 20, 2027, or a month whose speaker can't come): the version 'No guest speaker' ({ui:customize} → {ui:version}) shows this slide and the sharing after it. With a guest speaker it stays switched off: the speaker's talk takes its place.
       TIP (timekeeping): about 2 minutes, from about 7:02: a sentence or two on why the topic matters now, what we'll look at, and the question that starts the sharing.
-      SAY: We have no guest speaker tonight, so we'll share on a topic: {fill:topic}. (Two or three sentences on why it matters now, and what we'll look at.) Here's a question to start us off: {fill:topic_question} Who would like to share first?
+      SAY: Tonight's topic: {fill:topic}. (Two or three sentences on why it matters now, and what we'll look at.) Here's a question to start us off: {fill:topic_question} Who would like to share first?
       WHICH TOPIC: the page 'Suggested topics: the year at a glance' ({ui:customize} → {ui:prepare}) suggests one for each month, or take this month's Grapevine or La Viña theme. In February and March, the Conference agenda items for the Conference Committee on Grapevine and La Viña make a good topic, to help prepare our delegate (in 2027, they include the final report of the Fellowship survey on Grapevine's products); in May, the delegate reports back.
       DO: In February, March and May, invite the delegate or the alternate delegate ahead of time. Send any background material by e-mail beforehand (BCC). Keep internal figures off the slide.
       UPDATE: the topic and its three lines ({ui:customize} → {ui:your_details}).

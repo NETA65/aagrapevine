@@ -1,4 +1,4 @@
-"""Round 12 · the committee meeting's paperwork (Customize → Agenda & minutes): the deck's `paperwork:` block
+"""Round 12 · the committee meeting's paperwork (Customize → Agenda & notes): the deck's `paperwork:` block
 (config/presentations/committee-meeting.yml), its checks (tests/test_presentations.py and its twin in
 eleventy/filters/presentations.js), the meetings the build adds to the deck's JSON, and the player's logic
 (src/assets/js/presentations-core.js paperText / nextMonthPlan / startNextMonth / undoNextMonth):
@@ -390,7 +390,7 @@ class Texts(unittest.TestCase):
         # lines whose blanks are all empty are left out; a half-filled one shows its [hint]
         self.assertIn("\n\nHelp wanted\n- CityWide booth, Nov 14: two helpers\n- Writing workshop in District 22: [helpers needed]\n\n", t)
         self.assertEqual(re.findall(r"\[[^\]]*\]", t), ["[helpers needed]"])
-        self.assertNotIn("Tonight's topic", t, "no topic typed in: its line is left out")
+        self.assertNotIn("Topic for sharing", t, "no topic typed in: its line is left out")
         # a blank of the old business slides a chair's device may still keep is never shown
         self.assertNotIn("Two group visits", t)
         for gone in ("Old business", "New business", "minutes", "District reports", "Treasurer", "Preamble"):
@@ -407,9 +407,9 @@ class Texts(unittest.TestCase):
         a = r["topicWeek"]["agenda"]["text"]
         # (the time as the site writes it: its no-break spaces stay no-break in a text)
         self.assertIn("\nWhen: Wednesday, October 21, 2026, 7:00\u00a0–\u00a08:00\u00a0PM Central time\n"
-                      "Tonight's topic for sharing: Gratitude in our service\nJoin on Google Meet: ", a)
+                      "Topic for sharing: Gratitude in our service\nJoin on Google Meet: ", a)
         m = r["topicAfter"]["minutes"]["text"]
-        self.assertIn("Opened with a moment of silence and the Serenity Prayer.\nTonight's topic for sharing: Gratitude in our service\n\n"
+        self.assertIn("Opened with a moment of silence and the Serenity Prayer.\nTopic shared on: Gratitude in our service\n\n"
                       "Coming up and workshop requests\n", m)
         for text in (a, m, r["topicWeek"]["reminder"]["text"]):
             self.assertNotIn("Guest speaker", text)
@@ -450,7 +450,7 @@ class Texts(unittest.TestCase):
     def test_an_empty_version_never_shows_an_empty_blank(self):
         t = self.run_texts()["emptyWeek"]["agenda"]["text"]
         self.assertNotIn("[", t)
-        for gone in ("Help wanted", "Tonight's topic", "phone"):
+        for gone in ("Help wanted", "Topic for sharing", "phone"):
             self.assertNotIn(gone, t, gone)
         self.assertIn("From 7:30 to 8:00: coming events", t, "a line with no blank always stays")
         self.assertIn("Area 65 Grapevine / La Viña Chair", t, "a blank's default counts as filled in")
@@ -459,7 +459,7 @@ class Texts(unittest.TestCase):
         self.assertIn("GVR and RLV sharing\n- Highlights (what's working, challenges, help needed): ___", m,
                       "a heading over a line with no blank stays")
         self.assertIn("Follow-ups (what · who, by service position · by when)\n- ___", m)
-        for gone in ("\n\nVolunteers", "Magazine topics", "Tonight's topic"):
+        for gone in ("\n\nVolunteers", "Magazine topics", "Topic shared on"):
             self.assertNotIn(gone, m, gone)
 
     def test_the_reminder_in_english_and_spanish(self):

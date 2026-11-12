@@ -428,7 +428,7 @@ while a link to a section below it — `/shop/#offers-holiday-gifts-2026`, `#sub
 smoothly leaves that section where the link puts it, a reader who scrolled away is not pulled back; skipped when the
 Shop shows no banner), `test_r12_u8_whatsnew_browser.py`
 (`WhatsNewSince`: a seeded `gv-wn-seen` record, the marks, no layout shift, "Mark all as read"),
-`test_r12_u9_meeting_browser.py` (`MeetingPaperwork`: Customize → Agenda & minutes, Start next month and its Undo,
+`test_r12_u9_meeting_browser.py` (`MeetingPaperwork`: Customize → Agenda & notes, Start next month and its Undo,
 the clock stopped at the built deck's meeting dates) and `test_r12_u10_areareport.py` (`AreaReportInBrowser`: For:
 Area, the Word file's dated name, dates typed one at a time, a 360 px phone seen as Safari on an iPhone, with the
 line on Safari's 7-day rule under *Earlier reports* and in the note; `AreaDraftsInBrowser`, the clock stopped at the

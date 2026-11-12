@@ -1,8 +1,8 @@
-"""Round 12 · the committee meeting's paperwork (Customize → Agenda & minutes) on the built site, in a real browser
+"""Round 12 · the committee meeting's paperwork (Customize → Agenda & notes) on the built site, in a real browser
 (tests/browser/__init__.py says how to run these; they share test_site_in_browser.py's site server and browser):
 
   * MeetingPaperwork — the tab is there for the committee meeting only; its three texts (the agenda e-mail, the
-                       reminder with its paragraph in Spanish, the draft minutes) show the chair's details and never
+                       reminder with its paragraph in Spanish, the draft notes) show the chair's details and never
                        the first name kept for the notes, nor a blank of the old business slides kept on the device;
                        "Copy" puts the text on the clipboard; "Start next month" (nothing to carry: the committee
                        meeting has no old business) clears tonight's blanks and the checklist, says so without any
@@ -11,8 +11,8 @@
                        the drawer, no sideways scroll, and no script error anywhere; the drawer's tabs (one row that
                        scrolls sideways) never push its panel off the screen or under the control bar, and each tab,
                        reached with the arrow keys, is whole on the screen and takes a tap — the workshops' too.
-                       Once the next meeting has begun, the draft minutes no longer say to undo "Start next month"
-                       and its Undo is gone (it would replace that meeting's details); minutes printed the morning
+                       Once the next meeting has begun, the draft notes no longer say to undo "Start next month"
+                       and its Undo is gone (it would replace that meeting's details); notes printed the morning
                        after are named with their meeting's date. A text too long for a mailto: link opens no e-mail
                        when the page cannot copy it (its "paste here" would paste whatever the clipboard held), and
                        the long message saying so stays as long as it takes to read it, with an OK the keyboard
@@ -161,12 +161,12 @@ class MeetingPaperwork(unittest.TestCase):
             page = self.open_paper(ctx, "en", errors)
             origin = page.evaluate("() => location.origin")
             ctx.grant_permissions(["clipboard-read", "clipboard-write"], origin=origin)
-            self.assertEqual(page.locator('[data-gvp-tab="paper"]').inner_text().strip(), "Agenda & minutes")
+            self.assertEqual(page.locator('[data-gvp-tab="paper"]').inner_text().strip(), "Agenda & notes")
             self.show_tab(page)
             boxes = page.locator('[data-gvp-panel="paper"] .gvp-out')
             self.assertEqual(boxes.count(), 3)
             self.assertEqual([boxes.nth(i).get_attribute("aria-label") for i in range(3)],
-                             ["Agenda e-mail: the text", "Reminder: the text", "Draft minutes: the text"])
+                             ["Agenda e-mail: the text", "Reminder: the text", "Draft notes: the text"])
             agenda, reminder, minutes = (boxes.nth(i).inner_text() for i in range(3))
             self.assertIn("Subject: Agenda: Grapevine and La Viña Committee meeting,", agenda)
             self.assertIn("Agenda (Central time)\n7:00  Opening: a moment of silence and the Serenity Prayer", agenda)
@@ -233,7 +233,7 @@ class MeetingPaperwork(unittest.TestCase):
             seeded(ctx)
             page = self.open_paper(ctx, "es", errors)
             tab = page.locator('[data-gvp-tab="paper"]')
-            self.assertEqual(tab.inner_text().strip(), "Agenda y acta")
+            self.assertEqual(tab.inner_text().strip(), "Agenda y notas")
             # eight tabs: none pushes the panel off the screen or under the control bar, each one whole and tappable
             self.assertEqual(self.assert_drawer_usable(page, "committee-meeting"),
                              ["version", "slides", "edit", "add", "details", "prepare", "paper", "save"])
@@ -270,8 +270,8 @@ class MeetingPaperwork(unittest.TestCase):
 
     def test_the_undo_ends_when_the_next_meeting_begins(self):
         """The chair started next month after one meeting and typed the next month's details. The morning after,
-        the draft minutes (that meeting's) say its details are gone and the Undo is offered; printed, they are named
-        with that meeting's date. Once the next meeting has begun, the minutes are its own: no such word, no Undo
+        the draft notes (that meeting's) say its details are gone and the Undo is offered; printed, they are named
+        with that meeting's date. Once the next meeting has begun, the notes are its own: no such word, no Undo
         (it would put the details from before over that meeting's)."""
         held, after = built_meetings()
         self.assertGreater(after["ymd"], held["ymd"])
@@ -294,18 +294,18 @@ class MeetingPaperwork(unittest.TestCase):
                     undo = page.locator('[data-gvp-key="paper:undo"]')
                     if current:
                         self.assertIn(f"the meeting of {held['label']}", minutes.inner_text())
-                        self.assertEqual(word.count(), 1, "the minutes of the meeting it closed: their details are gone")
+                        self.assertEqual(word.count(), 1, "the notes of the meeting it closed: their details are gone")
                         self.assertEqual(undo.count(), 1)
                         # printed (or saved as a document) the morning after: named with the meeting's date
                         page.evaluate("() => { window.print = () => { window.__printed = document.title; }; }")
                         page.locator('[data-gvp-key="paper:minutes:print"]').click()
                         page.wait_for_function("() => typeof window.__printed === 'string'", timeout=5000)
                         self.assertEqual(page.evaluate("() => window.__printed"),
-                                         f"Monthly Committee Meeting – Draft minutes – {held['ymd']}")
+                                         f"Monthly Committee Meeting – Draft notes – {held['ymd']}")
                         page.evaluate("() => window.dispatchEvent(new Event('afterprint'))")
                     else:
                         self.assertIn(f"the meeting of {after['label']}", minutes.inner_text())
-                        self.assertEqual(word.count(), 0, "the minutes are the meeting's own, from its own details")
+                        self.assertEqual(word.count(), 0, "the notes are the meeting's own, from its own details")
                         self.assertEqual(undo.count(), 0, "an Undo would replace this meeting's details")
                         self.assertTrue(page.locator('[data-gvp-key="paper:start"]').is_enabled(), "next month can start again")
                         self.assertIn("A Grapevine story mentioned: Next month's story", minutes.inner_text())

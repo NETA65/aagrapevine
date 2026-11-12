@@ -108,10 +108,10 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   en enero de 2027), cada una con preguntas de repaso; también como **diapositivas** para una reunión del
   distrito ("Presentar diapositivas") y como **hoja para imprimir** (una por lección). El texto está en
   `config/orientation.yml` (inglés y español en el mismo archivo). En sus **Presentaciones**, la reunión mensual
-  del comité tiene en **Personalizar → Agenda y acta** el correo con la agenda, un recordatorio (en inglés y en
-  español), el borrador del acta y **Empezar el mes siguiente**, hechos con los datos del coordinador; todo
+  del comité tiene en **Personalizar → Agenda y notas** el correo con la agenda, un recordatorio (en inglés y en
+  español), el borrador de las notas y **Empezar el mes siguiente**, hechos con los datos del coordinador; todo
   queda en su dispositivo y el sitio no envía nada (sección [The committee meeting's
-  paperwork](#the-committee-meetings-paperwork-agenda--minutes)).
+  paperwork](#the-committee-meetings-paperwork-agenda--notes)).
 - **Pantalla para la mesa** (`/es/about/#booth`): una presentación que se reproduce sola en un televisor, una
   computadora portátil o una tableta en nuestra mesa en asambleas y eventos, en español, en inglés o en ambos;
   abierta una vez con internet, sigue funcionando sin conexión. Guía (en inglés): [how-to/booth.md](how-to/booth.md).
@@ -408,8 +408,8 @@ What the newer pages do:
   `config/orientation.yml` (both languages, checked by the build and by `tests/test_orientation.py`); the GVR
   corner and the Monthly toolkit link to it. Its **Presentations** are the committee's five web slide decks
   ([how-to/presentations.md](how-to/presentations.md)); the monthly committee meeting's deck also makes the
-  chair's paperwork — the agenda e-mail, a reminder, the draft minutes and **Start next month** (Customize →
-  **Agenda & minutes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--minutes)).
+  chair's paperwork — the agenda e-mail, a reminder, the draft notes and **Start next month** (Customize →
+  **Agenda & notes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--notes)).
 - **Meetings** (`/meetings/`, renamed from *Committee meeting*; the old `/meeting/` address forwards there,
   `#weekly-open` included): a *New to AA?* card at the top (`#new-to-aa`) with AA's own places to find **any** AA
   meeting (aa.org's *Find AA near you*, *Is AA for you?*, the *Meeting Guide app*, and the AA offices in our
@@ -586,10 +586,10 @@ breaks while you decide.
   (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
-- **Agenda & minutes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —
-  offer interpretation?); what **Start next month** clears and keeps; the agenda's and the minutes' wording
-  (opening, closing, "DRAFT, for the committee's approval…"); the Spanish names of the controls. The texts are in
-  `config/presentations/committee-meeting.yml` under `paperwork:`.
+- **Agenda & notes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —
+  offer interpretation?); what **Start next month** clears and keeps; the agenda's and the notes' wording
+  (opening, closing, "DRAFT NOTES of the meeting, for the committee's records…"); the Spanish names of the
+  controls. The texts are in `config/presentations/committee-meeting.yml` under `paperwork:`.
 - **Report to the Area:** the title and the blanks' words, the names of the Area meetings ("Assembly", "Area
   committee meeting" — or "Area Chairs' Meeting"?), the file name (`… Grapevine La Vina Area … Report`), whether
   the printed report should carry the Google Meet link and meeting code, and which events count as "ours".
@@ -611,7 +611,7 @@ breaks while you decide.
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
   Calendar, Apple Calendar and Outlook and see which ones keep the reminder; Copy and **Open in my e-mail** from
-  *Agenda & minutes* with the e-mail app you use, and print the draft minutes and the Shop's information sheet
+  *Agenda & notes* with the e-mail app you use, and print the draft notes and the Shop's information sheet
   (Bilingual).
 
 ---
@@ -2824,11 +2824,11 @@ card, About's and the corner's compact one; `src/assets/css/areas/read.css` `.re
 and `booth.json` (`booth.dyk.*`); browser checks `PassItOn`
 (`tests/browser/test_r12_u5_gvr.py`) and `StartCards`, `VideosBesideQuestion` (`tests/browser/test_r13_u2_gvr.py`).
 
-### The committee meeting's paperwork (Agenda & minutes)
+### The committee meeting's paperwork (Agenda & notes)
 
 The monthly committee meeting's slides (GVR / RLV 101 → Presentations → the committee meeting; the player is
-`/orientation/?present=committee-meeting`) have a tab in **Customize**: **Agenda & minutes** (Spanish: **Agenda y
-acta**). Only that deck has it (a deck has it when its file has a `paperwork:` block). It makes the chair's monthly
+`/orientation/?present=committee-meeting`) have a tab in **Customize**: **Agenda & notes** (Spanish: **Agenda y
+notas**). Only that deck has it (a deck has it when its file has a `paperwork:` block). It makes the chair's monthly
 paperwork from what is typed in **Customize → Your details** and from the site's own facts (the meeting's date and
 time, its Google Meet link and meeting code, and that meeting's guest speaker from `config/site.yml` →
 `meeting:` → `speakers:`):
@@ -2837,10 +2837,10 @@ time, its Google Meet link and meeting code, and that meeting's guest speaker fr
    (its *Guest speaker* line, name and position, and its *Topic* line; both are **left out** when the list names no
    speaker for that meeting — November 18 and December 16, 2026, which have none, or a date whose speaker isn't
    listed yet — and in *No guest speaker*), the agenda's times (from the version of the agenda slide chosen: *With a
-   guest speaker*, whose 7:02 row reads "Guest speaker: none at this meeting" for a meeting with none — November 18
+   guest speaker*, whose 7:01 row reads "Guest speaker: none at this meeting" for a meeting with none — November 18
    and December 16 in the first version, which the panel warns about — and "Guest speaker: to be announced" for one
    not listed yet; or *No guest speaker*, with tonight's topic in place of the speaker's rows, for a night such as
-   those two), tonight's topic when one is filled in, the second half (7:30–8:00: coming events, workshop requests,
+   those two), the topic for sharing when one is filled in, the second half (7:30–8:00: coming events, workshop requests,
    special offers, magazine topics, GVR and RLV sharing), the volunteers wanted, the parking lot after the close,
    the online / no-photos reminder and a signature. The committee meeting is not a business meeting (November
    2026): no minutes to approve, no reports, no old or new business.
@@ -2849,17 +2849,17 @@ time, its Google Meet link and meeting code, and that meeting's guest speaker fr
    meeting code and the same line ("la reunión después de la reunión" for the parking lot) that also says the
    meeting is in English ("La reunión es en inglés"); then the link to the meeting's details and the signature.
    There is no phone line: our Google Meet room has no number to call.
-3. **Draft minutes** (the committee's short *draft notes*) — for the *last meeting held*: the chair **by service
-   position**, "Attended: about ___ members", the opening, the guest speaker by service position and topic (or
-   tonight's topic), the events and workshop requests, the volunteers, the stories mentioned, the sharing's
-   highlights, the follow-ups (what · who, by service position · by when) and the next meeting; "Closed with the
-   Responsibility Statement; the parking lot followed." Service positions and counts only: no names, phone numbers
-   or e-mail addresses, and no attendance list. Make it right after the meeting.
+3. **Draft notes** (Spanish: **Borrador de las notas**; the file's `minutes:` text) — for the *last meeting
+   held*: the chair **by service position**, "Attended: about ___ members", the opening, the guest speaker by
+   service position and topic (or the topic shared on), the events and workshop requests, the volunteers, the
+   stories mentioned, the sharing's highlights, the follow-ups (what · who, by service position · by when) and the
+   next meeting; "Closed with the Responsibility Statement; the parking lot followed." Service positions and counts
+   only: no names, phone numbers or e-mail addresses, and no attendance list. Make it right after the meeting.
 
 Each text has **Copy**, **Copy the subject** and **Open in my e-mail** (the chair's own e-mail app opens with no
 address: every address goes in BCC). A long text is copied first and the e-mail opens with "(Paste the text here:
 it's on your clipboard.)"; if the browser won't let the page copy, no e-mail opens and the page says to copy the
-text by hand. The minutes also have **Print** (named with the meeting's date; the print window can save a
+text by hand. The notes also have **Print** (named with the meeting's date; the print window can save a
 document). A line whose details are all blank is left out; a blank left empty beside a filled one shows in
 [brackets].
 

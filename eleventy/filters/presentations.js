@@ -159,7 +159,7 @@ const UI_TAG = /\{ui:([^}]*)\}/g;
 const VERSION_TAG = /\{(only|not):([^}]*)\}/g;
 const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 const HTML = /<[A-Za-z/!]/;
-// The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & minutes): its
+// The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & notes): its
 // texts (plain text, in the deck's language), their own facts {paper:…} (the meeting a text is for, its month, the
 // meeting after it, the agenda's rows, the date and time in Spanish for a Spanish paragraph, the committee's name as
 // the Spanish pages give it — config/site.yml site.committee_es —, that meeting's guest speaker: name and service
@@ -430,7 +430,7 @@ function fieldProblems(s, layout, w, idset) {
  * tests/test_presentations.py check_deck, line for line (its YAML reading is loadDecks' job here).
  */
 /**
- * The rules of a deck's `paperwork:` block (the committee meeting's agenda e-mail, reminder, draft minutes and
+ * The rules of a deck's `paperwork:` block (the committee meeting's agenda e-mail, reminder, draft notes and
  * "Start next month"; config/presentations/README.md) as lines that start with "paperwork". Its texts keep the
  * slides' wording and privacy rules — they go out by e-mail and into minutes that may be posted — and are plain
  * text: blanks ({fill:…}, never a notes_only one), facts ({live:…}), its own facts ({paper:…}) and Spanish spans.
@@ -789,7 +789,7 @@ export function checkDeck(d, stem) {
     if (layout === "quote" && isStr(s.credit) && !s.credit.trim()) out.push(`${w}: a quote needs its credit line`);
   });
 
-  // the chair's paperwork (Customize → Agenda & minutes)
+  // the chair's paperwork (Customize → Agenda & notes)
   out.push(...paperworkProblems(d, fillKeys, idset, byId));
 
   if (!hasDisclaimer) out.push('no slide says "Not an official AA Grapevine, Inc. presentation" (keep it, as in the deck)');
@@ -1033,7 +1033,7 @@ function shapeDeck(d, id, now, notice) {
     footer: String(d.footer || ""),
     version: hash(slides.map((s) => s.h).join("\n")),
     slides,
-    // the chair's paperwork (Customize → Agenda & minutes), or null
+    // the chair's paperwork (Customize → Agenda & notes), or null
     paperwork: shapePaper(d, fillins, new Set(raw.map((s) => s.id))),
   };
 }
@@ -2001,7 +2001,7 @@ export function deckJson(deck, ctx) {
     fillins: deck.fillins,
     live: liveFacts(c),
     slides,
-    // the chair's paperwork (Customize → Agenda & minutes; only a deck that has a `paperwork:` block): the deck's
+    // the chair's paperwork (Customize → Agenda & notes; only a deck that has a `paperwork:` block): the deck's
     // block, with the meetings it can be for and the committee's name as the Spanish pages give it
     ...(deck.paperwork ? { paperwork: { ...deck.paperwork, meetings: paperMeetings(c).rows, time_es: paperMeetings(c).time_es,
       committee_es: clean(c.site.committee_es) } } : {}),

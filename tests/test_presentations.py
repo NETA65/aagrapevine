@@ -106,7 +106,7 @@ UI_TAG = re.compile(r"\{ui:([^}]*)\}")
 VERSION_TAG = re.compile(r"\{(only|not):([^}]*)\}")
 LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
 HTML = re.compile(r"<[A-Za-z/!]")
-# The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & minutes): its
+# The chair's paperwork (a deck's `paperwork:` block — the committee meeting's Customize → Agenda & notes): its
 # texts (plain text), their own facts {paper:…} (the meeting a text is for — its guest speaker too — …) and "Start
 # next month" (numbered rows of blanks: <row>_what / _who / _when for an action item, <row>_item / _status for old
 # business)
@@ -367,7 +367,7 @@ def field_problems(s: dict, layout: str, w: str, idset: set) -> list[str]:
 
 
 def paperwork_problems(d: dict, fill_keys: dict, idset: set, by_id: dict) -> list[str]:
-    """The rules of a deck's `paperwork:` block (the committee meeting's agenda e-mail, reminder, draft minutes and
+    """The rules of a deck's `paperwork:` block (the committee meeting's agenda e-mail, reminder, draft notes and
     "Start next month") as lines that start with "paperwork". Its texts keep the slides' wording and privacy rules —
     they go out by e-mail and into minutes that may be posted — and are plain text: blanks ({fill:…}, never a
     notes_only one), facts ({live:…}), its own facts ({paper:…}) and Spanish spans. `fill_keys`: key → notes_only."""
@@ -806,7 +806,7 @@ def check_deck(path: Path) -> list[str]:
         if layout == "quote" and isinstance(s.get("credit"), str) and not s["credit"].strip():
             out.append(f"{w}: a quote needs its credit line")
 
-    # the chair's paperwork (Customize → Agenda & minutes)
+    # the chair's paperwork (Customize → Agenda & notes)
     out.extend(paperwork_problems(d, fill_keys, idset, by_id))
 
     if not has_disclaimer:

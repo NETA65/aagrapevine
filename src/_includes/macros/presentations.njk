@@ -7,7 +7,7 @@
     pres.player(lang) prints, all inert until the script uses them:
       #gvp-tpl      the dialog shell, cloned when a presentation is opened: progress line, the stage, the notes
                     panel, the presenter view's timer / clock / next slide, the Customize drawer (eight tabs — the
-                    "Agenda & minutes" one only for a deck with the chair's paperwork; their panels are drawn by the
+                    "Agenda & notes" one only for a deck with the chair's paperwork; their panels are drawn by the
                     script), the overview, the control bar and its two menus (Print · More),
                     a live region and the toast. Every label in the page language; the slides inside are English
                     (marked lang="en" by the script; "(en inglés)" on /es/). Areas/presentations.css (prefix gvp-).
@@ -81,7 +81,7 @@
   "pres.st_edited", "pres.st_edited_one", "pres.st_added", "pres.st_added_one", "pres.st_moved", "pres.st_details",
   "pres.st_details_one", "pres.st_last", "pres.st_last_n", "pres.st_resume", "pres.st_resume_label"
 ] -%}
-{#- ("paper", Agenda & minutes: the script shows it only for a deck with the chair's paperwork — the committee meeting) -#}
+{#- ("paper", Agenda & notes: the script shows it only for a deck with the chair's paperwork — the committee meeting) -#}
 {%- set tabs = [["version", "timer"], ["slides", "list"], ["edit", "pencil"], ["add", "plus"], ["details", "notebook-pen"], ["prepare", "list-checks"], ["paper", "mail"], ["save", "download"]] -%}
 {%- set printModes = ["slides", "notes", "handout", "script"] -%}
 <template id="gvp-tpl">

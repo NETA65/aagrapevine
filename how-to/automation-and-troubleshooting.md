@@ -531,7 +531,7 @@ Listen episode link and Home's *Resume* (`ListenSharedLink`, `HomeResumeFocus`),
 calendar* menu (`DeadlineCalendarMenu`), read aloud's controls and video captions (`ReadAloudControls`,
 `VideoCaptions`), the question of the day and *Pass it on* (`QuestionOfTheDay`, `PassItOn`, `GvrPhone`), the
 Shop's cost card and its sheet (`ShopCostCalculator`, `ShopCostSheet`), What's New's "New since your last visit"
-(`WhatsNewSince`), the committee meeting's *Agenda & minutes* (`MeetingPaperwork`) and the Area report: For:
+(`WhatsNewSince`), the committee meeting's *Agenda & notes* (`MeetingPaperwork`) and the Area report: For:
 Area, its Word file's dated name, the dates typed one at a time and a phone seen as Safari on an iPhone, with the
 line on Safari's 7-day rule (`AreaReportInBrowser`), and, on a stopped clock, the working report following today, a
 *To* picked by hand, *Next report* and the "Start from your … report?" offer, the browser asked to keep the site's
