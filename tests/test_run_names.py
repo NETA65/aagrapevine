@@ -245,6 +245,10 @@ def update_cases(full: str, midday: str, evening: str) -> list[tuple[str, dict, 
          "Full update (started by hand)"),
         ("Run workflow, nothing changed", dict(event="workflow_dispatch", inputs=update_inputs()),
          "Full update (started by hand)"),
+        # (the form's empty crawl_minutes reaches run-name as null: GitHub titled two such runs "… without the
+        # document search" on 2026-11-12, as null == '0' is true)
+        ("Run workflow, crawl_minutes left empty (null)", dict(event="workflow_dispatch", inputs=update_inputs(crawl_minutes=None)),
+         "Full update (started by hand)"),
         ("a push", dict(event="push"), ""),
     ]
 

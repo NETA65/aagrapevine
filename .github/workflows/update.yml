@@ -45,8 +45,10 @@ name: Website update
 # the morning refresh's: scripts/ops/morning_check.py finds its run by this exact title (MORNING_TITLE — keep the two
 # equal). Only the "17 7 * * *" schedule is a full update ("Decide what to sync" → FULL_CRON); every other schedule
 # is a quick refresh, "7 20 * * *" the evening one. Every later branch tests the event before an input (a schedule's
-# or a push's inputs are null — and GitHub's null == '0' is true). A push keeps GitHub's own title, the commit's
-# subject ('' falls back to it). Folded (>-) into ONE line for GitHub: every line of it at the same indentation
+# or a push's inputs are null — and GitHub's null == '0' is true). crawl_minutes is compared as text, "[0]": a
+# Run-workflow form whose field is left empty reaches this title as null too, and null == '0' would call that full
+# update one "without the document search" ("Decide what to sync" reads the empty field as the daily setting). A
+# push keeps GitHub's own title, the commit's subject ('' falls back to it). Folded (>-) into ONE line for GitHub: every line of it at the same indentation
 # (tests/test_run_names.py works out each kind of run's title).
 run-name: >-
   ${{ inputs.morning && 'Morning refresh: new day and daily quote'
@@ -55,7 +57,7 @@ run-name: >-
   || github.event_name == 'schedule' && 'Midday refresh (GitHub schedule)'
   || github.event_name == 'workflow_dispatch' && inputs.skip_crawl && 'Quick refresh (started by hand)'
   || github.event_name == 'workflow_dispatch' && github.actor == 'github-actions[bot]' && 'Full update (started by the Morning check)'
-  || github.event_name == 'workflow_dispatch' && inputs.crawl_minutes == '0' && 'Full update without the document search (started by hand)'
+  || github.event_name == 'workflow_dispatch' && format('[{0}]', inputs.crawl_minutes) == '[0]' && 'Full update without the document search (started by hand)'
   || github.event_name == 'workflow_dispatch' && 'Full update (started by hand)'
   || '' }}
 
