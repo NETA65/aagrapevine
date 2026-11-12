@@ -2777,6 +2777,19 @@
       var pr = btn("gvp-pill gvp-pill--sm", T("pres.print_page"), { icon: "printer" });
       pr.addEventListener("click", function () { printDeck(P.deck.id, "pages", pr, [e.id]); });
       acts.appendChild(pr);
+      // a page of text for the presenter to paste somewhere (the Grapevine Meeting's message for the Google Meet
+      // chat): Copy puts it on the clipboard as plain text, line by line (G.plainLines), with the presenter's own
+      // words if they edited it and the facts of the moment it is pressed
+      if (e.slide.facilitator && e.slide.layout === "text") {
+        var cp = btn("gvp-pill gvp-pill--sm gvp-pill--primary", T("pres.paper_copy"), { icon: "copy" });
+        cp.setAttribute("data-gvp-key", "copy:" + e.id);
+        cp.addEventListener("click", function () {
+          var now = (P.cur && P.cur.byId[e.id]) || e;
+          var ctx = Object.assign(ctxFor(P.cur, "slide"), { live: G.liveValues(P.deck.live, Date.now()) });
+          copyOut(G.plainLines(now.slide.body, ctx), T("pres.paper_copied"));
+        });
+        acts.appendChild(cp);
+      }
       card.appendChild(acts);
       p.appendChild(card);
     });

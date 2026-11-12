@@ -676,7 +676,8 @@ speaker or wording, rebuild the kit and upload the new PNG over the old one in *
 
 **The four PowerPoint copies** in the Panel 77 folder `slides` were rebuilt with the Google Meet details the same
 day (same names, so their IDs and links stayed), and the decks' `drive_title:` lines in `config/presentations/`
-link them from `/orientation/` again.
+link them from `/orientation/` again. A fifth, `Grapevine Meeting.pptx` (the Grapevine Meeting's script), is being
+added to `slides` in November 2026; `grapevine-meeting.yml`'s `drive_title` links it the same way once it is there.
 
 **The Bulletin.** Put a Google Doc (or a .txt / .docx file) in *bulletin*. It becomes a post on the
 Bulletin page (`/bulletin/`, under *Committee*); the file name is the headline and the document's text is the body:

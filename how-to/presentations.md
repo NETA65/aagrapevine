@@ -50,8 +50,9 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
 
 - The six short GVR / RLV 101 sessions on the same page (`/orientation/magazines/` …) come from
   `config/orientation.yml`. See [Settings](settings.md).
-- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed snapshots,
-  made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026. Changing a YAML file never
+- The PowerPoint copies (`.pptx`) in the Drive folder `2027-2028_Panel77_GVLV/slides` are separate, fixed
+  snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet details on November 11, 2026,
+  and the Grapevine Meeting's copy being added in November 2026. Changing a YAML file never
   changes them, and changing them never changes the web decks. A card links its copy as "PowerPoint copy" through
   its `drive_title`.
 - The booth display on `/about/#booth` is a different thing: a show that plays by itself at the committee's table,
@@ -126,7 +127,7 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop / Taller informativo de Grapevine y La Viña | 2 | 60 | `gv` (blue) | `book-open` | 53 / 49 | `full` (60), `late` (48), `visit` (20) |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 40 / 23 | `full` (60: with a guest speaker), `no-speaker` (60) |
-| `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 17 / 14 | `full` (60) |
+| `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 19 / 15 | `full` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
@@ -154,14 +155,24 @@ night the committee asks for it. The Google Meet chat message is a page for the 
 Prepare). The ids of the slides that kept their role stayed the same; the business slides and their blanks were
 deleted (a chair's device that still keeps those blanks never shows them).
 
-**The Grapevine Meeting** (first Wednesday, 7–8 PM Central, from December 2, 2026) is an English-language AA meeting:
-the Serenity Prayer, the AA Grapevine Statement of Purpose in place of the Preamble, a story from AA Grapevine read
-aloud, sharing on its topic, the Seventh Tradition (no basket: the meeting has no expenses, and AA Grapevine, Inc.
-takes no contributions), announcements and the Responsibility Statement. The Statement of Purpose and the story are
-AA Grapevine's words: the slides name them and the readers read them from their own copy; neither is ever put on a
-slide (the site never quotes Grapevine material; with AA Grapevine's written permission, licensing@aagrapevine.org,
-the Statement of Purpose could become a `quote` slide with their credit line). Its dates come from
-`recurring_events:` → `grapevine-meeting`, as `/events/` lists them.
+**The Grapevine Meeting** (first Wednesday, 7–8 PM Central, from December 2, 2026) is an English-language AA meeting,
+in the order of the committee's draft script (November 2026), about 58 minutes: the welcome and housekeeping (muted,
+Raise hand, mind what's behind your camera, no photos or recordings), a moment of silence and the Serenity Prayer, the
+AA Grapevine Statement of Purpose in place of the Preamble, a welcome from across Area 65 (a first name and the city,
+district or home group), a story from AA Grapevine read aloud by a member who then starts the sharing, open sharing
+on its topic (3 to 5 minutes each) until about 7:50, Carry the Message in place of a Seventh Tradition basket (the
+meeting has no expenses, AA Grapevine, Inc. takes no contributions and the committee collects no money: described,
+never sold), the announcements (and any from the floor), "Before we close" (writing for Grapevine, Tradition Twelve
+said word for word from its short form with the A.A.W.S. credit, "who you see here…"), the Responsibility Statement
+and "Keep coming back!". The Statement of Purpose and the story are AA Grapevine's words: the slides name them and
+the readers read them from their own copy; neither is ever put on a slide, shared on the screen or pasted in the
+chat (the site never quotes Grapevine material; with AA Grapevine's written permission, licensing@aagrapevine.org,
+the Statement of Purpose could become a `quote` slide with their credit line). For the chair, Customize → Prepare
+has the checklist "Before the meeting", the credits, and "Chat message for Google Meet": the links and dates to paste
+in the Google Meet chat during the announcements, with its **Copy** button
+([3.14](#314-facilitator-pages-and-handouts)). Its dates come from `recurring_events:` → `grapevine-meeting`, as
+`/events/` lists them. Its PowerPoint copy, the Drive file `Grapevine Meeting.pptx` (`drive_title: "Grapevine
+Meeting"`), is being added to `slides` in November 2026: the card links it once it is there.
 
 Also in the folder: `README.md`, the committee's writing guide (saving it does not rebuild the site). Two sample
 decks are in [`tests/fixtures/presentations/`](../tests/fixtures/presentations/): `sample-workshop.yml` uses every
@@ -936,6 +947,13 @@ Mistakes: `show_until must be a quoted "YYYY-MM-DD"`, `show_from is after show_u
 - `facilitator: true`: a page for the presenter, never projected. It is listed in **Customize → Prepare** with the
   handouts, and can be viewed and printed there. No `minutes`. A `checklist: true` page has tick boxes whose ticks
   stay on the device. The orientation workshop has two: `before-you-present` and `sixty-minute-plan`.
+- A facilitator page with `layout: "text"` also has a **Copy** button there: it puts the page's `body` on the
+  clipboard as plain text, line by line (an empty line between paragraphs), with its `{live:…}` facts as they are
+  when Copy is pressed and the presenter's blanks filled in (an empty one as `[hint]`); bold and italic marks go, and
+  a link keeps only its words, so a page made to be pasted writes its web addresses out in full
+  (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`). The Grapevine Meeting's `chat-message` is
+  one: the links and dates its chair pastes into the Google Meet chat. A browser that doesn't let the page copy
+  says so: then **View** the page, select its text and copy it.
 - `handout: true`: a page printed for the participants (**Prepare → Print**). On a facilitator page it is printed
   only; on a slide of the show it is shown AND printed (the writing workshop's `checklist` slide).
 - `print: "portrait"`: on a handout, prints the page upright (otherwise sideways).
@@ -1084,7 +1102,7 @@ them, but update them as well so the record stays true.
 The `{live:…}` facts follow `config/site.yml` by themselves (`meeting:` for the committee, `recurring_events:` for
 the booth and La Viña's workshop; see [Settings](settings.md)). But some sentences in the decks were typed by hand.
 After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursday`, `5:30`, `five`, `seven` and
-`p.m.`, and fix what you find, in the slides and in the notes. Real examples:
+`p.m.` (and `PM`, `7:`, `eight`), and fix what you find, in the slides and in the notes. Real examples:
 
 | File, slide | Typed by hand |
 |---|---|
@@ -1094,7 +1112,8 @@ After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursda
 | `orientation-workshop.yml`, `thank-you` | "Our committee meets every 3rd Wednesday, {live:meeting_time}, on Google Meet." |
 | `committee-meeting.yml`, `next-meeting`, `open-meetings`, `coming-up` | "Every 3rd Wednesday · …" and "Usually the 4th Thursday, …"; in the notes "third Wednesday", "at seven", "second Saturday … from 5:30 to 7:30 p.m.", "first Wednesday" |
 | `committee-meeting.yml`, the guest speaker's and the topic's slides, `welcome`, `part-1`, `agenda`, `sharing`, `responsibility`, `parking-lot`, and the paperwork | the evening's plan: 7:02, 7:22, "done by 7:30", 7:30 to 8:00, "After 8:00: the parking lot" (and the agenda's typed times) |
-| `grapevine-meeting.yml`, `announcements` | "every 2nd Saturday, 5:30 to 7:30 PM, Lovers Lane United Methodist Church"; in the notes "first Wednesday", "third Wednesday", "at seven" |
+| `grapevine-meeting.yml`, `card`, `welcome`, `seventh-tradition`, `announcements`, `before-we-close`, `chat-message` | "the first Wednesday of each month at 7:00 PM Central" (and the card's "first Wednesday of the month", in English and Spanish); "every 2nd Saturday, 5:30 to 7:30 PM"; "every 3rd Wednesday"; "on the 2nd Saturday, … the 3rd Wednesday, and back here on the 1st Wednesday of next month"; the chat message's "every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church", "every 1st Wednesday", "every 3rd Wednesday"; in the notes "first / second / third" Wednesday or Saturday, "from 5:30 to 7:30 PM", "Lovers Lane United Methodist Church", "at seven", "7:00 PM" |
+| `grapevine-meeting.yml`, `title`, `how-it-works`, `last-shares`, `before-the-meeting`, and each TIP (timekeeping) line | the hour's plan: "by 6:50 p.m. Central", "at 7:00", "at about 7:50", "by 8:00" ("by eight"), and the TIP lines' times (7:05 to 7:08 … 7:55 to 7:57) |
 | `information-workshop.yml`, `lv-workshop` | "Usually the **4th Thursday**", and "fourth Thursday" in its notes |
 
 Where the sentence allows it, use the fact instead: "Our committee meets {live:meeting_rule}, {live:meeting_time},
@@ -1201,7 +1220,7 @@ computer, another browser or a private window does not have it.
 | Edit (Editar) | Change the words of the slide on the screen: its title, small line, the layout's fields, highlighted box, sources line, minutes and notes. `{fill:…}`, `{live:…}`, bold, italic and links work. "Reset this slide to the original" undoes it. |
 | Add (Agregar) | Add their own slide after the current one: Title and points, Text, Section break, or Discussion question (up to 60 per deck). Marked "Yours". |
 | Your details (Tus datos) | Fill in the blanks, grouped by slide. |
-| Prepare (Preparar) | The facilitator pages and handouts: view, tick, print. |
+| Prepare (Preparar) | The facilitator pages and handouts: view, tick, print; a page of text for the presenter also has Copy (the Grapevine Meeting's chat message, [3.14](#314-facilitator-pages-and-handouts)). |
 | Agenda & notes (Agenda y notas) — the committee meeting only | The chair's agenda e-mail, reminder and draft notes, made from Your details; Start next month ([3.22](#322-the-chairs-paperwork-agenda--notes)). |
 | Save & share (Guardar y compartir) | Save my version (.json), open a saved version, print, Reset to the original. |
 
@@ -1670,6 +1689,7 @@ See [Pages and code](pages-and-code.md) for the i18n files in general.
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_build -v` | the build side: the JavaScript checker gives the same lines as the Python one; the sample decks use everything; the JSON's shape; the facts at fixed dates; the README lists every fallback (builds the sample decks in a temporary folder) |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the five real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
 | `.venv\Scripts\python.exe -m unittest tests.test_r12_u9_meeting -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_r12_u9_meeting_browser.py`) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core.Text -v` | `test_plain_lines_to_copy`: what Prepare's **Copy** puts on the clipboard (a page's text, line by line). In a real browser (a built site: `tests/browser/__init__.py`): `ChatMessageCopy` (`tests/browser/test_r26_chat_message.py`), the Grapevine Meeting's chat message copied with its addresses in full and its facts filled in, English and Spanish pages |
 | `python -m unittest discover -s tests` | everything (what Code check runs) |
 
 The `_core` tests need Node.js; the `_build` tests and the real-decks test of `_core` also need the site's tools
