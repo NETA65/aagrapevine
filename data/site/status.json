@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-11T22:59:42Z",
- "updated": "2026-11-11T22:59:42Z",
+ "generated": "2026-11-12T01:53:06Z",
+ "updated": "2026-11-12T01:53:06Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-11T22:59:13Z",
-   "attempted": "2026-11-11T22:59:13Z",
+   "updated": "2026-11-12T01:52:41Z",
+   "attempted": "2026-11-12T01:52:41Z",
    "count": 61,
    "new_7d": 19,
    "error": null,
@@ -86,21 +86,21 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-11T22:59:13Z",
-   "attempted": "2026-11-11T22:59:13Z",
+   "updated": "2026-11-12T01:52:41Z",
+   "attempted": "2026-11-12T01:52:41Z",
    "count": 2,
    "new_7d": 1,
    "error": null,
    "stats": {
     "files": 2,
-    "new": 1,
+    "new": 0,
     "problems": 0,
     "errors": [],
     "active": 1
    },
    "changes": {
-    "added": 1,
-    "removed": 2,
+    "added": 0,
+    "removed": 0,
     "held": 0
    },
    "held": null
@@ -110,8 +110,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-11T22:59:13Z",
-   "attempted": "2026-11-11T22:59:13Z",
+   "updated": "2026-11-12T01:52:41Z",
+   "attempted": "2026-11-12T01:52:41Z",
    "count": 17,
    "new_7d": 0,
    "error": null,
@@ -165,8 +165,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-11T22:59:27Z",
-   "attempted": "2026-11-11T22:59:27Z",
+   "updated": "2026-11-12T01:52:49Z",
+   "attempted": "2026-11-12T01:52:49Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -321,14 +321,14 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-11T22:59:19Z",
-   "attempted": "2026-11-11T22:59:19Z",
+   "updated": "2026-11-12T01:52:45Z",
+   "attempted": "2026-11-12T01:52:45Z",
    "count": 310,
    "new_7d": 3,
    "error": null,
    "stats": {
     "fetched": 310,
-    "new": 1,
+    "new": 0,
     "total": 310,
     "active": 310,
     "gone": 0,
@@ -339,34 +339,34 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 269,
       "latest": "2026-11-09T05:15:00Z",
-      "updated": "2026-11-11T22:59:16Z"
+      "updated": "2026-11-12T01:52:45Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 40,
       "latest": "2026-11-06T05:15:00Z",
-      "updated": "2026-11-11T22:59:16Z"
+      "updated": "2026-11-12T01:52:45Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 1,
       "latest": "2026-11-09T05:15:00Z",
-      "updated": "2026-11-11T22:59:16Z"
+      "updated": "2026-11-12T01:52:45Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-06T15:10:41Z",
     "discovered_feeds": [],
-    "seconds": 3.6,
+    "seconds": 3.2,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
    },
    "changes": {
-    "added": 1,
+    "added": 0,
     "removed": 0,
     "held": 0
    },
@@ -570,8 +570,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-11T22:59:39Z",
-   "attempted": "2026-11-11T22:59:39Z",
+   "updated": "2026-11-12T01:53:05Z",
+   "attempted": "2026-11-12T01:53:05Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -664,16 +664,16 @@
   "updated": "2026-11-11T15:31:37Z"
  },
  "translations": {
-  "cached": 4236,
+  "cached": 4234,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 10,
-  "from_cache": 4224,
+  "translated_this_run": 0,
+  "from_cache": 4234,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 2.2,
-  "model_seconds": 1.4,
-  "texts_per_second": 4.6,
+  "seconds": 0.2,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 269,
   "problems": []
  },
