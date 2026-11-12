@@ -378,9 +378,12 @@ class Report(unittest.TestCase):
         self.assertIn("terminan a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de "
                       "talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR.", es)
         # what we do there: not a business meeting
-        self.assertIn("What we do there: a guest speaker and questions (on a night without one, we share on a topic); then "
-                      "coming events and workshop requests, special offers, the magazines' topics and deadlines, and sharing by "
-                      "GVRs and RLVs; an open parking lot after the close.", en)
+        self.assertIn("What we do there: from January 2027, a guest speaker and questions (until then, and on any night "
+                      "without one, we share on a topic); then coming events and workshop requests, special offers, the "
+                      "magazines' topics and deadlines, and sharing by GVRs and RLVs; after the close, the “parking lot”: "
+                      "anyone can stay on to talk.", en)
+        self.assertIn("Lo que hacemos: desde enero de 2027, la charla de una persona invitada y las preguntas (hasta "
+                      "entonces, y en cualquier reunión sin persona invitada, compartimos sobre un tema); luego,", es)
         self.assertNotRegex(en + es, r"(?i)committee business|asuntos del comité|reports from the districts|informes de los distritos")
         self.assertNotIn("p. m..", es, "one period after a time in Spanish")
         self.assertIn("How to join on Google Meet, the link and the meeting code: https://neta65.github.io/aagrapevine/meetings/#committee-meeting", en)
