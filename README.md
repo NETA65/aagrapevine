@@ -50,7 +50,9 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   (revista, formato, duración y número de ejemplares, con los precios por cantidad) e imprime una **hoja
   informativa** de una página para la conciencia de grupo (en inglés, en español o bilingüe). Para quien quiere
   **ayudar económicamente**, la tarjeta *¿Quieres ayudar económicamente?* (en *Quiénes somos* y en la página «no
-  encontrada», donde está también en inglés) dice que el comité no recibe dinero; esa tarjeta y *Lleva el Mensaje*
+  encontrada», donde está también en inglés) dice que quien prefiere pagar en efectivo puede entregarlo en nuestra
+  mesa en el próximo evento, y el comité lo usa para comprar suscripciones de regalo de Lleva el Mensaje; esa
+  tarjeta y *Lleva el Mensaje*
   (`/es/shop/#carry`) enlazan los dos programas oficiales: Lleva el Mensaje de La Viña y Carry the Message de
   Grapevine (`links:` → `lleva_el_mensaje`, `carry_the_message`). **Kit del mes**
   (`/es/monthly/`): todo lo de este mes — la reunión del comité, los eventos, las fechas límite para
@@ -357,10 +359,12 @@ What the newer pages do:
   `config/site.yml` → `sources.grapevine.specialty` / `sources.lavina.specialty`; to stop showing one store's
   item, name its kind in `specialty_skip` next to them (for example `specialty_skip: [holiday]`).
 - **Carry the Message** (`/shop/#carry`, and since October 2026 a card on About and the 404 page): for anyone who
-  wants to help financially. The card, *Want to help financially?*, says plainly that our committee collects no
-  money, and how the official program works (as its own pages say): a Carry the Message gift certificate, bought in
-  the official store, which AA Grapevine or La Viña turns into a subscription for an alcoholic in need — a purchase,
-  not a donation, with the buyer's name not linked to it. Every place shows **both** programs — Grapevine's *Carry the
+  wants to help financially. The card, *Want to help financially?*, says how the official program works (as its own
+  pages say): a Carry the Message gift certificate, bought in the official store, which AA Grapevine or La Viña turns
+  into a subscription for an alcoholic in need — a purchase, not a donation, with the buyer's name not linked to it —
+  and, since November 2026, that a member who prefers cash may hand it to us at our Grapevine and La Viña table at
+  the next event, and the committee uses it to buy Carry the Message gift subscriptions (no amounts, no appeal).
+  Every place shows **both** programs — Grapevine's *Carry the
   Message* (in English) and La Viña's *Lleva el Mensaje* (in Spanish), the page language's first, the other one
   marked "En español" / "In English" — from `links:` → `carry_the_message` and `lleva_el_mensaje`. On About it
   closes *Our committee* (`#ctm`); on the 404 page it is a row of its own under the nine popular pages, which stay
@@ -609,20 +613,17 @@ breaks while you decide.
   "(in Spanish)"), and that it is "in English, for AA members"; the AA Grapevine Statement of Purpose is named,
   never printed (does AA Grapevine's licensing allow the text, with its credit line? and its official Spanish name);
   that Google Meet really has no dial-in and no passcode for our room, and who hosts (people who were not invited
-  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether November 18 and
-  December 16, 2026 may show the committee flyer that says each meeting opens with a guest speaker; and whether
-  there will be speakers in 2028.
+  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; and whether there will be
+  speakers in 2028.
 - **The committee meeting is not a business meeting (November 2026):** the words of its new hour on `/meetings/`
   (*How the evening runs*: "Events, offers, topics and sharing", "Close, then the parking lot"; without a speaker:
   "we share on a topic until 7:30" and its six steps), in every calendar entry ("The guest speaker's part ends by
   7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until
   8:00 PM.") and the GV/LV report ("The talk and questions are done by 7:30 PM; then …"), on the booth's
-  guest-speaker slide and on `/orientation/role/`; the Spanish "la reunión después de la reunión" for the parking
-  lot; and the Grapevine Meeting's five steps (a welcome to members from across the Area, the reader shares
-  first, 3 to 5 minutes each, Carry the Message in place of a basket; your Seventh Tradition goes to your home
-  group). A free Google account ends a call of three or more people after 60 minutes: the site says "stay on" for
-  the parking lot; the chair's deck tells the room to rejoin the same link if the call drops at 8:00 (and its
-  chat message says so too).
+  guest-speaker slide and on `/orientation/role/`; and the Grapevine Meeting's five steps (a welcome to members
+  from across the Area, the reader shares first, 3 to 5 minutes each, no basket: how we support AA Grapevine and
+  Carry the Message instead). Our Google Meet runs on the committee's Google Workspace account, with no time
+  limit: the call opens at 6:50 PM and the parking lot goes on in the same call after 8:00.
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
@@ -992,8 +993,9 @@ meeting's Google Meet room:
   the **AA Grapevine Statement of Purpose** — named, never printed on the site (AA Grapevine's text: it is read
   aloud from the current issue or from aagrapevine.org) — in place of the AA Preamble; then a welcome to
   first-timers and members from across the Area, a story read aloud (its reader shares first), sharing (3 to 5
-  minutes each), Carry the Message in place of a basket (the meeting has no expenses; your Seventh Tradition goes
-  to your home group), the announcements and the Responsibility Statement. (The committee meeting no longer reads
+  minutes each), in place of a basket how we support AA Grapevine and Carry the Message (the meeting has no
+  expenses; cash handed to us at our table goes to Carry the Message gift subscriptions), the announcements and the
+  Responsibility Statement. (The committee meeting no longer reads
   the Preamble either: its deck keeps the slide, switched off, since November 2026.)
 - **Its name** is "the Grapevine Meeting". Never "Grapevine meetings": that is the list of AA groups that read
   Grapevine (`/meetings/#grapevine-meetings`).

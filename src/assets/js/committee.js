@@ -160,8 +160,8 @@
           if (this._end && now >= this._end.getTime()) this.compute(); // meeting over → roll to the next one
           var st = this._start.getTime(), diff = st - now;
           // (live until its end: a meeting that could not be rolled on — no GVTime — is not "live" for ever; "soon"
-          // the last 5 minutes: the room opens a few minutes before we start — on a free Google account a call of
-          // 3 or more ends after 60 minutes)
+          // the last 5 minutes: the room opens a few minutes before we start — the host opens it at 6:50 PM, and
+          // the committee's Google Workspace account gives the call no time limit)
           this.phase = now >= st ? (this._end && now >= this._end.getTime() ? "upcoming" : "live") : diff <= 5 * 60000 ? "soon" : "upcoming";
           this.joinText = this.phase === "live" ? i18n.live : this.phase === "soon" ? i18n.soon : i18n.join;
           diff = Math.max(0, diff);

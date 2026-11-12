@@ -509,7 +509,10 @@ pageScripts: ["/assets/js/committee.js"]
           their service and topic), the questions, then events, offers, magazine topics and sharing (never
           "committee business": it is not a business meeting), the close and the parking lot after it;
         · without one (Nov 18 and Dec 16, 2026): the hour in a line ("no guest speaker", a topic to share on until
-          speaker_until — once the committee has speakers and speaker_until is set), then its six numbered steps.
+          speaker_until — once the committee has speakers and speaker_until is set), then its six numbered steps;
+          the second, "Guest speaker" (most months a speaker, done by speaker_until; without one, as at this
+          meeting, the chair's topic and the members' sharing) — "A topic to share on" while the committee has
+          no speakers or no speaker_until.
         The build shows its next date's; the other is there for the browser (x-cloak until Alpine decides).
         The steps: 1 → 2 → 3 columns by the card's width (committee.css .cm-steps; five timed steps: .is-timed,
         the talk the widest) ---------- -#}
@@ -546,12 +549,12 @@ pageScripts: ["/assets/js/committee.js"]
             until speaker_until (left out without one), then the same second half -#}
         {% if hasSpeakers and eve.until %}<p class="mt-3 flex items-start gap-2 text-sm font-medium text-ink">{% icon "clock-3", "mt-0.5 size-4 shrink-0 text-gv" %}<span>{{ "committee.meeting.evening_topic_hour" | t(lang, { time: (eve.plain | first).at, until: eve.until }) }}</span></p>{% endif %}
         <ol class="cm-steps mt-5">
-          {% for s in ["welcome", "topic", "events", "news", "sharing", "close"] %}
+          {% for s in ["welcome", "guest" if (hasSpeakers and eve.until) else "topic", "events", "news", "sharing", "close"] %}
           <li class="cm-step">
             <span class="step-num" aria-hidden="true">{{ loop.index }}</span>
             <div class="min-w-0">
               <h4 class="font-semibold leading-snug text-ink">{{ ("committee.meeting.step_" + s) | t(lang, { end: eve.end }) }}</h4>
-              <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.meeting.step_" + s + "_text") | t(lang, { end: eve.end }) }}</p>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.meeting.step_" + s + "_text") | t(lang, { until: eve.until, end: eve.end }) }}</p>
             </div>
           </li>
           {% endfor %}

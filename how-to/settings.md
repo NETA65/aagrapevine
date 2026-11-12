@@ -320,7 +320,8 @@ Where the speakers show — the name, the position and the topic, never `confirm
 - `/meetings/`: the next meeting's speaker, "How the evening runs" (7:00 opening · 7:02 guest speaker · 7:22
   questions · 7:30 events, offers, topics and sharing · 8:00 close, then the parking lot) and the year's speaker
   schedule (date, name, position, topic); a date without a speaker shows "What happens at our committee meeting"
-  instead (a topic to share on until 7:30, then the same second half, in six steps);
+  instead (its second step, "Guest speaker": most months a speaker until 7:30, and without one, as that night, the
+  chair's topic and the members' sharing; then the same second half, in six steps);
 - the home page's next-meeting card and each committee card on `/events/` ("Guest speaker: Rick W.");
 - each meeting's calendar entry (`/events.ics`, the Google and Outlook links, the downloaded `.ics` file): "Guest
   speaker: Rick W. — <position>", "Topic: “…”" and "The guest speaker's part ends by 7:30 PM; then coming events,
@@ -461,8 +462,8 @@ the presentation `config/presentations/grapevine-meeting.yml` ([presentations.md
 with a moment of silence, the Serenity Prayer and **the AA Grapevine Statement of Purpose** in place of the AA
 Preamble, read aloud from the current issue or from aagrapevine.org — named on the site, never printed there (AA
 Grapevine's text); then a welcome to first-timers and members from across the Area, a story from the current
-Grapevine (its reader shares first), sharing (3 to 5 minutes each), Carry the Message in place of a basket (the
-meeting has no expenses; your Seventh Tradition goes to your home group), the announcements and the Responsibility
+Grapevine (its reader shares first), sharing (3 to 5 minutes each), no basket (the meeting has no expenses):
+instead, how we support AA Grapevine and Carry the Message, the announcements and the Responsibility
 Statement at 8:00. Its section on `/meetings/` says so in five steps (`committee.gvmeeting.*` in
 `src/_i18n/committee.json`).
 
