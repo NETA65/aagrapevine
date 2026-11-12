@@ -45,14 +45,13 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   [When Grapevine announces new prices](#when-grapevine-announces-new-prices)). Una **oferta de las tiendas** (el
   envío gratis del 1 de noviembre al 31 de diciembre de 2026; las ofertas de regalo para las fiestas, hasta el 31
   de diciembre) va en `config/site.yml` (`store_offers:`) y se ve arriba en la Tienda (`/es/shop/#offers`) solo
-  durante sus días. En **Suscribe a tu grupo base**,
-  la tarjeta **Lo que costaría** (`/es/shop/#group-cost`) calcula lo que costaría una suscripción del grupo
-  (revista, formato, duración y número de ejemplares, con los precios por cantidad) e imprime una **hoja
-  informativa** de una página para la conciencia de grupo (en inglés, en español o bilingüe). Para quien quiere
-  **ayudar económicamente**, la tarjeta *¿Quieres ayudar económicamente?* (en *Quiénes somos* y en la página «no
-  encontrada», donde está también en inglés) dice que quien prefiere pagar en efectivo puede entregarlo en nuestra
-  mesa en el próximo evento, y el comité lo usa para comprar suscripciones de regalo de Lleva el Mensaje; esa
-  tarjeta y *Lleva el Mensaje*
+  durante sus días. En **Suscribe a tu grupo base**, la tarjeta **Lo que costaría** (`/es/shop/#group-cost`)
+  calcula lo que costaría una suscripción del grupo (revista, formato, duración y número de ejemplares, con
+  los precios por cantidad) e imprime una **hoja informativa** de una página para la conciencia de grupo (en
+  inglés, en español o bilingüe). Para quien quiere **ayudar económicamente**, la tarjeta *¿Quieres ayudar
+  económicamente?* (en *Quiénes somos* y en la página «no encontrada», donde está también en inglés) dice que
+  quien prefiere pagar en efectivo puede entregarlo en nuestra mesa en el próximo evento, y el comité lo usa
+  para comprar suscripciones de regalo de Lleva el Mensaje; esa tarjeta y *Lleva el Mensaje*
   (`/es/shop/#carry`) enlazan los dos programas oficiales: Lleva el Mensaje de La Viña y Carry the Message de
   Grapevine (`links:` → `lleva_el_mensaje`, `carry_the_message`). **Kit del mes**
   (`/es/monthly/`): todo lo de este mes — la reunión del comité, los eventos, las fechas límite para
