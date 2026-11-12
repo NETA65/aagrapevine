@@ -214,6 +214,19 @@ function driveFileId(url) {
   return m ? m[1] : null;
 }
 
+/** A flyer as a card shows it — { view, preview, thumb } — from its link (null without one): the preview the
+ *  site's own viewer opens (drivePreviewUrl; committee.js CM.preview, the page's {% cmPreviewDialog %}) and the
+ *  picture of the card's flyer tile (ui.njk flyerThumb): the data's own `thumb` (an outside calendar's image), else
+ *  the Drive's picture of the file — also for a content/events `flyer:` that links a Drive copy (a flyer on
+ *  neta65.org cannot be shown by other sites, so the committee copies it to its Drive) — else null: the tile shows
+ *  its own flyer icon. The tile is 7.5rem (120px) wide: a 320px copy is sharp on 2× screens. The one rule for every
+ *  card with a flyer tile: the events (normalizeEvents' ev.flyer) and the weekly open meetings (weeklyFlyer). */
+export function flyerLinks(view, thumb = "") {
+  if (!view) return null;
+  const id = driveFileId(view);
+  return { view, preview: drivePreviewUrl(view), thumb: thumb || (id ? `https://lh3.googleusercontent.com/d/${id}=w320` : null) };
+}
+
 // A Drive file's id in its link ("…/file/d/<id>/view", "…open?id=<id>"): Google's picture of it, 1200 px wide, is
 // an event's share picture (the card's own is 320 px — too small for a preview).
 const SHARE_DRIVE_ID = /drive\.google\.com\/(?:file\/d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)([\w-]{10,})/;
@@ -843,12 +856,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // or one an older sync wrote with plain "/meetings/")
   let link = committee ? localPath(COMMITTEE_MEETING_PATH, lang) : it.url ? localPath(it.url, lang) : "";
   const flyerView = x.flyer_url || (it.source === "drive" && /drive\.google\.com/.test(it.url || "") ? it.url : null);
-  const flyerId = driveFileId(flyerView);
-  // Its picture: the data's own (a Drive flyer's, an outside calendar's image), else the Drive's picture of the
-  // file — also for a content/events `flyer:` that links a Drive copy (a flyer on neta65.org cannot be shown by
-  // other sites, so the committee copies it to its Drive). None (null): /events/ shows the tile's own flyer
-  // icon instead. The tile is 7.5rem (120px) wide: a 320px copy is sharp on 2× screens.
-  const flyerThumb = x.flyer_thumb || (flyerId ? `https://lh3.googleusercontent.com/d/${flyerId}=w320` : null);
+  // Its link, preview and picture (flyerLinks: the data's own picture — a Drive flyer's, an outside calendar's
+  // image —, else the Drive's picture of the file; none: /events/ shows the tile's own flyer icon instead).
+  const flyer = flyerLinks(flyerView, x.flyer_thumb);
   // The place in this language: content/events `location_es` / `location_en` → i18n.location (build_data
   // also writes "Lugar por anunciarse" for an English "Venue to be announced"); else as written.
   const locText = String(H.pickLang(it, "location", lang) || x.location || "").trim();
@@ -953,7 +963,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
     whenLabel: allDay ? dateLabel : cap(fmt(start, lang, { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
     location, online, link, linkExternal: /^https?:/.test(link || ""),
     detailsUrl,
-    flyer: flyerView ? { view: flyerView, preview: drivePreviewUrl(flyerView), thumb: flyerThumb } : null,
+    flyer,
     isNew: !!it.is_new && !committee,
     past,
     calDescription, calLocation,
@@ -1763,6 +1773,20 @@ export function weeklyOpenAll(items, lang = "en", now = new Date()) {
   return list.map((w, i) => ({ w, i })).sort((a, b) => rank(a.w) - rank(b.w) || a.i - b.i).map((o) => o.w);
 }
 
+/**
+ * A weekly open meeting's official flyer (a weeklyOpen() object) → { view, preview, thumb } (flyerLinks), or null:
+ * the newest file in the Drive's flyers/ folder that its settings' flyer_match finds (config/site.yml
+ * grapevine_weekly_open / lavina_weekly_open → driveMatch; the Portfolio stays its home). Its card on
+ * /meetings/#weekly-open and its "every week" card on /events/ show it like every event's flyer (ui.njk
+ * flyerThumb, flyerButton); no pattern or no match: nothing.
+ */
+export function weeklyFlyer(w, site, items) {
+  if (!w) return null;
+  const cfg = (site && (w.isLv ? site.lavina_weekly_open : site.grapevine_weekly_open)) || {};
+  const f = cfg.flyer_match ? driveMatch(items, cfg.flyer_match, "flyers") : null;
+  return f ? flyerLinks((f.extra && f.extra.view_url) || f.url) : null;
+}
+
 // A weekly open meeting lasts an hour (no end time is published for either; the site's rule for a time without
 // an end, EVENT_NO_END_MS) — its end on the /meetings/ cards and in its calendar files. (The cards still say "Live
 // now" for 75 minutes: a meeting can run over.)
@@ -2327,6 +2351,9 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmWebcal", (u) => String(u || "").replace(/^https?:\/\//, "webcal://"));
   // Both weekly open meetings (Grapevine Weekly Open + La Viña), the page language's first — /meetings/#weekly-open
   eleventyConfig.addFilter("cmWeeklyAll", (items, lang) => weeklyOpenAll(EMPTY ? [] : items, lang));
+  // A weekly open meeting's flyer: {% set wf = w | cmWeeklyFlyer(site, db.drive.items) %} → { view, preview, thumb }
+  // or null (weeklyFlyer) — for ui.flyerThumb / ui.flyerButton, as an event's ev.flyer
+  eleventyConfig.addFilter("cmWeeklyFlyer", (w, site, items) => weeklyFlyer(w, site, EMPTY ? [] : items));
   // A weekly open meeting's "Add to calendar": {% set wc = w | cmWeeklyCal(site, lang) %} → { gcal, ics } (weeklyCalendar)
   eleventyConfig.addFilter("cmWeeklyCal", (w, site, lang) => weeklyCalendar(w, site, lang));
   // "7:00 – 8:00 PM CDT" from two instants (an end after midnight: "7:00 PM – 1:00 AM CST") — clockRange

@@ -1358,8 +1358,8 @@ link with more after its `?pwd=…`, such as Zoom's `&omn=…` or Google Calenda
 keep only `https://….zoom.us/j/<ID>?pwd=…` and delete the rest). So if the meeting moves to another Zoom room,
 Join still opens the right room (people type the passcode) until the new full link is pasted in the settings (for
 La Viña, together with the new room's `zoom_id` and `passcode`).
-`grapevine_weekly_open: flyer_match` finds AA Grapevine's flyer on the Drive for the Grapevine card ("View flyer"),
-as La Viña's `flyer_match` does for its card ([Settings §3.7](settings.md#37-lavina_weekly_open--la-viñas-weekly-open-meeting-and-grapevine_weekly_open)).
+`grapevine_weekly_open: flyer_match` finds AA Grapevine's flyer on the Drive for the Grapevine cards of `/meetings/`
+and `/events/` (its picture and "View flyer", as on every event card), as La Viña's `flyer_match` does for its cards ([Settings §3.7](settings.md#37-lavina_weekly_open--la-viñas-weekly-open-meeting-and-grapevine_weekly_open)).
 
 **The passcode** (`find_passcode`, since October 2026) is the first word after "password", "passcode",
 "contraseña" or "código de acceso" that holds a digit, so "This meeting is password protected; the passcode is
@@ -1406,7 +1406,7 @@ lavina_weekly_open:
 | `zoom_id` | 9–11 digits, shown grouped ("871 2036 8287") |
 | `zoom_url` | the full Zoom link of that meeting ID, as Zoom gives it, ending with its `?pwd=…` part (delete anything after it, such as `&omn=…` or `&from=addon`); another room's link, more after the `?pwd=…` or anything else → the plain link and a note on `/status/`; `""` → the plain link |
 | `passcode`, `url`, `source` | shown or linked as written |
-| `flyer_match` | a regular expression (capitals ignored) that finds the flyer in the committee's Drive folder `flyers/` → a "View flyer" link on the card. Several files match → the newest one (since Nov 12, 2026: the flyer without a month, "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"; its older edition is in the Drive's private folder) |
+| `flyer_match` | a regular expression (capitals ignored) that finds the flyer in the committee's Drive folder `flyers/` → its picture and a "View flyer" button on the cards of `/meetings/` and `/events/`. Several files match → the newest one (since Nov 12, 2026: the flyer without a month, "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"; its older edition is in the Drive's private folder) |
 
 Checked with `lavina_item` (as of Oct 2, 2026): the real block gives "Jueves, 12 p. m. (hora del
 Este)", **11 AM Central**, next meeting Nov 5, 2026. `time: "11 a. m."` → 10 AM Central.

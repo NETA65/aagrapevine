@@ -782,7 +782,7 @@ meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
 | `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. At most 400 characters each, the sign-off included: a longer one is cut off on the site. |
 | `url` | `"https://www.aalavina.org/podcast"` | La Viña's page for it: the card's **Details on aalavina.org** (`""` for none). Written exactly so, with no `/` at the end. |
 | `source` | flyer note | Stored, **not shown** on any page. |
-| `flyer_match` | `"reuni[oó]n abierta de la vi[nñ]a\|la vi[nñ]a open meeting"` | The newest file in the Drive's `flyers/` folder whose title or name matches → "View flyer" ("Ver volante") on the La Viña card (since November 12, 2026: "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"). Matched by the page: capitals ignored, accents **not** folded (write `vi[nñ]a`). |
+| `flyer_match` | `"reuni[oó]n abierta de la vi[nñ]a\|la vi[nñ]a open meeting"` | The newest file in the Drive's `flyers/` folder whose title or name matches → its picture and "View flyer" ("Ver volante") on the La Viña cards of `/meetings/` and `/events/` (since November 12, 2026: "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"). Matched by the page: capitals ignored, accents **not** folded (write `vi[nñ]a`). |
 
 Examples (checked, "today" = October 2, 2026):
 - Today's block → "Reunión Abierta de La Viña", Jueves, "12 p. m. (hora del Este)", "11 AM Central", first
@@ -807,7 +807,7 @@ Examples (checked, "today" = October 2, 2026):
 **`grapevine_weekly_open:`** (since November 2026) holds the two things about the Grapevine Weekly Open that
 aagrapevine.org's page does not give: `zoom_url`, its full Zoom link (the same rules as above; its digits must be the
 meeting ID the page gives that day), and `flyer_match`, which finds AA Grapevine's flyer of the meeting in the
-Drive's `flyers/` folder for a "View flyer" link on the Grapevine card (today `"grapevine weekly open"`: the file
+Drive's `flyers/` folder for the Grapevine cards of `/meetings/` and `/events/` (its picture and "View flyer"; today `"grapevine weekly open"`: the file
 "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom"). Everything else about
 it — day, time, meeting ID, passcode — is still read from aagrapevine.org. Both meetings use the same room today,
 but each has its own `zoom_url` line: if the room changes, paste the new full link in both, and in `lavina_weekly_open`

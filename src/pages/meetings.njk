@@ -30,8 +30,8 @@ pageScripts: ["/assets/js/committee.js"]
         when no group on the lists meets in Spanish, the intro points up to #weekly-open;
     (c) #weekly-open — the weekly open meetings of AA Grapevine and La Viña, FIRST on the page (right under
         (0), before (a)): open AA meetings, where anyone interested in AA is welcome (each card's Join opens
-        the meeting's full Zoom link, and each links its official flyer on the committee's Drive when one matches
-        grapevine_weekly_open / lavina_weekly_open.flyer_match).
+        the meeting's full Zoom link, and each shows its official flyer on the committee's Drive — its tile and View
+        flyer, as an event card on /events/ — when one matches grapevine_weekly_open / lavina_weekly_open.flyer_match).
     Each section opens with ui.sectionHead (eyebrow, title, one line of text).
     The hero's right-hand card (the shared hero aside, "This week"): how many Grapevine meetings there
     are today (committee.js gvmTeaser: its link also sets the list's Day filter to today) and the next
@@ -188,21 +188,30 @@ pageScripts: ["/assets/js/committee.js"]
   </div>
   {% if wos | length %}
   {#- From 1024px side by side; each card's parts sit on rows shared with the other card (subgrid:
-      title · text · day and time · links), so the day pills and the buttons line up -#}
+      title · text · day and time · links), so the day pills and the buttons line up.
+      Each meeting's official flyer, when it is on the committee's Drive (flyers/): the newest file its settings'
+      flyer_match finds (config/site.yml grapevine_weekly_open / lavina_weekly_open → cmWeeklyFlyer; the Portfolio
+      stays its home), shown as on every event card of /events/: its tile (committee.css .cm-flyer-thumb,
+      ui.flyerThumb; the fallback in the meeting's colour) from 640px beside the day and time — a column of its own
+      in that row, so the title and the text keep the card's whole width — and View flyer by the source line (on a
+      phone the way to it), both opening it in the site's viewer ({% cmPreviewDialog %} below). No flyer: neither,
+      and no empty column. -#}
   <div class="grid gap-5 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-0">
     {% for w in wos %}
     {%- set key = "lv" if w.isLv else "gv" -%}
+    {%- set wTitle = w.title or ("committee.weekly.title" | t(lang)) -%}
+    {%- set wf = w | cmWeeklyFlyer(site, db.drive.items) -%}
     <article class="card flex flex-col overflow-hidden lg:row-span-4 lg:grid lg:grid-rows-subgrid lg:gap-0" aria-labelledby="wo-{{ key }}-title">
-      <div class="flex flex-col border-b border-line bg-surface-2 p-6 sm:p-7 lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-0 {{ 'bg-[radial-gradient(120%_100%_at_0%_0%,var(--c-lv-soft),transparent_70%)]' if w.isLv else 'bg-[radial-gradient(120%_100%_at_0%_0%,var(--c-grape-soft),transparent_70%)]' }}">
-        <div>
+      <div class="flex flex-col border-b border-line bg-surface-2 p-6 sm:p-7{{ ' sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:grid-rows-[auto_auto_1fr]' if wf }} lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-0 {{ 'bg-[radial-gradient(120%_100%_at_0%_0%,var(--c-lv-soft),transparent_70%)]' if w.isLv else 'bg-[radial-gradient(120%_100%_at_0%_0%,var(--c-grape-soft),transparent_70%)]' }}">
+        <div{{ ' class="sm:col-span-2"' if wf }}>
           <p class="flex flex-wrap items-center gap-2">
             <span class="{{ 'badge-lv' if w.isLv else 'badge-gv' }}">{% icon "grapes", "size-3" %} {{ "La Viña" if w.isLv else "Grapevine" }}</span>
             <span class="badge-muted">{% icon "languages", "size-3" %} {{ ("committee.weekly.lang_" + w.lang) | t(lang) }}</span>
           </p>
-          <h3 id="wo-{{ key }}-title" class="mt-3 font-display text-2xl font-semibold leading-tight text-balance text-ink">{{ w.title or ("committee.weekly.title" | t(lang)) }}</h3>
+          <h3 id="wo-{{ key }}-title" class="mt-3 font-display text-2xl font-semibold leading-tight text-balance text-ink">{{ wTitle }}</h3>
         </div>
         {#- La Viña: the flyer's own words (config/site.yml); its closing line is the section's sign-off below -#}
-        <p class="measure mt-2 leading-relaxed text-muted">{{ (w.summary | replace(closing, "") | trim) if w.isLv else ("committee.weekly.gv_text" | t(lang)) }}</p>
+        <p class="measure mt-2 leading-relaxed text-muted{{ ' sm:col-span-2' if wf }}">{{ (w.summary | replace(closing, "") | trim) if w.isLv else ("committee.weekly.gv_text" | t(lang)) }}</p>
 
         <div class="mt-5">
           <div class="flex flex-col items-start gap-1.5">
@@ -230,6 +239,7 @@ pageScripts: ["/assets/js/committee.js"]
           </p>
           {% endif %}
         </div>
+        {{ ui.flyerThumb(wf, wTitle, lang, "ev-tone-" + key + " sm:col-start-2 sm:row-start-3 sm:mt-5 sm:ml-5") }}
       </div>
 
       <div class="@container flex flex-1 flex-col p-6 sm:p-7">
@@ -242,7 +252,7 @@ pageScripts: ["/assets/js/committee.js"]
               own link cannot repeat an event). Plain links: no JavaScript needed. -#}
           {% if wc %}
           <details class="cm-menu">
-            <summary class="btn-secondary" aria-label="{{ 'committee.weekly.cal_aria' | t(lang, { name: w.title or ('committee.weekly.title' | t(lang)) }) }}">{% icon "calendar-plus", "size-4" %} {{ "common.add_to_calendar" | t(lang) }} {% icon "chevron-down", "size-4 opacity-70" %}</summary>
+            <summary class="btn-secondary" aria-label="{{ 'committee.weekly.cal_aria' | t(lang, { name: wTitle }) }}">{% icon "calendar-plus", "size-4" %} {{ "common.add_to_calendar" | t(lang) }} {% icon "chevron-down", "size-4 opacity-70" %}</summary>
             <div class="cm-menu-panel">
               <a href="{{ wc.gcal }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Google Calendar<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
               <a href="{{ wc.ics }}" download="weekly-open-{{ wc.key }}.ics" type="text/calendar">{% icon "download", "size-4" %} {{ "committee.cal.ics_file" | t(lang) }}</a>
@@ -253,19 +263,16 @@ pageScripts: ["/assets/js/committee.js"]
           {#- Its recordings on /listen/: the show that records this meeting (config sources.podcasts[].weekly_open —
               the Grapevine Weekly Open's "wo", La Viña's "lvo"), filtered to its episodes — once it has one there -#}
           {%- set woShowKey = (site.sources.podcasts or []) | mediaMeetingShow("lavina" if w.isLv else "grapevine", db.episodes or {}) %}
-          {% if woShowKey %}<a class="btn-secondary" href="{{ ('/listen/?show=' + woShowKey + '#episodes') | lurl(lang) }}" aria-label="{{ 'committee.weekly.listen_name' | t(lang, { name: w.title or ('committee.weekly.title' | t(lang)) }) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
+          {% if woShowKey %}<a class="btn-secondary" href="{{ ('/listen/?show=' + woShowKey + '#episodes') | lurl(lang) }}" aria-label="{{ 'committee.weekly.listen_name' | t(lang, { name: wTitle }) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
           {% if w.detailsUrl %}<a class="btn-ghost" href="{{ w.detailsUrl }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span>{{ ("committee.weekly.details_" + key) | t(lang) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span></a>{% endif %}
         </div>
-        {#- Each meeting's official flyer, when it is on the committee's Drive (flyers/): the newest file its settings'
-            flyer_match finds (config/site.yml grapevine_weekly_open / lavina_weekly_open → driveMatch; the Portfolio
-            stays its home). Grapevine's details still come from aagrapevine.org: its line (source_gv) adds that the
-            flyer is AA Grapevine's (committee.weekly.source_gv_flyer), kept whole on a line of its own when it wraps -#}
-        {%- set woCfg = (site.lavina_weekly_open if w.isLv else site.grapevine_weekly_open) or {} -%}
-        {%- set woFlyer = (db.drive.items | driveMatch(woCfg.flyer_match, "flyers")) if woCfg.flyer_match else null -%}
-        {% if woFlyer %}
+        {#- The source line, with the flyer's View flyer (wf, above). Grapevine's details still come from
+            aagrapevine.org: its line (source_gv) adds that the flyer is AA Grapevine's
+            (committee.weekly.source_gv_flyer), kept whole on a line of its own when it wraps -#}
+        {% if wf %}
         <div class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-4">
           <p class="text-xs text-faint">{% if w.isLv %}{{ "committee.weekly.source_lv" | t(lang) }}{% else %}{{ "committee.weekly.source_gv" | t(lang) }} <span class="inline-block">{{ "committee.weekly.source_gv_flyer" | t(lang) }}</span>{% endif %}</p>
-          <a class="btn-ghost btn-sm" href="{{ woFlyer.extra.view_url or woFlyer.url }}" target="_blank" rel="noopener">{% icon "file-image", "size-4" %} {{ "committee.events.view_flyer" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+          {{ ui.flyerButton(wf, wTitle, lang, "btn-ghost btn-sm") }}
         </div>
         {% else %}
         <p class="mt-auto pt-4 text-xs text-faint">{{ ("committee.weekly.source_" + key) | t(lang) }}</p>
@@ -981,3 +988,6 @@ pageScripts: ["/assets/js/committee.js"]
     </div>
   </div>
 </section>
+
+{#- the site's own viewer for the weekly open meetings' flyers (data-cm-preview: committee.js CM.preview) -#}
+{% cmPreviewDialog lang %}

@@ -741,9 +741,9 @@ sources:
 #    the new room's full link is pasted here. "" = the plain link.
 #  flyer_match: AA Grapevine's flyer for this meeting on our Drive
 #    (flyers/ folder): the newest file whose title or file name matches
-#    this (a regular expression, capitals ignored) gets a "View flyer"
-#    link on the Grapevine card at /meetings/#weekly-open. No match → no
-#    link. Change it if the flyer is renamed.
+#    this (a regular expression, capitals ignored) shows on the Grapevine
+#    cards at /meetings/#weekly-open and on /events/: its picture and
+#    "View flyer". No match → no flyer. Change it if the flyer is renamed.
 # ---------------------------------------------------------------------
 grapevine_weekly_open:
   # The committee's link (2026-11-12): the same room as La Viña's meeting below.
@@ -794,9 +794,9 @@ lavina_weekly_open:
   url: "https://www.aalavina.org/podcast"
   source: "Official La Viña flyers shared with the committee: November 2026's, and the newest one, without a month, every Thursday in the four U.S. time zones (Drive flyers/, 2026-11-12)"
   # The flyer itself on the committee's Google Drive: the newest file in the Drive's flyers/ folder
-  # whose title or file name matches this (a regular expression, capitals ignored) gets a "View flyer"
-  # link on the La Viña card at /meetings/#weekly-open. A flyer in another folder, or no match → no
-  # link. Change it if the flyer is renamed.
+  # whose title or file name matches this (a regular expression, capitals ignored) shows on the La Viña
+  # cards at /meetings/#weekly-open and on /events/: its picture and "View flyer". A flyer in another
+  # folder, or no match → no flyer. Change it if the flyer is renamed.
   # Since 2026-11-12: "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del
   # Este), por Zoom.jpg" (the newest; its older edition is in the Drive's private folder, off the site).
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"

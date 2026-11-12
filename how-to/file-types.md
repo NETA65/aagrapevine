@@ -1044,7 +1044,7 @@ longer match, and the link quietly disappears:
 |---|---|---|
 | `/shop/` · `/es/shop/` | **Read AA Grapevine's notice** for a price change | `price_changes` → `doc_match` in [config/site.yml](../config/site.yml) |
 | Portfolio, `/orientation/` · `/es/orientation/` | **Present on the web**, the deck's "PowerPoint copy" | exactly the deck's `drive_title` in `config/presentations/*.yml` ([Presentations](presentations.md)) |
-| `/meetings/` · `/es/meetings/` | each weekly open meeting's **View flyer** (Grapevine's and La Viña's) | `grapevine_weekly_open` / `lavina_weekly_open` → `flyer_match` in config/site.yml |
+| `/meetings/` · `/es/meetings/`, `/events/` · `/es/events/` | each weekly open meeting's flyer picture and **View flyer** (Grapevine's and La Viña's) | `grapevine_weekly_open` / `lavina_weekly_open` → `flyer_match` in config/site.yml |
 | `/events/` (monthly events) | each date's flyer | `recurring_events` → `flyer_match` ([Flyers and events §5.2](flyers-and-events.md#52-a-monthly-events-flyer-flyer_match)); our Grapevine Meeting's: `Grapevine Meeting - flyer.png` |
 | `/events/` (the committee meeting) | each meeting's flyer, from `flyers` only | `meeting` → `flyer_match`: `Committee Meeting - flyer.png` (every meeting), `January 2027 Committee Meeting - guest speaker.png` (that month's; a month only, so no event of its own) — [Settings §3.2](settings.md#the-meetings-flyers-flyer_match) |
 | `/contribute/` · `/es/contribute/` | printable "Share your story" flyers (at most 2, from `flyers`) | "share your story" / "comparte tu historia" |

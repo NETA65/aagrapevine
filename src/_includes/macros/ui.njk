@@ -634,3 +634,31 @@
 {% macro langPill(item, lang) %}
 {%- if item.lang and item.lang != lang and item.lang != "und" %}<span class="badge-muted uppercase" title="{{ ('lang.' + item.lang) | t(lang) }}">{{ item.lang }}</span>{% endif -%}
 {% endmacro %}
+
+{#- ── A FLYER ON A CARD ── the same two ways to it on every card that has one: the events of /events/ (their
+    "View flyer" button and side tile; the past events' list has the button), the weekly open meetings' cards on
+    /events/ (#ev-weekly) and /meetings/ (#weekly-open). flyer = { view, preview, thumb } (committee.js flyerLinks:
+    an event's ev.flyer, a weekly open meeting's cmWeeklyFlyer), title = the card's title. Both open the flyer in
+    the site's own viewer (data-cm-preview → committee.js CM.preview: the page needs {% cmPreviewDialog lang %}),
+    without JavaScript in a new tab. Nothing at all without a flyer (no empty frame). -#}
+{#- The tile (committee.css .cm-flyer-thumb: 7.5rem wide, 3:4, beside the card's text from 640px; on a phone the
+    card's "View flyer" button is the way to it): the flyer's picture when there is one; else — a flyer only its
+    own site can show (neta65.org turns other sites away), or a picture still loading or that fails — the tile's
+    own flyer icon and the word "Flyer", never an empty space. The picture covers them once it has loaded
+    (is-loaded: a flyer with transparent parts never shows them through). cls: classes for where the tile sits. -#}
+{% macro flyerThumb(flyer, title, lang, cls="") %}
+{%- if flyer and flyer.view %}
+<a class="cm-flyer-thumb{{ (' ' + cls) if cls }}" href="{{ flyer.view }}" target="_blank" rel="noopener" data-cm-preview="{{ flyer.preview }}" data-cm-title="{{ title }}" data-cm-open="{{ flyer.view }}" aria-label="{{ 'committee.events.view_flyer_of' | t(lang, { title: title }) }}">
+  {% if flyer.thumb %}
+  <img src="{{ flyer.thumb }}" alt="" width="240" height="320" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.parentNode.classList.add('is-loaded')" onerror="this.parentNode.classList.add('is-broken')">
+  {% endif %}
+  <span class="cm-flyer-fallback" aria-hidden="true">{% icon "file-image", "size-9" %}<span class="cm-flyer-word">{{ "committee.events.flyer" | t(lang) }}</span></span>
+</a>
+{%- endif %}
+{% endmacro %}
+
+{#- The "View flyer" button (cls: its button classes — an event card's btn-secondary, a quieter btn-ghost where the
+    flyer is one line among others) -#}
+{% macro flyerButton(flyer, title, lang, cls="btn-secondary btn-sm") %}
+{%- if flyer and flyer.view %}<a class="{{ cls }}" href="{{ flyer.view }}" target="_blank" rel="noopener" data-cm-preview="{{ flyer.preview }}" data-cm-title="{{ title }}" data-cm-open="{{ flyer.view }}">{% icon "eye", "size-4" %} {{ "committee.events.view_flyer" | t(lang) }}</a>{% endif -%}
+{% endmacro %}
