@@ -307,6 +307,14 @@
     "en": "The chair introduces a topic, and members share their experience on it.",
     "es": "Quien coordina presenta un tema y los miembros comparten su experiencia sobre él."
   },
+  "committee.meeting.step_guest": {
+    "en": "Guest speaker",
+    "es": "Orador(a) invitado(a)"
+  },
+  "committee.meeting.step_guest_text": {
+    "en": "Most months a guest speaker shares on a topic and answers our questions, done by {until}. When there's no guest speaker, as at this meeting, the chair introduces a topic and members share their experience on it.",
+    "es": "La mayoría de los meses, un(a) orador(a) invitado(a) habla sobre un tema y responde nuestras preguntas, y a más tardar a las {until} termina su parte. Cuando no hay orador(a) invitado(a), como en esta reunión, quien coordina presenta un tema y los miembros comparten su experiencia sobre él."
+  },
   "committee.meeting.step_events": {
     "en": "Coming up & workshop requests",
     "es": "Eventos próximos y solicitudes de talleres"
@@ -1516,8 +1524,8 @@
     "es": "Cierre"
   },
   "committee.gvmeeting.step_close_text": {
-    "en": "No basket: the meeting has no expenses, and your Seventh Tradition goes to your home group. In place of the basket, a word about Carry the Message. Then the announcements, and we close on time with the Responsibility Statement, at {end}.",
-    "es": "No pasamos canasta: la reunión no tiene gastos, y tu Séptima Tradición es para tu grupo base. En lugar de la canasta, hablamos de Lleva el Mensaje. Luego, los anuncios, y a las {end} cerramos a tiempo con la Declaración de Responsabilidad."
+    "en": "No basket (the meeting has no expenses): instead, how we support AA Grapevine and Carry the Message; announcements; and we close at {end} with the Responsibility Statement.",
+    "es": "No pasamos canasta (la reunión no tiene gastos): en su lugar, cómo apoyamos a AA Grapevine y Lleva el Mensaje; los anuncios; y a las {end} cerramos con la Declaración de Responsabilidad."
   },
   "committee.gvmeeting.same_room": {
     "en": "The same {platform} room as our committee meeting.",

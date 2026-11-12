@@ -160,9 +160,11 @@ in the order of the committee's draft script (November 2026), about 58 minutes: 
 Raise hand, mind what's behind your camera, no photos or recordings), a moment of silence and the Serenity Prayer, the
 AA Grapevine Statement of Purpose in place of the Preamble, a welcome from across Area 65 (a first name and the city,
 district or home group), a story from AA Grapevine read aloud by a member who then starts the sharing, open sharing
-on its topic (3 to 5 minutes each) until about 7:50, Carry the Message in place of a Seventh Tradition basket (the
-meeting has no expenses, AA Grapevine, Inc. takes no contributions and the committee collects no money: described,
-never sold), the announcements (and any from the floor), "Before we close" (writing for Grapevine, Tradition Twelve
+on its topic (3 to 5 minutes each) until about 7:50, "Instead of a basket: supporting AA Grapevine" (the meeting has
+no expenses; AA Grapevine, Inc. takes no contributions: members support it by subscribing, giving gift
+subscriptions, buying its books and writing for it; Carry the Message described, never sold, and cash handed to us
+at our table goes to Carry the Message gift subscriptions), the announcements (and any from the floor), "Before we
+close" ("Have a story? Send it to AA Grapevine or La Viña", with the committee's /contribute/ page; Tradition Twelve
 said word for word from its short form with the A.A.W.S. credit, "who you see here…"), the Responsibility Statement
 and "Keep coming back!". The Statement of Purpose and the story are AA Grapevine's words: the slides name them and
 the readers read them from their own copy; neither is ever put on a slide, shared on the screen or pasted in the

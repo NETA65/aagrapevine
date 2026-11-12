@@ -160,7 +160,7 @@ class MissingSpanishAddress(unittest.TestCase):
                         self.assertIsNotNone(o, r)
                         self.assertEqual(o["lang"], "es")
                         self.assertIn("¿Quieres ayudar económicamente?", o["text"])
-                        self.assertIn("Nuestro comité no recibe dinero.", o["text"])
+                        self.assertIn("¿Prefieres pagar en efectivo? Entrégalo en nuestra mesa de La Viña y Grapevine", o["text"])
                         self.assertGreater(o["h"], 0, "shown")
                         if width == 1920:       # beside the English words, its top by the heading's
                             self.assertGreater(o["left"], r["words"]["right"], r)

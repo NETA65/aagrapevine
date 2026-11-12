@@ -71,7 +71,7 @@ class ChatMessageCopy(unittest.TestCase):
         self.assertTrue(all(line.startswith("• ") for line in lines[1:]), lines)
         # the addresses written out in full, as Google Meet's chat makes links of them
         self.assertEqual(lines[1], "• Carry the Message: https://www.aagrapevine.org/carry-the-message · La Viña: "
-                                   "https://www.aalavina.org/lleva-el-mensaje")
+                                   "https://www.aalavina.org/lleva-el-mensaje · or cash at our table at the next event")
         self.assertEqual(lines[2], "• Our table at CityWide Dallas: every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church")
         self.assertRegex(lines[3], rf"^• Grapevine Meeting: every 1st Wednesday, .+, on this Google Meet \(next: {DATE}\)$")
         self.assertRegex(lines[4], rf"^• Committee meeting: every 3rd Wednesday, .+, the same link \(next: {DATE}\)$")
