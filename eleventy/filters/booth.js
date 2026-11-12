@@ -156,6 +156,10 @@ const WS = `[${WS_CHARS}]`;
 // An address the booth accepts: https, a host, no white space, no user name in it ("https://aa.org@other.site/" is
 // not aa.org)
 const URL_RE = new RegExp(`^https://([^/?#@:${WS_CHARS}]+)(:[0-9]+)?([/?#][^${WS_CHARS}]*)?$`, "i");
+// The same with http:// too — only ever for the site's OWN address as site.url writes it (ownLink): GitHub Pages
+// serves a new custom domain on http:// until its certificate is issued and "Enforce HTTPS" is ticked, and the
+// deploy builds for the address Pages reports. Never for another host.
+const SITE_URL_RE = new RegExp(`^https?://([^/?#@:${WS_CHARS}]+)(:[0-9]+)?([/?#][^${WS_CHARS}]*)?$`, "i");
 
 /* ------------------------------------------------------------------ */
 /*  Reading the CSV (RFC 4180, the way Python's csv module reads it)    */
@@ -284,7 +288,19 @@ export function secondsOf(v) {
 
 /** An https:// address → { host (lower case), path, query } or null (another scheme, white space, a user name). */
 export function splitUrl(v) {
-  const m = URL_RE.exec(String(v ?? ""));
+  return splitWith(URL_RE, v);
+}
+/** The site's own host from its address, http:// or https:// ("grapevine.neta65.org"), or "". */
+const siteHost = (url) => (splitWith(SITE_URL_RE, url) || {}).host || "";
+/** A link on the site's own address exactly as site.url writes it (base: that address with one "/" at the end;
+ *  http:// while the custom domain has no certificate yet) → splitUrl's parts, else null. Every other http://
+ *  link stays refused. */
+const ownLink = (v, base) => {
+  const s = String(v ?? "");
+  return base && (s === base.slice(0, -1) || s.startsWith(base)) ? splitWith(SITE_URL_RE, s) : null;
+};
+function splitWith(re, v) {
+  const m = re.exec(String(v ?? ""));
   if (!m) return null;
   const rest = m[3] || "";
   const q = rest.indexOf("?"), h = rest.indexOf("#");
@@ -451,7 +467,7 @@ function resolveSite(v, base) {
 export function checkCsv(text, opts = {}) {
   const file = opts.file || "booth.csv";
   const base = siteBase(opts.site);
-  const own = base ? (splitUrl(base) || {}).host : "";
+  const own = siteHost(base);
   const hostOk = (h) => ALLOWED_HOSTS.includes(h) || (!!own && h === own);
   const items = [];
   const problems = [];
@@ -721,14 +737,15 @@ export function checkCsv(text, opts = {}) {
 
     // qr_url: a link shown as a QR code ({site} / {site_es} for a page of this site: the English page on English
     // slides, the Spanish one on Spanish slides — qr / qr_es) — a page, never a document file: the player prints its
-    // address (host and path) under the code, and a visitor never reads "PDF"; source_url: where to check it
+    // address (host and path) under the code, and a visitor never reads "PDF"; source_url: where to check it.
+    // (A page of this site has the scheme of site.url — http:// on a custom domain without its certificate yet.)
     const qrRaw = oneLine(get("qr_url"));
     let qr = null, qrEs = null;
     if (!qrRaw) {
       if (type === "qr") err("qr_url is empty", "falta qr_url");
     } else {
       const resolved = resolveSite(qrRaw, base);
-      const u = resolved ? splitUrl(resolved.en) : null;
+      const u = resolved ? splitUrl(resolved.en) || ownLink(resolved.en, base) : null;
       if (!u) err(`qr_url "${qrRaw}": an https:// link, or {site}… for a page of this website`, `qr_url "${qrRaw}": un enlace https:// o {site}… para una página de este sitio`);
       else if (!hostOk(u.host)) err(`qr_url: ${u.host} is not one of the allowed sites (${HOSTS_EN})`, `qr_url: ${u.host} no es uno de los sitios permitidos (${HOSTS_ES})`);
       else if (PDF_WORD.test(u.path)) {
@@ -1193,12 +1210,15 @@ function context(ctx = {}) {
   const site = ctx.site || {};
   const url = String(site.url || "").replace(/\/+$/, "");
   const now = ctx.now instanceof Date ? ctx.now : nowDate();
-  const own = url ? (splitUrl(url + "/") || {}).host : "";
+  const own = siteHost(url);
   const memo = new Map();
-  // a link a QR code or an item may hold: on an allowed site (SPEC §1.2), else null
+  // a link a QR code or an item may hold: on an allowed site (SPEC §1.2), or a page of this site with the scheme
+  // site.url has (http:// on a custom domain before its certificate: the site's own pages, never another host), else
+  // null
   const linkOk = (u) => {
     const s = splitUrl(u);
-    return s && (ALLOWED_HOSTS.includes(s.host) || (!!own && s.host === own)) ? String(u) : null;
+    if (s) return ALLOWED_HOSTS.includes(s.host) || (!!own && s.host === own) ? String(u) : null;
+    return url && ownLink(u, url + "/") ? String(u) : null;
   };
   return {
     [CONTEXT]: true,
@@ -1213,7 +1233,7 @@ function context(ctx = {}) {
     // visitor never reads "PDF" (the CSV's qr_url has the same rule); else null
     qrOk: (u) => {
       const s = linkOk(u);
-      return s && !PDF_WORD.test(splitUrl(s).path) ? s : null;
+      return s && !PDF_WORD.test(splitWith(SITE_URL_RE, s).path) ? s : null;
     },
     once: (key, fn) => {
       if (!memo.has(key)) memo.set(key, fn());
@@ -1845,10 +1865,12 @@ export function boothCore() {
 }
 
 /** Where a question's "Source" link may lead (csvSources): AA's own sites — aa.org, aagrapevine.org, aalavina.org —
- *  and neta65.org, plus this site's own host. Not ALLOWED_HOSTS: that list is where the booth may PLAY from (YouTube,
- *  the podcast's host), and a link there could lead to anybody's channel or show (AA's non-affiliation). */
+ *  and neta65.org and neta65.github.io (NETA 65's own: the site's first address, which still forwards to it, as the
+ *  CSV's source_url of the site's own pages is written), plus this site's own host. Not ALLOWED_HOSTS: that list is
+ *  where the booth may PLAY from (YouTube, the podcast's host), and a link there could lead to anybody's channel or
+ *  show (AA's non-affiliation). */
 export const SOURCE_HOSTS = ["aa.org", "www.aa.org", "aagrapevine.org", "www.aagrapevine.org", "aalavina.org",
-  "www.aalavina.org", "neta65.org", "www.neta65.org"];
+  "www.aalavina.org", "neta65.org", "www.neta65.org", "neta65.github.io"];
 
 /** One column of the CSV text, by row id → { id: the cell on one line } (an empty object without that column) — for
  *  the columns the booth itself never uses: source_url, web. The header as checkCsv reads it (any capitalization, the
@@ -1875,7 +1897,7 @@ export function csvColumn(text, name) {
  *  there. */
 export function csvSources(text, site) {
   const base = siteBase(site);
-  const own = base ? (splitUrl(base) || {}).host : "";
+  const own = siteHost(base);
   const out = Object.create(null);
   for (const [id, url] of Object.entries(csvColumn(text, "source_url"))) {
     const u = splitUrl(url);

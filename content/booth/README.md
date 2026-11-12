@@ -36,8 +36,9 @@ their `from` / `until` dates and complete in the page's language. Some rows stay
 
 The booth still shows all of them. After an answer the card shows the row's `explain_*` and its source line, the
 `credit_*` text; that line is a link to the row's `source_url` when the address is on aa.org, aagrapevine.org,
-aalavina.org or neta65.org (with or without `www.`) or on this site's own host (today `neta65.github.io`) — the link
-reads "Source" / "Fuente" when the row has no `credit_*` — and plain text otherwise. A change to these rows reaches
+aalavina.org or neta65.org (with or without `www.`), on `neta65.github.io` (the site's first address, which forwards
+to the new one) or on this site's own host (today `grapevine.neta65.org`) — the link reads "Source" / "Fuente" when
+the row has no `credit_*` — and plain text otherwise. A change to these rows reaches
 the card with the next build. More: [how-to/booth.md](../../how-to/booth.md#1-what-it-is).
 
 ## Editing it, and when it shows

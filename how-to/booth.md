@@ -1642,10 +1642,13 @@ and this site):
 | La Viña | `aalavina.org`, `www.aalavina.org` |
 | A.A. World Services | `aa.org`, `www.aa.org` |
 | NETA 65 | `neta65.org`, `www.neta65.org` |
-| This site | `neta65.github.io` (the site's own address) |
+| This site | `grapevine.neta65.org` (the site's own address), and `neta65.github.io` (its first address, which forwards to it) |
 | The podcast's host | `episodes.captivate.fm`, `podcasts.captivate.fm`, `player.captivate.fm` (not any other `*.captivate.fm`) |
 
-Every link must start with `https://`. Refused: `http://…`, `mailto:…`, another site (*qr_url: www.facebook.com is
+Every link must start with `https://`. The one exception is a page of this site while its address is still
+`http://` (a custom domain before GitHub has issued its certificate): a `qr_url` written `{site}…` then gets the
+site's own `http://` address, and switches to `https://` with the first publish after **Enforce HTTPS**. Refused:
+`http://…` for any other site, `mailto:…`, another site (*qr_url: www.facebook.com is
 not one of the allowed sites (YouTube, aagrapevine.org, aalavina.org, aa.org, neta65.org, the podcast's
 captivate.fm, this website)*), and tricks such as `https://www.aa.org@other.site/`. The Code check also makes sure a
 YouTube row plays a video of the official AA Grapevine & La Viña channel and a podcast row an episode the site

@@ -657,11 +657,13 @@
   }
   /** auto:about — who shares the display, the site's address and QR, and that it is not an official display.
    *  Without booth.json's `site` (the fallback of an empty pool before anything loaded): the committee's name from
-   *  here, no address (qr null — the screen shows the site's own QR). */
+   *  here, no address (qr null — the screen shows the site's own QR). The address is the site's own, from booth.json:
+   *  https://, or http:// while a custom domain has no certificate yet (GitHub Pages serves it on http:// until
+   *  then, and the build writes the address Pages reports). */
   function aboutItem(json) {
     var site = isMap(json) && isMap(json.site) ? json.site : {};
-    var url = isStr(site.url) && /^https:\/\//.test(site.url) ? site.url : null;
-    var urlEs = isStr(site.url_es) && /^https:\/\//.test(site.url_es) ? site.url_es : null;
+    var url = isStr(site.url) && /^https?:\/\/[^\/\s]/.test(site.url) ? site.url : null;
+    var urlEs = isStr(site.url_es) && /^https?:\/\/[^\/\s]/.test(site.url_es) ? site.url_es : null;
     var host = str(site.host);
     return autoItem("about",
       words({ title: fmt(WORDS.en.shared_by, { committee: str(site.committee_en) || WORDS.en.committee }), text: WORDS.en.not_official, credit: host }),

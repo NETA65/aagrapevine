@@ -122,6 +122,9 @@ TYPE_PUNCT = re.compile(rf"(?:{WS}|[_/-])+")
 TAG = re.compile(r"\A[^\W_][\w-]*\Z")
 ID = re.compile(r"\A[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 URL_RE = re.compile(rf"\Ahttps://([^/?#@:{WS_CHARS}]+)(:[0-9]+)?([/?#][^{WS_CHARS}]*)?\Z", re.I)
+# The same with http:// too — only for the site's OWN address as site.url writes it (own_link): GitHub Pages serves a
+# new custom domain on http:// until its certificate is issued and "Enforce HTTPS" is ticked. Never another host.
+SITE_URL_RE = re.compile(rf"\Ahttps?://([^/?#@:{WS_CHARS}]+)(:[0-9]+)?([/?#][^{WS_CHARS}]*)?\Z", re.I)
 
 SALES = "no sales or urgency words: attraction, not promotion"
 # "PDF" / "PDFs" as a word — in a shown cell, and in the part of a qr_url the player prints under the code
@@ -251,7 +254,25 @@ def clock(sec: int) -> str:
 
 
 def split_url(v: str) -> dict | None:
-    m = URL_RE.match(v or "")
+    return split_with(URL_RE, v)
+
+
+def site_host(url: str) -> str:
+    """The site's own host from its address, http:// or https:// ("grapevine.neta65.org"), or ""."""
+    return (split_with(SITE_URL_RE, url) or {}).get("host", "")
+
+
+def own_link(v: str, base: str) -> dict | None:
+    """A link on the site's own address exactly as site.url writes it (base: with one "/" at the end; http:// while
+    the custom domain has no certificate yet) → split_url's parts, else None. Every other http:// link stays
+    refused."""
+    if base and (v == base[:-1] or v.startswith(base)):
+        return split_with(SITE_URL_RE, v)
+    return None
+
+
+def split_with(rx: re.Pattern, v: str) -> dict | None:
+    m = rx.match(v or "")
     if not m:
         return None
     rest = m[3] or ""
@@ -344,7 +365,7 @@ def check_csv(text: str, file: str = "booth.csv", site_url: str = BASE) -> tuple
     """A CSV text → (items, problems): the rows the show uses, as the build's items, and one line per mistake —
     "booth.csv row 14 (quiz-12): …" (the build's `where` and English `en`)."""
     base = site_url.rstrip("/") + "/" if site_url else ""
-    own = (split_url(base) or {}).get("host", "") if base else ""
+    own = site_host(base)
 
     def host_ok(h: str) -> bool:
         return h in ALLOWED_HOSTS or (bool(own) and h == own)
@@ -624,7 +645,8 @@ def check_csv(text: str, file: str = "booth.csv", site_url: str = BASE) -> tuple
                 err("qr_url is empty")
         else:
             resolved = resolve_site(qr_raw, base)
-            u = split_url(resolved["en"]) if resolved else None
+            # (a page of this site has the scheme of site.url — http:// on a custom domain before its certificate)
+            u = (split_url(resolved["en"]) or own_link(resolved["en"], base)) if resolved else None
             if not u:
                 err(f'qr_url "{qr_raw}": an https:// link, or {{site}}… for a page of this website')
             elif not host_ok(u["host"]):
@@ -697,7 +719,18 @@ def check_file(path: Path) -> list[str]:
 # What each fixture must give, line by line (tests/fixtures/booth_csv/*.csv — one kind of mistake per file)
 # ----------------------------------------------------------------------------------------------------------------
 HOSTS_LINE = f"is not one of the allowed sites ({HOSTS_EN})"
-ID_RULE = "use only a–z, 0–9 and dashes (no spaces or capitals), at most 48 characters"
+# The site's own address on http:// (a custom domain before its certificate) — Rules and Twin: the site's pages with its
+# scheme, written {site}… or out in full; another host on http:// (an allowed one too, a look-alike, a user name) and a
+# document file refused (rows 7–11)
+HTTP_SITE = "http://gvlv.example.org"
+HTTP_ROWS = "\n".join([
+    "site,qr,Scan,{site}contribute/", "site-es,qr,Scan,{site_es}meetings/", "home,qr,Scan,{site}",
+    "written,qr,Scan,http://gvlv.example.org/shop/", "secure,qr,Scan,https://gvlv.example.org/watch/",
+    "other,qr,Scan,http://example.org/x/", "aa,qr,Scan,http://www.aa.org/",
+    "lookalike,qr,Scan,http://gvlv.example.org.other.test/", "user,qr,Scan,http://gvlv.example.org@other.test/",
+    "doc,qr,Scan,{site}files/flyer.pdf",
+])
+ID_RULE ="use only a–z, 0–9 and dashes (no spaces or capitals), at most 48 characters"
 DATE_RULE = "a date written YYYY-MM-DD, year 2000–2099 (Excel may have changed it: format the column as Text)"
 TAG_RULE = "is not a tag (one word: letters, digits, dashes; at most 32 characters)"
 TYPE_LIST = ", ".join(TYPES)
@@ -1033,6 +1066,45 @@ class Rules(unittest.TestCase):
         _, problems = self.check("q,qr,Scan,{site}", header="id,type,title_en,qr_url", site_url="")
         self.assertEqual(problems, ['t.csv row 2 (q): qr_url "{site}": an https:// link, or {site}… for a page of this website'])
 
+    def test_the_sites_own_address_on_http(self):
+        """A custom domain is served on http:// until GitHub issues its certificate and the owner ticks "Enforce
+        HTTPS" — and the deploy builds for the address GitHub Pages reports. A page of this site then has the
+        site's scheme ({site}… and the address written out alike); every other host still needs https://, the
+        allowed sites too."""
+        items, problems = self.check(HTTP_ROWS, header="id,type,title_en,qr_url", site_url=HTTP_SITE)
+        self.assertEqual([(i["id"], i["qr"], i["qr_es"]) for i in items], [
+            ("site", HTTP_SITE + "/contribute/", HTTP_SITE + "/es/contribute/"),
+            ("site-es", HTTP_SITE + "/es/meetings/", HTTP_SITE + "/es/meetings/"),
+            ("home", HTTP_SITE + "/", HTTP_SITE + "/es/"),
+            ("written", HTTP_SITE + "/shop/", None),
+            ("secure", "https://gvlv.example.org/watch/", None),
+        ])
+        https_line = 'an https:// link, or {site}… for a page of this website'
+        self.assertEqual(problems, [
+            f't.csv row 7 (other): qr_url "http://example.org/x/": {https_line}',
+            f't.csv row 8 (aa): qr_url "http://www.aa.org/": {https_line}',
+            f't.csv row 9 (lookalike): qr_url "http://gvlv.example.org.other.test/": {https_line}',
+            f't.csv row 10 (user): qr_url "http://gvlv.example.org@other.test/": {https_line}',
+            't.csv row 11 (doc): qr_url: a link to a document file (its address shows under the code): link to the page '
+            'that offers the document',
+        ])
+        # on https:// the site's own http:// address is refused like any other http:// link
+        items, problems = self.check("written,qr,Scan,http://gvlv.example.org/shop/", header="id,type,title_en,qr_url",
+                                     site_url="https://gvlv.example.org")
+        self.assertEqual((items, problems), ([], [f't.csv row 2 (written): qr_url "http://gvlv.example.org/shop/": {https_line}']))
+
+    def test_the_real_file_on_the_http_address(self):
+        """The committee's real rows on the live address before its certificate (http://grapevine.neta65.org): no
+        problem, the same rows and codes as on https:// — each page of this site with the site's own scheme."""
+        text = read_csv_file(CSV_FILE)
+        h_items, h_problems = check_csv(text, site_url="http://grapevine.neta65.org")
+        s_items, s_problems = check_csv(text, site_url="https://grapevine.neta65.org")
+        self.assertEqual((h_problems, s_problems), ([], []))
+        self.assertEqual([i["id"] for i in h_items], [i["id"] for i in s_items])
+        swap = lambda v: v.replace("https://grapevine.neta65.org/", "http://grapevine.neta65.org/") if v else v  # noqa: E731
+        self.assertEqual([(i["qr"], i["qr_es"]) for i in h_items], [(swap(i["qr"]), swap(i["qr_es"])) for i in s_items])
+        self.assertGreater(sum(1 for i in h_items if (i["qr"] or "").startswith("http://grapevine.neta65.org/")), 20)
+
     def test_a_language_alone(self):
         items, _ = self.check("es-only,fact,,Un dato.,https://www.aa.org/", header="id,type,text_en,text_es,source_url")
         self.assertEqual((items[0]["langs"], items[0]["en"], items[0]["es"]["text"]), (["es"], None, "Un dato."))
@@ -1067,6 +1139,25 @@ class Twin(unittest.TestCase):
                 for en_line, es in zip(js["lines"], js["es"]):
                     self.assertTrue(es.strip(), en_line)
                     self.assertNotEqual(es, en_line.split(": ", 1)[1], "the Spanish line is a translation")
+
+    def test_the_same_on_an_http_address(self):
+        """The site's own address on http:// (a custom domain before its certificate): the same lines and items from
+        both checkers — for the inline rows of Rules and the real file."""
+        cases = [("t.csv", "id,type,title_en,qr_url\n" + HTTP_ROWS + "\n", HTTP_SITE),
+                 (CSV_FILE.name, read_csv_file(CSV_FILE), "http://grapevine.neta65.org")]
+        res = run_js(self, """
+            const B = await imp("eleventy/filters/booth.js");
+            out(input.cases.map(([name, text, site]) => {
+              const r = B.checkCsv(text, { site: { url: site }, file: name });
+              return { items: r.items, lines: r.problems.map((p) => `${p.where}: ${p.en}`) };
+            }));
+        """, data={"cases": cases})
+        for (name, text, site), js in zip(cases, res):
+            with self.subTest(file=name):
+                items, problems = check_csv(text, file=name, site_url=site)
+                self.assertEqual(js["lines"], problems)
+                self.assertEqual(js["items"], items)
+        self.assertEqual(len(res[0]["lines"]), 5)
 
 
 if __name__ == "__main__":

@@ -690,6 +690,19 @@ class Pool(unittest.TestCase):
         self.assertEqual(r["aboutOff"], [])
         self.assertEqual(r["emptyShow"], ["auto:about"])
 
+    def test_the_about_slide_on_an_http_address(self):
+        """A custom domain is served on http:// until GitHub issues its certificate (the build writes the address
+        GitHub Pages reports): the about slide still shows the site's code then. Any other scheme gives none."""
+        r = core(self, r"""
+          const about = (site) => G.autoItems({ ...J, site: { ...J.site, ...site } }, S()).find((it) => it.id === "auto:about");
+          const h = about({ url: "http://grapevine.example.org/", url_es: "http://grapevine.example.org/es/" });
+          const bad = about({ url: "javascript:alert(1)//", url_es: "ftp://grapevine.example.org/es/" });
+          const blank = about({ url: "http://", url_es: "https:// x" });
+          out({ h: [h.qr, h.qr_es, h.url], bad: [bad.qr, bad.qr_es], blank: [blank.qr, blank.qr_es] });""")
+        self.assertEqual(r["h"], ["http://grapevine.example.org/", "http://grapevine.example.org/es/", "http://grapevine.example.org/"])
+        self.assertEqual(r["bad"], [None, None])
+        self.assertEqual(r["blank"], [None, None])
+
     def test_pool_contents_and_live_rows(self):
         show = sample_show()
         r = core(self, r"""

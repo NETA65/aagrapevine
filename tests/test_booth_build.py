@@ -811,6 +811,46 @@ class LiveLinks(unittest.TestCase):
         self.assertNotIn("pdf", json.dumps(got).lower())
 
 
+HTTP_JS = r"""
+const B = await imp("eleventy/filters/booth.js");
+const F = "tests/fixtures/booth_csv/";
+const show = (url) => {
+  const site = { ...input.site, url };
+  const booth = B.loadBooth({ csv: F + "show.csv", drive: F + "drive-booth.json", manifest: F + "booth-manifest.json",
+    config: input.config, site, base: "/" });
+  const s = B.boothShow(booth, { db: input.db, site, now: new Date(input.now), base: "/" });
+  return { site: s.site, problems: s.problems.map((p) => p.where + ": " + p.en), qr: Object.keys(s.qr),
+    items: s.items.map((i) => ({ id: i.id, qr: i.qr, qr_es: i.qr_es, url: i.url })) };
+};
+out({ http: show(input.http), https: show(input.https) });
+"""
+
+
+class HttpAddress(unittest.TestCase):
+    """A custom domain is served on http:// until GitHub issues its certificate and the owner ticks "Enforce HTTPS",
+    and the deploy builds for the address GitHub Pages reports — so for a while the site's own address is http://.
+    The show is then the same as on https://: every CSV row with a {site} code, every live item's code, the same QR
+    map, each page of this site with the site's own scheme (another host still needs https://: Rules in
+    tests/test_booth_csv.py)."""
+
+    def test_the_same_show_on_http(self):
+        node_ready(self)
+        http, https = "http://grapevine.example.org", "https://grapevine.example.org"
+        r = run_js(self, HTTP_JS, data={"db": DB_X, "site": SITE_X, "config": CONFIG_X, "now": NOW,
+                                        "http": http, "https": https})
+        swap = lambda v: v.replace(https + "/", http + "/") if isinstance(v, str) else v  # noqa: E731
+        h, s = r["http"], r["https"]
+        self.assertEqual((h["site"]["url"], h["site"]["url_es"], h["site"]["host"]),
+                         (http + "/", http + "/es/", "grapevine.example.org"))
+        self.assertEqual(h["problems"], [swap(p) for p in s["problems"]])
+        self.assertEqual(h["items"], [{k: swap(v) for k, v in it.items()} for it in s["items"]])
+        self.assertEqual(h["qr"], [swap(u) for u in s["qr"]])
+        own = [it for it in h["items"] if (it["qr"] or "").startswith(http + "/")]
+        self.assertTrue(any(it["id"].startswith("live:") for it in own), "the live items' codes (events, meetings …)")
+        self.assertTrue(any(not it["id"].startswith("live:") for it in own), "the CSV's {site} codes")
+        self.assertFalse(any("{site" in p for p in h["problems"]), h["problems"])
+
+
 class Build(unittest.TestCase):
     """A real build of /about/booth.json alone, as GitHub Pages builds the site."""
 
