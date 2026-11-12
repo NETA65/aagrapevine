@@ -266,8 +266,11 @@ class Bulletin(unittest.TestCase):
         self.assertIn("impresión, papel y materiales, preparación de pedidos, correo y envío", es)
         self.assertIn("If your group buys Grapevine or La Viña books or subscriptions, your treasurer may want to plan next "
                       "year's budget with the new prices.", en)
-        self.assertIn("Si tu grupo compra libros o suscripciones de Grapevine y La Viña, quizás el tesorero quiera planear el "
+        self.assertIn("Si tu grupo compra libros o suscripciones de La Viña y Grapevine, quizás el tesorero quiera planear el "
                       "presupuesto del próximo año con los nuevos precios.", es)
+        self.assertIn("y cada libro de La Viña y Grapevine, **$2.00 más**.", es)
+        # the Spanish names La Viña first, as /es/shop/ does (round 27); AA Grapevine's own notice keeps its title
+        self.assertNotIn("Grapevine y La Viña", es)
         self.assertIn("(en inglés): [Grapevine & La Viña Pricing Update]", es)
 
     def test_calm_words(self):

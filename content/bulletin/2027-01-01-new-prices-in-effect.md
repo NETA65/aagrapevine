@@ -8,9 +8,9 @@ publish: 2027-01-01
 expires: 2027-01-31
 lang: en
 tags: prices, subscriptions, books
-title_es: "Ya rigen los nuevos precios de Grapevine y La Viña"
+title_es: "Ya rigen los nuevos precios de La Viña y Grapevine"
 summary_es: |
-  Desde el **1 de enero de 2027** rigen los nuevos precios que anunció AA Grapevine: la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; a Grapevine, **$39.00** impresa o **$34.00** digital; y cada libro de Grapevine y La Viña, **$2.00 más**.
+  Desde el **1 de enero de 2027** rigen los nuevos precios que anunció AA Grapevine: la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; a Grapevine, **$39.00** impresa o **$34.00** digital; y cada libro de La Viña y Grapevine, **$2.00 más**.
 
   Todos los precios actuales y cómo pedir en las tiendas oficiales: [Tienda: suscripciones y precios](/shop/#subscriptions). El aviso de AA Grapevine (en inglés): [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view).
 ---

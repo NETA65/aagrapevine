@@ -877,6 +877,12 @@ class Bulletin(unittest.TestCase):
         self.assertIn("(/shop/#subscriptions)", body)
         self.assertIn("https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view", body)
         self.assertIn("\n\n", es, "the Spanish text keeps its paragraphs")
+        # the Spanish names La Viña first, as /es/shop/ does (round 27): its title and its first sentence
+        es_title, es_summary = s["extra"]["own_i18n"]["title"]["es"], s["extra"]["own_i18n"]["summary"]["es"]
+        self.assertEqual(es_title, "Ya rigen los nuevos precios de La Viña y Grapevine")
+        self.assertIn("y cada libro de La Viña y Grapevine, **$2.00 más**.", es)
+        for text in (es_title, es_summary, es):
+            self.assertNotIn("Grapevine y La Viña", text)
         # calm and informative: no pressure to buy, no claim the letter does not make
         for text in (body, es):
             self.assertNotRegex(text.lower(), r"buy now|before prices|hurry|don't miss|renew (?:now|early|before)|ahora antes|renueva")

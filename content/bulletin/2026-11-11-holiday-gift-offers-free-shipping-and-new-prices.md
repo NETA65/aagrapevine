@@ -50,11 +50,11 @@ summary_es: |
 
   # Nuevos precios a partir del 1 de enero de 2027
 
-  A partir del **1 de enero de 2027**, la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; a Grapevine, **$39.00** impresa o **$34.00** digital; y cada libro de Grapevine y La Viña, **$2.00 más**.
+  A partir del **1 de enero de 2027**, la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; a Grapevine, **$39.00** impresa o **$34.00** digital; y cada libro de La Viña y Grapevine, **$2.00 más**.
 
   AA Grapevine anunció los nuevos precios en una carta a las oficinas intergrupales y centrales. Explica que siguen subiendo los costos de producir y distribuir sus publicaciones y productos: impresión, papel y materiales, preparación de pedidos, correo y envío.
 
-  **Qué significa para tu grupo.** Si tu grupo compra libros o suscripciones de Grapevine y La Viña, quizás el tesorero quiera planear el presupuesto del próximo año con los nuevos precios.
+  **Qué significa para tu grupo.** Si tu grupo compra libros o suscripciones de La Viña y Grapevine, quizás el tesorero quiera planear el presupuesto del próximo año con los nuevos precios.
 
   - Los precios de hoy y los nuevos, lado a lado: [Tienda: suscripciones y precios](/shop/#subscriptions)
   - El aviso de AA Grapevine (en inglés): [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view)
