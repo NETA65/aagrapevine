@@ -755,6 +755,14 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   return out.filter(Boolean).sort((a, b) => a.startMs - b.startMs || a.title.localeCompare(b.title));
 }
 
+/** An event's title without the spaces a calendar left inside its brackets: "XLII … ( A.A. Un camino a la vida )"
+ *  → "XLII … (A.A. Un camino a la vida)" (also after "¿" / "¡"), so no ")" sits on a line of its own. The one rule
+ *  for every place an event's title shows: /events/ and /events.ics (shapeEvent), the month pages — the poster,
+ *  the Dates row, the message (monthly.js dateRow) — and the month's calendar file (monthIcs, from shapeEvent). */
+export function tidyBrackets(s) {
+  return String(s ?? "").replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
+}
+
 function shapeEvent(it, site, lang, now, descOverride) {
   const x = it.extra || {};
   // Its days and times (all-day: midnight to the midnight after its last day; a timed event without an end:
@@ -782,7 +790,7 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // event details", never "All day". Only Drive flyers and hand-written events are
   // really "All day".
   const timeNotListed = allDay && it.source === "calendar" && /^https?:\/\//.test(it.url || "");
-  const title = it._i18nTitle ? it.title : (H.pickLang(it, "title", lang) || it.title || "");
+  const title = tidyBrackets(it._i18nTitle ? it.title : (H.pickLang(it, "title", lang) || it.title || ""));
   const summary = it._i18nTitle ? it.summary : (H.pickLang(it, "summary", lang) || "");
   const recurrence = recurring ? (recurrenceText(x.rule, lang) || withZone(String(H.pickLang(it, "recurrence_label", lang) || x.recurrence_label || ""), lang)) : "";
   // The committee wrote this event in both languages (config/site.yml title / title_es, or a

@@ -127,8 +127,8 @@
   --p-accent2: #1d1a26; --p-on-accent2: #fff; --p-card: #f4efe6; --p-card-ink: var(--p-ink); --p-card-muted: var(--p-muted);
   --p-line: #d9d2c4; --mp-w: 760px; --mp-max: 150px;
   --p-card-accent: var(--p-accent); /* resolved per design; cards read it without a var() cycle */
-  display: flex; flex-direction: column; gap: 22px; width: 1080px; height: 1350px; box-sizing: border-box; overflow: hidden;
-  padding: 56px; background: var(--p-bg); color: var(--p-ink);
+  display: flex; flex-direction: column; gap: 18px; width: 1080px; height: 1350px; box-sizing: border-box; overflow: hidden;
+  padding: 44px; background: var(--p-bg); color: var(--p-ink);
   font-family: var(--font-sans); font-size: 23px; line-height: 1.3; font-weight: 400; letter-spacing: 0; text-align: left;
   -webkit-print-color-adjust: exact; print-color-adjust: exact; color-scheme: light;
   contain: strict; /* a fixed 1080 × 1350 sheet: its layout never affects the page (13 of them on the hub) */
@@ -153,10 +153,16 @@
   font-size: min(var(--mp-max), calc(var(--mp-w) / (0.6 * var(--mp-nlen, 9)))); font-optical-sizing: auto; }
 .mp-year { font-weight: 400; font-style: italic; letter-spacing: -0.01em; color: var(--p-year, var(--p-accent)); font-size: 0.5em; margin-left: 0.15em; }
 .mp-tag { margin-top: 10px !important; font-size: 1.05em; font-weight: 700; color: var(--p-muted); }
+/* A name with a descender (macros/monthly.njk head: mp-head--desc — the y of July, the p of April, the g of August):
+   the line right under it clears the letter — the tagline, or the year where the year has a line of its own (the
+   ticket, the split; their tagline follows the year). The cover's tagline sits in the masthead's corner (3e). */
+.mp-head--desc .mp-tag { margin-top: 24px !important; }
+.mp-l-ticket .mp-head--desc .mp-year, .mp-l-split .mp-head--desc .mp-year { margin-top: 18px; }
+.mp-l-ticket .mp-head--desc .mp-tag, .mp-l-split .mp-head--desc .mp-tag { margin-top: 10px !important; }
 
 /* Blocks */
 .mp-b, .mp-poster .mp-foot, .mp-poster .mp-head { flex-shrink: 0; }
-.mp-h { display: flex; align-items: center; gap: 10px; margin-bottom: 10px !important; font-family: var(--font-sans); font-size: 0.9em; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.15; color: var(--p-accent); }
+.mp-h { display: flex; align-items: center; gap: 10px; margin-bottom: 8px !important; font-family: var(--font-sans); font-size: 0.9em; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.15; color: var(--p-accent); }
 .mp-sub { margin: 10px 0 6px !important; font-size: 0.8em; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-muted); }
 .mp-note { font-size: 0.95em; color: var(--p-muted); }
 .mp-theme { font-family: var(--font-display); font-size: 1.85em; line-height: 1.02; font-weight: 700; letter-spacing: -0.01em; }
@@ -193,23 +199,34 @@
 .mp-off { display: inline-block; margin-top: 2px; font-weight: 800; color: var(--p-accent); }
 .mp-botm > p.mp-off { display: block; margin-top: 8px !important; font-size: 0.92em; }
 
-.mp-dlist li { display: flex; gap: 14px; align-items: flex-start; padding: 7px 0; }
-.mp-chip { flex: none; display: flex; flex-direction: column; align-items: center; width: 3.3em; padding: 5px 0 6px; border-radius: 10px; background: var(--p-accent); color: var(--p-on-accent); text-align: center; line-height: 1; }
+.mp-dlist li { display: flex; gap: 12px; align-items: flex-start; padding: 5px 0; }
+.mp-chip { flex: none; display: flex; flex-direction: column; align-items: center; width: 3.1em; padding: 4px 0 5px; border-radius: 10px; background: var(--p-accent); color: var(--p-on-accent); text-align: center; line-height: 1; }
 .mp-chip-m { font-size: 0.7em; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 .mp-chip-d { margin: 2px 0; font-family: var(--font-display); font-size: 1.45em; font-weight: 800; }
 .mp-chip-w { font-size: 0.66em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .mp-date--committee .mp-chip { background: var(--p-accent2); color: var(--p-on-accent2); }
+/* the month's other happenings after its dates (an offer of the stores, the price change: macros/monthly.njk dates()):
+   their icon in a smaller chip of the same colours, level with the title — the title takes the width a date's chip
+   would (every layout, the dates in more columns too) */
+.mp-dlist li:is(.mp-date--offer, .mp-date--price) { gap: 10px; }
+.mp-dates .mp-dlist .mp-chip--icon { justify-content: center; width: 1.9em; min-height: 1.9em; margin-top: 1px; padding: 0; border-radius: 8px; }
+.mp-chip-i { width: 1.2em; height: 1.2em; }
 .mp-date-b { min-width: 0; padding-top: 2px; }
 .mp-date-t { display: block; font-size: 0.92em; line-height: 1.15; }
-.mp-date-m { display: block; margin-top: 3px; font-size: 0.84em; line-height: 1.25; color: var(--p-muted); }
-.mp-more { margin-top: 4px !important; font-size: 0.84em; font-weight: 700; color: var(--p-muted); }
+.mp-date-m { display: block; margin-top: 2px; font-size: 0.84em; line-height: 1.22; color: var(--p-muted); }
+/* A very busy month (the fit's last resort, monthly.js: one column would leave the type under 18px): the dates in one
+   more column — two in a column, one more in a band across the poster (the layouts below) — with narrower chips;
+   every date stays on the poster */
+.mp-dates--cols .mp-dlist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
+.mp-dates--cols .mp-dlist li { gap: 8px; }
+.mp-dates--cols .mp-chip { width: 2.8em; }
 
 .mp-wk li { margin-top: 6px; font-size: 0.86em; line-height: 1.25; }
 .mp-wk strong { font-size: 1.02em; }
 .mp-wk-when { display: block; color: var(--p-muted); font-size: 0.92em; }
 .mp-new { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--p-accent2); color: var(--p-on-accent2); font-size: 0.66em; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: 0.2em; }
 
-.mp-foot { margin-top: auto; display: flex; align-items: center; gap: 20px; }
+.mp-foot { margin-top: auto; display: flex; align-items: center; gap: 18px; }
 .mp-logo { flex: none; display: block; padding: 6px 10px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08); }
 .mp-logo img { display: block; width: 92px; height: auto; }
 .mp-foot-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -217,34 +234,41 @@
 .mp-url { font-size: 1.1em; font-weight: 800; letter-spacing: -0.01em; color: var(--p-ink); }
 .mp-url > span { white-space: nowrap; }
 .mp-scan { font-size: 0.84em; color: var(--p-muted); }
-.mp-qr { flex: none; display: block; width: 204px; height: 204px; padding: 8px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1); }
+.mp-qr { flex: none; display: block; width: 176px; height: 176px; padding: 7px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1); }
 .mp-qr svg { display: block; width: 100%; height: 100%; }
 
 /* ---------- 3. Layouts ---------- */
 
 /* 3a. EDITORIAL — bold typographic masthead, two columns, rule lines */
-.mp-l-editorial { padding: 60px 64px 48px; gap: 26px; }
-.mp-l-editorial .mp-head { padding-bottom: 20px; border-bottom: 6px solid var(--p-ink); --mp-w: 780px; }
-.mp-l-editorial .mp-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.12fr 1fr; gap: 40px; }
-.mp-l-editorial .mp-col { display: flex; flex-direction: column; justify-content: space-between; gap: 26px; min-height: 0; min-width: 0; }
-.mp-l-editorial .mp-col-b { padding-left: 36px; border-left: 3px solid var(--p-line); }
-.mp-l-editorial .mp-story { padding: 26px 28px; border-radius: 20px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); --p-line: var(--p-card-line, rgb(255 255 255 / 0.3)); --p-accent: var(--p-card-accent); }
-.mp-l-editorial .mp-foot { padding-top: 20px; border-top: 3px solid var(--p-ink); }
+.mp-l-editorial { padding: 42px 54px 34px; gap: 18px; }
+.mp-l-editorial .mp-head { padding-bottom: 14px; border-bottom: 6px solid var(--p-ink); --mp-w: 780px; --mp-max: 136px; }
+.mp-l-editorial .mp-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.12fr 1fr; gap: 34px; }
+.mp-l-editorial .mp-col { display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 0; min-width: 0; }
+.mp-l-editorial .mp-col-b { padding-left: 30px; border-left: 3px solid var(--p-line); }
+.mp-l-editorial .mp-story { padding: 22px 24px; border-radius: 20px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); --p-line: var(--p-card-line, rgb(255 255 255 / 0.3)); --p-accent: var(--p-card-accent); }
+.mp-l-editorial .mp-foot { padding-top: 14px; border-top: 3px solid var(--p-ink); }
+/* the date band: across the poster under a rule, the dates in three columns — no band when the fit moves the dates
+   up into a column (monthly.js) */
+.mp-l-editorial .mp-band { flex: none; padding-top: 16px; border-top: 3px solid var(--p-line); }
+.mp-l-editorial .mp-band:not(:has(> *)) { display: none; }
+.mp-l-editorial .mp-band .mp-dlist { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 26px; }
+.mp-l-editorial .mp-band > .mp-dates--cols .mp-dlist { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 16px; }
 
 /* 3b. TICKET — an admission ticket with a perforated stub; Book of the Month as a coupon */
-.mp-l-ticket { padding: 46px; }
+.mp-l-ticket { padding: 32px; }
 .mp-ticket { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 372px; position: relative; border-radius: 30px; background: var(--p-card); color: var(--p-card-ink);
   --p-ink: var(--p-card-ink); --p-muted: var(--p-card-muted); box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.5); }
 .mp-ticket::before, .mp-ticket::after { content: ""; position: absolute; right: 346px; width: 52px; height: 52px; border-radius: 999px; background: var(--p-bg); z-index: 2; }
 .mp-ticket::before { top: -26px; }
 .mp-ticket::after { bottom: -26px; }
-.mp-l-ticket .mp-main { display: flex; flex-direction: column; gap: 22px; min-height: 0; padding: 44px 40px 36px; }
+.mp-l-ticket .mp-main { display: flex; flex-direction: column; gap: 18px; min-height: 0; padding: 36px 34px 28px; }
 .mp-l-ticket .mp-head { --mp-w: 540px; --mp-max: 130px; }
 .mp-l-ticket .mp-kicker::before { content: "★ "; }
 .mp-l-ticket .mp-year { display: block; margin: 6px 0 0; font-size: 0.55em; }
-.mp-l-ticket .mp-stub { display: flex; flex-direction: column; gap: 22px; font-size: 0.9em; min-height: 0; padding: 40px 30px 34px 34px; border-left: 4px dashed var(--p-line); border-radius: 0 30px 30px 0; background: var(--p-stub); color: var(--p-stub-ink, var(--p-card-ink)); }
+.mp-l-ticket .mp-stub { display: flex; flex-direction: column; gap: 18px; font-size: 0.9em; min-height: 0; padding: 32px 26px 28px 30px; border-left: 4px dashed var(--p-line); border-radius: 0 30px 30px 0; background: var(--p-stub); color: var(--p-stub-ink, var(--p-card-ink)); }
 .mp-l-ticket .mp-botm { margin-top: auto; padding: 18px 22px 18px 24px; border: 3px dashed var(--p-accent); border-radius: 16px; background: var(--p-coupon, transparent); position: relative; }
 .mp-l-ticket .mp-botm::after { content: "✂"; position: absolute; top: -20px; left: 24px; padding: 0 6px; font-size: 26px; line-height: 1; color: var(--p-accent); background: var(--p-card); }
+.mp-l-ticket .mp-stub .mp-botm::after { background: var(--p-stub); }
 .mp-l-ticket .mp-foot { flex-direction: column; align-items: flex-start; gap: 12px; }
 .mp-l-ticket .mp-foot-t { order: 2; }
 .mp-l-ticket .mp-logo { display: none; }
@@ -252,13 +276,13 @@
 
 /* 3c. SPLIT — colored side column with a calendar strip; content column on paper */
 .mp-l-split { flex-direction: row; gap: 0; padding: 0; }
-.mp-l-split .mp-side { width: 404px; flex: none; display: flex; flex-direction: column; gap: 30px; padding: 54px 36px 44px 44px; background: var(--p-side); color: var(--p-side-ink);
+.mp-l-split .mp-side { width: 404px; flex: none; display: flex; flex-direction: column; gap: 22px; padding: 42px 32px 32px 38px; background: var(--p-side); color: var(--p-side-ink);
   --p-ink: var(--p-side-ink); --p-muted: var(--p-side-muted); --p-accent: var(--p-side-accent); --p-on-accent: var(--p-side-on-accent); --p-accent2: var(--p-side-accent2, #fff); --p-on-accent2: var(--p-side-on-accent2, #111); --p-line: rgb(255 255 255 / 0.25); --p-year: var(--p-side-accent); }
 .mp-l-split .mp-head { --mp-w: 320px; --mp-max: 120px; }
 .mp-l-split .mp-year { display: block; margin: 8px 0 0; font-size: 0.62em; }
-.mp-l-split .mp-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: 54px 52px 44px 48px; }
-.mp-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font-size: 21px; font-weight: 700; text-align: center; }
-.mp-cal > span { display: grid; place-items: center; height: 44px; border-radius: 8px; }
+.mp-l-split .mp-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; padding: 42px 44px 32px 42px; }
+.mp-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 21px; font-weight: 700; text-align: center; }
+.mp-cal > span { display: grid; place-items: center; height: 40px; border-radius: 8px; }
 .mp-cal-wd { height: 28px !important; font-size: 18px; letter-spacing: 0.08em; color: var(--p-muted); }
 .mp-cal-d { background: rgb(255 255 255 / 0.08); }
 .mp-cal .mp-k-deadline { box-shadow: inset 0 0 0 2px var(--p-accent); }
@@ -268,20 +292,20 @@
 .mp-l-split .mp-logo img { width: 84px; }
 .mp-l-split .mp-foot-t { order: 3; flex-basis: 100%; }
 .mp-l-split .mp-url { font-size: 0.9em; }
-.mp-l-split .mp-issue { padding: 24px 26px; border-radius: 18px; background: var(--p-card); color: var(--p-card-ink); }
+.mp-l-split .mp-issue { padding: 20px 24px; border-radius: 18px; background: var(--p-card); color: var(--p-card-ink); }
 
 /* 3d. CORK — a bulletin board: a pinned banner, an index card with the QR, two columns of notes */
-.mp-l-cork { padding: 44px 46px 40px; gap: 30px;
+.mp-l-cork { padding: 34px 38px 30px; gap: 22px;
   background-image: radial-gradient(circle at 20% 30%, rgb(0 0 0 / 0.07) 0 1.5px, transparent 2px), radial-gradient(circle at 70% 80%, rgb(255 255 255 / 0.1) 0 1.2px, transparent 1.8px), radial-gradient(circle at 45% 60%, rgb(0 0 0 / 0.06) 0 1px, transparent 1.6px);
   background-size: 23px 23px, 31px 31px, 17px 17px; }
 .mp-l-cork .mp-top { display: flex; align-items: flex-start; padding-right: 170px; } /* the right edge shows the month's motif */
-.mp-l-cork .mp-board { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.06fr 1fr; gap: 30px; }
-.mp-l-cork .mp-col { display: flex; flex-direction: column; justify-content: space-around; gap: 30px; min-width: 0; }
-.mp-l-cork .mp-head { position: relative; flex: 1; min-width: 0; margin-top: 12px; padding: 22px 30px 22px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); transform: rotate(-1.2deg); box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.45); --mp-w: 640px; --mp-max: 136px; }
+.mp-l-cork .mp-board { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.06fr 1fr; gap: 26px; }
+.mp-l-cork .mp-col { display: flex; flex-direction: column; justify-content: space-around; gap: 24px; min-width: 0; }
+.mp-l-cork .mp-head { position: relative; flex: 1; min-width: 0; margin-top: 12px; padding: 18px 28px 18px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); transform: rotate(-1.2deg); box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.45); --mp-w: 640px; --mp-max: 124px; }
 .mp-l-cork .mp-head::before, .mp-l-cork .mp-head::after { content: ""; position: absolute; top: -14px; width: 110px; height: 34px; background: rgb(255 255 255 / 0.55); box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
 .mp-l-cork .mp-head::before { left: 26px; transform: rotate(-6deg); }
 .mp-l-cork .mp-head::after { right: 26px; transform: rotate(5deg); }
-.mp-l-cork .mp-b, .mp-l-cork .mp-foot { position: relative; padding: 24px 24px 20px; background: var(--p-card); color: var(--p-card-ink); --p-ink: var(--p-card-ink); --p-muted: var(--p-card-muted); box-shadow: 0 12px 22px -12px rgb(0 0 0 / 0.5); border-radius: 3px; }
+.mp-l-cork .mp-b, .mp-l-cork .mp-foot { position: relative; padding: 20px 22px 18px; background: var(--p-card); color: var(--p-card-ink); --p-ink: var(--p-card-ink); --p-muted: var(--p-card-muted); box-shadow: 0 12px 22px -12px rgb(0 0 0 / 0.5); border-radius: 3px; }
 .mp-l-cork .mp-b::before, .mp-l-cork .mp-foot::before { content: ""; position: absolute; top: -9px; left: 50%; width: 22px; height: 22px; margin-left: -11px; border-radius: 999px; background: radial-gradient(circle at 35% 35%, rgb(255 255 255 / 0.7) 0 3px, var(--p-pin) 4px); box-shadow: 0 3px 4px rgb(0 0 0 / 0.35); }
 .mp-l-cork .mp-story { transform: rotate(0.8deg); }
 .mp-l-cork .mp-dates { transform: rotate(-0.9deg); }
@@ -296,30 +320,37 @@
 
 /* 3e. COVER — a magazine cover: masthead, cover story, cover lines, date strip */
 .mp-l-cover { padding: 0; gap: 0; }
-.mp-l-cover .mp-head { padding: 40px 56px 30px; background: var(--p-mast); color: var(--p-mast-ink); --p-accent: var(--p-mast-accent); --p-muted: var(--p-mast-muted); --p-head: var(--p-mast-ink); --p-year: var(--p-mast-accent); --mp-w: 900px; --mp-max: 176px; }
-.mp-l-cover .mp-tag { position: absolute; right: 56px; top: 42px; margin: 0 !important; font-size: 0.8em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--p-mast-muted); }
-.mp-l-cover .mp-cover { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; padding: 34px 56px 18px; }
-.mp-l-cover .mp-feature { min-width: 0; min-height: 0; }
+.mp-l-cover .mp-head { padding: 30px 48px 26px; background: var(--p-mast); color: var(--p-mast-ink); --p-accent: var(--p-mast-accent); --p-muted: var(--p-mast-muted); --p-head: var(--p-mast-ink); --p-year: var(--p-mast-accent); --mp-w: 900px; --mp-max: 150px; }
+.mp-l-cover .mp-tag { position: absolute; right: 48px; top: 32px; margin: 0 !important; font-size: 0.8em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--p-mast-muted); }
+.mp-l-cover .mp-cover { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.3fr 1fr; gap: 34px; padding: 24px 48px 14px; }
+.mp-l-cover .mp-feature { display: flex; flex-direction: column; gap: 20px; min-width: 0; min-height: 0; }
 .mp-l-cover .mp-theme { font-size: 2.9em; line-height: 0.96; margin-bottom: 8px !important; color: var(--p-accent); }
-.mp-l-cover .mp-rail { display: flex; flex-direction: column; gap: 24px; min-width: 0; min-height: 0; padding-left: 28px; border-left: 6px solid var(--p-accent); }
-.mp-l-cover .mp-strip { display: grid; grid-template-columns: 1.55fr 1fr; gap: 32px; padding: 24px 56px; background: var(--p-strip); }
+.mp-l-cover .mp-rail { display: flex; flex-direction: column; gap: 20px; min-width: 0; min-height: 0; padding-left: 26px; border-left: 6px solid var(--p-accent); }
+.mp-l-cover .mp-strip { display: grid; grid-template-columns: 1.55fr 1fr; gap: 30px; padding: 18px 48px; background: var(--p-strip); }
 .mp-l-cover .mp-strip .mp-dlist:has(> li:nth-child(3)) { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
-.mp-l-cover .mp-foot { padding: 20px 56px 34px; margin-top: 0; }
+/* the dates alone in the strip (the fit moved the weekly meetings up into a column, monthly.js): across its width,
+   in three columns from four dates on */
+.mp-l-cover .mp-strip > :only-child { grid-column: 1 / -1; }
+.mp-l-cover .mp-strip > .mp-dates:only-child .mp-dlist:has(> li:nth-child(4)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mp-l-cover .mp-strip > .mp-dates--cols .mp-dlist:has(> li:nth-child(3)) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 16px; }
+.mp-l-cover .mp-strip > .mp-dates--cols:only-child .mp-dlist:has(> li:nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mp-l-cover .mp-foot { padding: 14px 48px 26px; margin-top: 0; }
 
 /* 3f. NOTEBOOK — a ruled notebook page / a chalkboard, hand-lettered headings */
-.mp-l-notebook { padding: 58px 60px 44px 132px; gap: 20px; }
-.mp-l-notebook .mp-head { --mp-w: 700px; --mp-max: 124px; }
+.mp-l-notebook { padding: 44px 50px 32px 126px; gap: 16px; }
+.mp-l-notebook .mp-head { --mp-w: 700px; --mp-max: 116px; }
 .mp-l-notebook .mp-month { font-style: italic; font-weight: 700; line-height: 1.02; }
 .mp-l-notebook .mp-year { font-style: normal; font-weight: 600; }
 .mp-l-notebook .mp-h { font-family: var(--font-display); font-style: italic; font-size: 1.35em; letter-spacing: 0; text-transform: none; font-weight: 700; }
 .mp-l-notebook .mp-h span { text-decoration: underline wavy var(--p-accent2); text-decoration-thickness: 2px; text-underline-offset: 8px; }
-.mp-l-notebook .mp-page { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 26px; }
-.mp-l-notebook .mp-row { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+.mp-l-notebook .mp-page { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
+.mp-l-notebook .mp-row { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
 .mp-l-notebook .mp-row .mp-col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
 .mp-l-notebook .mp-botm { padding: 20px 22px; background: var(--p-sticky); color: var(--p-sticky-ink, #2a2418); --p-ink: var(--p-sticky-ink, #2a2418); --p-muted: var(--p-sticky-muted, #4d4535); --p-accent: var(--p-sticky-accent, #9a3412); transform: rotate(1.8deg); box-shadow: 0 10px 18px -10px rgb(0 0 0 / 0.45); }
 .mp-l-notebook .mp-row > .mp-dates:only-child { grid-column: 1 / -1; }
 .mp-l-notebook .mp-row > .mp-dates:only-child .mp-dlist { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
-.mp-l-notebook .mp-foot { padding-top: 16px; border-top: 2px dashed var(--p-line); }
+.mp-l-notebook .mp-row > .mp-dates--cols:only-child .mp-dlist { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 20px; }
+.mp-l-notebook .mp-foot { padding-top: 12px; border-top: 2px dashed var(--p-line); }
 .mp-holes { position: absolute; left: 34px; top: 70px; bottom: 70px; display: flex; flex-direction: column; justify-content: space-between; }
 .mp-holes span { display: block; width: 30px; height: 30px; border-radius: 999px; background: var(--p-hole, #e7e1d3); box-shadow: inset 0 3px 4px rgb(0 0 0 / 0.25); }
 
@@ -397,9 +428,9 @@
   --p-mast: #b02d49; --p-mast-ink: #fff; --p-mast-muted: #ffe0e6; --p-mast-accent: #ffe9a8; --p-strip: #ffe4d7; }
 .mp-d-bloom .mp-m { color: #fff; opacity: 0.2; stroke-width: 1.3; }
 .mp-d-bloom .mp-m1 { width: 170px; height: 170px; right: 300px; top: -40px; }
-.mp-d-bloom .mp-m2 { width: 110px; height: 110px; right: 170px; top: 150px; }
-.mp-d-bloom .mp-m3 { width: 80px; height: 80px; right: 480px; top: 180px; }
-/* (motifs stay inside the masthead: below it the cover story, strip and footer are opaque bands) */
+.mp-d-bloom .mp-m2 { width: 100px; height: 100px; right: 170px; top: 104px; }
+.mp-d-bloom .mp-m3 { width: 76px; height: 76px; right: 480px; top: 128px; }
+/* (motifs stay inside the masthead, ~215px tall: below it is the paper) */
 .mp-d-bloom .mp-m4 { width: 64px; height: 64px; right: 560px; top: 24px; }
 .mp-d-bloom .mp-m5, .mp-d-bloom .mp-m6, .mp-d-bloom .mp-m7 { display: none; }
 
@@ -408,10 +439,10 @@
   --p-mast: #14532d; --p-mast-ink: #fff; --p-mast-muted: #d6eadb; --p-mast-accent: #f2d27a; --p-strip: #e8eee0; }
 .mp-d-holiday .mp-m { color: #fff; opacity: 0.18; }
 .mp-d-holiday .mp-m1 { width: 150px; height: 150px; right: 330px; top: 20px; }
-.mp-d-holiday .mp-m2 { width: 70px; height: 70px; right: 230px; top: 170px; }
-.mp-d-holiday .mp-m3 { width: 90px; height: 90px; right: 520px; top: 150px; }
+.mp-d-holiday .mp-m2 { width: 70px; height: 70px; right: 230px; top: 132px; }
+.mp-d-holiday .mp-m3 { width: 84px; height: 84px; right: 520px; top: 120px; }
 .mp-d-holiday .mp-m4, .mp-d-holiday .mp-m5, .mp-d-holiday .mp-m6, .mp-d-holiday .mp-m7 { display: none; }
-.mp-d-holiday .mp-tree { width: 220px; height: 220px; right: 20px; top: 40px; color: #f2d27a; opacity: 0.3; }
+.mp-d-holiday .mp-tree { width: 190px; height: 190px; right: 20px; top: 16px; color: #f2d27a; opacity: 0.3; }
 .mp-d-holiday .mp-star1 { width: 44px; height: 44px; right: 110px; top: 20px; color: #f2d27a; opacity: 0.9; fill: #f2d27a; }
 .mp-d-holiday .mp-star2 { width: 30px; height: 30px; right: 430px; top: 110px; color: #f2d27a; opacity: 0.7; fill: #f2d27a; }
 
@@ -427,7 +458,7 @@
   --p-sticky: #fff3b0; --p-sticky-ink: #2a2418; --p-sticky-muted: #4d4535; --p-sticky-accent: #9a3412; --p-year: #ffd166;
   border: 22px solid #7a5230; box-shadow: inset 0 0 0 2px rgb(0 0 0 / 0.25);
   background-image: radial-gradient(ellipse at 30% 20%, rgb(255 255 255 / 0.06), transparent 60%), radial-gradient(ellipse at 80% 90%, rgb(255 255 255 / 0.05), transparent 55%); }
-.mp-l-notebook.mp-d-chalk { padding: 40px 42px 26px 110px; }
+.mp-l-notebook.mp-d-chalk { padding: 32px 36px 22px 106px; }
 .mp-d-chalk .mp-holes { left: 22px; top: 50px; bottom: 50px; }
 .mp-d-chalk .mp-holes span { width: 26px; height: 26px; }
 .mp-d-chalk .mp-logo, .mp-d-chalk .mp-qr { box-shadow: none; }
@@ -452,10 +483,26 @@
   body.mp-page .mp-fit { box-shadow: none !important; border-radius: 0 !important; break-inside: avoid; }
 }
 
-/* The hidden copy fit() measures (monthly.js): never animate it. The reduced-motion rules set a tiny
-   transition-duration on everything, which made each font-size change a transition, so the fit read
-   stale sizes and posters overflowed with "Reduce motion" on. */
-.mp-measure .mp-poster, .mp-measure .mp-poster * { transition-property: none !important; }
+/* The hidden copy fit() measures (monthly.js) and the poster it fits: never animate them. The reduced-motion
+   rules set a tiny transition-duration on everything, which made each font-size change a transition, so the
+   fit read stale sizes and posters overflowed with "Reduce motion" on — and the fitted poster, read at once
+   (the PNG, the share picture), could still have its old type. */
+.mp-measure .mp-poster, .mp-measure .mp-poster *, [data-mp-poster], [data-mp-poster] * { transition-property: none !important; }
+/* Until the fit has run (and without JavaScript) the poster has the build's arrangement at the stylesheet's type: a
+   busy month's column is clipped at its own edge, so it loses its last lines rather than running over the date band,
+   the strip or the footer. overflow: clip moves no box (not a scroll container: every offset the fit reads is the
+   same); the copy the fit measures has no data-mp-poster and the fitted poster (data-mp-fit) is never clipped. The
+   margin keeps the cards' tilt and shadows and is smaller than the gap to the next block (none on the ticket: its
+   halves end at the card's edge). The cork's and the split's columns end at the sheet, which clips them already. */
+[data-mp-poster]:not([data-mp-fit]) :is(.mp-body > .mp-col, .mp-feature, .mp-rail, .mp-page, .mp-main, .mp-stub) { overflow: clip; overflow-clip-margin: 10px; }
+[data-mp-poster]:not([data-mp-fit]) :is(.mp-main, .mp-stub) { overflow-clip-margin: 0px; }
+/* …and a Spanish poster (longer words: the busy ones lost a date there at the density's type, March, June and
+   September 2027) starts at a smaller type until its fit, smaller still with nine rows or more in its Dates block
+   (November 2026: six dates, the stores' two offers and the price change): every row is on it before the fit too.
+   The copy the fit measures has no data-mp-poster (its starting type is the density's) and the fitted poster has its
+   own type. */
+[data-mp-poster]:not([data-mp-fit])[lang="es"] { font-size: 21px; }
+[data-mp-poster]:not([data-mp-fit])[lang="es"]:has(.mp-dlist > li:nth-child(9)) { font-size: 18px; }
 
 /* ---------- Hub hero aside (monthly.njk): this month's poster in the hero's right-hand card ----------
    The poster MOVES from the "This month" card into the hero while the aside is shown there — the same

@@ -18,6 +18,11 @@ Output: Items of kind "meeting" — see docs/DATA_SCHEMA.md:
      (no player_url / sentence), plus `starts` (first meeting); next_start is never before `starts`.
      Written on every run, also when the Grapevine page cannot be read.
 
+Each meeting's join link (extra.zoom_url: the "Join on Zoom" buttons, the calendar entries) is the FULL link of its
+settings — config/site.yml `grapevine_weekly_open.zoom_url` / `lavina_weekly_open.zoom_url`, with its "?pwd=…" (no
+passcode to type) — when that link is a Zoom join link of the meeting's own Zoom ID (join_link); otherwise
+https://zoom.us/j/<the ID>, and stats.warnings (the Status page) says why.
+
 If the page can't be fetched or parsed, the previous Grapevine item is kept and the envelope gets ok=false.
 
 Run:  python -m scripts.sync.weekly_open [--dry-run] [--html FILE]
@@ -73,6 +78,9 @@ PASS_RE = re.compile(r"(?i)\b(?:password|passcode|pass\s*code|pwd|contraseña|c[
 PASS_WORDS = {"protected", "required", "needed", "below", "above", "here", "the", "for", "and", "will", "sent",
               "upon", "via", "not", "only", "may", "protegida", "protegido", "requerida", "requerido", "necesaria",
               "necesario", "abajo", "arriba", "aqui", "para", "por", "del", "sera", "enviada", "enviado"}
+# A Zoom join link as Zoom gives it (config zoom_url): https://zoom.us/j/<ID> or https://<server>.zoom.us/j/<ID>,
+# optionally with its "?pwd=<token>" (the passcode built into the link). Nothing else after it.
+JOIN_LINK_RE = re.compile(r"https://(?:[a-z0-9-]+\.)*zoom\.us/j/(\d{9,11})(?:\?pwd=[\w.~%-]+)?", re.I | re.A)
 
 
 # --------------------------------------------------------------------------- parsing helpers
@@ -86,6 +94,42 @@ def _format_zoom_id(raw: str) -> str:
     if len(d) == 9:
         return f"{d[:3]} {d[3:6]} {d[6:]}"
     return d
+
+
+def join_link(configured, zoom_id, setting: str, notes: list[str] | None = None) -> str | None:
+    """A weekly open meeting's join link: the settings' full link (`configured`, e.g.
+    "https://us02web.zoom.us/j/87120368287?pwd=…", kept exactly as written) when it is a Zoom join link
+    (JOIN_LINK_RE) whose meeting number is this meeting's `zoom_id` ("871 2036 8287"); else the plain
+    https://zoom.us/j/<zoom_id> (None without a usable ID). A link that is set but not used is logged and added to
+    `notes` (→ the source's stats.warnings, shown on /status/), the link cut at its first "?", "#" or "&" (a note
+    never shows the passcode part). A join link with more after its "?pwd=…" (Zoom's "&omn=…", Google Calendar's
+    "&from=addon", a "#…") gets its own note: keep only https://….zoom.us/j/<ID>?pwd=… and delete the rest.
+    `setting` names its block in config/site.yml ("grapevine_weekly_open")."""
+    digits = re.sub(r"\D", "", str(zoom_id or ""))
+    plain = f"https://zoom.us/j/{digits}" if 9 <= len(digits) <= 11 else None
+    link = configured.strip() if isinstance(configured, str) else ""
+    if not link:
+        return plain
+    m = JOIN_LINK_RE.fullmatch(link)
+    shown = re.split(r"[?#&]", link, maxsplit=1)[0][:120]
+    head = None if m else JOIN_LINK_RE.match(link)
+    if head and link[head.end():head.end() + 1] in ("?", "#", "&"):
+        why = (f"{setting}: zoom_url has more after its meeting ID or its ?pwd=… part (such as &omn=… or &from=addon). Keep only "
+               "https://….zoom.us/j/<meeting ID>?pwd=… and delete the rest. The plain link is used.")
+    elif not m:
+        why = (f"{setting}: zoom_url {shown!r} is not a Zoom join link (https://….zoom.us/j/<meeting ID>?pwd=…) — "
+               "the plain link is used")
+    elif not plain:
+        why = f"{setting}: zoom_url not used — the meeting's Zoom ID is not known"
+    elif m[1] != digits:
+        why = (f"{setting}: zoom_url is for Zoom meeting {_format_zoom_id(m[1])}, not this meeting's "
+               f"{_format_zoom_id(digits)} — the plain link is used (zoom_url and the meeting ID must be the same Zoom meeting)")
+    else:
+        return link
+    log.warning(why)
+    if notes is not None:
+        notes.append(why)
+    return plain
 
 
 def find_passcode(*texts: str) -> str | None:
@@ -246,9 +290,10 @@ def build_item(p: dict, page_url: str) -> dict:
     )
 
 
-def lavina_item(cfg: dict | None, now: datetime | None = None) -> dict | None:
+def lavina_item(cfg: dict | None, now: datetime | None = None, notes: list[str] | None = None) -> dict | None:
     """La Viña's weekly open meeting from config/site.yml `lavina_weekly_open` → an Item shaped like the
-    Grapevine one (lang "es"), or None when the block is missing, disabled or incomplete."""
+    Grapevine one (lang "es"), or None when the block is missing, disabled or incomplete. Its join link: the
+    block's full `zoom_url` when it is this meeting's (join_link; why it is not → `notes`)."""
     c = cfg if isinstance(cfg, dict) else {}
     if not c or c.get("enabled") is False:
         return None
@@ -308,7 +353,7 @@ def lavina_item(cfg: dict | None, now: datetime | None = None) -> dict | None:
         "timezone": tzname,
         "time_central": f"{_fmt_clock(central.hour, central.minute)} Central",
         "next_start": to_iso(nxt),
-        "zoom_url": f"https://zoom.us/j/{digits}" if 9 <= len(digits) <= 11 else None,
+        "zoom_url": join_link(c.get("zoom_url"), digits, "lavina_weekly_open", notes),
         "starts": starts or None,
         "url": clean_text(c.get("url")) or None,
         "source_note": clean_text(c.get("source")) or None,
@@ -321,9 +366,10 @@ def lavina_item(cfg: dict | None, now: datetime | None = None) -> dict | None:
     )
 
 
-def with_lavina(items: list[dict], prev_items: list[dict], cfg: dict | None) -> list[dict]:
+def with_lavina(items: list[dict], prev_items: list[dict], cfg: dict | None,
+                notes: list[str] | None = None) -> list[dict]:
     """`items` (the Grapevine item(s)) + La Viña's item from config, merged with its previous copy."""
-    lv = lavina_item(cfg)
+    lv = lavina_item(cfg, notes=notes)
     rest = [i for i in items if i.get("id") != LV_ITEM_ID]
     if lv is None:
         return rest
@@ -357,6 +403,31 @@ def carry_join_details(item: dict, prev_items: list[dict]) -> list[str]:
     return carried
 
 
+def with_join_link(items: list[dict], cfg: dict | None, notes: list[str] | None = None) -> list[dict]:
+    """The Grapevine item(s) with their join link (in place): config/site.yml `grapevine_weekly_open.zoom_url`
+    when it is a link to the Zoom ID the item has — read from aagrapevine.org that day, or kept from the day
+    before (carry_join_details) — else the plain link of that ID (join_link). Also on the previous day's item
+    when the page cannot be read today, so a changed setting shows in that run too."""
+    link = (cfg if isinstance(cfg, dict) else {}).get("zoom_url")
+    for it in items:
+        ex = it.setdefault("extra", {})
+        url = join_link(link, ex.get("zoom_id"), "grapevine_weekly_open", notes)
+        if url:
+            ex["zoom_url"] = url
+        else:
+            ex.pop("zoom_url", None)
+    return items
+
+
+def _stats(stats: dict | None, notes: list[str]) -> dict:
+    """The envelope's stats with this run's notes on the settings (stats.warnings → /status/), never an earlier
+    run's."""
+    out = {k: v for k, v in (stats or {}).items() if k != "warnings"}
+    if notes:
+        out["warnings"] = notes
+    return out
+
+
 # --------------------------------------------------------------------------- main
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
@@ -367,6 +438,8 @@ def main(argv=None) -> None:
     full_cfg = load_config()
     cfg = full_cfg.get("sources", {}).get("grapevine", {}) or {}
     lv_cfg = full_cfg.get("lavina_weekly_open")
+    gv_cfg = full_cfg.get("grapevine_weekly_open")     # its full join link (zoom_url); its flyer is the page's
+    notes: list[str] = []
     page_url = (cfg.get("base") or "https://www.aagrapevine.org").rstrip("/") + (cfg.get("weekly_open") or "/grapevine-weekly-open")
     prev = load_raw(SOURCE)
     prev_items = prev.get("items", [])
@@ -380,8 +453,8 @@ def main(argv=None) -> None:
     if not html:
         log.warning("could not fetch %s — keeping previous item", page_url)
         if not args.dry_run:
-            save_raw(SOURCE, with_lavina(prev_gv, prev_items, lv_cfg), ok=False, error=f"fetch failed: {page_url}",
-                     stats=prev.get("stats"))
+            items = with_lavina(with_join_link(prev_gv, gv_cfg, notes), prev_items, lv_cfg, notes)
+            save_raw(SOURCE, items, ok=False, error=f"fetch failed: {page_url}", stats=_stats(prev.get("stats"), notes))
         return
 
     try:
@@ -401,23 +474,25 @@ def main(argv=None) -> None:
         err = err or "could not find the Zoom ID or meeting day on the page (layout changed?)"
         log.warning(err)
         if not args.dry_run:
-            save_raw(SOURCE, with_lavina(prev_gv, prev_items, lv_cfg), ok=False, error=err, stats={"missing": missing})
+            items = with_lavina(with_join_link(prev_gv, gv_cfg, notes), prev_items, lv_cfg, notes)
+            save_raw(SOURCE, items, ok=False, error=err, stats=_stats({"missing": missing}, notes))
         return
 
     item = build_item(parsed, page_url)
     if args.dry_run:
         import json
-        print(json.dumps([item, lavina_item(lv_cfg)], ensure_ascii=False, indent=1))
+        print(json.dumps([with_join_link([item], gv_cfg)[0], lavina_item(lv_cfg)], ensure_ascii=False, indent=1))
         return
     # Today's page is the truth (a link or note the page dropped disappears), except for the join
     # details: if the parser missed one today, yesterday's value is kept and listed in stats.
     carried = carry_join_details(item, prev_items)
+    with_join_link([item], gv_cfg, notes)                   # the settings' full link, for that Zoom ID
     merged, _ = merge_items(prev_gv, [item], drop_missing=True, authoritative=True)
-    merged = with_lavina(merged, prev_items, lv_cfg)       # Grapevine first, then La Viña
+    merged = with_lavina(merged, prev_items, lv_cfg, notes)  # Grapevine first, then La Viña
     stats = {"found": found, "missing": missing}
     if carried:
         stats["kept_from_previous"] = carried
-    save_raw(SOURCE, merged, ok=True, stats=stats)
+    save_raw(SOURCE, merged, ok=True, stats=_stats(stats, notes))
     log.info("weekly open: %s %s, Zoom %s", item["extra"].get("day"), item["extra"].get("time"),
              item["extra"].get("zoom_id"))
 

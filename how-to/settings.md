@@ -96,10 +96,11 @@ All settings files are YAML: `key: value`, with indentation showing what belongs
 
 ## 3. Full reference
 
-`config/site.yml` has 16 sections today, in this order: `site`, `meeting`, `recurring_events`,
-`price_changes`, `store_offers`, `drive`, `booth`, `sources`, `lavina_weekly_open`, `phone_access`, `meetings`,
-`spotlight`, `writers_archive`, `links`, `library`, `digest`. Each one is below (`store_offers:` is 3.4b;
-`booth:`, the booth display, is 3.14; `writers_archive:` is with `spotlight:` in 3.10), then the other files
+`config/site.yml` has 17 sections today, in this order: `site`, `meeting`, `recurring_events`,
+`price_changes`, `store_offers`, `drive`, `booth`, `sources`, `grapevine_weekly_open`, `lavina_weekly_open`,
+`phone_access`, `meetings`, `spotlight`, `writers_archive`, `links`, `library`, `digest`. Each one is below
+(`store_offers:` is 3.4b; `booth:`, the booth display, is 3.14; `writers_archive:` is with `spotlight:` in 3.10;
+`grapevine_weekly_open:` is with `lavina_weekly_open:` in 3.7), then the other files
 (3.15–3.20). Every example says what
 happens and where it shows. Examples marked "checked" were run through the site's own code on the real file
 (October 2, 2026).
@@ -320,7 +321,8 @@ Where the speakers show — the name, the position and the topic, never `confirm
 - `/meetings/`: the next meeting's speaker, "How the evening runs" (7:00 opening · 7:02 guest speaker · 7:22
   questions · 7:30 events, offers, topics and sharing · 8:00 close, then the parking lot) and the year's speaker
   schedule (date, name, position, topic); a date without a speaker shows "What happens at our committee meeting"
-  instead (a topic to share on until 7:30, then the same second half, in six steps);
+  instead (its second step, "Guest speaker": most months a speaker until 7:30, and without one, as that night, the
+  chair's topic and the members' sharing; then the same second half, in six steps);
 - the home page's next-meeting card and each committee card on `/events/` ("Guest speaker: Rick W.");
 - each meeting's calendar entry (`/events.ics`, the Google and Outlook links, the downloaded `.ics` file): "Guest
   speaker: Rick W. — <position>", "Topic: “…”" and "The guest speaker's part ends by 7:30 PM; then coming events,
@@ -461,8 +463,8 @@ the presentation `config/presentations/grapevine-meeting.yml` ([presentations.md
 with a moment of silence, the Serenity Prayer and **the AA Grapevine Statement of Purpose** in place of the AA
 Preamble, read aloud from the current issue or from aagrapevine.org — named on the site, never printed there (AA
 Grapevine's text); then a welcome to first-timers and members from across the Area, a story from the current
-Grapevine (its reader shares first), sharing (3 to 5 minutes each), Carry the Message in place of a basket (the
-meeting has no expenses; your Seventh Tradition goes to your home group), the announcements and the Responsibility
+Grapevine (its reader shares first), sharing (3 to 5 minutes each), no basket (the meeting has no expenses):
+instead, how we support AA Grapevine and Carry the Message, the announcements and the Responsibility
 Statement at 8:00. Its section on `/meetings/` says so in five steps (`committee.gvmeeting.*` in
 `src/_i18n/committee.json`).
 
@@ -762,7 +764,7 @@ An event that is already on `/events/` (a `content/events` file, a flyer, a mont
 shows once: ours wins. A calendar's health is informational only (run summary "Other calendars (optional,
 informational)" and the `/status/` box); it never opens the "stopped updating" issue.
 
-### 3.7 `lavina_weekly_open:` — La Viña's weekly open meeting
+### 3.7 `lavina_weekly_open:` — La Viña's weekly open meeting (and `grapevine_weekly_open:`)
 
 Written from La Viña's official flyer (its page, www.aalavina.org/podcast, is linked, never read). It becomes the second weekly open
 meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
@@ -775,15 +777,20 @@ meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
 | `time` | `"12:00"` | In the meeting's own time zone: `"12:00"`, `"12 p. m."`, `"noon"`. |
 | `timezone` | `"America/New_York"` | The meeting's zone; the site also shows Central ("11 AM Central"). An unknown zone (`"Eastern"`) takes the meeting off the site. |
 | `starts` | `"2026-11-05"` | The first meeting. Until then `/meetings/` says "Starts Thursday, November 5, 2026" (`/es/meetings/`: "Comienza el jueves 5 de noviembre de 2026") and the toolkit "starting …". A date on another weekday is moved to the first real one. |
-| `zoom_id` / `passcode` | `"871 2036 8287"` / `"238047"` | 9–11 digits: the formatted ID and a Join link `https://zoom.us/j/<digits>`. Otherwise no Zoom ID (and a test fails). |
-| `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. |
+| `zoom_id` / `passcode` | `"871 2036 8287"` / `"238047"` | 9–11 digits: the formatted ID (and, without `zoom_url`, a plain Join link `https://zoom.us/j/<digits>`). Otherwise no Zoom ID (and a test fails). |
+| `zoom_url` | `"https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"` | The meeting's **full** Zoom link, pasted as Zoom gives it, ending with its `?pwd=…` part (delete anything after it, such as `&omn=…` or `&from=addon`): the card's **Join on Zoom** (on `/meetings/` and `/events/`) and its **Add to calendar** (Google's link and the `.ics` file) open the meeting without asking for the passcode. Used only when it is `https://<server>.zoom.us/j/<digits>` (or `https://zoom.us/j/…`), optionally with `?pwd=…` and nothing after it, **and** its digits are `zoom_id`'s; otherwise the plain link, and `/status/` says why (the box *Grapevine Weekly Open meeting*, which holds both weekly meetings' notes). `""` = the plain link. |
+| `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. At most 400 characters each, the sign-off included: a longer one is cut off on the site. |
 | `url` | `"https://www.aalavina.org/podcast"` | La Viña's page for it: the card's **Details on aalavina.org** (`""` for none). Written exactly so, with no `/` at the end. |
 | `source` | flyer note | Stored, **not shown** on any page. |
-| `flyer_match` | `"reuni[oó]n abierta de la vi[nñ]a\|la vi[nñ]a open meeting"` | The newest Drive file whose title or name matches → "View flyer" ("Ver volante") on the La Viña card. Matched by the page: capitals ignored, accents **not** folded (write `vi[nñ]a`). |
+| `flyer_match` | `"reuni[oó]n abierta de la vi[nñ]a\|la vi[nñ]a open meeting"` | The newest file in the Drive's `flyers/` folder whose title or name matches → "View flyer" ("Ver volante") on the La Viña card (since November 12, 2026: "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"). Matched by the page: capitals ignored, accents **not** folded (write `vi[nñ]a`). |
 
 Examples (checked, "today" = October 2, 2026):
 - Today's block → "Reunión Abierta de La Viña", Jueves, "12 p. m. (hora del Este)", "11 AM Central", first
-  meeting Thursday, November 5, 2026, Join https://zoom.us/j/87120368287.
+  meeting Thursday, November 5, 2026, Join https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1
+  (checked November 12, 2026).
+- `zoom_url` of another room (`https://us06web.zoom.us/j/81595931777?pwd=…`) → Join https://zoom.us/j/87120368287,
+  and `/status/` notes *lavina_weekly_open: zoom_url is for Zoom meeting 815 9593 1777, not this meeting's 871 2036
+  8287 — the plain link is used …* (never the link's `pwd=` part).
 - `time: 720` (what an unquoted 12:00 becomes), `starts: "2026-11-04"`, `zoom_id: "871-2036-8287"` → the
   same result (the first meeting moves to Thursday, November 5).
 - `day: "funday"` or `timezone: "Eastern"` → the meeting **silently disappears** from the site; the reason is
@@ -794,7 +801,19 @@ Examples (checked, "today" = October 2, 2026):
 > when your save changes this block, the push run runs that module too (`scripts/ops/push_modules.py`), so the
 > edit is on the site a few minutes later ([section 4](#4-what-happens-after-you-save)). `flyer_match` is read by
 > the page itself. Mistakes here are never "Settings problems"; they appear only in the log of the step "Sync
-> sources and translate" of the run.
+> sources and translate" of the run — except a `zoom_url` that is not used: `/status/` says why (the box
+> *Grapevine Weekly Open meeting*, which holds both weekly meetings' notes).
+
+**`grapevine_weekly_open:`** (since November 2026) holds the two things about the Grapevine Weekly Open that
+aagrapevine.org's page does not give: `zoom_url`, its full Zoom link (the same rules as above; its digits must be the
+meeting ID the page gives that day), and `flyer_match`, which finds AA Grapevine's flyer of the meeting in the
+Drive's `flyers/` folder for a "View flyer" link on the Grapevine card (today `"grapevine weekly open"`: the file
+"Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom"). Everything else about
+it — day, time, meeting ID, passcode — is still read from aagrapevine.org. Both meetings use the same room today,
+but each has its own `zoom_url` line: if the room changes, paste the new full link in both, and in `lavina_weekly_open`
+also change `zoom_id` and `passcode` to the new room's (Grapevine's come from aagrapevine.org). A renamed flyer needs
+its `flyer_match` changed too, and its title in the other language in `data/translations/overrides.yml`
+([Translations](translations.md)).
 
 Where it shows: `/meetings/#weekly-open` (both weekly meetings; a shared Zoom room is shown once),
 `/accessibility/#phone`, the home page, `/monthly/` (from its first meeting), and the presentations
@@ -1280,7 +1299,7 @@ search (faster). Write access is enough (MKP715).
 | `sources: instagram` | Yes | The look-ups of single posts |
 | `sources: podcasts` | Yes | Looking for new feeds |
 | `sources: ics_feeds` | Yes (each calendar is asked at most once in about 20 hours) | — |
-| `lavina_weekly_open:` | Yes | — |
+| `grapevine_weekly_open:`, `lavina_weekly_open:` | Yes | — |
 | `meetings:` | Yes (the push run reads the meeting lists again) | — |
 | `spotlight:` | Yes (home, `/published/` and its Texas writers archive; `neta65_counties` also the Meetings page's "Our Area") | — |
 | `writers_archive:` | Yes | — |
@@ -1298,9 +1317,9 @@ search (faster). Write access is enough (MKP715).
 |---|---|
 | Every page: browser tab, footer | `site: title`, `committee` (©), `area_website` and `contact_email` (footer buttons); `links: gv_home`, `lv_home` |
 | Home `/`, `/es/` | `meeting:` (next-meeting card, Join); `recurring_events:` ("Upcoming events"); `spotlight: home_days`; `links: gvr_register`, `rlv_register`, `youtube_channel`; `lavina_weekly_open:`; `sources: grapevine / lavina: quote_page` (the two daily quotes) |
-| `/meetings/` | `meeting:` (#committee-meeting, with `platform` and `note` / `note_es` in *Who can come*); `lavina_weekly_open:` and `links: weekly_open` (#weekly-open); `meetings:` and `spotlight: neta65_counties` (#grapevine-meetings); `contact_email` (the question button under the Grapevine meetings); `links: aa_find`, `aa_is_aa_for_you`, `aa_meeting_guide` (`_es` on `/es/`), the `meetings: feeds` offices with `in_area: true`, `site: area_website` and `area` / `area_es` (#new-to-aa, the *New to AA?* card) |
+| `/meetings/` | `meeting:` (#committee-meeting, with `platform` and `note` / `note_es` in *Who can come*); `grapevine_weekly_open:`, `lavina_weekly_open:` and `links: weekly_open` (#weekly-open); `meetings:` and `spotlight: neta65_counties` (#grapevine-meetings); `contact_email` (the question button under the Grapevine meetings); `links: aa_find`, `aa_is_aa_for_you`, `aa_meeting_guide` (`_es` on `/es/`), the `meetings: feeds` offices with `in_area: true`, `site: area_website` and `area` / `area_es` (#new-to-aa, the *New to AA?* card) |
 | `/404.html`, `/es/404.html` | `contact_email`; the short *New to AA?* card in both languages: `links: aa_find`, `aa_is_aa_for_you`, `aa_meeting_guide` and their `_es` twins; the Carry the Message card: `links: carry_the_message`, `lleva_el_mensaje` |
-| `/events/`, `/events.ics`, `/es/events.ics` | `meeting:`, `recurring_events:`, `sources: ics_feeds`; `site: committee` (the meeting's title, and the organizer of our own events for search engines); `contact_email`; for search engines also `site: area` / `area_es`, `area_website` (the organizer of an Area assembly) and `links: gv_home`, `lv_home` (La Viña's and Grapevine's events) |
+| `/events/`, `/events.ics`, `/es/events.ics` | `meeting:`, `recurring_events:`, `sources: ics_feeds`; `site: committee` (the meeting's title, and the organizer of our own events for search engines); `contact_email`; for search engines also `site: area` / `area_es`, `area_website` (the organizer of an Area assembly) and `links: gv_home`, `lv_home` (La Viña's and Grapevine's events); `grapevine_weekly_open: zoom_url`, `lavina_weekly_open:` (#ev-weekly: the weekly open meetings' cards, their Join on Zoom) |
 | `/accessibility/` | `phone_access:` and the weekly open meetings' Zoom IDs (#phone); `meeting:` (our meetings on Google Meet: no number to call); `links: asl_playlist`, `aa_big_book`, `aa_twelve_and_twelve` (`aa_twelve_and_twelve_es` on `/es/`), `aa_accessibility_resources`, `aa_access_email`; `contact_email` (#feedback); `meeting: chair_email` (for anyone who cannot join online) |
 | `/listen/`, `/watch/` | `site: listen`, `watch`; `links: gv_apps`, `lv_apps`, `podcasts_page`, `youtube_channel`; `sources: podcasts`, `youtube` |
 | `/about/` | `site: area`, `committee_page`, `area_website`, `contact_email`, `about_videos`; `links: gv_home`, `lv_home`, `aa_org`, `carry_the_message`, `lleva_el_mensaje` (the Carry the Message card, `#ctm`); `config/history.yml` (#history); the next meeting date; `booth:` (#booth, the booth display's starting settings and the size of its offline copy; its live slides use `meeting:`, `recurring_events:`, `lavina_weekly_open:`, `price_changes:`, `site: committee` and `about_videos` too) |
@@ -1329,7 +1348,8 @@ search (faster). Write access is enough (MKP715).
 
 - **The website build.** [`src/_data/site.js`](../src/_data/site.js) reads `config/site.yml` and hands the
   templates `site`: every key of `site:`, plus `meeting` (with `platform`, Zoom when left out, and `online_url`, an older `zoom_url` when there is none), `recurring_events`,
-  `drive`, `sources`, `links`, `phone_access`, `digest`, `lavina_weekly_open`, and since October 2026 `meetings`
+  `drive`, `sources`, `links`, `phone_access`, `digest`, `lavina_weekly_open` (and since November 2026
+  `grapevine_weekly_open`), and since October 2026 `meetings`
   and `spotlight` (so `/meetings/` still lists each office's site when `data/site/meetings.json` is missing).
   **Not** handed over: `price_changes`, `library` — they reach the pages only through the synced data files. On
   GitHub, `url` and `repository` are replaced (search for `process.env.SITE_URL`), and `timezone` is always a
@@ -1493,7 +1513,8 @@ Where problems show up:
 - **Notes** in the run summary: small problems of a source that still updated (for example
   `content/instagram.yml`).
 - **The log** of the step "Sync sources and translate": the only place where mistakes in `lavina_weekly_open:` and
-  most of `sources:` appear. (A `drive:` mistake that stops the Drive source, such as an empty
+  most of `sources:` appear (a `zoom_url` that is not used is also on `/status/`, box *Grapevine Weekly Open
+  meeting*). (A `drive:` mistake that stops the Drive source, such as an empty
   `root_folder_id`, shows as **PROBLEM** in the summary's "Content sources" table and on `/status/`.)
 
 | Symptom | Cause | Fix |
@@ -1508,7 +1529,8 @@ Where problems show up:
 | La Viña's weekly open meeting disappeared | An unreadable `day`, `time` or `timezone` | Fix it; it returns after the push run of the fix. The reason is only in the log. |
 | An edit to `sources: crawler`, `magazine_hub` or the shop's pages changed nothing | Read only by the full daily update | Wait for it, or start one ([section 4](#4-what-happens-after-you-save)). |
 | An edit to `lavina_weekly_open:`, `sources: youtube / instagram`, `meetings:` or `content/instagram.yml` changed nothing | The push run could not tell which files the push changed, or could not compare `config/site.yml` with its earlier copy (a blue notice *Push run* says so), or the source failed in that run | Look at the run's summary (**Also run for this push**); otherwise the next full update reads it. |
-| No flyer link on the La Viña weekly open card, or no letter link in the price notice | The page's pattern does not ignore accents | Write both letters: `vi[nñ]a`, `actualizaci[oó]n`. |
+| No flyer link on a weekly open card (Grapevine's or La Viña's), or no letter link in the price notice | The flyer is not in the Drive's `flyers/` folder, or the file's name does not match `flyer_match` (the notice's: `doc_match`); accents are not ignored | Put the flyer in `flyers/`; write both letters: `vi[nñ]a`, `actualizaci[oó]n`. |
+| Join on Zoom asks for the passcode | `zoom_url` is empty, is another meeting's link (the meeting moved to a new Zoom room), or has more after its meeting ID or its `?pwd=…` part (`&omn=…`, `&from=addon`) | Paste the meeting's full link from Zoom, ending with its `?pwd=…` part (delete anything after it, such as `&omn=…` or `&from=addon`), into `grapevine_weekly_open` / `lavina_weekly_open` → `zoom_url` (for La Viña, also `zoom_id` and `passcode`); `/status/`, box *Grapevine Weekly Open meeting*, says which. |
 | Code check red after deleting the `listen:` or `watch:` lines | A test expects both ids | Put them back, or change the test. |
 | Code check red after adding a milestone or a session | The counts 40 and 6 are pinned | Change the test in the same commit. |
 | Code check red with "settings … that no code reads" | `tests/test_settings_used.py`: a key no code reads (misspelled, or one that does nothing) | Fix its name, or delete it; Website update published the rest meanwhile. |

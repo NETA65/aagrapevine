@@ -1,8 +1,10 @@
 """Carry the Message · Lleva el Mensaje — for anyone who wants to help financially (src/_includes/macros/ctm.njk, the
 words in src/_i18n/common.json ctm.*, the buttons' CSS in src/assets/css/areas/shop.css .ctm-*):
 
-  * the words   — both languages, written by hand (the Spanish is not the English); the card says plainly that our
-                  committee collects no money and that a gift is a purchase, not a donation; no amounts, no appeal
+  * the words   — both languages, written by hand (the Spanish is not the English); the card says plainly that a
+                  gift is a purchase, not a donation, and (since November 2026) that a member who prefers cash may
+                  hand it to us at our table at the next event, the committee buying Carry the Message gift
+                  subscriptions with it — never that the committee takes no money; no amounts, no appeal
                   (no "please", "now", "urgent", "!"); what the programs are, as their own pages say (October 2026):
                   a gift certificate from the official store, which the magazine turns into a subscription for an
                   alcoholic in need — the Shop's "How it works" says the same (never "or to someone you choose": that
@@ -64,10 +66,18 @@ class Words(unittest.TestCase):
         # the tag names the program's language in that language (each is shown with lang="…" on it)
         self.assertEqual(keys["ctm.in_lang"], {"en": "In English", "es": "En español"})
 
-    def test_the_committee_collects_no_money_and_it_is_no_donation(self):
+    def test_cash_at_our_table_and_it_is_no_donation(self):
         text, note = COMMON["ctm.text"], COMMON["ctm.note"]
-        self.assertTrue(text["en"].startswith("Our committee doesn't collect money."))
-        self.assertTrue(text["es"].startswith("Nuestro comité no recibe dinero."))
+        # cash only at our table, and only for Carry the Message gift subscriptions (the committee's practice since
+        # November 2026): no "doesn't collect money" any more, and no receipt line
+        self.assertTrue(text["en"].endswith("Prefer cash? Hand it to us at our Grapevine and La Viña table at the next event, "
+                                            "and the committee uses it to buy Carry the Message gift subscriptions."))
+        self.assertTrue(text["es"].endswith("¿Prefieres pagar en efectivo? Entrégalo en nuestra mesa de La Viña y Grapevine en el "
+                                            "próximo evento, y el comité lo usa para comprar suscripciones de regalo de Lleva el "
+                                            "Mensaje y Carry the Message."))
+        for lang, old in (("en", "collect money"), ("es", "no recibe dinero")):
+            self.assertNotIn(old, text[lang])
+            self.assertNotRegex(text[lang], r"(?i)receipt|recibo")
         self.assertIn("not a donation", note["en"])
         self.assertIn("no un donativo", note["es"])
         # each program by its own name, the official store, and who gets it — as the programs' own pages say
@@ -97,6 +107,15 @@ class Words(unittest.TestCase):
             self.assertNotIn("you choose" if lang == "en" else "elijas", how2[lang])
         # the one-program button is gone (both are shown now)
         self.assertNotIn("read.subs.ctm_btn", READ)
+
+    def test_the_shop_says_cash_at_our_table_in_the_cards_words(self):
+        """The Shop's "How it works" says the cash option too (owner, November 12, 2026: "site too"): word for word
+        the last sentence of the card's ctm.text, no receipt line, no amount, no appeal."""
+        cash = READ["read.subs.ctm_cash"]
+        for lang in ("en", "es"):
+            with self.subTest(lang=lang):
+                self.assertTrue(COMMON["ctm.text"][lang].endswith(" " + cash[lang]))
+                self.assertNotRegex(cash[lang], r"(?i)receipt|recibo|\$|\d|!|¡|please|por favor|donat|donativo")
 
 
 # --------------------------------------------------------------------------------------------- the macro
@@ -217,9 +236,12 @@ class Pages(unittest.TestCase):
                     self.assertIn(host, a["_text"])
                     self.assertIn("AA Grapevine" if host.startswith("gv") else "La Viña", a["_text"])
 
-    def test_the_card_says_the_committee_collects_no_money(self):
+    def test_the_card_says_its_words(self):
         for url, lang, html in self.places():
             if "/shop/" in url:
+                with self.subTest(url=url):  # the band's "How it works" card ends with the cash sentence
+                    how = html[html.index(READ["read.subs.ctm_how_title"][lang]):]
+                    self.assertIn(READ["read.subs.ctm_cash"][lang].replace("'", "&#39;"), how)
                 continue
             other = "en" if lang == "es" else "es"
             with self.subTest(url=url):
@@ -232,7 +254,7 @@ class Pages(unittest.TestCase):
 
     def test_the_404_card_says_it_in_both_languages(self):
         """GitHub Pages answers every missing address, /es/… too, with the root /404.html: its card says "¿Quieres
-        ayudar económicamente? / Nuestro comité no recibe dinero" as well (and /es/404.html the English) — in an
+        ayudar económicamente? / Si quieres ayudar, puedes comprar…" as well (and /es/404.html the English) — in an
         element with lang on it, after the page language's words; About's card is in the page's language only."""
         p = self.pages()
         for url, lang, other in (("/404.html", "en", "es"), ("/es/404.html", "es", "en")):

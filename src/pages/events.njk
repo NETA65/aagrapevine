@@ -234,11 +234,15 @@ calendarFeed: "/events.ics"
       JavaScript it shows). Each card, in its magazine's colour (ev-tone-gv / -lv, kindBadge's "Grapevine" /
       "La Viña"): "Every week", its language, the title, the day and time (Central · the host's), the next date —
       the /meetings/ cards' data-cm-weekly markup, so committee.js weekly() rolls it on, says "Live now" and adds the
-      visitor's own time; before La Viña's first meeting it says "Starts Thursday, November 5, 2026" —, then How to
-      join and Add to calendar (every week: Google's link and the .ics file of /meetings/; plain links, no JavaScript
-      needed). How to join leads to /meetings/#weekly-open: the Zoom ID and passcode are given there only (the Zoom
-      link alone would ask for the passcode). Phones: the two buttons side by side when both fit — the calendar menu
-      then opens to the left, so it stays on screen — else one under the other; from 640px one row. -#}
+      visitor's own time; before La Viña's first meeting it says "Starts Thursday, November 5, 2026" —, then Join on
+      Zoom, Meeting details and Add to calendar. Join on Zoom is the meeting's full Zoom link (w.zoomUrl: with its
+      "?pwd=…", nobody types the passcode), the /meetings/ cards' button and label (committee.weekly.join_gv / _lv
+      name the meeting). Meeting details leads to /meetings/#weekly-open: the Zoom ID, passcode, joining by phone,
+      the recordings and the flyer are there. Add to calendar: every week, Google's link and the .ics file of
+      /meetings/ (plain links, no JavaScript needed; both carry the full link). Phones: Join on its own row, then the
+      other two side by side when both fit, with their short words ("Details", "Calendar"; a screen reader hears the
+      whole label) — the calendar menu then opens to the left, so it stays on screen — else one under the other; from
+      640px one row. -#}
   {#- (wos: set above, with the colour key) -#}
   {% if wos | length %}
   <section id="ev-weekly" class="mb-10" x-show="filter === 'all' || filter === 'calendar'" aria-labelledby="ev-weekly-title">
@@ -280,7 +284,8 @@ calendarFeed: "/events.ics"
           {% endif %}
           {%- set wc = w | cmWeeklyCal(site, lang) %}
           <div class="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9.5rem),1fr))] gap-2 sm:flex sm:flex-wrap">
-            <a class="btn-primary btn-sm" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{% icon "info", "size-4" %} {{ "media.wo_join" | t(lang) }}<span class="sr-only"> — {{ wTitle }}</span></a>
+            {% if w.zoomUrl %}<a class="btn-primary btn-sm col-span-full" href="{{ w.zoomUrl }}" target="_blank" rel="noopener" aria-label="{{ ('committee.weekly.join_' + key) | t(lang) }}">{% icon "video", "size-4" %} {{ "committee.meeting.join" | t(lang, { platform: "Zoom" }) }}</a>{% endif %}
+            <a class="btn-secondary btn-sm" href="{{ '/meetings/#weekly-open' | lurl(lang) }}">{% icon "info", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.meeting_details" | t(lang) }}</span><span class="sr-only"> — {{ wTitle }}</span></a>
             {% if wc %}
             <details class="cm-menu">
               <summary class="btn-secondary btn-sm w-full sm:w-auto" aria-label="{{ 'committee.weekly.cal_aria' | t(lang, { name: wTitle }) }}">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:hidden">{{ "common.add_to_calendar" | t(lang) }}</span> {% icon "chevron-down", "size-4 opacity-70" %}</summary>

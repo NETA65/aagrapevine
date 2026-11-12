@@ -764,7 +764,7 @@ class Monthly(unittest.TestCase):
         self.assertIn("📢 New Grapevine and La Viña prices since January 1, 2027: https://example.org/site/shop/#price-changes", r["2027-01"]["wa"])
         for k in ("2026-09", "2027-02"):
             self.assertNotIn("📢", r[k]["wa"])
-        self.assertIn("Los precios de Grapevine y La Viña cambian el 1 de enero de 2027 / Grapevine and La Viña prices change on January 1, 2027: "
+        self.assertIn("Los precios de La Viña y Grapevine cambian el 1 de enero de 2027 / Grapevine and La Viña prices change on January 1, 2027: "
                       "https://example.org/site/es/shop/#price-changes", r["2026-12"]["bi"])
 
     def test_keep_up_all_month(self):
@@ -818,7 +818,7 @@ class Digest(SD.DigestCase):
         self.assertEqual(r["prices"]["2026-12-01T15:05:00Z"]["date"], {"en": "January 1, 2027", "es": "1 de enero de 2027"})
         py = [(SDM.price_change(SDM.to_central(datetime.fromisoformat(n.replace("Z", "+00:00"))).date()) or {}).get("kind") for n in NOWS]
         self.assertEqual(py, KINDS)
-        self.assertIn("📢 Grapevine and La Viña prices change on January 1, 2027 / Los precios de Grapevine y La Viña cambian el 1 de enero "
+        self.assertIn("📢 Grapevine and La Viña prices change on January 1, 2027 / Los precios de La Viña y Grapevine cambian el 1 de enero "
                       "de 2027: https://example.org/site/shop/#price-changes", r["text"])
 
     def test_the_email_rows(self):
@@ -828,7 +828,7 @@ class Digest(SD.DigestCase):
         self.assertIn("What changes, and why →", html)
         en, es = self.halves(text)
         self.assertIn(f"Grapevine and La Viña prices change on January 1, 2027: {SD.SITE}/shop/#price-changes", en)
-        self.assertIn(f"Los precios de Grapevine y La Viña cambian el 1 de enero de 2027: {SD.SITE}/es/shop/#price-changes", es)
+        self.assertIn(f"Los precios de La Viña y Grapevine cambian el 1 de enero de 2027: {SD.SITE}/es/shop/#price-changes", es)
         html, text = self.preview("2027-01-01")
         self.assertIn("New Grapevine and La Viña prices since January 1, 2027", html)
         self.assertIn("See the new prices →", html)

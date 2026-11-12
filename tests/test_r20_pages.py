@@ -4,7 +4,8 @@ Spanish), with the committee meeting's guest speakers and our new Grapevine Meet
   * how the evening runs (eleventy/filters/committee.js meetingEvening — cmEvening): the opening, about 2 minutes
     later the guest speaker's talk, about 20 minutes later the questions, from `speaker_until` the events, offers,
     magazine topics and sharing (never "committee business": it is not a business meeting), the close at the end,
-    then the parking lot — the times from the settings; without a speaker a topic to share on, then the same
+    then the parking lot — the times from the settings; without a speaker a topic to share on (its second step,
+    "Guest speaker": most months a speaker, done by speaker_until; without one the chair's topic), then the same
     second half;
   * the speakers to come (meetingSpeakerDates — cmSpeakers): each with that meeting's calendar text, word for word
     the one /events/ and /events.ics give it, and the text of a meeting without one; a meeting that is over drops off;
@@ -17,7 +18,8 @@ Spanish), with the committee meeting's guest speakers and our new Grapevine Meet
     gives the feed's UID; "Starting soon" only the last 5 minutes (the room opens a few minutes before we start);
   * the built pages, at a fixed clock, on settings of the test's own (two speakers, a Grapevine Meeting in the
     committee meeting's room): Nov 26, 2026 (the next committee meeting, Dec 16, has no speaker; the Grapevine
-    Meeting's first date is Dec 2) and Dec 17, 2026 (the next, Jan 20, has one);
+    Meeting's first date is Dec 2) and Dec 17, 2026 (the next, Jan 20, has one); and on Nov 26 with no speakers listed
+    at all (step 2 is the chair's topic again, never "Most months a guest speaker");
   * the Grapevine Meeting is ours (event-tone.js): its card says NETA 65, never Grapevine's name for its badge.
 
     python -m unittest tests.test_r20_pages -v      (or: python -m unittest discover -s tests)
@@ -37,12 +39,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))     # nodejs.py
 
 from nodejs import run_js  # noqa: E402
 from test_central_time import DOM, plain  # noqa: E402  (the browser stand-in: page(), el())
-from test_r20_meeting import NOW, ROOM, YAML, Untranslated, ctx_with  # noqa: E402  (the settings of round 20's tests)
+from test_r20_meeting import NOW, ROOM, SPEAKERS, YAML, Untranslated, ctx_with  # noqa: E402  (the settings of round 20's tests)
 from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import events_external as X  # noqa: E402
 
 NOV26 = "2026-11-26T18:00:00Z"       # the merge day: the next committee meeting (Dec 16) has no guest speaker
 DEC17 = "2026-12-17T18:00:00Z"       # the next one (Jan 20) has: Ann B.
+# the same settings with no guest speakers listed at all (a year without them, such as 2028 may be)
+NO_SPEAKERS = YAML.replace(SPEAKERS, "\n  speakers: []\n")
 
 # the settings as the pages read them (src/_data/site.js: the committee meeting's platform and link filled in)
 SITE_JS = r"""
@@ -360,11 +364,12 @@ def x_data(page: str, needle: str) -> dict:
 class BuiltPages(Untranslated):
     built: dict = {}
 
-    def pages(self, at: str) -> dict:
-        if at not in BuiltPages.built:
+    def pages(self, at: str, settings: str = YAML) -> dict:
+        key = (at, settings)
+        if key not in BuiltPages.built:
             items = B.recurring_events(ctx_with())
-            BuiltPages.built[at] = run_js(self, PAGES_JS, data={"yaml": YAML, "items": items}, timeout=900, now=at)
-        return BuiltPages.built[at]
+            BuiltPages.built[key] = run_js(self, PAGES_JS, data={"yaml": settings, "items": items}, timeout=900, now=at)
+        return BuiltPages.built[key]
 
     # ------------------------------------------------------------------ /meetings/
     def test_meetings_before_the_first_speaker(self):
@@ -387,11 +392,14 @@ class BuiltPages(Untranslated):
                 self.assertIn('data-copy="abc-defg-hij"', board)
                 self.assertNotRegex(board, r"(?i)passcode|código de acceso")
         en = text(part(p["/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
-        # Dec 16: no guest speaker — a topic to share on until 7:30, then the same second half, in six steps
+        # Dec 16: no guest speaker — a topic to share on until 7:30, then the same second half, in six steps; the
+        # second, "Guest speaker", says most months have one (done by the settings' speaker_until) and this one doesn't
         self.assertIn("7:00 – 8:00 PM Central time: no guest speaker at this meeting; we share on a topic until 7:30 PM.", en)
         self.assertIn("1 Welcome & opening We open with a moment of silence and the Serenity Prayer. People who are here for the "
-                      "first time or new to service are especially welcome. 2 A topic to share on The chair introduces a topic, and "
-                      "members share their experience on it. 3 Coming up & workshop requests", en)
+                      "first time or new to service are especially welcome. 2 Guest speaker Most months a guest speaker shares on "
+                      "a topic and answers our questions, done by 7:30 PM. When there's no guest speaker, as at this meeting, the "
+                      "chair introduces a topic and members share their experience on it. 3 Coming up & workshop requests", en)
+        self.assertNotIn("A topic to share on", en)
         for s in ("4 Special offers & magazine topics", "5 GVR and RLV sharing", "experience, not reports",
                   "6 Close at 8:00 PM, then the parking lot We close with the Responsibility Statement. Then the parking lot: "
                   "stay on for whatever is on your mind."):
@@ -413,7 +421,11 @@ class BuiltPages(Untranslated):
         self.assertNotRegex(en, r"(?i)committee business|business hour|reports from|the minutes|old business|new business")
         es = text(part(p["/es/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
         for s in ("7:00–8:00 p. m., hora del Centro: en esta reunión no hay orador(a) invitado(a); hasta las 7:30 p. m. "
-                  "compartimos sobre un tema.", "2 Un tema para compartir", "5 Lo que comparten los RLV y GVR",
+                  "compartimos sobre un tema.",
+                  "2 Orador(a) invitado(a) La mayoría de los meses, un(a) orador(a) invitado(a) habla sobre un tema y responde "
+                  "nuestras preguntas, y termina a más tardar a las 7:30 p. m.; cuando no hay orador(a) invitado(a), "
+                  "como en esta reunión, quien coordina presenta un tema y los miembros comparten su experiencia sobre él. "
+                  "3 Eventos próximos", "5 Lo que comparten los RLV y GVR",
                   "6 Cierre a las 8:00 p. m. y la reunión después de la reunión",
                   "Cómo transcurre la reunión", "hacia las 7:02 p. m. Nuestro(a) orador(a) invitado(a)",
                   "7:30 p. m. Eventos, ofertas, temas y tiempo para compartir", "después, hasta las 8:00 p. m., eventos, ofertas, temas de las "
@@ -422,6 +434,24 @@ class BuiltPages(Untranslated):
             self.assertIn(s, es)
         self.assertNotIn("p. m..", es)
         self.assertNotRegex(es, r"(?i)asuntos del comité|informes de distritos")
+
+    def test_meetings_without_any_guest_speakers(self):
+        # no guest speakers listed (a year without them): step 2 is the chair's topic again, never "Most months a guest
+        # speaker…" (the "Guest speaker" step needs the list and speaker_until), and no list of speakers to come
+        self.assertNotIn("Ann B.", NO_SPEAKERS)
+        p = self.pages(NOV26, NO_SPEAKERS)
+        en = text(part(p["/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
+        self.assertIn("2 A topic to share on The chair introduces a topic, and members share their experience on it. "
+                      "3 Coming up", en)
+        self.assertNotIn("Most months a guest speaker", en)
+        self.assertNotIn("2 Guest speaker", en)
+        es = text(part(p["/es/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
+        self.assertIn("2 Un tema para compartir Quien coordina presenta un tema y los miembros comparten su experiencia "
+                      "sobre él. 3 Eventos próximos", es)
+        self.assertNotIn("La mayoría de los meses", es)
+        for url in ("/meetings/", "/es/meetings/"):
+            with self.subTest(url=url):
+                self.assertNotIn('id="guest-speakers"', p[url])
 
     def test_the_guest_speakers_list(self):
         p = self.pages(NOV26)
@@ -468,9 +498,9 @@ class BuiltPages(Untranslated):
                 self.assertIn(date, words)
                 for s in ("Grapevine Meeting", "Our monthly online meeting · In English", "The AA Grapevine Statement of Purpose",
                           "in place of the AA Preamble", "A story from AA Grapevine", "and starts the sharing.",
-                          "Sharing on its topic", "3 to 5 minutes each.", "your Seventh Tradition goes to your home group. "
-                          "In place of the basket, a word about Carry the Message.",
-                          "we close on time with the Responsibility Statement, at 8:00 PM.",
+                          "Sharing on its topic", "3 to 5 minutes each.",
+                          "No basket (the meeting has no expenses): instead, how we support AA Grapevine and Carry the "
+                          "Message; announcements; and we close at 8:00 PM with the Responsibility Statement.",
                           "Meeting code abc-defg-hij", "Join on Google Meet",
                           "The same Google Meet room as our committee meeting."):
                     self.assertIn(s, words)
@@ -479,12 +509,15 @@ class BuiltPages(Untranslated):
                 self.assertEqual((cloaked("First meeting"), cloaked("Next meeting")), (not first, first))
                 self.assertIn(f'data-copy="{ROOM}"', sec)
                 self.assertNotIn("Grapevine meetings", words)
+                self.assertNotIn("home group", words)          # no "your Seventh Tradition goes to your home group"
         es = text(part(self.pages(NOV26)["/es/meetings/"], 'aria-labelledby="grapevine-meeting-h"', "</section>"))
         for s in ("Nuestra reunión mensual en línea Reunión de Grapevine (en inglés)", "La Declaración de Propósito de AA Grapevine",
-                  "a las 8:00 p. m. cerramos a tiempo con la Declaración de Responsabilidad.", "hablamos de Lleva el Mensaje",
-                  "tu Séptima Tradición es para tu grupo base.",
+                  "No pasamos canasta (la reunión no tiene gastos): en su lugar, cómo apoyamos a AA Grapevine y Lleva el "
+                  "Mensaje; los anuncios; y a las 8:00 p. m. cerramos con la Declaración de Responsabilidad.",
                   "Código de la reunión abc-defg-hij", "Primera reunión"):
             self.assertIn(s, es)
+        # the Seventh Tradition is not sent to the home group any more: the close says how we support AA Grapevine
+        self.assertNotIn("grupo base", es)
         self.assertNotIn("En inglés", es, "the title says it: the eyebrow does not again")
 
     # ------------------------------------------------------------------ the home page

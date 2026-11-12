@@ -687,6 +687,9 @@ pageScripts: ["/assets/js/shop.js"]
         <li class="flex gap-3"><span class="step-num" aria-hidden="true">{{ n }}</span><span class="pt-0.5 text-sm leading-relaxed text-muted"><span class="sr-only">{{ n }}. </span>{{ ("read.subs.ctm_how" + n) | t(lang) }}</span></li>
         {% endfor %}
       </ol>
+      {#- cash at our table (the committee's practice since November 2026): word for word the last sentence of the
+          card's ctm.text on About and the 404 page (tests/test_r14_ctm.py) -#}
+      <p class="mt-4 text-sm leading-relaxed text-muted">{{ "read.subs.ctm_cash" | t(lang) }}</p>
       {% if ctmPdfs.length %}
       <p class="eyebrow mt-6">{{ "read.subs.ctm_flyers" | t(lang) }}</p>
       <ul class="-mx-3 mt-2">{% for p in ctmPdfs %}{{ pdfRow(p, lang) }}{% endfor %}</ul>

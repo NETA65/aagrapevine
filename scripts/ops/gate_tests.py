@@ -125,6 +125,9 @@ CONTENT_TESTS: dict[str, str] = {
     "test_r25_lavina_podcast.RealSettings.":
         "config/site.yml sources.podcasts and lavina_weekly_open, as written: the three shows (La Viña's open-meeting "
         "show lvo) and La Viña's meeting page",
+    "test_r26c_weekly_link.RealSettings.":
+        "config/site.yml grapevine_weekly_open and lavina_weekly_open, as written: the full Zoom links of their room, "
+        "the two flyer patterns, La Viña's summaries; the flyers' titles in data/translations/overrides.yml",
     "test_r25_holiday_offers.ShopPages.":
         "config/site.yml store_offers (and the bulletin post's /shop/ links): a build of the Shop and November's "
         "toolkit with the committee's two offers",
@@ -165,6 +168,8 @@ CONTENT_TESTS: dict[str, str] = {
         "config/orientation.yml: the facts the sessions teach",
     "test_orientation.OrientationStringsTest.test_aa_wording_of_the_sessions":
         "config/orientation.yml: no classroom word in the sessions' texts",
+    "test_monthly.Strings.test_put_it_to_work_never_says_donate":
+        "config/carry.yml: no donation words in the 'Put this issue to work' tips (month pages and posters), as written",
     "test_history.HistoryFileTest.":
         "config/history.yml: the milestones complete, oldest first, their wording and the official links",
     "test_expenses_page.Config.":
