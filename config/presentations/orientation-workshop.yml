@@ -928,7 +928,7 @@ slides:
     notes: |
       SAY: Let's take a ten-minute break. We'll start again at {fill:break_end}. If you're online, you can stay in the meeting; turn off your camera if you like. Please keep the room free of photos and screenshots while we stretch.
       DO: Start a visible timer. Leave this slide up. Online, you can play nothing, or put the committee website's address in the chat. Do not play Grapevine audio from the deck; if you want music or a story during the break, play it live from the official site.
-      ONLINE ON GOOGLE MEET: the committee's own Google Meet runs on its Google Workspace account, with no time limit, so the call can stay open through the break. On a free Google account, Meet ends a call of three or more people after 60 minutes: end the call at the break and start it again, on the same link, for the second part.
+      ONLINE ON GOOGLE MEET: our Google Meet runs on the committee's Google Workspace account, so there is no time limit: the call stays open through the break.
       TIP: Use the break to check the chat for questions you missed, and to see whether you are on time. If you're running late, the 'CUT TO 60' notes show what to shorten: {ui:customize} → {ui:version} → the 60-minute version.
     version_notes:
       short: "CUT TO 60: no break; or a short stretch."

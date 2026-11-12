@@ -313,7 +313,7 @@
   },
   "committee.meeting.step_guest_text": {
     "en": "Most months a guest speaker shares on a topic and answers our questions, done by {until}. When there's no guest speaker, as at this meeting, the chair introduces a topic and members share their experience on it.",
-    "es": "La mayoría de los meses, un(a) orador(a) invitado(a) habla sobre un tema y responde nuestras preguntas, y a más tardar a las {until} termina su parte. Cuando no hay orador(a) invitado(a), como en esta reunión, quien coordina presenta un tema y los miembros comparten su experiencia sobre él."
+    "es": "La mayoría de los meses, un(a) orador(a) invitado(a) habla sobre un tema y responde nuestras preguntas, y termina a más tardar a las {until}; cuando no hay orador(a) invitado(a), como en esta reunión, quien coordina presenta un tema y los miembros comparten su experiencia sobre él."
   },
   "committee.meeting.step_events": {
     "en": "Coming up & workshop requests",

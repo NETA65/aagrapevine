@@ -3,16 +3,16 @@
 #  Central, on Google Meet, in the committee meeting's room), as a web presentation on /orientation/ ("Workshop
 #  presentations"). An English-language AA meeting, open to every AA member: the AA Grapevine Statement of Purpose,
 #  a story from AA Grapevine, our meeting in print, read aloud by a member who then starts the sharing, sharing on
-#  its topic, Carry the Message in place of a basket, announcements, and the Responsibility Statement. The first
-#  one: Wednesday, December 2, 2026.
+#  its topic, how we support AA Grapevine and Carry the Message, in place of a basket, announcements, and the
+#  Responsibility Statement. The first one: Wednesday, December 2, 2026.
 #  (Never "Grapevine meetings": that is the list of AA groups that read Grapevine, /meetings/#grapevine-meetings.)
 #
 #  The order follows the owner's draft script (November 2026: "Area 65 AA Grapevine Meeting Script"), loosely: its
 #  welcome and housekeeping, the Statement of Purpose in place of the Preamble, the welcome from across Area 65,
-#  the reader who reads the story and starts the sharing, 3 to 5 minutes a share, the wrap-up at about 7:50, Carry
-#  the Message in place of the Seventh Tradition basket, the announcements from the floor, the chat message, writing
-#  for Grapevine, Tradition Twelve and "who you see here…", and "Keep coming back!". Where the draft and the site's
-#  rules differ, the site's rules win:
+#  the reader who reads the story and starts the sharing, 3 to 5 minutes a share, the wrap-up at about 7:50, how
+#  we support AA Grapevine and Carry the Message, in place of a basket, the announcements from the floor, the chat
+#  message, writing for Grapevine, Tradition Twelve and "who you see here…", and "Keep coming back!". Where the
+#  draft and the site's rules differ, the site's rules win:
 #   · the AA Grapevine Statement of Purpose is NAMED, never quoted (the draft prints it): it is AA Grapevine's own
 #     text, and the site never quotes Grapevine material (only the Preamble, with AA Grapevine's credit line). A
 #     reader reads it aloud from the current issue or from aagrapevine.org/about-us, and its slide names it and says
@@ -75,8 +75,8 @@ card:
     en: "Grapevine Meeting"
     es: "Reunión de Grapevine"
   summary:
-    en: "The script for our monthly online AA meeting in English, on Google Meet: the AA Grapevine Statement of Purpose, a story from AA Grapevine read aloud, sharing on its topic, and Carry the Message in place of a basket, from the Serenity Prayer to the Responsibility Statement."
-    es: "El guion de nuestra reunión mensual de AA en línea, en inglés, por Google Meet: la Declaración de Propósito de AA Grapevine, una historia de AA Grapevine leída en voz alta, lo que compartimos sobre su tema y, en lugar de la canasta, Lleva el Mensaje, desde la Oración de la Serenidad hasta la Declaración de Responsabilidad."
+    en: "The script for our monthly online AA meeting in English, on Google Meet: the AA Grapevine Statement of Purpose, a story from AA Grapevine read aloud, sharing on its topic, and, instead of a basket, how we support AA Grapevine and Carry the Message, from the Serenity Prayer to the Responsibility Statement."
+    es: "El guion de nuestra reunión mensual de AA en línea, en inglés, por Google Meet: la Declaración de Propósito de AA Grapevine, una historia de AA Grapevine leída en voz alta, lo que compartimos sobre su tema y, en lugar de la canasta, cómo apoyamos a AA Grapevine y Lleva el Mensaje, desde la Oración de la Serenidad hasta la Declaración de Responsabilidad."
   audience:
     en: "For whoever chairs the Grapevine Meeting on the first Wednesday of the month, and for its two readers. All AA members are welcome to attend, from across Area 65 and beyond."
     es: "Para quien coordina la Reunión de Grapevine el primer miércoles del mes, y para las dos personas que leen. Todos los miembros de AA pueden asistir, de cualquier parte del Área 65 o de fuera de ella."
@@ -216,7 +216,7 @@ slides:
     items:
       - "A story from AA Grapevine, read aloud by tonight's reader, who then starts the sharing"
       - "Then the floor is open: sharing on the story's topic, 3 to 5 minutes each"
-      - "At about 7:50 we wrap up: Carry the Message, announcements, and the Responsibility Statement by 8:00"
+      - "At about 7:50 we wrap up: instead of a basket, how we support AA Grapevine and Carry the Message; announcements; the Responsibility Statement by 8:00"
     minutes: 0.75
     notes: |
       SAY: Here's how our hour works. Tonight's reader reads a story from AA Grapevine, our meeting in print, and then starts us off by sharing on it. Then the floor is open for your experience, strength and hope on the story's topic: about three to five minutes each, so everyone who wishes has a turn. At about 7:50 we wrap up the sharing; then, in place of a basket, a word about how we support AA Grapevine and about Carry the Message, our announcements, and the Responsibility Statement, so we close by eight.

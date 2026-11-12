@@ -419,7 +419,7 @@ class BuiltPages(Untranslated):
         for s in ("7:00–8:00 p. m., hora del Centro: en esta reunión no hay orador(a) invitado(a); hasta las 7:30 p. m. "
                   "compartimos sobre un tema.",
                   "2 Orador(a) invitado(a) La mayoría de los meses, un(a) orador(a) invitado(a) habla sobre un tema y responde "
-                  "nuestras preguntas, y a más tardar a las 7:30 p. m. termina su parte. Cuando no hay orador(a) invitado(a), "
+                  "nuestras preguntas, y termina a más tardar a las 7:30 p. m.; cuando no hay orador(a) invitado(a), "
                   "como en esta reunión, quien coordina presenta un tema y los miembros comparten su experiencia sobre él. "
                   "3 Eventos próximos", "5 Lo que comparten los RLV y GVR",
                   "6 Cierre a las 8:00 p. m. y la reunión después de la reunión",
