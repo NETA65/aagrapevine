@@ -132,7 +132,7 @@ slides:
       WHEN: Have this slide up while people arrive. The hour starts when you move on, at 7:00 sharp: that is 0:00 in the timing lines of these notes.
       BEFORE YOU START: make sure you have a reader for the AA Grapevine Statement of Purpose, a reader for tonight's story (who also starts the sharing) and a timekeeper, and that each one knows it.
       DO: Start the Google Meet ({live:grapevine_meeting_link}) by 6:50 PM Central, signed in to the Google account that owns this Meet link (the organizer of its calendar event): on Google Meet that account is the host, and only it can admit the people who ask to join, so it stays in the call until the end. Check that you can share your screen and that nobody is recording. Have the chat message ready to paste ({ui:customize} → {ui:prepare}: 'Chat message for Google Meet', its Copy button).
-      NO TIME LIMIT: Our Google Meet runs on the committee's Google Workspace account, so there is no time limit: open the call at 6:50 PM Central and admit people as they arrive; the call can go on after 8:00 for newcomers' questions.
+      GOOGLE MEET: Our Google Meet runs on the committee's Google Workspace account, so there is no time limit: open the call at 6:50 PM Central and admit people as they arrive; the call can go on after 8:00 for newcomers' questions.
       SAY (as people arrive): Welcome, come on in; we're starting in just a moment.
       UPDATE EACH MONTH: tonight's story ({ui:customize} → {ui:your_details}: its title, the issue it's in and its topic). The date, the time and the panel fill in by themselves. Every orange item in square brackets, on any slide, is something to fill in, and orange always means 'still to fill in'. The page 'Before the meeting', in {ui:customize} → {ui:prepare}, is the chair's checklist.
       TIP: This presentation, the slides AND these notes, is public on the committee's website. What you type in {ui:customize} stays on this device and is never sent anywhere, but it is shown on screen at the meeting. Use service positions, not names.
@@ -374,7 +374,7 @@ slides:
       SAY (in a small room of four or five, instead of the line above): Please feel free to unmute your microphones and join me in closing with the Responsibility Statement. (Read it slowly.)
       DO: As with the prayer, say it aloud yourself: unmuting a larger room all at once makes an echo.
       TIP: Read the words exactly as they appear on the slide. The wording shouldn't be changed or shortened.
-      AFTER THE MEETING: stay on the Meet for a few minutes for newcomers' questions: our Google Meet runs on the committee's Google Workspace account, so there is no time limit and the call goes on after 8:00. A question you can't answer then can go to grapevine@neta65.org.
+      AFTER THE MEETING: stay on the Meet for a few minutes for newcomers' questions; if one needs a longer answer, offer to reply by e-mail from grapevine@neta65.org.
 
   - id: "thank-you"
     layout: "closing"
@@ -427,7 +427,7 @@ slides:
       STEP 2: Ask a reader for the Statement of Purpose, a reader for the story, and a timekeeper, by e-mail from grapevine@neta65.org. Ask the story's reader to share first, once they've read it, to start the sharing. Send the reader of the Statement of Purpose the link aagrapevine.org/about-us, in case they have no printed issue.
       STEP 3: On the night, start the Google Meet by 6:50 PM Central, signed in to the Google account that owns this Meet link (the organizer of its calendar event): only that account can admit the people who ask to join, so whoever chairs needs it. Check that you can share your screen, and that nobody is recording.
       STEP 4: Open 'Chat message for Google Meet' (the next page) and check it; during the announcements, press its Copy button and paste the message in the Google Meet chat.
-      NO TIME LIMIT: Our Google Meet runs on the committee's Google Workspace account, so there is no time limit: open the call at 6:50 PM Central and admit people as they arrive; the call can go on after 8:00 for newcomers' questions.
+      GOOGLE MEET: Our Google Meet runs on the committee's Google Workspace account, so there is no time limit: open the call at 6:50 PM Central and admit people as they arrive; the call can go on after 8:00 for newcomers' questions.
       ANONYMITY: first names only, on the screen and in the chat; no screenshots of the Meet tiles; no recordings; nobody's e-mail or phone number in the chat.
 
   # The message for the Google Meet chat: Customize → Prepare gives a `text` page for the chair a Copy button,

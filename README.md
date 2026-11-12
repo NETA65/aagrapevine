@@ -613,19 +613,17 @@ breaks while you decide.
   "(in Spanish)"), and that it is "in English, for AA members"; the AA Grapevine Statement of Purpose is named,
   never printed (does AA Grapevine's licensing allow the text, with its credit line? and its official Spanish name);
   that Google Meet really has no dial-in and no passcode for our room, and who hosts (people who were not invited
-  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; whether November 18 and
-  December 16, 2026 may show the committee flyer that says each meeting opens with a guest speaker; and whether
-  there will be speakers in 2028.
+  must ask to join); CityWide's 5:30–7:30 PM at "Lovers Lane United Methodist Church"; and whether there will be
+  speakers in 2028.
 - **The committee meeting is not a business meeting (November 2026):** the words of its new hour on `/meetings/`
   (*How the evening runs*: "Events, offers, topics and sharing", "Close, then the parking lot"; without a speaker:
   "we share on a topic until 7:30" and its six steps), in every calendar entry ("The guest speaker's part ends by
   7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until
   8:00 PM.") and the GV/LV report ("The talk and questions are done by 7:30 PM; then …"), on the booth's
-  guest-speaker slide and on `/orientation/role/`; the Spanish "la reunión después de la reunión" for the parking
-  lot; and the Grapevine Meeting's five steps (a welcome to members from across the Area, the reader shares
-  first, 3 to 5 minutes each, no basket: how we support AA Grapevine and Carry the Message instead). Our Google
-  Meet runs on the committee's Google Workspace account, with no time limit: the call opens at 6:50 PM and the
-  parking lot goes on in the same call after 8:00.
+  guest-speaker slide and on `/orientation/role/`; and the Grapevine Meeting's five steps (a welcome to members
+  from across the Area, the reader shares first, 3 to 5 minutes each, no basket: how we support AA Grapevine and
+  Carry the Message instead). Our Google Meet runs on the committee's Google Workspace account, with no time
+  limit: the call opens at 6:50 PM and the parking lot goes on in the same call after 8:00.
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google

@@ -18,7 +18,8 @@ Spanish), with the committee meeting's guest speakers and our new Grapevine Meet
     gives the feed's UID; "Starting soon" only the last 5 minutes (the room opens a few minutes before we start);
   * the built pages, at a fixed clock, on settings of the test's own (two speakers, a Grapevine Meeting in the
     committee meeting's room): Nov 26, 2026 (the next committee meeting, Dec 16, has no speaker; the Grapevine
-    Meeting's first date is Dec 2) and Dec 17, 2026 (the next, Jan 20, has one);
+    Meeting's first date is Dec 2) and Dec 17, 2026 (the next, Jan 20, has one); and on Nov 26 with no speakers listed
+    at all (step 2 is the chair's topic again, never "Most months a guest speaker");
   * the Grapevine Meeting is ours (event-tone.js): its card says NETA 65, never Grapevine's name for its badge.
 
     python -m unittest tests.test_r20_pages -v      (or: python -m unittest discover -s tests)
@@ -38,12 +39,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))     # nodejs.py
 
 from nodejs import run_js  # noqa: E402
 from test_central_time import DOM, plain  # noqa: E402  (the browser stand-in: page(), el())
-from test_r20_meeting import NOW, ROOM, YAML, Untranslated, ctx_with  # noqa: E402  (the settings of round 20's tests)
+from test_r20_meeting import NOW, ROOM, SPEAKERS, YAML, Untranslated, ctx_with  # noqa: E402  (the settings of round 20's tests)
 from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import events_external as X  # noqa: E402
 
 NOV26 = "2026-11-26T18:00:00Z"       # the merge day: the next committee meeting (Dec 16) has no guest speaker
 DEC17 = "2026-12-17T18:00:00Z"       # the next one (Jan 20) has: Ann B.
+# the same settings with no guest speakers listed at all (a year without them, such as 2028 may be)
+NO_SPEAKERS = YAML.replace(SPEAKERS, "\n  speakers: []\n")
 
 # the settings as the pages read them (src/_data/site.js: the committee meeting's platform and link filled in)
 SITE_JS = r"""
@@ -361,11 +364,12 @@ def x_data(page: str, needle: str) -> dict:
 class BuiltPages(Untranslated):
     built: dict = {}
 
-    def pages(self, at: str) -> dict:
-        if at not in BuiltPages.built:
+    def pages(self, at: str, settings: str = YAML) -> dict:
+        key = (at, settings)
+        if key not in BuiltPages.built:
             items = B.recurring_events(ctx_with())
-            BuiltPages.built[at] = run_js(self, PAGES_JS, data={"yaml": YAML, "items": items}, timeout=900, now=at)
-        return BuiltPages.built[at]
+            BuiltPages.built[key] = run_js(self, PAGES_JS, data={"yaml": settings, "items": items}, timeout=900, now=at)
+        return BuiltPages.built[key]
 
     # ------------------------------------------------------------------ /meetings/
     def test_meetings_before_the_first_speaker(self):
@@ -430,6 +434,24 @@ class BuiltPages(Untranslated):
             self.assertIn(s, es)
         self.assertNotIn("p. m..", es)
         self.assertNotRegex(es, r"(?i)asuntos del comité|informes de distritos")
+
+    def test_meetings_without_any_guest_speakers(self):
+        # no guest speakers listed (a year without them): step 2 is the chair's topic again, never "Most months a guest
+        # speaker…" (the "Guest speaker" step needs the list and speaker_until), and no list of speakers to come
+        self.assertNotIn("Ann B.", NO_SPEAKERS)
+        p = self.pages(NOV26, NO_SPEAKERS)
+        en = text(part(p["/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
+        self.assertIn("2 A topic to share on The chair introduces a topic, and members share their experience on it. "
+                      "3 Coming up", en)
+        self.assertNotIn("Most months a guest speaker", en)
+        self.assertNotIn("2 Guest speaker", en)
+        es = text(part(p["/es/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
+        self.assertIn("2 Un tema para compartir Quien coordina presenta un tema y los miembros comparten su experiencia "
+                      "sobre él. 3 Eventos próximos", es)
+        self.assertNotIn("La mayoría de los meses", es)
+        for url in ("/meetings/", "/es/meetings/"):
+            with self.subTest(url=url):
+                self.assertNotIn('id="guest-speakers"', p[url])
 
     def test_the_guest_speakers_list(self):
         p = self.pages(NOV26)
