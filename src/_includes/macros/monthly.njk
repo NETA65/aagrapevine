@@ -19,7 +19,11 @@
     footer 90); a block that may sit in another column of its layout lists the columns it may go to
     (data-mp-move="b a": the first is where the build puts it) and the columns name themselves (data-mp-slot).
     The poster's fit (assets/js/monthly.js) tries those places and keeps the one with the largest type, so a busy
-    month's dates use the room another column leaves empty.
+    month's dates use the room another column leaves empty. Round 27 (the type as large as the room allows): the dates
+    may also flow on from a column into the next ("a+b": the rows that fit at the foot of a, the others at the head of
+    b), and the rule between the columns may move toward the column that needs the room (data-mp-widths on the
+    layout's grid or side: the values of its --mp-split, the build's first — areas/monthly.css; data-mp-sizes: the
+    column a larger value widens, then the one it narrows).
     ========================================================================= -#}
 
 {#- On the pages (not the poster), under a machine-translated theme: the magazine's own words in italics after the
@@ -303,32 +307,33 @@
       first (the fit keeps the arrangement whose type is largest — the build's when none is larger) -#}
   {% if m.layout == "editorial" %}
     {{ head(m, lang, tid) }}
-    <div class="mp-body">
+    <div class="mp-body" data-mp-widths="1.12fr 1fr 1.24fr 0.88fr 1.36fr" data-mp-sizes="a b">
       <div class="mp-col" data-mp-slot="a">{{ story(m, lang, site) }}</div>
       <div class="mp-col mp-col-b" data-mp-slot="b">{{ issue(m, lang, 3, "b a") }}{{ botm(m, lang, "b a") }}{{ weekly(m, lang, "b a") }}</div>
     </div>
-    {#- the date band across the poster (the dates in three columns) — or the dates up in a column -#}
-    <div class="mp-band" data-mp-slot="band">{{ dates(m, lang, "band b a") }}</div>
+    {#- the date band across the poster (the dates in three columns) — or the dates up in a column, or at the foot of
+        the left one flowing on into the right one -#}
+    <div class="mp-band" data-mp-slot="band">{{ dates(m, lang, "band b a a+b") }}</div>
     {{ foot(m, lang, site) }}
   {% elif m.layout == "ticket" %}
-    <div class="mp-ticket">
+    <div class="mp-ticket" data-mp-widths="372px 402px 342px 432px 312px" data-mp-sizes="stub main">
       <div class="mp-main" data-mp-slot="main">{{ head(m, lang, tid) }}{{ story(m, lang, site) }}{{ issue(m, lang, 2, "main stub") }}{{ botm(m, lang, "main stub") }}</div>
-      <div class="mp-stub" data-mp-slot="stub">{{ dates(m, lang, "stub main") }}{{ weekly(m, lang, "stub main") }}{{ foot(m, lang, site) }}</div>
+      <div class="mp-stub" data-mp-slot="stub">{{ dates(m, lang, "stub main main+stub") }}{{ weekly(m, lang, "stub main") }}{{ foot(m, lang, site) }}</div>
     </div>
   {% elif m.layout == "split" %}
-    <div class="mp-side" data-mp-slot="side">{{ head(m, lang, tid) }}{{ calendar(m) }}{{ weekly(m, lang, "side content") }}{{ foot(m, lang, site) }}</div>
+    <div class="mp-side" data-mp-slot="side" data-mp-widths="404px 374px 434px 464px" data-mp-sizes="side content">{{ head(m, lang, tid) }}{{ calendar(m) }}{{ weekly(m, lang, "side content") }}{{ foot(m, lang, site) }}</div>
     <div class="mp-content" data-mp-slot="content">{{ story(m, lang, site, "content side") }}{{ issue(m, lang, 3) }}{{ dates(m, lang, "content side") }}{{ botm(m, lang, "content side") }}</div>
   {% elif m.layout == "cork" %}
     <div class="mp-top">{{ head(m, lang, tid) }}</div>
-    <div class="mp-board">
+    <div class="mp-board" data-mp-widths="1.06fr 0.94fr 1.18fr 0.82fr 1.3fr" data-mp-sizes="a b">
       {#- the weekly note balances the shorter column: left when the Book of the Month fills the right -#}
       {%- set wkLeft = m.botm.length -%}
       <div class="mp-col" data-mp-slot="a">{{ story(m, lang, site) }}{{ issue(m, lang, 3, "a b") }}{% if wkLeft %}{{ weekly(m, lang, "a b") }}{% endif %}</div>
-      <div class="mp-col" data-mp-slot="b">{{ dates(m, lang, "b a") }}{{ botm(m, lang, "b a") }}{% if not wkLeft %}{{ weekly(m, lang, "b a") }}{% endif %}{{ foot(m, lang, site) }}</div>
+      <div class="mp-col" data-mp-slot="b">{{ dates(m, lang, "b a a+b") }}{{ botm(m, lang, "b a") }}{% if not wkLeft %}{{ weekly(m, lang, "b a") }}{% endif %}{{ foot(m, lang, site) }}</div>
     </div>
   {% elif m.layout == "cover" %}
     {{ head(m, lang, tid) }}
-    <div class="mp-cover">
+    <div class="mp-cover" data-mp-widths="1.3fr 1.15fr 1.45fr 1fr 1.6fr" data-mp-sizes="feature rail">
       <div class="mp-feature" data-mp-slot="feature">{{ issue(m, lang, 3) }}</div>
       <div class="mp-rail" data-mp-slot="rail">{{ story(m, lang, site) }}{{ botm(m, lang, "rail feature") }}</div>
     </div>
@@ -338,7 +343,7 @@
   {% else %}
     {{ head(m, lang, tid) }}
     <div class="mp-page">
-      <div class="mp-row"><div class="mp-col" data-mp-slot="a">{{ story(m, lang, site) }}{{ weekly(m, lang, "a b") }}</div><div class="mp-col" data-mp-slot="b">{{ issue(m, lang, 2) }}</div></div>
+      <div class="mp-row" data-mp-widths="1fr 0.88fr 1.12fr 0.76fr 1.24fr" data-mp-sizes="a b"><div class="mp-col" data-mp-slot="a">{{ story(m, lang, site) }}{{ weekly(m, lang, "a b") }}</div><div class="mp-col" data-mp-slot="b">{{ issue(m, lang, 2) }}</div></div>
       <div class="mp-row" data-mp-slot="row">{{ dates(m, lang) }}{{ botm(m, lang, "row a b") }}</div>
     </div>
     {{ foot(m, lang, site) }}

@@ -16,6 +16,13 @@ borders":
                     arrangement at the stylesheet's type: a busy month's column may lose its last lines, but no text
                     is drawn over another block's, and every date is whole inside its column (a Spanish poster starts
                     at a smaller type for it).
+  * UseTheRoom    — round 27 (DESIGN-27 §B6: "use the empty space … the fitted type gets LARGER, never smaller"): every
+                    month EN/ES, the fitted type is never smaller than the build's own arrangement reaches (the fit's
+                    own search on the poster as built, the page's script blocked); a poster arranged otherwise keeps
+                    every date's title 10 of its em wide at least (no title in four or five short lines); no column
+                    spreads its blocks over its height; the month's name stays inside its column (the rule may move);
+                    dates that flow on into the next column read on (at its head, no heading, the dates at the foot of
+                    theirs).
 
 Nothing here depends on today's date: the months are the build's, the dates are each page's own.
 """
@@ -27,7 +34,7 @@ from io import BytesIO
 
 from .test_site_in_browser import S, new_context, open_page, poster_months, setUpModule, tearDownModule  # noqa: F401
 
-FITTED = "() => { const p = document.querySelector('[data-mp-poster]'); return !!p && p.hasAttribute('data-mp-fit'); }"
+FITTED_ATTR = "() => { const p = document.querySelector('[data-mp-poster]'); return !!p && p.hasAttribute('data-mp-fit'); }"
 
 # The fitted poster against the page: its dates, its size and type, and the fit's own overflow measure (offsets: no
 # scale, no tilt of the cork's cards) on every block, column and band.
@@ -51,7 +58,8 @@ CHECK = r"""() => {
     const o = [...s.children].filter((k) => k.hasAttribute("data-mp-order")).map((k) => Number(k.getAttribute("data-mp-order")));
     if (o.some((v, i) => i && v < o[i - 1])) order.push(s.getAttribute("data-mp-slot") + ": " + o.join(","));
   });
-  const kinds = [...p.querySelectorAll(".mp-b")].map((b) => [...b.classList].find((c) => c !== "mp-b" && c !== "mp-dates--cols"));
+  // (the dates' rows that flow on into the next column, round 27, are the dates' own block continued)
+  const kinds = [...p.querySelectorAll(".mp-b:not(.mp-dates--more)")].map((b) => [...b.classList].find((c) => c !== "mp-b" && c !== "mp-dates--cols"));
   return {
     size: p.offsetWidth + " x " + p.offsetHeight, font: parseFloat(getComputedStyle(p).fontSize),
     poster: [...p.querySelectorAll(".mp-dlist > li:not(.mp-date--offer, .mp-date--price) .mp-date-t")].map(text).sort(),
@@ -83,7 +91,7 @@ class EveryDateFits(unittest.TestCase):
                 for lang in ("en", "es"):
                     path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
                     page = open_page(ctx, path, errors)
-                    page.wait_for_function(FITTED, timeout=30_000)
+                    page.wait_for_function(FITTED_ATTR, timeout=30_000)
                     r = page.evaluate(CHECK)
                     page.close()
                     where = f"/{path}"
@@ -121,7 +129,7 @@ class PrintOnePage(unittest.TestCase):
             ctx = new_context(1280, 900, lang=lang)
             try:
                 page = open_page(ctx, ("es/" if lang == "es" else "") + f"monthly/{busiest}/")
-                page.wait_for_function(FITTED, timeout=30_000)
+                page.wait_for_function(FITTED_ATTR, timeout=30_000)
                 shown = page.evaluate("document.querySelectorAll('[data-mp-poster] .mp-dlist > li').length")
                 page.emulate_media(media="print")
                 pdf = page.pdf(prefer_css_page_size=True, print_background=True)
@@ -167,7 +175,7 @@ class MastheadClear(unittest.TestCase):
                 for lang in ("en", "es"):
                     path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
                     page = open_page(ctx, path)
-                    page.wait_for_function(FITTED, timeout=30_000)
+                    page.wait_for_function(FITTED_ATTR, timeout=30_000)
                     page.evaluate(_isolate(True))
                     clip = page.evaluate(SHOW, "none")
                     bare = Image.open(BytesIO(page.screenshot(clip=clip)))
@@ -252,6 +260,103 @@ class UnfittedClipped(unittest.TestCase):
             ctx.close()
         self.assertEqual(problems, [], "\n".join(problems))
 
+
+# The build's own arrangement (the page's script blocked: the poster as built), searched as the fit searches it first
+# (assets/js/monthly.js: from the density's type, then halving; the same overflow measure) → the type it reaches.
+BUILD_BEST = r"""() => {
+  const p = document.querySelector("[data-mp-poster]");
+  const BLOCKS = ".mp-b, .mp-foot, .mp-head, .mp-row, .mp-col, .mp-body, .mp-board, .mp-cover, .mp-strip, .mp-page, .mp-main, .mp-stub, .mp-side, .mp-content, .mp-top, .mp-feature, .mp-rail, .mp-band";
+  const holder = document.createElement("div");
+  holder.className = "mp-measure";
+  holder.style.cssText = "position:absolute;left:-12000px;top:0;width:1080px;visibility:hidden;pointer-events:none;";
+  const c = p.cloneNode(true);
+  c.removeAttribute("data-mp-poster");
+  c.style.position = "relative";
+  holder.appendChild(c);
+  document.body.appendChild(holder);
+  const box = (el) => { let t = 0, l = 0, e = el; while (e && e !== c) { t += e.offsetTop; l += e.offsetLeft; e = e.offsetParent; } return { t, b: t + el.offsetHeight, r: l + el.offsetWidth }; };
+  const fits = (k) => {
+    c.style.fontSize = k / 4 + "px";
+    for (const b of c.querySelectorAll(BLOCKS)) {
+      const par = b.parentElement, bb = box(b), pad = parseFloat(getComputedStyle(par).paddingBottom) || 0;
+      const limit = par === c ? c.clientHeight - pad : box(par).t + par.clientTop + par.clientHeight - pad;
+      if (bb.b > limit + 2 || bb.r > c.clientWidth + 2) return false;
+    }
+    return true;
+  };
+  const base = Math.floor((parseFloat(getComputedStyle(c).fontSize) || 23) * 4), minK = 60, topK = Math.floor(Math.min(base / 4 * 1.25, 28) * 4);
+  let lo = minK - 1, hi = topK + 1;
+  const b0 = Math.min(base, topK);
+  if (b0 >= minK) { if (fits(b0)) lo = b0; else hi = b0; }
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (fits(mid)) lo = mid; else hi = mid; }
+  holder.remove();
+  return Math.max(lo, minK) / 4;
+}"""
+
+# The fitted poster (taken out of its scaled frame: _isolate): its type, whether it is arranged as built, the narrowest
+# room beside a date's chip (in its title's em), the columns that spread their blocks, how far the month's name runs
+# past its column, and what is wrong with dates that flow on.
+FITTED = r"""() => {
+  const p = document.querySelector("[data-mp-poster]");
+  const sp = p.querySelector("[data-mp-widths]");
+  const built = [...p.querySelectorAll("[data-mp-move]")].every((m) => m.parentElement.closest("[data-mp-slot]").getAttribute("data-mp-slot") === m.getAttribute("data-mp-move").split(/\s+/)[0])
+    && !(sp && sp.style.getPropertyValue("--mp-split")) && !p.querySelector(".mp-dates--cols, .mp-dates--more");
+  const rooms = [...p.querySelectorAll(".mp-dlist > li")].map((li) => {
+    const ls = getComputedStyle(li), chip = li.querySelector(".mp-chip"), t = li.querySelector(".mp-date-t");
+    const room = li.clientWidth - parseFloat(ls.paddingLeft) - parseFloat(ls.paddingRight) - (chip ? chip.offsetWidth : 0) - (parseFloat(ls.columnGap) || 0);
+    return Math.round(room / parseFloat(getComputedStyle(t).fontSize) * 10) / 10;
+  });
+  const spread = [...p.querySelectorAll("[data-mp-slot], .mp-page")].filter((s) => /space-/.test(getComputedStyle(s).justifyContent)).map((s) => s.className);
+  const head = p.querySelector(".mp-head"), col = head.parentElement, cs = getComputedStyle(col);
+  const name = document.createRange();
+  name.selectNodeContents(head.querySelector(".mp-month"));
+  const right = col.getBoundingClientRect().right - parseFloat(cs.paddingRight) - parseFloat(cs.borderRightWidth);
+  const more = p.querySelector(".mp-dates--more"), flow = [];
+  if (more) {
+    const d = p.querySelector(".mp-dates:not(.mp-dates--more)"), ord = (k) => Number(k.getAttribute("data-mp-order"));
+    if ([...more.parentElement.children].find((k) => k.hasAttribute("data-mp-order") && ord(k) >= 10) !== more) flow.push("not at the head of its column");
+    if ([...d.parentElement.children].filter((k) => k.hasAttribute("data-mp-order")).pop() !== d) flow.push("the dates not at the foot of theirs");
+    if (more.querySelector(".mp-h")) flow.push("a heading");
+    if (!d.querySelector(".mp-dlist > li") || !more.querySelector(".mp-dlist > li")) flow.push("an empty part");
+  }
+  return { font: parseFloat(getComputedStyle(p).fontSize), built, minRoom: Math.min(...rooms), spread,
+           nameOut: Math.round(name.getBoundingClientRect().right - right), flow };
+}"""
+
+
+class UseTheRoom(unittest.TestCase):
+    def test_the_type_is_as_large_as_the_room_allows(self):
+        problems: list[str] = []
+        blocked = new_context(1280, 1400)
+        blocked.route(re.compile(r".*/assets/js/monthly\.js(\?.*)?$"), lambda route: route.abort())
+        ctx = new_context(1280, 1400)
+        try:
+            for month in poster_months():
+                for lang in ("en", "es"):
+                    path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
+                    page = open_page(blocked, path)
+                    built = page.evaluate(BUILD_BEST)
+                    page.close()
+                    page = open_page(ctx, path)
+                    page.wait_for_function(FITTED_ATTR, timeout=30_000)
+                    page.evaluate(_isolate(True))
+                    r = page.evaluate(FITTED)
+                    page.close()
+                    where = f"/{path}"
+                    if r["font"] < built:
+                        problems.append(f"{where}: {r['font']}px, smaller than the build's own arrangement's {built}px")
+                    if not r["built"] and r["minRoom"] < 10:
+                        problems.append(f"{where}: a date's title has {r['minRoom']} em beside its chip (10 at least)")
+                    if r["spread"]:
+                        problems.append(f"{where}: blocks spread over their column — {r['spread']}")
+                    if r["nameOut"] > 1:
+                        problems.append(f"{where}: the month's name runs {r['nameOut']}px past its column")
+                    if r["flow"]:
+                        problems.append(f"{where}: the dates that flow on — {r['flow']}")
+        finally:
+            ctx.close()
+            blocked.close()
+        self.assertEqual(problems, [], "\n".join(problems))
 
 if __name__ == "__main__":
     unittest.main()

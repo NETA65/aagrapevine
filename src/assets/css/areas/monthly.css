@@ -237,13 +237,19 @@
 .mp-qr { flex: none; display: block; width: 176px; height: 176px; padding: 7px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1); }
 .mp-qr svg { display: block; width: 100%; height: 100%; }
 
-/* ---------- 3. Layouts ---------- */
+/* ---------- 3. Layouts ----------
+   A column's blocks sit together at its top (round 27: no spreading over the column's height — what room is left is one
+   band at its foot, and the fit gives it to the type); a footer stays at the foot of its column (margin-top: auto).
+   --mp-split: the rule between a layout's two columns (the first column's share, the split's side, the ticket's stub),
+   which the fit may move a step or two toward the column that needs the room (macros/monthly.njk data-mp-widths: its
+   values, the build's first, the default here). .mp-dates--more: the dates' rows that flow on into the next column
+   (monthly.js), the dates' own look without their heading. */
 
 /* 3a. EDITORIAL — bold typographic masthead, two columns, rule lines */
 .mp-l-editorial { padding: 42px 54px 34px; gap: 18px; }
 .mp-l-editorial .mp-head { padding-bottom: 14px; border-bottom: 6px solid var(--p-ink); --mp-w: 780px; --mp-max: 136px; }
-.mp-l-editorial .mp-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.12fr 1fr; gap: 34px; }
-.mp-l-editorial .mp-col { display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 0; min-width: 0; }
+.mp-l-editorial .mp-body { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--mp-split, 1.12fr) 1fr; gap: 34px; }
+.mp-l-editorial .mp-col { display: flex; flex-direction: column; gap: 22px; min-height: 0; min-width: 0; }
 .mp-l-editorial .mp-col-b { padding-left: 30px; border-left: 3px solid var(--p-line); }
 .mp-l-editorial .mp-story { padding: 22px 24px; border-radius: 20px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); --p-line: var(--p-card-line, rgb(255 255 255 / 0.3)); --p-accent: var(--p-card-accent); }
 .mp-l-editorial .mp-foot { padding-top: 14px; border-top: 3px solid var(--p-ink); }
@@ -256,13 +262,13 @@
 
 /* 3b. TICKET — an admission ticket with a perforated stub; Book of the Month as a coupon */
 .mp-l-ticket { padding: 32px; }
-.mp-ticket { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 372px; position: relative; border-radius: 30px; background: var(--p-card); color: var(--p-card-ink);
+.mp-ticket { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) var(--mp-split, 372px); position: relative; border-radius: 30px; background: var(--p-card); color: var(--p-card-ink);
   --p-ink: var(--p-card-ink); --p-muted: var(--p-card-muted); box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.5); }
-.mp-ticket::before, .mp-ticket::after { content: ""; position: absolute; right: 346px; width: 52px; height: 52px; border-radius: 999px; background: var(--p-bg); z-index: 2; }
+.mp-ticket::before, .mp-ticket::after { content: ""; position: absolute; right: calc(var(--mp-split, 372px) - 26px); width: 52px; height: 52px; border-radius: 999px; background: var(--p-bg); z-index: 2; }
 .mp-ticket::before { top: -26px; }
 .mp-ticket::after { bottom: -26px; }
 .mp-l-ticket .mp-main { display: flex; flex-direction: column; gap: 18px; min-height: 0; padding: 36px 34px 28px; }
-.mp-l-ticket .mp-head { --mp-w: 540px; --mp-max: 130px; }
+.mp-l-ticket .mp-head { --mp-w: min(540px, calc(912px - var(--mp-split, 372px))); --mp-max: 130px; }
 .mp-l-ticket .mp-kicker::before { content: "★ "; }
 .mp-l-ticket .mp-year { display: block; margin: 6px 0 0; font-size: 0.55em; }
 .mp-l-ticket .mp-stub { display: flex; flex-direction: column; gap: 18px; font-size: 0.9em; min-height: 0; padding: 32px 26px 28px 30px; border-left: 4px dashed var(--p-line); border-radius: 0 30px 30px 0; background: var(--p-stub); color: var(--p-stub-ink, var(--p-card-ink)); }
@@ -276,11 +282,11 @@
 
 /* 3c. SPLIT — colored side column with a calendar strip; content column on paper */
 .mp-l-split { flex-direction: row; gap: 0; padding: 0; }
-.mp-l-split .mp-side { width: 404px; flex: none; display: flex; flex-direction: column; gap: 22px; padding: 42px 32px 32px 38px; background: var(--p-side); color: var(--p-side-ink);
+.mp-l-split .mp-side { width: var(--mp-split, 404px); flex: none; display: flex; flex-direction: column; gap: 22px; padding: 42px 32px 32px 38px; background: var(--p-side); color: var(--p-side-ink);
   --p-ink: var(--p-side-ink); --p-muted: var(--p-side-muted); --p-accent: var(--p-side-accent); --p-on-accent: var(--p-side-on-accent); --p-accent2: var(--p-side-accent2, #fff); --p-on-accent2: var(--p-side-on-accent2, #111); --p-line: rgb(255 255 255 / 0.25); --p-year: var(--p-side-accent); }
-.mp-l-split .mp-head { --mp-w: 320px; --mp-max: 120px; }
+.mp-l-split .mp-head { --mp-w: min(320px, calc(var(--mp-split, 404px) - 84px)); --mp-max: 120px; }
 .mp-l-split .mp-year { display: block; margin: 8px 0 0; font-size: 0.62em; }
-.mp-l-split .mp-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; padding: 42px 44px 32px 42px; }
+.mp-l-split .mp-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; padding: 42px 44px 32px 42px; }
 .mp-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 21px; font-weight: 700; text-align: center; }
 .mp-cal > span { display: grid; place-items: center; height: 40px; border-radius: 8px; }
 .mp-cal-wd { height: 28px !important; font-size: 18px; letter-spacing: 0.08em; color: var(--p-muted); }
@@ -299,8 +305,8 @@
   background-image: radial-gradient(circle at 20% 30%, rgb(0 0 0 / 0.07) 0 1.5px, transparent 2px), radial-gradient(circle at 70% 80%, rgb(255 255 255 / 0.1) 0 1.2px, transparent 1.8px), radial-gradient(circle at 45% 60%, rgb(0 0 0 / 0.06) 0 1px, transparent 1.6px);
   background-size: 23px 23px, 31px 31px, 17px 17px; }
 .mp-l-cork .mp-top { display: flex; align-items: flex-start; padding-right: 170px; } /* the right edge shows the month's motif */
-.mp-l-cork .mp-board { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.06fr 1fr; gap: 26px; }
-.mp-l-cork .mp-col { display: flex; flex-direction: column; justify-content: space-around; gap: 24px; min-width: 0; }
+.mp-l-cork .mp-board { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--mp-split, 1.06fr) 1fr; gap: 26px; }
+.mp-l-cork .mp-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .mp-l-cork .mp-head { position: relative; flex: 1; min-width: 0; margin-top: 12px; padding: 18px 28px 18px; background: var(--p-card); color: var(--p-card-ink); --p-muted: var(--p-card-muted); transform: rotate(-1.2deg); box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.45); --mp-w: 640px; --mp-max: 124px; }
 .mp-l-cork .mp-head::before, .mp-l-cork .mp-head::after { content: ""; position: absolute; top: -14px; width: 110px; height: 34px; background: rgb(255 255 255 / 0.55); box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
 .mp-l-cork .mp-head::before { left: 26px; transform: rotate(-6deg); }
@@ -312,7 +318,7 @@
 .mp-l-cork .mp-issue { transform: rotate(-0.5deg); }
 .mp-l-cork .mp-botm { background: var(--p-sticky); transform: rotate(1.6deg); }
 .mp-l-cork .mp-weekly { transform: rotate(-1deg); }
-.mp-l-cork .mp-foot { flex: none; margin-top: 0; flex-direction: row; align-items: center; gap: 18px; transform: rotate(1.4deg); }
+.mp-l-cork .mp-foot { flex: none; margin-top: auto; flex-direction: row; align-items: center; gap: 18px; transform: rotate(1.4deg); }
 .mp-l-cork .mp-foot .mp-qr { order: -1; }
 .mp-l-cork .mp-logo { display: none; }
 .mp-l-cork .mp-url { font-size: 0.88em; }
@@ -322,7 +328,7 @@
 .mp-l-cover { padding: 0; gap: 0; }
 .mp-l-cover .mp-head { padding: 30px 48px 26px; background: var(--p-mast); color: var(--p-mast-ink); --p-accent: var(--p-mast-accent); --p-muted: var(--p-mast-muted); --p-head: var(--p-mast-ink); --p-year: var(--p-mast-accent); --mp-w: 900px; --mp-max: 150px; }
 .mp-l-cover .mp-tag { position: absolute; right: 48px; top: 32px; margin: 0 !important; font-size: 0.8em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--p-mast-muted); }
-.mp-l-cover .mp-cover { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.3fr 1fr; gap: 34px; padding: 24px 48px 14px; }
+.mp-l-cover .mp-cover { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--mp-split, 1.3fr) 1fr; gap: 34px; padding: 24px 48px 14px; }
 .mp-l-cover .mp-feature { display: flex; flex-direction: column; gap: 20px; min-width: 0; min-height: 0; }
 .mp-l-cover .mp-theme { font-size: 2.9em; line-height: 0.96; margin-bottom: 8px !important; color: var(--p-accent); }
 .mp-l-cover .mp-rail { display: flex; flex-direction: column; gap: 20px; min-width: 0; min-height: 0; padding-left: 26px; border-left: 6px solid var(--p-accent); }
@@ -343,8 +349,8 @@
 .mp-l-notebook .mp-year { font-style: normal; font-weight: 600; }
 .mp-l-notebook .mp-h { font-family: var(--font-display); font-style: italic; font-size: 1.35em; letter-spacing: 0; text-transform: none; font-weight: 700; }
 .mp-l-notebook .mp-h span { text-decoration: underline wavy var(--p-accent2); text-decoration-thickness: 2px; text-underline-offset: 8px; }
-.mp-l-notebook .mp-page { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
-.mp-l-notebook .mp-row { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.mp-l-notebook .mp-page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 20px; }
+.mp-l-notebook .mp-row { flex: none; display: grid; grid-template-columns: var(--mp-split, 1fr) 1fr; gap: 32px; align-items: start; }
 .mp-l-notebook .mp-row .mp-col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
 .mp-l-notebook .mp-botm { padding: 20px 22px; background: var(--p-sticky); color: var(--p-sticky-ink, #2a2418); --p-ink: var(--p-sticky-ink, #2a2418); --p-muted: var(--p-sticky-muted, #4d4535); --p-accent: var(--p-sticky-accent, #9a3412); transform: rotate(1.8deg); box-shadow: 0 10px 18px -10px rgb(0 0 0 / 0.45); }
 .mp-l-notebook .mp-row > .mp-dates:only-child { grid-column: 1 / -1; }
