@@ -459,7 +459,7 @@
 "Nueva reunión abierta de La Viña - jueves a las 12 p. m. (hora del Este) por Zoom": { en: "New La Viña Open Meeting - Thursdays at 12 PM Eastern on Zoom" }
 # …and its newest flyer without a month (Drive flyers/, 2026-11-12; the edition of 2026-11-07 went to the Drive's
 # private folder, off the site): the newest file that lavina_weekly_open.flyer_match finds is the one /meetings/ shows
-"Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom": { en: "La Viña Open Meeting (in Spanish) - Every Thursday, 11 AM Central (noon Eastern), on Zoom" }
+"Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom": { en: "La Viña Open Meeting (in Spanish) - every Thursday, 11 AM Central (noon Eastern), on Zoom" }
 # La Viña's open-meeting podcast (config sources.podcasts "lvo", from 2026-11-09) and its YouTube copies: the show's
 # name (its episodes' and videos' titles are that name and a " [Temporada 1, episodio 1]" tail — the machine wrote
 # "Weekly Open Meeting of Alcoholics Anonymous La Viña"). Its description needs no line here: it carries its own

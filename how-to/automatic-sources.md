@@ -1384,8 +1384,8 @@ lavina_weekly_open:
   zoom_id: "871 2036 8287"
   passcode: "238047"
   zoom_url: "https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"   # the full link (Join, calendars)
-  summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores que son miembros de AA, … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
-  summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers who are AA members, … Let's keep extending this powerful lifeline together!"
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana la guía un coordinador, con dos oradores que son miembros de AA; … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_en: "A virtual open AA meeting in Spanish. Each week a chairperson leads it, with two speakers who are AA members; … Let's keep extending this powerful lifeline together!"
   url: "https://www.aalavina.org/podcast"   # La Viña's page for it: the card's "Details on aalavina.org" — exactly so, no "/" at the end
   source: "Official La Viña flyers shared with the committee: November 2026's, and the newest one, …"
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"

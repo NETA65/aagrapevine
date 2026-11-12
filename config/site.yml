@@ -786,16 +786,17 @@ lavina_weekly_open:
   # authors and trusted servants; the meetings are recorded for La Viña's podcast and YouTube. The last sentence
   # (the first flyer's) is /meetings/' sign-off: the card leaves it out (committee.weekly.closing) — keep it last,
   # word for word.
-  summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores que son miembros de AA, entre ellos autores de historias de La Viña y servidores de confianza. Las reuniones se graban: escúchalas en el pódcast de La Viña, en tus plataformas de pódcast favoritas y en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
-  summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers who are AA members, among them La Viña story authors and trusted servants. The meetings are recorded: listen to them on La Viña's podcast, on your favorite podcast platforms and on YouTube. Let's keep extending this powerful lifeline together!"
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana la guía un coordinador, con dos oradores que son miembros de AA; entre quienes participan hay autores de historias de La Viña y servidores de confianza. Todas las reuniones quedan grabadas, así que puedes escucharlas después en el pódcast de La Viña, en tus plataformas de pódcast favoritas o en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_en: "A virtual open AA meeting in Spanish. Each week a chairperson leads it, with two speakers who are AA members; among those taking part are La Viña story authors and trusted servants. Every meeting is recorded, so you can listen to it later on La Viña's podcast, on your favorite podcast platforms or on YouTube. Let's keep extending this powerful lifeline together!"
   # La Viña's page for the meeting ("Details on aalavina.org" on its card): its podcast's page describes the
   # meeting and plays its recordings (the committee's choice, 2026-11-11). Written exactly so: with a "/" at the
   # end, aalavina.org sends it on to another address.
   url: "https://www.aalavina.org/podcast"
   source: "Official La Viña flyers shared with the committee: November 2026's, and the newest one, without a month, every Thursday in the four U.S. time zones (Drive flyers/, 2026-11-12)"
-  # The flyer itself on the committee's Google Drive: the newest Drive file whose title or file name
-  # matches this (a regular expression, capitals ignored) gets a "View flyer" link on the La Viña
-  # card at /meetings/#weekly-open. No match → no link. Change it if the flyer is renamed.
+  # The flyer itself on the committee's Google Drive: the newest file in the Drive's flyers/ folder
+  # whose title or file name matches this (a regular expression, capitals ignored) gets a "View flyer"
+  # link on the La Viña card at /meetings/#weekly-open. A flyer in another folder, or no match → no
+  # link. Change it if the flyer is renamed.
   # Since 2026-11-12: "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del
   # Este), por Zoom.jpg" (the newest; its older edition is in the Drive's private folder, off the site).
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"

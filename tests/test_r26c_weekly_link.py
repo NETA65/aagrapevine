@@ -363,8 +363,12 @@ class MeetingsPage(unittest.TestCase):
             c = cards(p[pre + "meetings/"])
             with self.subTest(lang=lang):
                 self.assertEqual(flyer_link(c["gv"], lang), "https://drive.google.com/file/d/gvFlyer/view")
-                self.assertIn(T["committee.weekly.source_gv_flyer"][lang], visible(c["gv"]))
-                self.assertNotIn(T["committee.weekly.source_gv"][lang], visible(c["gv"]))
+                # one source line: the plain one, then the short flyer sentence (whole, on its own line if it wraps)
+                self.assertIn(T["committee.weekly.source_gv"][lang] + " " + T["committee.weekly.source_gv_flyer"][lang],
+                              visible(c["gv"]))
+                self.assertEqual(visible(c["gv"]).count(T["committee.weekly.source_gv"][lang]), 1)
+                self.assertIn(T["committee.weekly.source_gv_flyer"][lang],
+                              [html.unescape(s) for s in re.findall(r'<span class="inline-block">([^<]*)</span>', c["gv"])])
                 # La Viña's newest flyer, never November's (older) or the Grapevine one
                 self.assertEqual(flyer_link(c["lv"], lang), "https://drive.google.com/file/d/lvNewest/view")
                 self.assertIn(T["committee.weekly.source_lv"][lang], visible(c["lv"]))
@@ -383,8 +387,10 @@ class MeetingsPage(unittest.TestCase):
         for lang in ("en", "es"):
             text = T["committee.weekly.source_gv_flyer"][lang]
             self.assertNotRegex(text, r"(?i)\bpdf\b|automatic")
-            self.assertIn("aagrapevine.org", text)
             self.assertIn("AA Grapevine", text)
+            # one short sentence after the card's plain line (which names aagrapevine.org)
+            self.assertLess(len(text), 40, text)
+            self.assertIn("aagrapevine.org", T["committee.weekly.source_gv"][lang])
 
 
 # ---------------------------------------------------------------------------------------------- the settings
@@ -439,7 +445,7 @@ class RealSettings(unittest.TestCase):
         overrides = yaml.safe_load((ROOT / "data" / "translations" / "overrides.yml").read_text(encoding="utf-8"))
         self.assertEqual(overrides[GV_FLYER], {"es": "Reunión abierta semanal de Grapevine (en inglés) - todos los "
                                                      "miércoles, 11 a. m. hora del Centro (mediodía del Este), por Zoom"})
-        self.assertEqual(overrides[LV_FLYER], {"en": "La Viña Open Meeting (in Spanish) - Every Thursday, 11 AM Central "
+        self.assertEqual(overrides[LV_FLYER], {"en": "La Viña Open Meeting (in Spanish) - every Thursday, 11 AM Central "
                                                      "(noon Eastern), on Zoom"})
 
     def test_la_vinas_summaries_follow_its_newest_flyer(self):

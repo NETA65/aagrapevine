@@ -258,13 +258,13 @@ pageScripts: ["/assets/js/committee.js"]
         </div>
         {#- Each meeting's official flyer, when it is on the committee's Drive (flyers/): the newest file its settings'
             flyer_match finds (config/site.yml grapevine_weekly_open / lavina_weekly_open → driveMatch; the Portfolio
-            stays its home). Grapevine's details still come from aagrapevine.org: its line says the flyer is AA
-            Grapevine's (committee.weekly.source_gv_flyer) -#}
+            stays its home). Grapevine's details still come from aagrapevine.org: its line (source_gv) adds that the
+            flyer is AA Grapevine's (committee.weekly.source_gv_flyer), kept whole on a line of its own when it wraps -#}
         {%- set woCfg = (site.lavina_weekly_open if w.isLv else site.grapevine_weekly_open) or {} -%}
         {%- set woFlyer = (db.drive.items | driveMatch(woCfg.flyer_match, "flyers")) if woCfg.flyer_match else null -%}
         {% if woFlyer %}
         <div class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-4">
-          <p class="text-xs text-faint">{{ ("committee.weekly.source_lv" if w.isLv else "committee.weekly.source_gv_flyer") | t(lang) }}</p>
+          <p class="text-xs text-faint">{% if w.isLv %}{{ "committee.weekly.source_lv" | t(lang) }}{% else %}{{ "committee.weekly.source_gv" | t(lang) }} <span class="inline-block">{{ "committee.weekly.source_gv_flyer" | t(lang) }}</span>{% endif %}</p>
           <a class="btn-ghost btn-sm" href="{{ woFlyer.extra.view_url or woFlyer.url }}" target="_blank" rel="noopener">{% icon "file-image", "size-4" %} {{ "committee.events.view_flyer" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
         </div>
         {% else %}

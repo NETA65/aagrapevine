@@ -777,7 +777,7 @@ meeting, after the Grapevine Weekly Open that is read from aagrapevine.org.
 | `timezone` | `"America/New_York"` | The meeting's zone; the site also shows Central ("11 AM Central"). An unknown zone (`"Eastern"`) takes the meeting off the site. |
 | `starts` | `"2026-11-05"` | The first meeting. Until then `/meetings/` says "Starts Thursday, November 5, 2026" (`/es/meetings/`: "Comienza el jueves 5 de noviembre de 2026") and the toolkit "starting …". A date on another weekday is moved to the first real one. |
 | `zoom_id` / `passcode` | `"871 2036 8287"` / `"238047"` | 9–11 digits: the formatted ID (and, without `zoom_url`, a plain Join link `https://zoom.us/j/<digits>`). Otherwise no Zoom ID (and a test fails). |
-| `zoom_url` | `"https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"` | The meeting's **full** Zoom link, pasted exactly as Zoom gives it: the card's **Join on Zoom** and its **Add to calendar** (Google's link and the `.ics` file) open the meeting without asking for the passcode. Used only when it is `https://<server>.zoom.us/j/<digits>` (or `https://zoom.us/j/…`), optionally with `?pwd=…` and nothing else, **and** its digits are `zoom_id`'s; otherwise the plain link, and `/status/` says why (the Weekly Open source's notes). `""` = the plain link. |
+| `zoom_url` | `"https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"` | The meeting's **full** Zoom link, pasted exactly as Zoom gives it: the card's **Join on Zoom** and its **Add to calendar** (Google's link and the `.ics` file) open the meeting without asking for the passcode. Used only when it is `https://<server>.zoom.us/j/<digits>` (or `https://zoom.us/j/…`), optionally with `?pwd=…` and nothing else, **and** its digits are `zoom_id`'s; otherwise the plain link, and `/status/` says why (the box *Grapevine Weekly Open meeting*, which holds both weekly meetings' notes). `""` = the plain link. |
 | `summary_es` / `summary_en` | | Your own words; a missing one is machine-translated. |
 | `url` | `"https://www.aalavina.org/podcast"` | La Viña's page for it: the card's **Details on aalavina.org** (`""` for none). Written exactly so, with no `/` at the end. |
 | `source` | flyer note | Stored, **not shown** on any page. |
@@ -800,8 +800,8 @@ Examples (checked, "today" = October 2, 2026):
 > when your save changes this block, the push run runs that module too (`scripts/ops/push_modules.py`), so the
 > edit is on the site a few minutes later ([section 4](#4-what-happens-after-you-save)). `flyer_match` is read by
 > the page itself. Mistakes here are never "Settings problems"; they appear only in the log of the step "Sync
-> sources and translate" of the run — except a `zoom_url` that is not used, which `/status/` also notes (the
-> Grapevine Weekly Open source's notes).
+> sources and translate" of the run — except a `zoom_url` that is not used: `/status/` says why (the box
+> *Grapevine Weekly Open meeting*, which holds both weekly meetings' notes).
 
 **`grapevine_weekly_open:`** (since November 2026) holds the two things about the Grapevine Weekly Open that
 aagrapevine.org's page does not give: `zoom_url`, its full Zoom link (the same rules as above; its digits must be the
@@ -1511,7 +1511,8 @@ Where problems show up:
 - **Notes** in the run summary: small problems of a source that still updated (for example
   `content/instagram.yml`).
 - **The log** of the step "Sync sources and translate": the only place where mistakes in `lavina_weekly_open:` and
-  most of `sources:` appear. (A `drive:` mistake that stops the Drive source, such as an empty
+  most of `sources:` appear (a `zoom_url` that is not used is also on `/status/`, box *Grapevine Weekly Open
+  meeting*). (A `drive:` mistake that stops the Drive source, such as an empty
   `root_folder_id`, shows as **PROBLEM** in the summary's "Content sources" table and on `/status/`.)
 
 | Symptom | Cause | Fix |
@@ -1526,7 +1527,8 @@ Where problems show up:
 | La Viña's weekly open meeting disappeared | An unreadable `day`, `time` or `timezone` | Fix it; it returns after the push run of the fix. The reason is only in the log. |
 | An edit to `sources: crawler`, `magazine_hub` or the shop's pages changed nothing | Read only by the full daily update | Wait for it, or start one ([section 4](#4-what-happens-after-you-save)). |
 | An edit to `lavina_weekly_open:`, `sources: youtube / instagram`, `meetings:` or `content/instagram.yml` changed nothing | The push run could not tell which files the push changed, or could not compare `config/site.yml` with its earlier copy (a blue notice *Push run* says so), or the source failed in that run | Look at the run's summary (**Also run for this push**); otherwise the next full update reads it. |
-| No flyer link on the La Viña weekly open card, or no letter link in the price notice | The page's pattern does not ignore accents | Write both letters: `vi[nñ]a`, `actualizaci[oó]n`. |
+| No flyer link on a weekly open card (Grapevine's or La Viña's), or no letter link in the price notice | The flyer is not in the Drive's `flyers/` folder, or the file's name does not match `flyer_match` (the notice's: `doc_match`); accents are not ignored | Put the flyer in `flyers/`; write both letters: `vi[nñ]a`, `actualizaci[oó]n`. |
+| Join on Zoom asks for the passcode | `zoom_url` is empty or is another meeting's link (the meeting moved to a new Zoom room) | Paste the meeting's full link from Zoom into `grapevine_weekly_open` / `lavina_weekly_open` → `zoom_url`; `/status/`, box *Grapevine Weekly Open meeting*, says which. |
 | Code check red after deleting the `listen:` or `watch:` lines | A test expects both ids | Put them back, or change the test. |
 | Code check red after adding a milestone or a session | The counts 40 and 6 are pinned | Change the test in the same commit. |
 | Code check red with "settings … that no code reads" | `tests/test_settings_used.py`: a key no code reads (misspelled, or one that does nothing) | Fix its name, or delete it; Website update published the rest meanwhile. |
