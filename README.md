@@ -49,15 +49,14 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   calcula lo que costaría una suscripción del grupo (revista, formato, duración y número de ejemplares, con
   los precios por cantidad) e imprime una **hoja informativa** de una página para la conciencia de grupo (en
   inglés, en español o bilingüe). Para quien quiere **ayudar económicamente**, la tarjeta *¿Quieres ayudar
-  económicamente?* (en *Quiénes somos* y en la página «no encontrada», donde está también en inglés) dice que
-  quien prefiere pagar en efectivo puede entregarlo en nuestra mesa en el próximo evento, y el comité lo usa
-  para comprar suscripciones de regalo de Lleva el Mensaje; esa tarjeta y *Lleva el Mensaje*
-  (`/es/shop/#carry`) enlazan los dos programas oficiales: Lleva el Mensaje de La Viña y Carry the Message de
-  Grapevine (`links:` → `lleva_el_mensaje`, `carry_the_message`). **Kit del mes**
-  (`/es/monthly/`): todo lo de este mes — la reunión del comité, los eventos, las fechas límite para
-  historias, las revistas del mes y el libro del mes —, un cartel para cada mes (descargar en PNG, compartir,
-  imprimir), las 10 maneras de poner una edición a trabajar y cada mes también como mensaje para WhatsApp o
-  correo. El **Resumen mensual** (`/es/digest/`) reúne todo lo nuevo del mes pasado (el correo mensual,
+  económicamente?* (en *Quiénes somos* y en la página «no encontrada», donde está también en inglés) dice que quien
+  prefiere pagar en efectivo puede entregarlo en nuestra mesa en el próximo evento, y el comité lo usa para comprar
+  suscripciones de regalo de Lleva el Mensaje; esa tarjeta y *Lleva el Mensaje* (`/es/shop/#carry`) enlazan los dos
+  programas oficiales: Lleva el Mensaje de La Viña y Carry the Message de Grapevine (`links:` → `lleva_el_mensaje`,
+  `carry_the_message`). **Kit del mes** (`/es/monthly/`): todo lo de este mes — la reunión del comité, los eventos,
+  las fechas límite para historias, las revistas del mes y el libro del mes —, un cartel para cada mes (descargar en
+  PNG, compartir, imprimir), las 10 maneras de poner una edición a trabajar y cada mes también como mensaje para
+  WhatsApp o correo. El **Resumen mensual** (`/es/digest/`) reúne todo lo nuevo del mes pasado (el correo mensual,
   sección [10 c](#c-monthly-e-mail-digest-keep-every-district-informed), es la misma edición). Nuestras
   reuniones son por **Google Meet** (código de la reunión `rva-tmst-vdb`, la misma sala para las dos, sin código
   de acceso ni número para llamar): la **reunión del comité** (tercer miércoles, de 7 a 8 p. m., hora del Centro;
@@ -289,7 +288,7 @@ refresh (GitHub schedule)", "Evening refresh (GitHub schedule)", "Morning refres
 | **Instagram** (@alcoholicsanonymous_gv, @alcoholicosanonimos_lv) | Newest posts — see [section 9](#9-instagram-how-the-site-reads-it-please-read) | **Instagram** |
 | **Committee Google Drive** | Reports, notes, slides, workshops, forms, photo albums; dated flyers → events; docs in *bulletin* → bulletin posts | **Portfolio · Photos · Events · Bulletin** |
 | **Editorial calendar** (Grapevine), **yearly themes** (La Viña: the "Temas de LV" document on aalavina.org/recursos) and suggested topics (both: La Viña's *temas sugeridos*; the departments and "always in need of" topics Grapevine's /contribute page names) | Upcoming themes and story deadlines of both magazines, and the topics they take any time | **Contribute** (also the monthly toolkit, the district report, Home and the workshop presentations; the story recorder's topic list; the [story deadlines calendar](#calendar-files-story-deadlines-and-reminders), `/deadlines.ics`) |
-| **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details | **Meetings** (a card on **Events**, without the Zoom details) |
+| **Grapevine Weekly Open meeting** (web page) | Current day, time and Zoom details (its full join link and its flyer: `grapevine_weekly_open:` in the settings) | **Meetings** (a card on **Events**, with Join on Zoom but without the meeting ID and passcode) |
 | **La Viña's weekly open meeting** (from the settings, `lavina_weekly_open:` — an official La Viña flyer) | Thursdays in Spanish, first date, Zoom details | **Meetings** (a card on **Events**; one line on Home · Listen · Watch · monthly posters) |
 | **Official stores** (aagrapevine.org / aalavina.org store pages) | **Book of the Month** (title, cover, percent, sale price, dates) and **subscription prices** per region (U.S. · Canada · International; print / digital / complete); once a week the **specialty items** — greeting cards, pocket planner, wall calendar and, in season, the holiday cards (picture, price, pack size, volume price, a short description) | **Shop** (a short teaser on Home, the monthly posters and the monthly toolkit) |
 | **Daily quote** (the home pages of aagrapevine.org and aalavina.org) | Grapevine's *Daily Quote* and La Viña's *Cita Diaria*: the quote as published (never translated), who said it, the book it comes from, the official e-mail sign-up — under them the publishers' permission credits ("Reprinted with permission of A.A. World Services, Inc." · "Copyright © The AA Grapevine, Inc. Reprinted with permission. All rights reserved.") | **Home** |
@@ -439,8 +438,9 @@ What the newer pages do:
 - **La Viña's weekly open meeting**: `/meetings/#weekly-open` shows both public weekly meetings (Grapevine on
   Wednesdays in English, La Viña on Thursdays in Spanish) with day, time and Zoom details — the one place
   with those details; other pages link there. The **Events** page lists both too, under *Weekly open meetings*
-  (`#ev-weekly`, right under the next committee meeting): each with *Every week*, its next date, **How to join**
-  (to `/meetings/#weekly-open`) and **Add to calendar** — never in the month list or the calendar feed.
+  (`#ev-weekly`, right under the next committee meeting): each with *Every week*, its next date, **Join on Zoom**
+  (the meeting's full link), **Meeting details** (to `/meetings/#weekly-open`) and **Add to calendar** — never in
+  the month list or the calendar feed.
 - **Published writers** (`/published/`): the stories of the last 60 or 90 days by writers from Area 65, the rest of
   Texas or anywhere, and below them **"Texas writers through the years"** (`#archive`): every story by a Texas
   writer in the magazines' online archives, grouped by decade, Area 65 first (the rest of Texas loads when a visitor

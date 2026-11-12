@@ -728,10 +728,12 @@ sources:
 #  aagrapevine.org's page does not give us. Everything else about this
 #  meeting (its day, time, Zoom meeting ID and passcode) is read from
 #  aagrapevine.org every day (sources.grapevine.weekly_open above).
-#  zoom_url: the meeting's FULL Zoom link, pasted exactly as Zoom gives
-#    it, with its "?pwd=…" part. The "Join on Zoom" button on
-#    /meetings/#weekly-open and the meeting's "Add to calendar" entries
-#    then open the meeting at once: nobody has to type the passcode.
+#  zoom_url: the meeting's FULL Zoom link, pasted as Zoom gives it,
+#    ending with its "?pwd=…" part (delete anything after it, such as
+#    "&omn=…" or "&from=addon"). The "Join on Zoom" buttons on
+#    /meetings/#weekly-open and /events/, and the link in the meeting's
+#    "Add to calendar" entries, then open the meeting at once: nobody
+#    has to type the passcode.
 #    It is used only while its meeting number (the digits after /j/) is
 #    the meeting ID aagrapevine.org gives. If the meeting moves to
 #    another Zoom room, the site goes back to the plain link (people type
@@ -744,8 +746,7 @@ sources:
 #    link. Change it if the flyer is renamed.
 # ---------------------------------------------------------------------
 grapevine_weekly_open:
-  # The committee's link (2026-11-12). It is the same Zoom room as La Viña's meeting below (the QR code on La
-  # Viña's newest flyer opens this very link).
+  # The committee's link (2026-11-12): the same room as La Viña's meeting below.
   zoom_url: "https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"
   # "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom.png" (Drive flyers/,
   # 2026-11-12: AA Grapevine's flyer)
@@ -774,20 +775,18 @@ lavina_weekly_open:
   starts: "2026-11-05"          # first meeting (a Thursday)
   zoom_id: "871 2036 8287"
   passcode: "238047"
-  # The meeting's FULL Zoom link, with its "?pwd=…" part (nobody has to type the passcode): the card's "Join on
-  # Zoom" button and its "Add to calendar" entries. Used only while its meeting number (the digits after /j/) is
-  # zoom_id above; otherwise the plain link https://zoom.us/j/<zoom_id>, and the Status page says why. "" = the
-  # plain link. The QR code on La Viña's newest flyer opens this very link. The same Zoom room as the Grapevine
-  # Weekly Open today (grapevine_weekly_open above), but each meeting has its own line. If La Viña's meeting moves
-  # to another Zoom room, change zoom_id, passcode and zoom_url here together (and grapevine_weekly_open's zoom_url
-  # too if the Grapevine meeting moved).
+  # The full Zoom link, with the same rules as grapevine_weekly_open's zoom_url above: used only while its number
+  # after /j/ is zoom_id; otherwise the plain link, and the Status page says why (box "Grapevine Weekly Open
+  # meeting"). "" = the plain link. The QR code on La Viña's newest flyer opens this very link. If La Viña's
+  # meeting moves to another Zoom room, change zoom_id, passcode and zoom_url here together (and
+  # grapevine_weekly_open's zoom_url too if the Grapevine meeting moved).
   zoom_url: "https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"
   # In our words, from La Viña's newest flyer (no month on it; every Thursday in the four U.S. time zones; Drive
   # flyers/, 2026-11-12): a coordinator and two speakers who are AA members each week, among them La Viña story
   # authors and trusted servants; the meetings are recorded for La Viña's podcast and YouTube. The last sentence
   # (the first flyer's) is /meetings/' sign-off: the card leaves it out (committee.weekly.closing) — keep it last,
   # word for word. At most 400 characters each, the sign-off included: a longer one is cut off on the site.
-  summary_es: "Una reunión abierta virtual de AA en español. Cada semana la guía un coordinador, con dos oradores que son miembros de AA; entre quienes participan hay autores de historias de La Viña y servidores de confianza. Las reuniones se graban: puedes escucharlas en el pódcast de La Viña, en tus plataformas de pódcast favoritas o en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana la guía un coordinador, con dos oradores que son miembros de AA; entre quienes participan hay autores de historias de La Viña y servidores de confianza. Las reuniones se graban: puedes escucharlas en el podcast de La Viña, en tus plataformas de podcast favoritas o en YouTube. ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
   summary_en: "A virtual open AA meeting in Spanish. Each week a chairperson leads it, with two speakers who are AA members; among those taking part are La Viña story authors and trusted servants. Every meeting is recorded, so you can listen to it later on La Viña's podcast, on your favorite podcast platforms or on YouTube. Let's keep extending this powerful lifeline together!"
   # La Viña's page for the meeting ("Details on aalavina.org" on its card): its podcast's page describes the
   # meeting and plays its recordings (the committee's choice, 2026-11-11). Written exactly so: with a "/" at the

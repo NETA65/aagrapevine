@@ -10,7 +10,8 @@
                     `grapevine_weekly_open` runs the source again (scripts/ops/push_modules.py);
   * the pages     — /meetings/#weekly-open, English and Spanish: both cards' Join is the full link; their Add to
                     calendar carries it — Google's link (encoded) and the .ics files (escaped, folded at 75 octets) —
-                    as do the /events/ cards' calendar links (How to join there still leads to /meetings/); the
+                    as do the /events/ cards: their own Join on Zoom (the full link, the same label) and calendar
+                    links, with Meeting details still leading to /meetings/#weekly-open; the
                     Grapevine card links AA Grapevine's flyer on the Drive (grapevine_weekly_open.flyer_match, in
                     flyers/ only), with a source line that says the flyer is AA Grapevine's, and no link when nothing
                     matches; La Viña's card links its NEWEST flyer;
@@ -98,7 +99,8 @@ class JoinLink(unittest.TestCase):
     def test_what_is_not_a_zoom_join_link_gives_the_plain_link_and_a_note(self):
         for link in ("http://us02web.zoom.us/j/87120368287?pwd=abc",          # not https
                      "https://us02web.zoom.us/w/87120368287?pwd=abc",          # a webinar address
-                     "https://us02web.zoom.us/j/87120368287?pwd=abc&uname=Ana",  # more than the passcode
+                     "https://us02web.zoom.us/w/87120368287#pwd=abc",
+                     "http://us02web.zoom.us/j/87120368287&pwd=abc",
                      "https://us02web.zoom.us.example.org/j/87120368287",      # another site
                      "https://example.org/zoom.us/j/87120368287",
                      "https://meet.google.com/rva-tmst-vdb", "zoom.us/j/87120368287", "87120368287"):
@@ -108,6 +110,28 @@ class JoinLink(unittest.TestCase):
                 self.assertEqual(len(notes), 1)
                 self.assertIn("not a Zoom join link", notes[0])
                 self.assertNotIn("pwd=abc", notes[0])
+                # the link shown is cut at its first "?", "#" or "&"
+                shown = re.search(r"zoom_url '([^']*)'", notes[0])[1]
+                self.assertEqual(shown, re.split(r"[?#&]", link, maxsplit=1)[0])
+
+    def test_more_after_the_passcode_part_gets_its_own_note(self):
+        """Zoom's recurring-meeting invites add "&omn=…", Google Calendar's Zoom add-on "&from=addon": a link that
+        starts as a join link but goes on after its ?pwd=… is not used, and the note says what to delete (never the
+        old "is not a Zoom join link" next to a link that looks right)."""
+        for link in (FULL + "&omn=87120368287", FULL + "&from=addon", FULL + "#success",
+                     "https://us02web.zoom.us/j/87120368287?pwd=abc&uname=Ana",
+                     "https://zoom.us/j/87120368287#pwd=abc", "https://zoom.us/j/87120368287?omn=1&pwd=abc"):
+            with self.subTest(link=link):
+                notes: list[str] = []
+                self.assertEqual(W.join_link(link, ZOOM_ID, "grapevine_weekly_open", notes), PLAIN)
+                self.assertEqual(len(notes), 1)
+                note = notes[0]
+                self.assertIn("grapevine_weekly_open: zoom_url has more after its ?pwd=… part", note)
+                self.assertIn("Keep only https://….zoom.us/j/<meeting ID>?pwd=… and delete the rest", note)
+                self.assertNotIn("not a Zoom join link", note)
+                for token in ("VYskKcQbHB4KtZiTk0EmDcMuJO95kV", "pwd=abc", "omn=8", "omn=1", "success", "uname",
+                              "zoom.us/j/8712"):   # nothing of the link itself
+                    self.assertNotIn(token, note)
 
     def test_nothing_set_or_no_meeting_id(self):
         for empty in (None, "", "  ", 42):
@@ -345,17 +369,27 @@ class MeetingsPage(unittest.TestCase):
                     desc = next(ln for ln in lines if ln.startswith("DESCRIPTION:"))
                     self.assertIn(f": {FULL}\\n", desc)          # (RFC 5545 escapes no ":", "?", "=" or ".")
 
-    def test_the_events_cards_calendar_links_carry_it_and_how_to_join_still_leads_to_meetings(self):
+    def test_the_events_cards_join_and_calendar_links_carry_it(self):
+        """Owner, 2026-11-12: "so anyone can join directly through our join button" — /events/ too."""
         p = built(self)
         for lang, pre in (("en", "/"), ("es", "/es/")):
             with self.subTest(lang=lang):
                 page = p[pre + "events/"]
                 i = page.index('<section id="ev-weekly"')
                 block = page[i:page.index("</section>", i)]
+                found = []
                 for m in re.finditer(r'<article class="card ev-accent ev-tone-(gv|lv)[^"]*".*?</article>', block, re.S):
-                    self.assertEqual(gcal_query(m.group(0))["location"], FULL)
-                    self.assertFalse(re.search(r'href="https?://([\w-]+\.)*zoom\.us/', m.group(0)))
-                    self.assertIn(f'href="{pre}meetings/#weekly-open"', m.group(0))
+                    card, key = m.group(0), m.group(1)
+                    found.append(key)
+                    self.assertEqual(gcal_query(card)["location"], FULL)
+                    join = re.findall(r'<a class="btn-primary btn-sm[^"]*" href="([^"]+)" target="_blank" rel="noopener" '
+                                      r'aria-label="([^"]+)">', card)
+                    self.assertEqual([(html.unescape(h), html.unescape(a)) for h, a in join],
+                                     [(FULL, T[f"committee.weekly.join_{key}"][lang])])
+                    zoom = [html.unescape(h) for h in re.findall(r'href="(https?://(?:[\w-]+\.)*zoom\.us/[^"]*)"', card)]
+                    self.assertEqual(zoom, [FULL], "the Join button is the card's one zoom.us link")
+                    self.assertIn(f'href="{pre}meetings/#weekly-open"', card)
+                self.assertEqual(sorted(found), ["gv", "lv"])
 
     def test_each_card_links_its_own_flyer(self):
         p = built(self)

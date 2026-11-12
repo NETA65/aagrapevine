@@ -66,7 +66,7 @@
 import crypto from "node:crypto";
 import { qrSvg, issueLabel, issueInSentence, issueLabelOf } from "./community.js";
 import { chicagoDayEndMs, eventEndMs, gvMeetings, announcementList, normalizeEvents, buildIcs, calendarLinks, meetingJoin,
-  meetingSpeaker, COMMITTEE_MEETING_PATH } from "./committee.js";
+  meetingSpeaker, COMMITTEE_MEETING_PATH, tidyBrackets } from "./committee.js";
 import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel, shopOfferIn, offerDates } from "./shop.js";
@@ -318,9 +318,10 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *   host      "lv" / "gv" for La Viña's or Grapevine's own event (extra.host — La Viña's monthly workshop):
  *             eventTone gives it that magazine's colour; "" for ours
  *   title     its title in the row's language, without the spaces a calendar left inside its brackets
- *             ("( A.A. Un camino a la vida )" → "(A.A. Un camino a la vida)": no ")" on a line of its own)
- *   place     the city to show after the title, with its state when that is not Texas ("Riverside, CA"): ""
- *             when the title already names the city ("Writing Workshop — Mansfield", "booth at CityWide
+ *             ("( A.A. Un camino a la vida )" → "(A.A. Un camino a la vida)": no ")" on a line of its own —
+ *             committee.js tidyBrackets, so /events/ and the calendar files read the same)
+ *   place     the city to show after the title, with its state when that is not Texas ("Riverside, CA"; "TX"
+ *             and "Texas" are both Texas): "" when the title already names the city ("Writing Workshop — Mansfield", "booth at CityWide
  *             Dallas") — the page's row, the poster and the message say a place once
  *   online    it can be joined online (an online link, or "Zoom" / "Google Meet" as its place): the row, the
  *             poster and the message say "Online" there, after the place when it has one ("Riverside, CA ·
@@ -329,6 +330,8 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  * (src, not enumerable: the event record the row is made from — the month's calendar file writes it as
  * /events.ics does, monthIcs)
  */
+// Texas as a calendar writes it ("TX", "Texas", "tx."): a Texas city needs no state on a North Texas poster
+const TEXAS = /^\s*(?:tx\.?|texas)\s*$/i;
 function dateRow(e, L, ctx, extra = {}) {
   const d = eventDays(e);
   const ex = e.extra || {};
@@ -336,7 +339,7 @@ function dateRow(e, L, ctx, extra = {}) {
   const shownDay = d.start < ctx.first ? ctx.first : d.start;
   const overAt = iso(eventEndMs(e));
   const href = extra.kind === "committee" ? COMMITTEE_MEETING_PATH : e.url || "/events/";
-  const title = clean(tr(e, "title", L)).replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
+  const title = tidyBrackets(clean(tr(e, "title", L)));
   const city = clean(ex.city);
   const state = clean(ex.state);
   return Object.defineProperty({
@@ -345,7 +348,7 @@ function dateRow(e, L, ctx, extra = {}) {
     endDay: d.end !== d.start ? longDay(d.end, L) : "",
     range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
     time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? ctx.zone : "",
-    city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city + (state && state.toUpperCase() !== "TX" ? `, ${state}` : "") : "",
+    city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city + (state && !TEXAS.test(state) ? `, ${state}` : "") : "",
     online: !!ex.online || !!ex.online_url || /\b(?:zoom|google meet|microsoft teams|webex)\b/i.test(ex.location || ""),
     host: ex.host === "lv" || ex.host === "gv" ? ex.host : "",
     tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,

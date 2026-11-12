@@ -10,8 +10,9 @@
   * Events        — #ev-weekly under the pinned committee meeting and before the months: both meetings, the page
                     language's first, each in its magazine's colour, "Every week", its day and time, its next date
                     with the /meetings/ cards' data-cm-weekly markup (committee.js rolls it on in the browser) —
-                    La Viña's "Starts Thursday, November 5, 2026" before that day, its next Thursday after it —, How
-                    to join (/meetings/#weekly-open: the one home of the Zoom ID and passcode, never shown here) and
+                    La Viña's "Starts Thursday, November 5, 2026" before that day, its next Thursday after it —, Join
+                    on Zoom (since round 26c: the meeting's own Zoom link, the /meetings/ cards' label), Meeting
+                    details (/meetings/#weekly-open: the one home of the Zoom ID and passcode, never shown here) and
                     Add to calendar (the weekly .ics files of /meetings/, Google's weekly link); shown with "All" and
                     "GV & LV calendars", never counted as an event of the month list;
                     The colour key counts the two cards' colours; a card with no day or time has no clock line;
@@ -282,18 +283,32 @@ class EventsPage(unittest.TestCase):
                 self.assertIn(T["committee.weekly.next"][lang] + " " + lv, visible(cards["lv"]))
                 self.assertIn(T["committee.weekly.next"][lang] + " " + gv, visible(cards["gv"]))
 
-    def test_how_to_join_and_add_to_calendar(self):
+    def test_join_meeting_details_and_add_to_calendar(self):
         p = built(self, BEFORE)
         for lang in ("en", "es"):
             pre = "/es" if lang == "es" else ""
             with self.subTest(lang=lang):
                 for key, card in weekly_cards(weekly_block(p[page_url(lang, "events/")])):
                     hrefs = re.findall(r'href="([^"]+)"', card)
-                    # How to join: the meetings page, where the Zoom ID and passcode are; never the Zoom link itself
-                    join = re.search(r'<a class="btn-primary btn-sm" href="([^"]+)">(.*?)</a>', card, re.S)
-                    self.assertEqual(join.group(1), f"{pre}/meetings/#weekly-open")
-                    self.assertTrue(visible(join.group(2)).startswith(T["media.wo_join"][lang]))
-                    self.assertFalse([h for h in hrefs if re.match(r"https?://([\w-]+\.)*zoom\.us/", h)])
+                    # Join on Zoom (round 26c): the meeting's own Zoom link, first, with the /meetings/ cards' label
+                    # and name ("Join on Zoom: Grapevine Weekly Open"); the card's only link to zoom.us
+                    join = re.search(r'<a class="btn-primary btn-sm[^"]*" href="([^"]+)" target="_blank" rel="noopener" '
+                                     r'aria-label="([^"]+)">(.*?)</a>', card, re.S)
+                    self.assertIsNotNone(join, key)
+                    self.assertEqual(join.group(1), f"https://zoom.us/j/{ZOOM_DIGITS}")
+                    self.assertEqual(html.unescape(join.group(2)), T[f"committee.weekly.join_{key}"][lang])
+                    self.assertEqual(visible(join.group(3)), T["committee.meeting.join"][lang].replace("{platform}", "Zoom"))
+                    self.assertEqual([h for h in hrefs if re.match(r"https?://([\w-]+\.)*zoom\.us/", h)], [join.group(1)])
+                    # Meeting details: the meetings page, where the Zoom ID, passcode, phone numbers and flyer are
+                    details = re.search(r'<a class="btn-secondary btn-sm" href="([^"]+)">(.*?)</a>', card, re.S)
+                    self.assertEqual(details.group(1), f"{pre}/meetings/#weekly-open")
+                    # (phones: the short word, "Details", for the eye; a screen reader hears the whole label)
+                    self.assertIn(f'<span class="sm:hidden" aria-hidden="true">{T["committee.events.details_short"][lang]}</span>'
+                                  f'<span class="max-sm:sr-only">{T["committee.events.meeting_details"][lang]}</span>'
+                                  f'<span class="sr-only"> — {html.escape(WEEKLY[key == "lv"]["i18n"]["title"][lang], quote=True).replace("&#x27;", "&#39;")}</span>',
+                                  details.group(2))
+                    self.assertLess(card.index(join.group(0)), card.index(details.group(0)))
+                    self.assertLess(card.index(details.group(0)), card.index('<details class="cm-menu">'))
                     # Add to calendar: every week — the weekly .ics file of /meetings/ and Google's repeating link
                     self.assertIn(f'<a href="{pre}/meetings/weekly-open-{key}.ics" download="weekly-open-{key}.ics" type="text/calendar">', card)
                     gcal = [h for h in hrefs if h.startswith("https://calendar.google.com/calendar/render?")]
@@ -316,8 +331,8 @@ class EventsPage(unittest.TestCase):
                                   f'{T["committee.events.kind." + key][lang]}</li>', legend.group(1))
 
     def test_a_card_without_its_day_and_time(self):
-        # Grapevine's page read without the day and time: the card keeps its title and How to join, no clock line
-        # (no lone "·"), no date and no calendar menu; La Viña's card is as before
+        # Grapevine's page read without the day and time (nor its Zoom link): the card keeps its title and Meeting
+        # details, no Join on Zoom, no clock line (no lone "·"), no date and no calendar menu; La Viña's card is as before
         p = built(self, BEFORE, bare=True)
         for lang in ("en", "es"):
             with self.subTest(lang=lang):
@@ -328,18 +343,20 @@ class EventsPage(unittest.TestCase):
                 self.assertNotRegex(gv, r'<span class="min-w-0">\s*<span aria-hidden="true">·</span>\s*</span>')
                 self.assertNotIn("data-cm-weekly", gv)
                 self.assertNotIn("cm-menu", gv)
+                self.assertNotIn("zoom.us", gv)
                 self.assertIn('href="' + ("/es" if lang == "es" else "") + '/meetings/#weekly-open"', gv)
+                self.assertIn("zoom.us", cards["lv"])
                 self.assertIn("clock-3", cards["lv"])
                 self.assertIn(WEEKLY[1]["i18n"]["day"][lang] + ' <span aria-hidden="true">·</span> '
                               + WEEKLY[1]["i18n"]["time_central"][lang], cards["lv"])
 
     def test_the_zoom_id_and_passcode_are_never_on_the_page(self):
         # (Google's "add" link carries them in the calendar entry's own description, as on /meetings/: it is the
-        # entry people join from — that is not the page's text)
+        # entry people join from — and Join on Zoom's link the meeting's number: neither is the page's text)
         p = built(self, BEFORE)
         for lang in ("en", "es"):
             with self.subTest(lang=lang):
-                page = re.sub(r'href="https://calendar\.google\.com/[^"]*"', 'href=""', p[page_url(lang, "events/")])
+                page = re.sub(r'href="https://(calendar\.google\.com|zoom\.us)/[^"]*"', 'href=""', p[page_url(lang, "events/")])
                 for s in (ZOOM_ID, ZOOM_DIGITS, PASSCODE, "834-5678-9012"):
                     self.assertNotIn(s, page)
 

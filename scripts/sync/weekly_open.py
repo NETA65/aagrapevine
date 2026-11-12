@@ -101,16 +101,22 @@ def join_link(configured, zoom_id, setting: str, notes: list[str] | None = None)
     "https://us02web.zoom.us/j/87120368287?pwd=…", kept exactly as written) when it is a Zoom join link
     (JOIN_LINK_RE) whose meeting number is this meeting's `zoom_id` ("871 2036 8287"); else the plain
     https://zoom.us/j/<zoom_id> (None without a usable ID). A link that is set but not used is logged and added to
-    `notes` (→ the source's stats.warnings, shown on /status/), named without its "?pwd=…" part. `setting` names
-    its block in config/site.yml ("grapevine_weekly_open")."""
+    `notes` (→ the source's stats.warnings, shown on /status/), the link cut at its first "?", "#" or "&" (a note
+    never shows the passcode part). A join link with more after its "?pwd=…" (Zoom's "&omn=…", Google Calendar's
+    "&from=addon", a "#…") gets its own note: keep only https://….zoom.us/j/<ID>?pwd=… and delete the rest.
+    `setting` names its block in config/site.yml ("grapevine_weekly_open")."""
     digits = re.sub(r"\D", "", str(zoom_id or ""))
     plain = f"https://zoom.us/j/{digits}" if 9 <= len(digits) <= 11 else None
     link = configured.strip() if isinstance(configured, str) else ""
     if not link:
         return plain
     m = JOIN_LINK_RE.fullmatch(link)
-    shown = link.split("?", 1)[0][:120]
-    if not m:
+    shown = re.split(r"[?#&]", link, maxsplit=1)[0][:120]
+    head = None if m else JOIN_LINK_RE.match(link)
+    if head and link[head.end():head.end() + 1] in ("?", "#", "&"):
+        why = (f"{setting}: zoom_url has more after its ?pwd=… part (such as &omn=… or &from=addon). Keep only "
+               "https://….zoom.us/j/<meeting ID>?pwd=… and delete the rest. The plain link is used.")
+    elif not m:
         why = (f"{setting}: zoom_url {shown!r} is not a Zoom join link (https://….zoom.us/j/<meeting ID>?pwd=…) — "
                "the plain link is used")
     elif not plain:

@@ -124,7 +124,7 @@ also the quick rebuild after you save a file, the midday and evening refreshes a
 | Price changes (`price_changes.py`) | Nothing online: your `price_changes:` block | `price_changes:` | Every build | `/shop/#price-changes` | — (mistakes show as a *Settings problem* in the run summary) |
 | Daily quote (`quote.py`) | The two magazines' home pages | `sources.<pub>.quote_page`, `site.morning_goal` | Every run (in the morning refresh, right after Drive and the bulletin) | home quote card | Daily quote |
 | Editorial themes (`editorial.py`) | Grapevine's editorial calendar and suggested topics, La Viña's suggested topics and yearly themes document | `sources.grapevine.contribute`, `sources.lavina.contribute`, `themes_page`, `themes_link` | Full + push | `/contribute/#deadlines`, home | Editorial themes & deadlines |
-| Weekly open meetings (`weekly_open.py`) | Grapevine's Weekly Open page; La Viña's from your settings | `sources.grapevine.weekly_open`, `lavina_weekly_open:` | Full + push | `/meetings/#weekly-open`, `/events/#ev-weekly` | Grapevine Weekly Open meeting |
+| Weekly open meetings (`weekly_open.py`) | Grapevine's Weekly Open page; La Viña's from your settings | `sources.grapevine.weekly_open`, `grapevine_weekly_open:`, `lavina_weekly_open:` | Full + push | `/meetings/#weekly-open`, `/events/#ev-weekly` | Grapevine Weekly Open meeting |
 | Record your story (`audio_project.py`) | Grapevine's audio portal, La Viña's *Graba tu historia* pages | `sources.grapevine.audio_project`, `sources.lavina.record_*` | Full + push | `/contribute/#record` | Record your story by phone (Grapevine & La Viña) |
 | Grapevine meetings (`meetings.py`) | 8 intergroup / central office meeting lists | `meetings:` (and `spotlight.neta65_counties`, `data/geo/texas_places.json` for "our Area") | Full + push | `/meetings/#grapevine-meetings` | Grapevine meetings (our Area and nearby) |
 | Committee meeting (`meeting.py`) | Nothing online: your `meeting:` block | `meeting:` | Every build | `/meetings/#committee-meeting`, home, `/events/` | — (a wrong skip date shows as a *Settings problem* in the run summary) |
@@ -1348,11 +1348,14 @@ marked failed.
 committee's settings give each meeting its full Zoom link, with its `?pwd=…` part: `grapevine_weekly_open: zoom_url`
 and `lavina_weekly_open: zoom_url` (today both
 `https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1`, the link the QR code on La Viña's
-newest flyer opens). The card's **Join on Zoom**, its Google Calendar link and its `.ics` file then open the
-meeting without asking for the passcode. `join_link` uses a link only when it is a Zoom join link
-(`https://<server>.zoom.us/j/<digits>`, optionally `?pwd=…`, nothing else) whose digits are the meeting's ID —
+newest flyer opens). The **Join on Zoom** buttons (the cards on `/meetings/` and on `/events/`), the Google Calendar
+link and the `.ics` file then open the meeting without asking for the passcode. `join_link` uses a link only when it
+is a Zoom join link (`https://<server>.zoom.us/j/<digits>`, optionally `?pwd=…`, nothing after it) whose digits are
+the meeting's ID —
 Grapevine's as the page gives it that day, La Viña's `zoom_id`; otherwise the plain `https://zoom.us/j/<ID>`, and
-the source's notes on `/status/` say why (without the `pwd=` part). So if the meeting moves to another Zoom room,
+the source's notes on `/status/` say why (the link cut at its first `?`, `#` or `&`, so never its `pwd=` part; a
+link with more after its `?pwd=…`, such as Zoom's `&omn=…` or Google Calendar's `&from=addon`, gets its own note:
+keep only `https://….zoom.us/j/<ID>?pwd=…` and delete the rest). So if the meeting moves to another Zoom room,
 Join still opens the right room (people type the passcode) until the new full link is pasted in the settings (for
 La Viña, together with the new room's `zoom_id` and `passcode`).
 `grapevine_weekly_open: flyer_match` finds AA Grapevine's flyer on the Drive for the Grapevine card ("View flyer"),
@@ -1401,7 +1404,7 @@ lavina_weekly_open:
 | `timezone` | a time-zone name such as `America/New_York` (the default) or `America/Chicago` — **not** `Eastern` |
 | `starts` | the first meeting; until then the card says "Starts …". A date that is not on `day` → the first real meeting day is used |
 | `zoom_id` | 9–11 digits, shown grouped ("871 2036 8287") |
-| `zoom_url` | the full Zoom link of that meeting ID, exactly as Zoom gives it (`?pwd=…` included); another room's link or anything else → the plain link and a note on `/status/`; `""` → the plain link |
+| `zoom_url` | the full Zoom link of that meeting ID, as Zoom gives it, ending with its `?pwd=…` part (delete anything after it, such as `&omn=…` or `&from=addon`); another room's link, more after the `?pwd=…` or anything else → the plain link and a note on `/status/`; `""` → the plain link |
 | `passcode`, `url`, `source` | shown or linked as written |
 | `flyer_match` | a regular expression (capitals ignored) that finds the flyer in the committee's Drive folder `flyers/` → a "View flyer" link on the card. Several files match → the newest one (since Nov 12, 2026: the flyer without a month, "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"; its older edition is in the Drive's private folder) |
 
@@ -1421,8 +1424,8 @@ itself and follows at the quick rebuild in any case.
 
 **Where it shows.** `/meetings/#weekly-open` · `/es/meetings/#weekly-open` — the one place with the
 Zoom details, the page language's meeting first, at the top of the page (right under *New to AA?*). A card
-each on `/events/#ev-weekly` (every week: the next date, How to join → `/meetings/#weekly-open`, Add to
-calendar — no Zoom details). One line on the home page, on `/listen/` and on
+each on `/events/#ev-weekly` (every week: the next date, **Join on Zoom** — the same full link —, Meeting details →
+`/meetings/#weekly-open`, Add to calendar — no Zoom ID or passcode written out). One line on the home page, on `/listen/` and on
 `/watch/`; on `/listen/` also the show card of each meeting's recordings, with its own day ("Live on Zoom:
 Thursdays") and language; `/accessibility/#phone` and `/offline/` (joining by phone with these IDs); `/monthly/`
 posters; the GV/LV report; the presentations; search; the booth display ("Meetings you can join", with the Zoom
@@ -1866,8 +1869,8 @@ On the 1st of the month — and after a day GitHub skipped — the Morning check
 | `library.official_hosts` (hiding a host) | the quick rebuild (documents of a newly added host: the next document search) |
 | `meetings.enabled`, an office's `enabled: false` or deleted block, `area_label`, `region_label`, office order | the quick rebuild |
 | adding or changing an office (`feed`, `page`, `methods`, keys) | the quick rebuild (it reads the meeting lists again) |
-| `lavina_weekly_open.flyer_match` | the quick rebuild |
-| the rest of `lavina_weekly_open`, `sources.grapevine.weekly_open` | the quick rebuild (it reads the weekly open meetings again) |
+| `lavina_weekly_open.flyer_match`, `grapevine_weekly_open.flyer_match` | the quick rebuild |
+| the rest of `lavina_weekly_open`, `grapevine_weekly_open.zoom_url`, `sources.grapevine.weekly_open` | the quick rebuild (it reads the weekly open meetings again) |
 | `content/instagram.yml`, `sources.instagram` | the quick rebuild (it reads Instagram again; pictures and captions it could not get: the next full run) |
 | `sources.youtube` | the quick rebuild (the channels' feeds; the complete listing of older videos: a full run, once a week) |
 | `sources.<pub>.contribute`, `themes_page`, `themes_link` | the quick rebuild (it reads the editorial themes again) |

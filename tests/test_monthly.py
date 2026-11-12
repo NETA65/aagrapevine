@@ -1096,8 +1096,10 @@ class PosterEveryDate(unittest.TestCase):
                       extra={"city": "Tulsa", "state": "OK", "online": True, "all_day": True}),
                 # a calendar's spaces inside the brackets (La Viña's "XLII … ( A.A. Un camino a la vida )"): the row
                 # reads "(A Way of Life)", so no ")" is left on a line of its own
+                # (its state spelled out: "Texas" is Texas as "TX" is — "Longview", never "Longview, Texas")
                 event("ev:x6", "2026-10-30", "2026-11-01", "XLII Zone Gathering ( A Way of Life )",
-                      title_es="XLII Reunión de Zona ( Un camino a la vida )", extra={"city": "Longview", "all_day": True}),
+                      title_es="XLII Reunión de Zona ( Un camino a la vida )",
+                      extra={"city": "Longview", "state": "Texas", "all_day": True}),
             ]
             # the month's other happenings (round 26b, fix round 2): the stores' offers and a price change announced
             db["shop"]["price_changes"] = [PRICE_CHANGE]
@@ -1218,6 +1220,9 @@ class PosterEveryDate(unittest.TestCase):
                                 r'</strong>\s*<span class="mp-date-m">(.*?)</span>', text, re.S)
                 self.assertTrue(row.group(1).endswith(" · Denton"), row.group(1))
                 self.assertIn(f'<strong class="mp-date-t">{brackets[lang]}</strong>', text)
+                row = re.search(r'<strong class="mp-date-t">' + re.escape(brackets[lang]) +
+                                r'</strong>\s*<span class="mp-date-m">(.*?)</span>', text, re.S)
+                self.assertTrue(row.group(1).endswith("Longview"), row.group(1))
                 at = text.index('<ul class="mp-dlist">')
                 self.assertNotRegex(text[at:text.index("</ul>", at)], r"\( |\s\)")
                 seen += 1
@@ -1231,6 +1236,7 @@ class PosterEveryDate(unittest.TestCase):
                 self.assertTrue(line.endswith(f"— Tulsa, OK · {online[lang]}"), line)
                 self.assertIn(f"— {brackets[lang]} — Longview", msg)
                 self.assertNotIn("Denton, TX", msg)
+                self.assertNotIn("Longview, Texas", msg)
 
     def test_a_month_without_a_date_says_so(self):
         page = self.r["html"]["empty-en"]
@@ -1309,6 +1315,9 @@ for (const [key, lang] of input.runs) {
 }
 // /events.ics as the site writes it: the same events, the same UIDs
 res.events = C.buildIcs(C.normalizeEvents(db.events.items, site, "en", { monthsBack: 3, monthsAhead: 12, now }), { lang: "en", now, name: "x" });
+res.eventsEs = C.buildIcs(C.normalizeEvents(db.events.items, site, "es", { monthsBack: 3, monthsAhead: 12, now }), { lang: "es", now, name: "x" });
+// the titles /events/ shows (its cards: filter cmEvents = normalizeEvents)
+res.titles = Object.fromEntries(["en", "es"].map((l) => [l, C.normalizeEvents(db.events.items, site, l, { monthsBack: 3, monthsAhead: 12, now }).map((e) => e.title)]));
 if (input.filter) res.filter = filters.mpIcs(input.filter, db, carry, site, "en");
 out(res);
 """
@@ -1351,9 +1360,13 @@ class MonthCalendar(unittest.TestCase):
         db = full_db()
         db["events"]["items"].append(event("ev:qa", "2026-11-07T15:00:00Z", "2026-11-07T17:00:00Z", "Workshop; Q&A, open",
                                            url="https://neta65.org/event/qa", extra={"city": "Plano"}))
+        # a calendar's spaces inside the brackets (La Viña's "XLII … ( A.A. Un camino a la vida )")
+        db["events"]["items"].append(event("ev:br", "2026-11-20", "2026-11-22", "XLII Zone Gathering ( A Way of Life )",
+                                           title_es="XLII Reunión de Zona ( Un camino a la vida )",
+                                           extra={"city": "Longview", "all_day": True}))
         site = dict(SITE, url="https://example.org/site")
         self.r = run_js(self, ICS_JS, data={"db": db, "site": site, "carry": CARRY, "now": NOW_A, "filter": "2026-10",
-                                            "runs": [["2026-10", "en"], ["2026-10", "es"], ["2026-11", "en"]]},
+                                            "runs": [["2026-10", "en"], ["2026-10", "es"], ["2026-11", "en"], ["2026-11", "es"]]},
                         env={"MONTHLY_NOW": NOW_A})
 
     def test_a_valid_calendar(self):
@@ -1398,6 +1411,19 @@ class MonthCalendar(unittest.TestCase):
         # a later month: every date (the booth of November and its committee meeting, worked out from the rule)
         nov = {e["UID"] for e in vevents(self.r["2026-11:en"]["ics"])}
         self.assertTrue({"ev-rec-2026-11-14@neta65-gvlv", "ev-committee-2026-11-18@neta65-gvlv", "ev-qa@neta65-gvlv"} <= nov, nov)
+
+    def test_a_title_reads_the_same_everywhere(self):
+        """The brackets' spaces a calendar left ("( A Way of Life )") go in one place (committee.js tidyBrackets):
+        /events/' cards, /events.ics and the month's calendar file read like the poster and the month's Dates row."""
+        want = {"en": "XLII Zone Gathering (A Way of Life)", "es": "XLII Reunión de Zona (Un camino a la vida)"}
+        for lang, files in (("en", ("2026-11:en", "events")), ("es", ("2026-11:es", "eventsEs"))):
+            with self.subTest(lang=lang):
+                self.assertIn(want[lang], self.r["titles"][lang])
+                self.assertFalse([t for t in self.r["titles"][lang] if re.search(r"[(¿¡] |\s\)", t)])
+                for f in files:
+                    ics = self.r[f]["ics"] if isinstance(self.r[f], dict) else self.r[f]
+                    summary = [e["SUMMARY"] for e in vevents(ics) if e["UID"].startswith("ev-br")]
+                    self.assertEqual(summary, [want[lang]], f)
 
     def test_where_the_file_is(self):
         self.assertEqual((self.r["2026-10:en"]["path"], self.r["2026-10:es"]["path"]),
