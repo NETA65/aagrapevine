@@ -275,7 +275,7 @@ class Monthly(unittest.TestCase):
         poster = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
         self.assertIn("d.speaker", page)
         self.assertIn("nc.speaker", page)
-        self.assertIn('{% if d.speaker %} · {{ "monthly.speaker" | t(lang, { name: d.speaker.name }) }}{% endif %}', poster)
+        self.assertIn('{%- if d.speaker %}{% set _m = mparts.push("monthly.speaker" | t(lang, { name: d.speaker.name })) %}{% endif -%}', poster)
         self.assertNotIn("Zoom link", page)
 
 

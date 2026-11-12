@@ -31,8 +31,10 @@
 {%- endif -%}
 {% endmacro %}
 
+{#- mp-head--desc: a month's name with a descender (the y of July, the p of April, the g of August): the line under
+    it (the tagline, or the ticket's year) gets the room the letter hangs into (areas/monthly.css, the header) -#}
 {% macro head(m, lang, tid) %}
-<header class="mp-head" data-mp-order="0">
+<header class="mp-head{% if r/[gjpqy]/.test(m.name) %} mp-head--desc{% endif %}" data-mp-order="0">
   <p class="mp-kicker">{{ "monthly.kicker" | t(lang) }}</p>
   <h2 class="mp-month" id="{{ tid }}"><span class="mp-mname">{{ m.name }}</span> <span class="mp-year">{{ m.year }}</span></h2>
   <p class="mp-tag">{{ "monthly.tagline" | t(lang) }}</p>
@@ -159,12 +161,22 @@
       <span class="mp-date-b">
         <span class="mp-sr">{{ d.day }}: </span>
         <strong class="mp-date-t">{{ ("monthly.committee" | t(lang)) if d.kind == "committee" else d.title }}</strong>
-        <span class="mp-date-m">
-          {%- if d.range %}{{ d.range }}{% if d.time %} · {% endif %}{% endif -%}
-          {%- if d.time %}{{ d.time }} {{ d.zone }}{% endif -%}
-          {%- if d.kind == "committee" %} · {{ d.platform or ("monthly.online" | t(lang)) }}{% if d.speaker %} · {{ "monthly.speaker" | t(lang, { name: d.speaker.name }) }}{% endif %} · {{ "monthly.all_welcome" | t(lang) }}{% elif d.city %}{% if d.place %} · {{ d.place }}{% endif %}{% elif d.online %} · {{ "monthly.online" | t(lang) }}{% endif -%}
-          {%- if d.tentative %} · {{ "committee.events.tentative" | t(lang) }}{% endif -%}
-        </span>
+        {#- the line under the title: its parts joined by " · ", so none starts with the separator (an all-day
+            event with a city has no range or time: "Riverside", not "· Riverside") -#}
+        {%- set mparts = [] -%}
+        {%- if d.range %}{% set _m = mparts.push(d.range) %}{% endif -%}
+        {%- if d.time %}{% set _m = mparts.push(d.time + " " + d.zone) %}{% endif -%}
+        {%- if d.kind == "committee" -%}
+          {%- set _m = mparts.push(d.platform or ("monthly.online" | t(lang))) -%}
+          {%- if d.speaker %}{% set _m = mparts.push("monthly.speaker" | t(lang, { name: d.speaker.name })) %}{% endif -%}
+          {%- set _m = mparts.push("monthly.all_welcome" | t(lang)) -%}
+        {%- elif d.city -%}
+          {%- if d.place %}{% set _m = mparts.push(d.place) %}{% endif -%}
+        {%- elif d.online -%}
+          {%- set _m = mparts.push("monthly.online" | t(lang)) -%}
+        {%- endif -%}
+        {%- if d.tentative %}{% set _m = mparts.push("committee.events.tentative" | t(lang)) %}{% endif %}
+        {% if mparts.length %}<span class="mp-date-m">{{ mparts | join(" · ") }}</span>{% endif %}
       </span>
     </li>
     {% endfor %}

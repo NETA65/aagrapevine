@@ -8,6 +8,12 @@ borders":
                     measure), each block is there once and in the reading order of its column, and the type is 15px at
                     least (7.5 pt on a Letter page).
   * PrintOnePage  — the busiest month's poster prints on one US Letter page, English and Spanish, every date on it.
+  * MastheadClear — every month's masthead at its real size, fitted: the month's name, its year and the tagline never
+                    touch (the y of July, the p of April, the g of August hang into the line below; the fit's measure
+                    sees boxes, not letters — this compares what each one draws).
+  * UnfittedClipped — the poster before its fit (or without JavaScript: the page's script blocked) has the build's
+                    arrangement at the stylesheet's type: a busy month's column may lose its last lines, but no text
+                    is drawn over another block's.
 
 Nothing here depends on today's date: the months are the build's, the dates are each page's own.
 """
@@ -15,6 +21,7 @@ from __future__ import annotations
 
 import re
 import unittest
+from io import BytesIO
 
 from .test_site_in_browser import S, new_context, open_page, poster_months, setUpModule, tearDownModule  # noqa: F401
 
@@ -110,6 +117,119 @@ class PrintOnePage(unittest.TestCase):
                 self.assertEqual(shown, rows[busiest])
                 self.assertEqual(len(re.findall(rb"/Type\s*/Page(?!s)", pdf)), 1, "one Letter page")
                 self.assertIn(b"/MediaBox [0 0 612 792]", pdf.replace(b"  ", b" "))
+
+
+def _isolate(wait_for_fit: bool) -> str:
+    """The share picture's script (scripts/ops/poster_share.py ISOLATE): the poster out of its scaled frame, at its real
+    size at the top left — without waiting for the fit when there is none."""
+    from scripts.ops.poster_share import ISOLATE
+    return ISOLATE if wait_for_fit else ISOLATE.replace('!poster.hasAttribute("data-mp-fit") &&', "false &&")
+
+
+# Shows one part of the masthead (the others keep their place, hidden; "none": all hidden) → the masthead's box.
+SHOW = """(only) => {
+  const h = document.querySelector("[data-mp-poster] .mp-head");
+  for (const s of [".mp-mname", ".mp-year", ".mp-tag"]) { const e = h.querySelector(s); if (e) e.style.visibility = only === s ? "visible" : "hidden"; }
+  const r = h.getBoundingClientRect();
+  return { x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 8), width: Math.min(1080, r.width + 16), height: r.height + 16 };
+}"""
+
+
+class MastheadClear(unittest.TestCase):
+    def test_the_months_name_never_touches_the_line_under_it(self):
+        from PIL import Image, ImageChops, ImageFilter
+
+        def ink(shot, bare):          # what one part draws: where the masthead with it differs from the one without
+            d = ImageChops.difference(shot.convert("RGB"), bare.convert("RGB")).convert("L")
+            return d.point(lambda v: 255 if v > 40 else 0)
+
+        def touching(a, b) -> int:    # pixels of b within a pixel of a
+            return sum(ImageChops.multiply(a.filter(ImageFilter.MaxFilter(3)), b).histogram()[1:])
+
+        problems: list[str] = []
+        ctx = new_context(1280, 1400)
+        try:
+            for month in poster_months():
+                for lang in ("en", "es"):
+                    path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
+                    page = open_page(ctx, path)
+                    page.wait_for_function(FITTED, timeout=30_000)
+                    page.evaluate(_isolate(True))
+                    clip = page.evaluate(SHOW, "none")
+                    bare = Image.open(BytesIO(page.screenshot(clip=clip)))
+                    parts = {}
+                    for part in (".mp-mname", ".mp-year", ".mp-tag"):
+                        page.evaluate(SHOW, part)
+                        parts[part] = ink(Image.open(BytesIO(page.screenshot(clip=clip))), bare)
+                    page.close()
+                    for a, b in ((".mp-mname", ".mp-tag"), (".mp-mname", ".mp-year"), (".mp-year", ".mp-tag")):
+                        n = touching(parts[a], parts[b])
+                        if n:
+                            problems.append(f"/{path}: {a} touches {b} ({n} px)")
+        finally:
+            ctx.close()
+        self.assertEqual(problems, [], "\n".join(problems))
+
+
+# Every line of text the poster draws (and its QR, chips and logo), cut to what its ancestors' overflow lets show
+# (overflow-clip-margin included); two of them from different blocks drawn on the same spot = an overlap.
+DRAWN = r"""() => {
+  const p = document.querySelector("[data-mp-poster]");
+  const P = p.getBoundingClientRect();
+  const R = (r) => ({ l: r.left, t: r.top, r: r.right, b: r.bottom });
+  const cut = (a, b) => ({ l: Math.max(a.l, b.l), t: Math.max(a.t, b.t), r: Math.min(a.r, b.r), b: Math.min(a.b, b.b) });
+  const area = (a) => Math.max(0, a.r - a.l) * Math.max(0, a.b - a.t);
+  const clipOf = (el) => {
+    let c = R(P);
+    for (let e = el.parentElement; e && e !== p.parentElement; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.overflowX === "visible" && cs.overflowY === "visible") continue;
+      const r = e.getBoundingClientRect(), m = cs.overflowX === "clip" || cs.overflowY === "clip" ? parseFloat(cs.overflowClipMargin) || 0 : 0;
+      c = cut(c, { l: r.left + (parseFloat(cs.borderLeftWidth) || 0) - m, t: r.top + (parseFloat(cs.borderTopWidth) || 0) - m,
+                   r: r.right - (parseFloat(cs.borderRightWidth) || 0) + m, b: r.bottom - (parseFloat(cs.borderBottomWidth) || 0) + m });
+    }
+    return c;
+  };
+  const blocks = [...p.querySelectorAll(".mp-b, .mp-foot, .mp-head")], drawn = [];
+  blocks.forEach((b, bi) => {
+    const w = document.createTreeWalker(b, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      if (!n.textContent.trim() || n.parentElement.closest(".mp-sr, .sr-only")) continue;
+      const g = document.createRange(); g.selectNodeContents(n);
+      const c = clipOf(n.parentElement);
+      for (const r of g.getClientRects()) { const v = cut(R(r), c); if (area(v) >= 1) drawn.push({ bi, v, s: n.textContent.trim().slice(0, 30) }); }
+    }
+    b.querySelectorAll(".mp-qr, .mp-chip, .mp-logo").forEach((q) => { const v = cut(R(q.getBoundingClientRect()), clipOf(q)); if (area(v) >= 1) drawn.push({ bi, v, s: q.className }); });
+  });
+  const over = [];
+  for (let i = 0; i < drawn.length; i++) for (let j = i + 1; j < drawn.length; j++) {
+    const a = drawn[i], b = drawn[j];
+    if (a.bi === b.bi || blocks[a.bi].contains(blocks[b.bi]) || blocks[b.bi].contains(blocks[a.bi])) continue;
+    if (area(cut(a.v, b.v)) > 6) over.push(a.s + " / " + b.s);
+  }
+  return { fitted: p.hasAttribute("data-mp-fit"), over };
+}"""
+
+
+class UnfittedClipped(unittest.TestCase):
+    def test_no_text_over_another_block_before_the_fit(self):
+        problems: list[str] = []
+        ctx = new_context(1280, 1400)
+        ctx.route(re.compile(r".*/assets/js/monthly\.js(\?.*)?$"), lambda route: route.abort())
+        try:
+            for month in poster_months():
+                for lang in ("en", "es"):
+                    path = ("es/" if lang == "es" else "") + f"monthly/{month}/"
+                    page = open_page(ctx, path)
+                    page.evaluate(_isolate(False))
+                    r = page.evaluate(DRAWN)
+                    page.close()
+                    self.assertFalse(r["fitted"], "the page's script was blocked: no fit")
+                    if r["over"]:
+                        problems.append(f"/{path}: {r['over'][:4]}")
+        finally:
+            ctx.close()
+        self.assertEqual(problems, [], "\n".join(problems))
 
 
 if __name__ == "__main__":

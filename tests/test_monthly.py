@@ -220,6 +220,29 @@ class Strings(unittest.TestCase):
                     # "documents", never "PDF"; the site never describes how it updates itself
                     self.assertNotRegex(v[lang], r"\bPDFs?\b|crawl|scrap|robot|\bbots?\b", key)
 
+    def test_put_it_to_work_never_says_donate(self):
+        """config/carry.yml ("Put this issue to work": the month pages and the poster's tips) never asks for a
+        donation: Grapevine and La Viña take none (a gift subscription is a purchase) — the booth's rule,
+        tests/test_booth_csv.py. Every text in the file, English and Spanish."""
+        import yaml
+        data = yaml.safe_load((ROOT / "config" / "carry.yml").read_text(encoding="utf-8"))
+        texts: list[tuple[str, str]] = []
+
+        def walk(node, where):
+            if isinstance(node, dict):
+                for k, v in node.items():
+                    walk(v, f"{where}.{k}")
+            elif isinstance(node, list):
+                for i, v in enumerate(node):
+                    walk(v, f"{where}[{i}]")
+            elif isinstance(node, str):
+                texts.append((where, node))
+
+        walk(data, "carry")
+        self.assertGreater(len([w for w, _t in texts if ".tips." in w]), 100)
+        refused = re.compile(r"\w*donat\w*|donaci\w*|donativ\w*", re.I)
+        self.assertEqual([f"{w}: {t}" for w, t in texts if refused.search(t)], [])
+
     def test_every_key_asked_for_exists(self):
         strings = i18n_all()
         used = set()
@@ -627,7 +650,10 @@ class Templates(unittest.TestCase):
         poster = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
         self.assertIn('{% if d.kind == "committee" %} · {{ d.platform or ("monthly.online" | t(lang)) }}{% elif d.place %} · {{ d.place }}'
                       '{% elif d.online and not d.city %} · {{ "monthly.online" | t(lang) }}{% endif %}', self.month)
-        self.assertIn("{% elif d.city %}{% if d.place %} · {{ d.place }}{% endif %}{% elif d.online %}", poster)
+        # (the poster's line joins its parts with " · " — round 26b fix: no part starts with the separator)
+        self.assertRegex(poster, r"\{%- elif d\.city -%\}\s*\{%- if d\.place %\}\{% set _m = mparts\.push\(d\.place\) %\}\{% endif -%\}"
+                                 r"\s*\{%- elif d\.online -%\}")
+        self.assertNotIn("mparts.push(d.city)", poster)
         for name, t in (("monthly-month.njk", self.month), ("macros/monthly.njk", poster)):
             self.assertNotIn("· {{ d.city }}", t, name)
 
@@ -946,7 +972,7 @@ class PosterNote(unittest.TestCase):
 
 
 # ------------------------------------------------------------------ every date on the poster (round 26b)
-# The poster of a busy October (10 dates: the data set's 7 and 3 more) in each of the six layouts, English and Spanish,
+# The poster of a busy October (11 dates: the data set's 7 and 4 more, one of them all day with a city) in each of the six layouts, English and Spanish,
 # and a month without a date — made by the build's own Eleventy and filters (no page of src/pages: ONLY).
 POSTER_DATES_JS = r"""
 process.env.ONLY = "-none-";
@@ -1030,6 +1056,9 @@ class PosterEveryDate(unittest.TestCase):
                 event("ev:x2", "2026-10-14T23:00:00Z", "2026-10-15T01:00:00Z", "La Viña Writing Workshop — Garland",
                       extra={"city": "Garland"}),
                 event("ev:x3", "2026-10-28T00:00:00Z", "2026-10-28T01:00:00Z", "Delegate's Report", extra={"online": True}),
+                # all day, with a city: no range or time before the city on its line (round 26b fix: "Riverside",
+                # never "· Riverside")
+                event("ev:x4", "2026-10-24", "2026-10-24", "La Viña-Grapevine Workshop", extra={"city": "Riverside", "all_day": True}),
             ]
             PosterEveryDate.r = run_js(self, POSTER_DATES_JS, data={"db": db, "site": SITE, "carry": CARRY, "now": NOW_A},
                                        timeout=300)
@@ -1044,7 +1073,7 @@ class PosterEveryDate(unittest.TestCase):
             lang = name.rsplit("-", 1)[1]
             want = self.r["models"][lang]["dates"]
             with self.subTest(poster=name):
-                self.assertEqual(len(want), 10)
+                self.assertEqual(len(want), 11)
                 self.assertEqual(self.r["models"][lang]["density"], "dense", "the busiest kind of month")
                 rows = re.findall(r'<li class="mp-date mp-date--(\w+)">.*?<strong class="mp-date-t">(.*?)</strong>', page, re.S)
                 self.assertEqual([k for k, _t in rows], [d["kind"] for d in want])
@@ -1054,6 +1083,29 @@ class PosterEveryDate(unittest.TestCase):
                 for gone in ("mp-more", "more on the website", "más en el sitio web"):
                     self.assertNotIn(gone, page)
         self.assertNotIn("monthly.more_dates", self.s)
+
+    def test_no_date_line_starts_with_the_separator(self):
+        """A date's line under its title joins its parts with " · " (range, time, the place or "Online", the
+        committee meeting's words, "tentative"): an all-day event with a city reads "Riverside", never "· Riverside",
+        and no part is left empty between two separators."""
+        seen = 0
+        for name, page in self.r["html"].items():
+            if name.startswith("empty"):
+                continue
+            with self.subTest(poster=name):
+                self.assertNotIn('<span class="mp-date-m"> ·', page)
+                metas = [html.unescape(m).strip() for m in re.findall(r'<span class="mp-date-m">(.*?)</span>', page, re.S)]
+                self.assertGreaterEqual(len(metas), 10)
+                for m in metas:
+                    self.assertTrue(m, "an empty line under a date")
+                    self.assertFalse(m.startswith("·") or m.endswith("·") or "·  ·" in m or "· ·" in m, m)
+                title = "La Viña-Grapevine Workshop" if name.endswith("-en") else "ES La Viña-Grapevine Workshop"
+                row = re.search(r'<strong class="mp-date-t">' + re.escape(title) + r'</strong>\s*<span class="mp-date-m">(.*?)</span>',
+                                html.unescape(page), re.S)
+                self.assertIsNotNone(row, "the all-day workshop is on the poster")
+                self.assertEqual(row.group(1), "Riverside")
+                seen += 1
+        self.assertEqual(seen, 12)
 
     def test_a_month_without_a_date_says_so(self):
         page = self.r["html"]["empty-en"]
@@ -1097,6 +1149,23 @@ class PosterEveryDate(unittest.TestCase):
         css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
         self.assertIn("width: 1080px; height: 1350px;", css)          # the poster's size is kept
         self.assertNotIn(".mp-more", css)
+
+    def test_the_unfitted_poster_and_the_masthead(self):
+        """Before its fit (or without JavaScript) a busy poster's columns are clipped (overflow: clip, no box moves),
+        never the copy the fit measures (it has no data-mp-poster) nor the fitted poster; a month's name with a
+        descender gets room under it (the cover's tagline, in the masthead's corner, keeps its place). The browser
+        checks (tests/browser/test_r26b_posters.py MastheadClear, UnfittedClipped) look at what is drawn."""
+        css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
+        js = (ROOT / "src" / "assets" / "js" / "monthly.js").read_text(encoding="utf-8")
+        macro = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
+        clip = re.search(r"\[data-mp-poster\]:not\(\[data-mp-fit\]\) :is\(([^)]*)\) \{ overflow: clip;", css)
+        self.assertIsNotNone(clip)
+        self.assertIn(".mp-body > .mp-col", clip.group(1))
+        self.assertIn('c.removeAttribute("data-mp-poster");', js)
+        self.assertIn('<header class="mp-head{% if r/[gjpqy]/.test(m.name) %} mp-head--desc{% endif %}"', macro)
+        self.assertLess(css.index(".mp-head--desc .mp-tag { margin-top: 24px !important; }"), css.index(".mp-l-cover .mp-tag {"))
+        heads = [re.search(r'<header class="(mp-head[^"]*)"', p).group(1) for n, p in self.r["html"].items() if not n.startswith("empty")]
+        self.assertEqual(set(heads), {"mp-head"}, "October / Octubre: no descender")
 
 
 # ------------------------------------------------------------------ "Add this month's dates to my calendar"

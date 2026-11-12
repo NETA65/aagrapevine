@@ -153,6 +153,12 @@
   font-size: min(var(--mp-max), calc(var(--mp-w) / (0.6 * var(--mp-nlen, 9)))); font-optical-sizing: auto; }
 .mp-year { font-weight: 400; font-style: italic; letter-spacing: -0.01em; color: var(--p-year, var(--p-accent)); font-size: 0.5em; margin-left: 0.15em; }
 .mp-tag { margin-top: 10px !important; font-size: 1.05em; font-weight: 700; color: var(--p-muted); }
+/* A name with a descender (macros/monthly.njk head: mp-head--desc — the y of July, the p of April, the g of August):
+   the line right under it clears the letter — the tagline, or the year where the year has a line of its own (the
+   ticket, the split; their tagline follows the year). The cover's tagline sits in the masthead's corner (3e). */
+.mp-head--desc .mp-tag { margin-top: 24px !important; }
+.mp-l-ticket .mp-head--desc .mp-year, .mp-l-split .mp-head--desc .mp-year { margin-top: 18px; }
+.mp-l-ticket .mp-head--desc .mp-tag, .mp-l-split .mp-head--desc .mp-tag { margin-top: 10px !important; }
 
 /* Blocks */
 .mp-b, .mp-poster .mp-foot, .mp-poster .mp-head { flex-shrink: 0; }
@@ -476,6 +482,14 @@
    fit read stale sizes and posters overflowed with "Reduce motion" on — and the fitted poster, read at once
    (the PNG, the share picture), could still have its old type. */
 .mp-measure .mp-poster, .mp-measure .mp-poster *, [data-mp-poster], [data-mp-poster] * { transition-property: none !important; }
+/* Until the fit has run (and without JavaScript) the poster has the build's arrangement at the stylesheet's type: a
+   busy month's column is clipped at its own edge, so it loses its last lines rather than running over the date band,
+   the strip or the footer. overflow: clip moves no box (not a scroll container: every offset the fit reads is the
+   same); the copy the fit measures has no data-mp-poster and the fitted poster (data-mp-fit) is never clipped. The
+   margin keeps the cards' tilt and shadows and is smaller than the gap to the next block (none on the ticket: its
+   halves end at the card's edge). The cork's and the split's columns end at the sheet, which clips them already. */
+[data-mp-poster]:not([data-mp-fit]) :is(.mp-body > .mp-col, .mp-feature, .mp-rail, .mp-page, .mp-main, .mp-stub) { overflow: clip; overflow-clip-margin: 10px; }
+[data-mp-poster]:not([data-mp-fit]) :is(.mp-main, .mp-stub) { overflow-clip-margin: 0px; }
 
 /* ---------- Hub hero aside (monthly.njk): this month's poster in the hero's right-hand card ----------
    The poster MOVES from the "This month" card into the hero while the aside is shown there — the same
