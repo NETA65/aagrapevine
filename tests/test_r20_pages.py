@@ -394,7 +394,11 @@ class BuiltPages(Untranslated):
         en = text(part(p["/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
         # Dec 16: no guest speaker — a topic to share on until 7:30, then the same second half, in six steps; the
         # second, "Guest speaker", says most months have one (done by the settings' speaker_until) and this one doesn't
-        self.assertIn("7:00 – 8:00 PM Central time: no guest speaker at this meeting; we share on a topic until 7:30 PM.", en)
+        self.assertIn("7:00 – 8:00 PM Central time: we share on a topic until 7:30 PM.", en)
+        # "no guest speaker" said once — in step 2, as the owner approved it (round 27: the hour line no longer
+        # repeats it)
+        self.assertEqual(en.count("no guest speaker"), 1)
+        self.assertNotIn("no guest speaker at this meeting", en)
         self.assertIn("1 Welcome & opening We open with a moment of silence and the Serenity Prayer. People who are here for the "
                       "first time or new to service are especially welcome. 2 Guest speaker Most months a guest speaker shares on "
                       "a topic and answers our questions, done by 7:30 PM. When there's no guest speaker, as at this meeting, the "
@@ -420,8 +424,9 @@ class BuiltPages(Untranslated):
         self.assertNotIn("15 minutes", en)
         self.assertNotRegex(en, r"(?i)committee business|business hour|reports from|the minutes|old business|new business")
         es = text(part(p["/es/meetings/"], 'class="cm-board"', 'id="grapevine-meeting"'))
-        for s in ("7:00–8:00 p. m., hora del Centro: en esta reunión no hay orador(a) invitado(a); hasta las 7:30 p. m. "
-                  "compartimos sobre un tema.",
+        self.assertEqual(es.count("no hay orador(a) invitado(a)"), 1)
+        self.assertNotIn("en esta reunión no hay orador(a) invitado(a)", es)
+        for s in ("7:00–8:00 p. m., hora del Centro: hasta las 7:30 p. m. compartimos sobre un tema.",
                   "2 Orador(a) invitado(a) La mayoría de los meses, un(a) orador(a) invitado(a) habla sobre un tema y responde "
                   "nuestras preguntas, y termina a más tardar a las 7:30 p. m.; cuando no hay orador(a) invitado(a), "
                   "como en esta reunión, quien coordina presenta un tema y los miembros comparten su experiencia sobre él. "

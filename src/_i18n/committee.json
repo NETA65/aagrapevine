@@ -400,8 +400,8 @@
     "es": "A las {end} cerramos con la Declaración de Responsabilidad. Luego, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
   },
   "committee.meeting.evening_topic_hour": {
-    "en": "{time} Central time: no guest speaker at this meeting; we share on a topic until {until}.",
-    "es": "{time}, hora del Centro: en esta reunión no hay orador(a) invitado(a); hasta las {until} compartimos sobre un tema."
+    "en": "{time} Central time: we share on a topic until {until}.",
+    "es": "{time}, hora del Centro: hasta las {until} compartimos sobre un tema."
   },
   "committee.meeting.speakers_title": {
     "en": "Our guest speakers, {years}",
