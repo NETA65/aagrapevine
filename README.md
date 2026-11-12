@@ -619,8 +619,9 @@ breaks while you decide.
   and RLV sharing until 8:00 PM."), on the booth's guest-speaker slide and on `/orientation/role/`; the Spanish
   "la reunión después de la reunión" for the parking lot; and the Grapevine Meeting's five steps (a welcome to
   members from across the Area, the reader shares first, 3 to 5 minutes each, Carry the Message in place of a
-  basket). A free Google account ends a call of three or more people after 60 minutes: the site says "stay on"
-  for the parking lot; the chair's deck tells the room to rejoin the same link if the call drops at 8:00.
+  basket; your Seventh Tradition goes to your home group). A free Google account ends a call of three or more
+  people after 60 minutes: the site says "stay on" for the parking lot; the chair's deck tells the room to rejoin
+  the same link if the call drops at 8:00.
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
@@ -989,9 +990,9 @@ meeting's Google Meet room:
   the **AA Grapevine Statement of Purpose** — named, never printed on the site (AA Grapevine's text: it is read
   aloud from the current issue or from aagrapevine.org) — in place of the AA Preamble; then a welcome to
   first-timers and members from across the Area, a story read aloud (its reader shares first), sharing (3 to 5
-  minutes each), Carry the Message in place of a basket (the meeting has no expenses), the announcements and the
-  Responsibility Statement. (The committee meeting no longer reads the Preamble either: its deck keeps the slide,
-  switched off, since November 2026.)
+  minutes each), Carry the Message in place of a basket (the meeting has no expenses; your Seventh Tradition goes
+  to your home group), the announcements and the Responsibility Statement. (The committee meeting no longer reads
+  the Preamble either: its deck keeps the slide, switched off, since November 2026.)
 - **Its name** is "the Grapevine Meeting". Never "Grapevine meetings": that is the list of AA groups that read
   Grapevine (`/meetings/#grapevine-meetings`).
 

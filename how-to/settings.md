@@ -462,8 +462,9 @@ with a moment of silence, the Serenity Prayer and **the AA Grapevine Statement o
 Preamble, read aloud from the current issue or from aagrapevine.org — named on the site, never printed there (AA
 Grapevine's text); then a welcome to first-timers and members from across the Area, a story from the current
 Grapevine (its reader shares first), sharing (3 to 5 minutes each), Carry the Message in place of a basket (the
-meeting has no expenses), the announcements and the Responsibility Statement at 8:00. Its section on
-`/meetings/` says so in five steps (`committee.gvmeeting.*` in `src/_i18n/committee.json`).
+meeting has no expenses; your Seventh Tradition goes to your home group), the announcements and the Responsibility
+Statement at 8:00. Its section on `/meetings/` says so in five steps (`committee.gvmeeting.*` in
+`src/_i18n/committee.json`).
 
 The two meetings share one room on different Wednesdays (1st and 3rd), and the site keeps them apart: an outside
 calendar that lists the committee meeting in that room is never taken for a moved Grapevine Meeting. **Never call

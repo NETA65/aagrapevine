@@ -468,8 +468,9 @@ class BuiltPages(Untranslated):
                 self.assertIn(date, words)
                 for s in ("Grapevine Meeting", "Our monthly online meeting · In English", "The AA Grapevine Statement of Purpose",
                           "in place of the AA Preamble", "A story from the current Grapevine", "and starts the sharing.",
-                          "Sharing on its topic", "3 to 5 minutes each.", "No basket (the meeting has no expenses): instead, "
-                          "a word about Carry the Message.", "we close on time with the Responsibility Statement, at 8:00 PM.",
+                          "Sharing on its topic", "3 to 5 minutes each.", "your Seventh Tradition goes to your home group. "
+                          "In place of the basket, a word about Carry the Message.",
+                          "we close on time with the Responsibility Statement, at 8:00 PM.",
                           "Meeting code abc-defg-hij", "Join on Google Meet",
                           "The same Google Meet room as our committee meeting."):
                     self.assertIn(s, words)
@@ -481,6 +482,7 @@ class BuiltPages(Untranslated):
         es = text(part(self.pages(NOV26)["/es/meetings/"], 'aria-labelledby="grapevine-meeting-h"', "</section>"))
         for s in ("Nuestra reunión mensual en línea Reunión de Grapevine (en inglés)", "La Declaración de Propósito de AA Grapevine",
                   "a las 8:00 p. m. cerramos a tiempo con la Declaración de Responsabilidad.", "hablamos de Lleva el Mensaje",
+                  "tu Séptima Tradición es para tu grupo base.",
                   "Código de la reunión abc-defg-hij", "Primera reunión"):
             self.assertIn(s, es)
         self.assertNotIn("En inglés", es, "the title says it: the eyebrow does not again")

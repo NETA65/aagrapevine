@@ -75,6 +75,9 @@ CONTENT_TESTS: dict[str, str] = {
         "content/booth/booth.csv: each tag has its words in src/_i18n/booth.json",
     "test_r12_u5_gvr.DailyQuestionsRealCsv.":
         "content/booth/booth.csv: the question of the day About and the GVR / RLV corner carry, from its real rows",
+    "test_r20_secondary.Booth.test_the_csv_rows":
+        "content/booth/booth.csv: the committee meeting's rows (online, not Zoom; the guest speakers from Dec 17, "
+        "2026, in words that say it is not a business meeting) and the Grapevine Meeting's row, and their QR codes",
     "test_writers_archive.RealFiles.":
         "the owner's archive exports in content/archive",
     "test_price_changes.Bulletin.":

@@ -1516,8 +1516,8 @@
     "es": "Cierre"
   },
   "committee.gvmeeting.step_close_text": {
-    "en": "No basket (the meeting has no expenses): instead, a word about Carry the Message. Then the announcements, and we close on time with the Responsibility Statement, at {end}.",
-    "es": "No pasamos canasta (la reunión no tiene gastos): en su lugar, hablamos de Lleva el Mensaje. Luego, los anuncios, y a las {end} cerramos a tiempo con la Declaración de Responsabilidad."
+    "en": "No basket: the meeting has no expenses, and your Seventh Tradition goes to your home group. In place of the basket, a word about Carry the Message. Then the announcements, and we close on time with the Responsibility Statement, at {end}.",
+    "es": "No pasamos canasta: la reunión no tiene gastos, y tu Séptima Tradición es para tu grupo base. En lugar de la canasta, hablamos de Lleva el Mensaje. Luego, los anuncios, y a las {end} cerramos a tiempo con la Declaración de Responsabilidad."
   },
   "committee.gvmeeting.same_room": {
     "en": "The same {platform} room as our committee meeting.",
