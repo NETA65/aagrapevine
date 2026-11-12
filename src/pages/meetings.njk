@@ -377,7 +377,7 @@ pageScripts: ["/assets/js/committee.js"]
       right — both sides end together —, the guest speakers under all three. The cards lay out their own insides
       by their width (container queries).
       The board is the countdown's x-data (cmMeeting): the countdown, its guest speaker and "What happens"
-      (with a speaker: how the evening runs; without one: the business hour) show the date the countdown shows —
+      (with a speaker: how the evening runs; without one: the topic-sharing hour) show the date the countdown shows —
       the build's next one, or the one after once it is over (a page kept open, or saved). -#}
   {%- set hasSpeakers = spk.list | length -%}
   {%- set sp = next.speaker if next else null -%}
@@ -506,9 +506,10 @@ pageScripts: ["/assets/js/committee.js"]
     {#- ---------- What happens at the meeting — for the countdown's date (cmMeeting `speaker`):
         · with a guest speaker: how the evening runs, part by part with its time (committee.js cmEvening — from
           config/site.yml meeting start, speaker_until and end): the opening, the talk (that date's speaker,
-          their service and topic), the questions, committee business, the close;
-        · without one (Dec 16, 2026): the business hour in a line ("no guest speaker", once the committee has
-          speakers), then its six numbered steps.
+          their service and topic), the questions, then events, offers, magazine topics and sharing (never
+          "committee business": it is not a business meeting), the close and the parking lot after it;
+        · without one (Nov 18 and Dec 16, 2026): the hour in a line ("no guest speaker", a topic to share on until
+          speaker_until — once the committee has speakers and speaker_until is set), then its six numbered steps.
         The build shows its next date's; the other is there for the browser (x-cloak until Alpine decides).
         The steps: 1 → 2 → 3 columns by the card's width (committee.css .cm-steps; five timed steps: .is-timed,
         the talk the widest) ---------- -#}
@@ -530,7 +531,7 @@ pageScripts: ["/assets/js/committee.js"]
               <p class="mt-1 text-sm leading-relaxed text-ink" x-show="speaker && speaker.topic">“<span x-text="speaker ? speaker.topic : ''">{{ sp.topic if sp }}</span>”</p>
               <p class="mt-1 text-sm leading-relaxed text-muted">{{ "committee.meeting.evening_talk_text" | t(lang, { min: eve.talkMin }) }}</p>
               {%- else %}
-              <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.meeting.evening_" + s.key + "_text") | t(lang, { until: eve.until }) }}</p>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.meeting.evening_" + s.key + "_text") | t(lang, { until: eve.until, end: eve.end }) }}</p>
               {%- endif %}
             </div>
           </li>
@@ -541,15 +542,16 @@ pageScripts: ["/assets/js/committee.js"]
       <div class="flex flex-1 flex-col"{% if timed %} x-show="!speaker"{% if sp %} x-cloak{% endif %}{% endif %}>
         <h3 class="card-h"><span>{% icon "list-ordered", "size-5" %}</span>{{ "committee.meeting.agenda_title" | t(lang) }}</h3>
         <p class="mt-1.5 text-muted">{{ "committee.meeting.agenda_sub" | t(lang) }}</p>
-        {#- the plain business-hour line, once the committee has guest speakers: this date has none -#}
-        {% if hasSpeakers %}<p class="mt-3 flex items-start gap-2 text-sm font-medium text-ink">{% icon "clock-3", "mt-0.5 size-4 shrink-0 text-gv" %}<span>{{ "committee.meeting.evening_business_hour" | t(lang, { time: (eve.plain | first).at }) }}</span></p>{% endif %}
+        {#- the hour in a line, once the committee has guest speakers: this date has none — a topic to share on
+            until speaker_until (left out without one), then the same second half -#}
+        {% if hasSpeakers and eve.until %}<p class="mt-3 flex items-start gap-2 text-sm font-medium text-ink">{% icon "clock-3", "mt-0.5 size-4 shrink-0 text-gv" %}<span>{{ "committee.meeting.evening_topic_hour" | t(lang, { time: (eve.plain | first).at, until: eve.until }) }}</span></p>{% endif %}
         <ol class="cm-steps mt-5">
-          {% for s in ["welcome", "reports", "news", "plan", "questions", "close"] %}
+          {% for s in ["welcome", "topic", "events", "news", "sharing", "close"] %}
           <li class="cm-step">
             <span class="step-num" aria-hidden="true">{{ loop.index }}</span>
             <div class="min-w-0">
-              <h4 class="font-semibold leading-snug text-ink">{{ ("committee.meeting.step_" + s) | t(lang) }}</h4>
-              <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.meeting.step_" + s + "_text") | t(lang) }}</p>
+              <h4 class="font-semibold leading-snug text-ink">{{ ("committee.meeting.step_" + s) | t(lang, { end: eve.end }) }}</h4>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("committee.meeting.step_" + s + "_text") | t(lang, { end: eve.end }) }}</p>
             </div>
           </li>
           {% endfor %}

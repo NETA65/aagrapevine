@@ -117,7 +117,9 @@
   }
   /* Five steps fill whole rows: two to a row with the last one across both (36–48rem); from 48rem the
      Grapevine Meeting's three then two (.is-five), the evening with a guest speaker the opening beside the
-     talk — the longest step, two thirds wide — then the questions, committee business and the close (.is-timed) */
+     talk — the longest step, two thirds wide — then the questions, the events, offers, topics and sharing, and
+     the close (.is-timed: exactly five steps, the parking lot is part of the close). A night without a speaker
+     has six plain steps (no modifier: three to a row) */
   @container (36rem <= width < 48rem) { .cm-steps:is(.is-five, .is-timed) > :last-child { grid-column: 1 / -1; } }
   @container (width >= 48rem) {
     .cm-steps:is(.is-five, .is-timed) { grid-template-columns: repeat(6, minmax(0, 1fr)); }

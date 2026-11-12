@@ -340,9 +340,10 @@ def meeting_speakers(cfg: dict | None) -> tuple[dict[str, dict], list[str]]:
 
 
 def speaker_until(cfg: dict | None) -> tuple[tuple[int, int] | None, list[str]]:
-    """config/site.yml `meeting: speaker_until` ("19:30": the guest speaker's part ends by then; committee business
-    follows until the meeting's end) → ((19, 30), notes). None when it is left out — or noted when it cannot be read
-    or is not between the meeting's start and end (committee.js meetingSpeakerUntil reads it the same way)."""
+    """config/site.yml `meeting: speaker_until` ("19:30": the guest speaker's part ends by then; coming events,
+    workshop requests, special offers, magazine topics and GVR and RLV sharing follow until the meeting's end) →
+    ((19, 30), notes). None when it is left out — or noted when it cannot be read or is not between the meeting's
+    start and end (committee.js meetingSpeakerUntil reads it the same way)."""
     cfg = cfg if isinstance(cfg, dict) else {}
     v = cfg.get("speaker_until")
     if v is None or v == "":

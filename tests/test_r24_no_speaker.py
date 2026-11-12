@@ -411,6 +411,9 @@ class Wording(unittest.TestCase):
         self.assertIn("From January 2027 each meeting opens with a guest speaker", point["text"]["en"])
         self.assertIn("Desde enero de 2027", point["text"]["es"])
         self.assertNotIn("a guest speaker first", point["text"]["en"])
+        # not a business meeting (November 2026): the second half is events, offers, magazine topics and sharing
+        self.assertIn("then events, offers, magazine topics and sharing", point["text"]["en"])
+        self.assertNotRegex(point["text"]["en"] + point["text"]["es"], r"(?i)committee business|asuntos del comité")
 
     def test_the_decks_and_the_lessons(self):
         files = sorted((ROOT / "config" / "presentations").glob("*.yml")) + [ROOT / "config" / "orientation.yml"]
