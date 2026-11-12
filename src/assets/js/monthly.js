@@ -65,10 +65,10 @@
      4 … then halving); then, for the best and the NEAR arrangements that fell short by least, what may free
      the one of the two columns that runs out of room: the rule a step toward it, the dates in one more
      column where they are what is too tall (as long as each step helps). As many layouts a task as fit in
-     BUDGET_MS (the page never freezes, the visible poster changes once): about as long as round 26b's fit
-     took, a third longer in the busiest month. Only for the full-size poster of a month page (the hub shows the
-     months in miniature — macros/monthly.njk posterMini, never fitted). The PNG and the print use this DOM;
-     once it is done the poster carries data-mp-fit (the share pictures wait for it:
+     BUDGET_MS (the page never freezes, the visible poster changes once): 1.1 to 2 times as long as round
+     26b's fit (the busiest poster: about a second on a computer). Only for the full-size poster of a month
+     page (the hub shows the months in miniature — macros/monthly.njk posterMini, never fitted). The PNG and
+     the print use this DOM; once it is done the poster carries data-mp-fit (the share pictures wait for it:
      scripts/ops/poster_share.py) and fitDone resolves (the PNG waits for it). */
   var BLOCKS = ".mp-b, .mp-foot, .mp-head, .mp-row, .mp-col, .mp-body, .mp-board, .mp-cover, .mp-strip, .mp-page, .mp-main, .mp-stub, .mp-side, .mp-content, .mp-top, .mp-feature, .mp-rail, .mp-band";
   var MIN_PX = 15, MAX_PX = 28;            // the type's range (poster px; 15px prints at 7.5 pt on Letter)
@@ -238,17 +238,15 @@
     // the arrangements held back in the first round ({ short: by how many px, next: the steps that may free them }); the
     // NEAR closest get those steps tried in the second (every arrangement once, then the rule and the dates' columns for
     // the best and the nearest — trying them for every arrangement took three times as long)
-    var held = [], round = 1, short = 0, gal = 0, lastK = -1, lastOk = false;
+    var held = [], round = 1, short = 0, gal = 0, failed = null;
     // (the build's own arrangement is measured as it is: no month's type can end up smaller than it)
     var fits = function (k) {
-      lastK = k;
-      lastOk = false;
       c.style.fontSize = k / 4 + "px";
       if (flow && !flowOn(c, flow)) { short = Infinity; return false; }
       short = overflowing(c);
       if (short > 0) return false;
       if (!cur.build && narrow(c)) { short = Infinity; return false; }
-      return (lastOk = true);
+      return true;
     };
     // The copy as it stands, held back: → what to try next, the rule a step toward whichever of its two columns runs out
     // of room, and the dates in one more column where they are what is too tall (in that column, or across under it).
@@ -278,16 +276,17 @@
         if (hi - lo > 1) {
           // up from the step it holds by a step, two, four … (most beat the best by a step or two), then halving
           var mid = gal ? Math.min(lo + gal, hi - 1) : (lo + hi) >> 1;
-          if (fits(mid)) { lo = mid; gal *= 2; } else { hi = mid; gal = 0; }
+          // (what holds it back at a size it does not hold: read now, while the copy stands so)
+          if (fits(mid)) { lo = mid; gal *= 2; } else { hi = mid; gal = 0; failed = { k: mid, next: explore(cur) }; }
           return false;
         }
         searching = false;
         // (lo below minK: nothing fits even at the smallest type — another arrangement may still)
         var w = cur.cols ? 1 : 0;
         if (lo > best[w]) { best[w] = lo; bestCombo[w] = cur; }
-        // what holds it back a step up (the copy stands so when that was the last size tried)
-        var a = aim(cur);
-        if (a <= topK && ((lastK === a && !lastOk) || !fits(a))) todo.unshift.apply(todo, explore(cur));
+        // what holds it back a step up: as read at that size, else read there now
+        var a = aim(cur), next = failed && failed.k === a ? failed.next : (a <= topK && !fits(a) ? explore(cur) : []);
+        if (a <= topK) todo.unshift.apply(todo, next);
         return false;
       }
       cur = todo.shift();
@@ -304,11 +303,12 @@
       if (flow === false) return false;
       if (cur.build) {
         // the build's arrangement: from the type the stylesheet gives it (the month's density)
-        lo = minK - 1; hi = topK + 1; gal = 0; searching = true;
-        if (Math.min(base, topK) >= minK) { if (fits(Math.min(base, topK))) lo = Math.min(base, topK); else hi = Math.min(base, topK); }
+        lo = minK - 1; hi = topK + 1; gal = 0; failed = null; searching = true;
+        var b0 = Math.min(base, topK);
+        if (b0 >= minK) { if (fits(b0)) lo = b0; else { hi = b0; failed = { k: b0, next: explore(cur) }; } }
       } else if (aim(cur) <= topK) {
         // another: only when it holds the step it must beat (else, after this one layout, only what may free it is tried)
-        if (fits(aim(cur))) { lo = aim(cur); hi = topK + 1; gal = 1; searching = true; } else heldBack(cur);
+        if (fits(aim(cur))) { lo = aim(cur); hi = topK + 1; gal = 1; failed = null; searching = true; } else heldBack(cur);
       }
       return false;
     }
