@@ -195,7 +195,7 @@ paperwork:
 
       From 7:30 to 8:00: coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing. Bring an event or a workshop request, and your sharing: what's working with Grapevine and La Viña in your group or district, a challenge in your service position, or help you need.
 
-      Help wanted
+      Volunteers wanted
       - {fill:volunteer_1_event}: {fill:volunteer_1_helpers}
       - {fill:volunteer_2_event}: {fill:volunteer_2_helpers}
 
@@ -293,7 +293,7 @@ slides:
       DO: Start the Google Meet ({live:meeting_link}) by 6:50 p.m. Central, signed in to the Google account that owns this Meet link (the organizer of its calendar event): on Google Meet that account is the host, and only it can admit the people who ask to join, so it stays in the call until the end. Check that you can share your screen, that nobody is recording, and that someone watches the chat. Line up a timekeeper, and someone to jot down a few lines for the draft notes ({ui:customize} → {ui:paperwork}).
       {not:no-speaker} DO (the guest speaker): admit tonight's speaker at 6:50 for a sound check, just the two of you: their microphone, their camera, and how you'll signal the time ("2 minutes" in the chat). {live:speaker_slides}
       60 MINUTES AND THE PARKING LOT: on a free Google account, Google Meet ends a call of three or more people after 60 minutes. So admit the members at 7:00, not earlier (the sound check with the speaker alone is fine): the hour then ends at 8:00 sharp, right after the Responsibility Statement. Before that closing, tell the room: "if the call drops at eight, click the same link again for the parking lot". Third-party guides say a new call opens on the same link right away (Google doesn't document it). If the link doesn't reopen, the parking lot waits for next month, or you e-mail a new link from grapevine@neta65.org. If the account that owns the link has a plan without that limit, nothing happens at 8:00, and the call can open from 6:50 as people arrive.
-      SAY (as people arrive): Welcome, come on in. We'll start right at seven. While we wait, please type your first name, your district and your service position in the chat, so we all know who's here.
+      SAY (as people arrive, or, on a free account, as you admit them at 7:00): Welcome, come on in. Please type your first name, your district and your service position in the chat, so we all know who's here.
       {not:no-speaker} TONIGHT'S GUEST SPEAKER (from the Meetings page): {live:speaker_name}; if there is none (every meeting before January 20, 2027, when the guest speakers start) or the speaker can't come, choose the version 'No guest speaker' ({ui:customize} → {ui:version}): a topic to share on until 7:30, with its own agenda.
       {only:no-speaker} NEXT MONTH: when the next meeting has a guest speaker, choose 'With a guest speaker' again ({ui:customize} → {ui:version}) before you send its agenda. 'Start next month' does it for you, and the paperwork says so if a listed speaker is left out.
       UPDATE EACH MONTH: nothing on this slide: the meeting's month and date (always the third Wednesday), the time and the panel fill in by themselves, and so does tonight's guest speaker on the next slides. Every orange item in square brackets, on any slide, is something to fill in: {ui:customize} → {ui:your_details} lists them all, and orange always means 'still to fill in'. What you typed last month stays on this device until you change it, so save your version first if you want to keep it ({ui:customize} → {ui:save_share}). The pages 'For the chair', in {ui:customize} → {ui:prepare}, list what to update on each slide and where to find it.
@@ -334,7 +334,7 @@ slides:
       {not:no-speaker} SAY: The housekeeping is on the screen: your first name, district and service position in the chat, please, and no photos, screenshots or recordings. We aren't recording tonight either.
       {only:no-speaker} SAY: A few housekeeping notes so the hour runs smoothly. If you haven't yet, please type your first name, district and service position in the chat: on Google Meet your name is the one your Google account shows. Cameras are up to you. Please stay muted unless you're speaking, and use the chat or the raise-hand button when you'd like a turn. Out of respect for everyone's anonymity, please don't take photos or screenshots while people are on camera, and please don't record. We aren't recording tonight either.
       {only:no-speaker} SAY: One more thing: this is our Area committee's meeting. We share what we learn from AA Grapevine and La Viña, but we don't speak for them, and this isn't an official AA Grapevine, Inc. presentation.
-      DO: Before you say 'we aren't recording', make sure nobody is recording. If Spanish-speaking members are present, ask a bilingual volunteer ahead of time to give a short summary in the chat, and post the key links in both languages (the chat message is in {ui:customize} → {ui:prepare}).
+      DO: Before you say 'we aren't recording', make sure nobody is recording. If Spanish-speaking members are present, ask a bilingual volunteer ahead of time to give a short summary in Spanish in the chat, and post the key links (the chat message in {ui:customize} → {ui:prepare} has them, in English).
       TRANSITION: Let's begin the way we always do.
 
   # The opening's prayer keeps the deck's grape (its quote slides' big quote mark) inside the Opening, whose colour
@@ -633,7 +633,7 @@ slides:
     layout: "bullets"
     title: "Special offers"
     items:
-      - "At the stores: {live:store_offers}"
+      - "Right now: {live:store_offers}"
       - "Grapevine's Book of the Month: {live:botm}"
       - "{lang:es}Libro del mes{/lang} of La Viña: {live:botm_lv}"
       - "Carry the Message: [{live:site}/shop/#carry](/shop/#carry)"
@@ -641,7 +641,7 @@ slides:
     minutes: 2
     notes: |
       TIP (timekeeping): about 2 minutes: a sentence for each line.
-      SAY: Here's what the Grapevine and La Viña stores have on offer right now: {live:store_offers}. Each magazine also has a Book of the Month, an older book offered at a lower price for a set time: from Grapevine, {live:botm}; from La Viña, the {lang:es}Libro del mes{/lang}: {live:botm_lv}. Our committee's Shop page has the details and the conditions, with links to the official stores.
+      SAY: Here's what's on offer right now: {live:store_offers}. Each magazine also has a Book of the Month, an older book offered at a lower price for a set time: from Grapevine, {live:botm}; from La Viña, the {lang:es}Libro del mes{/lang}: {live:botm_lv}. Our committee's Shop page has the details and the conditions, with links to the official stores.
       SAY (Carry the Message): Carry the Message is a way to reach an alcoholic who can't get the magazines. A member or a group buys a gift certificate or a subscription, and AA Grapevine or La Viña turns it into a subscription for an alcoholic in need: in a treatment center, a correctional facility, a hospital or a detox. It's a purchase from the official stores, not a donation, and our committee doesn't collect money for it.
       TIP: Describe, never sell. Keep an informative attitude, not a 'hard sell': the General Service Conference asked for exactly that in Grapevine presentations in 1960. Give the facts and the link, never a reason to rush, and never call a purchase a contribution to Grapevine: AA Grapevine, Inc. accepts no contributions.
       DO: Post the Shop page's link in the chat ({live:site}/shop/#offers), so reps can read the conditions themselves; the chat message in {ui:customize} → {ui:prepare} has it.
@@ -700,7 +700,7 @@ slides:
     minutes: 1.5
     notes: |
       TIP (timekeeping): about 1½ minutes: this month's themes, the next issues, and one story per magazine.
-      SAY: Here's what's in the magazines. This month's theme in Grapevine: {live:gv_theme}; the next issue: {live:gv_next_issue}. In La Viña, for these two months: {live:lv_theme}; the next issue: {live:lv_next_issue}. One story that stayed with me is {fill:gv_story}; you'll find it in the {fill:gv_section} section.
+      SAY: Here's what's in the magazines. This month's theme in Grapevine: {live:gv_theme}; the next issue: {live:gv_next_issue}. In La Viña, for these two months: {live:lv_theme}; the next issue: {live:lv_next_issue}. One story that stayed with me is {fill:gv_story}; you'll find it in the {fill:gv_section} section. And in La Viña: {fill:lv_story}.
       DO: Hold the printed issue up to your camera, or open it in the app. Don't put covers, artwork or story text on the slide: AA Grapevine's copyright policy doesn't allow it without permission. Mention a story by its title and invite people to read it.
       ASK: Has anyone used this month's theme as a meeting topic at their group? How did it go?
       STAYS CURRENT: both issues, the next ones and their themes fill in by themselves from the committee website.
@@ -772,7 +772,7 @@ slides:
     minutes: 0.25
     notes: |
       SAY: Thank you all for your sharing. We're coming to the end of our hour: a look at our next meeting, then we close together with the Responsibility Statement, and the parking lot follows for anyone who wants to stay.
-      TIP: Check the clock here: the Responsibility Statement starts by about 7:58, so the meeting closes at eight.
+      TIP: Check the clock here: the Responsibility Statement starts at about 7:57 (by 7:58 at the latest), so the meeting closes at eight.
 
   # Shown DURING tonight's meeting, so its date is the meeting after tonight's ({live:meeting_after}), and its
   # guest speaker that meeting's ({live:speaker_after}: "none this time" for a meeting the Meetings page lists no
@@ -796,7 +796,7 @@ slides:
     minutes: 0.5
     notes: |
       SAY: Our next meeting: {live:meeting_after}. As always, it's on the third Wednesday, at seven, on this same Google Meet link. Please invite anyone in your district who might be interested: GVRs, RLVs, GSRs or any member. Our guest speaker next month: {live:speaker_after}; everyone is welcome, and there's nothing to sign up for.
-      DO: Post the date and the Meet link in the chat (in Spanish too, if Spanish-speaking members attend): the chat message in {ui:customize} → {ui:prepare} has them. Send a reminder about a week ahead, by e-mail with every address in BCC: {ui:customize} → {ui:paperwork} has one, with next month's guest speaker.
+      DO: Post the date and the Meet link in the chat (the chat message in {ui:customize} → {ui:prepare} has them, in English; add a line in Spanish if Spanish-speaking members attend). Send a reminder about a week ahead, by e-mail with every address in BCC: {ui:customize} → {ui:paperwork} has one, with next month's guest speaker.
       STAYS CURRENT: the date (the meeting after tonight's, until midnight after the meeting), its guest speaker ('none this time' when the Meetings page lists none for it, 'to be announced' while the committee's list doesn't name one yet), the time, the Meet link and its code fill in by themselves ({ui:customize} → {ui:prepare} lists the next twelve dates). If the committee skips or moves a meeting, or a speaker changes, tell whoever looks after the website, so the date and the speaker here and the countdown on its meetings page stay right.
       TIP: The Meet link and its code are public on our flyers, the Area's website and our meetings page, so they can stay on this slide. There is no number to call: our Google Meet room has no phone dial-in. Someone without internet can still join the weekly open meetings by phone ({live:site}/accessibility/#phone).
 
@@ -848,7 +848,7 @@ slides:
       - "Northeast Texas Area 65: neta65.org"
     minutes: 0.25
     notes: |
-      WHEN: after the hour: leave this slide up while people say goodbye, or through the parking lot.
+      WHEN: at the end of the parking lot (or right after the close, if nobody stays): leave this slide up while people say goodbye.
       SAY: Thank you for being here, and for everything you do to carry the message. If you have questions, the committee's e-mail is on the screen, and our website has this month's news, deadlines and events. Good night, and see you next month.
       DO: Stop sharing your screen only after the last person has left. Then finish the short draft notes ({ui:customize} → {ui:paperwork} drafts them from your details), make sure the website shows the right date for the next meeting, and save this month's version if you want to keep it ({ui:customize} → {ui:save_share}): anything that shouldn't be public stays in your own Drive, outside the shared folders.
       TIP: The contact on this slide is the committee's service address. Never put a personal phone number or e-mail address here.
@@ -1116,7 +1116,7 @@ slides:
     options: { pub: "gv", limit: 6 }
     notes: |
       NOT PRESENTED: a reference for the chair.
-      SOURCE: AA Grapevine's editorial calendar (aagrapevine.org/contribute). This list stays current by itself, and the 'Story deadlines coming up' slide shows the next ones.
+      SOURCE: AA Grapevine's editorial calendar (aagrapevine.org/contribute). This list stays current by itself, and the 'Story topics and deadlines coming up' slide shows the next ones.
       AS OF OCTOBER 2026, the 2027 calendar: August 2027, 'Sober Seniors', due January 1, 2027; September 2027, 'Young & Sober', due February 1, 2027; October 2027, 'AA in the Military', due March 1, 2027; November 2027, 'Classic Grapevine' (stories from the archive), no deadline; December 2027, 'Remote Communities / Sober Holidays!', due May 1, 2027. The 2028 calendar was not yet published; it was expected in early 2027.
       EARLIER DEADLINES, for a meeting before January 2027: the June 2027 issue, 'Emotional Sobriety', is due November 1, 2026, and the July 2027 Annual Prison Issue is due December 1, 2026; for that issue the editors especially want stories from women in long-term custody. The November issue is 'Classic Grapevine', made of stories from the archive, so it has no deadline.
       TIP: Stories go through aagrapevine.org/submit-your-story or to gveditorial@aagrapevine.org. Grapevine suggests 300 to 1,800 words. A story that misses its deadline may still be used later.
@@ -1150,7 +1150,8 @@ slides:
     body: |
       🍇 Grapevine and La Viña Committee · links and dates 🍇
       • Next committee meeting: {live:meeting_after}, {live:meeting_time}, on this same Google Meet: {live:meeting_url}
-      • Our Grapevine Meeting: every 1st Wednesday, 7:00 PM Central, the same link (next: {live:grapevine_meeting_next})
+      • If the call drops at eight, click the same link again for the parking lot.
+      • Our Grapevine Meeting: every 1st Wednesday, {live:grapevine_meeting_time}, the same link (next: {live:grapevine_meeting_next})
       • The stores' special offers, the Books of the Month and Carry the Message: {live:site_url}shop/#offers
       • Coming events (our CityWide table, workshops, assemblies): {live:site_url}events/
       • The committee website, with dates and flyers: {live:site_url}

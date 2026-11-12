@@ -419,8 +419,8 @@ What the newer pages do:
   Area, the Spanish-speaking office first on `/es/`) — the 404 page shows a short version in both languages,
   and Home has one line to it ([New to AA?](#new-to-aa-meetings-the-404-page-home)) —, the committee meeting
   (`#committee-meeting`, on Google Meet: its link and meeting code, the next meeting's guest speaker, *How the
-  evening runs* — the speaker until 7:30, then events, offers, magazine topics and sharing until 8:00, the
-  Responsibility Statement and the parking lot; without a speaker, a topic to share on — and the year's
+  evening runs* (the speaker until 7:30, then events, offers, magazine topics and sharing until 8:00, the
+  Responsibility Statement and the parking lot; without a speaker, a topic to share on) and the year's
   speakers — [Changing settings](#the-committee-meeting-google-meet-and-the-guest-speakers)),
   our own **Grapevine Meeting** (`#grapevine-meeting`: the 1st Wednesday, online, in English), the **Grapevine
   meetings** of local groups (`#grapevine-meetings`: our Area first, then each nearby area — filters for place,
@@ -614,14 +614,15 @@ breaks while you decide.
   there will be speakers in 2028.
 - **The committee meeting is not a business meeting (November 2026):** the words of its new hour on `/meetings/`
   (*How the evening runs*: "Events, offers, topics and sharing", "Close, then the parking lot"; without a speaker:
-  "we share on a topic until 7:30" and its six steps), in every calendar entry and the GV/LV report ("The guest
-  speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR
-  and RLV sharing until 8:00 PM."), on the booth's guest-speaker slide and on `/orientation/role/`; the Spanish
-  "la reunión después de la reunión" for the parking lot; and the Grapevine Meeting's five steps (a welcome to
-  members from across the Area, the reader shares first, 3 to 5 minutes each, Carry the Message in place of a
-  basket; your Seventh Tradition goes to your home group). A free Google account ends a call of three or more
-  people after 60 minutes: the site says "stay on" for the parking lot; the chair's deck tells the room to rejoin
-  the same link if the call drops at 8:00.
+  "we share on a topic until 7:30" and its six steps), in every calendar entry ("The guest speaker's part ends by
+  7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until
+  8:00 PM.") and the GV/LV report ("The talk and questions are done by 7:30 PM; then …"), on the booth's
+  guest-speaker slide and on `/orientation/role/`; the Spanish "la reunión después de la reunión" for the parking
+  lot; and the Grapevine Meeting's five steps (a welcome to members from across the Area, the reader shares
+  first, 3 to 5 minutes each, Carry the Message in place of a basket; your Seventh Tradition goes to your home
+  group). A free Google account ends a call of three or more people after 60 minutes: the site says "stay on" for
+  the parking lot; the chair's deck tells the room to rejoin the same link if the call drops at 8:00 (and its
+  chat message says so too).
 - **On a real phone** (with the [story recorder's real-device test](#the-story-recorder-share-your-story)):
   start an episode on Home, stop it, and open Listen ("Continue listening"); start Read aloud half-way down a page
   and try Next / Previous and Slower; turn Video captions on and play a video on Watch; add a deadline to Google
@@ -2888,8 +2889,8 @@ document). A line whose details are all blank is left out; a blank left empty be
 [brackets].
 
 4. **Start next month** — after the meeting, once the notes are drafted. Nothing is carried over (the committee
-   meeting has no old business: the panel says "Nothing to carry over."); the details that were for that meeting
-   only are cleared (tonight's topic, the volunteers, the stories mentioned); the presenter is kept; the
+   meeting has no old business, so the panel shows no "Carry to next month" box); the details that were for that
+   meeting only are cleared (tonight's topic, the volunteers, the stories mentioned); the presenter is kept; the
    week-before checklist (Customize → Prepare) is unticked, and the agenda and reminder move on to the next
    meeting. It asks first, and **Undo “Start next month”** stays until the next meeting begins. (A deck with
    `actions` and `old_business` rows — the sample deck in `tests/fixtures/presentations/` — still carries the

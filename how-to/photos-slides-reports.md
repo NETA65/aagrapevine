@@ -296,7 +296,7 @@ the copy's title**: the title must be exactly the deck's `drive_title`.
 | `Grapevine and La Viña Information Workshop.pptx` | `config/presentations/information-workshop.yml` | `/orientation/?present=information-workshop` |
 | `Grapevine and La Viña Writing Workshop.pptx` | `config/presentations/writing-workshop.yml` | `/orientation/?present=writing-workshop` |
 | `Grapevine and La Viña Monthly Committee Meeting.pptx` | `config/presentations/committee-meeting.yml` | `/orientation/?present=committee-meeting` |
-| `Grapevine Meeting.pptx` (being added in November 2026; until then the card has no "PowerPoint copy" link) | `config/presentations/grapevine-meeting.yml` | `/orientation/?present=grapevine-meeting` |
+| `Grapevine Meeting.pptx` (being added in November 2026; until then the card has no "PowerPoint copy" link). Any other Grapevine Meeting file in the Drive gets a suffix ("Grapevine Meeting - flyer", "Grapevine Meeting - notes"), never exactly "Grapevine Meeting": the match takes any file with that title, in any folder | `config/presentations/grapevine-meeting.yml` | `/orientation/?present=grapevine-meeting` |
 
 What the match gives:
 

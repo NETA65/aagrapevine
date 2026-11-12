@@ -949,11 +949,12 @@ Mistakes: `show_until must be a quoted "YYYY-MM-DD"`, `show_from is after show_u
   stay on the device. The orientation workshop has two: `before-you-present` and `sixty-minute-plan`.
 - A facilitator page with `layout: "text"` also has a **Copy** button there: it puts the page's `body` on the
   clipboard as plain text, line by line (an empty line between paragraphs), with its `{live:…}` facts as they are
-  when Copy is pressed and the presenter's blanks filled in (an empty one as `[hint]`); bold and italic marks go, and
+  when Copy is pressed and the presenter's blanks filled in (an empty one as `[hint]`; a `notes_only` blank, like the
+  first name, never: it copies as `[hint]`); bold and italic marks go, and
   a link keeps only its words, so a page made to be pasted writes its web addresses out in full
   (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`). The Grapevine Meeting's `chat-message` is
   one: the links and dates its chair pastes into the Google Meet chat. A browser that doesn't let the page copy
-  says so: then **View** the page, select its text and copy it.
+  says so ("Press View, select the message and copy it"): then **View** the page, select its text and copy it.
 - `handout: true`: a page printed for the participants (**Prepare → Print**). On a facilitator page it is printed
   only; on a slide of the show it is shown AND printed (the writing workshop's `checklist` slide).
 - `print: "portrait"`: on a handout, prints the page upright (otherwise sideways).
@@ -1113,7 +1114,7 @@ After such a change, search each deck file for `Wednesday`, `Saturday`, `Thursda
 | `committee-meeting.yml`, `next-meeting`, `open-meetings`, `coming-up` | "Every 3rd Wednesday · …" and "Usually the 4th Thursday, …"; in the notes "third Wednesday", "at seven", "second Saturday … from 5:30 to 7:30 p.m.", "first Wednesday" |
 | `committee-meeting.yml`, the guest speaker's and the topic's slides, `welcome`, `part-1`, `agenda`, `sharing`, `responsibility`, `parking-lot`, and the paperwork | the evening's plan: 7:02, 7:22, "done by 7:30", 7:30 to 8:00, "After 8:00: the parking lot" (and the agenda's typed times) |
 | `grapevine-meeting.yml`, `card`, `welcome`, `seventh-tradition`, `announcements`, `before-we-close`, `chat-message` | "the first Wednesday of each month at 7:00 PM Central" (and the card's "first Wednesday of the month", in English and Spanish); "every 2nd Saturday, 5:30 to 7:30 PM"; "every 3rd Wednesday"; "on the 2nd Saturday, … the 3rd Wednesday, and back here on the 1st Wednesday of next month"; the chat message's "every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church", "every 1st Wednesday", "every 3rd Wednesday"; in the notes "first / second / third" Wednesday or Saturday, "from 5:30 to 7:30 PM", "Lovers Lane United Methodist Church", "at seven", "7:00 PM" |
-| `grapevine-meeting.yml`, `title`, `how-it-works`, `last-shares`, `before-the-meeting`, and each TIP (timekeeping) line | the hour's plan: "by 6:50 p.m. Central", "at 7:00", "at about 7:50", "by 8:00" ("by eight"), and the TIP lines' times (7:05 to 7:08 … 7:55 to 7:57) |
+| `grapevine-meeting.yml`, `title`, `how-it-works`, `last-shares`, `before-the-meeting`, and each TIP (timekeeping) line | the hour's plan: "by 6:50 PM Central", "at 7:00", "at about 7:50", "by 8:00" ("by eight"), and the TIP lines' times (7:05 to 7:08 … 7:55 to 7:57) |
 | `information-workshop.yml`, `lv-workshop` | "Usually the **4th Thursday**", and "fourth Thursday" in its notes |
 
 Where the sentence allows it, use the fact instead: "Our committee meets {live:meeting_rule}, {live:meeting_time},
@@ -1338,7 +1339,7 @@ business: the third text (`minutes:` in the file) is short draft notes.
 
 | Text | For which meeting | What is in it |
 |---|---|---|
-| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic (or the topic for sharing, when one is filled in); the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); the second half (7:30–8:00) and what to bring; "Help wanted" (the volunteer lines); the parking lot after the close; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
+| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic (or the topic for sharing, when one is filled in); the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); the second half (7:30–8:00) and what to bring; "Volunteers wanted" (the volunteer lines); the parking lot after the close; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
 | **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic (or the topic for sharing, when one is filled in), the second half and the parking lot in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish or the topic for sharing, the same line about the second half and "la reunión después de la reunión", "La reunión es en inglés", all AA members welcome) |
 | **Draft notes** (*Borrador de las notas*) | the **last meeting held**, from the moment it starts | "DRAFT NOTES of the meeting, for the committee's records (this is not a business meeting: nothing to approve). Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic (never by name) or the topic shared on; the events and workshop requests, the volunteers, the stories mentioned, the sharing's highlights and the follow-ups (what · who · by when) as blanks (___) to finish by hand; the next meeting; "Closed with the Responsibility Statement; the parking lot followed." |
 
@@ -1362,8 +1363,8 @@ website lists no speaker for the next meeting (never for one only not listed yet
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the notes are drafted. The
-committee meeting has nothing to carry over (no old business, no action items: the tab says "Nothing to carry
-over."). It asks first. Then:
+committee meeting has nothing to carry over (no old business, no action items), so the tab shows no "Carry to next
+month" box. It asks first. Then:
 
 - the details that were for that one meeting are **cleared**: tonight's topic and its three lines, the volunteers,
   the stories mentioned;

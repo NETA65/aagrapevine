@@ -1059,7 +1059,9 @@
    *  the Grapevine Meeting's message for the Google Meet chat): line by line, its tokens filled in and its marks
    *  gone — a link keeps its words only, so such a page writes its addresses out in full —, its line breaks kept
    *  (plain() alone would make them spaces) and at most one empty line between its paragraphs; the build's word
-   *  joiners go, as in the paperwork's texts (plainSpaces). */
+   *  joiners go, as in the paperwork's texts (plainSpaces). Each line is filled in on its own, so on such a page a
+   *  mark opens and closes on the same line ({lang:es}…{/lang}, **bold**, a [label](url)): one that crosses a line
+   *  break would be copied with its marks left over. */
   function plainLines(text, ctx) {
     var out = [];
     String(isStr(text) ? text : "").replace(/\r\n?/g, "\n").split("\n").forEach(function (l) {

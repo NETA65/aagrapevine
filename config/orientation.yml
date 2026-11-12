@@ -179,7 +179,7 @@ lessons:
           es: "Nuestro comité se reúne cada mes"
         text:
           en: "The Area committee meets on {platform} {rule_lc}, {time} Central time. From January 2027 each meeting opens with a guest speaker, then events, offers, magazine topics and sharing. Every AA member is welcome, and you don't need to register."
-          es: "El comité del Área se reúne por {platform} {rule_lc}, {time}, hora del Centro. Desde enero de 2027 habla primero una persona invitada; luego, eventos, ofertas, temas de las revistas y tiempo para compartir. Todo miembro de AA es bienvenido."
+          es: "El comité se reúne por {platform} {rule_lc}, {time}, hora del Centro. Desde enero de 2027 abre una persona invitada; luego, eventos, ofertas, temas de las revistas y tiempo para compartir. Todo miembro de AA es bienvenido, sin registrarse."
       - title:
           en: "Panel {panel}, from {panel_start}"
           es: "Panel {panel}, a partir de {panel_start}"

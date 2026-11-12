@@ -502,8 +502,9 @@ def _meeting_clock(hm: tuple[int, int], lang: str) -> str:
 def speaker_sentences(speaker: dict | None, until: tuple[int, int] | None, end: tuple[int, int], lang: str) -> str:
     """A committee meeting's guest speaker in a sentence or two (its summary), "" without one: "Guest speaker: Rick
     W. — “From NETA 65 to the Conference table: …”. The guest speaker's part ends by 7:30 PM; then coming events,
-    workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM." The name and the topic only — the service position is in extra.speaker. (A name alone
-    gets no period of its own: it ends in its initial's — "Guest speaker: Rick W.")"""
+    workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM."
+    The name and the topic only — the service position is in extra.speaker. (A name alone gets no period of its
+    own: it ends in its initial's — "Guest speaker: Rick W.")"""
     if not speaker:
         return ""
     topic = speaker["topic"][lang]

@@ -373,7 +373,10 @@ price_changes:
 #   · on /shop/ (#offers, right under the page's menu): the offer's days,
 #     what each store says, its banner and a button to the store;
 #   · in the monthly toolkit (/monthly/: "Keep up all month" and the
-#     month's message, in the months the offer runs).
+#     month's message, in the months the offer runs);
+#   · on the committee meeting's "Special offers" slide
+#     ({live:store_offers}: its title and days, read aloud by the chair,
+#     so write a title that reads well in a sentence).
 #  It shows from 00:00 Central on `starts` and is gone by itself the day
 #  after `ends` (also on a page that is open, or saved for offline use);
 #  after that the block may be deleted.

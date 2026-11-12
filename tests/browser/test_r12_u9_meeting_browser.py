@@ -170,7 +170,7 @@ class MeetingPaperwork(unittest.TestCase):
             agenda, reminder, minutes = (boxes.nth(i).inner_text() for i in range(3))
             self.assertIn("Subject: Agenda: Grapevine and La Viña Committee meeting,", agenda)
             self.assertIn("Agenda (Central time)\n7:00  Opening: a moment of silence and the Serenity Prayer", agenda)
-            self.assertIn("Help wanted\n- CityWide booth, Nov 14: two helpers", agenda)
+            self.assertIn("Volunteers wanted\n- CityWide booth, Nov 14: two helpers", agenda)
             self.assertIn("After we close at 8:00, the parking lot: stay on for whatever is on your mind.", agenda)
             self.assertTrue(reminder.split("Subject:", 1)[1].count("Recordatorio"), "the Spanish paragraph")
             self.assertEqual(boxes.nth(1).locator('p[lang="es"]').count(), 1)
@@ -188,10 +188,14 @@ class MeetingPaperwork(unittest.TestCase):
             # every mailto: link opens with no address (checked offline too: tests/test_r12_u9_meeting.py)
             self.assertEqual(page.locator('[data-gvp-panel="paper"] [data-gvp-key$=":mail"]').count(), 3)
 
-            # Start next month: nothing to carry (no old business, no action items), and no "0 items" anywhere
+            # Start next month: nothing it could carry (no old business, no action items), so no "Carry to next month"
+            # box at all, and no "0 items" anywhere
             self.assertEqual(page.locator('[data-gvp-key^="carry:"]').count(), 0)
-            section = page.locator('[data-gvp-panel="paper"] .gvp-sec').last.inner_text()
-            self.assertIn("Nothing to carry over.", section)
+            last = page.locator('[data-gvp-panel="paper"] .gvp-sec').last
+            self.assertEqual(last.locator("fieldset").count(), 0, "no empty carry-over box")
+            section = last.inner_text()
+            self.assertNotIn("Carry to next month", section)
+            self.assertNotIn("Nothing to carry over.", section)
             self.assertNotIn("old business", section)
             asked = []
             page.once("dialog", lambda d: (asked.append(d.message), d.accept()))

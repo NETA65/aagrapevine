@@ -461,7 +461,7 @@ magazine, the longer period, all of Texas) → the last one takes the row; `Four
 lists never 3 + 1, every 12 px from 600 to 2000 px at 100–150 % text), `test_r14_v1_read_cards.py`
 (`IssueCards`: /read/'s Grapevine and La Viña cards side by side at 1440 / 1920 px, English and Spanish, 130 % text —
 they end on one line and their "Show all N stories" rows sit level; with one list opened the other card's "Show
-all" stays under its own list; one column at 1280 px and with one magazine chosen, each card its own length), `test_r14_v2_credits_browser.py` (the publishers' permission credits: `QuoteCredit` — Home's daily-quote card ends with one line of small print under both quotes, A.A.W.S.'s and AA Grapevine's credits in the page language, also on a phone where one quote waits behind its button, at least 12 px and 4.5:1 in light and dark; `FooterNotice` — the footer's notice in two runs, the whole width of the bar from 768 px; `OnPaper` — printed, Home keeps both and /digest/ prints its own copy of the notice) and `test_r14_ctm_browser.py` (Carry the
+all" stays under its own list; one column at 1280 px and with one magazine chosen, each card its own length), `test_r14_v2_credits_browser.py` (the publishers' permission credits: `QuoteCredit` — Home's daily-quote card ends with one line of small print under both quotes, A.A.W.S.'s and AA Grapevine's credits in the page language, also on a phone where one quote waits behind its button, at least 12 px and 4.5:1 in light and dark; `FooterNotice` — the footer's notice in two runs, the whole width of the bar from 768 px; `OnPaper` — printed, Home keeps both and /digest/ prints its own copy of the notice), `test_r14_ctm_browser.py` (Carry the
 Message: `NotFoundGrid` — the 404 page's 9 popular pages three even rows of 3 from 1024 px, also at 115 / 130 %
 text, with the *Want to help financially?* card a row of its own under them, as wide as the grid, never a 10th card
 in it; every 56 px from 360 to 2000 px at 100–150 % text, each row full or its one card the whole row (the 9th spans
@@ -469,7 +469,11 @@ both columns where only two fit), nothing scrolling sideways; `ProgramButtons` �
 404 page, About and Shop at 390–1920 px and 150 % text: at least 44 px tall, one width, side by side or one under
 the other, the page language's first; `MissingSpanishAddress` — a missing address answered with the root 404 page
 (status 404, as on GitHub Pages): La Viña's button first under `/es/…`, Grapevine's elsewhere, and the card's words
-in Spanish too, under the English ones at 390 / 1440 px and beside them at 1920 px). Each file takes
+in Spanish too, under the English ones at 390 / 1440 px and beside them at 1920 px) and `test_r26_chat_message.py`
+(`ChatMessageCopy`: Customize → Prepare of the Grapevine Meeting, the Copy button of "Chat message for Google Meet",
+the only Copy in that tab, beside View and Print; the clipboard holds 7 plain lines with every address written out
+in full, the day's facts filled in, and no `{live:`, `[ ]` or `**` marks; on `/es/` the button says "Copiar" and
+copies the same English text). Each file takes
 `setUpModule` / `tearDownModule` (and the helpers `new_context`, `open_page`, `url`, `S`) from
 `test_site_in_browser.py`, so each file starts the site server and the browser once and stops them after its last
 check; they are written not to depend on the day they run (a stopped clock, or what the built pages say). A new

@@ -337,7 +337,7 @@
   },
   "committee.meeting.step_close_text": {
     "en": "We close with the Responsibility Statement. Then the parking lot: stay on for whatever is on your mind.",
-    "es": "Cerramos con la Declaración de Responsabilidad. Después, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
+    "es": "Cerramos con la Declaración de Responsabilidad. Luego, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
   },
   "committee.meeting.evening_title": {
     "en": "How the evening runs",
@@ -377,7 +377,7 @@
   },
   "committee.meeting.evening_sharing": {
     "en": "Events, offers, topics and sharing",
-    "es": "Eventos, ofertas, temas y compartir"
+    "es": "Eventos, ofertas, temas y tiempo para compartir"
   },
   "committee.meeting.evening_sharing_text": {
     "en": "Coming events and workshop requests, special offers from the stores, the magazines' topics and deadlines, then GVRs and RLVs share what's working.",
@@ -389,7 +389,7 @@
   },
   "committee.meeting.evening_close_text": {
     "en": "We close at {end} with the Responsibility Statement. Then the parking lot: stay on for whatever is on your mind.",
-    "es": "A las {end} cerramos con la Declaración de Responsabilidad. Después, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
+    "es": "A las {end} cerramos con la Declaración de Responsabilidad. Luego, la reunión después de la reunión: quédate para hablar de lo que tengas en mente."
   },
   "committee.meeting.evening_topic_hour": {
     "en": "{time} Central time: no guest speaker at this meeting; we share on a topic until {until}.",
@@ -1496,12 +1496,12 @@
     "es": "Un miembro la lee en voz alta, en lugar del Preámbulo de AA."
   },
   "committee.gvmeeting.step_story": {
-    "en": "A story from the current Grapevine",
-    "es": "Una historia del Grapevine del mes"
+    "en": "A story from AA Grapevine",
+    "es": "Una historia de AA Grapevine"
   },
   "committee.gvmeeting.step_story_text": {
-    "en": "A member reads a story from this month's issue aloud and starts the sharing.",
-    "es": "Un miembro lee en voz alta una historia del número de este mes y comparte primero."
+    "en": "A member reads a story aloud (often from this month's issue) and starts the sharing.",
+    "es": "Un miembro lee en voz alta una historia (a menudo del número de este mes) y comparte primero."
   },
   "committee.gvmeeting.step_share": {
     "en": "Sharing on its topic",
@@ -1509,7 +1509,7 @@
   },
   "committee.gvmeeting.step_share_text": {
     "en": "Members share their experience, strength and hope on the story's topic, or on how Grapevine and La Viña have touched their recovery and service: 3 to 5 minutes each.",
-    "es": "Los miembros comparten su experiencia, fortaleza y esperanza sobre el tema de la historia, o sobre lo que La Viña y Grapevine han significado en su recuperación y su servicio: de 3 a 5 minutos cada uno."
+    "es": "Los miembros comparten su experiencia, fortaleza y esperanza sobre el tema de la historia, o sobre lo que La Viña y Grapevine han significado en su recuperación y su servicio: de 3 a 5 minutos por persona."
   },
   "committee.gvmeeting.step_close": {
     "en": "Close",

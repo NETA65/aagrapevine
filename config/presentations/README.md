@@ -186,7 +186,7 @@ new slide for them.
 | `version_fields` | the slide's own text in one version: `{ short: { title: "Today's plan (about 60 minutes)" } }` — any field of its layout (below), its `title`, `eyebrow`, `source` or `takeaway` (an activity's `duration`, a break's `body` …). Not `kind`, `options` or `qr`, which are the same in every version. The checker holds the slide as each version shows it to the same rules. A presenter's own change (Customize → Edit) of a field that has words of its own in any version stays in the version they changed it in: it is stored for that version alone, so the other versions keep their words (typing the version's own words back removes the change; "Reset this slide to the original" removes the changes of every version). A change of any other field, and of `minutes`, applies to every version |
 | `optional` | `true`: a slide that can go when running late |
 | `starts_off` | `true`: an optional slide that starts switched off (the presenter turns it on in Customize → Slides) |
-| `facilitator` | `true`: never shown to the room; it is in Customize → Prepare (checklists, timing plans, pages for the chair). No `minutes`. A `text` page there also has a **Copy** button: it copies the page's `body` as plain text, line by line, with the facts of the moment and the presenter's blanks filled in, for a message to paste somewhere (the Grapevine Meeting's `chat-message`, for the Google Meet chat). A copy keeps only the words of a `[label](url)` link, so write the web addresses of such a page out in full (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`) |
+| `facilitator` | `true`: never shown to the room; it is in Customize → Prepare (checklists, timing plans, pages for the chair). No `minutes`. A `text` page there also has a **Copy** button: it copies the page's `body` as plain text, line by line, with the facts of the moment and the presenter's blanks filled in (a `notes_only` blank, like the first name, never: it copies as `[hint]`), for a message to paste somewhere (the Grapevine Meeting's `chat-message`, for the Google Meet chat). A copy keeps only the words of a `[label](url)` link, so write the web addresses of such a page out in full (`https://www.aagrapevine.org/carry-the-message`, `{live:site_url}`) |
 | `handout` | `true`: a page printed for the participants — a `facilitator` page (Prepare → Print), or a slide that is shown AND printed |
 | `print` | on a `handout` page: `"portrait"` to print it upright. Left out: it prints `"landscape"` (sideways) |
 | `accent` | a colour: `gv` `lv` `vine` `grape` `navy`. On a `section` slide, the colour of its part: the slides after it take it. On any other slide, the colour of that slide only |
@@ -339,9 +339,9 @@ speaker), `speaker_after` with `meeting_after` (next month's); and `grapevine_me
 `grapevine_meeting_after` on the Grapevine Meeting's own slides.
 
 In the chair's paperwork (the committee meeting's `paperwork:` block: the agenda e-mail, the reminder, the short
-draft notes of the meeting — its `minutes` text), `{paper:speaker}` (the name and position), `{paper:speaker_position}` and `{paper:speaker_topic}` — and
-for a Spanish paragraph `{paper:speaker_es}` and `{paper:speaker_topic_es}` (the position and topic in Spanish, as
-the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
+draft notes of the meeting — its `minutes` text), `{paper:speaker}` (the name and position),
+`{paper:speaker_position}` and `{paper:speaker_topic}` — and for a Spanish paragraph `{paper:speaker_es}` and
+`{paper:speaker_topic_es}` (the position and topic in Spanish, as the Spanish Meetings page gives them) — are the guest speaker of the meeting the text is for, and so are the speaker
 keys in the agenda's rows there ("none at this meeting" for a meeting with no guest speaker, "to be announced" for
 one whose speaker isn't listed yet). A line whose `{paper:…}` facts are all empty (a meeting with no guest speaker)
 is left out. So is every speaker line in a version that leaves out the slide `paperwork: speaker_slide:` names (the

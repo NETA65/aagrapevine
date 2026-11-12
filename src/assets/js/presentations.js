@@ -1,7 +1,7 @@
 /* The workshop presentations' player — /orientation/ ("Workshop presentations"): a pop-up slide show for each deck
    of config/presentations/ (the JSON at /orientation/presentations/<id>.json, fetched only when a deck is opened or
    printed), with speaker notes, an overview, Customize (versions, slides, editing, your details, Prepare, the
-   committee meeting's "Agenda & minutes" — the chair's paperwork —, a "my version" file), a presenter view in a
+   committee meeting's "Agenda & notes" — the chair's paperwork —, a "my version" file), a presenter view in a
    second window, and printing in four ways. The logic (what is in the show,
    the clock, the text) is presentations-core.js (window.GVP); this file is the screen. Plain JavaScript, no
    dependencies (loaded with `defer` after app.js and presentations-core.js); the page works without it (its
@@ -1060,7 +1060,7 @@
       n.textContent = short;
       if (LANG !== "en") n.setAttribute("lang", "en");
     });
-    // "Agenda & minutes": only for a deck with the chair's paperwork (the committee meeting)
+    // "Agenda & notes": only for a deck with the chair's paperwork (the committee meeting)
     qa('[data-gvp-tab="paper"]').forEach(function (t) { t.hidden = !hasPaper(); });
     P.cur = G.current(deck, STATE, "", Date.now());
     var n = opts.slide || slideFromHash(location.hash) || 1;
@@ -1992,11 +1992,11 @@
   }
 
   /* ================================================================== 4. Customize (a drawer beside the stage)
-     Version · Slides · Edit · Add · Your details · Prepare · Agenda & minutes (a deck with a `paperwork:` block
+     Version · Slides · Edit · Add · Your details · Prepare · Agenda & notes (a deck with a `paperwork:` block
      only: the committee meeting) · Save & share. Every change is stored at once on this device and shown on the
      stage (the slide being edited is the one on the stage); nothing is sent anywhere. */
   var TABS = ["version", "slides", "edit", "add", "details", "prepare", "paper", "save"];
-  /** Does the open deck have the chair's paperwork (the "Agenda & minutes" tab)? */
+  /** Does the open deck have the chair's paperwork (the "Agenda & notes" tab)? */
   function hasPaper() { return !!(P.deck && P.deck.paperwork && G.PAPER_TEXTS.some(function (k) { return P.deck.paperwork[k]; })); }
   function ds() { return P.deck ? G.deckState(STATE, P.deck.id) : null; }
   function openDrawer(tab) {
@@ -2786,7 +2786,9 @@
         cp.addEventListener("click", function () {
           var now = (P.cur && P.cur.byId[e.id]) || e;
           var ctx = Object.assign(ctxFor(P.cur, "slide"), { live: G.liveValues(P.deck.live, Date.now()) });
-          copyOut(G.plainLines(now.slide.body, ctx), T("pres.paper_copied"));
+          // (no text to select on this card: the failure says to open the page with View)
+          copyText(G.plainLines(now.slide.body, ctx)).then(function () { toast(T("pres.paper_copied")); },
+            function () { toast(T("pres.page_copy_failed")); });
         });
         acts.appendChild(cp);
       }
@@ -2829,11 +2831,12 @@
     return ul;
   }
 
-  /* ---------- Agenda & minutes (the chair's paperwork: a deck with a `paperwork:` block) ----------
-     The agenda e-mail, the reminder and the draft minutes, made from the presenter's details and the day's facts
-     (presentations-core.js paperText: plain text, in the deck's language), each to copy, to open in the presenter's
-     own e-mail app (no address filled in: every one goes in BCC) or — the minutes — to print; and "Start next
-     month" (startNextMonth), with an Undo that lasts until the next meeting begins. Nothing is sent from here. */
+  /* ---------- Agenda & notes (the chair's paperwork: a deck with a `paperwork:` block) ----------
+     The agenda e-mail, the reminder and the draft notes (the paperwork's `minutes:` text), made from the presenter's
+     details and the day's facts (presentations-core.js paperText: plain text, in the deck's language), each to copy,
+     to open in the presenter's own e-mail app (no address filled in: every one goes in BCC) or — the notes — to
+     print; and "Start next month" (startNextMonth), with an Undo that lasts until the next meeting begins. Nothing
+     is sent from here. */
   var MAIL_MAX = 1800;        // the longest mailto: link (Windows / Outlook stop near 2,000), as the report builder's
   var PAPER_WORDS = {
     agenda: { h: "pres.paper_agenda_h", of: "pres.paper_agenda_for", label: "pres.paper_agenda_label" },
@@ -2876,8 +2879,8 @@
       // the meeting it is for: an English date inside the page's words
       var mn = meetingName(r.meeting);
       tInto(sec.appendChild(el("p", "gvp-pp")), words.of, { date: mn[0] }, mn[1]);
-      // the minutes of the meeting "Start next month" closed: its details are gone (Undo brings them back) — not
-      // once the next meeting has begun (the minutes are that one's, made from its own details)
+      // the draft notes of the meeting "Start next month" closed: its details are gone (Undo brings them back) — not
+      // once the next meeting has begun (the notes are that one's, made from its own details)
       if (which === "minutes" && started && started.current && (r.meeting ? r.meeting.ymd : "") === started.held) {
         var w = sec.appendChild(el("p", "gvp-warn gvp-warn--long"));
         w.textContent = T("pres.paper_minutes_started", { when: whenText(started.at) });
@@ -2999,14 +3002,16 @@
     sec.setAttribute("aria-labelledby", h.id);
     var held = plan.held;
     var hn = meetingName(held);
-    // (the minutes' month is one of the deck's English blanks: "October 2026")
+    // (the meeting's month is one of the deck's English blanks: "October 2026")
     tInto(sec.appendChild(el("p", "gvp-pp")), "pres.paper_next_text", { date: hn[0], month: held ? held.month : T("pres.paper_no_date") },
       hn[1].concat(held ? ["month"] : []));
     var prev = ds().prev;
     if (plan.done) sec.appendChild(el("p", "gvp-warn gvp-warn--long", T("pres.paper_next_already", { when: whenText(prev && prev.at) })));
-    var fs = sec.appendChild(el("fieldset", "gvp-fieldset"));
-    fs.appendChild(legend(T("pres.paper_carry_legend", { n: plan.room })));
     var boxes = [];
+    // a deck with nothing it could carry (no old business rows, no action items: the committee meeting) shows no
+    // "Carry to next month" box at all
+    var fs = plan.room || plan.items.length ? sec.appendChild(el("fieldset", "gvp-fieldset")) : null;
+    if (fs) fs.appendChild(legend(T("pres.paper_carry_legend", { n: plan.room })));
     var group = function (kind, title) {
       var items = plan.items.filter(function (it) { return it.kind === kind; });
       if (!items.length) return;
@@ -3039,9 +3044,11 @@
         boxes.push(cb);
       });
     };
-    group("action", T("pres.paper_carry_actions"));
-    group("old", T("pres.paper_carry_old"));
-    if (!boxes.length) fs.appendChild(el("p", "gvp-pp gvp-pp--muted", T("pres.paper_carry_none")));
+    if (fs) {
+      group("action", T("pres.paper_carry_actions"));
+      group("old", T("pres.paper_carry_old"));
+      if (!boxes.length) fs.appendChild(el("p", "gvp-pp gvp-pp--muted", T("pres.paper_carry_none")));
+    }
     if (plan.keep.length) {
       var names = plan.keep.map(function (k) { return defs[k] ? defs[k].label[LANG] || defs[k].label.en || k : k; });
       sec.appendChild(el("p", "gvp-pp gvp-pp--muted", T("pres.paper_keeps", { list: names.join("; ") })));
@@ -3090,7 +3097,7 @@
     }
     p.appendChild(sec);
   }
-  /** The draft minutes printed (or saved as a document by the print window): a page of headings, lists and
+  /** The draft notes printed (or saved as a document by the print window): a page of headings, lists and
    *  paragraphs, portrait — #gvp-print, as the presentation's own prints. */
   function printPaper(r, src) {
     if (PRINT.busy) return;
@@ -3120,8 +3127,8 @@
     document.documentElement.setAttribute("data-gvp-print", "paper");
     PRINT.active = true;
     document.documentElement.classList.add("gvp-printing");
-    // the name of a copy saved as a document: the date of the meeting the minutes are for, as their subject says
-    // ("… – Draft minutes – 2026-10-21", printed that night or a week later) — the day it is printed only when the
+    // the name of a copy saved as a document: the date of the meeting the notes are for, as their subject says
+    // ("… – Draft notes – 2026-10-21", printed that night or a week later) — the day it is printed only when the
     // site has no date for that meeting
     var day = r.meeting && r.meeting.ymd;
     if (!day) {

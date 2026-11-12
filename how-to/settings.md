@@ -569,7 +569,10 @@ it shows:
   The menu has no chip for it (a chip cannot come and go by date);
 - in the monthly toolkit, in each month the offer runs: a line in *Keep up all month* (this month's page) and in
   the month's message (WhatsApp and e-mail; in WhatsApp its heading starts with 📦, or 🎁 for an offer with
-  `icon: gift`), both linking the offer's own section, `/shop/#offers-<key>`.
+  `icon: gift`), both linking the offer's own section, `/shop/#offers-<key>`;
+- in the committee meeting's presentation, the *Special offers* slide (`{live:store_offers}`): each offer's `title`
+  and its days, joined with "; ", from its first day to the midnight after its last. The chair reads it aloud, so
+  write the title so it reads well in a sentence.
 
 The day after `ends` it is gone by itself — also on a page that is open, or saved for offline use — so there is
 nothing to switch off; the block may then be deleted. While a block is here, Home's *Shared by the committee*
@@ -1316,7 +1319,7 @@ search (faster). Write access is enough (MKP715).
 | `/status/` | `site: repository` (Actions button), `morning_goal` (the daily quote's mornings); `sources: ics_feeds` ("Other calendars") |
 | RSS `/feed.xml`, `/es/feed.xml` | `site: url`, `contact_email` |
 | Search engines: every page's structured data (README → "Search engines") | `site: committee`, `committee_es`, `area`, `area_website`, `committee_page`, `contact_email`, `title`; `site: search_engines` (`bing_verification` / `yandex_verification`: home page only; `indexnow_key`: the key file and Website update's IndexNow step) |
-| The presentations | `{live:…}` facts from `contact_email`, the site address, `meeting:`, `phone_access:`, `price_changes:`, `recurring_events:`, `lavina_weekly_open:`; the committee meeting's *Agenda & notes* also `meeting:` (its dates) and `site: committee_es` (the reminder's Spanish paragraph, `{paper:committee_es}`) |
+| The presentations | `{live:…}` facts from `contact_email`, the site address, `meeting:`, `phone_access:`, `price_changes:`, `store_offers:` (the committee meeting's *Special offers* slide, `{live:store_offers}`: each offer with its days, switching when an offer starts or ends), `recurring_events:`, `lavina_weekly_open:`; the committee meeting's *Agenda & notes* also `meeting:` (its dates) and `site: committee_es` (the reminder's Spanish paragraph, `{paper:committee_es}`) |
 
 ---
 

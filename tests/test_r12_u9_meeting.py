@@ -388,7 +388,7 @@ class Texts(unittest.TestCase):
                           "sharing. Bring an event or a workshop request, and your sharing", text)
             self.assertIn("\n\nAfter we close at 8:00, the parking lot: stay on for whatever is on your mind.\n\n", text)
         # lines whose blanks are all empty are left out; a half-filled one shows its [hint]
-        self.assertIn("\n\nHelp wanted\n- CityWide booth, Nov 14: two helpers\n- Writing workshop in District 22: [helpers needed]\n\n", t)
+        self.assertIn("\n\nVolunteers wanted\n- CityWide booth, Nov 14: two helpers\n- Writing workshop in District 22: [helpers needed]\n\n", t)
         self.assertEqual(re.findall(r"\[[^\]]*\]", t), ["[helpers needed]"])
         self.assertNotIn("Topic for sharing", t, "no topic typed in: its line is left out")
         # a blank of the old business slides a chair's device may still keep is never shown
@@ -454,7 +454,7 @@ class Texts(unittest.TestCase):
     def test_an_empty_version_never_shows_an_empty_blank(self):
         t = self.run_texts()["emptyWeek"]["agenda"]["text"]
         self.assertNotIn("[", t)
-        for gone in ("Help wanted", "Topic for sharing", "phone"):
+        for gone in ("Volunteers wanted", "Topic for sharing", "phone"):
             self.assertNotIn(gone, t, gone)
         self.assertIn("From 7:30 to 8:00: coming events", t, "a line with no blank always stays")
         self.assertIn("Area 65 Grapevine / La Viña Chair", t, "a blank's default counts as filled in")

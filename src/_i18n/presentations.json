@@ -270,6 +270,7 @@
   "pres.paper_copied": { "en": "Copied. Paste it into an e-mail or a message.", "es": "Copiado. Pégalo en un correo o en un mensaje." },
   "pres.paper_copied_subject": { "en": "Subject copied.", "es": "Asunto copiado." },
   "pres.paper_copy_failed": { "en": "This browser didn't let the page copy. Select the text and copy it yourself.", "es": "Este navegador no dejó copiar. Selecciona el texto y cópialo tú." },
+  "pres.page_copy_failed": { "en": "This browser didn't let the page copy. Press View, select the message and copy it.", "es": "Este navegador no dejó copiar. Toca Ver, selecciona el mensaje y cópialo." },
   "pres.paper_mail": { "en": "Open in my e-mail", "es": "Abrir en mi correo" },
   "pres.paper_mail_opened": { "en": "Your e-mail app opens with the text. Put every address in BCC.", "es": "Tu aplicación de correo se abre con el texto. Pon todas las direcciones en CCO." },
   "pres.paper_mail_long": { "en": "The text is long, so it was copied: paste it into the e-mail that opens, and put every address in BCC.", "es": "El texto es largo, así que se copió: pégalo en el correo que se abre y pon todas las direcciones en CCO." },

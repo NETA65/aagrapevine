@@ -416,7 +416,7 @@ class BuiltPages(Untranslated):
                   "compartimos sobre un tema.", "2 Un tema para compartir", "5 Lo que comparten los RLV y GVR",
                   "6 Cierre a las 8:00 p. m. y la reunión después de la reunión",
                   "Cómo transcurre la reunión", "hacia las 7:02 p. m. Nuestro(a) orador(a) invitado(a)",
-                  "7:30 p. m. Eventos, ofertas, temas y compartir", "después, hasta las 8:00 p. m., eventos, ofertas, temas de las "
+                  "7:30 p. m. Eventos, ofertas, temas y tiempo para compartir", "después, hasta las 8:00 p. m., eventos, ofertas, temas de las "
                   "revistas y lo que comparten los RLV y GVR.", "A las 8:00 p. m. cerramos con la Declaración de Responsabilidad.",
                   "Sin número de teléfono para llamar"):
             self.assertIn(s, es)
@@ -448,7 +448,7 @@ class BuiltPages(Untranslated):
         panel = opening_tag(board, 'class="cm-count-speaker"')
         self.assertNotIn("x-cloak", panel)
         self.assertIn("Guest speaker: Ann B.", text(part(board, 'class="cm-count-speaker"', "</div>")))
-        self.assertIn('x-show="!speaker" x-cloak', board)          # the business hour now waits for the browser
+        self.assertIn('x-show="!speaker" x-cloak', board)          # the topic-sharing hour now waits for the browser
         self.assertNotIn('x-show="speaker" x-cloak', board)
         evening = text(part(board, 'class="cm-agenda', 'class="flex flex-1 flex-col" x-show="!speaker"'))
         self.assertIn("about 7:02 PM Our guest speaker Ann B. · Past delegate, Area 99 “How the Conference works” About 20 minutes.", evening)
@@ -467,7 +467,7 @@ class BuiltPages(Untranslated):
                 words = text(sec)
                 self.assertIn(date, words)
                 for s in ("Grapevine Meeting", "Our monthly online meeting · In English", "The AA Grapevine Statement of Purpose",
-                          "in place of the AA Preamble", "A story from the current Grapevine", "and starts the sharing.",
+                          "in place of the AA Preamble", "A story from AA Grapevine", "and starts the sharing.",
                           "Sharing on its topic", "3 to 5 minutes each.", "your Seventh Tradition goes to your home group. "
                           "In place of the basket, a word about Carry the Message.",
                           "we close on time with the Responsibility Statement, at 8:00 PM.",
