@@ -918,6 +918,17 @@ class Real(unittest.TestCase):
     def test_no_problem_at_all(self):
         self.assertEqual(self.problems, [], "fix these rows in content/booth/booth.csv (content/booth/README.md says how)")
 
+    def test_the_real_file_on_the_http_address(self):
+        """The committee's real rows on the live address before its certificate (http://grapevine.neta65.org): no
+        problem, the same rows and codes as on https:// — each page of this site with the site's own scheme."""
+        h_items, h_problems = check_csv(self.text, site_url="http://grapevine.neta65.org")
+        s_items, s_problems = check_csv(self.text, site_url="https://grapevine.neta65.org")
+        self.assertEqual((h_problems, s_problems), ([], []))
+        self.assertEqual([i["id"] for i in h_items], [i["id"] for i in s_items])
+        swap = lambda v: v.replace("https://grapevine.neta65.org/", "http://grapevine.neta65.org/") if v else v  # noqa: E731
+        self.assertEqual([(i["qr"], i["qr_es"]) for i in h_items], [(swap(i["qr"]), swap(i["qr_es"])) for i in s_items])
+        self.assertGreater(sum(1 for i in h_items if (i["qr"] or "").startswith("http://grapevine.neta65.org/")), 20)
+
     def test_utf8_with_the_header_first(self):
         CSV_FILE.read_bytes().decode("utf-8")   # strict: never a byte that is not UTF-8
         header = [one_line(h).lower() for h in self.rows[0]]
@@ -1092,18 +1103,6 @@ class Rules(unittest.TestCase):
         items, problems = self.check("written,qr,Scan,http://gvlv.example.org/shop/", header="id,type,title_en,qr_url",
                                      site_url="https://gvlv.example.org")
         self.assertEqual((items, problems), ([], [f't.csv row 2 (written): qr_url "http://gvlv.example.org/shop/": {https_line}']))
-
-    def test_the_real_file_on_the_http_address(self):
-        """The committee's real rows on the live address before its certificate (http://grapevine.neta65.org): no
-        problem, the same rows and codes as on https:// — each page of this site with the site's own scheme."""
-        text = read_csv_file(CSV_FILE)
-        h_items, h_problems = check_csv(text, site_url="http://grapevine.neta65.org")
-        s_items, s_problems = check_csv(text, site_url="https://grapevine.neta65.org")
-        self.assertEqual((h_problems, s_problems), ([], []))
-        self.assertEqual([i["id"] for i in h_items], [i["id"] for i in s_items])
-        swap = lambda v: v.replace("https://grapevine.neta65.org/", "http://grapevine.neta65.org/") if v else v  # noqa: E731
-        self.assertEqual([(i["qr"], i["qr_es"]) for i in h_items], [(swap(i["qr"]), swap(i["qr_es"])) for i in s_items])
-        self.assertGreater(sum(1 for i in h_items if (i["qr"] or "").startswith("http://grapevine.neta65.org/")), 20)
 
     def test_a_language_alone(self):
         items, _ = self.check("es-only,fact,,Un dato.,https://www.aa.org/", header="id,type,text_en,text_es,source_url")
