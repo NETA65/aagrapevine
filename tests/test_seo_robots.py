@@ -1,8 +1,9 @@
 """robots.txt: ours, the one at the root of the address, and the weekly check that guards it — offline (no network).
 
-Crawlers read robots.txt only at the root of an address, so on the GitHub Pages project site our own
-/aagrapevine/robots.txt (src/robots.njk) is never read: https://neta65.github.io/robots.txt counts, published by the
-NETA65/neta65.github.io repository from the files in docs/user-site/ (README → "Search engines").
+Crawlers read robots.txt only at the root of an address. With the custom domain (grapevine.neta65.org, live since
+November 2026) our own robots.txt (src/robots.njk) IS that root file; on the GitHub Pages project-site address (the
+config's fallback) our /aagrapevine/robots.txt is never read: https://neta65.github.io/robots.txt counts there,
+published by the NETA65/neta65.github.io repository from the files in docs/user-site/ (README → "Search engines").
 
   * OurFile     — src/robots.njk builds exactly "User-agent: *", "Allow: /" and the sitemap's full address (an
                   Eleventy build of no page but it, with a custom domain's address): it is the root file once the

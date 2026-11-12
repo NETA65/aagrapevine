@@ -1,5 +1,6 @@
 // /googlef96fc15466439295.html — Google Search Console's ownership check of the site (a "URL prefix" property for
-// https://neta65.github.io/aagrapevine/): Google fetches this address and expects exactly this one line. Keep it while
+// https://neta65.github.io/aagrapevine/, and the same file for the custom domain's https://grapevine.neta65.org/ —
+// README §12b): Google fetches this address and expects exactly this one line. Keep it while
 // the committee uses Search Console (Google drops the verification some time after the file disappears). Another
 // Google account that verifies the site gets a file name of its own: add a second template like this one.
 // A template, not a copied file: Eleventy would treat a plain .html file in src/ as a page and publish it at

@@ -952,8 +952,9 @@
         toggleTheme: function () {
           this.theme = this.theme === "dark" ? "light" : "dark";
           document.documentElement.setAttribute("data-theme", this.theme);
-          // "gvlv-theme": our own key (neta65.github.io is one origin shared by every Pages project, and
-          // a bare "theme" is a common key there). base.njk reads it before the first paint.
+          // "gvlv-theme": our own key (on the github.io address the origin was shared by every Pages
+          // project, and a bare "theme" is a common key there; it stays with the custom domain). base.njk
+          // reads it before the first paint.
           try { localStorage.setItem("gvlv-theme", this.theme); } catch (e) {}
         },
       };

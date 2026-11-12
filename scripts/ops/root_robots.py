@@ -5,12 +5,15 @@
     python -m scripts.ops.root_robots --site https://neta65.github.io/aagrapevine      # on a computer
 
 Why it exists: crawlers read robots.txt only at the root of an address (RFC 9309 §2.3; Google: "crawlers don't
-check for robots.txt files in subdirectories"). The site is a GitHub Pages PROJECT site, so its own
-/aagrapevine/robots.txt (src/robots.njk) is never read; the file that counts is https://neta65.github.io/robots.txt,
-which only the NETA65 account's own user-site repository (NETA65/neta65.github.io) publishes — its files are
-docs/user-site/, the owner's steps README → "Search engines". One wrong line there ("Disallow: /") would hide this
-site, and every other NETA65 site under that address, from every search engine, and nothing else would notice.
-So once a week this reads it, with the site's own robot (its name, config/site.yml sources.crawler.user_agent;
+check for robots.txt files in subdirectories"). Since November 2026 the site has a custom domain
+(grapevine.neta65.org, README §12): it is the root of its address, its own robots.txt (src/robots.njk) is the root
+file, and this check says "Skipped" (the Weekly link check passes the address GitHub Pages serves as SITE_URL).
+As a GitHub Pages PROJECT site (https://neta65.github.io/aagrapevine — the fallback in config/site.yml) its own
+/aagrapevine/robots.txt is never read; the file that counts is then https://neta65.github.io/robots.txt, which only
+the NETA65 account's own user-site repository (NETA65/neta65.github.io) publishes — its files are docs/user-site/,
+the owner's steps README → "Search engines". One wrong line there ("Disallow: /") would hide this site, and every
+other NETA65 site under that address, from every search engine, and nothing else would notice. So once a week this
+reads it, with the site's own robot (its name, config/site.yml sources.crawler.user_agent;
 one request, retried politely on a 429 / 5xx answer — robots.txt itself is always allowed, RFC 9309 §2.2.2):
 
   * 404       → "not set up yet": the owner's step is still to do. Not a problem — with no robots.txt there
