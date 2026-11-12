@@ -1,7 +1,7 @@
 {
  "source": "youtube",
- "updated": "2026-11-12T20:58:42Z",
- "attempted": "2026-11-12T20:58:42Z",
+ "updated": "2026-11-12T22:50:49Z",
+ "attempted": "2026-11-12T22:50:49Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -31,7 +31,7 @@
   "shorts": 18,
   "approx_dates": 1,
   "playlists": 31,
-  "seconds": 41.4,
+  "seconds": 46.7,
   "warnings": [
    "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their last known details"
   ]
@@ -92,7 +92,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 161,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -125,7 +125,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 243,
+    "views": 246,
     "is_live_recording": true,
     "date_approx": false
    }
@@ -6421,7 +6421,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 202,
+    "views": 204,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -8629,7 +8629,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 827,
+    "views": 828,
     "is_live_recording": false,
     "date_approx": false
    }
@@ -16031,7 +16031,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 4831,
+    "views": 4833,
     "is_live_recording": false,
     "date_approx": false
    }
