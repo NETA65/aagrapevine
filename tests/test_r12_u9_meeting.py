@@ -379,7 +379,7 @@ class Texts(unittest.TestCase):
                       "7:22  Questions for our guest speaker\n7:30  Coming up and workshop requests\n7:35  Special offers\n"
                       "7:37  Magazine topics\n7:40  GVR and RLV sharing\n7:57  Next meeting; the Responsibility Statement\n"
                       "8:00  The parking lot (after the meeting)\n\n", t)
-        self.assertIn("Agenda (Central time)\n7:00  Opening: a moment of silence and the Serenity Prayer\n7:02  Tonight's topic and sharing\n"
+        self.assertIn("Agenda (Central time)\n7:00  Opening: a moment of silence and the Serenity Prayer\n7:02  Topic sharing\n"
                       "7:30  Coming up and workshop requests\n", r["noSpeaker"])
         self.assertIn("\n8:00  The parking lot (after the meeting)\n", r["noSpeaker"])
         # the second half and the parking lot, in every version

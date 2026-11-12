@@ -197,7 +197,7 @@ class Booth(unittest.TestCase):
         self.assertEqual(rows["message-committee-guest-speakers"]["from"], "2026-12-17", "December 16 has no speaker")
         self.assertIn("done by 7:30 p.m.", rows["message-committee-guest-speakers"]["text_en"])
         # not a business meeting: the second half's words
-        self.assertIn("Then events, workshop requests, special offers, magazine topics and sharing until 8.",
+        self.assertIn("Then coming events, workshop requests, special offers, magazine topics and sharing until 8.",
                       rows["message-committee-guest-speakers"]["text_en"])
         self.assertNotRegex(rows["message-committee-guest-speakers"]["text_en"] + rows["message-committee-guest-speakers"]["text_es"],
                             r"(?i)committee business|asuntos del comité")
@@ -380,8 +380,8 @@ class Report(unittest.TestCase):
         # what we do there: not a business meeting
         self.assertIn("What we do there: from January 2027, a guest speaker and questions (until then, and on any night "
                       "without one, we share on a topic); then coming events and workshop requests, special offers, the "
-                      "magazines' topics and deadlines, and sharing by GVRs and RLVs; after the close, the “parking lot”: "
-                      "anyone can stay on to talk.", en)
+                      "magazines' topics and deadlines, and sharing by GVRs and RLVs; after the close, the parking lot: "
+                      "stay on for whatever is on your mind.", en)
         self.assertIn("Lo que hacemos: desde enero de 2027, la charla de una persona invitada y las preguntas (hasta "
                       "entonces, y en cualquier reunión sin persona invitada, compartimos sobre un tema); luego,", es)
         self.assertNotRegex(en + es, r"(?i)committee business|asuntos del comité|reports from the districts|informes de los distritos")
