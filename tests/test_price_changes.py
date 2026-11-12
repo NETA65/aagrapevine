@@ -716,6 +716,10 @@ class Report(unittest.TestCase):
         self.assertIn("Nuevos precios desde el 1 de enero de 2027, según el anuncio de AA Grapevine:\n• La Viña, 1 año: impresa $19.50, digital $17.00\n"
                       "• Grapevine, 1 año: impresa $39.00, digital $34.00", es_after)
         self.assertNotIn("de arriba", es_after)
+        # the Spanish names La Viña first in the books' line too, as /es/shop/ does (round 27)
+        for text in (r["dec"]["es"]["text"], es_after):
+            self.assertIn("• Grapevine, 1 año: impresa $39.00, digital $34.00\n• Libros de La Viña y Grapevine: $2.00 más cada uno", text)
+            self.assertNotIn("Grapevine y La Viña", text)
         jan = r["jan"]["en"]
         self.assertNotIn("after", jan)
         self.assertEqual(list(self.steps(jan)), ["2027-01-15T06:00:00Z", N_AT])   # the offer's end, the notice's end
