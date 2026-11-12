@@ -2,7 +2,8 @@
 
 [![Website update](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml/badge.svg)](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml)
 
-**Website:** <https://neta65.github.io/aagrapevine/> · **En español:** <https://neta65.github.io/aagrapevine/es/>
+**Website:** [grapevine.neta65.org](http://grapevine.neta65.org/) · **En español:** [grapevine.neta65.org/es/](http://grapevine.neta65.org/es/)
+(the old address, neta65.github.io/aagrapevine, forwards there — [section 12](#12-using-your-own-address-custom-domain))
 
 The website of the **Northeast Texas Area 65 (NETA 65) Grapevine & La Viña Committee**.
 It **updates itself every morning** and is **fully bilingual (English + Spanish)**. Nobody has
@@ -1703,28 +1704,53 @@ Done for the current site (the owner's once-only steps after the move are in
 
 ## 12. Using your own address (custom domain)
 
-For example **grapevine.neta65.org** instead of neta65.github.io/aagrapevine:
+The site's address is **grapevine.neta65.org** (since November 12, 2026). The old address,
+neta65.github.io/aagrapevine, forwards every page there, so old links, QR codes and printed flyers keep working.
+These are the steps; 1 and the first half of 2 are done, the rest is the owner's (signed in to GitHub as
+**NETA65**, the repository's admin — another collaborator cannot change the Pages settings):
 
-1. **DNS** (whoever manages neta65.org — the Area webmaster): add a **CNAME** record
-   `grapevine` → `neta65.github.io` (the GitHub account that owns this repository).
-2. **GitHub:** repository **Settings → Pages → Custom domain** → type `grapevine.neta65.org` →
-   **Save**. Wait for the green "DNS check successful" (minutes to a few hours), then tick
-   **Enforce HTTPS**.
-3. **Settings file:** change `site:` → `url:` in `config/site.yml` to `https://grapevine.neta65.org`.
-4. Run **Website update** once. Links, feeds and share buttons now use the new address.
+1. **DNS** (done) — whoever manages neta65.org (Bluehost): one **CNAME** record `grapevine` → `neta65.github.io`
+   (the GitHub account that owns this repository), and no other record for that name.
+2. **GitHub: Settings → Pages → Custom domain** — `grapevine.neta65.org` → **Save** (done). Then:
+   - Press **Check again** until the page says **DNS check successful**. If it keeps saying *"improperly
+     configured — Domain does not resolve to the GitHub Pages server (NotServedByPagesError)"* while the site
+     opens fine at http://grapevine.neta65.org/, GitHub is getting a wrong answer from the DNS host itself. In
+     November 2026 that was a stray `github.io` zone at Bluehost (it answers for neta65.github.io with a parking
+     address): delete it in Bluehost's Domains / Zone Editor, or ask Bluehost support to, then **Check again**.
+   - Wait for GitHub's certificate: the page says when it is ready (minutes to a few hours after a successful DNS
+     check). Still not there a day later: **Remove** the custom domain → **Save**, type `grapevine.neta65.org`
+     again → **Save** (for those minutes the site is back on the old address), and wait again.
+   - Tick **Enforce HTTPS**.
+   - Then run **Website update** once by hand right away (**Actions → Website update → Run workflow**, tick
+     **skip_crawl** for a quick refresh → **Run workflow**; [section 7](#7-running-the-update-right-now)). Each
+     publish takes the address from the Pages setting, so this run is the one that switches the site's links,
+     sitemap, QR codes, calendar files and e-mail links from `http://` to `https://`. In the run, job **Build
+     website**, step **Work out the site address**, the line must say
+     `Building for https://grapevine.neta65.org with path prefix '/'`. (Without this run the switch comes with the
+     next scheduled or Morning-check run, hours later.)
+3. **Keep `config/site.yml` → `site:` → `url:` as it is** (`https://neta65.github.io/aagrapevine`). The live site
+   never uses it: every publish asks GitHub Pages for the address. It is only the address of a build on a
+   computer, of the Code check (which builds the site as a project site under `/aagrapevine/` and tests with that
+   address) and of a publish when that question fails — and it forwards to the live address. Changed, it would
+   make the Code check fail.
 
-No `CNAME` file is needed: sites published by GitHub Actions take the domain from the Pages
-setting, and the workflow reads the address from there by itself. Links and QR codes that show
-neta65.github.io/aagrapevine keep working: GitHub forwards them to the custom domain.
+No `CNAME` file is needed: sites published by GitHub Actions take the domain from the Pages setting. The custom
+domain goes in **this** repository's settings only — never in a `neta65.github.io` repository's, which would move
+every NETA65 site.
+
+**What stays behind at the old address:** what a browser keeps for a site belongs to the address it was saved at
+— the Tracker's entries, the story recorder's takes, the theme choice, the installed app and its offline copy. On
+the new address they start empty. Tracker users: **Back up now** before an address change and import the backup
+afterwards. That holds for the switch from `http://` to `https://` too, so tick **Enforce HTTPS** soon, and until
+then the story recorder and the offline copy do not work at all: browsers allow the microphone and the offline
+copy only on `https://`.
 
 **Search engines after the move** ([12b](#12b-search-engines-google-bing)): with an address of its own, the site's
-own `robots.txt` (`src/robots.njk`) is the one search engines read, and the weekly link check stops reading
-neta65.github.io/robots.txt. In the `neta65.github.io` repository (12b, step C), change the address in
-`index.html` (or delete that file) and in the `Sitemap:` line of `robots.txt` to the new one — and the same in
-`docs/user-site/` here (a test compares them with `site.url`). Add the new address as a new property in Google
-Search Console and Bing Webmaster Tools and submit its sitemap there (12b, steps A and B). The custom domain goes
-in **this** repository's settings only — never in the `neta65.github.io` repository's, which would move every
-NETA65 site.
+own `robots.txt` (`src/robots.njk`) is the one search engines read; it names the sitemap. The weekly link check
+says **Skipped** for the root robots.txt, and step C of 12b is not needed. Once **Enforce HTTPS** is ticked and the
+run above is done, add `https://grapevine.neta65.org/` as a new property in Google Search Console and in Bing
+Webmaster Tools and submit its sitemap there (12b, steps A and B). Keep the old property: it shows Google
+following the forward.
 
 ---
 
@@ -1732,7 +1758,8 @@ NETA65 site.
 
 Search engines can already find the site: nothing keeps them out, and every page tells them what it is. This
 section says what the site does by itself, the owner's once-only steps that make sure Google and Bing know every
-page (A to C, about 30 minutes in all), one optional choice (D), and what not to expect.
+page (A and B, about 10 minutes; C only for the old project-site address), one optional choice (D), and what not to
+expect.
 
 ### What the site already tells search engines
 
@@ -1742,7 +1769,7 @@ Nothing to do here: every update writes all of it, in both languages.
   descriptions are plain facts of at most 160 characters (what Google and Bing show whole), never promotional
   words: attraction, not promotion. Every page also names its own address and its twin in the other language,
   so a Spanish search finds the Spanish page.
-- **The sitemap** — <https://neta65.github.io/aagrapevine/sitemap.xml>, the list of the 88 pages meant to be
+- **The sitemap** — grapevine.neta65.org/sitemap.xml, the list of the 88 pages meant to be
   found (both languages). Each one carries the **date its content last changed**, not the day of the update: the
   site is rebuilt several times a day, and a date that always moves teaches search engines to ignore it. Each
   Website update compares what every page says with what it said in the last publish (GitHub keeps that list for
@@ -1789,6 +1816,14 @@ To see what Google reads on a page, paste its address into Google's Rich Results
 
 ### The owner's once-only steps
 
+**With the custom domain** ([section 12](#12-using-your-own-address-custom-domain)), do A and B again for the new
+address once **Enforce HTTPS** is ticked and the site has been published on `https://`: in Search Console **Add
+property** → **URL prefix** → `https://grapevine.neta65.org/` → **Verify** with the *HTML file* method (the site
+publishes the same file at the root of its new address, so nothing needs uploading), and in Bing **Add a site** →
+`https://grapevine.neta65.org/` (or import it from Search Console again). Read
+`https://grapevine.neta65.org/` wherever the steps below say `https://neta65.github.io/aagrapevine/`. Keep the
+old properties.
+
 **A. Google Search Console: submit the sitemap (5 minutes)** — with the committee's Google account that verified
 the site:
 
@@ -1821,7 +1856,13 @@ GitHub open `config/site.yml` → pencil icon → paste it between the quotes of
 code there while Bing Webmaster Tools is used. Yandex Webmaster works the same way with `yandex_verification`
 (only if the committee wants it).
 
-**C. The root robots.txt (15 minutes, signed in to GitHub as NETA65 — recommended)**
+**C. The root robots.txt — not needed with the custom domain**
+
+With grapevine.neta65.org the site sits at the root of its own address, so its own `robots.txt` (`src/robots.njk`,
+which names the sitemap) is the file search engines read, and the weekly link check says **Skipped** for this step.
+This site no longer needs a `neta65.github.io` repository (https://neta65.github.io/ answering "not found" is fine
+for it). The rest of this step is only for the project-site address, should the site ever go back to it (15 minutes, signed
+in to GitHub as NETA65):
 
 `robots.txt` is the file that tells search engines' robots what they may visit. They read it **only at the very
 top of an address**. This site lives in a folder of `neta65.github.io`, so the file they read is
@@ -2562,9 +2603,10 @@ device check added after it.
   recordings from this device** also clears the e-mail details — on a shared computer, do it when you are done. The
   Gmail and Outlook.com buttons open with a short message only (a web address stays in the browser's history), and
   the whole message is copied to paste.
-  *For maintainers — who else could read them:* the takes are in IndexedDB on the origin
-  `https://neta65.github.io`, which every GitHub Pages project of the NETA65 account shares. Keep those other
-  projects free of third-party scripts (a custom domain for this site would end the sharing: §12).
+  *For maintainers — who else could read them:* the takes are in IndexedDB on the site's own origin,
+  `https://grapevine.neta65.org` (the custom domain, §12), which no other site shares. Until November 2026 it was
+  `https://neta65.github.io`, shared by every GitHub Pages project of the NETA65 account; takes kept there stay
+  there (the old address only forwards).
 - **When it can't record:** inside Facebook, Instagram and other apps (the microphone may be refused: the card
   says so, with **Copy the link** and how to open the page in Safari or Chrome), without `https://`, when the
   microphone was refused (the card shows the steps for that browser), and without JavaScript (a note points to "Or

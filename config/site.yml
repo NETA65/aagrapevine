@@ -19,6 +19,8 @@ site:
   # GitHub Pages default: https://<user>.github.io/<repo>/
   # On GitHub the build uses the address Pages reports (so a rename or a custom domain is picked
   # up by itself); this one is used by a build on a computer and when that lookup fails.
+  # The live address comes from GitHub Pages: grapevine.neta65.org (README §12). Keep this
+  # github.io address: the Code check builds and tests with it, and it forwards to the live one.
   url: "https://neta65.github.io/aagrapevine"
   # The GitHub repository (the Status page links to its Actions tab and to content/events/README.md).
   # On GitHub the build uses the repository it runs in; this one is for a build on a computer.
