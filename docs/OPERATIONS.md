@@ -484,8 +484,9 @@ check; they are written not to depend on the day they run (a stopped clock, or w
 file must be named `test*.py` (discover's pattern) and take the same set-up. All 105 checks (the 17 files, with
 `test_site_in_browser.py`; none skipped on a build with both magazines' suggested topics) took about 11 minutes on a
 Windows PC with Microsoft Edge (`GV_BROWSER_CHANNEL=msedge`, November 12, 2026, while another job ran; the poster
-file alone about 1 minute; 96 checks took about 8 minutes on October 16, 2026); on GitHub's runner the 84 checks before them took 6¾ minutes, and
-the step's limit is 15 minutes (`check.yml`; it was 10 until October 16, 2026).
+file alone about 1 minute; 96 checks took about 8 minutes on October 16, 2026); on GitHub's runner, 84 checks
+(before the 105 above) took 6¾ minutes, and the step's limit is 15 minutes (`check.yml`; it was 10 until October
+16, 2026).
 
 Job `tests` (25 min since October 2026, 15 before; about 10 minutes with `GateLists`, the
 `check.yml` comment reckons): Python 3.12,
