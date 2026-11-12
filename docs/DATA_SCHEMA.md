@@ -189,7 +189,10 @@ Spanish file): the place in the other language — a place is never machine-tran
 the details are not final — the pages show "Details to be confirmed" / "Detalles por confirmar" and the
 calendar feeds write `STATUS:TENTATIVE` (every other event `STATUS:CONFIRMED`). Absent otherwise.
 `weekly_open.json`: items of kind `meeting` with `extra` = `zoom_id`, `passcode`, `day`, `time`, `url`
-(+ structured `weekday`, `start_local`, `timezone`, `next_start` — see §5):
+(+ structured `weekday`, `start_local`, `timezone`, `next_start` — see §5) and `zoom_url`, the join link: since
+November 2026 the settings' full link (`grapevine_weekly_open.zoom_url` / `lavina_weekly_open.zoom_url`, with its
+`?pwd=…`, as written) when it is a Zoom join link of the item's own `zoom_id`, else `https://zoom.us/j/<digits>`
+(scripts/sync/weekly_open.py `join_link`; a link not used is in the envelope's `stats.warnings`):
 1. id `weekly_open` — the **Grapevine Weekly Open** (Wednesdays), read from aagrapevine.org/grapevine-weekly-open.
    Always the FIRST item of `data/site/weekly_open.json`: templates read `db.weekly_open.items[0]`.
 2. id `weekly_open_lv` — **La Viña's weekly open meeting** in Spanish (Thursdays, from Nov 5, 2026), written

@@ -945,7 +945,7 @@ matching file wins, in any folder unless a folder is named):
 | Page | Link | The rule | Set in |
 |---|---|---|---|
 | Meetings `/meetings/` (chair card) | "Agendas and past reports in the Portfolio" | the notes tab when it has files; else the link stays and opens the top of the Portfolio | [meetings.njk](../src/pages/meetings.njk) |
-| Meetings `/meetings/` (La Viña's weekly open meeting) | its flyer | `lavina_weekly_open.flyer_match` | [config/site.yml](../config/site.yml) |
+| Meetings `/meetings/` (the weekly open meetings) | each card's flyer, `flyers/` only: "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom" and "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom" today (a renamed flyer also needs its title in the other language in `data/translations/overrides.yml`) | `grapevine_weekly_open.flyer_match`, `lavina_weekly_open.flyer_match` | [config/site.yml](../config/site.yml) |
 | Share your story `/contribute/` | up to 2 printable flyers, `flyers/` only | the title or file name contains "share your story" or "comparte tu historia" | [contribute.njk](../src/pages/contribute.njk) |
 | Monthly toolkit `/monthly/` | "Full editorial calendar" | the title or file name contains "editorial calendar" or "calendario editorial" | [monthly.njk](../src/pages/monthly.njk) |
 | Shop `/shop/` (price-change notice) | "Read AA Grapevine's notice" | matches `price_changes[].doc_match` | [config/site.yml](../config/site.yml) |

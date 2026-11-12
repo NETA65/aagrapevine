@@ -241,7 +241,7 @@ commit the push started from, as GitHub's own `paths:` filter sees the push.
 | `config/site.yml` → `sources.youtube` | `youtube` (the channels' feeds; the full listing of older videos stays in the full update) |
 | `config/site.yml` → `sources.instagram` | `instagram` |
 | `config/site.yml` → `sources.grapevine.contribute`, `sources.lavina.contribute`, `themes_page`, `rlv_resources`, `themes_link` | `editorial` |
-| `config/site.yml` → `sources.grapevine.weekly_open`, `lavina_weekly_open` | `weekly_open` |
+| `config/site.yml` → `sources.grapevine.weekly_open`, `grapevine_weekly_open`, `lavina_weekly_open` | `weekly_open` |
 | `config/site.yml` → `sources.grapevine.audio_project`, `sources.lavina.record_story`, `record_instructions`, `record_tips`, `record_topics`, `sample_audio` | `audio_project` |
 | `config/site.yml` → `meetings`, `spotlight.neta65_counties` | `meetings` |
 | `config/site.yml` → `sources.grapevine.base` or `sources.lavina.base` | `editorial`, `weekly_open` (Grapevine's base), `audio_project`, `events_external` |

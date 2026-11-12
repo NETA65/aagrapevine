@@ -1004,9 +1004,14 @@ meeting's Google Meet room:
 `lavina_weekly_open:` in `config/site.yml` holds La Viña's weekly open meeting (from its official flyer —
 La Viña's page for it, www.aalavina.org/podcast, is its podcast's, and nothing is read from it): Spanish
 and English title and summary, `day`, `time` + `timezone` (the meeting's own time zone; the site also shows
-Central time), `starts` (the first meeting, which must be on that `day`), `zoom_id` and `passcode`, and `url`: its page
+Central time), `starts` (the first meeting, which must be on that `day`), `zoom_id` and `passcode`, `zoom_url` (its
+full Zoom link, with the `?pwd=…` part, for the card's **Join on Zoom** and its calendar entries: nobody types the
+passcode), `flyer_match` (its flyer on the Drive), and `url`: its page
 (`https://www.aalavina.org/podcast`, the card's **Details on aalavina.org**). Set `enabled: false` (or delete the block) to take it off the
-site. Its recordings are a podcast of their own, the show `lvo` under `sources.podcasts` (`weekly_open: "lavina"`):
+site. Its neighbour `grapevine_weekly_open:` gives the Grapevine Weekly Open the same two things aagrapevine.org's
+page does not: `zoom_url` and `flyer_match` (AA Grapevine's flyer on the Drive). A `zoom_url` is used only while its
+meeting number is the meeting's own Zoom ID; otherwise Join opens the plain `https://zoom.us/j/<ID>` link and
+`/status/` says why ([how-to §3.7](how-to/settings.md#37-lavina_weekly_open--la-viñas-weekly-open-meeting-and-grapevine_weekly_open)). Its recordings are a podcast of their own, the show `lvo` under `sources.podcasts` (`weekly_open: "lavina"`):
 its card on `/meetings/` links them (**Listen to past meetings**), and their show card on `/listen/` says the
 meeting's day and language ([how-to §3.4](how-to/automatic-sources.md#34-podcasts)).
 

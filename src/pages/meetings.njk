@@ -29,8 +29,9 @@ pageScripts: ["/assets/js/committee.js"]
         nearby on/off) in committee.js (cmGvMeetings) — without JavaScript every group shows. On /es/,
         when no group on the lists meets in Spanish, the intro points up to #weekly-open;
     (c) #weekly-open — the weekly open meetings of AA Grapevine and La Viña, FIRST on the page (right under
-        (0), before (a)): open AA meetings, where anyone interested in AA is welcome (La Viña's card links to
-        its official flyer on the committee's Drive when one matches lavina_weekly_open.flyer_match).
+        (0), before (a)): open AA meetings, where anyone interested in AA is welcome (each card's Join opens
+        the meeting's full Zoom link, and each links its official flyer on the committee's Drive when one matches
+        grapevine_weekly_open / lavina_weekly_open.flyer_match).
     Each section opens with ui.sectionHead (eyebrow, title, one line of text).
     The hero's right-hand card (the shared hero aside, "This week"): how many Grapevine meetings there
     are today (committee.js gvmTeaser: its link also sets the list's Day filter to today) and the next
@@ -255,12 +256,15 @@ pageScripts: ["/assets/js/committee.js"]
           {% if woShowKey %}<a class="btn-secondary" href="{{ ('/listen/?show=' + woShowKey + '#episodes') | lurl(lang) }}" aria-label="{{ 'committee.weekly.listen_name' | t(lang, { name: w.title or ('committee.weekly.title' | t(lang)) }) }}">{% icon "headphones", "size-4" %} {{ "committee.weekly.listen" | t(lang) }}</a>{% endif %}
           {% if w.detailsUrl %}<a class="btn-ghost" href="{{ w.detailsUrl }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span>{{ ("committee.weekly.details_" + key) | t(lang) | escape | replace(r/(\S+)\.org/g, '<span class="inline-block">$1<wbr>.org</span>') | safe }}</span></a>{% endif %}
         </div>
-        {#- La Viña's details come from its official flyer: the flyer itself, when it is on the committee's
-            Drive (config/site.yml lavina_weekly_open.flyer_match → driveMatch; the Portfolio stays its home) -#}
-        {%- set woFlyer = (db.drive.items | driveMatch(site.lavina_weekly_open.flyer_match)) if (w.isLv and site.lavina_weekly_open and site.lavina_weekly_open.flyer_match) else null -%}
+        {#- Each meeting's official flyer, when it is on the committee's Drive (flyers/): the newest file its settings'
+            flyer_match finds (config/site.yml grapevine_weekly_open / lavina_weekly_open → driveMatch; the Portfolio
+            stays its home). Grapevine's details still come from aagrapevine.org: its line (source_gv) adds that the
+            flyer is AA Grapevine's (committee.weekly.source_gv_flyer), kept whole on a line of its own when it wraps -#}
+        {%- set woCfg = (site.lavina_weekly_open if w.isLv else site.grapevine_weekly_open) or {} -%}
+        {%- set woFlyer = (db.drive.items | driveMatch(woCfg.flyer_match, "flyers")) if woCfg.flyer_match else null -%}
         {% if woFlyer %}
         <div class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-4">
-          <p class="text-xs text-faint">{{ ("committee.weekly.source_" + key) | t(lang) }}</p>
+          <p class="text-xs text-faint">{% if w.isLv %}{{ "committee.weekly.source_lv" | t(lang) }}{% else %}{{ "committee.weekly.source_gv" | t(lang) }} <span class="inline-block">{{ "committee.weekly.source_gv_flyer" | t(lang) }}</span>{% endif %}</p>
           <a class="btn-ghost btn-sm" href="{{ woFlyer.extra.view_url or woFlyer.url }}" target="_blank" rel="noopener">{% icon "file-image", "size-4" %} {{ "committee.events.view_flyer" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
         </div>
         {% else %}

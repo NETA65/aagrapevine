@@ -67,7 +67,7 @@ DYNAMIC: dict[str, dict[str, str]] = {
 
 # --- the `site` the pages get (src/_data/site.js)
 SITE_SECTIONS = {"meeting", "recurring_events", "drive", "sources", "links", "phone_access", "digest",
-                 "lavina_weekly_open", "meetings", "spotlight", "store_offers"}
+                 "lavina_weekly_open", "grapevine_weekly_open", "meetings", "spotlight", "store_offers"}
 SITE_COMPUTED = {"built", "url", "repository", "timezone"}
 # Settings site.js always fills in, so the pages have them even when config/site.yml leaves them out (as its notes
 # allow): their path in `site` → what site.js gives.
