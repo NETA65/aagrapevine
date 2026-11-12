@@ -1344,6 +1344,19 @@ time "Noon Eastern" → **11 AM Central**, plus the next meeting date. If one de
 yesterday's is kept. If the page cannot be read at all, the previous details stay and the source is
 marked failed.
 
+**The full join link** (since November 12, 2026). The page gives the meeting ID and passcode but no link, so the
+committee's settings give each meeting its full Zoom link, with its `?pwd=…` part: `grapevine_weekly_open: zoom_url`
+and `lavina_weekly_open: zoom_url` (today both
+`https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1`, the link the QR code on La Viña's
+newest flyer opens). The card's **Join on Zoom**, its Google Calendar link and its `.ics` file then open the
+meeting without asking for the passcode. `join_link` uses a link only when it is a Zoom join link
+(`https://<server>.zoom.us/j/<digits>`, optionally `?pwd=…`, nothing else) whose digits are the meeting's ID —
+Grapevine's as the page gives it that day, La Viña's `zoom_id`; otherwise the plain `https://zoom.us/j/<ID>`, and
+the source's notes on `/status/` say why (without the `pwd=` part). So if the meeting moves to another Zoom room,
+Join still opens the right room (people type the passcode) until the new full link is pasted in the settings.
+`grapevine_weekly_open: flyer_match` finds AA Grapevine's flyer on the Drive for the Grapevine card ("View flyer"),
+as La Viña's `flyer_match` does for its card ([Settings §3.7](settings.md#37-lavina_weekly_open--la-viñas-weekly-open-meeting-and-grapevine_weekly_open)).
+
 **The passcode** (`find_passcode`, since October 2026) is the first word after "password", "passcode",
 "contraseña" or "código de acceso" that holds a digit, so "This meeting is password protected; the passcode is
 238047" gives 238047, not "protected". A passcode of letters only still works, unless it is an ordinary word of
@@ -1370,10 +1383,11 @@ lavina_weekly_open:
   starts: "2026-11-05"          # the first meeting (a Thursday)
   zoom_id: "871 2036 8287"
   passcode: "238047"
-  summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores, … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
-  summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers, … Let's keep extending this powerful lifeline together!"
+  zoom_url: "https://us02web.zoom.us/j/87120368287?pwd=VYskKcQbHB4KtZiTk0EmDcMuJO95kV.1"   # the full link (Join, calendars)
+  summary_es: "Una reunión abierta virtual de AA en español. Cada semana hay un coordinador y dos oradores que son miembros de AA, … ¡Sigamos extendiendo juntos esta poderosa cuerda salvavidas!"
+  summary_en: "A virtual open AA meeting in Spanish. Each week has a chairperson and two speakers who are AA members, … Let's keep extending this powerful lifeline together!"
   url: "https://www.aalavina.org/podcast"   # La Viña's page for it: the card's "Details on aalavina.org" — exactly so, no "/" at the end
-  source: "Official La Viña flyers (November 2026, and a newer one without a month), shared with the committee"
+  source: "Official La Viña flyers shared with the committee: November 2026's, and the newest one, …"
   flyer_match: "reuni[oó]n abierta de la vi[nñ]a|la vi[nñ]a open meeting"
 ```
 
@@ -1386,8 +1400,9 @@ lavina_weekly_open:
 | `timezone` | a time-zone name such as `America/New_York` (the default) or `America/Chicago` — **not** `Eastern` |
 | `starts` | the first meeting; until then the card says "Starts …". A date that is not on `day` → the first real meeting day is used |
 | `zoom_id` | 9–11 digits, shown grouped ("871 2036 8287") |
+| `zoom_url` | the full Zoom link of that meeting ID, exactly as Zoom gives it (`?pwd=…` included); another room's link or anything else → the plain link and a note on `/status/`; `""` → the plain link |
 | `passcode`, `url`, `source` | shown or linked as written |
-| `flyer_match` | a regular expression (capitals ignored) that finds the flyer on the committee's Drive → a "See the flyer" link on the card. Several files match → the newest one (since Nov 7, 2026: the flyer without a month, "Reunión abierta de La Viña - todos los jueves …") |
+| `flyer_match` | a regular expression (capitals ignored) that finds the flyer in the committee's Drive folder `flyers/` → a "View flyer" link on the card. Several files match → the newest one (since Nov 12, 2026: the flyer without a month, "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"; its older edition is in the Drive's private folder) |
 
 Checked with `lavina_item` (as of Oct 2, 2026): the real block gives "Jueves, 12 p. m. (hora del
 Este)", **11 AM Central**, next meeting Nov 5, 2026. `time: "11 a. m."` → 10 AM Central.
@@ -1399,7 +1414,7 @@ Este)", **11 AM Central**, next meeting Nov 5, 2026. `time: "11 a. m."` → 10 A
 > editing this block, look at `/meetings/#weekly-open` a few minutes later.
 
 **How often.** Both meetings: the full daily update — and the quick run of a save that changed
-`lavina_weekly_open` or `sources.grapevine.weekly_open` (or `sources.grapevine.base`), so an edit to the La Viña
+`lavina_weekly_open`, `grapevine_weekly_open` or `sources.grapevine.weekly_open` (or `sources.grapevine.base`), so an edit to the La Viña
 block (time, Zoom, `enabled: false` …) shows a few minutes after you save. `flyer_match` is read by the page
 itself and follows at the quick rebuild in any case.
 
@@ -1413,9 +1428,11 @@ posters; the GV/LV report; the presentations; search; the booth display ("Meetin
 meeting ID). Never "new".
 
 **Code pointers.** [`scripts/sync/weekly_open.py`](../scripts/sync/weekly_open.py) → `parse_page`,
-`build_item`, `lavina_item`, `with_lavina`, `carry_join_details`; `build_data.py` →
+`build_item`, `lavina_item`, `with_lavina`, `carry_join_details`, `join_link` / `with_join_link` (the full
+links); `build_data.py` →
 `weekly_open_items` (Grapevine always first); display `eleventy/filters/committee.js` → `cmWeeklyAll`,
-and `src/pages/meetings.njk`. Test: `tests/test_sync_pipeline.py`.
+and `src/pages/meetings.njk`. Tests: `tests/test_sync_pipeline.py`, `tests/test_weekly_open.py`,
+`tests/test_r26c_weekly_link.py` (the full links and the two flyers).
 
 ---
 

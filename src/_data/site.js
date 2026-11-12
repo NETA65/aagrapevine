@@ -42,6 +42,9 @@ export default function () {
     // La Viña's weekly open meeting (the data itself comes from data/site/weekly_open.json); the page
     // reads `flyer_match` here — the "View flyer" link on /meetings/#weekly-open
     lavina_weekly_open: cfg.lavina_weekly_open || {},
+    // …and the Grapevine Weekly Open's (its data is read from aagrapevine.org; its full join link, `zoom_url`, is the
+    // sync's — data/site/weekly_open.json): `flyer_match`, the "View flyer" link on its card
+    grapevine_weekly_open: cfg.grapevine_weekly_open || {},
     // The Grapevine meetings' offices (/meetings/#grapevine-meetings, eleventy/filters/committee.js gvMeetings):
     // without data/site/meetings.json the page still names "Our Area" (area_label) and links each office's
     // own site (feeds[].name / site) for people to look there.

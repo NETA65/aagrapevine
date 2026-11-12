@@ -29,6 +29,9 @@
 "Coming in": { es: "Llegando a AA" }                       # YouTube playlist
 "Sponsorship: “Willing to go to any length.”": { es: "Padrinazgo: “Dispuestos a llegar hasta donde sea necesario”" }
 "Introducing The Grapevine Open AA Meeting": { es: "Presentamos la Grapevine Open AA Meeting" }
+# Committee Portfolio (Google Drive flyers/, 2026-11-12): AA Grapevine's flyer of its weekly open meeting, the one
+# grapevine_weekly_open.flyer_match finds for /meetings/ — the meeting is in English, so the Spanish title says so
+"Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom": { es: "Reunión abierta semanal de Grapevine (en inglés) - todos los miércoles, 11 a. m. hora del Centro (mediodía del Este), por Zoom" }
 "GV Plays: “A Grapevine Christmas Carol”": { es: "Obras de GV: “Un cuento de Navidad de Grapevine”" }
 # Texas writers in the published-writers spotlight (home page), checked by hand 2026-09-23
 "A sober granddad survives a boozy holiday block party and gets to give the performance of a lifetime": { es: "Un abuelo sobrio sobrevive a una fiesta de barrio con mucho alcohol y logra dar la actuación de su vida" }
@@ -454,9 +457,9 @@
 # --- Spanish → English ------------------------------------------------
 # Committee Portfolio (Google Drive): La Viña's flyer is in Spanish, so is its file name
 "Nueva reunión abierta de La Viña - jueves a las 12 p. m. (hora del Este) por Zoom": { en: "New La Viña Open Meeting - Thursdays at 12 PM Eastern on Zoom" }
-# …and its newer flyer without a month (Drive flyers/, 2026-11-07): the newest file that lavina_weekly_open.flyer_match
-# finds is the one /meetings/ shows
-"Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom": { en: "La Viña Open Meeting - Every Thursday at 12 PM Eastern on Zoom" }
+# …and its newest flyer without a month (Drive flyers/, 2026-11-12; the edition of 2026-11-07 went to the Drive's
+# private folder, off the site): the newest file that lavina_weekly_open.flyer_match finds is the one /meetings/ shows
+"Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom": { en: "La Viña Open Meeting (in Spanish) - Every Thursday, 11 AM Central (noon Eastern), on Zoom" }
 # La Viña's open-meeting podcast (config sources.podcasts "lvo", from 2026-11-09) and its YouTube copies: the show's
 # name (its episodes' and videos' titles are that name and a " [Temporada 1, episodio 1]" tail — the machine wrote
 # "Weekly Open Meeting of Alcoholics Anonymous La Viña"). Its description needs no line here: it carries its own

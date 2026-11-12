@@ -79,8 +79,10 @@ SETTINGS: dict[str, tuple[str, ...]] = {
     "editorial": ("sources.grapevine.base", "sources.grapevine.contribute", "sources.lavina.base",
                   "sources.lavina.contribute", "sources.lavina.themes_page", "sources.lavina.rlv_resources",
                   "sources.lavina.themes_link"),
-    # weekly_open.py main(): the Grapevine Weekly Open page, and La Viña's weekly open meeting (from its flyer)
-    "weekly_open": ("sources.grapevine.base", "sources.grapevine.weekly_open", "lavina_weekly_open"),
+    # weekly_open.py main(): the Grapevine Weekly Open page and its full join link, and La Viña's weekly open meeting
+    # (from its flyer)
+    "weekly_open": ("sources.grapevine.base", "sources.grapevine.weekly_open", "grapevine_weekly_open",
+                    "lavina_weekly_open"),
     # audio_project.settings(): the record-your-story pages (the links to the other three are kept with the item)
     "audio_project": ("sources.grapevine.base", "sources.grapevine.audio_project", "sources.lavina.base",
                       "sources.lavina.record_story", "sources.lavina.record_instructions",
