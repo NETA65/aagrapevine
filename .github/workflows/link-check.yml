@@ -1,9 +1,12 @@
 # =====================================================================
 #  Weekly link check (never blocks anything — it only reports).
 #
-#  1. Builds the site and checks every link on every page with lychee
-#     (open source, MIT/Apache-2.0): internal links between our pages plus
-#     outbound links such as district websites.
+#  1. Builds the site for the address GitHub Pages serves (job "Find the
+#     site's address": a custom domain such as grapevine.neta65.org, http://
+#     until "Enforce HTTPS"; site.url in config/site.yml if that is not
+#     known) and checks every link on every page with lychee (open source,
+#     MIT/Apache-2.0): internal links between our pages plus outbound links
+#     such as district websites.
 #     High-volume hosts are skipped on purpose: aagrapevine.org /
 #     aalavina.org (thousands of PDF links — the daily crawler already
 #     tracks those politely, 5 s apart), YouTube, Instagram, Google (the
@@ -13,22 +16,25 @@
 #  2. Checks the official links in config/site.yml one by one with the
 #     site's polite bot (honors robots.txt and the 5-second crawl delay),
 #     so a moved Grapevine / La Viña page is noticed.
-#  3. Reads the robots.txt at the ROOT of the site's address
-#     (https://neta65.github.io/robots.txt — the only one search engines
-#     read; it comes from the NETA65/neta65.github.io repository) with the
-#     same bot: Google and Bing must be allowed in and the sitemap named
-#     (scripts/ops/root_robots.py). A 404 only means "not set up yet".
+#  3. Reads the robots.txt at the ROOT of the site's address with the same
+#     bot: Google and Bing must be allowed in and the sitemap named
+#     (scripts/ops/root_robots.py). With a custom domain the site IS at the
+#     root of its address and its own robots.txt is that file, so the step
+#     says "Skipped". Only for a project site (neta65.github.io/aagrapevine/)
+#     does it read https://neta65.github.io/robots.txt, from the
+#     NETA65/neta65.github.io repository; a 404 there means "not set up yet".
 #
 #  Result: the run summary, plus ONE GitHub issue titled "Broken links
 #  found by the weekly check" that is updated while problems remain and
 #  closed automatically once everything is fine again.
 #
-#  Two jobs, so the outside code never holds a key that can write: "Check
-#  links" (the link checker — an action from outside GitHub, pinned to one
-#  commit — and the Python packages of the polite check) may only READ the
-#  repository; it hands its reports (an artifact) to "Report broken
-#  links", a small job with no checkout and no outside code — the only
-#  one allowed to write issues.
+#  Separate jobs, so the outside code never holds a key that can do more
+#  than read: "Find the site's address" (no checkout, only GitHub's own gh)
+#  reads the Pages settings; "Check links" (the link checker — an action
+#  from outside GitHub, pinned to one commit — and the Python packages of
+#  the polite check) may only READ the repository; it hands its reports (an
+#  artifact) to "Report broken links", a small job with no checkout and no
+#  outside code — the only one allowed to write issues.
 # =====================================================================
 name: Weekly link check
 run-name: ${{ github.event_name == 'schedule' && 'Weekly link check (GitHub schedule)' || 'Weekly link check (started by hand)' }}
@@ -51,8 +57,31 @@ env:
   ISSUE_TITLE: "Broken links found by the weekly check"
 
 jobs:
+  address:
+    name: Find the site's address
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: read              # the site's public address (a custom domain included)
+    outputs:
+      url: ${{ steps.site.outputs.url }}
+    steps:
+      - name: Find the site's address
+        id: site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The address GitHub Pages actually serves, as morning.yml finds it (http:// for a custom domain until
+          # "Enforce HTTPS" is ticked). Empty if this fails: the build and the root robots.txt check then use
+          # site.url from config/site.yml, as before.
+          url="$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '.html_url' 2>/dev/null || true)"
+          echo "url=${url%/}" >> "$GITHUB_OUTPUT"
+          echo "Site address: ${url:-"(not known here: site.url from config/site.yml)"}"
+
   links:
     name: Check links
+    needs: address
+    if: ${{ !cancelled() }}    # the address not known: site.url from config/site.yml
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -76,6 +105,10 @@ jobs:
           cache: npm
 
       - name: Build the site (for checking only — nothing is published)
+        env:
+          # the live address, so the pages' own full links (canonical, language twins, share links) are checked
+          # where visitors open them, not through the old address's forward; empty → site.url from config/site.yml
+          SITE_URL: ${{ needs.address.outputs.url }}
         run: |
           npm ci --no-audit --no-fund
           # PATH_PREFIX "/" so links like /es/library/ map straight onto _site/
@@ -206,14 +239,17 @@ jobs:
               f.write(f"broken={len(broken)}\n")
           PY
 
-      # Search engines read robots.txt only at the root of the address (https://neta65.github.io/robots.txt, from
-      # the NETA65/neta65.github.io repository — README → "Search engines"); one wrong line there hides the site.
-      # 404 = not set up yet (not a problem); a site with its own address (a custom domain) is skipped.
+      # Search engines read robots.txt only at the root of the address. With a custom domain (grapevine.neta65.org)
+      # the site is that root and its own robots.txt (src/robots.njk) is the file: the step says "Skipped". For a
+      # project site it reads https://neta65.github.io/robots.txt (the NETA65/neta65.github.io repository —
+      # README → "Search engines"), where one wrong line hides the site; 404 = not set up yet (not a problem).
       # (a check that could not run at all — its Python packages missing, a crash — is a problem too: else the
       # issue would close as "all good" with nothing said about the root robots.txt)
       - name: Check the root robots.txt (politely)
         id: robots
         continue-on-error: true
+        env:
+          SITE_URL: ${{ needs.address.outputs.url }}    # empty → site.url from config/site.yml
         run: |
           python -m scripts.ops.root_robots || {
             echo "problems=1" >> "$GITHUB_OUTPUT"

@@ -18,6 +18,7 @@ works in a temporary folder.
   * LinkCheck      — link-check.yml: the outside link checker runs with a read-only key, pinned to a commit; a job of
                      its own, with no checkout, writes the issue from its reports (it opens, comments, closes); the
                      root robots.txt is read too (scripts/ops/root_robots.py), and a problem there opens the issue;
+                     both build for and read the address GitHub Pages serves (a small job of its own finds it);
   * Pinned         — every action from outside GitHub (not actions/…) in every workflow is pinned to a full commit
                      id, with its "# vX.Y.Z";
   * Dependabot     — it watches the Python packages too (new major versions only, one grouped pull request a month;
@@ -730,6 +731,40 @@ class LinkCheck(unittest.TestCase):
         self.assertLess(names.index("Check the official links in config/site.yml (politely)"),
                         names.index("Check the root robots.txt (politely)"))
         self.assertLess(names.index("Check the root robots.txt (politely)"), names.index("Keep the reports for the issue"))
+
+    def test_the_live_address_from_github_pages(self):
+        """The check builds for the address GitHub Pages serves (grapevine.neta65.org, http:// until "Enforce HTTPS")
+        and reads that address's root robots.txt — never the config's github.io address while Pages knows better.
+        A job of its own reads the Pages settings (pages: read, no checkout, no outside code), so "Check links" keeps
+        its read-only key."""
+        addr = self.jobs["address"]
+        self.assertEqual(addr["permissions"], {"pages": "read"})
+        self.assertEqual([s.get("uses") for s in addr["steps"] if s.get("uses")], [], "no checkout, no outside code")
+        self.assertEqual(addr["outputs"], {"url": "${{ steps.site.outputs.url }}"})
+        links = self.jobs["links"]
+        self.assertEqual((links["needs"], links["if"]), ("address", "${{ !cancelled() }}"))
+        build = step(links, "Build the site (for checking only — nothing is published)")
+        robots = step(links, "Check the root robots.txt (politely)")
+        for s in (build, robots):
+            with self.subTest(step=s["name"]):
+                self.assertEqual(s["env"]["SITE_URL"], "${{ needs.address.outputs.url }}")
+        self.assertIn("PATH_PREFIX=/ npx @11ty/eleventy", build["run"], "a custom domain or not: the pages map onto _site/")
+        bash = bash_path()
+        if not bash:
+            self.skipTest("needs bash")
+        run = step(addr, "Find the site's address")["run"]
+        for answer, ok, want in (("http://grapevine.neta65.org/", True, "http://grapevine.neta65.org"),
+                                 ("https://grapevine.neta65.org/", True, "https://grapevine.neta65.org"),
+                                 ("", False, "")):
+            with self.subTest(answer=answer):
+                tmp = Path(tempfile.mkdtemp(prefix="gv-addr-"))
+                self.addCleanup(shutil.rmtree, tmp, True)
+                out = tmp / "out.txt"
+                stub = (f'gh() {{ [ "$1 $2" = "api repos/o/r/pages" ] || return 9; '
+                        + (f'echo "{answer}"; }}\n' if ok else 'return 1; }\n'))
+                r = run_bash(bash, stub + run, {"GITHUB_REPOSITORY": "o/r", "GITHUB_OUTPUT": str(out), "GH_TOKEN": "x"}, cwd=tmp)
+                self.assertEqual(r.returncode, 0, r.stderr)
+                self.assertEqual(out.read_text(encoding="utf-8").splitlines(), [f"url={want}"])
 
     def test_a_small_job_of_its_own_writes_the_issue(self):
         report = self.jobs["report"]

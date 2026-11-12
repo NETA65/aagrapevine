@@ -151,7 +151,7 @@ All five live in [`.github/workflows/`](../.github/workflows/). Their names in t
 | **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | an hourly backstop through the night, the morning alarm, *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do | a run summary; its no-op runs are deleted a day later |
 | **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the browser checks + every Python test + an e-mail dry run. Publishes nothing | about 10 minutes | a ✓ or ✗ on the commit or pull request |
 | **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest, once. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; the month's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM` or `digest-unsent-YYYY-MM`; a `digest-preview` download |
-| **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | checks every link on the built site, the official links in the settings and the root robots.txt (https://neta65.github.io/robots.txt) (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
+| **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | finds the address GitHub Pages serves (job *Find the site's address*), then checks every link on the site built for it, the official links in the settings and the root robots.txt (skipped with the custom domain: the site's own is that file) (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
 
 Plus **Dependabot** ([`.github/dependabot.yml`](../.github/dependabot.yml)): once a month it may open a pull
 request that updates the building blocks: `chore(actions)…` for the workflows' actions, `chore(deps)…` for the
@@ -570,13 +570,16 @@ On Sundays (and by hand) it builds the site, checks every link on every page wit
 aagrapevine.org, aalavina.org, YouTube, Instagram, Google (our meetings' Google Meet link among them), Zoom and
 podcast, social and shopping sites, which limit robots),
 then checks the official links in `config/site.yml` (`links:`, `site.area_website`, `site.committee_page`,
-each podcast's `web:`) one by one with the site's polite robot. Then it reads the robots.txt at the root of the
-site's address, https://neta65.github.io/robots.txt (`scripts/ops/root_robots.py`, step *Check the root robots.txt
-(politely)*, one request with the robot's name): Googlebot and Bingbot must be allowed to fetch the two home pages
-(`/`, `/es/`), a stylesheet (`/assets/css/main.css`), a script (`/assets/js/app.js`), `/search-index.json` and
-`/sitemap.xml`, and the file must name the sitemap. A 404 means the NETA65/neta65.github.io repository is not set
-up yet (README → "Search engines", step C) — reported as "Not set up yet", not as a problem. A site with its own
-address (a custom domain) is skipped: its own robots.txt is then the root file. A check that cannot run at all (it
+each podcast's `web:`) one by one with the site's polite robot. The build and the next step use the address
+GitHub Pages serves (job *Find the site's address*; `site.url` from `config/site.yml` when it is not known). Then it
+looks at the robots.txt at the root of the site's address (`scripts/ops/root_robots.py`, step *Check the root
+robots.txt (politely)*). With the custom domain (grapevine.neta65.org) the site is that root and its own robots.txt
+is the file search engines read, so the step says **Skipped**. Only for a project site
+(neta65.github.io/aagrapevine) does it read https://neta65.github.io/robots.txt (one request with the robot's
+name): Googlebot and Bingbot must be allowed to fetch the two home pages (`/`, `/es/`), a stylesheet
+(`/assets/css/main.css`), a script (`/assets/js/app.js`), `/search-index.json` and `/sitemap.xml`, and the file
+must name the sitemap. A 404 there means the NETA65/neta65.github.io repository is not set up (README → "Search
+engines", step C) — reported as "Not set up yet", not as a problem. A check that cannot run at all (it
 crashed, or its Python packages are missing) counts as a problem too — "The check itself could not run — see the
 step …" —, so the issue never closes as all good with nothing known about the file. A broken link or a root
 robots.txt problem **never turns it red** (only a site build that fails would); it keeps one issue instead (8.2).
@@ -1082,9 +1085,9 @@ by hand while the source is still failing, the next run simply opens a new one.)
 Kept by the *Weekly link check*:
 
 - **Opens** (or, if already open, gets a new comment, every Sunday) when lychee found broken links, an official
-  link in `config/site.yml` is broken, or the root robots.txt (https://neta65.github.io/robots.txt) keeps Google or
-  Bing out, lost its `Sitemap:` line, redirects (a custom domain set on the NETA65/neta65.github.io repository) or
-  does not answer, or the check of that file could not run at all ("The check itself could not run — see the step
+  link in `config/site.yml` is broken, or (for a project site only) the root robots.txt
+  (https://neta65.github.io/robots.txt) keeps Google or Bing out, lost its `Sitemap:` line, redirects (a custom
+  domain set on the NETA65/neta65.github.io repository) or does not answer, or the check of that file could not run at all ("The check itself could not run — see the step
   …") — a 404 (not set up yet) never opens it. The text starts "The weekly link check found problems.
   Most can be fixed in **config/site.yml** or the files in **content/**", followed by the report (cut at about
   60,000 characters); a robots.txt problem is under *The root robots.txt*, with "Fix it in **the
