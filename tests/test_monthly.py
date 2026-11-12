@@ -224,6 +224,8 @@ class Strings(unittest.TestCase):
         """config/carry.yml ("Put this issue to work": the month pages and the poster's tips) never asks for a
         donation: Grapevine and La Viña take none (a gift subscription is a purchase) — the booth's rule,
         tests/test_booth_csv.py. Every text in the file, English and Spanish."""
+        # config/carry.yml as the committee keeps it — left to the Code check (scripts/ops/gate_tests.py
+        # CONTENT_TESTS: a donation word there must never keep the site from updating)
         import yaml
         data = yaml.safe_load((ROOT / "config" / "carry.yml").read_text(encoding="utf-8"))
         texts: list[tuple[str, str]] = []
@@ -977,18 +979,26 @@ class PosterNote(unittest.TestCase):
 POSTER_DATES_JS = r"""
 process.env.ONLY = "-none-";
 const M = await imp("eleventy/filters/monthly.js");
+const conf = await imp("eleventy.config.js");
+const t = (k, l, v) => conf.translateKey(k, l, v);
 const os = await import("node:os");
 const { Eleventy } = await import("@11ty/eleventy");
 const { db, site, carry } = input;
 const now = new Date(input.now);
 const LAYOUTS = { editorial: "frost", ticket: "rose", split: "sprout", cork: "rain", cover: "bloom", notebook: "notebook" };
 const cases = {}, models = {};
+const mm = { en: M.monthModel("2026-10", db, carry, site, "en", now), es: M.monthModel("2026-10", db, carry, site, "es", now) };
 for (const lang of ["en", "es"]) {
-  const m = M.monthModel("2026-10", db, carry, site, lang, now);
-  models[lang] = { density: m.density, dates: m.dates.map((d) => ({ kind: d.kind, title: d.title })) };
+  const m = mm[lang];
+  // (the month's message in the page's language, WhatsApp: the offers and the price change it names)
+  const message = M.monthMessage({ mm, nw: { [lang]: M.monthNow(db, site, lang, now) }, iss: { [lang]: M.monthIssueLinks(db, m) } },
+                                 [lang], "whatsapp", site, t);
+  models[lang] = { density: m.density, dates: m.dates.map((d) => ({ kind: d.kind, title: d.title })), message };
   for (const [layout, design] of Object.entries(LAYOUTS)) cases[`${layout}-${lang}`] = { m: { ...m, layout, design }, lang };
 }
-cases["empty-en"] = { m: { ...M.monthModel("2026-10", db, carry, site, "en", now), dates: [] }, lang: "en" };
+cases["empty-en"] = { m: { ...mm.en, dates: [], offers: [], price: null }, lang: "en" };
+// no date, but the stores' offers and the price change: the list, without "no dates"
+cases["extras-only-es"] = { m: { ...mm.es, dates: [] }, lang: "es" };
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gv-poster-dates-"));
 try {
   const elev = new Eleventy("src", dir, { quietMode: true, configPath: "eleventy.config.js", config(cfg) {
@@ -1036,6 +1046,24 @@ class _Places(HTMLParser):
                 break
 
 
+# The stores' offers of the busy month (config/site.yml store_offers' shape): one over on the 3rd (left out of the
+# current month's poster and message), one for the whole month, one without a first day (a gift: "Through …"), and a
+# price change announced in September (data/site/shop.json price_changes' shape) — October says it is coming.
+STORE_OFFERS = [
+    {"key": "early-2026", "title": "Early offer at the stores", "title_es": "Early offer ES", "starts": "2026-09-20",
+     "ends": "2026-10-03", "gv": {"text": "An early offer."}},
+    {"key": "shipping-oct", "title": "Free shipping at the Grapevine and La Viña stores",
+     "title_es": "Envío gratis en las tiendas de La Viña y Grapevine", "starts": "2026-10-01", "ends": "2026-10-31",
+     "gv": {"text": "Free shipping on all Grapevine products."}, "lv": {"text": "Free shipping on all La Viña products."}},
+    {"key": "gifts-2026", "title": "Holiday gift offers at the Grapevine and La Viña stores",
+     "title_es": "Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine", "starts": "2026-10-02",
+     "show_starts": False, "ends": "2026-12-31", "icon": "gift", "gv": {"text": "Gift offers."}},
+]
+PRICE_CHANGE = {"key": "2027-01", "announced": "2026-09-15", "effective": "2027-01-01", "notice_until": "2027-01-31",
+                "at": {"announced": "2026-09-15T05:00:00Z", "effective": "2027-01-01T06:00:00Z", "notice_end": "2027-02-01T06:00:00Z"},
+                "books_more": 2.0, "yearly": []}
+
+
 class PosterEveryDate(unittest.TestCase):
     """Round 26b (the owner: "every event of the month on the poster, with smaller borders"): the poster shows EVERY
     date of the month — the page's Dates list — in every layout and language, however busy the month: no "+N more on
@@ -1060,22 +1088,24 @@ class PosterEveryDate(unittest.TestCase):
                 # never "· Riverside")
                 event("ev:x4", "2026-10-24", "2026-10-24", "La Viña-Grapevine Workshop", extra={"city": "Riverside", "all_day": True}),
             ]
-            PosterEveryDate.r = run_js(self, POSTER_DATES_JS, data={"db": db, "site": SITE, "carry": CARRY, "now": NOW_A},
-                                       timeout=300)
+            # the month's other happenings (round 26b, fix round 2): the stores' offers and a price change announced
+            db["shop"]["price_changes"] = [PRICE_CHANGE]
+            PosterEveryDate.r = run_js(self, POSTER_DATES_JS, data={"db": db, "site": {**SITE, "store_offers": STORE_OFFERS},
+                                                                    "carry": CARRY, "now": NOW_A}, timeout=300)
         self.r = PosterEveryDate.r
         self.s = i18n_all()
 
     def test_every_date_in_every_layout(self):
-        self.assertEqual(len(self.r["html"]), 13)
+        self.assertEqual(len(self.r["html"]), 14)
         for name, page in self.r["html"].items():
-            if name.startswith("empty"):
+            if name.startswith(("empty", "extras-only")):
                 continue
             lang = name.rsplit("-", 1)[1]
             want = self.r["models"][lang]["dates"]
             with self.subTest(poster=name):
                 self.assertEqual(len(want), 11)
                 self.assertEqual(self.r["models"][lang]["density"], "dense", "the busiest kind of month")
-                rows = re.findall(r'<li class="mp-date mp-date--(\w+)">.*?<strong class="mp-date-t">(.*?)</strong>', page, re.S)
+                rows = re.findall(r'<li class="mp-date mp-date--(?!offer|price)(\w+)">.*?<strong class="mp-date-t">(.*?)</strong>', page, re.S)
                 self.assertEqual([k for k, _t in rows], [d["kind"] for d in want])
                 self.assertEqual([html.unescape(t) for _k, t in rows],
                                  [self.s["monthly.committee"][lang] if d["kind"] == "committee" else d["title"] for d in want])
@@ -1084,13 +1114,61 @@ class PosterEveryDate(unittest.TestCase):
                     self.assertNotIn(gone, page)
         self.assertNotIn("monthly.more_dates", self.s)
 
+    def test_the_months_offers_and_price_change(self):
+        """The owner: "add all the happenings and events of that month to those posters". After the dates, in the
+        Dates block: each offer the stores announced whose days meet the month, then AA Grapevine's price change —
+        in the words of the month's message (monthMessage), with the offer's own icon (the truck, the gift) and the
+        price change's calendar-clock in place of a date's chip. The current month leaves out an offer already over,
+        as its message does. Described only: no price, no link, no "!"."""
+        want = {"en": ["Free shipping at the Grapevine and La Viña stores | October 1 – October 31, 2026",
+                       "Holiday gift offers at the Grapevine and La Viña stores | Through December 31, 2026",
+                       "Grapevine and La Viña prices change on January 1, 2027"],
+                "es": ["Envío gratis en las tiendas de La Viña y Grapevine | Del 1 de octubre al 31 de octubre de 2026",
+                       "Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine | Hasta el 31 de diciembre de 2026",
+                       "Los precios de Grapevine y La Viña cambian el 1 de enero de 2027"]}
+        row = re.compile(r'<li class="mp-date mp-date--(offer|price)">\s*<span class="mp-chip mp-chip--icon" aria-hidden="true">'
+                         r'<svg class="icon mp-chip-i"[^>]*><use href="#i-([\w-]+)"/></svg></span>\s*<span class="mp-date-b">\s*'
+                         r'<strong class="mp-date-t">(.*?)</strong>\s*(?:<span class="mp-date-m">(.*?)</span>)?\s*</span>\s*</li>', re.S)
+        seen = 0
+        for name, page in self.r["html"].items():
+            if name.startswith("empty"):
+                continue
+            lang = name.rsplit("-", 1)[1]
+            with self.subTest(poster=name):
+                rows = row.findall(page)
+                self.assertEqual([k for k, *_r in rows], ["offer", "offer", "price"])
+                self.assertEqual([i for _k, i, *_r in rows], ["truck", "gift", "calendar-clock"])
+                got = [html.unescape(t) + (" | " + html.unescape(m) if m else "") for _k, _i, t, m in rows]
+                self.assertEqual(got, want[lang])
+                # the message's own words: 📦 / 🎁 an offer's heading and its days, 📢 the price change
+                msg = self.r["models"][lang]["message"]
+                said = [f"{a} | {b}" for a, b in re.findall(r"^(?:📦|🎁) \*(.+)\*\n(.+): \S+$", msg, re.M)]
+                said += re.findall(r"^📢 (.+): \S+$", msg, re.M)
+                self.assertEqual(got, said)
+                # the offer over on the 3rd (the current month, October 5): on neither
+                self.assertNotIn("Early offer", page)
+                self.assertNotIn("Early offer", msg)
+                # after every date, in the same list
+                at = page.index('<ul class="mp-dlist">')
+                ul = page[at:page.index("</ul>", at)]
+                kinds = re.findall(r'<li class="mp-date mp-date--(\w+)">', ul)
+                self.assertEqual(kinds[-3:], ["offer", "offer", "price"])
+                self.assertNotIn("offer", kinds[:-3])
+                self.assertNotIn("price", kinds[:-3])
+                self.assertNotRegex(ul, r"!|https?:|\$\d")
+                seen += 1
+        self.assertEqual(seen, 13)
+        only = self.r["html"]["extras-only-es"]
+        self.assertIn('<ul class="mp-dlist">', only)
+        self.assertNotIn(self.s["monthly.no_dates"]["es"], only)
+
     def test_no_date_line_starts_with_the_separator(self):
         """A date's line under its title joins its parts with " · " (range, time, the place or "Online", the
         committee meeting's words, "tentative"): an all-day event with a city reads "Riverside", never "· Riverside",
         and no part is left empty between two separators."""
         seen = 0
         for name, page in self.r["html"].items():
-            if name.startswith("empty"):
+            if name.startswith(("empty", "extras-only")):
                 continue
             with self.subTest(poster=name):
                 self.assertNotIn('<span class="mp-date-m"> ·', page)
@@ -1117,7 +1195,7 @@ class PosterEveryDate(unittest.TestCase):
                   "split": {"mp-story", "mp-dates", "mp-weekly", "mp-botm"}, "cork": {"mp-issue", "mp-dates", "mp-weekly", "mp-botm"},
                   "cover": {"mp-weekly", "mp-botm"}, "notebook": {"mp-weekly", "mp-botm"}}
         for name, page in self.r["html"].items():
-            if name.startswith("empty"):
+            if name.startswith(("empty", "extras-only")):
                 continue
             p = _Places()
             p.feed(page)
@@ -1161,6 +1239,9 @@ class PosterEveryDate(unittest.TestCase):
         clip = re.search(r"\[data-mp-poster\]:not\(\[data-mp-fit\]\) :is\(([^)]*)\) \{ overflow: clip;", css)
         self.assertIsNotNone(clip)
         self.assertIn(".mp-body > .mp-col", clip.group(1))
+        # a Spanish poster starts smaller until its fit (its longer words: March, June, September 2027 lost dates),
+        # never the copy the fit measures, nor the fitted poster
+        self.assertIn('[data-mp-poster]:not([data-mp-fit])[lang="es"] { font-size: 21px; }', css)
         self.assertIn('c.removeAttribute("data-mp-poster");', js)
         self.assertIn('<header class="mp-head{% if r/[gjpqy]/.test(m.name) %} mp-head--desc{% endif %}"', macro)
         self.assertLess(css.index(".mp-head--desc .mp-tag { margin-top: 24px !important; }"), css.index(".mp-l-cover .mp-tag {"))

@@ -205,6 +205,12 @@
 .mp-chip-d { margin: 2px 0; font-family: var(--font-display); font-size: 1.45em; font-weight: 800; }
 .mp-chip-w { font-size: 0.66em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .mp-date--committee .mp-chip { background: var(--p-accent2); color: var(--p-on-accent2); }
+/* the month's other happenings after its dates (an offer of the stores, the price change: macros/monthly.njk dates()):
+   their icon in a smaller chip of the same colours, level with the title — the title takes the width a date's chip
+   would (every layout, the dates in more columns too) */
+.mp-dlist li:is(.mp-date--offer, .mp-date--price) { gap: 10px; }
+.mp-dates .mp-dlist .mp-chip--icon { justify-content: center; width: 1.9em; min-height: 1.9em; margin-top: 1px; padding: 0; border-radius: 8px; }
+.mp-chip-i { width: 1.2em; height: 1.2em; }
 .mp-date-b { min-width: 0; padding-top: 2px; }
 .mp-date-t { display: block; font-size: 0.92em; line-height: 1.15; }
 .mp-date-m { display: block; margin-top: 2px; font-size: 0.84em; line-height: 1.22; color: var(--p-muted); }
@@ -490,6 +496,13 @@
    halves end at the card's edge). The cork's and the split's columns end at the sheet, which clips them already. */
 [data-mp-poster]:not([data-mp-fit]) :is(.mp-body > .mp-col, .mp-feature, .mp-rail, .mp-page, .mp-main, .mp-stub) { overflow: clip; overflow-clip-margin: 10px; }
 [data-mp-poster]:not([data-mp-fit]) :is(.mp-main, .mp-stub) { overflow-clip-margin: 0px; }
+/* …and a Spanish poster (longer words: the busy ones lost a date there at the density's type, March, June and
+   September 2027) starts at a smaller type until its fit, smaller still with nine rows or more in its Dates block
+   (November 2026: six dates, the stores' two offers and the price change): every row is on it before the fit too.
+   The copy the fit measures has no data-mp-poster (its starting type is the density's) and the fitted poster has its
+   own type. */
+[data-mp-poster]:not([data-mp-fit])[lang="es"] { font-size: 21px; }
+[data-mp-poster]:not([data-mp-fit])[lang="es"]:has(.mp-dlist > li:nth-child(9)) { font-size: 18px; }
 
 /* ---------- Hub hero aside (monthly.njk): this month's poster in the hero's right-hand card ----------
    The poster MOVES from the "This month" card into the hero while the aside is shown there — the same

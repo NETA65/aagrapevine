@@ -150,10 +150,13 @@
 
 {% macro dates(m, lang, mv="") %}
 {#- every date of the month, the page's Dates list (round 26b: none left out — a busy month's type gets smaller
-    and its dates take the room another column leaves, monthly.js fit) -#}
+    and its dates take the room another column leaves, monthly.js fit), then the month's other happenings in the
+    words of its message (mpPosterExtras: the stores' offers, AA Grapevine's price change), an icon in place of the
+    date's chip -#}
+{%- set extras = m | mpPosterExtras -%}
 <section class="mp-b mp-dates" data-mp-order="30"{% if mv %} data-mp-move="{{ mv }}"{% endif %}>
   <h3 class="mp-h">{% icon "calendar-days", "mp-i" %}<span>{{ "monthly.dates" | t(lang) }}</span></h3>
-  {% if m.dates.length %}
+  {% if m.dates.length or extras.length %}
   <ul class="mp-dlist">
     {% for d in m.dates %}
     <li class="mp-date mp-date--{{ d.kind }}">
@@ -177,6 +180,15 @@
         {%- endif -%}
         {%- if d.tentative %}{% set _m = mparts.push("committee.events.tentative" | t(lang)) %}{% endif %}
         {% if mparts.length %}<span class="mp-date-m">{{ mparts | join(" · ") }}</span>{% endif %}
+      </span>
+    </li>
+    {% endfor %}
+    {% for x in extras %}
+    <li class="mp-date mp-date--{{ x.kind }}">
+      <span class="mp-chip mp-chip--icon" aria-hidden="true">{% icon x.icon, "mp-chip-i" %}</span>
+      <span class="mp-date-b">
+        <strong class="mp-date-t"{% if x.titleLang != lang %} lang="{{ x.titleLang }}"{% endif %}>{{ x.title }}</strong>
+        {% if x.meta %}<span class="mp-date-m">{{ x.meta }}</span>{% endif %}
       </span>
     </li>
     {% endfor %}

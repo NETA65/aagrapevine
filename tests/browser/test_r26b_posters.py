@@ -4,16 +4,18 @@ borders":
 
   * EveryDateFits — every month page the build has (poster_months: this month and the next 12), English and Spanish:
                     once the page has fitted its poster (src/assets/js/monthly.js: data-mp-fit), the poster holds every
-                    date of the page's Dates list, nothing overflows its column or the 1080 × 1350 sheet (the fit's own
-                    measure), each block is there once and in the reading order of its column, and the type is 15px at
-                    least (7.5 pt on a Letter page).
+                    date of the page's Dates list and, after them, the month's other happenings its message names (the
+                    stores' offers, the price change: the same words), nothing overflows its column or the 1080 × 1350
+                    sheet (the fit's own measure), each block is there once and in the reading order of its column, and
+                    the type is 15px at least (7.5 pt on a Letter page).
   * PrintOnePage  — the busiest month's poster prints on one US Letter page, English and Spanish, every date on it.
   * MastheadClear — every month's masthead at its real size, fitted: the month's name, its year and the tagline never
                     touch (the y of July, the p of April, the g of August hang into the line below; the fit's measure
                     sees boxes, not letters — this compares what each one draws).
   * UnfittedClipped — the poster before its fit (or without JavaScript: the page's script blocked) has the build's
                     arrangement at the stylesheet's type: a busy month's column may lose its last lines, but no text
-                    is drawn over another block's.
+                    is drawn over another block's, and every date is whole inside its column (a Spanish poster starts
+                    at a smaller type for it).
 
 Nothing here depends on today's date: the months are the build's, the dates are each page's own.
 """
@@ -52,8 +54,17 @@ CHECK = r"""() => {
   const kinds = [...p.querySelectorAll(".mp-b")].map((b) => [...b.classList].find((c) => c !== "mp-b" && c !== "mp-dates--cols"));
   return {
     size: p.offsetWidth + " x " + p.offsetHeight, font: parseFloat(getComputedStyle(p).fontSize),
-    poster: [...p.querySelectorAll(".mp-dlist > li .mp-date-t")].map(text).sort(),
+    poster: [...p.querySelectorAll(".mp-dlist > li:not(.mp-date--offer, .mp-date--price) .mp-date-t")].map(text).sort(),
     page: [...document.querySelectorAll("#mp-dates li.mp-drow .mp-drow-t")].map(text).sort(),
+    // the rows after the dates (macros/monthly.njk dates(), mpPosterExtras): "title | days" — and what the month's
+    // message (WhatsApp, the page's language) names: 📦 / 🎁 an offer's heading and its days, 📢 the price change
+    extras: [...p.querySelectorAll(".mp-dlist > li:is(.mp-date--offer, .mp-date--price)")].map((li) =>
+      [li.querySelector(".mp-date-t"), li.querySelector(".mp-date-m")].filter(Boolean).map(text).join(" | ")),
+    message: (() => {
+      const msg = (document.getElementById("mp-msg-wa-one") || {}).textContent || "";
+      return [...[...msg.matchAll(/^(?:📦|🎁) \*(.+)\*\n(.+): \S+$/gmu)].map((x) => x[1] + " | " + x[2]),
+              ...[...msg.matchAll(/^📢 (.+): \S+$/gmu)].map((x) => x[1])];
+    })(),
     more: !!p.querySelector(".mp-more"), over, order,
     twice: kinds.filter((k, i) => kinds.indexOf(k) !== i),
   };
@@ -80,6 +91,11 @@ class EveryDateFits(unittest.TestCase):
                         problems.append(f"{where}: the poster is {r['size']}")
                     if r["poster"] != r["page"]:
                         problems.append(f"{where}: the poster's dates {r['poster']} are not the page's {r['page']}")
+                    if r["extras"] != r["message"]:
+                        problems.append(f"{where}: the poster's offers and price change {r['extras']} are not the "
+                                        f"message's {r['message']}")
+                    if month in ("2026-11", "2026-12") and len(r["extras"]) != 3:
+                        problems.append(f"{where}: the two offers and the price change of the season — {r['extras']}")
                     if r["more"]:
                         problems.append(f"{where}: \"more on the website\"")
                     if r["over"]:
@@ -207,7 +223,12 @@ DRAWN = r"""() => {
     if (a.bi === b.bi || blocks[a.bi].contains(blocks[b.bi]) || blocks[b.bi].contains(blocks[a.bi])) continue;
     if (area(cut(a.v, b.v)) > 6) over.push(a.s + " / " + b.s);
   }
-  return { fitted: p.hasAttribute("data-mp-fit"), over };
+  // a date (or an offer, the price change) cut by its column: its row not whole inside what its ancestors show
+  const hidden = [...p.querySelectorAll(".mp-dlist > li")].filter((li) => {
+    const r = R(li.getBoundingClientRect()), c = clipOf(li);
+    return r.t < c.t - 1 || r.b > c.b + 1 || r.l < c.l - 1 || r.r > c.r + 1;
+  }).map((li) => (li.querySelector(".mp-date-t") || li).textContent.trim().slice(0, 40));
+  return { fitted: p.hasAttribute("data-mp-fit"), over, hidden };
 }"""
 
 
@@ -227,6 +248,8 @@ class UnfittedClipped(unittest.TestCase):
                     self.assertFalse(r["fitted"], "the page's script was blocked: no fit")
                     if r["over"]:
                         problems.append(f"/{path}: {r['over'][:4]}")
+                    if r["hidden"]:
+                        problems.append(f"/{path}: dates cut by their column — {r['hidden']}")
         finally:
             ctx.close()
         self.assertEqual(problems, [], "\n".join(problems))
