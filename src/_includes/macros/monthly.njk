@@ -165,7 +165,8 @@
         <span class="mp-sr">{{ d.day }}: </span>
         <strong class="mp-date-t">{{ ("monthly.committee" | t(lang)) if d.kind == "committee" else d.title }}</strong>
         {#- the line under the title: its parts joined by " · ", so none starts with the separator (an all-day
-            event with a city has no range or time: "Riverside", not "· Riverside") -#}
+            event with a city has no range or time: "Denton", not "· Denton"); one that can be joined online
+            says so after its place ("Riverside, CA · Online") -#}
         {%- set mparts = [] -%}
         {%- if d.range %}{% set _m = mparts.push(d.range) %}{% endif -%}
         {%- if d.time %}{% set _m = mparts.push(d.time + " " + d.zone) %}{% endif -%}
@@ -173,10 +174,9 @@
           {%- set _m = mparts.push(d.platform or ("monthly.online" | t(lang))) -%}
           {%- if d.speaker %}{% set _m = mparts.push("monthly.speaker" | t(lang, { name: d.speaker.name })) %}{% endif -%}
           {%- set _m = mparts.push("monthly.all_welcome" | t(lang)) -%}
-        {%- elif d.city -%}
+        {%- else -%}
           {%- if d.place %}{% set _m = mparts.push(d.place) %}{% endif -%}
-        {%- elif d.online -%}
-          {%- set _m = mparts.push("monthly.online" | t(lang)) -%}
+          {%- if d.online %}{% set _m = mparts.push("monthly.online" | t(lang)) %}{% endif -%}
         {%- endif -%}
         {%- if d.tentative %}{% set _m = mparts.push("committee.events.tentative" | t(lang)) %}{% endif %}
         {% if mparts.length %}<span class="mp-date-m">{{ mparts | join(" · ") }}</span>{% endif %}

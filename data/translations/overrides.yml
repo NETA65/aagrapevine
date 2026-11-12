@@ -559,5 +559,7 @@
 "“Estas eran algunas de las formas en las que el temor conspiraba con el orgullo para impedir que hiciéramos una lista...” -Doce Pasos y Doce Tradiciones, pág. 78": { en: "“These were some of the ways in which fear conspired with pride to hinder our making a list…” -Twelve Steps and Twelve Traditions, p. 79" }
 
 # La Viña's calendar: the North Texas Spanish-speaking zone's 42nd gathering (the machine wrote "Xlii" and kept
-# the source's stray space before the parenthesis)
-"XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )": { en: "XLII North Texas Zone A.A. Gathering (A.A. A Way of Life)" }
+# the source's stray space before the parenthesis). The "es" restores its capitals only (build_data respell: capitals
+# and accents, never other words), checked by hand 2026-11-12 for the January 2027 Spanish poster; the poster's row
+# drops the spaces inside the parentheses (eleventy/filters/monthly.js dateRow)
+"XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )": { en: "XLII North Texas Zone A.A. Gathering (A.A. A Way of Life)", es: "XLII Reunión de A.A. Zona Norte de Texas ( A.A. Un camino a la vida )" }

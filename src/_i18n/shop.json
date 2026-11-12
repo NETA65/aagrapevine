@@ -115,8 +115,8 @@
   "shop.pc_volume": { "en": "Volume prices for {term}: see the store.", "es": "Precios por cantidad para {term}: consulta la tienda." },
   "shop.pc_botm_before": { "en": "From {date}, Grapevine and La Viña books cost {amount} more.", "es": "Desde el {date}, los libros de Grapevine y La Viña cuestan {amount} más." },
   "shop.pc_botm_after": { "en": "Book prices changed on {date}: the store shows this book's current price.", "es": "Los precios de los libros cambiaron el {date}: la tienda muestra el precio actual de este libro." },
-  "shop.pc_line_before": { "en": "Grapevine and La Viña prices change on {date}", "es": "Los precios de Grapevine y La Viña cambian el {date}" },
-  "shop.pc_line_after": { "en": "New Grapevine and La Viña prices since {date}", "es": "Nuevos precios de Grapevine y La Viña desde el {date}" },
+  "shop.pc_line_before": { "en": "Grapevine and La Viña prices change on {date}", "es": "Los precios de La Viña y Grapevine cambian el {date}" },
+  "shop.pc_line_after": { "en": "New Grapevine and La Viña prices since {date}", "es": "Nuevos precios de La Viña y Grapevine desde el {date}" },
 
   "shop.cost_title": { "en": "What it would cost", "es": "Lo que costaría" },
   "shop.cost_sub": { "en": "For your group's business meeting: pick the magazine, format, term and number of copies to see what a group subscription would cost, then print a one-page information sheet.", "es": "Para la reunión de trabajo de tu grupo: elige la revista, el formato, la duración y el número de ejemplares para ver cuánto costaría una suscripción del grupo, y luego imprime una hoja informativa de una página." },

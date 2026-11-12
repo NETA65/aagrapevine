@@ -317,11 +317,14 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *   category  the data's category (eventTone keeps the Grapevine / La Viña calendars' colours)
  *   host      "lv" / "gv" for La Viña's or Grapevine's own event (extra.host — La Viña's monthly workshop):
  *             eventTone gives it that magazine's colour; "" for ours
- *   place     the city to show after the title: "" when the title already names it ("Writing Workshop —
- *             Mansfield", "booth at CityWide Dallas") — the page's row, the poster and the message say a
- *             place once
- *   online    it can be joined online (an online link, or "Zoom" / "Google Meet" as its place): without a city
- *             the row, the poster and the message say "Online" there
+ *   title     its title in the row's language, without the spaces a calendar left inside its brackets
+ *             ("( A.A. Un camino a la vida )" → "(A.A. Un camino a la vida)": no ")" on a line of its own)
+ *   place     the city to show after the title, with its state when that is not Texas ("Riverside, CA"): ""
+ *             when the title already names the city ("Writing Workshop — Mansfield", "booth at CityWide
+ *             Dallas") — the page's row, the poster and the message say a place once
+ *   online    it can be joined online (an online link, or "Zoom" / "Google Meet" as its place): the row, the
+ *             poster and the message say "Online" there, after the place when it has one ("Riverside, CA ·
+ *             Online": an event out of state is on a North Texas poster because it can be joined online)
  * extra: { kind: "committee" | "recurring" | "event", … }
  * (src, not enumerable: the event record the row is made from — the month's calendar file writes it as
  * /events.ics does, monthIcs)
@@ -333,15 +336,16 @@ function dateRow(e, L, ctx, extra = {}) {
   const shownDay = d.start < ctx.first ? ctx.first : d.start;
   const overAt = iso(eventEndMs(e));
   const href = extra.kind === "committee" ? COMMITTEE_MEETING_PATH : e.url || "/events/";
-  const title = tr(e, "title", L);
+  const title = clean(tr(e, "title", L)).replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
   const city = clean(ex.city);
+  const state = clean(ex.state);
   return Object.defineProperty({
     id: e.id, title, url: e.url || "", href, external: /^https?:/.test(href), category: e.category || "",
     ymd: d.start, endYmd: d.end, chip: chip(shownDay, L), dayLabel: shortDate(shownDay, L, ctx.year), day: longDay(d.start, L),
     endDay: d.end !== d.start ? longDay(d.end, L) : "",
     range: d.end !== d.start ? dayRange(d.start, d.end, L) : "",
     time: timed ? `${timeRange(ex.start, ex.end, L)}` : "", zone: timed ? ctx.zone : "",
-    city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city : "",
+    city, place: city && !title.toLowerCase().includes(city.toLowerCase()) ? city + (state && state.toUpperCase() !== "TX" ? `, ${state}` : "") : "",
     online: !!ex.online || !!ex.online_url || /\b(?:zoom|google meet|microsoft teams|webex)\b/i.test(ex.location || ""),
     host: ex.host === "lv" || ex.host === "gv" ? ex.host : "",
     tentative: !!ex.tentative, overAt, past: !!overAt && Date.parse(overAt) <= ctx.nowMs, ...extra,
@@ -997,8 +1001,9 @@ export function monthMessage(ctx, langs, style, site, t) {
     if (d.kind === "recurring") bits.push(both("report.e_monthly"));
     if (d.tentative) bits.push(both("report.e_tbc"));
     // the place once: most titles already name the city ("Writing Workshop — Mansfield"; dateRow.place);
-    // an online event without a city says "Online" (La Viña's monthly workshop on Zoom), as the poster does
-    const where = d.place || (!d.city && d.online ? both("monthly.online") : "");
+    // an event that can be joined online says "Online" too, after its place when it has one ("Riverside, CA ·
+    // Online"; La Viña's monthly workshop on Zoom: "Online"), as the poster and the page's row do
+    const where = [d.place, d.online ? both("monthly.online") : ""].filter(Boolean).join(" · ");
     out.push(`${bullet} ${bits.join(" · ")} — ${d.title}${where ? ` — ${where}` : ""}`);
     for (const l of Ls.slice(1)) { const o = (mm[l].dates || []).find((x) => x.id === d.id); if (o && o.title && o.title !== d.title) out.push(`  ${o.title}`); }
   }

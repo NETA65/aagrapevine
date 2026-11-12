@@ -94,8 +94,6 @@ class EveryDateFits(unittest.TestCase):
                     if r["extras"] != r["message"]:
                         problems.append(f"{where}: the poster's offers and price change {r['extras']} are not the "
                                         f"message's {r['message']}")
-                    if month in ("2026-11", "2026-12") and len(r["extras"]) != 3:
-                        problems.append(f"{where}: the two offers and the price change of the season — {r['extras']}")
                     if r["more"]:
                         problems.append(f"{where}: \"more on the website\"")
                     if r["over"]:

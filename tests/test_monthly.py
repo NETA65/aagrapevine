@@ -645,16 +645,17 @@ class Templates(unittest.TestCase):
         self.hub = (ROOT / "src" / "pages" / "monthly.njk").read_text(encoding="utf-8")
 
     def test_a_place_is_said_once(self):
-        # the Dates card's rows and the poster print dateRow.place (the city unless the title names it):
-        # "Grapevine Writing Workshop — Arlington", never "… — Arlington · Arlington"; a row with a city never
-        # says "Online" (on the page or the poster) — one without (La Viña's monthly workshop on Zoom) does; a
-        # committee meeting its platform, or "Online" once it is over (committeeRow)
+        # the Dates card's rows and the poster print dateRow.place (the city unless the title names it, with its
+        # state out of Texas): "Grapevine Writing Workshop — Arlington", never "… — Arlington · Arlington"; a row
+        # that can be joined online says "Online" too, after its place when it has one (round 26b: "Riverside, CA ·
+        # Online", La Viña's hybrid workshop; La Viña's monthly workshop on Zoom: "Online"); a committee meeting its
+        # platform, or "Online" once it is over (committeeRow)
         poster = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")
-        self.assertIn('{% if d.kind == "committee" %} · {{ d.platform or ("monthly.online" | t(lang)) }}{% elif d.place %} · {{ d.place }}'
-                      '{% elif d.online and not d.city %} · {{ "monthly.online" | t(lang) }}{% endif %}', self.month)
+        self.assertIn('{% if d.kind == "committee" %} · {{ d.platform or ("monthly.online" | t(lang)) }}{% else %}{% if d.place %} · '
+                      '{{ d.place }}{% endif %}{% if d.online %} · {{ "monthly.online" | t(lang) }}{% endif %}{% endif %}', self.month)
         # (the poster's line joins its parts with " · " — round 26b fix: no part starts with the separator)
-        self.assertRegex(poster, r"\{%- elif d\.city -%\}\s*\{%- if d\.place %\}\{% set _m = mparts\.push\(d\.place\) %\}\{% endif -%\}"
-                                 r"\s*\{%- elif d\.online -%\}")
+        self.assertRegex(poster, r"\{%- else -%\}\s*\{%- if d\.place %\}\{% set _m = mparts\.push\(d\.place\) %\}\{% endif -%\}"
+                                 r"\s*\{%- if d\.online %\}\{% set _m = mparts\.push\(\"monthly\.online\" \| t\(lang\)\) %\}\{% endif -%\}")
         self.assertNotIn("mparts.push(d.city)", poster)
         for name, t in (("monthly-month.njk", self.month), ("macros/monthly.njk", poster)):
             self.assertNotIn("· {{ d.city }}", t, name)
@@ -1080,13 +1081,23 @@ class PosterEveryDate(unittest.TestCase):
         if PosterEveryDate.r is None:
             db = full_db()
             db["events"]["items"] += [
-                event("ev:x1", "2026-10-08T00:00:00Z", "2026-10-08T01:00:00Z", "District 12 Open House", extra={"city": "Denton"}),
+                # a Texas city: no state after it (out of state: ev:x5)
+                event("ev:x1", "2026-10-08T00:00:00Z", "2026-10-08T01:00:00Z", "District 12 Open House",
+                      extra={"city": "Denton", "state": "TX"}),
                 event("ev:x2", "2026-10-14T23:00:00Z", "2026-10-15T01:00:00Z", "La Viña Writing Workshop — Garland",
                       extra={"city": "Garland"}),
                 event("ev:x3", "2026-10-28T00:00:00Z", "2026-10-28T01:00:00Z", "Delegate's Report", extra={"online": True}),
                 # all day, with a city: no range or time before the city on its line (round 26b fix: "Riverside",
                 # never "· Riverside")
                 event("ev:x4", "2026-10-24", "2026-10-24", "La Viña-Grapevine Workshop", extra={"city": "Riverside", "all_day": True}),
+                # out of state and online (La Viña's hybrid workshop in Riverside, CA, Nov 2026): on a North Texas
+                # poster because it can be joined online — "Tulsa, OK · Online", never a bare "Tulsa"
+                event("ev:x5", "2026-10-17", "2026-10-17", "Hybrid Workshop",
+                      extra={"city": "Tulsa", "state": "OK", "online": True, "all_day": True}),
+                # a calendar's spaces inside the brackets (La Viña's "XLII … ( A.A. Un camino a la vida )"): the row
+                # reads "(A Way of Life)", so no ")" is left on a line of its own
+                event("ev:x6", "2026-10-30", "2026-11-01", "XLII Zone Gathering ( A Way of Life )",
+                      title_es="XLII Reunión de Zona ( Un camino a la vida )", extra={"city": "Longview", "all_day": True}),
             ]
             # the month's other happenings (round 26b, fix round 2): the stores' offers and a price change announced
             db["shop"]["price_changes"] = [PRICE_CHANGE]
@@ -1103,7 +1114,7 @@ class PosterEveryDate(unittest.TestCase):
             lang = name.rsplit("-", 1)[1]
             want = self.r["models"][lang]["dates"]
             with self.subTest(poster=name):
-                self.assertEqual(len(want), 11)
+                self.assertEqual(len(want), 13)
                 self.assertEqual(self.r["models"][lang]["density"], "dense", "the busiest kind of month")
                 rows = re.findall(r'<li class="mp-date mp-date--(?!offer|price)(\w+)">.*?<strong class="mp-date-t">(.*?)</strong>', page, re.S)
                 self.assertEqual([k for k, _t in rows], [d["kind"] for d in want])
@@ -1125,7 +1136,7 @@ class PosterEveryDate(unittest.TestCase):
                        "Grapevine and La Viña prices change on January 1, 2027"],
                 "es": ["Envío gratis en las tiendas de La Viña y Grapevine | Del 1 de octubre al 31 de octubre de 2026",
                        "Ofertas de regalo para las fiestas en las tiendas de La Viña y Grapevine | Hasta el 31 de diciembre de 2026",
-                       "Los precios de Grapevine y La Viña cambian el 1 de enero de 2027"]}
+                       "Los precios de La Viña y Grapevine cambian el 1 de enero de 2027"]}
         row = re.compile(r'<li class="mp-date mp-date--(offer|price)">\s*<span class="mp-chip mp-chip--icon" aria-hidden="true">'
                          r'<svg class="icon mp-chip-i"[^>]*><use href="#i-([\w-]+)"/></svg></span>\s*<span class="mp-date-b">\s*'
                          r'<strong class="mp-date-t">(.*?)</strong>\s*(?:<span class="mp-date-m">(.*?)</span>)?\s*</span>\s*</li>', re.S)
@@ -1184,6 +1195,42 @@ class PosterEveryDate(unittest.TestCase):
                 self.assertEqual(row.group(1), "Riverside")
                 seen += 1
         self.assertEqual(seen, 12)
+
+    def test_out_of_state_online_and_brackets(self):
+        """An event out of Texas that can be joined online says both, on the poster, the page's row and the message,
+        the same way: "Tulsa, OK · Online" / "Tulsa, OK · En línea" (a Texas city has no state after it); a title's
+        brackets lose the spaces a calendar left inside them."""
+        online = self.s["monthly.online"]
+        brackets = {"en": "XLII Zone Gathering (A Way of Life)", "es": "XLII Reunión de Zona (Un camino a la vida)"}
+        seen = 0
+        for name, page in self.r["html"].items():
+            if name.startswith(("empty", "extras-only")):
+                continue
+            lang = name.rsplit("-", 1)[1]
+            text = html.unescape(page)
+            with self.subTest(poster=name):
+                prefix = "" if lang == "en" else "ES "
+                row = re.search(r'<strong class="mp-date-t">' + re.escape(prefix + "Hybrid Workshop") +
+                                r'</strong>\s*<span class="mp-date-m">(.*?)</span>', text, re.S)
+                self.assertIsNotNone(row, "the out-of-state online workshop is on the poster")
+                self.assertEqual(row.group(1), f"Tulsa, OK · {online[lang]}")
+                row = re.search(r'<strong class="mp-date-t">' + re.escape(prefix + "District 12 Open House") +
+                                r'</strong>\s*<span class="mp-date-m">(.*?)</span>', text, re.S)
+                self.assertTrue(row.group(1).endswith(" · Denton"), row.group(1))
+                self.assertIn(f'<strong class="mp-date-t">{brackets[lang]}</strong>', text)
+                at = text.index('<ul class="mp-dlist">')
+                self.assertNotRegex(text[at:text.index("</ul>", at)], r"\( |\s\)")
+                seen += 1
+        self.assertEqual(seen, 12)
+        for lang in ("en", "es"):
+            with self.subTest(message=lang):
+                titles = [d["title"] for d in self.r["models"][lang]["dates"]]
+                self.assertIn(brackets[lang], titles)
+                msg = self.r["models"][lang]["message"]
+                line = next(l for l in msg.splitlines() if "Hybrid Workshop" in l)
+                self.assertTrue(line.endswith(f"— Tulsa, OK · {online[lang]}"), line)
+                self.assertIn(f"— {brackets[lang]} — Longview", msg)
+                self.assertNotIn("Denton, TX", msg)
 
     def test_a_month_without_a_date_says_so(self):
         page = self.r["html"]["empty-en"]
