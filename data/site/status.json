@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-12T01:53:06Z",
- "updated": "2026-11-12T01:53:06Z",
+ "generated": "2026-11-12T08:30:40Z",
+ "updated": "2026-11-12T08:30:40Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-12T01:52:41Z",
-   "attempted": "2026-11-12T01:52:41Z",
-   "count": 61,
-   "new_7d": 19,
+   "updated": "2026-11-12T08:30:14Z",
+   "attempted": "2026-11-12T08:30:14Z",
+   "count": 62,
+   "new_7d": 20,
    "error": null,
    "stats": {
     "mode": "html",
@@ -31,15 +31,15 @@
     "loose_skipped": 1,
     "skipped_panels": [],
     "folders": 11,
-    "files": 61,
-    "fetched": 61,
-    "new": 0,
+    "files": 62,
+    "fetched": 62,
+    "new": 1,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
      "flyers": 32,
      "booth": 15,
-     "slides": 4,
+     "slides": 5,
      "reports": 4,
      "photos": 2,
      "notes": 2,
@@ -49,7 +49,7 @@
     "by_kind": {
      "photo": 43,
      "document": 12,
-     "slides": 4,
+     "slides": 5,
      "announcement": 1,
      "video_file": 1
     },
@@ -75,7 +75,7 @@
     }
    },
    "changes": {
-    "added": 0,
+    "added": 1,
     "removed": 0,
     "held": 0
    },
@@ -86,8 +86,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-12T01:52:41Z",
-   "attempted": "2026-11-12T01:52:41Z",
+   "updated": "2026-11-12T08:30:14Z",
+   "attempted": "2026-11-12T08:30:14Z",
    "count": 2,
    "new_7d": 1,
    "error": null,
@@ -110,8 +110,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-12T01:52:41Z",
-   "attempted": "2026-11-12T01:52:41Z",
+   "updated": "2026-11-12T08:30:14Z",
+   "attempted": "2026-11-12T08:30:14Z",
    "count": 17,
    "new_7d": 0,
    "error": null,
@@ -165,8 +165,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-12T01:52:49Z",
-   "attempted": "2026-11-12T01:52:49Z",
+   "updated": "2026-11-12T08:30:23Z",
+   "attempted": "2026-11-12T08:30:23Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -321,8 +321,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-12T01:52:45Z",
-   "attempted": "2026-11-12T01:52:45Z",
+   "updated": "2026-11-12T08:30:17Z",
+   "attempted": "2026-11-12T08:30:17Z",
    "count": 310,
    "new_7d": 3,
    "error": null,
@@ -339,28 +339,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 269,
       "latest": "2026-11-09T05:15:00Z",
-      "updated": "2026-11-12T01:52:45Z"
+      "updated": "2026-11-12T08:30:17Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 40,
       "latest": "2026-11-06T05:15:00Z",
-      "updated": "2026-11-12T01:52:45Z"
+      "updated": "2026-11-12T08:30:17Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 1,
       "latest": "2026-11-09T05:15:00Z",
-      "updated": "2026-11-12T01:52:45Z"
+      "updated": "2026-11-12T08:30:17Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-06T15:10:41Z",
     "discovered_feeds": [],
-    "seconds": 3.2,
+    "seconds": 3.4,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -570,8 +570,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-12T01:53:05Z",
-   "attempted": "2026-11-12T01:53:05Z",
+   "updated": "2026-11-12T08:30:38Z",
+   "attempted": "2026-11-12T08:30:38Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -579,12 +579,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-11",
-    "new": 0
+    "today": "2026-11-12",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -601,6 +601,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-11-12",
+    "goal_at": "2026-11-12T11:30:00Z",
+    "gv": "2026-11-12T08:30:28Z",
+    "lv": "2026-11-12T08:30:38Z"
+   },
    {
     "day": "2026-11-11",
     "goal_at": "2026-11-11T11:30:00Z",
@@ -636,12 +642,6 @@
     "goal_at": "2026-11-06T11:30:00Z",
     "gv": "2026-11-06T09:31:13Z",
     "lv": "2026-11-06T09:31:24Z"
-   },
-   {
-    "day": "2026-11-05",
-    "goal_at": "2026-11-05T11:30:00Z",
-    "gv": "2026-11-05T09:38:46Z",
-    "lv": "2026-11-05T09:38:56Z"
    }
   ]
  },
@@ -664,16 +664,16 @@
   "updated": "2026-11-11T15:31:37Z"
  },
  "translations": {
-  "cached": 4234,
+  "cached": 4235,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 0,
+  "translated_this_run": 1,
   "from_cache": 4234,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.2,
+  "seconds": 0.5,
   "model_seconds": 0.0,
-  "texts_per_second": null,
+  "texts_per_second": 2.0,
   "glossary_entries": 269,
   "problems": []
  },
@@ -683,7 +683,7 @@
   "instagram": 218,
   "articles": 297,
   "pdfs": 96,
-  "drive": 45,
+  "drive": 46,
   "editorial": 51,
   "weekly_open": 2,
   "announcements": 2,
@@ -709,8 +709,8 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-11-11T08:43:06Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-11-12T08:30:38Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -719,7 +719,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-11",
+  "today": "2026-11-12",
   "home_days": 60,
   "list_days": [
    60,

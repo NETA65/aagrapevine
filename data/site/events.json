@@ -1,70 +1,7 @@
 {
- "updated": "2026-11-11T13:51:20Z",
+ "updated": "2026-11-12T08:30:40Z",
  "fixture": false,
  "items": [
-  {
-   "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
-   "source": "committee",
-   "kind": "event",
-   "url": "https://neta65.org/event/delegate-conference-connect-town-hall-2/",
-   "title": "Delegate — Conference Connect Town Hall",
-   "summary": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
-   "lang": "en",
-   "date": "2026-11-11T01:00:00Z",
-   "first_seen": "2026-10-26T14:35:09Z",
-   "image": null,
-   "tags": [
-    "neta65",
-    "delegate",
-    "town-hall"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-11-11T01:00:00Z",
-    "end": "2026-11-11T02:00:00Z",
-    "all_day": false,
-    "location": null,
-    "online_url": "https://us02web.zoom.us/j/4455711924?pwd=RDF0MTYweXFEdG5uT1hITGlsSHczUT09&omn=88181840080",
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "body_md": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
-    "slug": "2026-11-10-neta65-delegate-town-hall",
-    "file": "content/events/2026-11-10-neta65-delegate-town-hall.md",
-    "meeting_id": "445 571 1924",
-    "own_i18n": {
-     "title": {
-      "es": "Reunión Informativa de la Delegada — Conference Connect"
-     },
-     "summary": {
-      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
-     },
-     "body_md": {
-      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
-     }
-    },
-    "platform": "Zoom",
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Delegate — Conference Connect Town Hall",
-     "es": "Reunión Informativa de la Delegada — Conference Connect"
-    },
-    "summary": {
-     "en": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
-     "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
-    },
-    "body_md": {
-     "en": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
-     "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
-    }
-   },
-   "machine": [],
-   "is_new": false
-  },
   {
    "id": "ev:recurring:citywide-dallas:2026-11-14",
    "source": "committee",
@@ -678,7 +615,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-01-21T01:00:00Z",
    "first_seen": null,
@@ -720,8 +657,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Rick W. — “Grapevine como herramienta del Paso Doce: cómo ayuda a los nuevos representantes de Grapevine y lleva el mensaje en Información Pública, Cooperación con la Comunidad Profesional, Correccionales y Tratamiento”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Rick W. — “Grapevine as a Twelfth Step tool: how it helps new Grapevine representatives and carries the message in Public Information, Cooperation with the Professional Community, Corrections and Treatment”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Rick W. — “Grapevine como herramienta del Paso Doce: cómo ayuda a los nuevos representantes de Grapevine y lleva el mensaje en Información Pública, Cooperación con la Comunidad Profesional, Correccionales y Tratamiento”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -960,7 +897,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-02-18T01:00:00Z",
    "first_seen": null,
@@ -1002,8 +939,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Jeannie M. — “Grapevine y La Viña como herramientas de Información Pública”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Jeannie M. — “Grapevine and La Viña as Public Information tools”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Jeannie M. — “Grapevine y La Viña como herramientas de Información Pública”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -1253,7 +1190,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-03-18T00:00:00Z",
    "first_seen": null,
@@ -1295,8 +1232,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Greg G. — “El anonimato en un mundo digital: las puertas de AA en internet y las propuestas que podrían llegar a la 77.ª Conferencia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Greg G. — “Anonymity in a digital world: AA’s online doorways and proposals that may reach the 77th Conference”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Greg G. — “El anonimato en un mundo digital: las puertas de AA en internet y las propuestas que podrían llegar a la 77.ª Conferencia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -1616,7 +1553,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-04-22T00:00:00Z",
    "first_seen": null,
@@ -1658,8 +1595,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Courtney S. — “La reunión impresa en la era digital: lo que los miembros quieren de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Courtney S. — “The meeting in print in a digital age: what members want from Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Courtney S. — “La reunión impresa en la era digital: lo que los miembros quieren de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -1789,7 +1726,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-05-20T00:00:00Z",
    "first_seen": null,
@@ -1831,8 +1768,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Debra L. — “Recién llegada de la 77.ª Conferencia: lo que el Manual de Servicio, el Informe Final y la Carta Constitutiva ofrecen a nuestros representantes de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Debra L. — “Fresh from the 77th Conference: what the Service Manual, Final Report and Charter offer our Grapevine and La Viña representatives”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Debra L. — “Recién llegada de la 77.ª Conferencia: lo que el Manual de Servicio, el Informe Final y la Carta Constitutiva ofrecen a nuestros representantes de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -1903,7 +1840,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-06-17T00:00:00Z",
    "first_seen": null,
@@ -1945,8 +1882,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather L. — “Informe desde la coordinación: el Comité sobre Grapevine y La Viña de la 77.ª Conferencia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather L. — “Report from the chair’s seat: the 77th Conference Committee on Grapevine and La Viña”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather L. — “Informe desde la coordinación: el Comité sobre Grapevine y La Viña de la 77.ª Conferencia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -2157,7 +2094,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-07-22T00:00:00Z",
    "first_seen": null,
@@ -2199,8 +2136,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Luke B. — “Llevar el mensaje tras los muros: Grapevine y La Viña para los alcohólicos bajo custodia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Luke B. — “Carrying the message behind the walls: Grapevine and La Viña for alcoholics in custody”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Luke B. — “Llevar el mensaje tras los muros: Grapevine y La Viña para los alcohólicos bajo custodia”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -2212,7 +2149,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-08-19T00:00:00Z",
    "first_seen": null,
@@ -2254,8 +2191,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Kaitie S. — “Del manuscrito a la reunión: cómo se hacen la literatura de AA y los libros de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Kaitie S. — “From manuscript to meeting: how AA literature and Grapevine and La Viña books are made”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Kaitie S. — “Del manuscrito a la reunión: cómo se hacen la literatura de AA y los libros de Grapevine y La Viña”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -2267,7 +2204,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-09-16T00:00:00Z",
    "first_seen": null,
@@ -2309,8 +2246,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Corey D. — “Siguiendo el dinero: cómo Grapevine y La Viña se mantienen por sí mismas y cómo pueden ayudar los grupos”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Corey D. — “Following the money: how Grapevine and La Viña pay their way, and how groups can help”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Corey D. — “Siguiendo el dinero: cómo Grapevine y La Viña se mantienen por sí mismas y cómo pueden ayudar los grupos”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -2454,7 +2391,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-10-21T00:00:00Z",
    "first_seen": null,
@@ -2496,8 +2433,8 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather N. — “Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Heather N. — “From district to Conference: how a Grapevine or La Viña idea becomes an agenda item”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Heather N. — “Del distrito a la Conferencia: cómo una idea sobre Grapevine o La Viña llega a ser un punto de agenda”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
     }
    },
    "machine": [],
@@ -2509,7 +2446,7 @@
    "kind": "event",
    "url": "/meetings/#committee-meeting",
    "title": "NETA 65 Grapevine & La Viña Committee Meeting",
-   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Chitra S. — “Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
+   "summary": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Chitra S. — “Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
    "lang": "en",
    "date": "2027-11-18T01:00:00Z",
    "first_seen": null,
@@ -2551,8 +2488,71 @@
      "es": "Reunión del Comité de Grapevine y La Viña de NETA 65"
     },
     "summary": {
-     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Chitra S. — “Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch”. The guest speaker's part ends by 7:30 PM; committee business follows until 8:00 PM.",
-     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Chitra S. — “¿A quién nos falta llegar? Cómo llegar con calidez humana a los alcohólicos jóvenes, hispanohablantes y de culturas diversas”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., siguen los asuntos del comité."
+     "en": "Our monthly committee meeting on Google Meet. All AA members are welcome to attend. No registration required. Guest speaker: Chitra S. — “Who are we still missing? Reaching young, Spanish-speaking and culturally diverse alcoholics with a human touch”. The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing until 8:00 PM.",
+     "es": "Nuestra reunión mensual del comité por Google Meet. Todos los miembros de AA pueden asistir. No hace falta registrarse. Orador(a) invitado(a): Chitra S. — “¿A quién nos falta llegar? Cómo llegar con calidez humana a los alcohólicos jóvenes, hispanohablantes y de culturas diversas”. La charla de la persona invitada termina a más tardar a las 7:30 p. m.; luego, hasta las 8:00 p. m., eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR."
+    }
+   },
+   "machine": [],
+   "is_new": false
+  },
+  {
+   "id": "ev:manual:2026-11-10-neta65-delegate-town-hall",
+   "source": "committee",
+   "kind": "event",
+   "url": "https://neta65.org/event/delegate-conference-connect-town-hall-2/",
+   "title": "Delegate — Conference Connect Town Hall",
+   "summary": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
+   "lang": "en",
+   "date": "2026-11-11T01:00:00Z",
+   "first_seen": "2026-10-26T14:35:09Z",
+   "image": null,
+   "tags": [
+    "neta65",
+    "delegate",
+    "town-hall"
+   ],
+   "category": "manual",
+   "status": "ok",
+   "extra": {
+    "start": "2026-11-11T01:00:00Z",
+    "end": "2026-11-11T02:00:00Z",
+    "all_day": false,
+    "location": null,
+    "online_url": "https://us02web.zoom.us/j/4455711924?pwd=RDF0MTYweXFEdG5uT1hITGlsSHczUT09&omn=88181840080",
+    "flyer_url": null,
+    "flyer_thumb": null,
+    "city": null,
+    "state": null,
+    "body_md": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
+    "slug": "2026-11-10-neta65-delegate-town-hall",
+    "file": "content/events/2026-11-10-neta65-delegate-town-hall.md",
+    "meeting_id": "445 571 1924",
+    "own_i18n": {
+     "title": {
+      "es": "Reunión Informativa de la Delegada — Conference Connect"
+     },
+     "summary": {
+      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+     },
+     "body_md": {
+      "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+     }
+    },
+    "platform": "Zoom",
+    "past": true
+   },
+   "i18n": {
+    "title": {
+     "en": "Delegate — Conference Connect Town Hall",
+     "es": "Reunión Informativa de la Delegada — Conference Connect"
+    },
+    "summary": {
+     "en": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org. Zoom meeting ID 445 571 1924, passcode 051617.",
+     "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
+    },
+    "body_md": {
+     "en": "The last of this year's four Conference365 town halls with the Delegate, on Zoom. Learn how to submit a proposed agenda item, share what's on your mind about the General Service Conference, and hear any General Service Board news our Southwest Region trustee has shared with the Delegate. Attendance is optional. Questions? delegate@neta65.org.\n\nZoom meeting ID 445 571 1924, passcode 051617.",
+     "es": "La última de las cuatro reuniones informativas Conference365 del año con la Delegada, por Zoom. Aprende a proponer un punto para la agenda, comparte tus inquietudes sobre la Conferencia y escucha noticias de la Junta de Servicios Generales que el custodio regional del Suroeste haya dado a la Delegada. ¿Preguntas? delegate@neta65.org. ID de reunión de Zoom 445 571 1924, código de acceso 051617."
     }
    },
    "machine": [],
