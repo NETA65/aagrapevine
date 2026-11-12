@@ -1320,7 +1320,7 @@ business: the third text (`minutes:` in the file) is short draft notes.
 | Text | For which meeting | What is in it |
 |---|---|---|
 | **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic (or the topic for sharing, when one is filled in); the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); the second half (7:30–8:00) and what to bring; "Help wanted" (the volunteer lines); the parking lot after the close; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
-| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic, the second half and the parking lot in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish, the same line about the second half and "la reunión después de la reunión", "La reunión es en inglés", all AA members welcome) |
+| **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic (or the topic for sharing, when one is filled in), the second half and the parking lot in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish or the topic for sharing, the same line about the second half and "la reunión después de la reunión", "La reunión es en inglés", all AA members welcome) |
 | **Draft notes** (*Borrador de las notas*) | the **last meeting held**, from the moment it starts | "DRAFT NOTES of the meeting, for the committee's records (this is not a business meeting: nothing to approve). Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic (never by name) or the topic shared on; the events and workshop requests, the volunteers, the stories mentioned, the sharing's highlights and the follow-ups (what · who · by when) as blanks (___) to finish by hand; the next meeting; "Closed with the Responsibility Statement; the parking lot followed." |
 
 Each text has **Copy**, **Copy the subject** and **Open in my e-mail**. Open in my e-mail opens your own e-mail app
@@ -1373,7 +1373,7 @@ meeting's own, so the Undo is gone. It can be pressed once per meeting.
 Everything stays on the chair's device, in the same storage as Your details. Nothing is sent from the site, and no
 e-mail address is ever stored. The texts are in English like the slides (the reminder adds its Spanish paragraph);
 the buttons and explanations are in the page's language. The deck's own notes point to the tab (the title,
-"Responsibility Statement" and "Thank you" slides, and Customize → Prepare: "The week before each meeting", STEP 5).
+"Next meeting" and "Thank you" slides, and Customize → Prepare: "The week before each meeting", STEP 5).
 
 **Where the words are.** In `committee-meeting.yml`, the block `paperwork:` between `fillins:` and `slides:`. Edit
 it like a slide's words (keep the spaces at the start of each line), then run the checker

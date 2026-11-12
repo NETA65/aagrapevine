@@ -213,12 +213,14 @@ paperwork:
       Reminder: the NETA 65 Grapevine and La Viña Committee meets {paper:meeting}, {live:meeting_time}, on {live:meeting_platform}: {live:meeting_url} (meeting code {live:meeting_code}).
       Guest speaker: {paper:speaker}
       Topic: {paper:speaker_topic}
+      Topic for sharing: {fill:topic}
       From 7:30 to 8:00: coming events, workshop requests, special offers, magazine topics and GVR and RLV sharing. After we close at 8:00, the parking lot: stay on for whatever is on your mind.
       All AA members are welcome, and there's nothing to sign up for.
 
       {lang:es}Recordatorio: la reunión mensual del {paper:committee_es} es el {paper:meeting_es}, {paper:time_es}, por {live:meeting_platform}: {live:meeting_url} (código de la reunión: {live:meeting_code}).{/lang}
       {lang:es}Orador(a) invitado(a): {paper:speaker_es}{/lang}
       {lang:es}Tema: {paper:speaker_topic_es}{/lang}
+      {lang:es}Tema para compartir: {fill:topic}{/lang}
       {lang:es}Entre las 7:30 y las 8:00 p. m.: eventos próximos, solicitudes de talleres, ofertas especiales, temas de las revistas y lo que comparten los RLV y GVR. Después del cierre a las 8:00 p. m., la reunión después de la reunión: quédate para hablar de lo que tengas en mente.{/lang}
       {lang:es}La reunión es en inglés. Todos los miembros de AA son bienvenidos, y no hace falta registrarse.{/lang}
 
@@ -452,7 +454,7 @@ slides:
       TIP (timekeeping): about 45 seconds: our guest is thanked and done by 7:30.
       SAY: Please join me in thanking {live:speaker_name} for tonight's talk. (Members can send a reaction, or unmute for a round of applause.) Thank you so much for being with us. You're welcome to stay for the rest of our hour, or to leave now: we know your time is precious. Next month's guest speaker: {live:speaker_after}; we hope to see you all then.
       DO: Let the speaker leave without a fuss. After the meeting, send them a short thank-you from the committee's address, grapevine@neta65.org.
-      TRANSITION: Now let's turn to what's coming up, the stores' offers, the magazines' topics and your sharing.
+      TRANSITION: Now to the second half of our hour.
 
   # ------------------------------------------------------------------ TONIGHT'S TOPIC (no guest speaker, 7:02 – 7:30)
   # A night with no guest speaker (the version "No guest speaker"): the chair introduces a topic (from about 7:02,
@@ -472,7 +474,7 @@ slides:
     notes: |
       WHEN: a night with no guest speaker (every meeting before January 20, 2027, or a month whose speaker can't come): the version 'No guest speaker' ({ui:customize} → {ui:version}) shows this slide and the sharing after it. With a guest speaker it stays switched off: the speaker's talk takes its place.
       TIP (timekeeping): about 2 minutes, from about 7:02: a sentence or two on why the topic matters now, what we'll look at, and the question that starts the sharing.
-      SAY: Tonight's topic: {fill:topic}. (Two or three sentences on why it matters now, and what we'll look at.) Here's a question to start us off: {fill:topic_question} Who would like to share first?
+      SAY: Tonight's topic: {fill:topic}. (Two or three sentences on why it matters now, and what we'll look at.) Here's a question to start us off: {fill:topic_question}
       WHICH TOPIC: the page 'Suggested topics: the year at a glance' ({ui:customize} → {ui:prepare}) suggests one for each month, or take this month's Grapevine or La Viña theme. In February and March, the Conference agenda items for the Conference Committee on Grapevine and La Viña make a good topic, to help prepare our delegate (in 2027, they include the final report of the Fellowship survey on Grapevine's products); in May, the delegate reports back.
       DO: In February, March and May, invite the delegate or the alternate delegate ahead of time. Send any background material by e-mail beforehand (BCC). Keep internal figures off the slide.
       UPDATE: the topic and its three lines ({ui:customize} → {ui:your_details}).
@@ -492,10 +494,10 @@ slides:
     notes: |
       WHEN: in the version 'No guest speaker' only (this slide starts switched off).
       TIP (timekeeping): about 25 minutes, from about 7:04 to 7:30. At about 7:28, say 'time for one last share': the second half starts at 7:30, whatever is left.
-      SAY: The floor is open. Share your experience, strength and hope on tonight's topic: what you've seen in your group, in your district or in your own service. Please keep it to two or three minutes, so more of us can share.
+      SAY: The floor is open. Share your experience, strength and hope on tonight's topic: what you've seen in your group, in your district or in your own service. Please keep it to two or three minutes, so more of us can share. Who would like to share first?
       DO: Wait through the silence; someone usually speaks within ten seconds. Call first on people who haven't spoken yet tonight, and make sure new reps get a turn. Read questions from the chat aloud, without the names the chat shows.
       TIP: Keep it to experience, not reports: what worked, what didn't, what we'd try. If a share drifts into outside issues, such as politics, treatment methods, other fellowships or commercial apps, gently bring it back to how we carry the message with Grapevine and La Viña.
-      TRANSITION: Thank you all. Let's turn to what's coming up, the stores' offers, the magazines' topics and your sharing.
+      TRANSITION: Thank you all for sharing. Now to the second half of our hour.
 
   # ------------------------------------------------------------------ 1. EVENTS, OFFERS, TOPICS AND SHARING (7:30 – 8:00)
   # The second half, the same in both versions, in the committee's order: coming up (events), workshop requests
@@ -508,7 +510,7 @@ slides:
     accent: "gv"
     minutes: 0.25
     notes: |
-      SAY: It's 7:30: the second half of our hour. First what's coming up and your workshop requests, then the stores' special offers and the magazines' topics and deadlines, and then the floor is yours: GVR and RLV sharing until just before eight.
+      SAY: It's 7:30.
       TIP: Keep your own part short and lively. The most valuable time tonight is what the GVRs and RLVs share, so protect that quarter of an hour.
 
   # The agenda's clock times are the committee's plan for the hour (Central time), not times the player works
@@ -542,8 +544,7 @@ slides:
     minutes: 0.5
     notes: |
       WHEN: shown at 7:30, after the guest speaker (or tonight's topic): here's the rest of our hour.
-      {not:no-speaker} SAY: Here's the plan for the rest of our hour. After our guest speaker: what's coming up and your workshop requests, the stores' special offers, the magazines' topics, and then your sharing. We close with the Responsibility Statement at eight, and the parking lot follows. Our timekeeper tonight is (first name), who'll give a gentle signal in the chat when an item runs over.
-      {only:no-speaker} SAY: Thank you for tonight's sharing. Here's the plan for the rest of our hour: what's coming up and your workshop requests, the stores' special offers, the magazines' topics, and then your sharing. We close with the Responsibility Statement at eight, and the parking lot follows. Our timekeeper tonight is (first name), who'll give a gentle signal in the chat when an item runs over.
+      SAY: Here's the plan for the rest of our hour: what's coming up and your workshop requests, the stores' special offers, the magazines' topics, and then your sharing. We close with the Responsibility Statement at eight, and the parking lot follows. Our timekeeper tonight is (first name), who'll give a gentle signal in the chat when an item runs over.
       TIP (timekeeping): about 30 seconds. The times on the slide are the committee's plan, not a rule: the second half keeps a few minutes spare before eight (through January 2027 the price heads-up takes one of them). If the sharing runs long because members are sharing real experience, shorten the announcements instead: the sharing belongs to the members. Start on time even if only a few people are there; it respects the people who came on time.
       UPDATE: Change the times only if the committee changes its format ({ui:customize} → {ui:edit}). The version 'No guest speaker' shows its own plan by itself.
 
@@ -740,7 +741,7 @@ slides:
       SAY: Welcome to everyone who's new in this service position. Here are the first steps most reps find helpful. Register with the Grapevine office, or with La Viña if you serve as an RLV, so you receive the reps' newsletter (Grapevine News monthly, La Viña's {lang:es}Noticias{/lang} every two months); the Grapevine form also sends you a digital welcome kit. Both offices have free resources: the GVR Workbook in English and the RLV Manual in Spanish. Our committee's website has a corner for reps and a short orientation in six sessions. If you have a question for the office, the address for reps is on the screen, and customer service can help with any problem with an order; for help in Spanish, write to preguntas@aagrapevine.org.
       DO: Offer to help new reps after the meeting, or in the parking lot. The orientation sessions on the committee site (/orientation/) work one-on-one or at a district meeting. Remind reps who are rotating out to tell the office, so the lists stay current.
       TIP: Many reps like to read the current issue in whatever form suits them (print, digital or the app), but nobody needs to buy anything to serve.
-      TRANSITION: Now the floor is yours: GVR and RLV sharing, first-timers and new reps first.
+      TRANSITION: Now to your sharing.
 
   # The heart of the second half: GVRs and RLVs share experience (never reports), about two minutes each.
   - id: "sharing"

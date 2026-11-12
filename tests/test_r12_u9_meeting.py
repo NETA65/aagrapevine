@@ -401,13 +401,17 @@ class Texts(unittest.TestCase):
         self.assertEqual({b["lang"] for b in a["blocks"]}, {"en"})
 
     def test_a_night_without_a_guest_speaker(self):
-        """"No guest speaker": tonight's topic in the agenda e-mail (where the speaker's lines were) and in the notes;
-        no speaker anywhere."""
+        """"No guest speaker": tonight's topic in the agenda e-mail and the reminder (where the speaker's lines were)
+        and in the notes; no speaker anywhere."""
         r = self.run_texts()
         a = r["topicWeek"]["agenda"]["text"]
         # (the time as the site writes it: its no-break spaces stay no-break in a text)
         self.assertIn("\nWhen: Wednesday, October 21, 2026, 7:00\u00a0–\u00a08:00\u00a0PM Central time\n"
                       "Topic for sharing: Gratitude in our service\nJoin on Google Meet: ", a)
+        # the reminder too, in English and in Spanish (where the speaker's lines would be)
+        rem = r["topicWeek"]["reminder"]["text"]
+        self.assertIn("Topic for sharing: Gratitude in our service\nFrom 7:30 to 8:00: coming events", rem)
+        self.assertIn("(código de la reunión: rva-tmst-vdb).\nTema para compartir: Gratitude in our service\nEntre las 7:30", rem)
         m = r["topicAfter"]["minutes"]["text"]
         self.assertIn("Opened with a moment of silence and the Serenity Prayer.\nTopic shared on: Gratitude in our service\n\n"
                       "Coming up and workshop requests\n", m)

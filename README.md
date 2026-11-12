@@ -2844,10 +2844,11 @@ time, its Google Meet link and meeting code, and that meeting's guest speaker fr
    special offers, magazine topics, GVR and RLV sharing), the volunteers wanted, the parking lot after the close,
    the online / no-photos reminder and a signature. The committee meeting is not a business meeting (November
    2026): no minutes to approve, no reports, no old or new business.
-2. **Reminder** — a short note for an e-mail or a group chat: the date, time, guest speaker and Google Meet details
-   in English, the second half and the parking lot in one line, then a paragraph in Spanish with the date, time,
-   meeting code and the same line ("la reunión después de la reunión" for the parking lot) that also says the
-   meeting is in English ("La reunión es en inglés"); then the link to the meeting's details and the signature.
+2. **Reminder** — a short note for an e-mail or a group chat: the date, time, guest speaker (or the topic for
+   sharing, when one is filled in) and Google Meet details in English, the second half and the parking lot in one
+   line, then a paragraph in Spanish with the date, time, meeting code, the speaker or the topic, and the same line
+   ("la reunión después de la reunión" for the parking lot) that also says the meeting is in English ("La reunión
+   es en inglés"); then the link to the meeting's details and the signature.
    There is no phone line: our Google Meet room has no number to call.
 3. **Draft notes** (Spanish: **Borrador de las notas**; the file's `minutes:` text) — for the *last meeting
    held*: the chair **by service position**, "Attended: about ___ members", the opening, the guest speaker by
