@@ -431,7 +431,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       <p class="read-pass-body">{{ "read.gvr.pass_announce" | t(lang, { committee: committeeName, platform: platform, url: gvrAbs }) }}</p>
       <div class="read-pass-foot">
         <svg class="read-pass-qr" aria-hidden="true"><use href="#gvr-pass-qr"></use></svg>
-        <p><strong>{{ "read.gvr.pass_qr" | t(lang) }}</strong><br>{{ gvrAbs | replace("https://", "") }}</p>
+        <p><strong>{{ "read.gvr.pass_qr" | t(lang) }}</strong><br>{{ gvrAbs | cmShortUrl }}</p>
       </div>
     </article>
     {% endfor %}
@@ -445,9 +445,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       <div><dt>{{ "read.gvr.hs_mags" | t(lang) }}</dt><dd>{% for p in (["lv", "gv"] if lang == "es" else ["gv", "lv"]) %}<span class="read-pass-box"></span> {{ "La Viña" if p == "lv" else "AA Grapevine" }} &nbsp; {% endfor %}{{ "read.gvr.hs_copies" | t(lang) }} <span class="read-pass-blank"></span></dd></div>
       <div><dt>{{ "read.gvr.hs_subs" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
       <div><dt>{{ "read.gvr.hs_where" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
-      <div><dt>{{ "read.gvr.hs_forms" | t(lang, { url: (gvrAbs + "#kits") | replace("https://", "") }) }}</dt><dd class="read-pass-line"></dd></div>
+      <div><dt>{{ "read.gvr.hs_forms" | t(lang, { url: (gvrAbs + "#kits") | cmShortUrl }) }}</dt><dd class="read-pass-line"></dd></div>
       <div><dt>{{ "read.gvr.hs_district" | t(lang) }}</dt><dd class="read-pass-line"></dd></div>
-      <div><dt>{{ "read.gvr.hs_committee" | t(lang) }}</dt><dd>{{ "committee.meeting.hero_sub" | t(lang, { rule: site.meeting | cmRule(lang), time: site.meeting | cmTimeRange(lang), platform: platform }) }} {{ meetingsPage | replace("https://", "") }}</dd></div>
+      <div><dt>{{ "read.gvr.hs_committee" | t(lang) }}</dt><dd>{{ "committee.meeting.hero_sub" | t(lang, { rule: site.meeting | cmRule(lang), time: site.meeting | cmTimeRange(lang), platform: platform }) }} {{ meetingsPage | cmShortUrl }}</dd></div>
       <div><dt>{{ "read.gvr.hs_register" | t(lang) }}</dt><dd>{% for k in regOrder %}{{ "La Viña" if k == "rlv" else "Grapevine" }}: {{ (L.rlv_register if k == "rlv" else L.gvr_register) | replace("https://", "") | replace("www.", "") }}{% if loop.first %}<br>{% endif %}{% endfor %}</dd></div>
       <div><dt>{{ "read.gvr.hs_tell" | t(lang) }}</dt><dd>
         {%- for k in regOrder %}<span class="read-pass-box"></span> {{ "La Viña" if k == "rlv" else "Grapevine" }}: {{ L.rlv_office_email if k == "rlv" else L.gvr_office_email }} &nbsp; {% endfor -%}
@@ -456,7 +456,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     </dl>
     <div class="read-pass-foot">
       <svg class="read-pass-qr" aria-hidden="true"><use href="#gvr-pass-qr"></use></svg>
-      <p><strong>{{ "read.gvr.hs_qr" | t(lang) }}</strong><br>{{ gvrAbs | replace("https://", "") }}<br>{{ "read.gvr.hs_tracker" | t(lang, { url: (('/tracker/' | lurl(lang)) | siteUrl(site)) | replace("https://", "") }) }}</p>
+      <p><strong>{{ "read.gvr.hs_qr" | t(lang) }}</strong><br>{{ gvrAbs | cmShortUrl }}<br>{{ "read.gvr.hs_tracker" | t(lang, { url: (('/tracker/' | lurl(lang)) | siteUrl(site)) | cmShortUrl }) }}</p>
     </div>
   </div>
 </div>

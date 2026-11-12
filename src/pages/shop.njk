@@ -819,7 +819,7 @@ pageScripts: ["/assets/js/shop.js"]
         <span class="shop-sheet-line"></span><span class="shop-sheet-line"></span><span class="shop-sheet-line"></span>
         <p class="shop-sheet-date"><span lang="en" x-show="sheet !== 'es'">{{ "shop.sheet_date" | t("en") }}</span><span x-show="sheet === 'both'"> / </span><span lang="es" x-show="sheet !== 'en'">{{ "shop.sheet_date" | t("es") }}</span><span class="shop-sheet-line"></span></p>
       </div>
-      <p class="shop-sheet-site">{{ "/shop/" | lurl(lang) | siteUrl(site) | replace("https://", "") }}</p>
+      <p class="shop-sheet-site">{{ "/shop/" | lurl(lang) | siteUrl(site) | cmShortUrl }}</p>
     </div>
   </div>
   <script type="application/json" id="shop-cost-data">{{ cost | jsonScript | safe }}</script>

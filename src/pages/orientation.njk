@@ -630,16 +630,16 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
               <h2 id="{{ hid }}" class="o101-s-display o101-s-display--sm">{{ "orientation.deck_close_title" | t(lang) }}</h2>
               <ul class="o101-s-close" role="list">
                 <li><strong>{{ "orientation.deck_close_register" | t(lang) }}</strong><span>{% if lang == "es" %}aalavina.org · aagrapevine.org{% else %}aagrapevine.org · aalavina.org{% endif %}</span></li>
-                <li><strong>{{ "orientation.deck_close_steps" | t(lang) }}</strong><span>{{ (('/gvr/' | lurl(lang)) | siteUrl(site)) | replace("https://", "") }}</span></li>
+                <li><strong>{{ "orientation.deck_close_steps" | t(lang) }}</strong><span>{{ (('/gvr/' | lurl(lang)) | siteUrl(site)) | cmShortUrl }}</span></li>
                 {#- the date rolls on once that meeting is over (app.js GV.meetingLines: orientation.js runs it on the
                     slides when they open — a <template> is not part of the page until then) -#}
                 <li><strong>{{ "orientation.deck_close_meeting" | t(lang) }}</strong><span>{% if meeting.next %}<span data-gv-meeting="{{ meeting.rule | json }}" data-at="{{ meeting.next.start }}" data-tpl="{date}" data-date="long">{{ meeting.next.start | fmtDate(lang, "long") }}</span> · {% endif %}{{ site.meeting | cmTimeRange(lang) }} · {{ site.meeting.platform or "Zoom" }}</span></li>
-                <li><strong>{{ "orientation.deck_close_monthly" | t(lang) }}</strong><span>{{ (('/monthly/' | lurl(lang)) | siteUrl(site)) | replace("https://", "") }}</span></li>
+                <li><strong>{{ "orientation.deck_close_monthly" | t(lang) }}</strong><span>{{ (('/monthly/' | lurl(lang)) | siteUrl(site)) | cmShortUrl }}</span></li>
               </ul>
             </div>
             <figure class="o101-s-qr">
               {{ hubAbs | qrSvg("orientation.qr_alt" | t(lang, { url: hubAbs }), "o101-s-qr-svg") | safe }}
-              <figcaption><strong>{{ "orientation.deck_qr" | t(lang) }}</strong><span>{{ (hubAbs | replace("https://", "") | escape | replace("/", "/<wbr>")) | safe }}</span></figcaption>
+              <figcaption><strong>{{ "orientation.deck_qr" | t(lang) }}</strong><span>{{ (hubAbs | cmShortUrl | escape | replace("/", "/<wbr>")) | safe }}</span></figcaption>
             </figure>
           </div>
           {%- endif %}
@@ -705,12 +705,12 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
       <div>
         <h3>{{ "orientation.links_title" | t(lang) }}</h3>
         <ul>
-          {% for k in l.links | o101Links(lang, site) %}<li>{{ k.label }} — {{ (k.href if k.ext else (k.href | siteUrl(site))) | replace("https://", "") | replace("www.", "") }}</li>{% endfor %}
+          {% for k in l.links | o101Links(lang, site) %}<li>{{ k.label }} — {{ (k.href if k.ext else (k.href | siteUrl(site))) | cmShortUrl }}</li>{% endfor %}
         </ul>
       </div>
       <figure>
         {{ lessonAbs | qrSvg("", "o101-sheet-qr") | safe }}
-        <figcaption>{{ "orientation.handout_qr" | t(lang) }}<br>{{ lessonAbs | replace("https://", "") }}</figcaption>
+        <figcaption>{{ "orientation.handout_qr" | t(lang) }}<br>{{ lessonAbs | cmShortUrl }}</figcaption>
       </figure>
     </footer>
   </article>
