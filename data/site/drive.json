@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T19:51:02Z",
+ "updated": "2026-11-12T20:49:06Z",
  "fixture": false,
  "items": [
   {
@@ -103,7 +103,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
     ],
-    "modified_text": "12:29 am"
+    "modified_text": "12:48 pm"
    },
    "i18n": {
     "title": {
@@ -342,16 +342,14 @@
    "i18n": {
     "title": {
      "en": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom",
-     "es": "Grapevine Weekly Open AA Meeting - todos los miércoles, 11 a. m. Central (mediodía (hora del Este)), en Zoom"
+     "es": "Reunión abierta semanal de Grapevine (en inglés) - todos los miércoles, 11 a. m. hora del Centro (mediodía del Este), por Zoom"
     },
     "summary": {
      "en": "",
      "es": ""
     }
    },
-   "machine": [
-    "es"
-   ],
+   "machine": [],
    "is_new": true
   },
   {
@@ -691,7 +689,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
     ],
-    "modified_text": "12:29 am"
+    "modified_text": "12:49 pm"
    },
    "i18n": {
     "title": {
@@ -867,7 +865,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
     ],
-    "modified_text": "12:29 am"
+    "modified_text": "12:48 pm"
    },
    "i18n": {
     "title": {
@@ -1104,7 +1102,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1uOtbv5oBKKx67J8UbBknIVgkuBHj475A"
     ],
-    "modified_text": "12:29 am"
+    "modified_text": "12:48 pm"
    },
    "i18n": {
     "title": {
@@ -1225,7 +1223,7 @@
    },
    "i18n": {
     "title": {
-     "en": "Open meeting of La Viña - every Thursday, 11 a.m. time of the Centre (Middle East), by Zoom",
+     "en": "La Viña Open Meeting (in Spanish) - every Thursday, 11 AM Central (noon Eastern), on Zoom",
      "es": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"
     },
     "summary": {
@@ -1233,9 +1231,7 @@
      "es": ""
     }
    },
-   "machine": [
-    "en"
-   ],
+   "machine": [],
    "is_new": true
   },
   {
