@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T08:30:14Z",
+ "updated": "2026-11-12T16:01:56Z",
  "fixture": false,
  "items": [
   {
@@ -178,6 +178,64 @@
    "is_new": true
   },
   {
+   "id": "drive:1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
+   "title": "Our online meetings - flyer",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
+    "mime": "image/png",
+    "name": "Our online meetings - flyer.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
+    "preview_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Our online meetings - flyer",
+     "es": "Nuestras reuniones en línea - volante"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
    "id": "drive:1p9pwm0yRjK3WmyG1BmtMsLeNU6kS095b",
    "source": "drive",
    "kind": "photo",
@@ -234,6 +292,66 @@
     }
    },
    "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF/view",
+   "title": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-12T16:01:56Z",
+   "image": "https://lh3.googleusercontent.com/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF",
+    "mime": "image/png",
+    "name": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF/view",
+    "preview_url": "https://drive.google.com/file/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:58 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom",
+     "es": "Grapevine Weekly Open AA Meeting - todos los miércoles, 11 a. m. Central (mediodía (hora del Este)), en Zoom"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
    "is_new": true
   },
   {
@@ -344,6 +462,124 @@
     "title": {
      "en": "July 2027 Committee Meeting - guest speaker",
      "es": "Reunión del comité de julio de 2027 - orador invitado"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+   "title": "November 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:53:41Z",
+   "image": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "mime": "image/png",
+    "name": "November 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+    "preview_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-11"
+   },
+   "i18n": {
+    "title": {
+     "en": "November 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de noviembre de 2027 - oradora invitada"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
+   "title": "May 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
+    "mime": "image/png",
+    "name": "May 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
+    "preview_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-05"
+   },
+   "i18n": {
+    "title": {
+     "en": "May 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de mayo de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
@@ -530,6 +766,65 @@
    "is_new": true
   },
   {
+   "id": "drive:1WrBipT0UH0dAG2QbO__idbg1igNam49v",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
+   "title": "September 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1WrBipT0UH0dAG2QbO__idbg1igNam49v",
+    "mime": "image/png",
+    "name": "September 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
+    "preview_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1WrBipT0UH0dAG2QbO__idbg1igNam49v",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-09"
+   },
+   "i18n": {
+    "title": {
+     "en": "September 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de septiembre de 2027 - orador invitado"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
    "id": "drive:1SAguuNoWbgmUbX5LXEm5hEMJvz1GofOn",
    "source": "drive",
    "kind": "slides",
@@ -639,6 +934,124 @@
     "title": {
      "en": "April 2027 Committee Meeting - guest speaker",
      "es": "Reunión del comité de abril de 2027 - oradora invitada"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
+   "title": "March 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
+    "mime": "image/png",
+    "name": "March 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
+    "preview_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-03"
+   },
+   "i18n": {
+    "title": {
+     "en": "March 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de marzo de 2027 - orador invitado"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "drive:1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
+   "title": "October 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
+    "mime": "image/png",
+    "name": "October 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
+    "preview_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-10"
+   },
+   "i18n": {
+    "title": {
+     "en": "October 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de octubre de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",
@@ -766,6 +1179,66 @@
    "is_new": true
   },
   {
+   "id": "drive:1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq/view",
+   "title": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-12T16:01:56Z",
+   "image": "https://lh3.googleusercontent.com/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq",
+    "mime": "image/jpeg",
+    "name": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq/view",
+    "preview_url": "https://drive.google.com/file/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:58 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Open meeting of La Viña - every Thursday, 11 a.m. time of the Centre (Middle East), by Zoom",
+     "es": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
    "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
    "source": "drive",
    "kind": "photo",
@@ -808,7 +1281,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
     ],
-    "modified_text": "2:16 pm"
+    "modified_text": "Nov 11"
    },
    "i18n": {
     "title": {
@@ -932,64 +1405,6 @@
     "title": {
      "en": "Grapevine Area Chair Meeting Report",
      "es": "Informe de la reunión de coordinadores de Área de Grapevine"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
-   "id": "drive:1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
-   "title": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-11-07",
-   "first_seen": "2026-11-07T15:42:17Z",
-   "image": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
-    "mime": "image/jpeg",
-    "name": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
-    "preview_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 7"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Open Meeting - Every Thursday at 12 PM Eastern on Zoom",
-     "es": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom"
     },
     "summary": {
      "en": "",
@@ -1176,241 +1591,6 @@
    "is_new": true
   },
   {
-   "id": "drive:1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
-   "title": "Our online meetings - flyer",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
-    "mime": "image/png",
-    "name": "Our online meetings - flyer.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
-    "preview_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "Our online meetings - flyer",
-     "es": "Nuestras reuniones en línea - volante"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
-   "id": "drive:1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
-   "title": "November 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:53:41Z",
-   "image": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
-    "mime": "image/png",
-    "name": "November 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
-    "preview_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-11"
-   },
-   "i18n": {
-    "title": {
-     "en": "November 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de noviembre de 2027 - oradora invitada"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
-   "id": "drive:1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
-   "title": "May 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
-    "mime": "image/png",
-    "name": "May 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
-    "preview_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-05"
-   },
-   "i18n": {
-    "title": {
-     "en": "May 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de mayo de 2027 - oradora invitada"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
-   "id": "drive:1WrBipT0UH0dAG2QbO__idbg1igNam49v",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
-   "title": "September 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1WrBipT0UH0dAG2QbO__idbg1igNam49v",
-    "mime": "image/png",
-    "name": "September 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
-    "preview_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1WrBipT0UH0dAG2QbO__idbg1igNam49v",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-09"
-   },
-   "i18n": {
-    "title": {
-     "en": "September 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de septiembre de 2027 - orador invitado"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
    "id": "drive:1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",
    "source": "drive",
    "kind": "photo",
@@ -1517,124 +1697,6 @@
     "title": {
      "en": "Free shipping on all Grapevine products - banner",
      "es": "Envío gratis en todos los productos de Grapevine - banner"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
-   "id": "drive:1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
-   "title": "March 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
-    "mime": "image/png",
-    "name": "March 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
-    "preview_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-03"
-   },
-   "i18n": {
-    "title": {
-     "en": "March 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de marzo de 2027 - orador invitado"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true
-  },
-  {
-   "id": "drive:1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
-   "title": "October 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
-    "mime": "image/png",
-    "name": "October 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
-    "preview_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-10"
-   },
-   "i18n": {
-    "title": {
-     "en": "October 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de octubre de 2027 - oradora invitada"
     },
     "summary": {
      "en": "",

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T15:24:16Z",
+ "updated": "2026-11-12T16:03:03Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17022,
-   "posts": 4005,
+   "followers": 17012,
+   "posts": 4007,
    "owner_id": "48108439509",
-   "checked": "2026-11-11T15:23:58Z",
+   "checked": "2026-11-12T16:02:44Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,228 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2434,
-   "posts": 3025,
+   "posts": 3029,
    "owner_id": "48275839129",
-   "checked": "2026-11-11T15:24:01Z",
+   "checked": "2026-11-12T16:02:47Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfpUhn-uR2-",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpUhn-uR2-/",
+   "title": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast",
+   "summary": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast",
+   "lang": "es",
+   "date": "2026-11-12T15:01:38Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpUhn-uR2-.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpUhn-uR2-",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfpUhn-uR2-.webp",
+    "embed_url": "https://www.instagram.com/p/DfpUhn-uR2-/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpUhn-uR2-/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We hope you can join us at the meeting or listen to the podcast",
+     "es": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast"
+    },
+    "summary": {
+     "en": "We hope you can join us at the meeting or listen to the podcast",
+     "es": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfpVAeMvo1Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpVAeMvo1Z/",
+   "title": "Calendario anual de pared de La Viña",
+   "summary": "Calendario anual de pared de La Viña Lleno de hermosas fotografías tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionadas de historias de Grapevine. Para adquirir tu calendario visita: www.aalavina.org/tienda",
+   "lang": "es",
+   "date": "2026-11-12T15:00:23Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpVAeMvo1Z.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpVAeMvo1Z",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfpVAeMvo1Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfpVAeMvo1Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpVAeMvo1Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña annual wall calendar",
+     "es": "Calendario anual de pared de La Viña"
+    },
+    "summary": {
+     "en": "La Viña annual wall calendar Filled with beautiful photographs taken by members of AA, accompanied by quotes inspired by English, Spanish and French selected from Grapevine stories. To purchase your calendar visit: www.aalavina.org/tienda",
+     "es": "Calendario anual de pared de La Viña Lleno de hermosas fotografías tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionadas de historias de Grapevine. Para adquirir tu calendario visita: www.aalavina.org/tienda"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfpU_DTyBBE",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpU_DTyBBE/",
+   "title": "AA Grapevine Wall Calendar!",
+   "summary": "AA Grapevine Wall Calendar! Full of beautiful photos shot by AA members, accompanied by inspiring quotes in English, Spanish, and French selected from Grapevine stories. To purchase, visit: www.aagrapevine.org/store",
+   "lang": "en",
+   "date": "2026-11-12T15:00:09Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpU_DTyBBE.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpU_DTyBBE",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfpU_DTyBBE.webp",
+    "embed_url": "https://www.instagram.com/p/DfpU_DTyBBE/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpU_DTyBBE/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Grapevine Wall Calendar!",
+     "es": "¡AA Grapevine calendario de pared!"
+    },
+    "summary": {
+     "en": "AA Grapevine Wall Calendar! Full of beautiful photos shot by AA members, accompanied by inspiring quotes in English, Spanish, and French selected from Grapevine stories. To purchase, visit: www.aagrapevine.org/store",
+     "es": "¡AA Grapevine calendario de pared! Llena de fotos hermosas tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionados de historias Grapevine. Para comprar, visite: www.aagrapevine.org/store"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfpDze9DZe_",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpDze9DZe_/",
+   "title": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas…",
+   "summary": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas no nos representan. Todas nuestras dudas, miedos y recelos, anhelos inmaduros, autoindulgencias son obra de nuestro cuerpo físico, guiado por los falsos instintos y la imaginación, y no de nuestro verdadero ser, que es el alma —el espíritu que albergamos—. Allí está nuestra consciencia, nuestra sabiduría y…",
+   "lang": "es",
+   "date": "2026-11-12T12:30:15Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpDze9DZe_.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpDze9DZe_",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfpDze9DZe_.webp",
+    "embed_url": "https://www.instagram.com/p/DfpDze9DZe_/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpDze9DZe_/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“One does not get to know oneself by counting on its ‘bad actions’; these …",
+     "es": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas…"
+    },
+    "summary": {
+     "en": "“One does not get to know oneself by making a tale of his ‘bad actions’; these do not represent us. All our doubts, fears and recesses, immature longings, self-indulgences are the work of our physical body, guided by false instincts and imagination, and not of our true being, which is the soul — the spirit we hold. There is our consciousness, our wisdom and …",
+     "es": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas no nos representan. Todas nuestras dudas, miedos y recelos, anhelos inmaduros, autoindulgencias son obra de nuestro cuerpo físico, guiado por los falsos instintos y la imaginación, y no de nuestro verdadero ser, que es el alma —el espíritu que albergamos—. Allí está nuestra consciencia, nuestra sabiduría y…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfpDzg3jSf_",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpDzg3jSf_/",
+   "title": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we…",
+   "summary": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we are at peace with ourselves. And with others. And with God.” “Learning to Handle Sobriety,” Connecticut, March 1975, Best of Grapevine, Volume 2 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-12T12:30:14Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpDzg3jSf_.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpDzg3jSf_",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfpDzg3jSf_.webp",
+    "embed_url": "https://www.instagram.com/p/DfpDzg3jSf_/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpDzg3jSf_/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we…",
+     "es": "“Rechazamos la fantasía y aceptamos la realidad. Y lo encontramos hermoso. Por fin, …"
+    },
+    "summary": {
+     "en": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we are at peace with ourselves. And with others. And with God.” “Learning to Handle Sobriety,” Connecticut, March 1975, Best of Grapevine, Volume 2 Daily Quote at www.aagrapevine.org",
+     "es": "“Rechazamos la fantasía y aceptamos la realidad. Y lo encontramos hermoso. Por fin, estamos en paz con nosotros mismos. Y con otros. Y con Dios.” “Aprendizaje para manejar sobriedad,” Connecticut, marzo de 1975, el mejor de Grapevine, volumen 2 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Dfmktsbg5kO",
    "source": "instagram",
@@ -2479,7 +2694,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfFR15tjXfn",
@@ -2522,7 +2737,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfE5z2WDW0Z",
@@ -2565,7 +2780,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfE5z1fjVQP",
@@ -2608,7 +2823,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfCYcpnjVeP",

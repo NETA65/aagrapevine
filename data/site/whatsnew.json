@@ -1,7 +1,288 @@
 {
- "updated": "2026-11-12T08:30:40Z",
+ "updated": "2026-11-12T16:10:07Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfpUhn-uR2-",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpUhn-uR2-/",
+   "title": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast",
+   "summary": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast",
+   "lang": "es",
+   "date": "2026-11-12T15:01:38Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpUhn-uR2-.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpUhn-uR2-",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfpUhn-uR2-.webp",
+    "embed_url": "https://www.instagram.com/p/DfpUhn-uR2-/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpUhn-uR2-/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We hope you can join us at the meeting or listen to the podcast",
+     "es": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast"
+    },
+    "summary": {
+     "en": "We hope you can join us at the meeting or listen to the podcast",
+     "es": "Esperamos que puedas acompañarnos en la reunión o escuchar el pódcast"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T15:01:38Z"
+  },
+  {
+   "id": "ig:DfpVAeMvo1Z",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpVAeMvo1Z/",
+   "title": "Calendario anual de pared de La Viña",
+   "summary": "Calendario anual de pared de La Viña Lleno de hermosas fotografías tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionadas de historias de Grapevine. Para adquirir tu calendario visita: www.aalavina.org/tienda",
+   "lang": "es",
+   "date": "2026-11-12T15:00:23Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpVAeMvo1Z.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpVAeMvo1Z",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfpVAeMvo1Z.webp",
+    "embed_url": "https://www.instagram.com/p/DfpVAeMvo1Z/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpVAeMvo1Z/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña annual wall calendar",
+     "es": "Calendario anual de pared de La Viña"
+    },
+    "summary": {
+     "en": "La Viña annual wall calendar Filled with beautiful photographs taken by members of AA, accompanied by quotes inspired by English, Spanish and French selected from Grapevine stories. To purchase your calendar visit: www.aalavina.org/tienda",
+     "es": "Calendario anual de pared de La Viña Lleno de hermosas fotografías tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionadas de historias de Grapevine. Para adquirir tu calendario visita: www.aalavina.org/tienda"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T15:00:23Z"
+  },
+  {
+   "id": "ig:DfpU_DTyBBE",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpU_DTyBBE/",
+   "title": "AA Grapevine Wall Calendar!",
+   "summary": "AA Grapevine Wall Calendar! Full of beautiful photos shot by AA members, accompanied by inspiring quotes in English, Spanish, and French selected from Grapevine stories. To purchase, visit: www.aagrapevine.org/store",
+   "lang": "en",
+   "date": "2026-11-12T15:00:09Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpU_DTyBBE.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpU_DTyBBE",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "video",
+    "thumb": "/assets/cache/ig/DfpU_DTyBBE.webp",
+    "embed_url": "https://www.instagram.com/p/DfpU_DTyBBE/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpU_DTyBBE/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Grapevine Wall Calendar!",
+     "es": "¡AA Grapevine calendario de pared!"
+    },
+    "summary": {
+     "en": "AA Grapevine Wall Calendar! Full of beautiful photos shot by AA members, accompanied by inspiring quotes in English, Spanish, and French selected from Grapevine stories. To purchase, visit: www.aagrapevine.org/store",
+     "es": "¡AA Grapevine calendario de pared! Llena de fotos hermosas tomadas por miembros de AA, acompañadas de citas inspiradoras en inglés, español y francés seleccionados de historias Grapevine. Para comprar, visite: www.aagrapevine.org/store"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T15:00:09Z"
+  },
+  {
+   "id": "ig:DfpDze9DZe_",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpDze9DZe_/",
+   "title": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas…",
+   "summary": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas no nos representan. Todas nuestras dudas, miedos y recelos, anhelos inmaduros, autoindulgencias son obra de nuestro cuerpo físico, guiado por los falsos instintos y la imaginación, y no de nuestro verdadero ser, que es el alma —el espíritu que albergamos—. Allí está nuestra consciencia, nuestra sabiduría y…",
+   "lang": "es",
+   "date": "2026-11-12T12:30:15Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpDze9DZe_.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpDze9DZe_",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfpDze9DZe_.webp",
+    "embed_url": "https://www.instagram.com/p/DfpDze9DZe_/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpDze9DZe_/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“One does not get to know oneself by counting on its ‘bad actions’; these …",
+     "es": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas…"
+    },
+    "summary": {
+     "en": "“One does not get to know oneself by making a tale of his ‘bad actions’; these do not represent us. All our doubts, fears and recesses, immature longings, self-indulgences are the work of our physical body, guided by false instincts and imagination, and not of our true being, which is the soul — the spirit we hold. There is our consciousness, our wisdom and …",
+     "es": "“Uno no logra conocerse a sí mismo haciendo un recuento de sus ‘malas acciones’; éstas no nos representan. Todas nuestras dudas, miedos y recelos, anhelos inmaduros, autoindulgencias son obra de nuestro cuerpo físico, guiado por los falsos instintos y la imaginación, y no de nuestro verdadero ser, que es el alma —el espíritu que albergamos—. Allí está nuestra consciencia, nuestra sabiduría y…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:30:15Z"
+  },
+  {
+   "id": "ig:DfpDzg3jSf_",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfpDzg3jSf_/",
+   "title": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we…",
+   "summary": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we are at peace with ourselves. And with others. And with God.” “Learning to Handle Sobriety,” Connecticut, March 1975, Best of Grapevine, Volume 2 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-12T12:30:14Z",
+   "first_seen": "2026-11-12T16:03:03Z",
+   "image": "/assets/cache/ig/DfpDzg3jSf_.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfpDzg3jSf_",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfpDzg3jSf_.webp",
+    "embed_url": "https://www.instagram.com/p/DfpDzg3jSf_/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfpDzg3jSf_/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we…",
+     "es": "“Rechazamos la fantasía y aceptamos la realidad. Y lo encontramos hermoso. Por fin, …"
+    },
+    "summary": {
+     "en": "“We reject fantasizing and accept reality. And we find it beautiful. For, at last, we are at peace with ourselves. And with others. And with God.” “Learning to Handle Sobriety,” Connecticut, March 1975, Best of Grapevine, Volume 2 Daily Quote at www.aagrapevine.org",
+     "es": "“Rechazamos la fantasía y aceptamos la realidad. Y lo encontramos hermoso. Por fin, estamos en paz con nosotros mismos. Y con otros. Y con Dios.” “Aprendizaje para manejar sobriedad,” Connecticut, marzo de 1975, el mejor de Grapevine, volumen 2 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:30:14Z"
+  },
+  {
+   "id": "drive:1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq/view",
+   "title": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-12T16:01:56Z",
+   "image": "https://lh3.googleusercontent.com/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq=w600",
+   "tags": [
+    "panel-77",
+    "jpeg"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq",
+    "mime": "image/jpeg",
+    "name": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom.jpg",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq/view",
+    "preview_url": "https://drive.google.com/file/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1-bjRcwoLE43Eb_uB1GfDbCTWVaptIvEq=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "JPEG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:58 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Open meeting of La Viña - every Thursday, 11 a.m. time of the Centre (Middle East), by Zoom",
+     "es": "Reunión abierta de La Viña - todos los jueves, 11 a. m. hora del Centro (mediodía del Este), por Zoom"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
   {
    "id": "drive:18Ksg0cdmCUpTba1LlM6EcxTGvvKt9Qxm",
    "source": "drive",
@@ -111,6 +392,126 @@
     "title": {
      "en": "Grapevine and La Viña Information Workshop",
      "es": "Taller informativo de Grapevine y La Viña"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "drive:1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
+   "title": "October 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
+    "mime": "image/png",
+    "name": "October 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
+    "preview_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-10"
+   },
+   "i18n": {
+    "title": {
+     "en": "October 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de octubre de 2027 - oradora invitada"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "drive:1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
+   "title": "March 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
+    "mime": "image/png",
+    "name": "March 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
+    "preview_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-03"
+   },
+   "i18n": {
+    "title": {
+     "en": "March 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de marzo de 2027 - orador invitado"
     },
     "summary": {
      "en": "",
@@ -239,6 +640,66 @@
    "machine": [
     "es"
    ],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "drive:1WrBipT0UH0dAG2QbO__idbg1igNam49v",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
+   "title": "September 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1WrBipT0UH0dAG2QbO__idbg1igNam49v",
+    "mime": "image/png",
+    "name": "September 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
+    "preview_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1WrBipT0UH0dAG2QbO__idbg1igNam49v",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-09"
+   },
+   "i18n": {
+    "title": {
+     "en": "September 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de septiembre de 2027 - orador invitado"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
    "is_new": true,
    "wn_date": "2026-11-12T12:00:00Z"
   },
@@ -422,6 +883,126 @@
    "wn_date": "2026-11-12T12:00:00Z"
   },
   {
+   "id": "drive:1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
+   "title": "May 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
+    "mime": "image/png",
+    "name": "May 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
+    "preview_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-05"
+   },
+   "i18n": {
+    "title": {
+     "en": "May 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de mayo de 2027 - oradora invitada"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "drive:1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+   "title": "November 2027 Committee Meeting - guest speaker",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:53:41Z",
+   "image": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "mime": "image/png",
+    "name": "November 2027 Committee Meeting - guest speaker.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
+    "preview_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am",
+    "event_month": "2027-11"
+   },
+   "i18n": {
+    "title": {
+     "en": "November 2027 Committee Meeting - guest speaker",
+     "es": "Reunión del comité de noviembre de 2027 - oradora invitada"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
    "id": "drive:1k3YymU2KZ7yABMeelycHCYgNtHKTN5UA",
    "source": "drive",
    "kind": "photo",
@@ -541,6 +1122,67 @@
    "wn_date": "2026-11-12T12:00:00Z"
   },
   {
+   "id": "drive:1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF/view",
+   "title": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-12T16:01:56Z",
+   "image": "https://lh3.googleusercontent.com/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF",
+    "mime": "image/png",
+    "name": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF/view",
+    "preview_url": "https://drive.google.com/file/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1lKJZfFvqs-H_6LjCIqww4jAacEw3NFbF=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "6:58 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting - every Wednesday, 11 AM Central (noon Eastern), on Zoom",
+     "es": "Grapevine Weekly Open AA Meeting - todos los miércoles, 11 a. m. Central (mediodía (hora del Este)), en Zoom"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
    "id": "drive:1p9pwm0yRjK3WmyG1BmtMsLeNU6kS095b",
    "source": "drive",
    "kind": "photo",
@@ -590,6 +1232,65 @@
     "title": {
      "en": "December 2027 Committee Meeting - guest speaker",
      "es": "Reunión del comité de diciembre de 2027 - oradora invitada"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "drive:1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
+   "source": "drive",
+   "kind": "photo",
+   "url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
+   "title": "Our online meetings - flyer",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-12",
+   "first_seen": "2026-11-11T08:42:45Z",
+   "image": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
+   "tags": [
+    "panel-77",
+    "png"
+   ],
+   "category": "flyers",
+   "status": "ok",
+   "extra": {
+    "file_id": "1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
+    "mime": "image/png",
+    "name": "Our online meetings - flyer.png",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "flyers"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
+    "preview_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
+    "image_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w1600",
+    "is_image": true,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "PNG",
+    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
+    ],
+    "modified_text": "12:30 am"
+   },
+   "i18n": {
+    "title": {
+     "en": "Our online meetings - flyer",
+     "es": "Nuestras reuniones en línea - volante"
     },
     "summary": {
      "en": "",
@@ -1158,7 +1859,7 @@
      "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
      "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI"
     ],
-    "modified_text": "2:16 pm"
+    "modified_text": "Nov 11"
    },
    "i18n": {
     "title": {
@@ -1439,7 +2140,7 @@
     "duration_sec": null,
     "playlists": [],
     "is_short": false,
-    "views": 101,
+    "views": 107,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -1661,7 +2362,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 130,
+    "views": 154,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2197,65 +2898,6 @@
    "wn_date": "2026-11-07T12:00:00Z"
   },
   {
-   "id": "drive:1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
-   "title": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-11-07",
-   "first_seen": "2026-11-07T15:42:17Z",
-   "image": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
-    "mime": "image/jpeg",
-    "name": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/view",
-    "preview_url": "https://drive.google.com/file/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1dxqdQGLNi7EpcC5Dl8w6wrqCgB8LFggm=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 7"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Open Meeting - Every Thursday at 12 PM Eastern on Zoom",
-     "es": "Reunión abierta de La Viña - todos los jueves a las 12 p. m. (hora del Este) por Zoom"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-07T12:00:00Z"
-  },
-  {
    "id": "ig:Dfb6ZgtA-xc",
    "source": "instagram",
    "kind": "post",
@@ -2500,7 +3142,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 217,
+    "views": 238,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3275,7 +3917,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 189,
+    "views": 197,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -3382,126 +4024,6 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-02T12:30:14Z"
-  },
-  {
-   "id": "drive:1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
-   "title": "October 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
-    "mime": "image/png",
-    "name": "October 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/view",
-    "preview_url": "https://drive.google.com/file/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1Ca4tdzlc-IokPY3w-ynhhijWURCpjzVQ=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-10"
-   },
-   "i18n": {
-    "title": {
-     "en": "October 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de octubre de 2027 - oradora invitada"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
-   "title": "March 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
-    "mime": "image/png",
-    "name": "March 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/view",
-    "preview_url": "https://drive.google.com/file/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1FpiUeq1mx55p2ckXw-90gA9uYjVZw3sP=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-03"
-   },
-   "i18n": {
-    "title": {
-     "en": "March 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de marzo de 2027 - orador invitado"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-02T12:00:00Z"
   },
   {
    "id": "drive:1SKQUuJb53nxSvwlDQmvZH-V9x0ER25sP",
@@ -3611,245 +4133,6 @@
     "title": {
      "en": "Free shipping on all La Viña products - banner",
      "es": "Envíos gratuitos en todos los productos de La Viña - banner"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1WrBipT0UH0dAG2QbO__idbg1igNam49v",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
-   "title": "September 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1WrBipT0UH0dAG2QbO__idbg1igNam49v",
-    "mime": "image/png",
-    "name": "September 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/view",
-    "preview_url": "https://drive.google.com/file/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1WrBipT0UH0dAG2QbO__idbg1igNam49v",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1WrBipT0UH0dAG2QbO__idbg1igNam49v=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-09"
-   },
-   "i18n": {
-    "title": {
-     "en": "September 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de septiembre de 2027 - orador invitado"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
-   "title": "May 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
-    "mime": "image/png",
-    "name": "May 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/view",
-    "preview_url": "https://drive.google.com/file/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1jcz_aZzTQc3EQhj8AaTl902yH7KklsbO=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-05"
-   },
-   "i18n": {
-    "title": {
-     "en": "May 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de mayo de 2027 - oradora invitada"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
-   "title": "November 2027 Committee Meeting - guest speaker",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:53:41Z",
-   "image": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
-    "mime": "image/png",
-    "name": "November 2027 Committee Meeting - guest speaker.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/view",
-    "preview_url": "https://drive.google.com/file/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1jfUKQKntKLFSYUq1a0uNoDwBJ60Pdr_R=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2",
-    "event_month": "2027-11"
-   },
-   "i18n": {
-    "title": {
-     "en": "November 2027 Committee Meeting - guest speaker",
-     "es": "Reunión del comité de noviembre de 2027 - oradora invitada"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": true,
-   "wn_date": "2026-11-02T12:00:00Z"
-  },
-  {
-   "id": "drive:1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
-   "title": "Our online meetings - flyer",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-02",
-   "first_seen": "2026-11-11T08:42:45Z",
-   "image": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
-    "mime": "image/png",
-    "name": "Our online meetings - flyer.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/view",
-    "preview_url": "https://drive.google.com/file/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1prfso9s0mvmoUIEiCvHnfasKOTodut-X",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1prfso9s0mvmoUIEiCvHnfasKOTodut-X=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 2"
-   },
-   "i18n": {
-    "title": {
-     "en": "Our online meetings - flyer",
-     "es": "Nuestras reuniones en línea - volante"
     },
     "summary": {
      "en": "",
@@ -3987,7 +4270,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 285,
+    "views": 288,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -5046,7 +5329,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 283,
+    "views": 289,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -5160,7 +5443,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-29T15:00:14Z"
   },
   {
@@ -5204,7 +5487,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-29T15:00:14Z"
   },
   {
@@ -5248,7 +5531,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-29T11:30:15Z"
   },
   {
@@ -5292,7 +5575,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-29T11:30:14Z"
   },
   {
@@ -6782,7 +7065,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 335,
+    "views": 336,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7120,270 +7403,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-21T13:31:32Z"
-  },
-  {
-   "id": "ig:DewhNVqjeSy",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DewhNVqjeSy/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-10-21T13:30:28Z",
-   "first_seen": "2026-10-22T13:02:42Z",
-   "image": "/assets/cache/ig/DewhNVqjeSy.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DewhNVqjeSy",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DewhNVqjeSy.webp",
-    "embed_url": "https://www.instagram.com/p/DewhNVqjeSy/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DewhNVqjeSy/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-21T13:30:28Z"
-  },
-  {
-   "id": "ig:DewTcznDckq",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DewTcznDckq/",
-   "title": "“Quejarse no es un paso de acción”.",
-   "summary": "“Quejarse no es un paso de acción”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-21T11:30:16Z",
-   "first_seen": "2026-10-21T13:00:52Z",
-   "image": "/assets/cache/ig/DewTcznDckq.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DewTcznDckq",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DewTcznDckq.webp",
-    "embed_url": "https://www.instagram.com/p/DewTcznDckq/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DewTcznDckq/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“To complain is not a step of action.”",
-     "es": "“Quejarse no es un paso de acción”."
-    },
-    "summary": {
-     "en": "“To complain is not a step of action.” Indianápolis, Indiana, August 1982 AA Grapevine Daily Quote in www.aalavina.org",
-     "es": "“Quejarse no es un paso de acción”. \"“Destilación del espíritu” INDIANÁPOLIS, INDIANA, AGOSTO DE 1982 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-21T11:30:16Z"
-  },
-  {
-   "id": "ig:DewTc02DffK",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DewTc02DffK/",
-   "title": "“The deception of others is nearly always rooted in the deception of ourselves.”",
-   "summary": "“The deception of others is nearly always rooted in the deception of ourselves.” AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-21T11:30:15Z",
-   "first_seen": "2026-10-21T13:00:52Z",
-   "image": "/assets/cache/ig/DewTc02DffK.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DewTc02DffK",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DewTc02DffK.webp",
-    "embed_url": "https://www.instagram.com/p/DewTc02DffK/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DewTc02DffK/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“The deception of others is nearly always rooted in the deception of ourselves.”",
-     "es": "“El engaño de los demás está casi siempre arraigado en el engaño de nosotros mismos”."
-    },
-    "summary": {
-     "en": "“The deception of others is nearly always rooted in the deception of ourselves.” AA Co-Founder, Bill W., August 1961, “This Matter of Honesty”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“El engaño de los demás está casi siempre arraigado en el engaño de nosotros mismos”. AA cofundador, Bill W., agosto de 1961, “este asunto de honestidad”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-21T11:30:15Z"
-  },
-  {
-   "id": "ig:DeuGuAgmrsA",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeuGuAgmrsA/",
-   "title": "The November GV News!",
-   "summary": "The November GV News! Letter to Grapevine and La Viña Reps: GRAPEVINE NEWS! To read what’s new for November, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-20T15:00:31Z",
-   "first_seen": "2026-10-21T13:00:52Z",
-   "image": "/assets/cache/ig/DeuGuAgmrsA.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeuGuAgmrsA",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "carousel",
-    "thumb": "/assets/cache/ig/DeuGuAgmrsA.webp",
-    "embed_url": "https://www.instagram.com/p/DeuGuAgmrsA/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeuGuAgmrsA/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The November GV News!",
-     "es": "¡Noticias GV de noviembre!"
-    },
-    "summary": {
-     "en": "The November GV News! Letter to Grapevine and La Viña Reps: GRAPEVINE NEWS! To read what’s new for November, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
-     "es": "¡Noticias GV de noviembre! ¡Carta a Grapevine y La Viña Reps: Grapevine NEWS! Para leer lo nuevo para noviembre, visite www.aagrapevine.org/gvr-resources Inscríbase para recibir correos electrónicos Grapevine en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-20T15:00:31Z"
-  },
-  {
-   "id": "ig:DeuGtQiCc4j",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DeuGtQiCc4j/",
-   "title": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades…",
-   "summary": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades de Noviembre/Diciembre, visite www.aalavina.org/recursos Suscríbase para recibir correos electrónicos de La Viña en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-20T15:00:24Z",
-   "first_seen": "2026-10-21T13:00:52Z",
-   "image": "/assets/cache/ig/DeuGtQiCc4j.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DeuGtQiCc4j",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "carousel",
-    "thumb": "/assets/cache/ig/DeuGtQiCc4j.webp",
-    "embed_url": "https://www.instagram.com/p/DeuGtQiCc4j/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DeuGtQiCc4j/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Letter to the representatives of La Viña: News from La Viña! To read the news …",
-     "es": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades…"
-    },
-    "summary": {
-     "en": "Letter to the representatives of La Viña: News from La Viña! To read the latest news from November/December, visit www.aalavina.org/recursos Subscribe to receive emails from La Viña in www.aalavina.org",
-     "es": "Carta a los representantes de La Viña: ¡Noticias desde La Viña! Para leer las novedades de Noviembre/Diciembre, visite www.aalavina.org/recursos Suscríbase para recibir correos electrónicos de La Viña en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-20T15:00:24Z"
-  },
-  {
-   "id": "ig:Detup7GFy91",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Detup7GFy91/",
-   "title": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
-   "summary": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-20T11:30:14Z",
-   "first_seen": "2026-10-20T12:48:33Z",
-   "image": "/assets/cache/ig/Detup7GFy91.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Detup7GFy91",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Detup7GFy91.webp",
-    "embed_url": "https://www.instagram.com/p/Detup7GFy91/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Detup7GFy91/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“The spirit of AA has been with me ... for better or for worse, for richer or for…",
-     "es": "“El espíritu de AA ha estado conmigo... para mejor o para peor, para más rico o para …"
-    },
-    "summary": {
-     "en": "“The spirit of AA has been with me ... for better or for worse, for richer or for poorer, in sickness and in health.” “Absolutely Richard,” Santa Cruz, California, April 1998, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-     "es": "“El espíritu de AA ha estado conmigo... para bien o para mal, para más rico o para más pobre, en enfermedad y en salud”. “Absolutamente Richard,” Santa Cruz, California, abril de 1998, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-20T11:30:14Z"
   }
  ]
 }
