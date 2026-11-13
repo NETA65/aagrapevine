@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T20:58:42Z",
+ "updated": "2026-11-12T22:50:49Z",
  "fixture": false,
  "playlists": [
   {
@@ -574,7 +574,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 161,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -620,7 +620,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 243,
+    "views": 246,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -9529,7 +9529,7 @@
      "MUJERES EN AA"
     ],
     "is_short": false,
-    "views": 202,
+    "views": 204,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -12712,7 +12712,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 827,
+    "views": 828,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23273,7 +23273,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 4831,
+    "views": 4833,
     "is_live_recording": false,
     "date_approx": false
    },

@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-12T21:03:52Z",
- "attempted": "2026-11-12T21:03:52Z",
+ "updated": "2026-11-12T22:55:37Z",
+ "attempted": "2026-11-12T22:55:37Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -23,7 +23,7 @@
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 41
+  "requests": 37
  },
  "items": [
   {
