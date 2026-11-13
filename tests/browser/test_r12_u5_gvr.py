@@ -31,13 +31,14 @@ import yaml
 
 from browser.test_site_in_browser import (S, SIDEWAYS, new_context, open_page, setUpModule,  # noqa: F401
                                           tearDownModule, url)
-from test_r12_u5_gvr import TABLE_TALK, card_words
+from test_r12_u5_gvr import SOURCE_SITES, TABLE_TALK, card_words
 
 ROOT = Path(__file__).resolve().parents[2]
 # where the committee meets, as the pages say it (config/site.yml meeting.platform; Zoom when left out)
 PLATFORM = str((yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8")).get("meeting") or {}).get("platform") or "").strip() or "Zoom"
-AA_HOSTS = {"www.aa.org", "aa.org", "www.aagrapevine.org", "aagrapevine.org", "www.aalavina.org", "aalavina.org",
-            "neta65.org", "www.neta65.org", "neta65.github.io"}
+# Where a question's Source link may lead: the unit test's list (booth.js SOURCE_HOSTS: AA's sites, NETA 65's, the
+# site's address and its first one), so the two never differ
+AA_HOSTS = SOURCE_SITES
 
 
 def daily(path: str) -> dict:

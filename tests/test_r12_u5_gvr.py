@@ -54,6 +54,10 @@ COLUMNS = ["id", "on", "type", "pub", "tags", "weight", "from", "until", "second
 # test's own list (booth.js BOOTH_VOICE is the build's, a little wider): a narrower pattern there fails here.
 TABLE_TALK = re.compile(r"\b(?:this|our) table\b|\blike this one\b|\bask us\b|\b(?:esta|nuestra) mesa\b|¡como esta!"
                         r"|\bpregúnt[ae]n?nos\b", re.I)
+# Where a question's Source link may lead (booth.js SOURCE_HOSTS — tests/test_r27_domain.py pins the two alike): AA's
+# own sites, NETA 65's, the site's address and its first one. The browser check (browser/test_r12_u5_gvr) takes it too.
+SOURCE_SITES = frozenset({"www.aa.org", "aa.org", "www.aagrapevine.org", "aagrapevine.org", "www.aalavina.org",
+                          "aalavina.org", "neta65.org", "www.neta65.org", "grapevine.neta65.org", "neta65.github.io"})
 
 
 def card_words(it: dict) -> str:
@@ -325,8 +329,7 @@ class DailyQuestionsRealCsv(unittest.TestCase):
                 "2026-12-31T17:00:00Z", "2027-01-01T17:00:00Z"]
         r = run_js(self, REAL_JS, data={"site": SITE, "nows": nows}, now=nows[0])
         self.assertEqual(r["playable"], {"en": True, "es": True}, "every question can be answered in its page's language")
-        aa = {"www.aa.org", "aa.org", "www.aagrapevine.org", "aagrapevine.org", "www.aalavina.org", "aalavina.org",
-              "neta65.org", "www.neta65.org", "grapevine.neta65.org", "neta65.github.io"}
+        aa = SOURCE_SITES
         for lang, runs in r["runs"].items():
             for i, d in enumerate(runs):
                 with self.subTest(lang=lang, now=nows[i]):
