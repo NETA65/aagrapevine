@@ -1087,8 +1087,8 @@ Kept by the *Weekly link check*:
 - **Opens** (or, if already open, gets a new comment, every Sunday) when lychee found broken links, an official
   link in `config/site.yml` is broken, or (for a project site only) the root robots.txt
   (https://neta65.github.io/robots.txt) keeps Google or Bing out, lost its `Sitemap:` line, redirects (a custom
-  domain set on the NETA65/neta65.github.io repository) or does not answer, or the check of that file could not run at all ("The check itself could not run — see the step
-  …") — a 404 (not set up yet) never opens it. The text starts "The weekly link check found problems.
+  domain set on the NETA65/neta65.github.io repository) or does not answer, or the check of that file could not
+  run at all ("The check itself could not run — see the step …") — a 404 (not set up yet) never opens it. The text starts "The weekly link check found problems.
   Most can be fixed in **config/site.yml** or the files in **content/**", followed by the report (cut at about
   60,000 characters); a robots.txt problem is under *The root robots.txt*, with "Fix it in **the
   NETA65/neta65.github.io repository** (its robots.txt; the right text is **docs/user-site/robots.txt** in this

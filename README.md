@@ -2,8 +2,10 @@
 
 [![Website update](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml/badge.svg)](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml)
 
-**Website:** [grapevine.neta65.org](http://grapevine.neta65.org/) · **En español:** [grapevine.neta65.org/es/](http://grapevine.neta65.org/es/)
-(the old address, neta65.github.io/aagrapevine, forwards there — [section 12](#12-using-your-own-address-custom-domain))
+**Website:** [grapevine.neta65.org](http://grapevine.neta65.org/) ·
+**En español:** [grapevine.neta65.org/es/](http://grapevine.neta65.org/es/)
+(the old address, neta65.github.io/aagrapevine, forwards there:
+[section 12](#12-using-your-own-address-custom-domain))
 
 The website of the **Northeast Texas Area 65 (NETA 65) Grapevine & La Viña Committee**.
 It **updates itself every morning** and is **fully bilingual (English + Spanish)**. Nobody has
@@ -1861,8 +1863,8 @@ code there while Bing Webmaster Tools is used. Yandex Webmaster works the same w
 With grapevine.neta65.org the site sits at the root of its own address, so its own `robots.txt` (`src/robots.njk`,
 which names the sitemap) is the file search engines read, and the weekly link check says **Skipped** for this step.
 This site no longer needs a `neta65.github.io` repository (https://neta65.github.io/ answering "not found" is fine
-for it). The rest of this step is only for the project-site address, should the site ever go back to it (15 minutes, signed
-in to GitHub as NETA65):
+for it). The rest of this step is only for the project-site address, should the site ever go back to it (15
+minutes, signed in to GitHub as NETA65):
 
 `robots.txt` is the file that tells search engines' robots what they may visit. They read it **only at the very
 top of an address**. This site lives in a folder of `neta65.github.io`, so the file they read is
