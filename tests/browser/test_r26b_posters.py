@@ -319,7 +319,7 @@ FITTED = r"""() => {
     if ([...more.parentElement.children].find((k) => k.hasAttribute("data-mp-order") && ord(k) >= 10) !== more) flow.push("not at the head of its column");
     if ([...d.parentElement.children].filter((k) => k.hasAttribute("data-mp-order")).pop() !== d) flow.push("the dates not at the foot of theirs");
     if (more.querySelector(".mp-h")) flow.push("a heading");
-    if (!d.querySelector(".mp-dlist > li") || !more.querySelector(".mp-dlist > li")) flow.push("an empty part");
+    if (d.querySelectorAll(".mp-dlist > li").length < 2 || more.querySelectorAll(".mp-dlist > li").length < 2) flow.push("fewer than two dates in a part");
   }
   return { font: parseFloat(getComputedStyle(p).fontSize), built, minRoom: Math.min(...rooms), spread,
            nameOut: Math.round(name.getBoundingClientRect().right - right), flow };

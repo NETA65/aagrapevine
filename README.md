@@ -1708,11 +1708,11 @@ Done for the current site (the owner's once-only steps after the move are in
 
 The site's address is **grapevine.neta65.org** (since November 12, 2026), on `https://`. The old address,
 neta65.github.io/aagrapevine, forwards every page there, so old links, QR codes and printed flyers keep working.
-Steps 1 and 2 are done, and so is the first publish on `https://` (the Evening refresh of November 12, 2026). What
-is left (November 12, 2026): deleting the stray `github.io` zone at Bluehost, which still makes **Settings → Pages**
-say "improperly configured" (NotServedByPagesError; step 2, first bullet), and the search engines' new properties
-(below). Changes to the Pages settings are the owner's (signed in to GitHub as **NETA65**, the repository's admin —
-another collaborator cannot change them):
+Steps 1 and 2 are done, and so is the first publish on `https://` (a hand-started Quick refresh, November 12, 2026).
+What is left: the search engines' new properties (below), and — only if **Settings → Pages** still says "improperly
+configured" (NotServedByPagesError) — the stray `github.io` zone at Bluehost (step 2, first bullet; the certificate
+was approved with that zone still there, so it did not block it). Changes to the Pages settings are the owner's
+(signed in to GitHub as **NETA65**, the repository's admin — another collaborator cannot change them):
 
 1. **DNS** (done) — whoever manages neta65.org (Bluehost): one **CNAME** record `grapevine` → `neta65.github.io`
    (the GitHub account that owns this repository), and no other record for that name.
@@ -1736,7 +1736,7 @@ another collaborator cannot change them):
      Pages setting, so this run is the one that switches the site's links, sitemap, QR codes, calendar files and
      e-mail links. In the run, job **Build website**, step **Work out the site address**, the line must say
      `Building for https://grapevine.neta65.org with path prefix '/'`. (Without this run the switch comes with the
-     next scheduled or Morning-check run, hours later — as the Evening refresh did on November 12, 2026.)
+     next scheduled or Morning-check run, hours later.)
 3. **Keep `config/site.yml` → `site:` → `url:` as it is** (`https://neta65.github.io/aagrapevine`). The live site
    never uses it: every publish asks GitHub Pages for the address. It is only the address of a build on a
    computer, of the Code check (which builds the site as a project site under `/aagrapevine/` and tests with that

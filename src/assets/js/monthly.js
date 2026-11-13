@@ -50,7 +50,7 @@
        · a block that may sit in another column (data-mp-move="b a", the build's place first; the columns are
          [data-mp-slot]) is tried in each, in its place in the reading order (data-mp-order);
        · the dates may flow on from a column into the next (data-mp-move "a+b": the rows that fit at the foot
-         of a — one at least, under the heading —, the others at the head of b, in a block of their own,
+         of a — two at least, under the heading —, the others at the head of b, in a block of their own,
          .mp-dates--more, where nothing comes before them in b and nothing after the dates in a);
        · the rule between the columns may move a step or two toward the column that needs the room (the
          layout's data-mp-widths: values of its --mp-split, the build's first; data-mp-sizes: the column a
@@ -197,7 +197,7 @@
     var i = 0;
     while (i < rows.length && box(rows[i], root).b <= foot + 2) i++;
     if (i === rows.length) return true;               // all of them fit: nothing flows on
-    if (i < 1) return false;
+    if (i < 2 || rows.length - i < 2) return false;  // two dates at least on each side (no heading over one date)
     place(flow.to, flow.more);
     var rest = flow.more.querySelector(".mp-dlist");
     while (rows.length > i) rest.appendChild(rows[i]);
