@@ -89,13 +89,14 @@ LANGS = ["en", "es"]
 LANG_FIELDS = ["title", "text", "choices", "answer", "explain", "credit"]
 MAX = {"title": 80, "text": 300, "short_text": 180, "explain": 240, "credit": 200, "choice": 70, "answer": 60}
 LANG_NAME = {"en": ("English", "inglés"), "es": ("Spanish", "español")}
-# (the podcast's host, Captivate: its feed's links, its file server — where they lead, and where every episode of 2021
-# to mid-2025 is — and an episode's page; never *.captivate.fm, any podcast's own site)
+# (the site's address and its first one, which forwards to it, on every build; the podcast's host, Captivate: its
+# feed's links, its file server — where they lead, and where every episode of 2021 to mid-2025 is — and an episode's
+# page; never *.captivate.fm, any podcast's own site)
 ALLOWED_HOSTS = [
     "youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be", "youtube-nocookie.com", "www.youtube-nocookie.com",
     "aagrapevine.org", "www.aagrapevine.org", "aalavina.org", "www.aalavina.org", "aa.org", "www.aa.org",
-    "neta65.org", "www.neta65.org", "neta65.github.io", "episodes.captivate.fm", "podcasts.captivate.fm",
-    "player.captivate.fm",
+    "neta65.org", "www.neta65.org", "grapevine.neta65.org", "neta65.github.io", "episodes.captivate.fm",
+    "podcasts.captivate.fm", "player.captivate.fm",
 ]
 YT_HOSTS = ["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"]
 HOSTS_EN = "YouTube, aagrapevine.org, aalavina.org, aa.org, neta65.org, the podcast's captivate.fm, this website"

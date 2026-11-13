@@ -7,7 +7,9 @@ for a while the site's own address is http://, and with the next publish after "
                      http:// as well as https://: "x.test/gvr/", never "http://x.test/gvr/".
   * BoothSources   — a question's "Source" link to a page of this site, written for grapevine.neta65.org, stays a link
                      on every build, the Code check's (neta65.github.io/aagrapevine) too (eleventy/filters/booth.js
-                     SOURCE_HOSTS).
+                     SOURCE_HOSTS), and the tests' own lists of those sites are the booth's; a qr_url written for
+                     the site's address passes the booth's check on every build too (booth.js ALLOWED_HOSTS and its
+                     twin in tests/test_booth_csv.py), as how-to/booth.md's "Allowed sites" table says.
 
 (The booth's own pages on an http address: tests/test_booth_csv.py, test_booth_build.py HttpAddress and
 test_booth_core.py; the weekly link check's address: tests/test_automation.py LinkCheck.)
@@ -22,7 +24,9 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import test_booth_csv as TBC  # noqa: E402
 from nodejs import run_js  # noqa: E402
+from test_r12_u5_gvr import SOURCE_SITES  # noqa: E402
 
 BUILD_JS = r"""
 process.env.ONLY = "gvr,orientation,shop";        // (here: the helpers above read the config without it)
@@ -108,6 +112,31 @@ class BoothSources(unittest.TestCase):
                 self.assertEqual(sorted(k for k in got if k in "abc"), ["a", "b", "c"])
                 self.assertNotIn("d", got, "another site is never linked")
                 self.assertEqual("e" in got, s["url"] == "https://x.test", "the build's own host")
+
+    def test_the_tests_lists_are_the_booths(self):
+        r = run_js(self, 'const B = await imp("eleventy/filters/booth.js"); out({ src: B.SOURCE_HOSTS, ok: B.ALLOWED_HOSTS });')
+        self.assertEqual(set(r["src"]), SOURCE_SITES, "test_r12_u5_gvr.SOURCE_SITES (the browser check's too)")
+        self.assertEqual(r["ok"], TBC.ALLOWED_HOSTS, "test_booth_csv's checker, line for line")
+        self.assertIn("grapevine.neta65.org", r["ok"])
+
+    def test_a_qr_link_written_for_the_sites_address(self):
+        """A qr_url written as the live address (how-to/booth.md "Allowed sites": This site) passes on every build —
+        the Code check's (neta65.github.io/aagrapevine) and another address's too, in both checkers."""
+        text = ("id,type,title_en,qr_url\n"
+                "shop,qr,Scan,https://grapevine.neta65.org/shop/\n"
+                "old,qr,Scan,https://neta65.github.io/aagrapevine/listen/\n")
+        sites = ["https://grapevine.neta65.org", "http://grapevine.neta65.org", "https://neta65.github.io/aagrapevine",
+                 "https://x.test"]
+        r = run_js(self, """
+            const B = await imp("eleventy/filters/booth.js");
+            out(input.sites.map((u) => { const c = B.checkCsv(input.text, { site: { url: u }, file: "t.csv" });
+              return { lines: c.problems.map((p) => `${p.where}: ${p.en}`), qr: c.items.map((i) => i.qr) }; }));
+        """, data={"text": text, "sites": sites})
+        for u, js in zip(sites, r):
+            with self.subTest(site=u):
+                self.assertEqual(js["lines"], [])
+                self.assertEqual(js["qr"], ["https://grapevine.neta65.org/shop/", "https://neta65.github.io/aagrapevine/listen/"])
+                self.assertEqual(TBC.check_csv(text, file="t.csv", site_url=u)[1], [])
 
 
 if __name__ == "__main__":

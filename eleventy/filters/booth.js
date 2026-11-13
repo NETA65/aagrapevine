@@ -131,7 +131,9 @@ const MAX = { title: 80, text: 300, short_text: 180, explain: 240, credit: 200, 
 const LANG_NAME = { en: { en: "English", es: "inglés" }, es: { en: "Spanish", es: "español" } };
 
 /** Links a row may show or play (media_url, qr_url): AA's non-affiliation — research.md D3 "Links". The site's own
- *  address (site.url) is added to them. (m.youtube.com and www.youtube-nocookie.com are YouTube's own addresses too.)
+ *  address (site.url) is added to them; grapevine.neta65.org (the site's address) and neta65.github.io (its first
+ *  address, which forwards to it) are named, so a link written for either passes on every build, the Code check's
+ *  (built for neta65.github.io/aagrapevine) too. (m.youtube.com and www.youtube-nocookie.com are YouTube's own addresses too.)
  *  The podcast's host, Captivate, has three: episodes.captivate.fm (the feed's links to new episodes), its file
  *  server podcasts.captivate.fm (where those links lead, and where the feed points the older episodes — every
  *  episode of 2021 to mid-2025 — directly) and player.captivate.fm (an episode's page). Never *.captivate.fm: any
@@ -139,8 +141,8 @@ const LANG_NAME = { en: { en: "English", es: "inglés" }, es: { en: "Spanish", e
 export const ALLOWED_HOSTS = [
   "youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be", "youtube-nocookie.com", "www.youtube-nocookie.com",
   "aagrapevine.org", "www.aagrapevine.org", "aalavina.org", "www.aalavina.org", "aa.org", "www.aa.org",
-  "neta65.org", "www.neta65.org", "neta65.github.io", "episodes.captivate.fm", "podcasts.captivate.fm",
-  "player.captivate.fm",
+  "neta65.org", "www.neta65.org", "grapevine.neta65.org", "neta65.github.io", "episodes.captivate.fm",
+  "podcasts.captivate.fm", "player.captivate.fm",
 ];
 const YT_HOSTS = ["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"];
 const HOSTS_EN = "YouTube, aagrapevine.org, aalavina.org, aa.org, neta65.org, the podcast's captivate.fm, this website";
