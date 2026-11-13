@@ -772,7 +772,10 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
  *  → "XLII … (A.A. Un camino a la vida)" (also after "¿" / "¡"), so no ")" sits on a line of its own. The one rule
  *  for every place an event's title shows: /events/ and /events.ics (shapeEvent), the month pages — the poster,
  *  the Dates row, the message (monthly.js dateRow) — and the month's calendar file (monthIcs, from shapeEvent), the
- *  site search (library.js tidyTitle: the title and its original) and the Tracker's list of events (cmTidyTitle). */
+ *  site search (library.js tidyTitle: the title and its original), and through cmTidyTitle the Tracker's list of
+ *  events, Home's event cards, the /digest/ page (the month's events, an event among what is new; its texts to copy:
+ *  community.js monthlyDigestText) and What's New;
+ *  the monthly e-mail has its twin (scripts/notify/send_digest.py tidy_brackets). */
 export function tidyBrackets(s) {
   return String(s ?? "").replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
 }

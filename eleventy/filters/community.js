@@ -13,7 +13,7 @@ import { buildWarning } from "../build-warnings.js";
 // langPath: our page in a language ("/es/events/"; a file only when the build writes it for that language too)
 import { safeUrl, TZ, langPath, pickLang } from "../../eleventy.config.js";
 // The monthly digest groups the committee's photos into the albums of /photos/ (the same anchors).
-import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs, COMMITTEE_MEETING_PATH } from "./committee.js";
+import { ownLangs, chicagoDayEndMs, isPhotoItem, photoAlbumKey, photoAlbumSlugs, COMMITTEE_MEETING_PATH, tidyBrackets } from "./committee.js";
 // The monthly digest names its months like /monthly/ (monthLabel), finds the committee meeting of the
 // month it covers by the same rule (meetingByRule) and gives an issue the toolkit's theme (issueTheme).
 // (monthly.js imports from this file too: the cycle is safe, both only call each other's functions.)
@@ -1090,13 +1090,15 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
   const asOf = Date.parse(`${ed.last}T12:00:00Z`);
   const titleOf = (item, l) => {
     const raw = clean(pickLang(item, "title", l));
+    // (an event's title as /events/ shows it: committee.js tidyBrackets)
+    if (item?.kind === "event") return tidyBrackets(raw);
     if (!isMediaItem(item) || !media.title) return raw;
     // A Weekly Open recording's display title drops the show name on the web pages, which show
     // the show next to it; a text message has no such label, so only the numbering tail goes.
     if (media.cleanTitle && media.videoKind && media.videoKind(item) === "weekly") return clean(media.cleanTitle(raw)) || raw;
     return clean(media.title(item, l)) || raw;
   };
-  const titleLines = (item) => { const ts = uniq(L.map((l) => titleOf(item, l))); return ts.length ? ts : [clean(item.title)]; };
+  const titleLines = (item) => { const ts = uniq(L.map((l) => titleOf(item, l))); return ts.length ? ts : [item?.kind === "event" ? tidyBrackets(clean(item.title)) : clean(item.title)]; };
   const more = (n, page) => `${wa ? "➕" : "+"} ${both("community.digest.text_more", { n })} ${url(page)}`;
   const out = [];
 

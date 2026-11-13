@@ -287,7 +287,8 @@ pageScripts: ["/assets/js/community.js"]
                 Weekly Open prefix removed, as on Home, Listen and Watch) + an "S11 · E12" badge. -#}
             {%- set isMedia = it.kind == "episode" or it.kind == "video" -%}
             {%- set rawTitle = it | tx("title", lang) -%}
-            {%- set title = (it | mediaTitle(lang)) if isMedia else rawTitle -%}
+            {#- (an event's title as /events/ shows it: cmTidyTitle, no spaces a calendar left inside its brackets) -#}
+            {%- set title = (it | mediaTitle(lang)) if isMedia else ((rawTitle | cmTidyTitle) if it.kind == "event" else rawTitle) -%}
             {%- set se = (it | mediaSE(lang)) if isMedia else "" -%}
             {%- set summary = it | tx("summary", lang) | cmTeaser(rawTitle) -%}
             {#- A podcast episode opens in the site's own player (/listen/?ep=<id>: loaded, its row shown); its page at

@@ -86,8 +86,9 @@ pageScripts: ["/assets/js/community.js"]
     {#- Podcast episodes / videos: the shared media titles (as on Home, Listen and Watch — no
         "[Season 11, Episode 12]" tail) + an "S11 · E12" badge. -#}
     {%- set isMedia = it.kind == "episode" or it.kind == "video" -%}
-    {%- set title = (it | mediaTitle(lang)) if isMedia else (it | tx("title", lang)) -%}
-    {%- set otherTitle = (it | mediaTitle(other)) if isMedia else (it | tx("title", other)) -%}
+    {#- (an event's title as /events/ shows it: cmTidyTitle, no spaces a calendar left inside its brackets) -#}
+    {%- set title = (it | mediaTitle(lang)) if isMedia else ((it | tx("title", lang) | cmTidyTitle) if it.kind == "event" else (it | tx("title", lang))) -%}
+    {%- set otherTitle = (it | mediaTitle(other)) if isMedia else ((it | tx("title", other) | cmTidyTitle) if it.kind == "event" else (it | tx("title", other))) -%}
     {%- set se = (it | mediaSE(lang)) if isMedia else "" -%}
     {%- set isWeeklyVideo = it.kind == "video" and (it | mediaVideoKind) == "weekly" -%}
     <li class="cm-avoid-break relative flex items-start gap-3 py-3">
@@ -246,8 +247,9 @@ pageScripts: ["/assets/js/community.js"]
           {{ dgHead("dg-events", "calendar-check", "bg-vine-soft text-vine", "community.digest.events_title" | t(lang, { prev: prevW }), "community.digest.events_title" | t(other, { prev: prevWo }), other, md.events | length) }}
           <ul class="divide-y divide-line" role="list">
             {% for ev in md.events %}
-            {%- set title = ("community.digest.committee_meeting" | t(lang)) if ev._committee else (ev | tx("title", lang)) -%}
-            {%- set otherTitle = ("community.digest.committee_meeting" | t(other)) if ev._committee else (ev | tx("title", other)) -%}
+            {#- (each title as /events/ shows it: cmTidyTitle) -#}
+            {%- set title = ("community.digest.committee_meeting" | t(lang)) if ev._committee else (ev | tx("title", lang) | cmTidyTitle) -%}
+            {%- set otherTitle = ("community.digest.committee_meeting" | t(other)) if ev._committee else (ev | tx("title", other) | cmTidyTitle) -%}
             <li class="cm-avoid-break relative flex items-start gap-4 py-3">
               <span class="cm-datebox ev-tile ev-tone-{{ ev | eventTone }} grid w-12 shrink-0 place-items-center rounded-lg py-1.5 text-center" aria-hidden="true">
                 {#- "APR–MAY" / "30–2" for an event over several days that ends in another month -#}

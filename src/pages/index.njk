@@ -829,7 +829,10 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       {#- A monthly recurring event (e.g. the CityWide Dallas booth) opens its card on /events/; a committee meeting
           its section on /meetings/ (whatever url an older sync wrote: the weekly open meetings come first there) -#}
       {%- set href = (("/events/#" ~ (e | homeEventAnchor)) if e.category == "recurring" else ("/meetings/#committee-meeting" if e.category == "committee" else (e.url or x.flyer_url or x.online_url or "/events/"))) | lurl(L) -%}
-      {%- set et = e | tx("title", L) -%}
+      {#- its title as /events/ shows it (cmTidyTitle: no spaces a calendar left inside its brackets); etRaw, the
+          title before that, says whether it is the original's -#}
+      {%- set etRaw = e | tx("title", L) -%}
+      {%- set et = etRaw | cmTidyTitle -%}
       {#- the card hides itself once the event is over (GV.expire); the calendar card below is not an event.
           A phone shows three: the 4th is a spare that steps in there once an earlier one has ended. -#}
       {%- set evEndAt = e | homeEventEnd -%}
@@ -853,9 +856,9 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
               {%- set kindIco = "video" if (tone == "other" and x.online_url and not x.city and not x.location) else kindIcon[tone] -%}
               <span class="badge ev-badge">{% icon kindIco, "size-3" %} {{ kindLabel }}</span>
               {% if info.tentative %}{{ ui.tentativeBadge(L) }}{% endif %}
-              {% if e.lang and e.lang != L and e.lang != "und" and ((e | machineFor(L)) or et == e.title) %}<span class="badge-muted uppercase" title="{{ ('lang.' ~ e.lang) | t(L) }}">{{ e.lang }}</span>{% endif %}
+              {% if e.lang and e.lang != L and e.lang != "und" and ((e | machineFor(L)) or etRaw == e.title) %}<span class="badge-muted uppercase" title="{{ ('lang.' ~ e.lang) | t(L) }}">{{ e.lang }}</span>{% endif %}
             </p>
-            <h3 class="mt-2 font-display text-lg font-semibold leading-snug text-ink"{% if e.lang and e.lang != L and e.lang != "und" and et == e.title %} lang="{{ e.lang }}"{% endif %}>
+            <h3 class="mt-2 font-display text-lg font-semibold leading-snug text-ink"{% if e.lang and e.lang != L and e.lang != "und" and etRaw == e.title %} lang="{{ e.lang }}"{% endif %}>
               <a href="{{ href }}" class="no-underline after:absolute after:inset-0 group-hover:text-gv"{% if href.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ et }}</a>
             </h3>
             <p class="sr-only">{{ info.srDate }}</p>

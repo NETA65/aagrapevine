@@ -7,7 +7,8 @@
   * /meetings/  — a night without a guest speaker says so once: in step 2, as the owner approved it; the hour line
                   above the steps only gives the time and the topic;
   * titles      — an event's title without the spaces a calendar left inside its brackets in every place it shows:
-                  also the site search (the title and its original) and the Tracker's list of events.
+                  also the site search (the title and its original), the Tracker's list of events, Home's event
+                  cards, the /digest/ page (and its texts to copy), What's New and the monthly e-mail.
 
     python -m unittest tests.test_r27_small_fixes -v        (or: python -m unittest discover -s tests)
 """
@@ -129,6 +130,36 @@ try {
 }
 """
 
+# Home, /digest/ and What's New with the given events and What's New items → per page, how often each `find` string
+# is in it.
+PAGES_JS = r"""
+process.env.ONLY = "index.njk,digest.njk,whats-new.njk";
+process.env.PATH_PREFIX = "/";
+const os = await import("node:os");
+const { Eleventy } = await import("@11ty/eleventy");
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gv-r27-pages-"));
+try {
+  const elev = new Eleventy("src", dir, {
+    quietMode: true, configPath: "eleventy.config.js",
+    config(cfg) {
+      cfg.addGlobalData("eleventyComputed", {
+        db: (data) => ({ ...data.db, events: { updated: "2027-02-03T12:00:00Z", items: input.events },
+                         whatsnew: { updated: "2027-02-03T12:00:00Z", items: input.wn } }),
+      });
+    },
+  });
+  const pages = await elev.toJSON();
+  const res = {};
+  for (const p of pages) {
+    if (!/^\/(es\/)?(digest\/|whats-new\/)?$/.test(p.url || "")) continue;
+    res[p.url] = Object.fromEntries(Object.entries(input.find).map(([k, s]) => [k, (p.content || "").split(s).length - 1]));
+  }
+  out(res);
+} finally {
+  fs.rmSync(dir, { recursive: true, force: true });
+}
+"""
+
 
 class TidyTitles(unittest.TestCase):
     def test_the_site_search_shows_the_title_as_events_does(self):
@@ -148,6 +179,37 @@ class TidyTitles(unittest.TestCase):
         for url, titles in r.items():
             with self.subTest(url=url):
                 self.assertFalse([t for t in titles if re.search(r"\(\s|\s\)", t)], titles)
+
+    def test_the_monthly_email_tidies_as_the_site_does(self):
+        samples = [SPACED, SPACED_ES, EN, "¿ Qué tal ?", "¡  Hola !", "A (\tB\n)", "( )", "(A) ( B )", "", "Sin paréntesis"]
+        js = run_js(self, 'const c = await imp("eleventy/filters/committee.js"); out(input.map((s) => c.tidyBrackets(s)));',
+                    data=samples)
+        self.assertEqual([SDM.tidy_brackets(s) for s in samples], js, "send_digest.tidy_brackets = committee.js tidyBrackets")
+        links = SDM.Links("https://example.org")
+        self.assertEqual(SDM.event_row(event_item(), "es", links)["title"], TIDY_ES, "the month's events")
+        self.assertEqual(SDM.event_row(event_item(), "en", links)["title"], EN)
+        self.assertEqual(SDM.title_of(event_item(), "es"), TIDY_ES, "an event among what is new")
+        self.assertEqual(SDM.title_of({**event_item(), "kind": "article"}, "es"), SPACED_ES, "an event's title only")
+
+    def test_home_the_digest_page_and_whats_new(self):
+        held = event_item()                                                          # January 16: the digest's month
+        ahead = {**event_item(), "id": "ev:lvcal:zz-xlii-feb", "date": "2027-02-20T15:00:00Z",   # next on Home
+                 "extra": {**event_item()["extra"], "start": "2027-02-20T15:00:00Z", "end": "2027-02-20T23:00:00Z"}}
+        new = {**ahead, "first_seen": "2027-02-01T12:00:00Z", "wn_date": "2027-02-01T12:00:00Z", "is_new": True,
+               "machine": ["en"]}
+        r = run_js(self, PAGES_JS, data={"events": [held, ahead], "wn": [new],
+                                         "find": {"tidy_es": TIDY_ES, "spaced_es": SPACED_ES, "spaced": SPACED, "en": EN}},
+                   timeout=600, now="2027-02-03T18:00:00Z")
+        want = ["/", "/digest/", "/es/", "/es/digest/", "/es/whats-new/", "/whats-new/"]
+        self.assertEqual(sorted(r), want)
+        for url, n in r.items():
+            with self.subTest(url=url):
+                self.assertEqual((n["spaced_es"], n["spaced"]), (0, 0), "a title with the calendar's spaces")
+                if url.startswith("/es/"):
+                    self.assertGreaterEqual(n["tidy_es"], 1, "the Spanish title, tidied")
+                else:
+                    self.assertGreaterEqual(n["en"], 1, "the English title")
+        self.assertGreaterEqual(r["/digest/"]["tidy_es"], 1, "the original under the English title, tidied too")
 
 
 if __name__ == "__main__":

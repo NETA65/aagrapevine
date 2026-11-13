@@ -542,6 +542,13 @@ def tx(item: dict, field: str, lang: str) -> str:
     return str(val or "").strip()
 
 
+def tidy_brackets(s: str) -> str:
+    """An event's title without the spaces a calendar left inside its brackets (committee.js tidyBrackets, the one
+    rule for every place the title shows): "XLII … ( A.A. Un camino a la vida )" → "… (A.A. Un camino a la vida)",
+    also after "¿" / "¡", so no ")" sits on a line of its own."""
+    return re.sub(r"\s+\)", ")", re.sub(r"([(¿¡])\s+", r"\1", str(s or "")))
+
+
 def tr(item: dict | None, field: str, lang: str) -> str:
     """The /monthly/ month model's rule (monthly.js tr): i18n[lang], else i18n.en, else the field
     (or extra[field]) as written."""
@@ -620,7 +627,10 @@ def media_title(item: dict, lang: str) -> str:
 
 
 def title_of(item: dict, lang: str) -> str:
-    return media_title(item, lang) if item.get("kind") in ("episode", "video") else (tx(item, "title", lang) or str(item.get("title") or ""))
+    if item.get("kind") in ("episode", "video"):
+        return media_title(item, lang)
+    t = tx(item, "title", lang) or str(item.get("title") or "")
+    return tidy_brackets(t) if item.get("kind") == "event" else t
 
 
 def group_of(item: dict) -> str:
@@ -1688,7 +1698,7 @@ def event_row(it: dict, lang: str, links: Links, as_of: date | None = None) -> d
     # (never its online_url: a date that is over links to its page, its flyer or /events/ — not to the meeting room)
     url = url or ex.get("flyer_url") or ""
     url = links.item({**it, "url": url}, lang, "/events/")
-    return {"title": tx(it, "title", lang), "when": when, "where": where, "url": url}
+    return {"title": tidy_brackets(tx(it, "title", lang)), "when": when, "where": where, "url": url}
 
 
 def toolkit_block(data: dict, lang: str, links: Links) -> dict:
