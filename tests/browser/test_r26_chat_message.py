@@ -76,13 +76,15 @@ class ChatMessageCopy(unittest.TestCase):
         self.assertRegex(lines[3], rf"^• Grapevine Meeting: every 1st Wednesday, .+, on this Google Meet \(next: {DATE}\)$")
         self.assertRegex(lines[4], rf"^• Committee meeting: every 3rd Wednesday, .+, the same link \(next: {DATE}\)$")
         self.assertEqual(lines[5], "• Have a story? AA Grapevine: https://www.aagrapevine.org/submit-your-story · La Viña: https://www.aalavina.org/comparte")
+        # the site's own address as the build has it: https://neta65.github.io/aagrapevine/, or the custom domain's
+        # http://grapevine.neta65.org/ until GitHub Pages enforces HTTPS (the deploy takes it from Pages)
         site = built_site_url()
-        self.assertTrue(site.startswith("https://"), site)
+        self.assertRegex(site, r"^https?://[^/\s]+/")
         self.assertEqual(lines[6], f"• Dates and flyers: {site} · NETA 65: https://neta65.org")
         # plain text: every fact filled in, no blank, no formatting marks, no link's words without its address
         for mark in ("{live:", "{fill:", "{lang:", "[", "]", "**", "](", "⁠", "", ""):
             self.assertNotIn(mark, clip, mark)
-        self.assertEqual(re.findall(r"https://\S+", clip), ["https://www.aagrapevine.org/carry-the-message",
+        self.assertEqual(re.findall(r"https?://\S+", clip), ["https://www.aagrapevine.org/carry-the-message",
                                                              "https://www.aalavina.org/lleva-el-mensaje",
                                                              "https://www.aagrapevine.org/submit-your-story",
                                                              "https://www.aalavina.org/comparte",

@@ -155,8 +155,8 @@ class PassItOn(unittest.TestCase):
         ctx = new_context(1280, 900)
         errors: list[str] = []
         try:
-            ctx.grant_permissions(["clipboard-read", "clipboard-write"], origin=url("").split("/aagrapevine")[0])
             page = open_page(ctx, "gvr/", errors)
+            ctx.grant_permissions(["clipboard-read", "clipboard-write"], origin=page.evaluate("() => location.origin"))
             # Copy: the welcome message as shown, line by line
             page.locator("#pass-it-on li:nth-child(2) button:has-text('Copy')").click()
             copied = page.evaluate("navigator.clipboard.readText()")
@@ -167,9 +167,12 @@ class PassItOn(unittest.TestCase):
             self.assertRegex(lines[3], r"^• Our next committee meeting is \w+day, \w+ \d+, \d{4} at \d+:\d\d [AP]M C[SD]T on "
                              + re.escape(PLATFORM) + r"\.")
             self.assertTrue(copied.endswith("We're glad you're here."))
-            # the announcement: one paragraph, with this page's address
+            # the announcement: one paragraph, with this page's address — the build's own (its canonical link:
+            # https://neta65.github.io/aagrapevine/gvr/, or the custom domain's http://grapevine.neta65.org/gvr/)
             page.locator("#pass-it-on li:nth-child(1) button:has-text('Copy')").click()
-            self.assertIn("/aagrapevine/gvr/", page.evaluate("navigator.clipboard.readText()"))
+            own = page.evaluate("() => document.querySelector('link[rel=canonical]').href")
+            self.assertTrue(own.endswith("/gvr/"), own)
+            self.assertIn(own, page.evaluate("navigator.clipboard.readText()"))
             # Print: only that sheet goes on paper — the button sets data-print, then prints (stubbed here)
             page.evaluate("window.print = () => { window.__printed = document.documentElement.getAttribute('data-print'); }")
             page.click("#pass-it-on button:has-text('Print a half-sheet')")
