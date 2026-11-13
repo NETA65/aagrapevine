@@ -1,0 +1,83 @@
+﻿id,date,end_date,type,category,category_label,description,amount,signed_amount,funder,funder_name,claim_status,claim_date,claim_ref,paid_date,method,vendor,event,place,person,item,format,quantity,unit_cost,giveaway,miles,rate,from,to,round_trip,odometer_start,odometer_end,nights,attendees,sub_product,sub_term,sub_start,sub_end,sub_kind,repaid,receipt,receipt_ref,tags,notes,created,updated,"custom:Sponsor note, private",custom:Pages,custom:Approved?,custom:Reviewed on,custom:Size
+x0n,2024-02-29,2026-09-30,expense,books,Books & literature,"Comma, inside",0.00,0.00,me,Me (self-supported),none,2026-09-28,"Comma, inside",,cash,"Comma, inside","Comma, inside","Comma, inside","Comma, inside","Comma, inside",gv,0,0.00,yes,,,"Comma, inside","Comma, inside",,,,3,6,gv_print,12,,,gift,,none,"Comma, inside","Comma, inside; x0","Comma, inside
+Comma, inside",2026-09-27T18:00:00.123Z,2026-09-28T01:02:03.456Z,"Comma, inside",0,yes,2026-02-28,B
+x1n,1900-01-01,,mileage,mileage,Miles driven,"Quote ""inside""",25.84,-25.84,area,Area 65 (NETA 65),to_request,,"Quote ""inside""",,,"Quote ""inside""","Quote ""inside""","Quote ""inside""","Quote ""inside""","Quote ""inside""",lv,1.5,2.50,,184.6,0.14,"Quote ""inside""","Quote ""inside""",,,,,,,,,,,,paper,"Quote ""inside""","Quote ""inside""; x1","Quote ""inside""
+Quote ""inside""",2026-09-27T18:00:01.123Z,2026-09-28T01:02:03.456Z,"Quote ""inside""",1.5,no,2026-02-28,A
+x2n,2200-12-31,,received,repayment,Paid back by a person,"Line
+break",0.99,0.99,district,My district,none,,Line break,,,Line break,Line break,Line break,Line break,Line break,other,20,,,,,Line break,Line break,,,,,,,,,,,,photo,Line break,"Line break; x2","Line
+break
+Line
+break",2026-09-27T18:00:02.123Z,2026-09-28T01:02:03.456Z,"Line
+break",3,yes,2026-02-28,B
+x3n,2026-09-27,,giveaway,given,Given away at an event,"CRLF
+inside",0.00,0.00,group,My home group,none,,CRLF inside,,,CRLF inside,CRLF inside,CRLF inside,CRLF inside,CRLF inside,,,0.01,,,,CRLF inside,CRLF inside,,,,,,,,,,,,file,CRLF inside,"CRLF inside; x3","CRLF
+inside
+CRLF
+inside",2026-09-27T18:00:03.123Z,2026-09-28T01:02:03.456Z,"CRLF
+inside",4.5,no,2026-02-28,A
+x4n,2024-02-29,,stock,stock_in,Received to give away (no cost),Emoji 🙏📖 ok,0.00,0.00,committee,Grapevine / La Viña committee,none,,Emoji 🙏📖 ok,,,Emoji 🙏📖 ok,Emoji 🙏📖 ok,Emoji 🙏📖 ok,Emoji 🙏📖 ok,Emoji 🙏📖 ok,gv,0,0.00,,,,Emoji 🙏📖 ok,Emoji 🙏📖 ok,,,,,,,,,,,,none,Emoji 🙏📖 ok,"Emoji 🙏📖 ok; x4","Emoji 🙏📖 ok
+Emoji 🙏📖 ok",2026-09-27T18:00:04.123Z,2026-09-28T01:02:03.456Z,Emoji 🙏📖 ok,6,yes,2026-02-28,B
+x5n,1900-01-01,,expense,printing,Printing & copies,"Acentos: Viña, niño, José",0.50,-0.50,area,Area 65 (NETA 65),submitted,2026-09-28,"Acentos: Viña, niño, José",2026-10-01,card,"Acentos: Viña, niño, José","Acentos: Viña, niño, José","Acentos: Viña, niño, José","Acentos: Viña, niño, José","Acentos: Viña, niño, José",lv,1.5,2.50,,,,"Acentos: Viña, niño, José","Acentos: Viña, niño, José",,,,,6,lv_complete,24,2026-01-31,2028-01-31,gift,owed,paper,"Acentos: Viña, niño, José","Acentos: Viña, niño, José; x5","Acentos: Viña, niño, José
+Acentos: Viña, niño, José",2026-09-27T18:00:05.123Z,2026-09-28T01:02:03.456Z,"Acentos: Viña, niño, José",7.5,no,2026-02-28,A
+x6n,2200-12-31,,mileage,mileage,Miles driven,'=SUM(A1),43.21,-43.21,district,My district,to_request,,'=SUM(A1),,,'=SUM(A1),'=SUM(A1),'=SUM(A1),'=SUM(A1),'=SUM(A1),other,20,,,999999.9,,'=SUM(A1),'=SUM(A1),yes,,,,,,,,,,,photo,'=SUM(A1),"'=SUM(A1); x6","'=SUM(A1)
+=SUM(A1)",2026-09-27T18:00:06.123Z,2026-09-28T01:02:03.456Z,'=SUM(A1),9,yes,2026-02-28,B
+x7n,2026-09-27,,received,advance,Money advanced to me,'+1,1.00,1.00,group,My home group,none,,'+1,,,'+1,'+1,'+1,'+1,'+1,,,0.01,,,,'+1,'+1,,,,,,,,,,,,file,'+1,"'+1; x7","'+1
++1",2026-09-27T18:00:07.123Z,2026-09-28T01:02:03.456Z,'+1,10.5,no,2026-02-28,A
+x8n,2024-02-29,,giveaway,given,Given away at an event,'-5,0.00,0.00,committee,Grapevine / La Viña committee,none,,'-5,,,'-5,'-5,'-5,'-5,'-5,gv,0,0.00,,,,'-5,'-5,,,,,,,,,,,,none,'-5,"'-5; x8","'-5
+-5",2026-09-27T18:00:08.123Z,2026-09-28T01:02:03.456Z,'-5,12,yes,2026-02-28,B
+x9n,1900-01-01,,stock,stock_in,Received to give away (no cost),'@cmd,0.00,0.00,me,Me (self-supported),none,,'@cmd,,,'@cmd,'@cmd,'@cmd,'@cmd,'@cmd,lv,1.5,2.50,,,,'@cmd,'@cmd,,,,,,,,,,,,paper,'@cmd,"'@cmd; x9","'@cmd
+@cmd",2026-09-27T18:00:09.123Z,2026-09-28T01:02:03.456Z,'@cmd,13.5,no,2026-02-28,A
+xan,2200-12-31,,expense,meals,Meals,007,0.99,-0.99,district,My district,paid,2026-09-28,007,,direct,007,007,007,007,007,other,20,,,,,007,007,,,,,6,,,,,gift,repaid,photo,007,"007; x10","007
+007",2026-09-27T18:00:10.123Z,2026-09-28T01:02:03.456Z,007,15,yes,2026-02-28,B
+xbn,2026-09-27,,mileage,mileage,Miles driven,''=already guarded,0.06,-0.06,group,My home group,to_request,,''=already guarded,,,''=already guarded,''=already guarded,''=already guarded,''=already guarded,''=already guarded,,,0.01,,12.3,0.005,''=already guarded,''=already guarded,,,,,,,,,,,,file,''=already guarded,"''=already guarded; x11","''=already guarded
+'=already guarded",2026-09-27T18:00:11.123Z,2026-09-28T01:02:03.456Z,''=already guarded,16.5,no,2026-02-28,A
+xcn,2024-02-29,,received,reimbursement,Reimbursement,العربية مرحبا,123.45,123.45,committee,Grapevine / La Viña committee,none,,العربية مرحبا,,,العربية مرحبا,العربية مرحبا,العربية مرحبا,العربية مرحبا,العربية مرحبا,gv,0,0.00,,,,العربية مرحبا,العربية مرحبا,,,,,,,,,,,,none,العربية مرحبا,"العربية مرحبا; x12","العربية مرحبا
+العربية مرحبا",2026-09-27T18:00:12.123Z,2026-09-28T01:02:03.456Z,العربية مرحبا,18,yes,2026-02-28,B
+xdn,1900-01-01,,giveaway,given,Given away at an event,עברית ושלום,0.00,0.00,me,Me (self-supported),none,,עברית ושלום,,,עברית ושלום,עברית ושלום,עברית ושלום,עברית ושלום,עברית ושלום,lv,1.5,2.50,,,,עברית ושלום,עברית ושלום,,,,,,,,,,,,paper,עברית ושלום,"עברית ושלום; x13","עברית ושלום
+עברית ושלום",2026-09-27T18:00:13.123Z,2026-09-28T01:02:03.456Z,עברית ושלום,19.5,no,2026-02-28,A
+xen,2200-12-31,,stock,stock_in,Received to give away (no cost),"tab	inside",0.00,0.00,area,Area 65 (NETA 65),none,,tab inside,,,tab inside,tab inside,tab inside,tab inside,tab inside,other,20,,,,,tab inside,tab inside,,,,,,,,,,,,photo,tab inside,"tab inside; x14","tab	inside
+tab	inside",2026-09-27T18:00:14.123Z,2026-09-28T01:02:03.456Z,"tab	inside",21,yes,2026-02-28,B
+xfn,2026-09-27,2026-09-30,expense,lodging,Hotel & lodging,spaces,1.00,-1.00,group,My home group,denied,2026-09-28,spaces,2026-10-01,,spaces,spaces,spaces,spaces,spaces,,,0.01,yes,,,spaces,spaces,,,,3,6,other,1,2026-01-31,2026-02-28,gift,forgiven,file,spaces,"spaces; x15","spaces  
+  spaces",2026-09-27T18:00:15.123Z,2026-09-28T01:02:03.456Z,spaces,22.5,no,2026-02-28,A
+xgn,2024-02-29,,mileage,mileage,Miles driven,"semi; colon",0.07,-0.07,committee,Grapevine / La Viña committee,to_request,,"semi; colon",,,"semi; colon","semi; colon","semi; colon","semi; colon","semi; colon",gv,0,0.00,,0.1,0.655,"semi; colon","semi; colon",yes,,,,,,,,,,,none,"semi; colon","semi, colon; x16","semi; colon
+semi; colon",2026-09-27T18:00:16.123Z,2026-09-28T01:02:03.456Z,"semi; colon",24,yes,2026-02-28,B
+xhn,1900-01-01,,received,repayment,Paid back by a person,,0.01,0.01,me,Me (self-supported),none,,,,,,,,,,lv,1.5,2.50,,,,,,,,,,,,,,,,,paper,,x17,,2026-09-27T18:00:17.123Z,2026-09-28T01:02:03.456Z,,25.5,no,2026-02-28,A
+xin,2200-12-31,,giveaway,given,Given away at an event,',0.00,0.00,area,Area 65 (NETA 65),none,,',,,',',',',',other,20,,,,,',',,,,,,,,,,,,photo,',"'; x18","'
+'",2026-09-27T18:00:18.123Z,2026-09-28T01:02:03.456Z,',27,yes,2026-02-28,B
+xjn,2026-09-27,,stock,stock_in,Received to give away (no cost),'',0.00,0.00,district,My district,none,,'',,,'','','','','',,,0.01,,,,'','',,,,,,,,,,,,file,'',"''; x19","''
+''",2026-09-27T18:00:19.123Z,2026-09-28T01:02:03.456Z,'',28.5,no,2026-02-28,A
+xkn,2024-02-29,,expense,subscriptions,Magazine subscriptions,"""",123.45,-123.45,committee,Grapevine / La Viña committee,to_request,2026-09-28,"""",,cash,"""","""","""","""","""",gv,0,0.00,,,,"""","""",,,,,6,gv_print,12,,,gift,,none,"""","""; x20","""
+""",2026-09-27T18:00:20.123Z,2026-09-28T01:02:03.456Z,"""",30,yes,2026-02-28,B
+xln,1900-01-01,,mileage,mileage,Miles driven,"a
+b",5.39,-5.39,me,Me (self-supported),none,,a b,,,a b,a b,a b,a b,a b,lv,1.5,2.50,,38.5,0.14,a b,a b,,42150,42188.5,,,,,,,,,paper,a b,"a b; x21","a
+b
+a
+b",2026-09-27T18:00:21.123Z,2026-09-28T01:02:03.456Z,"a
+b",31.5,no,2026-02-28,A
+xmn,2200-12-31,,received,advance,Money advanced to me,"'=HYPERLINK(""http://x"")",999999999.99,999999999.99,area,Area 65 (NETA 65),none,,"'=HYPERLINK(""http://x"")",,,"'=HYPERLINK(""http://x"")","'=HYPERLINK(""http://x"")","'=HYPERLINK(""http://x"")","'=HYPERLINK(""http://x"")","'=HYPERLINK(""http://x"")",other,20,,,,,"'=HYPERLINK(""http://x"")","'=HYPERLINK(""http://x"")",,,,,,,,,,,,photo,"'=HYPERLINK(""http://x"")","'=HYPERLINK(""http://x""); x22","'=HYPERLINK(""http://x"")
+=HYPERLINK(""http://x"")",2026-09-27T18:00:22.123Z,2026-09-28T01:02:03.456Z,"'=HYPERLINK(""http://x"")",33,yes,2026-02-28,B
+xnn,2026-09-27,,giveaway,given,Given away at an event,‏RTL mark,0.00,0.00,district,My district,none,,‏RTL mark,,,‏RTL mark,‏RTL mark,‏RTL mark,‏RTL mark,‏RTL mark,,,0.01,,,,‏RTL mark,‏RTL mark,,,,,,,,,,,,file,‏RTL mark,"‏RTL mark; x23","‏RTL mark
+‏RTL mark",2026-09-27T18:00:23.123Z,2026-09-28T01:02:03.456Z,‏RTL mark,34.5,no,2026-02-28,A
+xon,2024-02-29,,stock,stock_in,Received to give away (no cost),0,0.00,0.00,group,My home group,none,,0,,,0,0,0,0,0,gv,0,0.00,,,,0,0,,,,,,,,,,,,none,0,"0; x24","0
+0",2026-09-27T18:00:24.123Z,2026-09-28T01:02:03.456Z,0,36,yes,2026-02-28,B
+xpn,1900-01-01,,expense,giveaways,Literature to give away (carry the message),"1,234.50",0.01,-0.01,me,Me (self-supported),none,2026-09-28,"1,234.50",2026-10-01,card,"1,234.50","1,234.50","1,234.50","1,234.50","1,234.50",lv,1.5,2.50,,,,"1,234.50","1,234.50",,,,,6,lv_complete,24,2026-01-31,2028-01-31,gift,owed,paper,"1,234.50","1,234.50; x25","1,234.50
+1,234.50",2026-09-27T18:00:25.123Z,2026-09-28T01:02:03.456Z,"1,234.50",37.5,no,2026-02-28,A
+xmuq0ga2a01c6d9,2026-09-15,,expense,books,Books & literature,Grapevine books for the district literature table,24.00,-24.00,district,My district,to_request,,,,card,aagrapevine.org store,,,,The Best of Grapevine,gv,2,12.00,,,,,,,,,,,,,,,,,paper,,,,2026-09-15T18:00:00.000Z,2026-09-15T18:00:00.000Z,,,,,
+xmuq0ga2a02vzum,2026-08-10,,expense,giveaways,Literature to give away (carry the message),Grapevine issues to carry the message,50.00,-50.00,area,Area 65 (NETA 65),paid,2026-08-13,A65-14,2026-09-07,card,aagrapevine.org store,,,,Grapevine (this month's issue),gv,20,2.50,yes,,,,,,,,,,,,,,,,paper,,,,2026-08-10T18:00:01.000Z,2026-08-10T18:00:01.000Z,,,,,
+xmuq0ga2a03pepj,2026-08-18,,expense,giveaways,Literature to give away (carry the message),La Viña issues to carry the message,25.00,-25.00,me,Me (self-supported),none,,,,card,aagrapevine.org store,,,,La Viña (this issue),lv,10,2.50,yes,,,,,,,,,,,,,,,,none,,,,2026-08-18T18:00:02.000Z,2026-08-18T18:00:02.000Z,,,,,
+xmuq0ga2a04su56,2025-11-01,,expense,subscriptions,Magazine subscriptions,Gift subscription,36.00,-36.00,me,Me (self-supported),none,,,,card,aagrapevine.org store,,,Maria G.,,,,,,,,,,,,,,,gv_print,12,2025-11-03,2026-11-03,gift,,file,aagrapevine.org,,,2025-11-01T18:00:03.000Z,2025-11-01T18:00:03.000Z,,,,,
+xmuq0ga2b05fkqp,2026-09-09,,expense,subscriptions,Magazine subscriptions,Subscription bought for a sponsee (paying me back),15.00,-15.00,me,Me (self-supported),none,,,,card,aagrapevine.org store,,,José R.,,,,,,,,,,,,,,,lv_online,12,2026-09-09,2027-09-09,helped,owed,none,,,,2026-09-09T18:00:04.000Z,2026-09-09T18:00:04.000Z,,,,,
+xmuq0ga2b0617w7,2026-07-14,2026-07-16,expense,lodging,Hotel & lodging,Hotel for the Fall Assembly,238.00,-238.00,district,My district,submitted,2026-07-19,D22-07,,card,Hampton Inn,Fall Assembly,Tyler,,,,,,,,,,,,,,2,,,,,,,,file,Hotel e-mail,assembly,,2026-07-14T18:00:05.000Z,2026-07-14T18:00:05.000Z,,,,,
+xmuq0ga2b072yaw,2026-08-25,,expense,meals,Meals,Pizza for the Grapevine workshop volunteers,42.00,-42.00,group,My home group,to_request,,,,cash,Pizza place,Grapevine & La Viña workshop,,,,,,,,,,,,,,,,6,,,,,,,paper,,,,2026-08-25T18:00:06.000Z,2026-08-25T18:00:06.000Z,,,,,
+xmuq0ga2b08s80y,2026-09-18,,expense,printing,Printing & copies,GVR report copies for the district meeting,4.50,-4.50,district,My district,to_request,,,,cash,Print shop,District 22 business meeting,,,GVR report,,30,,,,,,,,,,,,,,,,,,paper,,,,2026-09-18T18:00:07.000Z,2026-09-18T18:00:07.000Z,,,,,
+xmuq0ga2b095lro,2026-07-15,,expense,travel,"Parking, tolls & fares",Parking at the Assembly,8.00,-8.00,me,Me (self-supported),none,,,,cash,,Fall Assembly,,,,,,,,,,,,,,,,,,,,,,,none,,assembly,,2026-07-15T18:00:08.000Z,2026-07-15T18:00:08.000Z,,,,,
+xmuq0ga2b0acymh,2026-06-29,,expense,registration,Registration fees,Fall Assembly registration,15.00,-15.00,district,My district,paid,2026-07-19,D22-07,2026-08-08,card,,Fall Assembly,,,,,,,,,,,,,,,,,,,,,,,file,Hotel e-mail,assembly,,2026-06-29T18:00:09.000Z,2026-06-29T18:00:09.000Z,,,,,
+xmuq0ga2b0b4zdx,2026-09-18,,expense,contributions,Seventh Tradition contributions,Seventh Tradition at the district meeting,5.00,-5.00,me,Me (self-supported),none,,,,cash,,District 22 business meeting,,,,,,,,,,,,,,,,,,,,,,,none,,,,2026-09-18T18:00:10.000Z,2026-09-18T18:00:10.000Z,,,,,
+xmuq0ga2b0ckbvp,2026-07-14,,mileage,mileage,Miles driven,"Home → Fall Assembly, Tyler",25.84,-25.84,district,My district,submitted,2026-07-19,D22-07,,,,Fall Assembly,,,,,,,,184.6,0.14,Home,"Fall Assembly, Tyler",yes,,,,,,,,,,,none,,assembly,,2026-07-14T18:00:11.000Z,2026-07-14T18:00:11.000Z,,,,,
+xmuq0ga2b0dyzav,2026-09-18,,mileage,mileage,Miles driven,Home → District 22 business meeting,5.32,-5.32,me,Me (self-supported),none,,,,,,District 22 business meeting,,,,,,,,38,0.14,Home,District 22 business meeting,,42150,42188,,,,,,,,,none,,,,2026-09-18T18:00:12.000Z,2026-09-18T18:00:12.000Z,,,,,
+xmuq0ga2b0e19jm,2026-09-07,,received,reimbursement,Reimbursement,Area reimbursement for the Grapevine issues,50.00,50.00,area,Area 65 (NETA 65),none,,Check 1042,,check,,,,,,,,,,,,,,,,,,,,,,,,,none,,,,2026-09-07T18:00:13.000Z,2026-09-07T18:00:13.000Z,,,,,
+xmuq0ga2b0fp11k,2026-08-23,,received,advance,Money advanced to me,Group advance for the workshop,50.00,50.00,group,My home group,none,,,,cash,,Grapevine & La Viña workshop,,,,,,,,,,,,,,,,,,,,,,,none,,,,2026-08-23T18:00:14.000Z,2026-08-23T18:00:14.000Z,,,,,
+xmuq0ga2b0gy9bi,2026-07-29,,stock,stock_in,Received to give away (no cost),Back issues from the Area literature table,0.00,0.00,area,Area 65 (NETA 65),none,,,,,,,,,Grapevine (back issues),gv,15,,,,,,,,,,,,,,,,,,none,,,,2026-07-29T18:00:15.000Z,2026-07-29T18:00:15.000Z,,,,,
+xmuq0ga2b0hk16u,2026-07-15,,giveaway,given,Given away at an event,Fall Assembly,0.00,0.00,,,none,,,,,,Fall Assembly,,,Grapevine (this month's issue),gv,12,,,,,,,,,,,,,,,,,,none,,,,2026-07-15T18:00:16.000Z,2026-07-15T18:00:16.000Z,,,,,
+xmuq0ga2b0ikbn5,2026-08-25,,giveaway,given,Given away at an event,Grapevine & La Viña workshop,0.00,0.00,,,none,,,,,,Grapevine & La Viña workshop,,,La Viña (this issue),lv,6,,,,,,,,,,,,,,,,,,none,,,,2026-08-25T18:00:17.000Z,2026-08-25T18:00:17.000Z,,,,,
+xmuq0ga2b0jm075,2026-08-25,,giveaway,given,Given away at an event,Grapevine & La Viña workshop,0.00,0.00,,,none,,,,,,Grapevine & La Viña workshop,,,Grapevine (back issues),gv,10,,,,,,,,,,,,,,,,,,none,,,,2026-08-25T18:00:18.000Z,2026-08-25T18:00:18.000Z,,,,,

@@ -1,0 +1,748 @@
+{
+ "note": "Real entries of the site's search index (es/search-index.json, 2026-10-06): id, kind, titles, language, address and date only — test data for tests/test_search_kit.py.",
+ "items": [
+  {
+   "id": "gv:2026-09:40-years-9-sponsors",
+   "k": "article",
+   "t": "40 Años, 9 padrinos",
+   "o": "40 Years, 9 Sponsors",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/sep/40-years-9-sponsors",
+   "d": "2026-09-01",
+   "src": "gv"
+  },
+  {
+   "id": "lv:2026-07:12-anos-de-vida",
+   "k": "article",
+   "t": "12 años de vida",
+   "l": "es",
+   "u": "https://www.aalavina.org/revista/julio-agosto-2026/12-anos-de-vida",
+   "d": "2026-07-01",
+   "src": "lv"
+  },
+  {
+   "id": "gv:2026-07:40-years-80000-spoons",
+   "k": "article",
+   "t": "40 Años, 80.000 cucharas",
+   "o": "40 Years, 80,000 Spoons",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/jul/40-years-80000-spoons",
+   "d": "2026-07-01",
+   "src": "gv"
+  },
+  {
+   "id": "pdf:59b88e2ae62f",
+   "k": "pdf",
+   "t": "Conceptos 60 años",
+   "o": "Concepts 60 years",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/sites/default/files/2022-03/Concepts_60_Years.pdf",
+   "d": "2022-03-23",
+   "src": "gv"
+  },
+  {
+   "id": "pod:gv:d6b904b60127",
+   "k": "episode",
+   "t": "Los mejores años de nuestras vidas [Temporada 2, Episodio 16]",
+   "o": "The Best Years of Our Lives [Season 2, Episode 16]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/1c658e0b-0987-4b9a-baa9-7539080df831",
+   "d": "2022-04-17",
+   "src": "podcast"
+  },
+  {
+   "id": "yt:eVKc9Ja6QuU",
+   "k": "video",
+   "t": "Marisol - El mejor año de mi vida",
+   "l": "es",
+   "u": "https://www.youtube.com/watch?v=eVKc9Ja6QuU",
+   "d": "2024-12-16",
+   "src": "lv"
+  },
+  {
+   "id": "yt:UbrruARIOBI",
+   "k": "video",
+   "t": "Los mejores años de nuestras vidas [Temporada 2, Episodio 16] - AA Grapevine Podcast",
+   "o": "The Best Years of Our Lives [Season 2, Episode 16] - AA Grapevine Podcast",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=UbrruARIOBI",
+   "d": "2024-01-12",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:ar8tC214RRA",
+   "k": "video",
+   "t": "Lynne “Fui a la reunión después de la reunión. Fue toda mi vida esos primeros años”.",
+   "o": "Lynne “I went to meeting after meeting. It was my whole life those first years.”",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=ar8tC214RRA",
+   "d": "2023-01-12",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:tLWOddnv4GY",
+   "k": "video",
+   "t": "¡AA Grapevine, la revista internacional de Alcohólicos Anónimos, celebra 75 años!",
+   "o": "AA Grapevine, the International Journal of Alcoholics Anonymous, celebrates 75 Years!",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=tLWOddnv4GY",
+   "d": "2019-07-09",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:vri5d6uL7Js",
+   "k": "video",
+   "t": "¡AA Grapevine, la Revista Internacional de Alcohólicos Anónimos celebra 75º años!",
+   "l": "es",
+   "u": "https://www.youtube.com/watch?v=vri5d6uL7Js",
+   "d": "2019-07-09",
+   "src": "lv"
+  },
+  {
+   "id": "pod:gv:bcd0b7df49e9",
+   "k": "episode",
+   "t": "Dios rompiendo su anonimato [Temporada 8, Episodio 25]",
+   "o": "God Breaking His Anonymity [Season 8, Episode 25]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/b9dfc831-b157-48ce-bb9a-edabcb60fd51",
+   "d": "2025-06-22",
+   "src": "podcast"
+  },
+  {
+   "id": "pod:gv:6419ae8e4abe",
+   "k": "episode",
+   "t": "El Intergrupo en línea de Alcohólicos Anónimos [Temporada 7, Episodio 26]",
+   "o": "The Online Intergroup of Alcoholics Anonymous [Season 7, Episode 26]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/e124133b-92ff-40b0-bd18-75df24ac55fb",
+   "d": "2024-12-16",
+   "src": "podcast"
+  },
+  {
+   "id": "pod:gv:cf42e619fa26",
+   "k": "episode",
+   "t": "Anonimato y medios de comunicación [Temporada 3, Episodio 16]",
+   "o": "Anonymity and the Media [Season 3, Episode 16]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/747aa5fa-1493-409d-9b46-46b6f72aad48",
+   "d": "2022-10-09",
+   "src": "podcast"
+  },
+  {
+   "id": "yt:LHdgz_ZyCjw",
+   "k": "video",
+   "t": "Dios rompiendo su anonimato [Temporada 8, Episodio 25]",
+   "o": "God Breaking His Anonymity [Season 8, Episode 25]",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=LHdgz_ZyCjw",
+   "d": "2025-06-22",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:HZjrfG1fzjM",
+   "k": "video",
+   "t": "Guardar la fecha ASL/LSM/LSQ volante digital para el foro especial para miembros sordos Alcohólicos Anónimos",
+   "o": "Save the date ASL/LSM/LSQ digital flyer for the Special forum for Deaf Alcoholics Anonymous Members",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=HZjrfG1fzjM",
+   "d": "2025-02-13",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:XMgeNzP4XGE",
+   "k": "video",
+   "t": "El Intergrupo en línea de Alcohólicos Anónimos [Temporada 7, Episodio 26] - AA Grapevine Podcast",
+   "o": "The Online Intergroup of Alcoholics Anonymous [Season 7, Episode 26] - AA Grapevine Podcast",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=XMgeNzP4XGE",
+   "d": "2024-12-16",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:3pgFEpiQMGc",
+   "k": "video",
+   "t": "Rhonda B. “Me alejé de Alcohólicos Anónimos”.",
+   "o": "Rhonda B. “I walked away from Alcoholics Anonymous.”",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=3pgFEpiQMGc",
+   "d": "2024-01-17",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:vLm0T04gLt8",
+   "k": "video",
+   "t": "Anonimato y medios de comunicación [Temporada 3, Episodio 16] - AA Grapevine Podcast",
+   "o": "Anonymity and the Media [Season 3, Episode 16] - AA Grapevine Podcast",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=vLm0T04gLt8",
+   "d": "2024-01-12",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:arLRiRBBFHM",
+   "k": "video",
+   "t": "Sandy “No hay nada más importante en mi vida que Alcohólicos Anónimos”",
+   "o": "Sandy “There is nothing more important in my life than Alcoholics Anonymous”",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=arLRiRBBFHM",
+   "d": "2021-11-12",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:7x-1w_Gx9rQ",
+   "k": "video",
+   "t": "\"Anónimo en Alcohólicos Anónimos\" canción",
+   "o": "“Anonymity in Alcoholics Anonymous\" song",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=7x-1w_Gx9rQ",
+   "d": "2020-09-24",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:NkvUzcEMyyA",
+   "k": "video",
+   "t": "NACE UN LIBRO GRANDE: cronología de cómo se hizo el primer libro de Alcohólicos Anónimos",
+   "o": "A BIG BOOK IS BORN: A timeline of the making of Alcoholics Anonymous’ first book",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=NkvUzcEMyyA",
+   "d": "2019-10-09",
+   "src": "youtube"
+  },
+  {
+   "id": "gv:2026-10:reward-living-good-sober-life",
+   "k": "article",
+   "t": "La recompensa por vivir una buena vida sobria",
+   "o": "The Reward for Living A Good Sober Life",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/oct/reward-living-good-sober-life",
+   "d": "2026-09-23",
+   "src": "gv"
+  },
+  {
+   "id": "lv:2026-09:casados-sobrios-y-felices",
+   "k": "article",
+   "t": "Casados, sobrios y felices",
+   "l": "es",
+   "u": "https://www.aalavina.org/revista/septiembre-octubre-2026/casados-sobrios-y-felices",
+   "d": "2026-09-01",
+   "src": "lv"
+  },
+  {
+   "id": "gv:2026-08:sober-16",
+   "k": "article",
+   "t": "Sobrio a los 16",
+   "o": "Sober at 16",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/aug/sober-16",
+   "d": "2026-08-01",
+   "src": "gv"
+  },
+  {
+   "id": "gv:2026-08:rain-mud-sobriety",
+   "k": "article",
+   "t": "Lluvia, barro, sobriedad",
+   "o": "Rain, Mud, Sobriety",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/aug/rain-mud-sobriety",
+   "d": "2026-08-01",
+   "src": "gv"
+  },
+  {
+   "id": "lv:2026-07:relaciones-en-sobriedad",
+   "k": "article",
+   "t": "Relaciones en sobriedad",
+   "l": "es",
+   "u": "https://www.aalavina.org/revista/julio-agosto-2026/relaciones-en-sobriedad",
+   "d": "2026-07-01",
+   "src": "lv"
+  },
+  {
+   "id": "gv:2026-07:nothing-stopped-him-getting-sober",
+   "k": "article",
+   "t": "Nada lo detuvo de ser sobrio",
+   "o": "Nothing Stopped Him From Getting Sober",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/jul/nothing-stopped-him-getting-sober",
+   "d": "2026-07-01",
+   "src": "gv"
+  },
+  {
+   "id": "gv:2026-06:sober-iran",
+   "k": "article",
+   "t": "Sobria en Irán",
+   "o": "Sober in Iran",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/jun/sober-iran",
+   "d": "2026-06-01",
+   "src": "gv"
+  },
+  {
+   "id": "ed:gv:2027-12:sober-holidays",
+   "k": "topic",
+   "t": "¡Fiestas sobrias!",
+   "o": "Sober Holidays!",
+   "l": "en",
+   "u": "/es/contribute/",
+   "src": "gv"
+  },
+  {
+   "id": "ed:lv:2027-11:celebrando-en-sobriedad",
+   "k": "topic",
+   "t": "Celebrando en sobriedad",
+   "l": "es",
+   "u": "/es/contribute/",
+   "src": "lv"
+  },
+  {
+   "id": "ed:gv:2027-09:young-sober",
+   "k": "topic",
+   "t": "Joven y sobrio",
+   "o": "Young & Sober",
+   "l": "en",
+   "u": "/es/contribute/",
+   "src": "gv"
+  },
+  {
+   "id": "gv:2026-09:my-wild-card-sponsor",
+   "k": "article",
+   "t": "Mi padrino comodín",
+   "o": "My Wild Card Sponsor",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/sep/my-wild-card-sponsor",
+   "d": "2026-09-01",
+   "src": "gv"
+  },
+  {
+   "id": "gv:2026-09:my-temporary-sponsor",
+   "k": "article",
+   "t": "Mi padrino temporal",
+   "o": "My Temporary Sponsor",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/sep/my-temporary-sponsor",
+   "d": "2026-09-01",
+   "src": "gv"
+  },
+  {
+   "id": "ed:lv:any:lo-que-me-enseno-mi-padrino-algo-que-nunca-olvid",
+   "k": "topic",
+   "t": "Lo que me enseñó mi Padrino (algo que nunca olvidaré)",
+   "l": "es",
+   "u": "/es/contribute/",
+   "src": "lv"
+  },
+  {
+   "id": "yt:g7usEmBeqGg",
+   "k": "video",
+   "t": "Tomás - ¿Padrino?",
+   "l": "es",
+   "u": "https://www.youtube.com/watch?v=g7usEmBeqGg",
+   "d": "2025-11-29",
+   "src": "lv"
+  },
+  {
+   "id": "yt:ZKIvO0nRCxU",
+   "k": "video",
+   "t": "Bob “”Aprendí muchas cosas de la gente que patrociné”.",
+   "o": "Bob ‘”I learned many things from the people I sponsored.”",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=ZKIvO0nRCxU",
+   "d": "2023-04-21",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:M985gNEGlHU",
+   "k": "video",
+   "t": "Ron B. “Tengo un padrino, un grupo base y leí la literatura”.",
+   "o": "Ron B. “I got a sponsor, a home group and I read the literature.”",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=M985gNEGlHU",
+   "d": "2023-04-21",
+   "src": "youtube"
+  },
+  {
+   "id": "page:meetings",
+   "k": "page",
+   "t": "Reuniones",
+   "o": "Meetings",
+   "ol": "en",
+   "u": "/es/meetings/",
+   "src": "site"
+  },
+  {
+   "id": "report:monthly",
+   "k": "page",
+   "t": "Tu informe de GV/LV para la reunión del distrito",
+   "u": "/es/monthly/#report",
+   "src": "site"
+  },
+  {
+   "id": "gv:2026-10:meetings-yukon-yellowstone",
+   "k": "article",
+   "t": "Reuniones de Yukón a Yellowstone",
+   "o": "Meetings from Yukon to Yellowstone",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/oct/meetings-yukon-yellowstone",
+   "d": "2026-09-23",
+   "src": "gv"
+  },
+  {
+   "id": "lv:2026-09:reunion-virtual",
+   "k": "article",
+   "t": "Reunión virtual",
+   "l": "es",
+   "u": "https://www.aalavina.org/revista/septiembre-octubre-2026/reunion-virtual",
+   "d": "2026-09-01",
+   "src": "lv"
+  },
+  {
+   "id": "gv:2026-09:very-real-virtual-meeting",
+   "k": "article",
+   "t": "Una reunión virtual muy real",
+   "o": "A Very Real Virtual Meeting",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/sep/very-real-virtual-meeting",
+   "d": "2026-09-01",
+   "src": "gv"
+  },
+  {
+   "id": "gv:2026-07:special-noontime-meeting",
+   "k": "article",
+   "t": "Una reunión especial a mediodía",
+   "o": "A Special Noontime Meeting",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/jul/special-noontime-meeting",
+   "d": "2026-07-01",
+   "src": "gv"
+  },
+  {
+   "id": "drive:1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U",
+   "k": "slides",
+   "t": "Reunión mensual del Comité de Grapevine y La Viña",
+   "o": "Grapevine and La Viña Monthly Committee Meeting",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/1dtI6ThnHzigLUFLl6N8D6iQYrZXuSX3U/view",
+   "d": "2026-10-01",
+   "src": "neta"
+  },
+  {
+   "id": "drive:1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4",
+   "k": "document",
+   "t": "Informe de la reunión de coordinadores de Área de Grapevine",
+   "o": "Grapevine Area Chair Meeting Report",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/1fC3vvsu0CG-XdUagGDb_fgiwzkqEEfG4/view",
+   "d": "2026-08-11",
+   "src": "neta"
+  },
+  {
+   "id": "drive:1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu",
+   "k": "document",
+   "t": "Orden del día de la reunión de coordinadores de Área de Grapevine",
+   "o": "Grapevine Area Chair Meeting Agenda",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/1Fs9t4jxeMXemu_FQP-bKc7smr6NZHuiu/view",
+   "d": "2026-08-11",
+   "src": "neta"
+  },
+  {
+   "id": "drive:1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k",
+   "k": "document",
+   "t": "Informe de la reunión de coordinadores de Área de Grapevine",
+   "o": "Grapevine Area Chair Meeting Report",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/1a54yYQkKPkTffjCeGLD9fFC6r7fL7G9k/view",
+   "d": "2026-05-12",
+   "src": "neta"
+  },
+  {
+   "id": "ed:lv:any:mi-parte-favorita-del-libro-grande",
+   "k": "topic",
+   "t": "Mi parte favorita del Libro Grande",
+   "l": "es",
+   "u": "/es/contribute/",
+   "src": "lv"
+  },
+  {
+   "id": "pod:gv:6a515bfb7ad9",
+   "k": "episode",
+   "t": "Ampliar la puerta: el Libro Grande en lenguaje sencillo [Temporada 10, Episodio 20]",
+   "o": "Widening the Doorway — The Plain Language Big Book [Season 10, Episode 20]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/a8cd6078-a1ac-40ea-9424-94d9f633d6dd",
+   "d": "2026-05-17",
+   "src": "podcast"
+  },
+  {
+   "id": "pod:gv:0ee840413d06",
+   "k": "episode",
+   "t": "Discutir el idioma en el Libro Grande [Temporada 2, Episodio 12]",
+   "o": "Discussing The Language in the Big Book [Season 2, Episode 12]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/d0c326d8-4b38-4fd5-a522-4c7ffc234b83",
+   "d": "2022-03-20",
+   "src": "podcast"
+  },
+  {
+   "id": "yt:v0Yz9plY42Y",
+   "k": "video",
+   "t": "Ampliar la puerta: el Libro Grande en lenguaje sencillo [Temporada 10, Episodio 20]",
+   "o": "Widening the Doorway — The Plain Language Big Book [Season 10, Episode 20]",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=v0Yz9plY42Y",
+   "d": "2026-05-17",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:kHAT8kgeRVE",
+   "k": "video",
+   "t": "Discutir el idioma en el Libro Grande [Temporada 2, Episodio 12] - AA Grapevine Podcast",
+   "o": "Discussing The Language in the Big Book [Season 2, Episode 12] - AA Grapevine Podcast",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=kHAT8kgeRVE",
+   "d": "2024-01-12",
+   "src": "youtube"
+  },
+  {
+   "id": "yt:-PcdfSIobPY",
+   "k": "video",
+   "t": "Bill “Me dijeron: ‘Espera a Libro Grande Nick.’ “",
+   "o": "Bill “They told me, ‘Watch out for Big Book Nick.’ “",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=-PcdfSIobPY",
+   "d": "2023-04-21",
+   "src": "youtube"
+  },
+  {
+   "id": "meeting:mtg:4c3790ab4cbc",
+   "k": "meeting",
+   "t": "Big Book (Rockwall) Group",
+   "u": "/es/meetings/#gvg-big-book-rockwall-group-rockwall"
+  },
+  {
+   "id": "pdf:499d34a9edf4",
+   "k": "pdf",
+   "t": "El Grupo Base: Corazón de AA",
+   "o": "The Home Group: Heartbeat of AA",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/sites/default/files/2023-03/Postcard_HomeGroup_NB.pdf",
+   "d": "2023-03-23",
+   "src": "gv"
+  },
+  {
+   "id": "pdf:e346bd17d42f",
+   "k": "pdf",
+   "t": "El Grupo Base: Corazón de AA (edición del 30.º aniversario)",
+   "o": "The Home Group: Heartbeat of AA (30th Anniversary Edition)",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/sites/default/files/2023-03/2023_HG_Heartbeat_of_AA_AVAILABLE-NOW.pdf",
+   "d": "2023-03-15",
+   "src": "gv"
+  },
+  {
+   "id": "pod:gv:6ca8df610714",
+   "k": "episode",
+   "t": "186 Grupos base [Temporada 1, Episodio 3]",
+   "o": "186 Home Groups [Season 1, Episode 3]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/21387419-7753-4f39-82b9-7f2dbdf3c3e2",
+   "d": "2021-10-17",
+   "src": "podcast"
+  },
+  {
+   "id": "yt:zuBsjYv4-aQ",
+   "k": "video",
+   "t": "186 Grupos base [Temporada 1, Episodio 3] - AA Grapevine Podcast",
+   "o": "186 Home Groups [Season 1, Episode 3] - AA Grapevine Podcast",
+   "l": "en",
+   "u": "https://www.youtube.com/watch?v=zuBsjYv4-aQ",
+   "d": "2024-01-12",
+   "src": "youtube"
+  },
+  {
+   "id": "orientation:magazines",
+   "k": "page",
+   "t": "RLV / GVR 101 · Qué son La Viña y Grapevine",
+   "u": "/es/orientation/magazines/",
+   "src": "site"
+  },
+  {
+   "id": "lv:2026-07:la-vina-en-la-era-digital",
+   "k": "article",
+   "t": "La Viña en la era digital",
+   "l": "es",
+   "u": "https://www.aalavina.org/revista/julio-agosto-2026/la-vina-en-la-era-digital",
+   "d": "2026-07-01",
+   "src": "lv"
+  },
+  {
+   "id": "drive:1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p",
+   "k": "document",
+   "t": "Actualización de precios de Grapevine y La Viña - A partir del 1 de enero de 2027",
+   "o": "Grapevine & La Viña Pricing Update - Effective January 1, 2027",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view",
+   "d": "2026-10-01",
+   "src": "neta"
+  },
+  {
+   "id": "drive:1bH259UXhzbyCSNM50D5IKHETBs0vOx6f",
+   "k": "slides",
+   "t": "Taller de escritura de Grapevine y La Viña",
+   "o": "Grapevine and La Viña Writing Workshop",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/1bH259UXhzbyCSNM50D5IKHETBs0vOx6f/view",
+   "d": "2026-10-01",
+   "src": "neta"
+  },
+  {
+   "id": "drive:19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6",
+   "k": "slides",
+   "t": "Taller informativo de Grapevine y La Viña",
+   "o": "Grapevine and La Viña Information Workshop",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/19AFUSD2tNh07ryL4VHoAzyfPSLQQt2L6/view",
+   "d": "2026-10-01",
+   "src": "neta"
+  },
+  {
+   "id": "pdf:9f66a1263a2a",
+   "k": "pdf",
+   "t": "Quiero suscribirme a La Viña",
+   "l": "es",
+   "u": "https://www.aalavina.org/sites/default/files/2026-08/Quiero-suscribirme-a-la-Vin%CC%83a-082026.pdf",
+   "d": "2026-08-21",
+   "src": "lv"
+  },
+  {
+   "id": "pdf:06fd84448557",
+   "k": "pdf",
+   "t": "Formulario de suscripción a La Viña",
+   "o": "La Viña Subscription Form",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/sites/default/files/2026-08/La-Vin%CC%83a-Subscription-Form%5B30%5D.pdf",
+   "d": "2026-08-21",
+   "src": "gv"
+  },
+  {
+   "id": "pdf:52ad1c5c6736",
+   "k": "pdf",
+   "t": "30 Aniversario de La Viña",
+   "l": "es",
+   "u": "https://www.aalavina.org/sites/default/files/2026-02/LV-30-Aniversario.pdf",
+   "d": "2026-02-27",
+   "src": "lv"
+  },
+  {
+   "id": "pdf:80459bad57a9",
+   "k": "pdf",
+   "t": "La Viña en Instagram",
+   "l": "es",
+   "u": "https://www.aalavina.org/sites/default/files/2026-01/LV_Instagram--PC2026.pdf",
+   "d": "2026-01-08",
+   "src": "lv"
+  },
+  {
+   "id": "pdf:c09c5d737ba0",
+   "k": "pdf",
+   "t": "Libros de La Viña",
+   "l": "es",
+   "u": "https://www.aalavina.org/sites/default/files/2026-01/Libros_PC_LV_2026.pdf",
+   "d": "2026-01-08",
+   "src": "lv"
+  },
+  {
+   "id": "gv:2026-10:step-ten-rescue",
+   "k": "article",
+   "t": "Paso Diez al rescate",
+   "o": "Step Ten to the Rescue",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/oct/step-ten-rescue",
+   "d": "2026-09-23",
+   "src": "gv"
+  },
+  {
+   "id": "gv:2026-08:worth-every-step",
+   "k": "article",
+   "t": "Vale la pena cada paso",
+   "o": "Worth Every Step",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/magazine/2026/aug/worth-every-step",
+   "d": "2026-08-01",
+   "src": "gv"
+  },
+  {
+   "id": "ed:lv:any:una-reparacion-de-noveno-paso-que-cambio-mi-vida",
+   "k": "topic",
+   "t": "Una reparación de Noveno Paso que cambió mi vida",
+   "l": "es",
+   "u": "/es/contribute/",
+   "src": "lv"
+  },
+  {
+   "id": "ed:lv:any:mi-primer-paso",
+   "k": "topic",
+   "t": "Mi Primer Paso",
+   "l": "es",
+   "u": "/es/contribute/",
+   "src": "lv"
+  },
+  {
+   "id": "ed:lv:any:mi-paso-favorito-y-por-que",
+   "k": "topic",
+   "t": "Mi Paso favorito, y por qué",
+   "l": "es",
+   "u": "/es/contribute/",
+   "src": "lv"
+  },
+  {
+   "id": "drive:18mW_xghlvSL14WBAmas4gG987EeRN7-w",
+   "k": "document",
+   "t": "Grapevine como herramienta de Paso Doce - Ponlas a trabajar (calendario editorial 2026-2027)",
+   "o": "Grapevine as a Twelfth Step Tool - Put Them to Work (2026-2027 editorial calendar)",
+   "l": "en",
+   "u": "https://drive.google.com/file/d/18mW_xghlvSL14WBAmas4gG987EeRN7-w/view",
+   "d": "2026-09-25",
+   "src": "neta"
+  },
+  {
+   "id": "pdf:4e6c7d14474e",
+   "k": "pdf",
+   "t": "Nuestros 12 pasos",
+   "o": "Our 12 Steps",
+   "l": "en",
+   "u": "https://www.aagrapevine.org/sites/default/files/2024-05/Our_12_Steps_postcard.pdf",
+   "d": "2024-05-02",
+   "src": "gv"
+  },
+  {
+   "id": "pod:gv:eadddd66017a",
+   "k": "episode",
+   "t": "Tema candente: las visitas de Paso Doce [Temporada 9, Episodio 16]",
+   "o": "Hot Topic: Twelve-Step Calls [Season 9, Episode 16]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/c8f13a9f-7b39-4dc0-b538-6d9fd533c0f5",
+   "d": "2025-10-19",
+   "src": "podcast"
+  },
+  {
+   "id": "pod:gv:48d723f193d7",
+   "k": "episode",
+   "t": "Involucrarse, trabajar los pasos [Temporada 6, Episodio 19]",
+   "o": "Get Involved, Work the Steps [Season 6, Episode 19]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/e716321d-33c1-4227-a3ba-9bdae3d2cd2d",
+   "d": "2024-05-05",
+   "src": "podcast"
+  },
+  {
+   "id": "pod:gv:c916f56aa09a",
+   "k": "episode",
+   "t": "Necesitaremos trabajar los pasos [Temporada 6, Episodio 3]",
+   "o": "We Will Need to Work the Steps [Season 6, Episode 3]",
+   "l": "en",
+   "u": "https://player.captivate.fm/episode/2b5329df-51df-4abc-83f8-1fcad27e5f82",
+   "d": "2024-01-14",
+   "src": "podcast"
+  }
+ ]
+}

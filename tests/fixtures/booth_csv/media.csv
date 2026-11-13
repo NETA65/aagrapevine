@@ -1,0 +1,21 @@
+id,type,title_en,media_url,start,end
+vid-empty,video,A video,,,
+vid-http,video,A video,http://www.youtube.com/watch?v=V3RzyHdgQCY,,
+vid-host,video,A video,https://vimeo.com/123.mp4,,
+vid-userinfo,video,A video,https://www.aa.org@evil.example/x.mp4,,
+vid-mp3,video,A video,https://episodes.captivate.fm/episode/x.mp3,,
+audio-youtube,audio,A sound,https://www.youtube.com/watch?v=V3RzyHdgQCY,,
+image-gif,image,A picture,https://www.aa.org/picture.gif,,
+vid-youtu-be,video,A video,https://youtu.be/V3RzyHdgQCY?t=1m30s,,
+vid-shorts,video,A Short,https://www.youtube.com/shorts/0uyVPlTcSeI,,
+vid-embed,video,A video,https://www.youtube-nocookie.com/embed/V3RzyHdgQCY,,
+vid-mobile,video,A video,https://m.youtube.com/watch?v=Bqb1FP0lx1E&t=45,,
+vid-bad-id,video,A video,https://www.youtube.com/watch?v=short,,
+vid-file,video,A video,https://www.aagrapevine.org/files/clip.MP4,,
+audio-file,audio,A sound,https://episodes.captivate.fm/episode/abc.mp3?from=feed,,
+vid-times,video,A video,https://www.youtube.com/watch?v=V3RzyHdgQCY,1:30,2:45
+vid-bad-times,video,A video,https://www.youtube.com/watch?v=V3RzyHdgQCY,1:75,abc
+vid-end-before,video,A video,https://www.youtube.com/watch?v=V3RzyHdgQCY,2:00,1:30
+vid-url-start-end,video,A video,https://youtu.be/V3RzyHdgQCY?t=120,,90
+image-start,image,A picture,https://www.aa.org/a.png,10,
+audio-podcasts-host,audio,A sound,https://podcasts.captivate.fm/media/0d058c25-e582-4fa9-9b4e-4c5f62498209/GV-0187-28APR25-James-O-OD-DONE-converted.mp3,,

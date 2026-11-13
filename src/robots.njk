@@ -1,0 +1,28 @@
+---
+permalink: /robots.txt
+layout: false
+eleventyExcludeFromCollections: true
+---
+{#- Crawlers read robots.txt ONLY at the root of an address (RFC 9309; Google: "crawlers don't
+    check for robots.txt files in subdirectories"). This file is the live one
+    only with a custom domain — which the site has since November 2026 (grapevine.neta65.org,
+    README §12, "Using your own address"): the site is the root of its address, so THIS file is
+    the root robots.txt search engines read, and the Weekly link check says "Skipped" for it
+    (scripts/ops/root_robots.py).
+    Built as a GitHub Pages PROJECT site (https://neta65.github.io/aagrapevine/ — the fallback
+    address of the Code check and of a build on a computer) it is published at
+    /aagrapevine/robots.txt instead, where no search engine reads it. The file that counts there
+    is https://neta65.github.io/robots.txt, and only the NETA65 account's own user-site
+    repository, NETA65/neta65.github.io, can publish it: its ready-to-upload files are in
+    docs/user-site/, the owner's steps in README → "Search engines" (step C), and the Weekly link
+    check reads it every Sunday for such an address. Without that repository the root answers
+    404, which means "crawl everything".
+    So keep it as it is — everything allowed, no Disallow lines (Google needs the CSS, scripts
+    and JSON files to show the pages), and the sitemap.
+    The Sitemap line needs an absolute URL: site.url comes from config/site.yml (or the
+    SITE_URL the GitHub Action sets). Without one it is left out. -#}
+User-agent: *
+Allow: /
+{% if site.url %}
+Sitemap: {{ site.url }}/sitemap.xml
+{% endif %}

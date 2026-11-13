@@ -1,0 +1,348 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}photos/index.html"
+layout: layouts/base.njk
+pageKey: photos
+titleKey: nav.photos
+ldType: CollectionPage
+descKey: committee.photos.meta_desc
+pageScripts: ["/assets/vendor/glightbox.min.js", "/assets/js/committee.js"]
+pageStyles: ["/assets/vendor/glightbox.min.css"]
+eleventyComputed:
+  # with magazine covers on the page, its description says so (committee.photos.meta_desc_covers); without, as before
+  descKey: "{{ 'committee.photos.meta_desc_covers' if (db.drive.items | cmAlbums(lang) | cmCovers(lang)).total else 'committee.photos.meta_desc' }}"
+---
+{#- Photo albums from the committee's Google Drive "photos" folder.
+    Every sub-folder becomes an album. Lightbox: GLightbox (MIT, self-hosted).
+    Below the shared page hero and the committee sub-nav: the album index (grid-cards: the committee's albums,
+    then the two magazine cover collections) and one photo grid per album (2 → 3 → 4 → 5 → 6 columns) — or, with
+    no photos yet, the shared page-level empty card (ui.pageEmpty; the one visitor action is the hero's). Then
+    "Protecting anonymity" (what is great to share | what never is: the committee's photos, right above), then the
+    MAGAZINE COVERS (#covers: Grapevine's and La Viña's front covers, one block per magazine and year — at first
+    the two newest years, "Show earlier years (2015–2024)" for the rest —, with the Magazine / Year filter —
+    committee.js cmCovers; eleventy/filters/committee.js "The magazine covers on /photos/"), and last, collapsed,
+    "For committee members · Share photos" (ui.memberHelp, #share-photos): the steps (the covers' folders and names
+    too), where photos and covers go, Open Drive folder · Ask for upload access.
+    The Full screen and Share buttons of an album or a cover block need JavaScript (data-js-only); its ↑ does not.
+    Under its numbers the hero says whose the covers and other graphics are (committee.photos.hero_credit, the
+    publishers' own words, as the footer's footer.reprints) — on every build, in both languages.
+    The hero's right-hand card (the shared hero aside, "Next chance for photos"): the next two in-person
+    NETA 65 events — a booth, a workshop, an assembly (db.events through cmEvents: no committee meetings,
+    no online events, no later dates of a monthly series, not the magazines' own calendars) — each
+    linking to its card on /events/. Nothing the page shows (no pictures: the albums follow right below;
+    no anonymity rules: "Protecting anonymity" has them). Hidden on smaller screens and at larger text. -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set albums = db.drive.items | cmAlbums(lang) -%}
+{#- the committee's own albums (events, booths …) and the magazine covers (the cover albums: a.covers) -#}
+{%- set eventAlbums = albums | rejectattr("covers") -%}
+{%- set covers = albums | cmCovers(lang) -%}
+{%- set nPhotos = eventAlbums | pluck("photos") | sum -%}
+{%- set nVideos = albums | pluck("videos") | sum -%}
+{%- set di = db.status | cmDriveInfo(site) -%}
+{%- set photoEvs = [] -%}
+{%- for ev in db.events.items | cmEvents(site, lang) | cmCollapseRecurring %}{% if photoEvs.length < 2 and not ev.past and not ev.committee and not ev.later and not ev.isOnline and ev.category != "gv-calendar" and ev.category != "lv-calendar" %}{% set _n = photoEvs.push(ev) %}{% endif %}{% endfor -%}
+{%- set toneOf = { gv: "gv", lv: "lv", booth: "lv", assembly: "grape" } -%}
+
+{% call(slot) ui.pageHero(lang, "nav.photos" | t(lang), ("committee.photos.hero_sub_covers" if covers.total else "committee.photos.hero_sub") | t(lang), "images", "committee.photos.eyebrow" | t(lang), { side: "hide" }) %}
+{%- if slot == "side" %}
+  {% call ui.heroAside("committee.photos.aside_title" | t(lang), lang, { id: "photos-aside-title", icon: "camera", lead: "committee.photos.aside_lead" | t(lang) }) %}
+  {%- if photoEvs.length %}
+  <ul class="hero-aside-links" role="list">
+    {%- for ev in photoEvs %}{% set evTone = ev | eventTone %}
+    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ev.anchor, label: ev.title, text: (ev.rangeLabel if ev.multiDay else ((ev.startIso | fmtDate(lang, "short")) + (" · " + ev.timeLabel if ev.timeLabel else ""))), icon: "calendar-days", tone: toneOf[evTone] or "vine" }, lang) }}</li>
+    {%- endfor %}
+  </ul>
+  {%- else %}
+  <p class="hero-aside-text">{{ "committee.photos.aside_none" | t(lang) }}</p>
+  <p class="mt-3"><a class="hero-aside-cta" href="{{ '/events/' | lurl(lang) }}">{% icon "calendar-days", "size-4 shrink-0" %}{{ "committee.ann.all_events" | t(lang) }}</a></p>
+  {%- endif %}
+  {% endcall %}
+{%- else %}
+  <div class="hero-actions">
+    {#- one visitor action (the committee how-to is ui.memberHelp, below) -#}
+    {% if albums | length %}
+    <a class="btn-light" href="#albums">{% icon "layout-grid", "size-4" %} {{ "committee.photos.browse" | t(lang) }}</a>
+    {% else %}
+    <a class="btn-light" href="{{ '/instagram/' | lurl(lang) }}">{% icon "instagram", "size-4" %} {{ "committee.photos.see_instagram" | t(lang) }}</a>
+    {% endif %}
+  </div>
+  {% if albums | length %}
+  {#- albums and photos: the committee's own (events, booths …); the magazine covers have their own number
+      ("1 album", "2 photos": a label of its own for one) -#}
+  {%- set nAlbums = eventAlbums | length -%}
+  {{ ui.heroStats([
+    { value: (nAlbums or null), label: ("committee.photos.stat_albums_one" if nAlbums == 1 else "committee.photos.stat_albums") | t(lang) },
+    { value: (nPhotos or null), label: ("committee.photos.stat_photos_one" if nPhotos == 1 else "committee.photos.stat_photos") | t(lang) },
+    { value: (covers.total or null), label: ("committee.photos.stat_covers_one" if covers.total == 1 else "committee.photos.stat_covers") | t(lang) },
+    { value: (nVideos if nVideos else null), label: ("committee.photos.stat_videos_one" if nVideos == 1 else "committee.photos.stat_videos") | t(lang) }
+  ]) }}
+  {% endif %}
+  {#- whose the covers and the other graphics are, in the publishers' own words (like the footer's
+      footer.reprints): small type, readable on the hero, always there -#}
+  <p class="cm-hero-credit">{{ "committee.photos.hero_credit" | t(lang) }}</p>
+{%- endif %}
+{% endcall %}
+
+{% committeeNav lang, "photos", db %}
+<div hidden id="cm-lb-i18n" data-label="{{ 'nav.photos' | t(lang) }}" data-close="{{ 'common.close' | t(lang) }}" data-prev="{{ 'committee.photos.prev' | t(lang) }}" data-next="{{ 'committee.photos.next' | t(lang) }}"></div>
+
+{% if albums | length %}
+{#- ---------- Album index ---------- -#}
+<section class="container-page section pt-10 sm:pt-12" aria-labelledby="albums-h">
+  <div id="albums">{{ ui.sectionHead("committee.photos.albums" | t(lang), ("committee.photos.albums_sub_covers" if covers.total else "committee.photos.albums_sub") | t(lang), "", "", "layout-grid", { eyebrow: "nav.photos" | t(lang), id: "albums-h", lang: lang }) }}</div>
+  <ul class="grid-cards">
+    {% for a in eventAlbums %}
+    <li>
+      <a href="#{{ a.slug }}" class="card card-link group block overflow-hidden no-underline">
+        <div class="cm-mosaic cm-mosaic-{{ a.cover | length }}" aria-hidden="true">
+          {% for c in a.cover %}<span>{% icon "image", "size-7 cm-mosaic-ph" %}<img src="{{ c.thumb }}" alt="" loading="lazy" decoding="async" width="600" height="600" referrerpolicy="no-referrer" onerror="this.remove()"></span>{% else %}<span class="grid place-items-center text-faint">{% icon "images", "size-10" %}</span>{% endfor %}
+        </div>
+        <div class="flex items-start justify-between gap-3 p-5">
+          <div class="min-w-0">
+            <h3 class="h-card truncate group-hover:text-gv">{{ a.title }}</h3>
+            <p class="meta-row mt-1 text-sm text-muted">
+              <span>{{ ("committee.photos.count_one" if a.photos == 1 else "committee.photos.count") | t(lang, { n: a.photos }) }}</span>
+              {%- if a.videos %}<span>{{ ("committee.photos.count_videos_one" if a.videos == 1 else "committee.photos.count_videos") | t(lang, { n: a.videos }) }}</span>{% endif %}
+              {%- if a.newest %}<time datetime="{{ a.newest }}">{{ a.newest | fmtDate(lang, "month") }}</time>{% endif %}
+            </p>
+          </div>
+          {% if a.hasNew %}<span class="badge-new shrink-0">{{ "common.new" | t(lang) }}</span>{% endif %}
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+    {#- The magazines' cover collections: "Grapevine covers · 131 covers · 2015–2026" over its 3 newest covers, side
+        by side and whole (portrait; the 300-px pictures: coverShelf). The link (#covers-gv) lands on the magazine's
+        newest block; with JavaScript the covers' filter then shows that magazine alone, the filter in view
+        (committee.js cmCovers). "New" only for a genuinely new issue (the pipeline's is_new rule for covers). -#}
+    {% for m in covers.mags %}
+    <li>
+      <a href="#{{ m.id }}" class="card card-link group block overflow-hidden no-underline">
+        <div class="cm-mosaic cm-mosaic-covers is-{{ m.pub }} cm-mosaic-covers-{{ m.cover | length }}" aria-hidden="true">
+          {% for c in m.cover %}<span>{% icon "image", "size-6 cm-mosaic-ph" %}<img src="{{ c.thumb }}" alt="" loading="lazy" decoding="async" width="600" height="857" referrerpolicy="no-referrer" onerror="this.remove()"></span>{% endfor %}
+        </div>
+        <div class="flex items-start justify-between gap-3 p-5">
+          <div class="min-w-0">
+            <h3 class="h-card truncate group-hover:text-gv">{{ m.title }}</h3>
+            <p class="meta-row mt-1 text-sm text-muted">
+              <span>{{ ("committee.photos.covers_count_one" if m.count == 1 else "committee.photos.covers_count") | t(lang, { n: m.count }) }}</span>
+              {%- if m.range %}<span>{{ m.range }}</span>{% endif %}
+            </p>
+          </div>
+          {% if m.hasNew %}<span class="badge-new shrink-0">{{ "common.new" | t(lang) }}</span>{% endif %}
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{#- ---------- Albums ---------- -#}
+{% for a in eventAlbums %}
+{% if a.alias and a.alias != a.slug %}<span id="{{ a.alias }}" class="block" aria-hidden="true"></span>{% endif %}
+<section id="{{ a.slug }}" class="container-page cm-album" x-data="cmAlbum()" aria-labelledby="{{ a.slug }}-h">
+  <div class="border-t border-line pt-8">
+  {#- (Full screen and Share work through committee.js: without JavaScript they are not there — data-js-only) -#}
+  {% call ui.sectionHead(a.title, "", "", "", "images", { eyebrow: a.panelLabel + ((" · " + (a.newest | fmtDate(lang, "month"))) if a.newest else ""), id: a.slug + "-h", lang: lang }) %}
+    <button type="button" class="btn-secondary btn-sm" data-cm-open-gallery="{{ a.slug }}" data-js-only>{% icon "maximize", "size-4" %} {{ "committee.photos.slideshow" | t(lang) }}</button>
+    <button type="button" class="btn-ghost btn-sm" data-share="{{ page.url | siteUrl(site) }}#{{ a.slug }}" data-share-title="{{ a.title }} — {{ 'nav.photos' | t(lang) }} NETA 65" data-js-only>{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
+    <a class="btn-ghost btn-sm" href="#albums" aria-label="{{ 'committee.photos.back_to_albums' | t(lang) }}">{% icon "arrow-up", "size-4" %}</a>
+  {% endcall %}
+  </div>
+  {#- An album of 5+ photos opens with a big first photo and shows only as many photos as
+      fill whole rows at the current column count (committee.css, "photo grid"); "Show all"
+      reveals the rest. Without JavaScript every photo shows. -#}
+  {%- set feat = a.count >= 5 -%}
+  <ul class="cm-photo-grid{{ ' has-feature' if feat }}" :class="all && 'is-all'">
+    {#- data-title / data-description go through cmLbText: GLightbox inserts them with
+        innerHTML, so a Drive file or folder name must be escaped twice (XSS). -#}
+    {% for p in a.items %}
+    <li class="{{ 'cm-photo-feature' if loop.first and feat }}">
+      <a href="{{ p.full }}" class="cm-photo glightbox-cm" data-gallery="{{ a.slug }}" data-type="{{ 'external' if p.isVideo else 'image' }}"{% if p.isVideo %} data-width="960px" data-height="540px"{% endif %}
+         data-title="{{ p.title | cmLbText }}" data-description="{{ (a.title + ((' · ' + (p.date | fmtDate(lang, 'medium'))) if p.date else '')) | cmLbText }}"
+         aria-label="{{ ('committee.photos.open_video' if p.isVideo else 'committee.photos.open_photo') | t(lang, { title: p.title }) }}">
+        {% if p.thumb %}<img src="{{ p.thumb }}" alt="{{ p.title }}" loading="lazy" decoding="async" width="600" height="600" referrerpolicy="no-referrer" onerror="this.closest('.cm-photo').classList.add('is-broken')">{% endif %}
+        <span class="cm-photo-fallback" aria-hidden="true">{% icon "image", "size-8" %}</span>
+        {% if p.isVideo %}<span class="cm-play" aria-hidden="true">{% icon "play", "size-6 translate-x-px" %}</span>{% endif %}
+        <span class="cm-photo-cap" aria-hidden="true">{{ p.title }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {#- The button shows only at the column counts where photos are hidden (cm-more-N:
+      N columns → 11 / 12 / 13 / 12 / 15 photos shown at 2 / 3 / 4 / 5 / 6 columns). -#}
+  {%- set more = [] -%}
+  {%- if feat -%}
+  {%- for c in [[2, 11], [3, 12], [4, 13], [5, 12], [6, 15]] %}{% if a.count > c[1] and more.push("cm-more-" ~ c[0]) %}{% endif %}{% endfor -%}
+  {%- endif %}
+  {% if more | length %}
+  <div class="cm-more {{ more | join(' ') }} mt-5 text-center" x-show="!all" data-cm-js>
+    <button type="button" class="btn-secondary" @click="showAll()">{% icon "images", "size-4" %} {{ "committee.photos.show_all" | t(lang, { n: a.count }) }}</button>
+  </div>
+  {% endif %}
+</section>
+{% endfor %}
+
+{% else %}
+{#- ---------- No photos yet: the shared page-level empty card (the visitor action is the hero's) ---------- -#}
+<div class="container-page section pt-10 sm:pt-12">
+  {{ ui.pageEmpty("images", "committee.photos.empty_title" | t(lang), "committee.photos.empty_text" | t(lang), { id: "photos-empty-h" }) }}
+</div>
+{% endif %}
+
+{#- ---------- Protecting anonymity: what is great to share | what never is ---------- -#}
+{#- (right after the committee's own albums — the photos it is about —, before the magazine covers) -#}
+<section class="container-page section{{ ' pt-0' if not (albums | length) else ' pt-8 sm:pt-10' }}" aria-labelledby="anon-h">
+  {{ ui.sectionHead("committee.photos.anon_title" | t(lang), "committee.photos.anon_text" | t(lang), "", "", "shield-check", { eyebrow: "committee.photos.anon_eyebrow" | t(lang), tone: "text-vine", id: "anon-h", lang: lang }) }}
+  <div class="card card-pad grid gap-6 sm:grid-cols-2 sm:gap-0 sm:divide-x sm:divide-line">
+    <div class="sm:pr-8">
+      <h3 class="card-h"><span class="text-vine!">{% icon "circle-check", "size-5" %}</span>{{ "committee.photos.ok_title" | t(lang) }}</h3>
+      <ul class="mt-4 grid gap-2.5">
+        {% for k in ["ok_booths", "ok_literature", "ok_venue"] %}
+        <li class="flex items-start gap-2.5"><span class="mt-0.5 text-vine">{% icon "circle-check", "size-4" %}</span><span class="text-ink">{{ ("committee.photos." + k) | t(lang) }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="sm:pl-8">
+      <h3 class="card-h"><span class="text-danger!">{% icon "circle-x", "size-5" %}</span>{{ "committee.photos.never_title" | t(lang) }}</h3>
+      <ul class="mt-4 grid gap-2.5">
+        <li class="flex items-start gap-2.5"><span class="mt-0.5 text-danger">{% icon "scan-face", "size-4" %}</span><span class="text-ink">{{ "committee.photos.no_faces" | t(lang) }}</span></li>
+        <li class="flex items-start gap-2.5"><span class="mt-0.5 text-danger">{% icon "id-card", "size-4" %}</span><span class="text-ink">{{ "committee.photos.no_names" | t(lang) }}</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{#- ---------- Magazine covers (#covers) ----------
+    One block per magazine and year (photoAlbums' cover albums: the newest year first, Grapevine before La Viña),
+    each a portrait grid of all its covers (the 400-px pictures: photoAlbums' `tile`), the newest issue first — no
+    big first tile, no "Show all" (12 at most), each cover's issue under it ("November 2026", La Viña's
+    "November–December 2026").
+    The filter (Magazine: All · Grapevine · La Viña; Year: All · 2026 … — committee.js cmCovers) hides whole
+    blocks; without JavaScript it is not there and every block shows. Its state is in the address
+    (?mag=gv&year=2019), and a link to a magazine or a block sets it (#covers-gv, #covers-lv-2026) and lands on the
+    filter (its pressed chips and "Clear filters" in view, the block right under them); a link to one of a block's
+    generic ids (albumAnchors' "album-grapevine-covers-2026", What's New's "grapevine-covers-2026") that the filter
+    hides resets it and lands on the block. #covers-gv / #covers-lv sit on the magazine's newest block, so they land
+    without JavaScript too. The year chips count the chosen magazine's covers; a year it has none of hides.
+    With no filter on, only the two newest years show (their blocks, both magazines) and one button below them,
+    "Show earlier years (2015–2024)" (coverShelf's `earlier`), shows the rest — for the rest of the visit: clearing a
+    filter folds them away again only until the visitor has asked for them. The folded blocks (data-cm-early) are
+    hidden from the first paint when JavaScript is on (committee.css .cm-covers-ready); without JavaScript every
+    block shows and the button is not there. Each block's ↑ goes back to the filter (#covers). -#}
+{% if covers.total %}
+<section id="covers" class="container-page cm-covers pb-12 sm:pb-16" x-data="cmCovers()" data-count-label="{{ 'committee.photos.covers_showing' | t(lang) }}" data-count-label-one="{{ 'committee.photos.covers_showing_one' | t(lang) }}" aria-labelledby="covers-h">
+  <div class="border-t border-line pt-8">
+  {#- "Filter by magazine and year." only where the filter is (JavaScript) -#}
+  {{ ui.sectionHead("committee.photos.covers_title" | t(lang), ("committee.photos.covers_sub" | t(lang) | escape) + ' <span data-js-only>' + ("committee.photos.covers_sub_filter" | t(lang) | escape) + '</span>', "", "", "book-open", { eyebrow: "Grapevine · La Viña", id: "covers-h", lang: lang }) }}
+  </div>
+
+  <div class="cm-covers-filter" data-js-only>
+    <div class="cm-covers-row" role="group" aria-label="{{ 'committee.photos.filter_mag' | t(lang) }}">
+      <span class="cm-covers-label" aria-hidden="true">{{ "committee.photos.filter_mag" | t(lang) }}</span>
+      <div class="cm-covers-chips">
+        <button type="button" class="chip" data-cm-mag="" @click="setMag('')" :aria-pressed="(mag === '').toString()" aria-pressed="true">{{ "common.all" | t(lang) }} <span class="cm-chip-count">{{ covers.total }}</span></button>
+        {% for m in covers.mags %}
+        <button type="button" class="chip{{ ' read-chip-lv' if m.pub == 'lv' }}" data-cm-mag="{{ m.pub }}" @click="setMag(mag === '{{ m.pub }}' ? '' : '{{ m.pub }}')" :aria-pressed="(mag === '{{ m.pub }}').toString()" aria-pressed="false">{% icon "grapes", "size-4" %} {{ m.name }} <span class="cm-chip-count">{{ m.count }}</span></button>
+        {% endfor %}
+      </div>
+    </div>
+    {% if covers.years | length %}
+    {#- (on a phone the filter's chips are small ones: committee.css "/photos/#covers on a phone") -#}
+    <div class="cm-covers-row cm-covers-years" role="group" aria-label="{{ 'committee.photos.filter_year' | t(lang) }}">
+      <span class="cm-covers-label" aria-hidden="true">{{ "committee.photos.filter_year" | t(lang) }}</span>
+      <div class="cm-covers-chips">
+        <button type="button" class="chip" data-cm-year="" @click="setYear('')" :aria-pressed="(year === '').toString()" aria-pressed="true">{{ "common.all" | t(lang) }} <span class="cm-chip-count">{{ covers.total }}</span></button>
+        {% for y in covers.years %}
+        <button type="button" class="chip" data-cm-year="{{ y.year }}" @click="setYear(year === '{{ y.year }}' ? '' : '{{ y.year }}')" :aria-pressed="(year === '{{ y.year }}').toString()" aria-pressed="false">{{ y.year }} <span class="cm-chip-count">{{ y.count }}</span></button>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="cm-covers-status">
+      <p class="sr-only" aria-live="polite" aria-atomic="true" x-text="countText()"></p>
+      <button type="button" class="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-gv hover:underline" x-show="filtered" x-cloak @click="clear()">{% icon "x", "size-4" %}{{ "media.clear_filters" | t(lang) }}</button>
+    </div>
+  </div>
+
+  {% for a in covers.albums %}
+  {%- set cv = a.covers -%}
+  {#- (a block is a <section> without a name of its own: its h3 is there to jump to, while 23 more page regions
+      would only crowd a screen reader's list of landmarks) -#}
+  <section id="{{ cv.id }}" class="cm-cover-album" data-cm-cover data-mag="{{ cv.pub }}" data-year="{{ cv.year or '' }}" data-count="{{ a.count }}"{% if cv.early %} data-cm-early{% endif %} x-show="shows($el)">
+    {#- the magazine's anchor (#covers-gv) on its newest block, and the block's generic ids (a link made the usual way) -#}
+    {%- if cv.first %}<span id="covers-{{ cv.pub }}" class="cm-anchor" aria-hidden="true"></span>{% endif %}
+    {%- for an in a.anchors %}<span id="{{ an }}" class="cm-anchor" aria-hidden="true"></span>{% endfor %}
+    {#- Full screen and Share work through committee.js (data-js-only); ↑ back to the filter, as an event album's to #albums -#}
+    {% call ui.sectionHead(cv.heading, "", "", "", "book-open", { eyebrow: ("committee.photos.covers_count_one" if a.count == 1 else "committee.photos.covers_count") | t(lang, { n: a.count }), tone: ("text-lv-strong" if cv.pub == "lv" else "text-gv"), level: 3, id: cv.id + "-h", lang: lang }) %}
+      <button type="button" class="btn-secondary btn-sm" data-cm-open-gallery="{{ cv.id }}" data-js-only>{% icon "maximize", "size-4" %} {{ "committee.photos.slideshow" | t(lang) }}</button>
+      <button type="button" class="btn-ghost btn-sm" data-share="{{ page.url | siteUrl(site) }}#{{ cv.id }}" data-share-title="{{ a.title }} — {{ 'nav.photos' | t(lang) }} NETA 65" data-js-only>{% icon "share-2", "size-4" %} {{ "common.share" | t(lang) }}</button>
+      <a class="btn-ghost btn-sm" href="#covers" @click="up($event)" aria-label="{{ 'committee.photos.back_to_covers' | t(lang) }}">{% icon "arrow-up", "size-4" %}</a>
+    {% endcall %}
+    {#- data-title / data-description go through cmLbText (GLightbox inserts them with innerHTML: escaped twice);
+        the caption repeats the link's name for the eye only -#}
+    <ul class="cm-cover-grid">
+      {% for p in a.items %}
+      <li>
+        <a href="{{ p.full }}" class="cm-photo cm-cover glightbox-cm" data-gallery="{{ cv.id }}" data-type="image" data-title="{{ p.lbTitle | cmLbText }}" data-description="{{ p.lbDesc | cmLbText }}" aria-label="{{ 'committee.photos.open_cover' | t(lang, { title: p.lbTitle }) }}">
+          {% if p.thumb %}<img src="{{ p.tile or p.thumb }}" alt="{{ p.alt }}" loading="lazy" decoding="async" width="600" height="857" referrerpolicy="no-referrer" onerror="this.closest('.cm-photo').classList.add('is-broken')">{% endif %}
+          <span class="cm-photo-fallback" aria-hidden="true">{% icon "image", "size-8" %}</span>
+        </a>
+        <p class="cm-cover-cap" aria-hidden="true">{{ p.label }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+
+  {#- with no filter on: the earlier years, folded away until asked for (the years from the data) -#}
+  {% if covers.earlier %}
+  {%- set yrs = covers.earlier.from ~ (("–" ~ covers.earlier.to) if covers.earlier.to != covers.earlier.from else "") -%}
+  <div class="cm-covers-more pt-6 text-center" data-js-only x-show="folded">
+    <button type="button" class="btn-secondary" @click="showEarlier()">{% icon "images", "size-4" %} {{ ("committee.photos.covers_earlier" if covers.earlier.to != covers.earlier.from else "committee.photos.covers_earlier_one") | t(lang, { years: yrs }) }}</button>
+  </div>
+  {% endif %}
+
+  {#- every block filtered out (no chip makes that, but an address can) -#}
+  <div x-show="!visibleCount" x-cloak>
+    {{ ui.emptyState("search-x", "committee.photos.covers_none" | t(lang), "committee.photos.covers_none_text" | t(lang)) }}
+    <p class="mt-3 text-center"><button type="button" class="btn-secondary btn-sm" @click="clear()">{{ "media.clear_filters" | t(lang) }}</button></p>
+  </div>
+</section>
+{% endif %}
+
+{#- ---------- For committee members (collapsed): how to share photos ---------- -#}
+<div class="container-page">
+  {% call ui.memberHelp(lang, "committee.photos.how_title" | t(lang), { id: "share-photos" }) %}
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+    <div>
+      <ol class="space-y-4">
+        {% for k in ["1", "2", "3", "4"] %}
+        <li class="flex gap-3.5">
+          <span class="step-num" aria-hidden="true">{{ k }}</span>
+          {#- (the covers' step names folders and files — "AAGrapevine_covers", "LaVina_2027-01_Enero-Febrero.jpg": at
+              large text they break anywhere rather than push the page sideways) -#}
+          <p class="min-w-0 leading-relaxed text-muted [overflow-wrap:anywhere]">{{ ("committee.photos.how_" + k) | t(lang, { panel: (di.panel.label if di.panel else "Panel") }) }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        {% if di.url %}<a class="btn-primary" href="{{ di.url }}" target="_blank" rel="noopener">{% icon "folder-open", "size-4" %} {{ "committee.drive.open_folder" | t(lang) }}</a>{% endif %}
+        <a class="btn-secondary" href="mailto:{{ site.contact_email }}?subject={{ 'committee.photos.mail_subject' | t(lang) | urlencode }}">{% icon "mail", "size-4" %} {{ "committee.docs.ask_access" | t(lang) }}</a>
+      </div>
+    </div>
+    <div class="panel-muted">
+      <p class="eyebrow">{{ "committee.photos.empty_where" | t(lang) }}</p>
+      {% cmDrivePath lang, di, "photos/" + ("committee.photos.example_album" | t(lang)), "IMG_0142.jpg" %}
+      {#- the magazine covers (step 4): one folder per magazine, one per year inside; Grapevine by month, La Viña by
+          its bimonthly issue (01 = January–February … 06 = November–December) -#}
+      <p class="eyebrow mt-6">{{ "committee.photos.covers_where" | t(lang) }}</p>
+      {% cmDrivePath lang, di, "photos/AAGrapevine_covers/2027", "GV_2027-01_January.jpg" %}
+      {% cmDrivePath lang, di, "photos/AALavina_covers/2027", "LaVina_2027-01_Enero-Febrero.jpg" %}
+      {#- "We checked the committee's Google Drive on <the build's day>": left out of the page's sitemap date
+          (eleventy/lastmod.js) — a new day is not new content -#}
+      {% if not (albums | length) %}{% cmDriveChecked lang, di %}{% endif %}
+    </div>
+  </div>
+  {% endcall %}
+</div>

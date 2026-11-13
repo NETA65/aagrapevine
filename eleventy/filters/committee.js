@@ -1,0 +1,3045 @@
+// Committee area filters — Meeting, Events (+ .ics feeds), Portfolio (Drive documents), Photos, Bulletin.
+//
+// Everything here is PURE data shaping: it turns the synced data files
+// (data/site/events.json, drive.json, announcements.json — the Bulletin's posts —, weekly_open.json)
+// into ready-to-render objects so the Nunjucks templates stay simple.
+// The same functions also feed src/pages/events-ics.11ty.js, so the web
+// page and the calendar feed can never disagree.
+//
+// Dev helper: COMMITTEE_EMPTY=1 npx @11ty/eleventy …  renders every committee
+// page as if the Drive / events / bulletin data were empty (launch state).
+
+import { monthlyRule, hhmm, ymdText, TZ, siteUrl, shareImage, langPath } from "../../eleventy.config.js";
+// The site's one Central-time helper (the browser runs the same code: /assets/js/central-time.js)
+import { isZone, zoneParts, zoneInstant, ymdOf, nthWeekday, overnight, ruleDate, timeRange, icsSequence, icsAlarm, offsetMinutes } from "../central-time.js";
+import { iconSvg } from "../icons.js";
+import { buildWarning } from "../build-warnings.js";
+// the kind of an event (an Area assembly …): who holds it, for search engines (eventLd); the colours of /events/'
+// "Next 5 weeks" calendar, in the colour key's order (calendarWeeks)
+import { eventTone, EVENT_TONES } from "./event-tone.js";
+// a magazine issue's name ("November 2026", La Viña's "November–December 2026"): the magazine covers on /photos/
+// are named as /read/ names those issues (coverIssueLabel)
+import { issueName } from "./read.js";
+
+export { TZ }; // config/site.yml site.timezone (America/Chicago)
+const LOCALES = { en: "en-US", es: "es-US" };
+const EMPTY = !!process.env.COMMITTEE_EMPTY;
+
+// Helpers handed over by eleventy.config.js (translateKey, pickLang, fmtDate, toDate).
+// They are set when the plugin loads; the fallbacks keep this module usable
+// from a plain `node` script too.
+let H = {
+  translateKey: (k) => k,
+  // Intl's Spanish "7:00 p.m." → "7:00 p. m." (no-break spaces); replaced by eleventy.config.js's esMeridiem.
+  esMeridiem: (s) => String(s).replace(/\b([ap])\.\s?m\./g, "$1.\u00a0m.").replace(/(\d) (?=[ap]\.\u00a0m\.)/g, "$1\u00a0"),
+  pickLang: (item, field, lang) => {
+    if (!item) return "";
+    const i = item.i18n && item.i18n[field];
+    if (i && i[lang]) return i[lang];
+    return item[field] ?? (item.extra && item.extra[field]) ?? "";
+  },
+  fmtDate: (v) => String(v || ""),
+  toDate: (v) => (v ? new Date(v) : null),
+};
+const t = (key, lang, vars) => H.translateKey(key, lang, vars);
+
+/* ------------------------------------------------------------------ */
+/*  Small utilities                                                    */
+/* ------------------------------------------------------------------ */
+const isYmd = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
+
+export function slugify(s, max = 60) {
+  return String(s || "")
+    .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+    .slice(0, max).replace(/-+$/, "") || "item";
+}
+
+// A wall-clock time in Chicago → the real instant (Date) — eleventy/central-time.js, right on the days the
+// clocks change too.
+function atChicago(y, mo, d, hhmm = "00:00") {
+  const [h, mi] = String(hhmm).split(":").map(Number);
+  return new Date(zoneInstant(y, mo, d, h || 0, mi || 0, TZ));
+}
+
+// "YYYY-MM-DD" of an instant, as seen in Chicago.
+function chicagoYmd(date) {
+  return ymdOf(date instanceof Date ? date.getTime() : Number(date), TZ);
+}
+
+function ymdAddDays(ymd, n) {
+  const [y, m, d] = ymd.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
+}
+
+// Midnight (start of day) in Chicago for a YYYY-MM-DD string.
+function chicagoMidnight(ymd) {
+  const [y, m, d] = ymd.split("-").map(Number);
+  return atChicago(y, m - 1, d, "00:00");
+}
+
+// The moment a day ends in Chicago (midnight after it), as ms: an all-day event whose last day is
+// `ymd` is over then — not at noon UTC (7 AM Central), which is what a bare "YYYY-MM-DD" parses to.
+export function chicagoDayEndMs(ymd) {
+  return isYmd(ymd) ? chicagoMidnight(ymdAddDays(ymd, 1)).getTime() : NaN;
+}
+
+// An event without an end time lasts ONE HOUR: the length the calendars give it (the .ics feed, the
+// add-to-calendar links), and what config/site.yml's committee meeting (src/_data/meeting.js) and its
+// recurring events (build_data: a missing end is start + 1 hour) assume. content/events README: give
+// `end:` for anything longer.
+export const EVENT_NO_END_MS = 3600e3;
+
+/**
+ * An event's span as every page reads it — THE rule, so no two pages disagree about when an event is over,
+ * not even between builds (each writes this end as the moment its browser script hides the event or marks
+ * it "Over"): /events/ and /meetings/ (normalizeEvents: the card's "past", its data-cm-expire, the
+ * calendars' end), the home page (home.js homeEvents, homeEventEnd → data-gv-expire), the monthly toolkit
+ * (monthly.js dateRow overAt → data-mp-over) and the district report (report.js upcomingEvents).
+ *   · all-day (a date-only start, or `all_day`): from midnight Central of its first day to midnight after
+ *     its last day — the `end` date (an end given as an instant: its Central day, or the day before when
+ *     it is exactly midnight), never before the first; an assembly Fri–Sun stays current all Sunday;
+ *   · timed: from its start to its end — an `end` given as a date: midnight after that day; no end, one
+ *     that cannot be read, or one not after the start: EVENT_NO_END_MS after the start.
+ * → { allDay, startMs, endMs, startYmd, endYmd (the Central day of its last moment), hasEnd (a timed
+ * event's end came from the data) }, or null without a readable start.
+ */
+export function eventSpan(it) {
+  const x = (it && it.extra) || {};
+  const rawStart = x.start || (it && it.date);
+  const s = parseInstant(rawStart);
+  if (!s) return null;
+  const allDay = isYmd(rawStart) || x.all_day === true;
+  if (allDay) {
+    const startYmd = isYmd(rawStart) ? rawStart : chicagoYmd(s);
+    let endYmd = startYmd;
+    if (isYmd(x.end)) endYmd = x.end;
+    else if (x.end) {
+      const e = parseInstant(x.end);
+      if (e) {
+        const d = chicagoYmd(e);
+        endYmd = e.getTime() === chicagoMidnight(d).getTime() ? chicagoYmd(new Date(e.getTime() - 1)) : d;
+      }
+    }
+    if (endYmd < startYmd) endYmd = startYmd;
+    return { allDay, startMs: chicagoMidnight(startYmd).getTime(), endMs: chicagoDayEndMs(endYmd), startYmd, endYmd, hasEnd: true };
+  }
+  const startMs = s.getTime();
+  const e = isYmd(x.end) ? chicagoDayEndMs(x.end) : x.end ? (parseInstant(x.end)?.getTime() ?? NaN) : NaN;
+  const hasEnd = e > startMs;
+  const endMs = hasEnd ? e : startMs + EVENT_NO_END_MS;
+  return { allDay, startMs, endMs, startYmd: chicagoYmd(s), endYmd: chicagoYmd(new Date(endMs - 1)), hasEnd };
+}
+
+/** When an event is over (ms): eventSpan's end — NaN without a readable start. */
+export function eventEndMs(it) {
+  const sp = eventSpan(it);
+  return sp ? sp.endMs : NaN;
+}
+
+// Any IANA time zone (the Grapevine Weekly Open is hosted in Eastern time): the zone itself when it is a real
+// name, else Central. (zoneParts / zoneInstant: eleventy/central-time.js)
+const validZone = (tz) => (tz && isZone(String(tz)) ? String(tz) : TZ);
+
+/**
+ * A weekly meeting at a fixed local time (e.g. Noon Eastern): its first start at or after
+ * `firstMs` that is not over yet (`liveMs` after it starts). Steps one calendar week at a
+ * time in the host's own time zone, so a daylight-saving change never moves it by an hour.
+ * `hhmm` = the local start time ("12:00"); default: the local time of `firstMs`.
+ * (src/assets/js/committee.js does the same in the browser.)
+ */
+export function nextWeeklyStart(firstMs, nowMs, tz = TZ, hhmm = "", liveMs = 75 * 60000) {
+  if (validZone(tz) !== tz) {
+    tz = TZ;
+    hhmm = ""; // a local time in an unknown zone means nothing in Central: keep firstMs's clock time
+  }
+  const p = zoneParts(firstMs, tz);
+  if (!p) return firstMs;
+  const m = /^(\d{1,2}):(\d{2})$/.exec(String(hhmm || "").trim());
+  const h = m ? Number(m[1]) : p.h, mi = m ? Number(m[2]) : p.mi;
+  let ms = firstMs;
+  for (let w = 1; ms + liveMs < nowMs && w < 5000; w++) ms = zoneInstant(p.y, p.mo, p.d + 7 * w, h, mi, tz);
+  return ms;
+}
+
+function parseInstant(v) {
+  if (!v) return null;
+  if (v instanceof Date) return isNaN(v) ? null : v;
+  if (isYmd(v)) return new Date(v + "T12:00:00Z"); // noon UTC: same calendar day everywhere in the Americas
+  const d = new Date(v);
+  return isNaN(d) ? null : d;
+}
+
+function fmt(date, lang, opts) {
+  try {
+    const s = new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { timeZone: TZ, ...opts }).format(date);
+    return lang === "es" ? H.esMeridiem(s) : s;
+  } catch {
+    return "";
+  }
+}
+
+function fmtRange(a, b, lang, opts) {
+  try {
+    const f = new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { timeZone: TZ, ...opts });
+    const s = typeof f.formatRange === "function" ? f.formatRange(a, b) : `${f.format(a)} – ${f.format(b)}`;
+    return lang === "es" ? H.esMeridiem(s) : s;
+  } catch {
+    return "";
+  }
+}
+
+// "7:00 – 8:00 PM CDT"; an event that ends after midnight "7:00 PM – 1:00 AM CST" (not Intl's "12/31/2026,
+// 7:00 PM – 1/1/2027, 1:00 AM"); one over 12 hours into the next day "Fri, Oct 2, 7:00 PM – Sat, Oct 3, 12:00 PM
+// CDT": central-time.js timeRange, in Central time. opts: { weekday: "short" } …
+export function clockRange(a, b, lang = "en", opts) {
+  const s = timeRange(a, b, LOCALES[lang] || "en-US", TZ, opts);
+  return lang === "es" ? H.esMeridiem(s) : s;
+}
+
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+
+// UTC basic format for calendar URLs / ICS: 20261022T000000Z
+const utcStamp = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+const ymdCompact = (ymd) => ymd.replace(/-/g, "");
+
+// Drive "…/view" link → "…/preview" (embeddable). Leaves other URLs alone.
+export function drivePreviewUrl(url) {
+  if (!url) return "";
+  const m = String(url).match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  const o = String(url).match(/[?&]id=([\w-]+)/);
+  if (o && /drive\.google\.com/.test(url)) return `https://drive.google.com/file/d/${o[1]}/preview`;
+  return url;
+}
+
+function driveFileId(url) {
+  const m = String(url || "").match(/\/d\/([\w-]{10,})/) || String(url || "").match(/[?&]id=([\w-]{10,})/);
+  return m ? m[1] : null;
+}
+
+/** A flyer as a card shows it — { view, preview, thumb } — from its link (null without one): the preview the
+ *  site's own viewer opens (drivePreviewUrl; committee.js CM.preview, the page's {% cmPreviewDialog %}) and the
+ *  picture of the card's flyer tile (ui.njk flyerThumb): the data's own `thumb` (an outside calendar's image), else
+ *  the Drive's picture of the file — also for a content/events `flyer:` that links a Drive copy (a flyer on
+ *  neta65.org cannot be shown by other sites, so the committee copies it to its Drive) — else null: the tile shows
+ *  its own flyer icon. The tile is 7.5rem (120px) wide: a 320px copy is sharp on 2× screens. The one rule for every
+ *  card with a flyer tile: the events (normalizeEvents' ev.flyer) and the weekly open meetings (weeklyFlyer). */
+export function flyerLinks(view, thumb = "") {
+  if (!view) return null;
+  const id = driveFileId(view);
+  return { view, preview: drivePreviewUrl(view), thumb: thumb || (id ? `https://lh3.googleusercontent.com/d/${id}=w320` : null) };
+}
+
+// A Drive file's id in its link ("…/file/d/<id>/view", "…open?id=<id>"): Google's picture of it, 1200 px wide, is
+// an event's share picture (the card's own is 320 px — too small for a preview).
+const SHARE_DRIVE_ID = /drive\.google\.com\/(?:file\/d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)([\w-]{10,})/;
+
+/** The share picture of an event (its flyer): an address, or "" (none — the committee's card). The preview of its
+ *  share page (src/pages/event-share.11ty.js) and its picture for search engines (eventLd) — one rule for both. */
+export function eventSharePicture(ev) {
+  const f = ev && ev.flyer;
+  if (!f) return "";
+  const id = (String(f.view || "").match(SHARE_DRIVE_ID) || [])[1];
+  return id ? `https://lh3.googleusercontent.com/d/${id}=w1200` : String(f.thumb || "");
+}
+
+// A decorative icon, as the global {% icon %} shortcode draws it (eleventy/icons.js: a pointer at the page's
+// icon sprite) — needed because shortcodes can't call other shortcodes. "" for an unknown name, and a build
+// warning, as the shortcode gives (eleventy/build-warnings.js).
+export function icon(name, cls = "size-4") {
+  const svg = iconSvg(name, cls);
+  if (!svg) buildWarning("icon", `missing icon: ${name}`);
+  return svg;
+}
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+/* ------------------------------------------------------------------ */
+/*  Committee meeting                                                  */
+/* ------------------------------------------------------------------ */
+const WD = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
+
+// config/site.yml `meeting` as every page reads it: eleventy.config.js monthlyRule, the reading of
+// scripts/sync/meeting.py meeting_rule and src/_data/meeting.js — "7:00 PM", "7pm" or 19 → "19:00" (never
+// 7 AM or midnight), "sábado" → Saturday, a week it cannot read ("third") → the 3rd (never a missing
+// "committee.ord.NaN" that stops the build), one skip date without brackets, the end as used.
+const meetingCfg = (cfg) => monthlyRule(cfg && typeof cfg === "object" ? cfg : {});
+
+// Start / end ("HH:MM", Central) of the committee meeting from config/site.yml `meeting`.
+// A missing end (or one that is not after the start) means a 1-hour meeting — the same
+// rule as src/_data/meeting.js and scripts/sync/meeting.py, so the hero, the event
+// cards, the calendar files and the live countdown always agree. An overnight end ("22:00"–"01:00",
+// central-time.js overnight) stays: the next morning.
+const hhmmMinutes = (s) => {
+  const [h, m] = String(s || "").split(":").map(Number);
+  return (h || 0) * 60 + (m || 0);
+};
+function plusHour(hhmm) {
+  const [h, m] = String(hhmm || "19:00").split(":").map(Number);
+  return `${String(((h || 0) + 1) % 24).padStart(2, "0")}:${String(m || 0).padStart(2, "0")}`;
+}
+const meetingStart = (cfg = {}) => String(cfg.start || "19:00");
+function meetingEnd(cfg = {}) {
+  const start = meetingStart(cfg);
+  return cfg.end && (hhmmMinutes(cfg.end) > hhmmMinutes(start) || overnight(start, String(cfg.end))) ? String(cfg.end) : plusHour(start);
+}
+// Unquoted YAML dates (skip_dates: [2026-12-16]) arrive as Date objects → "YYYY-MM-DD".
+const skipDates = (cfg = {}) => (cfg.skip_dates || []).map((d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d)));
+
+/**
+ * How far ahead the pages list the committee meeting — normalizeEvents' window (/events/, /events.ics, the event share
+ * pages; meetingMonthsAhead below): this month (Central time) and the months after it through the month of
+ * config/site.yml `events_until` (since round 30: "2028-12-31", the last day of Panel 77 — on Nov 13, 2026 that is
+ * 25 months after this one: 26 meetings, Nov 18, 2026 … Dec 20, 2028), never fewer than MEETING_MONTHS_AHEAD (12)
+ * months after this one — the floor: the lists keep rolling a year ahead once that day is near or past, or when the
+ * setting is left out or is not a date — and never more than WINDOW_MONTHS_MAX (60: a slip like "2208-12-31" never
+ * lists two centuries of dates). Month granularity: "2028-12-31" and "2028-12-01" both mean "through December 2028".
+ * The month pages stay this month and the 12 after it (monthly.js WINDOW), inside that window always, each page's
+ * calendar file with its own month's meeting. Each date's flyer comes from its events.json record, and the sync
+ * writes one for every date of these months (scripts/sync/meeting.py window_months — the twin of meetingMonthsAhead:
+ * the same floor, cap and month arithmetic — → build_data.committee_meetings), so no date the pages list goes without
+ * its flyer, and no record of the sync falls outside them (normalizeEvents would list it as one more card, with the
+ * sync's words); unit tests keep the two in step (tests/test_r24_meeting_window.py, tests/test_r30_horizon.py) — a
+ * sync that counted 12 dates once left the 13th date the pages list (Nov 17, 2027 on Nov 11, 2026) without its flyer.
+ */
+export const MEETING_MONTHS_AHEAD = 12;
+export const WINDOW_MONTHS_MAX = 60;
+
+/**
+ * The number of months after `now`'s month (Central time) the pages list the committee meeting (normalizeEvents'
+ * default window, /events.ics): through `site.events_until`'s month (src/_data/site.js passes config/site.yml's
+ * top-level `events_until` on — a "YYYY-MM-DD" text, or the Date an unquoted YAML date becomes: ymdText), at least
+ * MEETING_MONTHS_AHEAD (12), at most WINDOW_MONTHS_MAX (60); MEETING_MONTHS_AHEAD when it is left out or is not a date
+ * (the sync's run summary says so — meeting.window_notes; the pages say nothing). On Nov 13, 2026 with "2028-12-31":
+ * 25; on Mar 1, 2028: 12. The twin of scripts/sync/meeting.py window_months.
+ *
+ * @param {object} site  the `site` global (or anything with `events_until`)
+ * @param {Date|number|string} [now]  the build's clock (a Date, ms or an ISO time); the real one without it
+ * @returns {number}
+ */
+export function meetingMonthsAhead(site, now = new Date()) {
+  const until = ymdText(site?.events_until);
+  if (!until) return MEETING_MONTHS_AHEAD;
+  let ms = now instanceof Date ? now.getTime() : typeof now === "string" ? Date.parse(now) : Number(now);
+  if (!Number.isFinite(ms)) ms = Date.now();
+  // (its month in Central time: the last evening of a month is already the next month in UTC)
+  const at = zoneParts(ms, TZ) || { y: new Date(ms).getUTCFullYear(), mo: new Date(ms).getUTCMonth() };
+  const months = (Number(until.slice(0, 4)) - at.y) * 12 + (Number(until.slice(5, 7)) - 1 - at.mo);
+  return Math.max(MEETING_MONTHS_AHEAD, Math.min(WINDOW_MONTHS_MAX, months));
+}
+
+/**
+ * Committee meeting dates between `monthsBack` months ago and `monthsAhead`
+ * months ahead, from config/site.yml `meeting` (same rule as src/_data/meeting.js).
+ * The months are counted from `now`'s month in Central time: the caller's clock (normalizeEvents' opt.now — the
+ * build's one moment, MONTHLY_NOW in a preview build or a test), else the real one.
+ */
+export function meetingDates(cfg = {}, monthsBack = 3, monthsAhead = MEETING_MONTHS_AHEAD, now = new Date()) {
+  cfg = meetingCfg(cfg);
+  const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
+  const n = Number(cfg.week_of_month || 3);
+  // (the countdown's rule: eleventy/central-time.js ruleDate, as src/_data/meeting.js and app.js GV.nextMeeting;
+  // `starts`, a first date, when the rule has one — no date before it)
+  const rule = { weekday, n, start: meetingStart(cfg), end: meetingEnd(cfg), skip: skipDates(cfg), starts: cfg.starts || "" };
+  let ms = now instanceof Date ? now.getTime() : Number(now);
+  if (!Number.isFinite(ms)) ms = Date.now();
+  // (its month in Central time: the last evening of a month is already the next month in UTC)
+  const at = zoneParts(ms, TZ) || { y: new Date(ms).getUTCFullYear(), mo: new Date(ms).getUTCMonth() };
+  const out = [];
+  for (let i = -monthsBack; i <= monthsAhead; i++) {
+    const d = ruleDate(at.y, at.mo + i, rule, TZ);
+    if (d) out.push({ ymd: d.ymd, start: new Date(d.start).toISOString(), end: new Date(d.end).toISOString() });
+  }
+  return out;
+}
+
+// "Every 3rd Wednesday of the month" / "Cada tercer miércoles del mes"
+function meetingRuleText(cfg = {}, lang = "en") {
+  cfg = meetingCfg(cfg);
+  const n = Number(cfg.week_of_month || 3);
+  const wd = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
+  // 2023-01-01 was a Sunday → +wd days gives the right weekday name
+  const weekday = fmt(new Date(Date.UTC(2023, 0, 1 + wd, 12)), lang, { weekday: "long", timeZone: "UTC" });
+  const ord = t(`committee.ord.${n === -1 ? "last" : n}`, lang);
+  return t("committee.rule", lang, { ord, weekday });
+}
+
+// "7:00 – 8:00 PM" (Central wall clock), from HH:MM strings; an overnight meeting "10:00 PM – 1:00 AM" (its end
+// is the next morning: never Intl's "1/21/2026, 10:00 PM – 1/22/2026, 1:00 AM").
+function meetingTimeRange(cfg = {}, lang = "en") {
+  cfg = meetingCfg(cfg);
+  const a = atChicago(2026, 0, 21, meetingStart(cfg));
+  const night = overnight(meetingStart(cfg), meetingEnd(cfg));
+  let b = atChicago(2026, 0, night ? 22 : 21, meetingEnd(cfg));
+  if (b <= a) b = new Date(a.getTime() + 3600e3); // a 23:59 start (a 23:30 one ends at 23:59, as in the sync)
+  const opts = { hour: "numeric", minute: "2-digit" };
+  return night ? `${fmtRange(a, a, lang, opts)} – ${fmtRange(b, b, lang, opts)}` : fmtRange(a, b, lang, opts);
+}
+
+// The repeat line of a monthly event from config/site.yml `recurring_events:` (build_data writes its
+// rule into extra.rule in the shape of `meeting:`): "Every second Saturday of the month · 5:00 – 8:00 PM
+// Central time" / "Cada segundo sábado del mes · 5:00–8:00 p. m., hora del Centro" — the words and clock
+// format of the committee meeting's own line on /meetings/ ("Every third Wednesday of the month · 7:00 –
+// 8:00 PM Central time, on Google Meet"). Empty when the rule cannot be read (the caller then uses the data's
+// recurrence_label, given its zone the same way: withZone).
+export function recurrenceText(rule, lang = "en") {
+  if (!rule || typeof rule !== "object") return "";
+  const n = Number(rule.week_of_month);
+  const hhmm = (v) => /^\d{1,2}:\d{2}$/.test(String(v || ""));
+  if (![1, 2, 3, 4, 5, -1].includes(n) || !(String(rule.weekday || "").toLowerCase() in WD) || !hhmm(rule.start)) return "";
+  const cfg = { week_of_month: n, weekday: rule.weekday, start: rule.start, end: hhmm(rule.end) ? rule.end : "" };
+  return withZone(`${meetingRuleText(cfg, lang)} · ${meetingTimeRange(cfg, lang)}`, lang);
+}
+
+// A repeat line's time with its zone: "… · 5:00 – 8:00 PM" → "… · 5:00 – 8:00 PM Central time" / "… · 5:00–8:00
+// p. m., hora del Centro" (report.c_time: the words the district report and the QR poster give the committee
+// meeting's time). The line goes into the calendars' description, beside the date's own start and end, which
+// a calendar shows in its reader's zone (DTSTART is an instant): without the zone, someone outside Central
+// time would see "2:00 PM" there next to a workshop their calendar puts at 3:00 PM. (The search's summary
+// shows the line too.) A line without " · " is left as it is.
+function withZone(line, lang) {
+  const i = line.lastIndexOf(" · ");
+  return i < 0 ? line : line.slice(0, i + 3) + t("report.c_time", lang, { time: line.slice(i + 3) });
+}
+
+// The languages the committee wrote an item in BY HAND besides its original one: a monthly event from
+// config/site.yml `recurring_events:` (title_es …) or a content/events · content/bulletin file with
+// title_es / summary_es (build_data puts them in i18n and never lists them in `machine`). Text in such a
+// language is not a foreign-language original: no "EN" pill and no lang="en" on it. So is an outside
+// calendar's listing that build_data took into such a series (extra.series_of — La Viña's own listing of a
+// month the rule skips): it carries the series' title and summary as the committee wrote them.
+export function ownLangs(it) {
+  const own = it && ((it.source === "committee" && ["manual", "recurring"].includes(it.category)) || (it.extra && it.extra.series_of));
+  if (!own) return [];
+  const t = (it.i18n && it.i18n.title) || {};
+  const machine = Array.isArray(it.machine) ? it.machine : [];
+  return ["en", "es"].filter((l) => l !== it.lang && !!t[l] && t[l] !== (it.title || "") && !machine.includes(l));
+}
+
+// "NETA 65 Grapevine & La Viña Committee Meeting" / "Reunión del Comité de Grapevine y La Viña de NETA 65"
+// Built from config/site.yml `site.committee(_es)` — the same words build_data.py
+// uses for the committee meetings in data/site/events.json, so every page agrees.
+export function meetingTitle(site, lang = "en") {
+  const s = site || {};
+  const name = (lang === "es" ? s.committee_es : s.committee) || t("committee.name", lang);
+  return t("committee.meeting_title", lang, { committee: name });
+}
+
+// A setting as one line of text ("" for nothing, a list, a block or a yes / no) — meeting.py _line.
+const oneLine = (v) => (v === null || v === undefined || typeof v === "object" || typeof v === "boolean" ? "" : String(v).replace(/\s+/g, " ").trim());
+
+// The label of what people type into the meeting app: "Meeting code" for one with letters (a Google Meet code,
+// "rva-tmst-vdb"), else "Meeting ID" (a Zoom ID, "815 9593 1777") — its i18n key.
+export function meetingIdKey(id) {
+  return /[a-z]/i.test(String(id ?? "")) ? "committee.meeting.code" : "committee.meeting.id";
+}
+
+/**
+ * How to join one of our meetings (config/site.yml `meeting:`): THE reading every page, calendar and deck uses —
+ *   platform  where it is held, in the pages' words ("Google Meet"; "Zoom" when left out, as site.js gives it)
+ *   url       the link (`online_url`; an older `zoom_url` still counts)
+ *   id        what people type into the app: a Google Meet code ("rva-tmst-vdb") or a Zoom ID ("815 9593 1777")
+ *   idKey, idLabel  its label's i18n key and words: "Meeting code" for a code with letters, "Meeting ID" for digits
+ *   copyId    what a Copy button copies: a code as it is written, a Zoom ID's digits
+ *   passcode  "" without one (Google Meet has none)
+ *   dialIn    callers can dial in with the ID (a Zoom ID: /accessibility/#phone, access.js); a Google Meet room on
+ *             a personal account has no number to call
+ */
+export function meetingJoin(m, lang = "en") {
+  const x = m && typeof m === "object" ? m : {};
+  const id = oneLine(x.meeting_id);
+  const idKey = meetingIdKey(id);
+  const digits = id.replace(/\D+/g, "");
+  return {
+    platform: oneLine(x.platform) || "Zoom", url: oneLine(x.online_url) || oneLine(x.zoom_url), id, idKey,
+    idLabel: id ? t(idKey, lang) : "", copyId: idKey === "committee.meeting.code" ? id : digits,
+    passcode: oneLine(x.passcode), dialIn: idKey === "committee.meeting.id" && !!digits,
+  };
+}
+
+// A guest speaker's name as the site may show it: a first name (one to three words: "Rick", "Mary Jo") and the
+// last initial ("W.") — anonymity: never a full last name. The same pattern as scripts/sync/meeting.py SPEAKER_NAME.
+const FIRST_NAME = "[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÖØ-öø-ÿ'’-]*";
+const SPEAKER_NAME = new RegExp(`^${FIRST_NAME}(?: ${FIRST_NAME}){0,2} [A-ZÀ-ÖØ-Þ]\\.$`);
+const ORD_SHORT = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th", "-1": "last" };     // (the chair's notes)
+const DAY_NAMES_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+// config/site.yml `meeting:` → its speakers and the chair's notes, read once per settings object (every page and
+// both languages read the same `site.meeting`, so each note is logged once). The notes are the chair's to act on —
+// the sync puts the same ones in the run summary (status.json problems.meeting) — so they are a plain log line, never
+// a build warning: a slip in the committee's settings never fails a build (scripts/ops/gate_tests.py).
+const speakerReads = new WeakMap();
+function readSpeakers(m) {
+  const x = m && typeof m === "object" ? m : {};
+  if (speakerReads.has(x)) return speakerReads.get(x);
+  const cfg = meetingCfg(x);
+  const weekday = WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3;
+  const n = Number(cfg.week_of_month || 3);
+  const skip = new Set(skipDates(cfg));
+  const nth = `${ORD_SHORT[n]} ${DAY_NAMES_EN[weekday]}`;
+  const list = [];
+  const notes = [];
+  let raw = x.speakers;
+  if (raw && typeof raw === "object" && !Array.isArray(raw) && !(raw instanceof Date)) raw = [raw];   // one, without "- "
+  if (raw === null || raw === undefined || raw === "" || (Array.isArray(raw) && !raw.length)) raw = [];
+  else if (!Array.isArray(raw)) {
+    notes.push("speakers: not understood — it must be a list, each speaker starting with “- date:”");
+    raw = [];
+  }
+  const byDay = new Map();
+  raw.forEach((e, i) => {
+    if (!e || typeof e !== "object" || Array.isArray(e) || e instanceof Date) {
+      notes.push(`speakers entry ${i + 1}: not understood (its settings must be indented under “- date:”) — left out`);
+      return;
+    }
+    const name = oneLine(e.name);
+    const who = name ? `speaker “${name}”` : `speakers entry ${i + 1}`;
+    const ymd = ymdText(e.date);
+    if (!ymd) return void notes.push(`${who}: date “${oneLine(e.date)}” is not a date like "2027-01-20" — left out`);
+    const [y, mo, d] = ymd.split("-").map(Number);
+    const day = nthWeekday(y, mo - 1, weekday, n);
+    if (day !== d) {
+      return void notes.push(`${who}: ${ymd} is not the ${nth} of its month — left out (`
+        + (day ? `that month's meeting is ${y}-${pad2(mo)}-${pad2(day)})` : `that month has no ${nth})`));
+    }
+    if (skip.has(ymd)) return void notes.push(`${who}: ${ymd} is one of the skip_dates (no meeting that day) — left out`);
+    if (!SPEAKER_NAME.test(name)) return void notes.push(`${who} (${ymd}): the name must be a first name and a last initial, like "Rick W." — left out`);
+    if (byDay.has(ymd)) return void notes.push(`${who}: ${ymd} has a speaker already (“${byDay.get(ymd).name}”) — left out`);
+    const pos = [oneLine(e.position), oneLine(e.position_es)];
+    const top = [oneLine(e.topic), oneLine(e.topic_es)];
+    if (!top[0] && !top[1]) notes.push(`${who} (${ymd}): no topic — shown without one`);
+    byDay.set(ymd, { ymd, name, position: { en: pos[0] || pos[1], es: pos[1] || pos[0] }, topic: { en: top[0] || top[1], es: top[1] || top[0] }, confirmed: e.confirmed === true });
+  });
+  list.push(...[...byDay.values()].sort((a, b) => a.ymd.localeCompare(b.ymd)));
+  // the guest speaker's part ends by `speaker_until` (between the meeting's start and end: meeting.py speaker_until)
+  let until = "";
+  if (x.speaker_until !== null && x.speaker_until !== undefined && x.speaker_until !== "") {
+    const u = hhmm(x.speaker_until), s = hhmmMinutes(meetingStart(cfg)), e = hhmmMinutes(meetingEnd(cfg));
+    if (u && hhmmMinutes(u) > s && hhmmMinutes(u) < (e > s ? e : 24 * 60)) until = u;
+    else notes.push(`speaker_until “${String(x.speaker_until)}” is not a time between the meeting's start and end — not shown`);
+  }
+  for (const note of notes) console.log(`[meeting] note: config/site.yml meeting: ${note}`);
+  const read = { list, until, notes };
+  speakerReads.set(x, read);
+  return read;
+}
+
+/**
+ * The committee meeting's guest speakers (config/site.yml `meeting: speakers:`), soonest first: [{ ymd, name,
+ * position: { en, es }, topic: { en, es }, confirmed }] — a language left out has the other one's words. Every
+ * speaker of the list is shown, but one that would be wrong to show is left out, with a note (meetingSpeakerNotes:
+ * the same notes as the sync's, scripts/sync/meeting.py meeting_speakers, which puts them in the run summary): a date
+ * that is not a date, not a meeting day by the rule or one of the skip_dates, a name that is not a first name and a
+ * last initial ("Rick W."), a second speaker for one date; one without a topic is shown without it. `confirmed` is
+ * for the chair (the run summary's reminder, the decks' notes): never shown on a page or in a calendar.
+ */
+export function meetingSpeakers(m) {
+  return readSpeakers(m).list;
+}
+
+/** The chair's notes about the speakers and speaker_until (["speaker “Jeannie Smith” (2027-02-17): the name must be
+ *  …"]), word for word the sync's (meeting.py meeting_speakers + speaker_until); [] when all is well. */
+export function meetingSpeakerNotes(m) {
+  return [...readSpeakers(m).notes];
+}
+
+/** The guest speaker of one meeting (its "YYYY-MM-DD") in a language → { ymd, name, position, topic }, or null (no
+ *  speaker that day: Dec 16, 2026). Never `confirmed`. */
+export function meetingSpeaker(m, ymd, lang = "en") {
+  const s = readSpeakers(m).list.find((x) => x.ymd === String(ymd || "").slice(0, 10));
+  return s ? { ymd: s.ymd, name: s.name, position: s.position[lang] || s.position.en, topic: s.topic[lang] || s.topic.en } : null;
+}
+
+/** When the guest speaker's part ends ("19:30", config/site.yml meeting.speaker_until), "" when it is not set (or not
+ *  between the meeting's start and end); then coming events, workshop requests, special offers, magazine topics and
+ *  GVR and RLV sharing until the meeting's end. */
+export function meetingSpeakerUntil(m) {
+  return readSpeakers(m).until;
+}
+
+// "7:30 PM" / "7:30 p. m." of an "HH:MM" (Central wall clock)
+const clockLabel = (s, lang) => fmt(atChicago(2026, 0, 21, s), lang, { hour: "numeric", minute: "2-digit" });
+
+// "The guest speaker's part ends by 7:30 PM; then coming events, workshop requests, special offers, magazine topics
+// and GVR and RLV sharing until 8:00 PM." — "" without speaker_until
+function speakerUntilLine(m, lang) {
+  const until = meetingSpeakerUntil(m);
+  return until ? t("committee.meeting.speaker_until", lang, { until: clockLabel(until, lang), end: clockLabel(meetingEnd(meetingCfg(m)), lang) }) : "";
+}
+
+// The meeting in a line for calendars and its card: "Monthly … committee meeting on Google Meet." and who may come
+// (config/site.yml meeting.platform — Zoom when left out — and meeting.note / note_es); with `ymd`, that meeting's
+// guest speaker and topic and when the speaker's part ends (the words of build_data.speaker_sentences). A meeting
+// that is `over` was held "online", never on a platform: the move to Google Meet changed it for the dates before
+// (the digest and the Area report say "online" too).
+function meetingSummary(site, lang, ymd, over = false) {
+  const m = site?.meeting || {};
+  const note = String((lang !== "en" && m[`note_${lang}`]) || m.note || "").replace(/\s+/g, " ").trim();
+  const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
+  // (no period after a name alone: it ends in its initial's — "Rick W.")
+  const speaker = sp ? [t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.topic ? ` — “${sp.topic}”.` : ""), speakerUntilLine(m, lang)] : [];
+  const line = over ? t("committee.meeting.cal_desc_online", lang) : t("committee.meeting.cal_desc", lang, { platform: meetingJoin(m, lang).platform });
+  return [line, note, ...speaker].filter(Boolean).join(" ");
+}
+
+// Plain-text description used in calendars (Google / Outlook / .ics): the summary, that meeting's guest speaker
+// (`ymd`: who, their service, the topic, until when) and how to join — never the speaker in the alarm (its title).
+// A meeting that is `over`: no link, meeting code or passcode (its room may have been another).
+function meetingDescription(site, lang, pageUrl, ymd, over = false) {
+  const m = site.meeting || {};
+  const j = over ? {} : meetingJoin(m, lang);
+  const lines = [meetingSummary(site, lang, "", over)];
+  const sp = ymd ? meetingSpeaker(m, ymd, lang) : null;
+  if (sp) {
+    lines.push("", t("committee.meeting.speaker", lang, { name: sp.name }) + (sp.position ? ` — ${sp.position}` : ""));
+    if (sp.topic) lines.push(t("committee.meeting.speaker_topic", lang, { topic: sp.topic }));
+    const until = speakerUntilLine(m, lang);
+    if (until) lines.push(until);
+  }
+  if (j.url) lines.push("", `${t("committee.meeting.cal_join", lang, { platform: j.platform })}: ${j.url}`);
+  if (j.id) lines.push(`${j.idLabel}: ${j.id}`);
+  if (j.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${j.passcode}`);
+  if (pageUrl) lines.push("", `${t("committee.cal.details", lang)}: ${pageUrl}`);
+  return lines.join("\n");
+}
+
+// "How the evening runs" at a meeting with a guest speaker: the opening (a moment of silence, the Serenity Prayer,
+// the speaker's welcome and the topic's introduction) takes about 2 minutes, the talk about 20 (the chair's deck: "2
+// minutes" in the chat at 18), then the questions until `speaker_until`.
+const SPEAKER_OPENING_MIN = 2;
+const SPEAKER_TALK_MIN = 20;
+const minutesHhmm = (n) => `${pad2(Math.floor(n / 60) % 24)}:${pad2(n % 60)}`;
+
+/**
+ * The committee meeting's evening, part by part, in Central time (/meetings/ "How the evening runs"), from
+ * config/site.yml `meeting:` start, speaker_until and end — the times the decks and flyers give:
+ *   speaker  a meeting with a guest speaker: [{ key, at, about }] — "opening" at the start, "talk" about 2 minutes
+ *            later, "questions" about 20 minutes after that (left out when that is not before speaker_until),
+ *            "sharing" at speaker_until (coming events and workshop requests, special offers, the magazines'
+ *            topics, GVR and RLV sharing — never committee business: the meeting is not a business meeting),
+ *            "close" at the end (the Responsibility Statement, then the parking lot); `about`: an approximate time.
+ *            [] without speaker_until (meetingSpeakerUntil: not set, or not between the start and the end)
+ *   plain    a meeting without one (Nov 18 and Dec 16, 2026: a topic to share on until speaker_until, then the same
+ *            second half): [{ key: "topic_hour", at: "7:00 – 8:00 PM" }]
+ *   until, end  "7:30 PM" ("" without speaker_until), "8:00 PM"; talkMin: the talk's minutes (about 20)
+ * `at` is the page language's clock ("7:02 PM", "7:02 p. m."); which one a date has is meetingSpeaker's.
+ */
+export function meetingEvening(m, lang = "en") {
+  const cfg = meetingCfg(m);
+  const start = meetingStart(cfg), end = meetingEnd(cfg), until = meetingSpeakerUntil(m);
+  const plain = [{ key: "topic_hour", at: meetingTimeRange(cfg, lang) }];
+  const out = { speaker: [], plain, until: until ? clockLabel(until, lang) : "", end: clockLabel(end, lang), talkMin: SPEAKER_TALK_MIN };
+  if (!until) return out;
+  const s = hhmmMinutes(start), u = hhmmMinutes(until);
+  const at = (n) => clockLabel(minutesHhmm(n), lang);
+  const talk = s + SPEAKER_OPENING_MIN, questions = talk + SPEAKER_TALK_MIN;
+  out.speaker.push({ key: "opening", at: at(s), about: false });
+  if (talk < u) out.speaker.push({ key: "talk", at: at(talk), about: true });
+  if (questions < u) out.speaker.push({ key: "questions", at: at(questions), about: true });
+  out.speaker.push({ key: "sharing", at: out.until, about: false }, { key: "close", at: out.end, about: false });
+  return out;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Events                                                             */
+/* ------------------------------------------------------------------ */
+// Filter-chip groups on /events/ ("recurring" = a monthly event from config/site.yml
+// `recurring_events:`, e.g. the booth at CityWide Dallas — a NETA 65 event, not a committee meeting;
+// "neta65" / "ics" = an outside calendar feed from config/site.yml `sources.ics_feeds:` that lists NETA 65
+// events, e.g. the neta65.org workshop calendar — shown with the NETA 65 events, not the GV/LV calendars)
+const GROUP_OF = { committee: "committee", recurring: "neta", flyer: "neta", manual: "neta", ics: "neta", neta65: "neta", "gv-calendar": "calendar", "lv-calendar": "calendar" };
+
+/**
+ * Who holds an event, when it is not us: "lv" / "gv" for La Viña's or Grapevine's OWN event that the committee
+ * shares (config/site.yml recurring_events `host:` — La Viña's monthly workshop on Zoom —, a content/events
+ * file's `host:`, a dated flyer of such a series: build_data writes extra.host), else "" (ours: NETA 65).
+ * Such an event is shown with the Grapevine / La Viña calendars (eventGroup), in that magazine's colour
+ * (event-tone.js), as theirs in the search, and with them as the organizer for search engines.
+ */
+export function eventHost(it) {
+  const h = String((it && it.extra && it.extra.host) || "").toLowerCase();
+  return h === "lv" || h === "gv" ? h : "";
+}
+
+function eventGroup(it) {
+  if (eventHost(it)) return "calendar";
+  if (GROUP_OF[it.category]) return GROUP_OF[it.category];
+  if (it.source === "calendar") return "calendar";
+  return "neta";
+}
+
+function siteAbs(site, url) {
+  const b = String(site?.url || "").replace(/\/$/, "");
+  return b + (String(url).startsWith("/") ? url : "/" + url);
+}
+
+function localPath(url, lang) {
+  if (!url || /^(https?:|mailto:|tel:|#)/.test(url)) return url;
+  const u = url.startsWith("/") ? url : "/" + url;
+  if (/^\/(en|es)(\/|$)/.test(u)) return u; // already language-prefixed
+  return lang && lang !== "en" ? `/${lang}${u}` : u;
+}
+
+// Where a link to OUR committee meeting goes: its own section of the Meetings page. The weekly open meetings come
+// first there, so a plain /meetings/ would open on someone else's meeting. Its cards on /events/, its calendar
+// entries (the .ics URL and the "Details:" line of the description), the countdowns' calendar files, the reports
+// and the monthly digest all link here (localPath / langPath add /es/; scripts/sync/build_data.py and
+// scripts/notify/send_digest.py write the same). A link to the page as a whole (the menu, the search, the sitemap,
+// the booth's "Meetings you can join") stays /meetings/.
+export const COMMITTEE_MEETING_PATH = "/meetings/#committee-meeting";
+
+// Element ids already used on the committee pages / layout. A bulletin post or
+// manual event whose file name slug equals one of these gets a prefixed anchor
+// instead, so a deep link never jumps to the wrong place.
+const RESERVED_IDS = new Set([
+  "main", "mobile-drawer", "subscribe", "how-docs", "how-to-post", "share-photos", "how-events", "albums",
+  "ev-upcoming-title", "ev-next-title", "cm-preview", "cm-preview-title", "cm-lb-i18n", "item",
+  "ev-weekly", "ev-weekly-title", "ev-weekly-gv", "ev-weekly-lv",
+  // /events/' pinned section (round 30): our two monthly meetings, the next Grapevine Meeting's card
+  "ev-pinned", "ev-pinned-title", "ev-next-gvm", "ev-next-gvm-title",
+]);
+// Anchor for a hand-written item: its file-name slug (the data links to
+// "/events/#<slug>" and "/bulletin/#<slug>"), else a stable fallback.
+function itemAnchor(slug, fallback) {
+  const s = String(slug || "");
+  if (/^[a-z0-9][a-z0-9-]{0,99}$/.test(s) && !RESERVED_IDS.has(s) && !/^(month-|docs-|cm-)/.test(s)) return s;
+  return fallback;
+}
+
+// A writing or recording workshop, by its title (English or Spanish) — cmWorkshops
+const WORKSHOP_RE = /(writing|recording) workshop|taller de (escritura|grabaci)/i;
+
+// The id of an event's card on /events/ ("ev-recurring-citywide-dallas-2026-10-10"), so other
+// pages (home, search, the bulletin) can link straight to it.
+export function eventAnchor(it) {
+  return itemAnchor(it?.extra?.slug, "ev-" + slugify(String(it?.id || "").replace(/^ev:/, "")));
+}
+
+// "Zoom", "Online", "En línea"… as a location really means "online on <platform>".
+const ONLINE_PLACE = /^(zoom|online|virtual|en l[ií]nea|google meet|meet|microsoft teams|teams|webex|skype|facebook live|youtube( live)?)$/i;
+
+export function calendarLinks(ev) {
+  const text = ev.title;
+  const details = ev.calDescription || "";
+  const location = ev.calLocation || "";
+  let gDates, oStart, oEnd;
+  if (ev.allDay) {
+    gDates = `${ymdCompact(ev.startYmd)}/${ymdCompact(ymdAddDays(ev.endYmd, 1))}`;
+    oStart = ev.startYmd;
+    oEnd = ymdAddDays(ev.endYmd, 1);
+  } else {
+    gDates = `${utcStamp(new Date(ev.startMs))}/${utcStamp(new Date(ev.endMs))}`;
+    oStart = new Date(ev.startMs).toISOString().replace(/\.\d{3}/, "");
+    oEnd = new Date(ev.endMs).toISOString().replace(/\.\d{3}/, "");
+  }
+  const q = (o) => Object.entries(o).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+  return {
+    gcal: "https://calendar.google.com/calendar/render?" + q({ action: "TEMPLATE", text, dates: gDates, details, location, ctz: TZ }),
+    outlook: "https://outlook.live.com/calendar/0/action/compose?" + q({ rru: "addevent", subject: text, startdt: oStart, enddt: oEnd, allday: ev.allDay ? "true" : "false", body: details, location }),
+  };
+}
+
+/**
+ * Normalize db.events items + the computed committee meetings into one list
+ * of display-ready events for a language.
+ *
+ * @param {object[]} items   db.events.items
+ * @param {object}   site    `site` global (config)
+ * @param {string}   lang    "en" | "es"
+ * @param {object}   [opt]   { monthsBack: 3, monthsAhead: meetingMonthsAhead(site, now) — through config/site.yml
+ *                            `events_until`'s month, at least 12 (MEETING_MONTHS_AHEAD) —, now: Date }
+ * @returns {object[]} sorted by start (soonest first)
+ */
+export function normalizeEvents(items, site, lang = "en", opt = {}) {
+  const now = (opt.now || new Date()).getTime();
+  const m = site?.meeting || {};
+  const out = [];
+  const seen = new Set();
+  const meetingPage = siteAbs(site, localPath(COMMITTEE_MEETING_PATH, lang));
+
+  // 1) Committee meetings — always computed from config/site.yml, so the
+  //    calendar is right even if the daily data sync failed.
+  //    (Titles/summaries are fixed human text — never machine translation.)
+  //    Each date with its own guest speaker (meetingSpeaker: extra.speaker, its summary and calendar text); the
+  //    title, the times and the calendar uid (ev-committee-<ymd>) stay the same with or without one. Its flyer is
+  //    the one the sync found for that date on the Drive (events.json: meeting.flyer_match), when it has one.
+  const mTitle = meetingTitle(site, lang);
+  const join = meetingJoin(m, lang);
+  const synced = new Map((items || []).filter((it) => it && it.category === "committee" && it.extra).map((it) => [it.id, it.extra]));
+  //    A date that is over (the calendar files keep 90 days) was held "Online", with no link or meeting code: the
+  //    move to Google Meet changed the platform for the dates before it.
+  //    The months: the caller's (opt.monthsAhead), else this month and the ones after it through `events_until`'s
+  //    month, at least the 12 after it (meetingMonthsAhead — the sync writes a record for each of these dates:
+  //    meeting.window_months, the same number) — /events/, the event share pages and the search take this default,
+  //    /events.ics asks for the same number itself.
+  const ahead = opt.monthsAhead ?? meetingMonthsAhead(site, now);
+  for (const d of meetingDates(m, opt.monthsBack ?? 3, ahead, new Date(now))) {
+    const id = `ev:committee:${d.ymd}`;
+    seen.add(id);
+    const speaker = meetingSpeaker(m, d.ymd, lang);
+    const fx = synced.get(id) || {};
+    const over = Date.parse(d.end) <= now;
+    out.push(shapeEvent({
+      id, source: "committee", kind: "event", category: "committee", lang: "en",
+      url: COMMITTEE_MEETING_PATH, title: mTitle, summary: meetingSummary(site, lang, d.ymd, over),
+      date: d.start, is_new: false, _i18nTitle: true,
+      extra: { start: d.start, end: d.end, all_day: false, location: over ? t("committee.events.online", lang) : join.platform,
+        online_url: over ? null : join.url || null,
+        flyer_url: fx.flyer_url || null, flyer_thumb: fx.flyer_thumb || null, ...(speaker ? { speaker } : {}) },
+    }, site, lang, now, meetingDescription(site, lang, meetingPage, d.ymd, over)));
+  }
+
+  // 2) Everything else (Drive flyers, manual events, TX GV/LV calendar, .ics feeds)
+  for (const it of items || []) {
+    if (!it || it.status === "gone" || it.kind !== "event") continue;
+    if (it.category === "committee") {
+      // Already covered above unless it is outside the computed window.
+      // Compare by the meeting's date in Central time (an evening meeting is
+      // already "tomorrow" in UTC).
+      const raw = it.extra?.start || it.date || "";
+      const inst = parseInstant(raw);
+      const ymd = isYmd(raw) ? raw : inst ? chicagoYmd(inst) : "";
+      if (seen.has(`ev:committee:${ymd}`) || seen.has(it.id)) continue;
+    }
+    if (seen.has(it.id)) continue;
+    seen.add(it.id);
+    const ev = shapeEvent(it, site, lang, now);
+    if (ev) out.push(ev);
+  }
+  return out.filter(Boolean).sort((a, b) => a.startMs - b.startMs || a.title.localeCompare(b.title));
+}
+
+/** An event's title without the spaces a calendar left inside its brackets: "XLII … ( A.A. Un camino a la vida )"
+ *  → "XLII … (A.A. Un camino a la vida)" (also after "¿" / "¡"), so no ")" sits on a line of its own. The one rule
+ *  for every place an event's title shows: /events/ and /events.ics (shapeEvent), the month pages — the poster,
+ *  the Dates row, the message (monthly.js dateRow) — and the month's calendar file (monthIcs, from shapeEvent), the
+ *  site search (library.js tidyTitle: the title and its original), and through cmTidyTitle the Tracker's list of
+ *  events, Home's event cards, the /digest/ page (the month's events, an event among what is new; its texts to copy:
+ *  community.js monthlyDigestText) and What's New; the district report's coming events and the Area report's events
+ *  (report.js) and the RSS feeds (src/pages/feed.11ty.js) call it too; the monthly e-mail has its twin
+ *  (scripts/notify/send_digest.py tidy_brackets). */
+export function tidyBrackets(s) {
+  return String(s ?? "").replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
+}
+
+function shapeEvent(it, site, lang, now, descOverride) {
+  const x = it.extra || {};
+  // Its days and times (all-day: midnight to the midnight after its last day; a timed event without an end:
+  // one hour) — eventSpan, the rule the home page, the monthly toolkit and the report use too.
+  const span = eventSpan(it);
+  if (!span) return null;
+  const { allDay, startMs, endMs, startYmd, endYmd } = span;
+  const start = new Date(startMs), end = new Date(endMs);
+  const startNoon = new Date(startYmd + "T12:00:00Z");
+  // An event over several days (an Area assembly, Fri–Sun): a date RANGE on the card, its tile and in the
+  // calendars. A timed event that only runs past midnight (7 PM – 1 AM) is not one.
+  const multiDay = startYmd !== endYmd && (allDay || endMs - startMs > 18 * 3600e3);
+  const nDays = Math.round((Date.parse(endYmd + "T12:00:00Z") - Date.parse(startYmd + "T12:00:00Z")) / 864e5) + 1;
+  // content/events `tentative: true` (or STATUS:TENTATIVE in an outside calendar): details not final yet.
+  const tentative = x.tentative === true;
+  const group = eventGroup(it);
+  const committee = it.category === "committee";
+  // A date of a monthly event from config/site.yml `recurring_events:` (build_data.recurring_events):
+  // its "every month" line is written from its rule (extra.rule) exactly like the committee meeting's, with
+  // the time zone; the data's own recurrence_label (both languages, no zone) is the fallback, given the zone.
+  const recurring = it.category === "recurring";
+  // An outside calendar (GV/LV websites, .ics feeds) that gives only a date did not list
+  // a start time — and its own event page may not either (La Viña's "Taller Mensual"
+  // page shows just the date and the Zoom link). So those say "Time not listed — see
+  // event details", never "All day". Only Drive flyers and hand-written events are
+  // really "All day".
+  const timeNotListed = allDay && it.source === "calendar" && /^https?:\/\//.test(it.url || "");
+  const title = tidyBrackets(it._i18nTitle ? it.title : (H.pickLang(it, "title", lang) || it.title || ""));
+  const summary = it._i18nTitle ? it.summary : (H.pickLang(it, "summary", lang) || "");
+  const recurrence = recurring ? (recurrenceText(x.rule, lang) || withZone(String(H.pickLang(it, "recurrence_label", lang) || x.recurrence_label || ""), lang)) : "";
+  // The committee wrote this event in both languages (config/site.yml title / title_es, or a
+  // content/events file's title_es / summary_es): the other language's text is not a foreign-language
+  // original, so no language pill and no lang="…" on it. (Anything machine-translated keeps them.)
+  const ownWords = !it._i18nTitle && ownLangs(it).includes(lang);
+  const past = x.past === true || endMs <= now;
+
+  // Labels (all in Central time — the Area's time zone)
+  const tileSrc = allDay ? startNoon : start;
+  const tileOpts = allDay ? { timeZone: "UTC" } : {};
+  const part = (d, o) => fmt(d, lang, { ...o, ...tileOpts }).replace(/\.$/, "");
+  const tile = { mon: part(tileSrc, { month: "short" }), day: part(tileSrc, { day: "numeric" }), wd: part(tileSrc, { weekday: "short" }), range: false };
+  if (multiDay) {
+    // "MAR · 19–21 · Fri–Sun" (a range across two months: "MAR–APR · 30–2 · Tue–Fri")
+    const endSrc = allDay ? new Date(endYmd + "T12:00:00Z") : new Date(endMs - 1);
+    const mon2 = part(endSrc, { month: "short" });
+    tile.mon = mon2 === tile.mon ? tile.mon : `${tile.mon}–${mon2}`;
+    tile.day = `${tile.day}–${part(endSrc, { day: "numeric" })}`;
+    tile.wd = `${tile.wd}–${part(endSrc, { weekday: "short" })}`;
+    tile.range = true;
+  }
+  let dateLabel, timeLabel = "", rangeLabel = "";
+  if (allDay) {
+    const a = new Date(startYmd + "T12:00:00Z"), b = new Date(endYmd + "T12:00:00Z");
+    dateLabel = startYmd === endYmd
+      ? cap(fmt(a, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }))
+      : cap(fmtRange(a, b, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }));
+    // "Fri, Mar 19 – Sun, Mar 21, 2027" / "Vie, 19 de mar – dom, 21 de mar de 2027"
+    if (multiDay) rangeLabel = cap(fmtRange(a, b, lang, { weekday: "short", month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }));
+    timeLabel = timeNotListed ? t("committee.events.time_not_listed", lang)
+      : multiDay ? t("committee.events.n_days", lang, { n: nDays }) : t("committee.events.all_day", lang);
+  } else {
+    dateLabel = cap(fmt(start, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
+    if (multiDay) {
+      // "Fri, Mar 19, 6:00 PM CDT – Sun, Mar 21, 12:00 PM CDT": the times are in the range itself
+      rangeLabel = cap(fmtRange(start, end, lang, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }));
+      dateLabel = cap(fmtRange(start, end, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" }));
+    } else if (span.hasEnd) timeLabel = cap(clockRange(start, end, lang)); // ("Vie, 2 de oct, 7:00 p. m. – …": over 12 hours)
+    // no end in the data: the start alone, as on the home page and the monthly toolkit — never the hour the
+    // calendars assume presented as its end
+    else timeLabel = fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+  }
+  const monthKey = startYmd.slice(0, 7);
+  const monthLabel = cap(fmt(new Date(monthKey + "-15T12:00:00Z"), lang, { month: "long", year: "numeric", timeZone: "UTC" }));
+  // "Sep 2026" / "Sept 2026": the month jump chips on /events/
+  const monthShort = cap(fmt(new Date(monthKey + "-15T12:00:00Z"), lang, { month: "short", year: "numeric", timeZone: "UTC" })).replace(/\.(?=\s|$)/, "");
+
+  // (a committee meeting: its section on /meetings/ — also a date of events.json outside normalizeEvents' window,
+  // or one an older sync wrote with plain "/meetings/")
+  let link = committee ? localPath(COMMITTEE_MEETING_PATH, lang) : it.url ? localPath(it.url, lang) : "";
+  const flyerView = x.flyer_url || (it.source === "drive" && /drive\.google\.com/.test(it.url || "") ? it.url : null);
+  // Its link, preview and picture (flyerLinks: the data's own picture — a Drive flyer's, an outside calendar's
+  // image —, else the Drive's picture of the file; none: /events/ shows the tile's own flyer icon instead).
+  const flyer = flyerLinks(flyerView, x.flyer_thumb);
+  // The place in this language: content/events `location_es` / `location_en` → i18n.location (build_data
+  // also writes "Lugar por anunciarse" for an English "Venue to be announced"); else as written.
+  const locText = String(H.pickLang(it, "location", lang) || x.location || "").trim();
+  let location = [locText, !locText && x.city ? [x.city, x.state].filter(Boolean).join(", ") : ""].filter(Boolean).join("");
+  // A place that is not known yet: plain text on the card — no map pin, no address in the calendars.
+  const locationTba = !!location && x.location_tba === true;
+  const online = x.online_url || null;
+  // "Zoom" as the location of an online event is the platform, not a place.
+  let platform = committee ? "" : String(x.platform || "").trim();
+  if (!committee && location && (ONLINE_PLACE.test(location.trim()) || (platform && location.trim().toLowerCase() === platform.toLowerCase()))) {
+    if (!platform && !/^(online|virtual|en l[ií]nea)$/i.test(location.trim())) platform = location.trim();
+    location = "";
+  }
+  const isOnline = !committee && !!(online || x.online === true || platform);
+  // The meeting ID or code people type into the meeting app (config/site.yml recurring_events `meeting_id:` — La
+  // Viña's monthly workshop's Zoom ID, the Grapevine Meeting's Google Meet code): a line on the card and in the
+  // calendars' description, "Meeting code" for a code with letters (meetingIdKey). (The committee meeting's own is
+  // on /meetings/ and in its calendar text — meetingDescription.)
+  const meetingId = committee ? "" : String(x.meeting_id || "").trim();
+  const meetingIdLabelKey = meetingIdKey(meetingId);
+  // A committee meeting's guest speaker (normalizeEvents: meetingSpeaker; an events.json date outside its window:
+  // the sync's extra.speaker, in both languages) → { name, position, topic } for the cards, else null
+  const sp = committee && x.speaker && typeof x.speaker === "object" && x.speaker.name ? x.speaker : null;
+  const inLang = (v) => (v && typeof v === "object" ? String(v[lang] || v.en || "") : String(v || ""));
+  const speaker = sp ? { name: String(sp.name), position: inLang(sp.position), topic: inLang(sp.topic) } : null;
+  // Who to write to about it (recurring_events `contact:` — La Viña's workshop: lveditorial@aagrapevine.org): a line
+  // of its own on the card, never only inside the summary (the card shows 3 lines of it), and a line in the
+  // calendars' description. A plain e-mail address only (build_data checks the same shape): it becomes a mailto: link.
+  const contactRaw = committee ? "" : String(x.contact || "").trim();
+  const contact = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/.test(contactRaw) ? contactRaw : "";
+  // A hand-written event links to its own card on /events/ ("/events/#slug"):
+  // no title link / "details" button for that — the calendar entry keeps it.
+  const selfLink = /^\/(?:[a-z]{2}\/)?events\/?(?:#.*)?$/.test(link);
+  const body = x.body_md ? String(H.pickLang(it, "body_md", lang) || x.body_md || "").trim() : "";
+
+  // Text for calendars. Its link (the .ics URL, "Details: …" in the description): its own page, else its card
+  // on /events/ — but only while /events/ has that card. A date of a monthly series that has passed is not on
+  // the page any more (events.njk lists a series' dates still to come, and its "Past events" leave the series
+  // out: where("past", true) | whereNot("recurring", true)), so its entry — kept 90 days in the calendar
+  // files — links to the page itself, never to a #… it no longer has. (A past one-off event keeps its row
+  // there, with this anchor; a committee meeting's page is its section on /meetings/: COMMITTEE_MEETING_PATH.)
+  const anchor = eventAnchor(it);
+  const onEventsPage = !committee && !(recurring && past);
+  const detailsUrl = link && !selfLink
+    ? (link.startsWith("/") ? siteAbs(site, link) : link)
+    : siteAbs(site, localPath("/events/", lang)) + (onEventsPage ? "#" + anchor : "");
+  if (selfLink) link = "";
+  // An event that is over (the calendar files keep it 90 days, for their subscribers) still says where it was — its
+  // place, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of its summary's
+  // sentences that give one (withoutJoinDetails). A room is not kept once its event is over: the committee's old
+  // Zoom room, retired with the move to Google Meet, stayed in the files with the workshop of October 3, 2026 that
+  // had used it. (The committee meeting's own dates that are over come as "Online": normalizeEvents.)
+  const onlineLabel = platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang);
+  const joinLink = past ? "" : online || "";
+  const descLines = [];
+  if (descOverride) descLines.push(descOverride);
+  else {
+    // Google / Outlook links cannot say "tentative" — the first line of the description does.
+    if (tentative) descLines.push(`${t("committee.events.tentative", lang)}. ${t("committee.events.tentative_help", lang)}`, "");
+    const calSummary = past ? withoutJoinDetails(summary) : summary;
+    if (calSummary) descLines.push(calSummary);
+    if (recurrence) descLines.push(recurrence);
+    if (locationTba) descLines.push(location);
+    if (online) descLines.push("", joinLink ? `${onlineLabel}: ${joinLink}` : onlineLabel);
+    if (meetingId && !past) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
+    if (contact) descLines.push(`${t("committee.events.contact", lang)}: ${contact}`);
+    if (flyerView) descLines.push(`${t("committee.events.flyer", lang)}: ${flyerView}`);
+    // Date-only outside event: the calendar shows it as all-day, so the note says the time was not listed.
+    if (detailsUrl !== flyerView) descLines.push("", `${t(timeNotListed ? "committee.events.time_not_listed" : "committee.cal.details", lang)}: ${detailsUrl}`);
+  }
+  const calDescription = descLines.join("\n").trim();
+  const place = locationTba ? "" : location;
+  const calLocation = committee ? (joinLink || location) : [place, !place && online ? joinLink || onlineLabel : ""].filter(Boolean).join("");
+
+  const ev = {
+    id: it.id,
+    anchor,
+    uid: slugify(String(it.id).replace(/:/g, "-"), 90),
+    group, committee, category: it.category || "", source: it.source || "",
+    // "lv" / "gv": La Viña's or Grapevine's own event (eventHost) — its colour, the organizer for search engines
+    host: eventHost(it), meetingId, meetingIdKey: meetingIdLabelKey, contact,
+    // a committee meeting's guest speaker { name, position, topic } (cards only: never JSON-LD, never the alarm)
+    speaker,
+    // recurrence: "Every second Saturday of the month · 5:00 – 8:00 PM Central time" (calendars, search);
+    // the card, which already shows the time, uses only the day part: "Every second Saturday of the month".
+    recurring, series: recurring ? String(x.series || "") : "", recurrence, recurrenceDay: recurrence.split(" · ")[0], ownWords,
+    // an outside calendar's listing of a month the series' rule skips (build_data series_moved_dates): that
+    // month's date of the series — a card of its own on /events/ with the series' other dates (since round 30 every
+    // date is; cmCollapseRecurring never marks it `later`)
+    seriesOf: recurring ? "" : String(x.series_of || ""),
+    title, summary, body, item: it,
+    platform, isOnline,
+    allDay, startMs, endMs, startYmd, endYmd, multiDay, nDays,
+    startIso: allDay ? startYmd : start.toISOString(),
+    endIso: allDay ? endYmd : end.toISOString(),
+    // stays listed through its last day (an all-day event until midnight Central after its last day)
+    expireIso: end.toISOString(),
+    tile, dateLabel, timeLabel, rangeLabel, monthKey, monthLabel, monthShort,
+    shareWhen: [dateLabel, timeLabel].filter(Boolean).join(" · "),
+    tentative, locationTba,
+    shortLabel: cap(fmt(tileSrc, lang, { month: "short", day: "numeric", ...tileOpts })).replace(/\.(?=\s|$)/, ""),
+    // One line for the next meeting: "Wednesday, October 21 · 7:00 PM CDT" (committee.js keeps it current)
+    whenLabel: allDay ? dateLabel : cap(fmt(start, lang, { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+    location, online, link, linkExternal: /^https?:/.test(link || ""),
+    detailsUrl,
+    flyer,
+    isNew: !!it.is_new && !committee,
+    past,
+    calDescription, calLocation,
+    dtstampSrc: it.first_seen || null,
+  };
+  Object.assign(ev, calendarLinks(ev));
+  // The "Add to calendar → .ics file" download (src/assets/js/committee.js CM.downloadIcs): all-day events
+  // as DATE values, end = the last day (the file gets the exclusive DTEND, the day after).
+  ev.icsData = { uid: ev.uid + (lang !== "en" ? "-" + lang : "") + "@neta65-gvlv", title: ev.title, start: ev.startIso, end: ev.endIso, allDay, tentative, description: calDescription, location: calLocation, url: ev.detailsUrl, filename: slugify(ev.title, 40) };
+  return ev;
+}
+
+/**
+ * The committee meeting's guest speakers still to come, soonest first (config/site.yml `meeting: speakers:`, read
+ * by meetingSpeakers) → { list: [{ ymd, start, end (ISO), name, position, topic (the page language's), description
+ * (that meeting's calendar text, as /events.ics has it) }], plain: the calendar text of a meeting without one }.
+ * /meetings/' "Guest speakers" list, and the countdowns' dates (src/assets/js/committee.js cmMeeting, home.js
+ * homeMeeting): once a card rolls on to the next date in the browser, it shows THAT date's speaker — or none — and
+ * its calendar links carry that date's text. A meeting over by `now` is not listed. Never `confirmed`.
+ */
+export function meetingSpeakerDates(site, lang = "en", now = new Date()) {
+  const m = site?.meeting || {};
+  const nowMs = now instanceof Date ? now.getTime() : Number(now);
+  const page = siteAbs(site, localPath(COMMITTEE_MEETING_PATH, lang));
+  // the meeting's dates (its rule, skip dates and first date), three years on: a speaker's date that is not one of
+  // them is left out by meetingSpeakers already
+  const dates = new Map(meetingDates(m, 1, 36, new Date(nowMs)).map((d) => [d.ymd, d]));
+  const list = [];
+  for (const s of meetingSpeakers(m)) {
+    const d = dates.get(s.ymd);
+    if (!d || Date.parse(d.end) <= nowMs) continue;
+    const sp = meetingSpeaker(m, s.ymd, lang);
+    list.push({ ymd: s.ymd, start: d.start, end: d.end, name: sp.name, position: sp.position, topic: sp.topic,
+      description: meetingDescription(site, lang, page, s.ymd) });
+  }
+  return { list, plain: meetingDescription(site, lang, page) };
+}
+
+// The meeting app a link opens ("Google Meet" for meet.google.com) — scripts/sync/events_external.py platform_of
+// and its PLATFORM_HOSTS, word for word (build_data names a recurring event's platform with it).
+const PLATFORM_HOSTS = { "zoom.us": "Zoom", "meet.google.com": "Google Meet", "teams.microsoft.com": "Microsoft Teams",
+  "teams.live.com": "Microsoft Teams", "webex.com": "Webex", "gotomeeting.com": "GoToMeeting", "skype.com": "Skype",
+  "whereby.com": "Whereby", "jitsi": "Jitsi" };
+export function platformOf(url) {
+  let host = "";
+  try { host = new URL(String(url || "")).host.toLowerCase(); } catch { return null; }
+  for (const [h, name] of Object.entries(PLATFORM_HOSTS)) if (host.includes(h)) return name;
+  return null;
+}
+
+// recurring_events `url:` / `online_url:` as build_data._recurring_url reads them: a web address ("www.…" gets its
+// https://), or — `sitePath` — a page of this site ("/meetings/#grapevine-meeting"); else null.
+function seriesUrl(v, sitePath = false) {
+  let s = oneLine(v);
+  if (!s) return null;
+  if (sitePath && /^\/(?![/\\])\S*$/.test(s)) return s;
+  if (/^www\./i.test(s)) s = "https://" + s;
+  return /^https?:\/\/[^\s/]+\.\S+$/i.test(s) ? s : null;
+}
+// build_data._MEETING_ID: letters, digits, spaces, dots and dashes ("815 9593 1777", "rva-tmst-vdb")
+const SERIES_MEETING_ID = /^[A-Za-z0-9](?:[A-Za-z0-9 .-]{1,38})[A-Za-z0-9]$/;
+// a title that already names its language: "La Viña Monthly Virtual Workshop (in Spanish)", "Reunión de Grapevine
+// (en inglés)" (access.js LANG_NOTE)
+const SAYS_LANG = /\((?:in|en) (?:english|spanish|inglés|español)\)/i;
+
+/**
+ * One of our monthly series (config/site.yml `recurring_events:` — the Grapevine Meeting) worked out from the
+ * SETTINGS, for its own section on our pages (/meetings/#grapevine-meeting): it is right even while
+ * data/site/events.json is stale (a merge day: the series not synced yet). Each date is the event /events/ and
+ * /events.ics have — events.json's own record when it has that date (its flyer, its translations), else one made
+ * here as build_data.recurring_events makes it (the entry read as recurring_specs reads it: monthlyRule, the link
+ * and the meeting code checked the same way) — so its calendar text, links and calendar UID
+ * ("ev-recurring-grapevine-meeting-2026-12-02") are the feed's: adding it twice keeps one entry.
+ *   → { key, title, summary, starts, rule (the countdown's: cmRuleObj), recurrence ("Every first Wednesday of the
+ *       month · 7:00 – 8:00 PM Central time"), recurrenceDay ("Every first Wednesday of the month"), time ("7:00 –
+ *       8:00 PM"), end ("8:00 PM"), join (meetingJoin: platform, url, meeting code …), contact, flyerMatch, uidPrefix
+ *       ("ev-recurring-grapevine-meeting-"), next (the next date's event), dates (the next `n`), saysLang (its
+ *       title names its language already — "Reunión de Grapevine (en inglés)": a page adds no "En inglés" of its
+ *       own) }
+ *   or null: no such series, or no date to come.
+ */
+export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
+  const raw = site?.recurring_events;
+  const entries = Array.isArray(raw) ? raw : raw && typeof raw === "object" ? [raw] : [];
+  const sp = entries.map((e) => (e && typeof e === "object" && e.enabled !== false ? monthlyRule(e, true) : null))
+    .find((e) => e && e.key === key);
+  if (!sp) return null;
+  const now = opt.now || new Date();
+  const n = Number(opt.n) || 4;
+  const titles = { en: oneLine(sp.title), es: oneLine(sp.title_es) };
+  const summaries = { en: oneLine(sp.summary), es: oneLine(sp.summary_es) };
+  if (!titles.en && !titles.es) return null;
+  const own = titles.en ? "en" : "es";
+  const both = (o) => ({ en: o.en || o.es, es: o.es || o.en });
+  const online = seriesUrl(sp.online_url);
+  const meetingId = SERIES_MEETING_ID.test(oneLine(sp.meeting_id)) ? oneLine(sp.meeting_id) : "";
+  const platform = platformOf(online);
+  const rule = { week_of_month: Number(sp.week_of_month), weekday: String(sp.weekday), start: meetingStart(sp), end: meetingEnd(sp) };
+  const synced = new Map((items || []).filter((it) => it && it.category === "recurring" && it.extra && it.extra.series === key && it.status !== "gone").map((it) => [it.id, it]));
+  const dates = [];
+  for (const d of meetingDates(sp, 0, 13, now)) {
+    if (Date.parse(d.end) <= now.getTime() || dates.length >= n) continue;
+    const id = `ev:recurring:${key}:${d.ymd}`;
+    const it = synced.get(id) || {
+      id, source: "committee", kind: "event", url: seriesUrl(sp.url, true) || "/events/",
+      title: titles[own], summary: summaries[own], lang: own, date: d.start, category: "recurring", status: "ok",
+      extra: { start: d.start, end: d.end, all_day: false, location: oneLine(sp.location) || null, online_url: online,
+        recurring: true, series: key, rule, host: eventHost({ extra: { host: sp.host } }) || "neta", online: !!online,
+        platform, meeting_id: meetingId || null, contact: oneLine(sp.contact) || null },
+      i18n: { title: both(titles), summary: both(summaries) }, machine: [], is_new: false,
+    };
+    const ev = normalizeEvents([it], site, lang, { monthsBack: 0, monthsAhead: 0, now }).find((e) => e.id === id);
+    if (ev) dates.push(ev);
+  }
+  if (!dates.length) return null;
+  const next = dates[0];
+  const day = next.uid.endsWith(next.startYmd) ? next.uid.slice(0, -next.startYmd.length) : "";
+  return {
+    key, title: next.title, summary: next.summary, starts: sp.starts || "", saysLang: SAYS_LANG.test(next.title),
+    rule: { weekday: WD[rule.weekday.toLowerCase()] ?? 3, n: rule.week_of_month, start: rule.start, end: rule.end, skip: skipDates(sp), ...(sp.starts ? { starts: sp.starts } : {}) },
+    recurrence: recurrenceText(rule, lang), recurrenceDay: recurrenceText(rule, lang).split(" · ")[0], time: meetingTimeRange(sp, lang),
+    end: clockLabel(rule.end, lang),
+    // (its platform as the link names it — "" for a link of another kind: "Join online"; never the committee's Zoom default)
+    join: { ...meetingJoin({ online_url: online || "", meeting_id: meetingId }, lang), platform: platform || "" },
+    contact: next.contact, flyerMatch: oneLine(sp.flyer_match), uidPrefix: day, next, dates,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Structured data (schema.org) of /events/                           */
+/* ------------------------------------------------------------------ */
+// What /events/ (and /es/events/) tell search engines about its events: one schema.org Event per upcoming event
+// held at a place (events.njk writes them as the page's FIRST <script type="application/ld+json">). Google lists
+// only events at a physical place with a postal address that the public may attend (its Event rules, updated
+// 2026-09-08), so an online-only event — the committee meeting's monthly dates (members only, on Google Meet), our
+// Grapevine Meeting (Google Meet), La Viña's workshop on Zoom — gets none: it could only count as an error. The
+// page, the .ics files and the share pages still show it. A hybrid event (a place AND an online link) is "Mixed",
+// with its place only: Google reads no VirtualLocation, and its link would only have been this page.
+// Only facts the data has, and no personal names: no performer (speakers' names — anonymity: a committee meeting's
+// guest speaker never reaches it), no offers (there are no tickets).
+
+const US_STATES = new Set(("AL AK AZ AR CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT NC ND "
+  + "NE NH NJ NM NV NY OH OK OR PA PR RI SC SD TN TX UT VA VT WA WI WV WY").split(" "));
+// a country at the end of a place ("…, TX, 76111, United States": the neta65.org calendar) — the US, always here
+const US_COUNTRY = /^(?:united states(?: of america)?|usa?|u\.\s?s\.(?:\s?a\.)?|estados unidos|ee\.?\s?uu\.?)$/i;
+
+// "TX" → "TX", "" when it is not a US state. Written in capitals ("in", "or", "me" are words of a venue's name),
+// except Texas: "Tx", "Texas" too. `anyCase`: the data's own extra.state.
+function usState(s, anyCase = false) {
+  const v = String(s || "").trim().replace(/\.$/, "");
+  if (/^(?:tx|texas)$/i.test(v)) return "TX";
+  const up = v.toUpperCase();
+  return US_STATES.has(up) && (anyCase || v === up) ? up : "";
+}
+
+// "LONGVIEW" / "FORT WORTH" → "Longview" / "Fort Worth"
+const titleCase = (s) => String(s).toLowerCase().replace(/(^|[\s-])(\p{Ll})/gu, (_, a, b) => a + b.toUpperCase());
+
+// An object without its empty values (schema.org: leave out what is not known)
+const compact = (o) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && v !== null && v !== ""));
+
+/**
+ * An event's place for search engines — { "@type": "Place", name, address: PostalAddress } — from its place as
+ * /events/ shows it: "Grupo Libro Grande, 623 West Bow, Tyler, TX 75702" → name "Grupo Libro Grande", streetAddress
+ * "623 West Bow", addressLocality "Tyler", addressRegion "TX", postalCode "75702", addressCountry "US". The data's
+ * own city and state (extra.city / extra.state) come first. A place written without commas ("Maude Cobb .
+ * Convenció center LONGVIEW TX 75604", from La Viña's calendar) gives its ZIP code, state, and a city written in
+ * capitals, from its end. A text that cannot be split at all is the street address as a whole only when it starts
+ * with a house number ("1802 West Division Street") — a venue's name alone ("Hilton Tyler") is its name, not its
+ * street. Empty parts are left out; null without a place. The country is the US unless the data names another one (extra.country, from an
+ * outside calendar): then it is left out.
+ */
+export function eventPlace(text, extra = {}) {
+  const parts = String(text ?? "").replace(/\s+/g, " ").split(",").map((p) => p.trim()).filter(Boolean);
+  while (parts.length > 1 && US_COUNTRY.test(parts[parts.length - 1])) parts.pop();
+  if (!parts.length) return null;
+  const whole = parts.join(", ");
+  const xCity = String(extra?.city || "").replace(/\s+/g, " ").trim();
+  const xCountry = String(extra?.country || "").trim();
+  let zip = "", region = "", city = "", inline = false, m;
+  let last = parts.pop();
+  // the ZIP code at its end: a part of its own ("…, TX, 76111"), or after the state ("TX 75702")
+  m = last.match(/^(.*?)\s*\b(\d{5})(?:-\d{4})?$/);
+  if (m && (parts.length || usState((m[1].match(/(\S+)$/) || [])[1]))) {
+    zip = m[2];
+    last = m[1] || parts.pop() || "";
+  }
+  // the state: a part of its own ("TX"), or after the city with no comma ("Tyler TX", "LONGVIEW TX")
+  m = last.match(/^(?:(.*\S)\s+)?(\S+)$/);
+  if (m && usState(m[2])) {
+    region = usState(m[2]);
+    inline = !!m[1];
+    last = m[1] || parts.pop() || "";
+  }
+  // the city: the part before the state or ZIP code ("…, Tyler, TX 75702") — or the end of the venue's part
+  // when no comma came before the state (the data's own city, else a city in capitals: "… center LONGVIEW")
+  const found = !!(zip || region);
+  const words = last.split(" "), n = xCity ? xCity.split(" ").length : 0;
+  if (last && xCity && foldText(last) === foldText(xCity)) {
+    city = xCity;
+    last = "";
+  } else if (last && xCity && found && inline && words.length > n && foldText(words.slice(-n).join(" ")) === foldText(xCity)) {
+    city = xCity;
+    last = words.slice(0, -n).join(" ");
+  } else if (last && found && !/\d/.test(last)) {
+    const caps = inline && last.match(/^(.*\p{Ll}.*?)\s+((?:\p{Lu}{2,}\s+){0,2}\p{Lu}{2,})$/u);
+    if (!inline || parts.length || (!caps && words.length <= 2)) {
+      city = last;
+      last = "";
+    } else if (caps) {
+      city = titleCase(caps[2]);
+      last = caps[1];
+    }
+  }
+  if (last) parts.push(last);
+  // what is left: the venue, then its street ("Grupo Libro Grande" + "623 West Bow"); a first part that starts
+  // with a number is the street (no venue named: the place's name is its whole text)
+  const venue = parts.length && !/^\d/.test(parts[0]) ? parts[0] : "";
+  let street = (venue ? parts.slice(1) : parts).join(", ");
+  if (!street && !found && !city && parts.length === 1 && /^\d/.test(whole)) street = whole;   // nothing to split
+  return {
+    "@type": "Place",
+    name: venue || whole,
+    address: compact({
+      "@type": "PostalAddress", streetAddress: street, addressLocality: xCity || city,
+      addressRegion: usState(extra?.state, true) || region, postalCode: zip,
+      addressCountry: !xCountry || US_COUNTRY.test(xCountry) ? "US" : "",
+    }),
+  };
+}
+
+// A summary as one plain line for search engines: no HTML (its few common entities read), single spaces, at most
+// `n` characters (cut at a word, "…" — as the share pages cut theirs) — and without its sentences that say how to
+// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 815 9593
+// 1777, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
+// them to people; a copy made for machines only helps those who look for meetings to disrupt.
+// What counts: "Meeting ID" / "Zoom ID" / "ID de Zoom" / "ID de (la) reunión" (never "meeting ideas"), a Zoom number
+// right after the word ("Zoom 871 2036 8287", "Zoom: 815-9593-1777"), a meeting code / "código de (la) reunión", a
+// passcode, password, "código de acceso" or "contraseña", a Zoom link or its pwd= token, a Google Meet link.
+const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
+const JOIN_DETAILS = /\bmeeting\s*ids?\b|\bzoom\s*id\b|\bid de zoom\b|\bzoom\W{0,3}\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+// A summary for the calendars of an event that is over (shapeEvent): its lines as written, without the sentences that
+// say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too many.
+function withoutJoinDetails(s) {
+  return String(s ?? "").split("\n").flatMap((line) => {
+    if (!line.trim()) return [""];
+    const kept = line.split(/(?<=[.!?])\s+/).filter((sentence) => !JOIN_DETAILS.test(sentence)).join(" ").trimEnd();
+    return kept.trim() ? [kept] : [];
+  }).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+function plainLine(s, n = 300) {
+  const t = String(s ?? "").replace(/<[^>]*>/g, " ").replace(/&(?:nbsp|quot|#39|apos|lt|gt|amp);/g, (e) => PLAIN_ENTITIES[e])
+    .replace(/\s+/g, " ").trim()
+    .split(/(?<=[.!?])\s+/).filter((sentence) => !JOIN_DETAILS.test(sentence)).join(" ");
+  return t.length > n ? t.slice(0, n).replace(/\s+\S*$/, "") + "…" : t;
+}
+
+/**
+ * The schema.org Events of /events/ (events.njk: `upcoming | cmEventLd(site, lang, pageAbs)` → its @graph): the
+ * events still to come that have a place (not one "to be announced"), a monthly series by its next date only, at
+ * most `max`. Each one says:
+ *   - name, startDate / endDate (a time in UTC; an all-day event its days), eventStatus, url (its card on this
+ *     page: pageAbs#anchor);
+ *   - eventAttendanceMode Offline, or Mixed for a hybrid event; location — its Place with a PostalAddress
+ *     (eventPlace);
+ *   - description — its summary as one plain line (≤ 300 characters); none for an event from Grapevine's or La
+ *     Viña's own calendar (their words, not ours: their own page tells search engines about it);
+ *   - image — its flyer (eventSharePicture, as its share page), else — only for the committee's own events — the
+ *     committee's card in the page's language (an event's picture must show that event: Google's rule; the card
+ *     names the committee, so it never stands for someone else's);
+ *   - sameAs — its own page on another site (neta65.org's event page, aalavina.org's …): never a flyer on Google
+ *     Drive / Docs, a site's home page (the CityWide booth's link is CityWide's site, not the booth) or our own;
+ *   - organizer — who holds it, when we know: La Viña or Grapevine for their own events we share (ev.host); none
+ *     for one from their calendars (not ours to say); the Area (config/site.yml area, area_website) for the Area's
+ *     own events (eventTone "assembly": an assembly, an ACM, the Area's town hall); else the committee — by the
+ *     "#committee" @id of the site's Organization,
+ *     with the same name as there (base.njk: config/site.yml committee, English on every page — one @id, one name);
+ *   - isAccessibleForFree only for the committee's own events (coming to one costs nothing; of the others' we do not
+ *     know); inLanguage "es" only for an event held in Spanish (La Viña's own, a content/events file tagged
+ *     la-vina, one from La Viña's calendar) — never the page's language.
+ */
+export function eventLd(events, site, lang = "en", pageAbs = "", max = 30) {
+  const s = site || {};
+  const page = pageAbs || siteUrl(langPath("/events/", lang), s);
+  const root = siteUrl("/", s);
+  const pickS = (field) => String((lang !== "en" && s[`${field}_${lang}`]) || s[field] || "");
+  const committee = compact({ "@type": "Organization", "@id": root + "#committee", name: String(s.committee || ""), url: root });
+  const area = compact({ "@type": "Organization", name: pickS("area"), url: s.area_website || "" });
+  const hosts = {
+    lv: compact({ "@type": "Organization", name: "La Viña", url: s.links?.lv_home || "" }),
+    gv: compact({ "@type": "Organization", name: "AA Grapevine", url: s.links?.gv_home || "" }),
+  };
+  const card = siteUrl(lang === "es" ? "/assets/img/og-default-es.png?v=2" : "/assets/img/og-default.png?v=2", s);
+  const out = [];
+  for (const ev of events || []) {
+    if (out.length >= max) break;
+    if (!ev || ev.past || ev.later || ev.committee || ev.locationTba || !ev.location) continue;
+    // an online event from an outside calendar (La Viña's brings in Spanish-language ones from anywhere): its
+    // "place" is where to join ("Zoom ID: … Código: …"), not a place
+    if (ev.item?.extra?.scope === "online") continue;
+    const location = eventPlace(ev.location, ev.item?.extra);
+    if (!location) continue;
+    // held at a place = a place with a real address (a city, a state or a ZIP code): not just a text such as "Sala
+    // virtual" beside an online link, nor a venue's name alone (Google: "the venue's detailed street address")
+    const addr = location.address || {};
+    if (!(addr.addressLocality || addr.addressRegion || addr.postalCode)) continue;
+    // an event from Grapevine's or La Viña's own calendar (not one of theirs the committee shares: ev.host)
+    const outside = ev.group === "calendar" && !ev.host;
+    const organizer = ev.host ? hosts[ev.host] : outside ? null : eventTone(ev) === "assembly" ? area : committee;
+    const tags = Array.isArray(ev.item?.tags) ? ev.item.tags : [];
+    const spanish = ev.host === "lv" || ev.category === "lv-calendar" || tags.includes("la-vina");
+    const link = ev.linkExternal ? String(ev.link || "") : "";
+    let ownPage = "";
+    try {
+      const u = new URL(link);
+      if (!/^(?:drive|docs)\.google\.com$/i.test(u.hostname) && u.pathname.replace(/\/+$/, "") && !link.startsWith(root)) ownPage = link;
+    } catch { /* no link of its own */ }
+    const picture = shareImage(eventSharePicture(ev), s);
+    out.push(compact({
+      "@type": "Event",
+      name: ev.title,
+      description: outside ? "" : plainLine(ev.summary),
+      startDate: ev.startIso,
+      endDate: ev.endIso,
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: `https://schema.org/${ev.isOnline ? "Mixed" : "Offline"}EventAttendanceMode`,
+      location,
+      image: picture ? picture.url : organizer === committee ? card : "",
+      organizer,
+      isAccessibleForFree: organizer === committee ? true : null,
+      inLanguage: spanish ? "es" : "",
+      sameAs: ownPage,
+      url: page + "#" + ev.anchor,
+    }));
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------------ */
+/*  iCalendar (RFC 5545) writer                                        */
+/* ------------------------------------------------------------------ */
+// TEXT escaping (RFC 5545 §3.3.11)
+export function icsEscape(s) {
+  return String(s ?? "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\n/g, "\\n");
+}
+
+// Fold a content line to ≤ 75 octets per physical line, never splitting a
+// UTF-8 character (RFC 5545 §3.1). Continuation lines start with one space.
+export function icsFold(line) {
+  const enc = new TextEncoder();
+  if (enc.encode(line).length <= 75) return line;
+  const parts = [];
+  let cur = "", curBytes = 0, limit = 75;
+  for (const ch of line) {
+    const b = enc.encode(ch).length;
+    if (curBytes + b > limit) {
+      parts.push(cur);
+      cur = "";
+      curBytes = 0;
+      limit = 74; // continuation lines begin with a space (1 octet)
+    }
+    cur += ch;
+    curBytes += b;
+  }
+  if (cur) parts.push(cur);
+  return parts.join("\r\n ");
+}
+
+/**
+ * Build a complete VCALENDAR string.
+ * @param {object[]} events  output of normalizeEvents()
+ * @param {object}   o       { name, description, lang, url, now, categoryLabel, alarms }
+ * alarms: true gives every event the site's one reminder (central-time.js icsAlarm: an hour before; 9 AM the day
+ * before an all-day one) — the files a member adds once (a month's dates, /deadlines.ics). The big /events.ics
+ * feeds leave it out: a subscriber would get over a hundred alarms.
+ */
+export function buildIcs(events, o = {}) {
+  const now = o.now || new Date();
+  const stamp = utcStamp(now);
+  // The same UID as before and a SEQUENCE that is higher in every newer file (central-time.js icsSequence: the
+  // minutes since 2026 when it was made) — a calendar app takes a changed time or place instead of keeping the
+  // old one (it ignores a version whose SEQUENCE is not higher than the one it has).
+  const seq = icsSequence(now);
+  const L = [];
+  const push = (s) => L.push(icsFold(s));
+  push("BEGIN:VCALENDAR");
+  push("VERSION:2.0");
+  push("PRODID:-//NETA 65 Grapevine La Vina Committee//Events " + String(o.lang || "en").toUpperCase() + "//EN");
+  push("CALSCALE:GREGORIAN");
+  push("METHOD:PUBLISH");
+  push("NAME:" + icsEscape(o.name));
+  push("X-WR-CALNAME:" + icsEscape(o.name));
+  if (o.description) {
+    push("DESCRIPTION:" + icsEscape(o.description));
+    push("X-WR-CALDESC:" + icsEscape(o.description));
+  }
+  push("X-WR-TIMEZONE:" + TZ);
+  if (o.url) push("URL:" + o.url);
+  push("REFRESH-INTERVAL;VALUE=DURATION:PT12H");
+  push("X-PUBLISHED-TTL:PT12H");
+  for (const ev of events) {
+    push("BEGIN:VEVENT");
+    push("UID:" + ev.uid + (o.lang && o.lang !== "en" ? "-" + o.lang : "") + "@neta65-gvlv");
+    push("DTSTAMP:" + stamp);
+    if (ev.allDay) {
+      push("DTSTART;VALUE=DATE:" + ymdCompact(ev.startYmd));
+      push("DTEND;VALUE=DATE:" + ymdCompact(ymdAddDays(ev.endYmd, 1)));
+      push("TRANSP:TRANSPARENT");
+    } else {
+      push("DTSTART:" + utcStamp(new Date(ev.startMs)));
+      push("DTEND:" + utcStamp(new Date(ev.endMs)));
+      push("TRANSP:OPAQUE");
+    }
+    push("SUMMARY:" + icsEscape(ev.title));
+    if (ev.calDescription) push("DESCRIPTION:" + icsEscape(ev.calDescription));
+    if (ev.calLocation) push("LOCATION:" + icsEscape(ev.calLocation));
+    if (ev.detailsUrl) push("URL:" + ev.detailsUrl);
+    if (ev.flyer && ev.flyer.view) push("ATTACH:" + ev.flyer.view);
+    push("CATEGORIES:" + icsEscape(o.categoryLabel ? o.categoryLabel(ev) : ev.group));
+    // TENTATIVE: details not final yet (content/events `tentative: true`); every other event is CONFIRMED.
+    push("STATUS:" + (ev.tentative ? "TENTATIVE" : "CONFIRMED"));
+    push("SEQUENCE:" + seq);
+    if (o.alarms) icsAlarm(ev.title, ev.allDay).forEach(push);
+    push("END:VEVENT");
+  }
+  // No event (no deadline open, a month with nothing in it, a build without data): RFC 5545 §3.6 wants at least one
+  // component in a calendar — the site's zone (X-WR-TIMEZONE) as a VTIMEZONE, so a strict app or a subscriber's
+  // next fetch still reads a valid, empty calendar.
+  if (!events.length) vtimezone(TZ, Number(now)).forEach(push);
+  push("END:VCALENDAR");
+  return L.join("\r\n") + "\r\n";
+}
+
+/* ------------------------------------------------------------------ */
+/*  Drive: documents & photos                                          */
+/* ------------------------------------------------------------------ */
+// Category tabs on the Portfolio page, /portfolio/ (fixed order; unknown folders follow by name)
+export const DOC_TABS = [
+  { key: "reports", icon: "file-bar-chart" },
+  { key: "notes", icon: "notebook-pen" },
+  { key: "slides", icon: "presentation" },
+  { key: "workshops", icon: "pen-line" },
+  { key: "flyers", icon: "megaphone" },
+  { key: "forms", icon: "clipboard-list" },
+];
+const DOC_KINDS = new Set(["document", "slides", "form", "video_file", "photo"]);
+const PHOTO_KINDS = new Set(["photo", "video_file"]);
+
+/** A photo or video of an album on /photos/ (not a flyer or a slide that happens to be a picture).
+ *  Also the monthly digest's rule for "photo albums" (community.js; send_digest.py is_album_media). */
+export function isPhotoItem(it) {
+  return PHOTO_KINDS.has(it.kind) && (it.category === "photos" || it.category === "other" || !it.category);
+}
+function isDocItem(it) {
+  if (!DOC_KINDS.has(it.kind)) return false;
+  if (it.category === "photos" || it.category === "announcements") return false;
+  if (isPhotoItem(it)) return false;
+  return true;
+}
+
+function fileType(it) {
+  const mime = String(it.extra?.mime || "").toLowerCase();
+  if (it.kind === "form" || mime.includes("google-apps.form")) return { key: "form", icon: "clipboard-list", tone: "vine" };
+  if (it.kind === "slides" || /presentation|powerpoint/.test(mime)) return { key: "slides", icon: "presentation", tone: "grape" };
+  if (it.kind === "video_file" || mime.startsWith("video/")) return { key: "video", icon: "file-video", tone: "grape" };
+  if (it.kind === "photo" || mime.startsWith("image/")) return { key: "image", icon: "file-image", tone: "vine" };
+  if (mime.includes("pdf") || it.extra?.is_pdf) return { key: "pdf", icon: "file-text", tone: "lv" };
+  return { key: "doc", icon: "file-text", tone: "gv" };
+}
+
+function itemDate(it) {
+  return it.date || null;
+}
+function sortKey(it) {
+  const d = parseInstant(it.date) || parseInstant(it.first_seen);
+  return d ? d.getTime() : 0;
+}
+const byNewest = (a, b) => sortKey(b) - sortKey(a) || String(a.title).localeCompare(String(b.title));
+
+function panelOf(it) {
+  const n = Number(it.extra?.panel) || 0;
+  return { n, label: it.extra?.panel_label || (n ? `Panel ${n}` : "") };
+}
+
+function shapeDoc(it, lang) {
+  const x = it.extra || {};
+  const ft = fileType(it);
+  const mime = String(x.mime || "");
+  const googleNative = mime.startsWith("application/vnd.google-apps");
+  const view = x.view_url || it.url || "";
+  const preview = x.preview_url || drivePreviewUrl(view);
+  // uc?export=download does not work for native Google Docs/Slides/Forms.
+  const download = x.download_url && !(googleNative && /export=download/.test(x.download_url)) ? x.download_url : "";
+  return {
+    id: it.id,
+    title: H.pickLang(it, "title", lang) || it.title || "",
+    type: ft,
+    date: itemDate(it),
+    added: it.first_seen || null,
+    panel: panelOf(it),
+    view, preview: ft.key === "form" ? "" : preview, download: ft.key === "form" ? "" : download,
+    thumb: x.thumb_url || it.image || "",
+    isNew: !!it.is_new,
+    item: it,
+  };
+}
+
+/* The texts a Drive file is found by (driveMatch, the Portfolio's pinned flyers): its title as uploaded, its English
+   and Spanish titles (a translation the sync stored: data/translations/overrides.yml → i18n.title) and its file name
+   ("Grapevine Meeting - flyer.png"). */
+function driveTexts(it) {
+  return [it?.title, it?.i18n?.title?.en, it?.i18n?.title?.es, it?.extra?.name].filter(Boolean).map(String);
+}
+
+/* config/site.yml drive.pinned_flyers → the patterns the site can read, in their order (capitals ignored). One
+   pattern written without "- " counts too; an empty line, a value that is not text, or a pattern that is not one
+   the site can read ("(" alone) is skipped — silently: the setting only orders what a page shows, so the build
+   never warns about it (a warning would fail the strict build of the Code check). */
+function pinPatterns(pins) {
+  const out = [];
+  for (const p of [].concat(pins ?? [])) {
+    if (typeof p !== "string" && typeof p !== "number") continue;
+    const src = String(p).trim();
+    if (!src) continue;
+    try { out.push(new RegExp(src, "i")); } catch { /* not a pattern: skipped */ }
+  }
+  return out;
+}
+
+/* Documents (shaped, newest first) → { pinned, rest }: for each pattern in its order, the newest document it finds
+   that an earlier pattern did not take (one file found by two patterns shows once; a pattern that finds nothing
+   leaves no gap), then the others, still newest first. */
+function pinFirst(docs, patterns) {
+  const pinned = [];
+  const taken = new Set();
+  for (const re of patterns) {
+    const d = docs.find((x) => !taken.has(x) && driveTexts(x.item).some((s) => re.test(s)));
+    if (d) { pinned.push(d); taken.add(d); }
+  }
+  return { pinned, rest: docs.filter((x) => !taken.has(x)) };
+}
+
+/**
+ * Documents grouped into category tabs (+ panels inside each tab), each tab newest first — except the flyers tab's
+ * pinned flyers, which come first (round 30): `pins` = config/site.yml drive.pinned_flyers (patterns, capitals
+ * ignored, matched against each flyer's title, its English and Spanish titles and its file name — pinFirst), in
+ * that order, each marked `pinned: true` (the Portfolio's "Pinned" badge); with several panels, first within their
+ * panel's group. Without pins every tab is newest first (/meetings/' notes tab and the sub-nav's count call it so).
+ * Returns { tabs: [{key, label, icon, count, groups: [{panel, label, items}]}], total, multiPanel }
+ */
+export function documentTabs(items, lang = "en", pins = []) {
+  const patterns = pinPatterns(pins);
+  const docs = (items || []).filter((it) => it && it.status !== "gone" && it.source === "drive" && isDocItem(it));
+  const tabs = new Map(DOC_TABS.map((d) => [d.key, { key: d.key, icon: d.icon, label: t(`committee.docs.cat.${d.key}`, lang), desc: t(`committee.docs.cat.${d.key}_desc`, lang), builtin: true, items: [] }]));
+  for (const it of docs) {
+    let key = it.category;
+    if (!tabs.has(key) || !tabs.get(key).builtin) {
+      if (it.kind === "form") key = "forms";
+      else {
+        const folder = (it.extra?.path && it.extra.path[0]) || t("committee.docs.cat.other", lang);
+        key = "folder-" + slugify(folder, 40);
+        if (!tabs.has(key)) tabs.set(key, { key, icon: "folder", label: folder, desc: "", builtin: false, items: [] });
+      }
+    }
+    tabs.get(key).items.push(shapeDoc(it, lang));
+  }
+  const panels = new Set();
+  for (const tab of tabs.values()) {
+    tab.items.sort((a, b) => byNewest(a.item, b.item));
+    if (tab.key === "flyers" && patterns.length) {
+      const { pinned, rest } = pinFirst(tab.items, patterns);
+      for (const d of pinned) d.pinned = true;
+      tab.items = [...pinned, ...rest];
+    }
+    tab.count = tab.items.length;
+    const g = new Map();
+    for (const d of tab.items) {
+      panels.add(d.panel.n);
+      if (!g.has(d.panel.n)) g.set(d.panel.n, { panel: d.panel.n, label: d.panel.label || t("committee.docs.no_panel", lang), items: [] });
+      g.get(d.panel.n).items.push(d);
+    }
+    tab.groups = [...g.values()].sort((a, b) => b.panel - a.panel);
+  }
+  const list = [...tabs.values()];
+  // Built-in tabs keep their order; extra folder tabs follow alphabetically.
+  const builtin = list.filter((x) => x.builtin);
+  const extra = list.filter((x) => !x.builtin).sort((a, b) => a.label.localeCompare(b.label));
+  const panelLabels = [...new Set(docs.map((it) => panelOf(it).label).filter(Boolean))];
+  return { tabs: [...builtin, ...extra], total: docs.length, multiPanel: panels.size > 1, panels: panelLabels };
+}
+
+/**
+ * A committee Drive file shown on the page it is about (the Portfolio stays its home): the newest
+ * Drive item whose title (as uploaded or translated) or file name matches `pattern` (a regular
+ * expression, case-insensitive), optionally only in one Drive `category` ("flyers", "workshops" …).
+ * n = 0 (default): that item, or null — then the page shows nothing. n > 0: up to n items, newest first.
+ *   {% set f = db.drive.items | driveMatch("editorial calendar|calendario editorial") %}
+ */
+export function driveMatch(items, pattern, category = "", n = 0) {
+  let re;
+  try { re = new RegExp(String(pattern || ""), "i"); } catch { return n > 0 ? [] : null; }
+  if (!pattern) return n > 0 ? [] : null;
+  const list = (items || [])
+    .filter((it) => it && it.source === "drive" && it.status !== "gone" && (!category || it.category === category)
+      && driveTexts(it).some((s) => re.test(s)))
+    .sort(byNewest);
+  return n > 0 ? list.slice(0, n) : list[0] || null;
+}
+
+/**
+ * The Portfolio hero's right-hand card (/portfolio/: the shared hero aside) — never the list's first category, which
+ * starts right below the hero:
+ *   "flyers"  the flyers tab, when it has files and is not that first one: "Flyers to share". With `pins`
+ *             (config/site.yml drive.pinned_flyers — patterns, in their order) the committee's pinned flyers first,
+ *             in that order (each the newest flyer its pattern finds that an earlier one did not: pinFirst), then the
+ *             newest others — max(2, min(4, the number of patterns)) files in all, so 4 patterns show 4 and a
+ *             pattern that finds nothing (the file renamed or deleted) leaves its place to the newest other flyer.
+ *             A pattern the site cannot read is skipped (it counts for nothing). No pins: the 2 newest flyers.
+ *   "latest"  else the file added last (first seen, else its own date) in any other category — pins play no part;
+ *   null      nothing else to show.
+ * Silent (no build warning): the setting only orders what the card shows.
+ *   → { kind, tab, docs, pinned (how many of docs are pinned ones) }
+ *   {% set teaser = dt | cmDocTeaser(site.drive.pinned_flyers) %}
+ */
+export function docTeaser(dt, pins = []) {
+  const tabs = ((dt && dt.tabs) || []).filter((tb) => tb.count);
+  const rest = tabs.slice(1);
+  const flyers = rest.find((tb) => tb.key === "flyers");
+  if (flyers) {
+    // newest first whatever order the tab came in (documentTabs puts the pinned ones first itself)
+    const newest = [...(flyers.items || [])].sort((a, b) => byNewest(a.item || {}, b.item || {}));
+    const patterns = pinPatterns(pins);
+    if (!patterns.length) return { kind: "flyers", tab: flyers, docs: newest.slice(0, 2), pinned: 0 };
+    const limit = Math.max(2, Math.min(4, patterns.length));
+    const { pinned, rest: others } = pinFirst(newest, patterns);
+    return { kind: "flyers", tab: flyers, docs: [...pinned, ...others].slice(0, limit), pinned: Math.min(pinned.length, limit) };
+  }
+  let best = null;
+  for (const tab of rest) {
+    for (const d of tab.items || []) {
+      const k = (parseInstant(d.added) || parseInstant(d.date))?.getTime() || 0;
+      if (!best || k > best.k) best = { k, doc: d, tab };
+    }
+  }
+  return best ? { kind: "latest", tab: best.tab, docs: [best.doc], pinned: 0 } : null;
+}
+
+/* Which album a photo belongs to, and the album's anchors on /photos/. Shared by photoAlbums (the
+   /photos/ page) and the monthly digest (community.js: one "Photos: <album>" row per album and month,
+   linking to "/photos/#<slug>"), so a digest link always lands on its album. */
+const albumFolder = (it) => { const x = it.extra || {}; return x.album || (it.category === "other" && x.path && x.path[0]) || null; };
+
+/** The album of a photo: "f:<Drive sub-folder>" (extra.album; for a loose file in "other", its first
+ *  folder), else "p:<panel number>" (the panel's own album). send_digest.py album_key copies it. */
+export function photoAlbumKey(it) {
+  const folder = albumFolder(it);
+  return folder ? `f:${folder}` : `p:${(it.extra && it.extra.panel) || 0}`;
+}
+
+/* Each album's anchors, in the order its first photo appears in the list: `slug` ("album-<folder or
+   panel>", "-2", "-3" … when two albums would share it) and `alias` (the slug build_data.py gives a What's
+   New photo group, extra.album_slug — dropped when another album already has it). */
+function albumAnchors(photos) {
+  const firsts = new Map();
+  for (const it of photos) { const k = photoAlbumKey(it); if (!firsts.has(k)) firsts.set(k, it); }
+  const out = new Map();
+  const taken = new Set();
+  for (const [k, it] of firsts) {
+    const x = it.extra || {};
+    const pl = x.panel_label || (x.panel ? `Panel ${x.panel}` : "");
+    const base = "album-" + slugify(albumFolder(it) || pl || "photos", 50);
+    let slug = base, i = 2;
+    while (taken.has(slug)) slug = `${base}-${i++}`;
+    taken.add(slug);
+    let alias = itemAnchor(slugify(x.album || (x.path || []).join(" / "), 80), "");
+    if (alias && taken.has(alias)) alias = "";
+    else if (alias) taken.add(alias);
+    out.set(k, { slug, alias });
+  }
+  return out;
+}
+
+const albumPhotos = (items) => (items || []).filter((it) => it && it.status !== "gone" && it.source === "drive" && isPhotoItem(it));
+
+/** Every album's /photos/ anchor: Map(photoAlbumKey → "album-…"), exactly the ids photoAlbums gives. */
+export function photoAlbumSlugs(items) {
+  return new Map([...albumAnchors(albumPhotos(items))].map(([k, a]) => [k, a.slug]));
+}
+
+/* ---------- The magazine covers on /photos/ (#covers) ----------
+   The committee keeps the front covers of Grapevine and La Viña on its Drive, one folder per magazine and year
+   (photos/AAGrapevine_covers/2026/GV_2026-11_November.jpg, photos/AALavina_covers/2026/LaVina_2026-06_Noviembre-
+   Diciembre.jpg — README, how-to/photos-slides-reports.md). The Drive sync (scripts/sync/drive.py) marks each with
+   extra.cover = { pub: "gv" | "lv", year, month (Grapevine) | issue (La Viña's bimonthly number, 1–6), months, key:
+   "YYYY-MM" of the issue's first month — "" when the file name gives none } and files it in the album "Grapevine
+   covers <year>" / "La Viña covers <year>" (extra.album; docs/DATA_SCHEMA.md). Here, the page's side:
+     · photoAlbums groups the covers by magazine and year (extra.cover — never by Drive's folder names), one album
+       each with `covers` = { pub, year, id: "covers-gv-2026" (the album's anchor), heading: "Grapevine · 2026",
+       name: "Grapevine" }, after the committee's own albums: the newest year first, Grapevine before La Viña in
+       a year, a cover without a year last. Its covers run newest issue first and each carries its issue's name
+       (coverIssueLabel), its alt text and the lightbox's lines with the publisher's credit.
+     · coverShelf is what photos.njk's covers section and its filter need: the two collections (the album index's
+       "Grapevine covers · 131 covers · 2015–2026" cards), the years, the counts.
+     · library.js gives the site search one entry per cover album (its words: every issue's name in English and
+       Spanish), linking to /photos/?mag=gv&year=2019#covers-gv-2019.
+   In the browser, committee.js cmCovers filters the albums by magazine and year (?mag=&year=, #covers-gv …).
+   A cover album keeps its generic anchors too (albumAnchors' "album-grapevine-covers-2026" and What's New's
+   "grapevine-covers-2026", the twin of build_data.album_slug), so any link made the usual way still lands. */
+export const COVER_PUBS = ["gv", "lv"];          // Grapevine before La Viña (the filter's order, a year's order)
+const COVER_NAME = { gv: "Grapevine", lv: "La Viña" };
+
+/** A Drive photo's magazine cover — { pub, year (a number, or null), key ("YYYY-MM" of the issue's first month,
+ *  or "") } — or null when it is not one (extra.cover missing or not Grapevine's / La Viña's). */
+export function coverOf(it) {
+  const c = it && it.extra && it.extra.cover;
+  if (!c || typeof c !== "object" || !COVER_NAME[c.pub] || !isPhotoItem(it)) return null;
+  const key = /^\d{4}-(0[1-9]|1[0-2])$/.test(String(c.key || "")) ? String(c.key) : "";
+  const y = Number(c.year);
+  const year = Number.isInteger(y) && y >= 1900 && y <= 2999 ? y : key ? Number(key.slice(0, 4)) : null;
+  return { pub: c.pub, year, key };
+}
+
+/** A cover's issue, as /read/ names that magazine's issues: La Viña's bimonthly issue by the site's one name for it
+ *  (read.js issueName: "November–December 2026" / "Noviembre–Diciembre 2026"); Grapevine's month as /read/ shows a
+ *  Grapevine issue — the pipeline's rule-written label (build_data.issue_label): "November 2026" / "Noviembre 2026"
+ *  (Intl's Spanish "noviembre de 2026" without the "de"). "" without an issue key. */
+export function coverIssueLabel(c, lang = "en") {
+  if (!c || !c.key) return "";
+  if (c.pub === "lv") return issueName(c.key, "lv", lang);
+  const s = issueName(c.key, "gv", lang);
+  return lang === "es" ? s.replace(/\s+de\s+(\d{4})$/, " $1") : s;
+}
+
+/** A Drive picture's address at another width: the "=w600" a thumbnail (lh3.googleusercontent.com/d/<id>=w600)
+ *  ends with becomes "=w<width>" — the same picture, the same shape, fewer bytes for a small tile (the covers' grid:
+ *  =w400; the collection cards' mosaic: =w300; the lightbox keeps image_url's =w1600). An address without that
+ *  ending is returned as it is. */
+export function driveImageWidth(url, width) {
+  const s = String(url || "");
+  const w = Math.round(Number(width));
+  return w > 0 && /=w\d+$/.test(s) ? s.replace(/=w\d+$/, `=w${w}`) : s;
+}
+const COVER_TILE_W = 400, COVER_SHELF_W = 300;
+// the years /photos/ shows at first with no filter on (both magazines' blocks of each; coverShelf `earlier`)
+const COVERS_FIRST_YEARS = 2;
+
+/* The anchor of a cover album: "covers-gv-2026" ("covers-gv-undated" for covers without a year) */
+const coverAlbumId = (pub, year) => `covers-${pub}-${year || "undated"}`;
+// An id of the covers section (#covers, #covers-gv, #covers-lv-2026 …): never an event album's alias
+const COVER_ID = /^covers(?:-|$)/;
+
+/**
+ * Photo albums: one per Drive sub-folder (extra.album), else per folder/panel; the magazine covers one per
+ * magazine and year (extra.cover — see "The magazine covers on /photos/" above).
+ * Returns [{key, slug, alias, title, count, photos, videos, cover:[…], newest, oldest, panelLabel, items:[…],
+ * covers (cover albums only: { pub, year, id, heading, name }), anchors (cover albums: their generic ids)}] —
+ * the committee's own albums newest first, then the cover albums (newest year first, Grapevine first).
+ */
+export function photoAlbums(items, lang = "en") {
+  const photos = albumPhotos(items);
+  const anchors = albumAnchors(photos);
+  // the Drive albums the committee's own photos are in: a cover never takes one of their anchors (a cover
+  // without its extra.album would otherwise bring the panel album's "#photos" along)
+  const ownKeys = new Set(photos.filter((it) => !coverOf(it)).map(photoAlbumKey));
+  const albums = new Map();
+  for (const it of photos) {
+    const x = it.extra || {};
+    const folder = albumFolder(it);
+    const pl = x.panel_label || (x.panel ? `Panel ${x.panel}` : "");
+    const cv = coverOf(it);
+    // a cover goes to its magazine's album of its year, whatever its Drive folder is called
+    const key = cv ? `c:${cv.pub}:${cv.year || ""}` : photoAlbumKey(it);
+    if (!albums.has(key)) {
+      const albumI18n = it.i18n?.album?.[lang];
+      const name = cv ? COVER_NAME[cv.pub] : "";
+      albums.set(key, {
+        key,
+        // alias: the slug build_data.py gives a What's New photo group (extra.album_slug), so
+        // "/photos/#<album_slug>" lands on this album too (albumAnchors). Not on a cover album: those are
+        // in its `anchors` (below), and the covers section's own ids (#covers …) are never an alias.
+        alias: cv ? "" : anchors.get(key).alias,
+        slug: cv ? coverAlbumId(cv.pub, cv.year) : anchors.get(key).slug,
+        // a cover album's name is written here (never the Drive folder's, never machine-translated):
+        // "Grapevine covers 2026" / "Portadas de Grapevine 2026"
+        title: cv
+          ? (cv.year ? t("committee.photos.covers_album", lang, { mag: name, year: cv.year }) : t("committee.photos.covers_collection", lang, { mag: name }))
+          : albumI18n || folder || (pl ? t("committee.photos.panel_album", lang, { panel: pl }) : t("committee.photos.untitled_album", lang)),
+        panelLabel: pl,
+        covers: cv ? {
+          pub: cv.pub, year: cv.year, id: coverAlbumId(cv.pub, cv.year), name,
+          heading: cv.year ? `${name} · ${cv.year}` : t("committee.photos.covers_collection", lang, { mag: name }),
+        } : null,
+        anchors: [],
+        items: [],
+      });
+    }
+    const a = albums.get(key);
+    // a cover album's generic ids: albumAnchors' slug and alias of each Drive album its covers came from
+    // ("album-grapevine-covers-2026", "grapevine-covers-2026"), so a link made the usual way lands on it
+    const gk = cv && photoAlbumKey(it);
+    if (gk && gk.startsWith("f:") && !ownKeys.has(gk)) {
+      const g = anchors.get(gk);
+      for (const id of [g && g.slug, g && g.alias]) if (id && id !== a.slug && !COVER_ID.test(id) && !a.anchors.includes(id)) a.anchors.push(id);
+    }
+    const isVideo = it.kind === "video_file" || x.is_video;
+    const fid = x.file_id || driveFileId(it.url);
+    const thumb = x.thumb_url || it.image || (fid ? `https://lh3.googleusercontent.com/d/${fid}=w600` : "");
+    const title = H.pickLang(it, "title", lang) || it.title || "";
+    const p = {
+      id: it.id,
+      title,
+      date: it.date || null,
+      thumb,
+      full: isVideo ? (x.preview_url || drivePreviewUrl(it.url)) : (x.image_url || (fid ? `https://lh3.googleusercontent.com/d/${fid}=w1600` : thumb)),
+      view: x.view_url || it.url,
+      isVideo: !!isVideo,
+      isNew: !!it.is_new,
+      item: it,
+    };
+    if (cv) {
+      // "November 2026" (the tile's caption), "Grapevine cover, November 2026" (alt), the lightbox's
+      // "Grapevine — November 2026" and "Grapevine · 2026 · © The AA Grapevine, Inc."; a file whose name
+      // gives no issue: its own title
+      const name = a.covers.name, issue = coverIssueLabel(cv, lang) || title;
+      Object.assign(p, {
+        cover: cv, label: issue,
+        // the grid's tile (158–200 CSS px wide): the 400-px picture (driveImageWidth)
+        tile: driveImageWidth(thumb, COVER_TILE_W),
+        alt: t("committee.photos.cover_alt", lang, { mag: name, issue }),
+        lbTitle: `${name} — ${issue}`,
+        lbDesc: [name, cv.year, t("committee.photos.cover_credit", lang)].filter(Boolean).join(" · "),
+      });
+    }
+    a.items.push(p);
+  }
+  const out = [...albums.values()];
+  for (const a of out) {
+    // covers: the newest issue first (a file without an issue last), then by title
+    a.items.sort(a.covers
+      ? (p, q) => (q.cover.key > p.cover.key) - (q.cover.key < p.cover.key) || String(p.title).localeCompare(String(q.title))
+      : (p, q) => byNewest(p.item, q.item));
+    a.count = a.items.length;
+    a.videos = a.items.filter((p) => p.isVideo).length;
+    a.photos = a.count - a.videos;
+    a.cover = a.items.filter((p) => p.thumb).slice(0, 3);
+    const times = a.items.map((p) => parseInstant(p.date)).filter(Boolean).map((d) => d.getTime());
+    a.newest = times.length ? new Date(Math.max(...times)).toISOString() : null;
+    a.oldest = times.length ? new Date(Math.min(...times)).toISOString() : null;
+    a.sortMs = times.length ? Math.max(...times) : Math.max(0, ...a.items.map((p) => sortKey(p.item)));
+    a.hasNew = a.items.some((p) => p.isNew);
+    // an event album named "Covers …" never takes an id of the covers section
+    if (!a.covers && a.alias && COVER_ID.test(a.alias)) a.alias = "";
+  }
+  const byYear = (a, b) => (b.covers.year || 0) - (a.covers.year || 0) || COVER_PUBS.indexOf(a.covers.pub) - COVER_PUBS.indexOf(b.covers.pub);
+  return [
+    ...out.filter((a) => !a.covers).sort((a, b) => b.sortMs - a.sortMs || a.title.localeCompare(b.title)),
+    ...out.filter((a) => a.covers).sort(byYear),
+  ];
+}
+
+/**
+ * What the covers section of /photos/ needs, from photoAlbums' list: { albums (the cover albums, in its order; each
+ * album's covers.first: the magazine's first block, which carries #covers-gv / #covers-lv),
+ * mags: [{ pub, name, id: "covers-gv", title: "Grapevine covers", count, range: "2015–2026", cover: [3 newest — their
+ * thumb at =w300], hasNew }] (a magazine without covers left out), years: [{ year, count, gv, lv }] (newest first),
+ * total, earlier: the years the page folds away at first ({ from, to, n } — cmCovers: every year but the 2 newest;
+ * null when there are no more) }.
+ *   {% set covers = albums | cmCovers(lang) %}
+ */
+export function coverShelf(albums, lang = "en") {
+  const list = (albums || []).filter((a) => a && a.covers);
+  // the magazine's anchor (#covers-gv) goes on its first (newest) block: `first`
+  const seen = new Set();
+  for (const a of list) { a.covers.first = !seen.has(a.covers.pub); seen.add(a.covers.pub); }
+  const mags = COVER_PUBS.map((pub) => {
+    const own = list.filter((a) => a.covers.pub === pub);
+    const items = own.flatMap((a) => a.items);
+    const years = own.map((a) => a.covers.year).filter(Boolean);
+    const first = years.length ? Math.min(...years) : null, last = years.length ? Math.max(...years) : null;
+    return {
+      pub, name: COVER_NAME[pub], id: `covers-${pub}`,
+      title: t("committee.photos.covers_collection", lang, { mag: COVER_NAME[pub] }),
+      count: items.length,
+      range: first === null ? "" : first === last ? String(first) : `${first}–${last}`,
+      // the card's mosaic (3 covers of ~90–110 CSS px, near the top of the page: loaded at once): the 300-px pictures
+      cover: items.filter((p) => p.thumb).slice(0, 3).map((p) => ({ ...p, thumb: driveImageWidth(p.thumb, COVER_SHELF_W) })),
+      hasNew: items.some((p) => p.isNew),
+    };
+  }).filter((m) => m.count);
+  const years = new Map();
+  for (const a of list) {
+    if (!a.covers.year) continue;
+    if (!years.has(a.covers.year)) years.set(a.covers.year, { year: a.covers.year, count: 0, gv: 0, lv: 0 });
+    const y = years.get(a.covers.year);
+    y.count += a.count;
+    y[a.covers.pub] += a.count;
+  }
+  const byYear = [...years.values()].sort((a, b) => b.year - a.year);
+  // With no filter on, the page shows the 2 newest years at first (both magazines' blocks) and folds the others
+  // away behind "Show earlier years (2015–2024)" (committee.js cmCovers): covers.early on those blocks — the covers
+  // without a year (last) with them, when there are earlier years at all
+  const recent = new Set(byYear.slice(0, COVERS_FIRST_YEARS).map((y) => y.year));
+  const older = byYear.slice(COVERS_FIRST_YEARS).map((y) => y.year);
+  for (const a of list) a.covers.early = a.covers.year ? !recent.has(a.covers.year) : older.length > 0;
+  return {
+    albums: list, mags,
+    years: byYear,
+    total: list.reduce((s, a) => s + a.count, 0),
+    earlier: older.length ? { from: Math.min(...older), to: Math.max(...older), n: list.filter((a) => a.covers.early).reduce((s, a) => s + a.count, 0) } : null,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Bulletin (/bulletin/ — the data and these names say "announcement") */
+/* ------------------------------------------------------------------ */
+// `now` (default: the build's clock) decides which posts are over (`expires` before its Central day);
+// the monthly toolkit passes its own clock (MONTHLY_NOW) — monthly.js monthNow.
+export function announcementList(items, now = new Date()) {
+  const today = chicagoYmd(now);
+  return (items || [])
+    .filter((it) => it && it.status !== "gone")
+    .filter((it) => {
+      const exp = it.extra?.expires;
+      return !exp || String(exp).slice(0, 10) >= today;
+    })
+    .map((it) => ({
+      ...it,
+      // Data links point to "/bulletin/#<slug>" (content/bulletin/<slug>.md)
+      _anchor: itemAnchor(it.extra?.slug, "ann-" + slugify(String(it.id).replace(/^ann:/, ""), 70)),
+      _pinned: !!it.extra?.pinned,
+    }))
+    .sort((a, b) => (b._pinned - a._pinned) || sortKey(b) - sortKey(a));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Grapevine Weekly Open: "Wednesdays" / "11 AM Central" → Spanish     */
+/* ------------------------------------------------------------------ */
+const ES_DAYS = {
+  monday: "lunes", tuesday: "martes", wednesday: "miércoles", thursday: "jueves", friday: "viernes", saturday: "sábado", sunday: "domingo",
+};
+export function whenText(s, lang = "en") {
+  if (!s || lang !== "es") return s || "";
+  let out = String(s);
+  out = out.replace(/\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(s)?\b/gi, (m0, d, plural) => {
+    const es = ES_DAYS[d.toLowerCase()];
+    return plural ? `los ${es === "sábado" || es === "domingo" ? es + "s" : es}` : es;
+  });
+  out = out
+    .replace(/\b(\d{1,2}(?::\d{2})?)\s*a\.?\s?m\b\.?/gi, "$1\u00a0a.\u00a0m.")
+    .replace(/\b(\d{1,2}(?::\d{2})?)\s*p\.?\s?m\b\.?/gi, "$1\u00a0p.\u00a0m.")
+    .replace(/\bnoon\b/gi, "mediodía")
+    .replace(/\b(?:central(?: time)?|CT|CST|CDT)\b/gi, "(hora del Centro)")
+    .replace(/\b(?:eastern(?: time)?|ET|EST|EDT)\b/gi, "(hora del Este)")
+    .replace(/\b(?:pacific(?: time)?|PT|PST|PDT)\b/gi, "(hora del Pacífico)")
+    .replace(/\bevery\b/gi, "cada")
+    .replace(/\bat\b/gi, "a las")
+    .replace(/\band\b/gi, "y")
+    .replace(/\s+/g, " ")
+    .trim();
+  return cap(out);
+}
+
+/**
+ * Grapevine Weekly Open (data/site/weekly_open.json item) → display object.
+ * Times are shown in Central time (NETA 65's time zone); the host's own time
+ * ("Noon Eastern") is kept as a secondary line. `next` is rolled forward week
+ * by week from extra.next_start so it is right even if the data is a few days old
+ * (committee.js rolls it forward again in the browser). The weeks are counted in the
+ * host's time zone (extra.timezone, extra.start_local): Noon Eastern stays 11 AM Central
+ * across daylight-saving changes.
+ */
+export function weeklyOpen(wo, lang = "en", now = new Date()) {
+  if (!wo) return null;
+  const x = wo.extra || {};
+  const pick = (f) => {
+    const v = wo.i18n && wo.i18n[f] && wo.i18n[f][lang];
+    return v ? String(v) : "";
+  };
+  const when = pick("when") || [whenText(x.day, lang), whenText(x.time_central || x.time, lang)].filter(Boolean).join(" · ");
+  const hostTime = pick("time") || whenText(x.time, lang);
+  const digits = String(x.zoom_id || "").replace(/\D+/g, "");
+  let next = null;
+  const n0 = parseInstant(x.next_start);
+  if (n0) {
+    const tz = validZone(x.timezone);
+    // start_local is the host's clock time, so it only counts together with its own zone.
+    const at = tz === x.timezone && /^\d{1,2}:\d{2}$/.test(String(x.start_local || "").trim()) ? String(x.start_local).trim() : "";
+    // "live" for ~an hour and a quarter after it starts
+    const d = new Date(nextWeeklyStart(n0.getTime(), now.getTime(), tz, at, 75 * 60000));
+    next = {
+      iso: d.toISOString(),
+      tz, at, // for the browser's own roll-forward (committee.js)
+      date: cap(fmt(d, lang, { weekday: "long", month: "long", day: "numeric" })),
+      time: fmt(d, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+      // with its end (WEEKLY_OPEN_MS): "11:00 AM – 12:00 PM CDT" — the /meetings/ cards and their calendar files
+      range: clockRange(d, new Date(d.getTime() + WEEKLY_OPEN_MS), lang),
+    };
+  }
+  // A meeting that has not started yet (La Viña's, from extra.starts = "2026-11-05"): its first
+  // start, in the host's zone. Until then the page says "Starts Thursday, November 5, 2026".
+  let starts = null;
+  if (isYmd(x.starts) && next) {
+    const [y, mo, dd] = x.starts.split("-").map(Number);
+    const tz = next.tz;
+    const at = /^(\d{1,2}):(\d{2})$/.exec(next.at || "");
+    const p = zoneParts(Date.parse(next.iso), tz); // no start_local: the clock time of next_start
+    const ms = zoneInstant(y, mo - 1, dd, at ? Number(at[1]) : p.h, at ? Number(at[2]) : p.mi, tz);
+    if (Number.isFinite(ms) && now.getTime() < ms) {
+      const d = new Date(ms);
+      // "Thursday, November 5, 2026" / "jueves 5 de noviembre de 2026" (no comma after the weekday in Spanish)
+      let long = fmt(d, lang, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+      if (lang === "es") long = long.replace(/^([^\d,]+),\s*/, "$1 ");
+      starts = {
+        iso: d.toISOString(), date: lang === "es" ? long : cap(long),
+        time: fmt(d, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+        range: clockRange(d, new Date(ms + WEEKLY_OPEN_MS), lang),
+      };
+    }
+  }
+  const isLv = wo.source === "lavina" || wo.id === "weekly_open_lv";
+  return {
+    id: wo.id || "",
+    isLv,
+    lang: wo.lang || (isLv ? "es" : "en"),
+    title: pick("title") || String(wo.title || ""),
+    summary: pick("summary") || String(wo.summary || ""),
+    summaryMachine: Array.isArray(wo.machine) && wo.machine.includes(lang),
+    day: pick("day") || whenText(x.day, lang),
+    timeCentral: pick("time_central") || whenText(x.time_central, lang),
+    when,
+    hostTime: hostTime && !when.toLowerCase().includes(hostTime.toLowerCase()) ? hostTime : "",
+    zoomId: x.zoom_id || "",
+    zoomDigits: digits,
+    passcode: x.passcode || "",
+    zoomUrl: x.zoom_url || (digits ? `https://zoom.us/j/${digits}` : ""),
+    detailsUrl: x.url || wo.url || "",
+    playerUrl: x.player_url || "",
+    next,
+    starts,
+  };
+}
+
+/**
+ * Every weekly open meeting (data/site/weekly_open.json: the Grapevine Weekly Open, then La Viña's
+ * Reunión Abierta) → display objects, the page language's meeting first (La Viña on /es/).
+ */
+export function weeklyOpenAll(items, lang = "en", now = new Date()) {
+  const list = (items || []).filter((it) => it && it.kind === "meeting" && it.status !== "gone")
+    .map((it) => weeklyOpen(it, lang, now)).filter(Boolean);
+  const rank = (w) => (w.lang === lang ? 0 : 1);
+  return list.map((w, i) => ({ w, i })).sort((a, b) => rank(a.w) - rank(b.w) || a.i - b.i).map((o) => o.w);
+}
+
+/**
+ * /events/' "Next 5 weeks" card — the sidebar's calendar under the calendar feed (events.njk #ev-cal): the weeks to
+ * come as a month-style grid, Sunday first, each day with what is on, so the next five weeks are always in view like
+ * a real calendar while the list scrolls by.
+ *   events  the page's upcoming events (cmEvents | cmCollapseRecurring, then where("past", false)): EVERY one of them,
+ *           the committee meetings and each date of a monthly series (the Grapevine Meeting, the CityWide booth …)
+ *           included, on each of its days — an event over several days (an Area assembly, Fri–Sun: ev.multiDay) on
+ *           every day from its first to its last; any other on the day it starts. Its days are Central days
+ *           (startYmd / endYmd): the committee meeting at 7 PM Central is on its Wednesday, never on Thursday as in UTC.
+ *   wos     the weekly open meetings (cmWeeklyAll): AA Grapevine's Weekly Open and La Viña's Reunión Abierta, every
+ *           week from their next date — or from their first one (w.starts: La Viña's, before November 5, 2026) —,
+ *           one whose hour is over (WEEKLY_OPEN_MS; the cards say "Live now" a little longer) left out,
+ *           stepped a calendar week at a time in the host's own zone at its own clock time (w.next.tz, w.next.at, as
+ *           nextWeeklyStart): Noon Eastern stays 11 AM Central on the Sundays the clocks change (2027-03-14,
+ *           2027-11-07). They are not events of the list; their entries lead to their "every week" cards
+ *           (#ev-weekly-gv / #ev-weekly-lv).
+ *   opt     { weeks: 5 — the rows shown —, spare: 3 — more rows, hidden: as each week ends, the browser drops its row
+ *           and shows the next one (src/assets/js/committee.js expire() with the tbody's data-cm-max), so a page built
+ *           on a Monday still shows five weeks on the Sunday after the next build should have come —, now (a Date;
+ *           the build's clock when left out) }
+ * The rows start on the Sunday of the build's week (Central); a day before the build's own day is `past` (no link).
+ * Within a day: the list's events by their start, then the weekly meetings.
+ * → { n (weeks shown), todayYmd, weekdays: 7 × { short ("Wed" / "Mié"), tiny ("We" / "Mi": a narrow card's), long
+ *     ("Wednesday" / "Miércoles") },
+ *     caption ("November – December 2026" / "Noviembre–diciembre de 2026": the months of the rows shown, Intl's own
+ *     range — the browser writes it again the same way once a week has gone), captionFrom (the first day shown),
+ *     weeks: (weeks + spare) × { endIso (the moment its Saturday ends, Central — when the browser drops the row),
+ *       hidden (a spare row), days: 7 × { ymd, day (1–31), mon ("Dec": on the 1st and on the grid's first day),
+ *       label ("Wednesday, November 18"), today, past, events: [{ title, tone (eventTone: its colour), weekly,
+ *       anchor (its card's id), time ("7:00 PM", Central; an all-day event "All day", one whose time an outside
+ *       calendar did not list nothing), endIso (when it is over) }], dots (the first 3), more (how many after them),
+ *       sr (what a screen reader hears for the day: "Wednesday, November 18: Committee meeting, 7:00 PM; Grapevine
+ *       Weekly Open, 11:00 AM, every week"),
+ *       first (the anchor its link leads to without JavaScript) } },
+ *     panel (the day whose list shows first: today when something is on today, else the next day with something on),
+ *     panelToday (that day is today),
+ *     kinds: [{ tone, label }] (the colours used, in the colour key's order; grey is "NETA 65" when every grey entry
+ *       is one of ours, as the Grapevine Meeting is — else "Other events"), weekly (a weekly meeting is on) }
+ * — or null when nothing is on in these weeks (a COMMITTEE_EMPTY build without a meeting): no card then.
+ */
+export function calendarWeeks(events, wos, lang = "en", opt = {}) {
+  const num = (v, d) => (Number.isFinite(Number(v)) ? Math.max(0, Math.min(12, Math.floor(Number(v)))) : d);
+  const n = Math.max(1, num(opt.weeks, 5)), spare = num(opt.spare, 3);
+  const now = opt.now instanceof Date ? opt.now : new Date();
+  const todayYmd = chicagoYmd(now);
+  const firstYmd = ymdAddDays(todayYmd, -new Date(todayYmd + "T12:00:00Z").getUTCDay());
+  const lastYmd = ymdAddDays(firstYmd, (n + spare) * 7 - 1);
+  const noon = (ymd) => new Date(ymd + "T12:00:00Z");
+  const clock = (ms) => fmt(new Date(ms), lang, { hour: "numeric", minute: "2-digit" });
+  const byDay = new Map();
+  const add = (ymd, e) => { if (ymd >= firstYmd && ymd <= lastYmd) (byDay.get(ymd) || byDay.set(ymd, []).get(ymd)).push(e); };
+  const allDay = t("committee.events.all_day", lang), notListed = t("committee.events.time_not_listed", lang);
+  // the grey kind says "NETA 65" only when every grey entry is one of ours (the list's group "neta")
+  let greyOurs = true;
+  for (const ev of events || []) {
+    if (!ev || ev.past || !isYmd(ev.startYmd) || !ev.anchor) continue;
+    const tone = eventTone(ev);
+    const last = ev.multiDay && isYmd(ev.endYmd) ? ev.endYmd : ev.startYmd;
+    for (let ymd = ev.startYmd < firstYmd ? firstYmd : ev.startYmd; ymd <= last && ymd <= lastYmd; ymd = ymdAddDays(ymd, 1)) {
+      if (tone === "other" && ev.group !== "neta") greyOurs = false;
+      // all day (an outside calendar's date without a time: what its card says — nothing); a timed event over
+      // several days: its start on its first day only
+      const time = ev.allDay ? (ev.timeLabel === notListed ? "" : allDay) : ymd === ev.startYmd ? clock(ev.startMs) : "";
+      add(ymd, { title: ev.title, tone, weekly: false, anchor: ev.anchor, time, endIso: ev.expireIso, at: ev.startMs });
+    }
+  }
+  let weekly = false;
+  for (const w of wos || []) {
+    if (!w || !w.next) continue;
+    const tz = validZone(w.next.tz);
+    const base = Date.parse((w.starts || w.next).iso);
+    const p = Number.isFinite(base) ? zoneParts(base, tz) : null;
+    if (!p) continue;
+    const at = /^(\d{1,2}):(\d{2})$/.exec(String(w.next.at || ""));
+    const h = at ? Number(at[1]) : p.h, mi = at ? Number(at[2]) : p.mi;
+    const key = w.isLv ? "lv" : "gv";
+    const title = w.title || t("committee.weekly.title", lang);
+    for (let k = 0; k <= n + spare + 1; k++) {
+      const ms = zoneInstant(p.y, p.mo, p.d + 7 * k, h, mi, tz);
+      const ymd = chicagoYmd(ms);
+      if (ymd > lastYmd) break;
+      // (the next date can be one under way — "Live now" for 75 minutes —: once its hour is over it is not listed)
+      if (ymd < firstYmd || ms + WEEKLY_OPEN_MS <= now.getTime()) continue;
+      weekly = true;
+      add(ymd, { title, tone: key, weekly: true, anchor: "ev-weekly-" + key, time: clock(ms),
+        endIso: new Date(ms + WEEKLY_OPEN_MS).toISOString(), at: ms });
+    }
+  }
+  if (!byDay.size) return null;
+  const everyWeek = t("committee.events.badge_weekly", lang).toLowerCase();
+  const monShort = (d) => cap(fmt(d, lang, { month: "short", timeZone: "UTC" })).replace(/\.$/, "");
+  const seen = new Set();
+  const weeks = [];
+  let panel = "";
+  for (let i = 0; i < (n + spare) * 7; i++) {
+    const ymd = ymdAddDays(firstYmd, i), d = noon(ymd);
+    const evs = (byDay.get(ymd) || []).sort((a, b) => a.weekly - b.weekly || a.at - b.at || a.title.localeCompare(b.title))
+      .map(({ at, ...e }) => e);
+    evs.forEach((e) => seen.add(e.tone));
+    const label = cap(fmt(d, lang, { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" }));
+    if (!panel && evs.length && ymd >= todayYmd) panel = ymd;
+    const day = {
+      ymd, day: d.getUTCDate(), mon: i === 0 || d.getUTCDate() === 1 ? monShort(d) : "", label,
+      today: ymd === todayYmd, past: ymd < todayYmd, events: evs, dots: evs.slice(0, 3), more: Math.max(0, evs.length - 3),
+      sr: evs.length ? `${label}: ${evs.map((e) => [e.title, e.time, e.weekly ? everyWeek : ""].filter(Boolean).join(", ")).join("; ")}` : "",
+      first: evs.length ? evs[0].anchor : "",
+    };
+    if (i % 7 === 0) weeks.push({ hidden: weeks.length >= n, days: [] });
+    const wk = weeks[weeks.length - 1];
+    wk.days.push(day);
+    if (i % 7 === 6) wk.endIso = new Date(chicagoDayEndMs(ymd)).toISOString();
+  }
+  // (from a fixed Sunday, January 1, 2023; tiny: the first two letters — "We" / "Mi", one of a kind in both
+  // languages — for a narrow card)
+  const weekdays = [0, 1, 2, 3, 4, 5, 6].map((k) => {
+    const d = new Date(Date.UTC(2023, 0, 1 + k, 12));
+    const short = cap(fmt(d, lang, { weekday: "short", timeZone: "UTC" })).replace(/\.$/, "");
+    return { short, tiny: short.slice(0, 2), long: cap(fmt(d, lang, { weekday: "long", timeZone: "UTC" })) };
+  });
+  return {
+    n, todayYmd, weekdays, weeks, panel, panelToday: panel === todayYmd, weekly,
+    caption: cap(fmtRange(noon(firstYmd), noon(ymdAddDays(firstYmd, n * 7 - 1)), lang, { month: "long", year: "numeric", timeZone: "UTC" })),
+    captionFrom: firstYmd,
+    kinds: EVENT_TONES.filter((k) => seen.has(k)).map((tone) => ({ tone,
+      label: t(tone === "other" && greyOurs ? "committee.events.kind.neta" : "committee.events.kind." + tone, lang) })),
+  };
+}
+
+/**
+ * A weekly open meeting's official flyer (a weeklyOpen() object) → { view, preview, thumb } (flyerLinks), or null:
+ * the newest file in the Drive's flyers/ folder that its settings' flyer_match finds (config/site.yml
+ * grapevine_weekly_open / lavina_weekly_open → driveMatch; the Portfolio stays its home). Its card on
+ * /meetings/#weekly-open and its "every week" card on /events/ show it like every event's flyer (ui.njk
+ * flyerThumb, flyerButton); no pattern or no match: nothing.
+ */
+export function weeklyFlyer(w, site, items) {
+  if (!w) return null;
+  const cfg = (site && (w.isLv ? site.lavina_weekly_open : site.grapevine_weekly_open)) || {};
+  const f = cfg.flyer_match ? driveMatch(items, cfg.flyer_match, "flyers") : null;
+  return f ? flyerLinks((f.extra && f.extra.view_url) || f.url) : null;
+}
+
+// A weekly open meeting lasts an hour (no end time is published for either; the site's rule for a time without
+// an end, EVENT_NO_END_MS) — its end on the /meetings/ cards and in its calendar files. (The cards still say "Live
+// now" for 75 minutes: a meeting can run over.)
+export const WEEKLY_OPEN_MS = EVENT_NO_END_MS;
+const ICS_DAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+
+/**
+ * "Add to calendar" for a weekly open meeting (/meetings/#weekly-open; a weeklyOpen() object): every week at its
+ * own clock time in its own zone (Noon Eastern), from its next date — or its first one (La Viña's, from
+ * extra.starts) — for an hour; the Zoom link, meeting ID and passcode in the text.
+ *   → { key ("gv" | "lv"), ics: the page's calendar file (/meetings/weekly-open-gv.ics, /es/…: its text is
+ *     weeklyIcs, written by src/pages/meetings-weekly-ics.11ty.js), gcal: Google Calendar's "add" link with the
+ *     weekly repeat } — null without a date. (Outlook.com's link cannot repeat an event: the file is for Outlook.)
+ */
+export function weeklyCalendar(w, site, lang = "en") {
+  if (!w || !w.next) return null;
+  const tz = validZone(w.next.tz);
+  const startMs = Date.parse((w.starts || w.next).iso);
+  const a = zoneParts(startMs, tz), b = zoneParts(startMs + WEEKLY_OPEN_MS, tz);
+  if (!a || !b) return null;
+  const key = w.isLv ? "lv" : "gv";
+  const local = (p) => `${p.y}${pad2(p.mo + 1)}${pad2(p.d)}T${pad2(p.h)}${pad2(p.mi)}00`;
+  const rrule = `RRULE:FREQ=WEEKLY;BYDAY=${ICS_DAYS[new Date(Date.UTC(a.y, a.mo, a.d)).getUTCDay()]}`;
+  const page = siteAbs(site, localPath("/meetings/", lang)) + "#weekly-open";
+  const lines = [w.isLv ? w.summary : t("committee.weekly.gv_text", lang)];
+  // the weekly open meetings are Zoom meetings (their join button names Zoom too)
+  if (w.zoomUrl) lines.push("", `${t("committee.meeting.cal_join", lang, { platform: "Zoom" })}: ${w.zoomUrl}`);
+  if (w.zoomId) lines.push(`${t("committee.meeting.id", lang)}: ${w.zoomId}`);
+  if (w.passcode) lines.push(`${t("committee.meeting.passcode", lang)}: ${w.passcode}`);
+  lines.push("", `${t("committee.cal.details", lang)}: ${page}`);
+  const title = w.title || t("committee.weekly.title", lang);
+  const description = lines.filter((s, i) => s || i > 0).join("\n").trim();
+  const q = (o) => Object.entries(o).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+  return {
+    key, tz, startMs, title, description, page, rrule,
+    uid: `${String(w.id || "weekly-open").replace(/[^a-z0-9]+/gi, "-").toLowerCase()}${lang !== "en" ? "-" + lang : ""}@neta65-gvlv`,
+    dtstart: local(a), dtend: local(b), location: w.zoomUrl || "",
+    ics: localPath(`/meetings/weekly-open-${key}.ics`, lang),
+    gcal: "https://calendar.google.com/calendar/render?" + q({ action: "TEMPLATE", text: title, dates: `${local(a)}/${local(b)}`, ctz: tz, recur: rrule, details: description, location: w.zoomUrl || "" }),
+  };
+}
+const pad2 = (n) => String(n).padStart(2, "0");
+
+// The zone's rules as an iCalendar VTIMEZONE, so a calendar app reads "DTSTART;TZID=America/New_York:…" the same
+// everywhere (RFC 5545 wants one for every TZID): its offsets in the year of `ms` and the days its clocks change
+// there, written as yearly rules ("the 2nd Sunday of March at 2 AM"; a day in the last week of its month: the
+// last such weekday), from 1970. A zone without daylight-saving time: one offset.
+export function vtimezone(tz, ms) {
+  const p = zoneParts(ms, tz);
+  if (!p) return [];
+  const y = p.y, changes = [];
+  let prev = offsetMinutes(Date.UTC(y, 0, 1, 12), tz);
+  for (let day = 1; day <= 366; day++) {
+    const at = Date.UTC(y, 0, 1 + day, 12), off = offsetMinutes(at, tz);
+    if (off === prev) continue;
+    let lo = at - 864e5, hi = at; // the minute it changes
+    while (hi - lo > 60000) {
+      const mid = lo + Math.max(60000, Math.floor((hi - lo) / 120000) * 60000);
+      if (offsetMinutes(mid, tz) === prev) lo = mid; else hi = mid;
+    }
+    changes.push({ at: hi, from: prev, to: off });
+    prev = off;
+  }
+  const hm = (m) => `${m < 0 ? "-" : "+"}${pad2(Math.floor(Math.abs(m) / 60))}${pad2(Math.abs(m) % 60)}`;
+  const L = ["BEGIN:VTIMEZONE", "TZID:" + tz];
+  if (!changes.length) {
+    L.push("BEGIN:STANDARD", "DTSTART:19700101T000000", "TZOFFSETFROM:" + hm(prev), "TZOFFSETTO:" + hm(prev), "END:STANDARD");
+  }
+  for (const c of changes) {
+    const wall = new Date(c.at + c.from * 60000); // the clock just before it changes, as UTC fields
+    const mo = wall.getUTCMonth(), d = wall.getUTCDate(), wd = wall.getUTCDay();
+    const dim = new Date(Date.UTC(y, mo + 1, 0)).getUTCDate();
+    const n = d + 7 > dim ? -1 : Math.ceil(d / 7);
+    const d1970 = nthWeekday1970(mo, wd, n);
+    const kind = c.to > c.from ? "DAYLIGHT" : "STANDARD";
+    L.push(`BEGIN:${kind}`, `DTSTART:1970${pad2(mo + 1)}${pad2(d1970)}T${pad2(wall.getUTCHours())}${pad2(wall.getUTCMinutes())}00`,
+      "TZOFFSETFROM:" + hm(c.from), "TZOFFSETTO:" + hm(c.to), `RRULE:FREQ=YEARLY;BYMONTH=${mo + 1};BYDAY=${n}${ICS_DAYS[wd]}`, `END:${kind}`);
+  }
+  L.push("END:VTIMEZONE");
+  return L;
+}
+function nthWeekday1970(mo, wd, n) {
+  const dim = new Date(Date.UTC(1970, mo + 1, 0)).getUTCDate();
+  if (n === -1) return dim - ((new Date(Date.UTC(1970, mo, dim)).getUTCDay() - wd + 7) % 7);
+  return 1 + ((wd - new Date(Date.UTC(1970, mo, 1)).getUTCDay() + 7) % 7) + (n - 1) * 7;
+}
+
+/** A weekly open meeting's calendar file (weeklyCalendar → the text of /meetings/weekly-open-gv.ics …): one
+ *  event that repeats every week, in the meeting's own zone (DTSTART;TZID + its VTIMEZONE), the same UID in
+ *  every file of that language, SEQUENCE from the moment it was made (central-time.js icsSequence), and the
+ *  site's one reminder, an hour before each meeting (icsAlarm: its title only — the Zoom passcode stays in the
+ *  description). */
+export function weeklyIcs(cal, now = new Date()) {
+  if (!cal) return "";
+  const L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//NETA 65 Grapevine La Vina Committee//Weekly open meeting//EN",
+    "CALSCALE:GREGORIAN", "METHOD:PUBLISH", ...vtimezone(cal.tz, cal.startMs), "BEGIN:VEVENT",
+    "UID:" + cal.uid, "DTSTAMP:" + utcStamp(now), "SEQUENCE:" + icsSequence(now),
+    `DTSTART;TZID=${cal.tz}:${cal.dtstart}`, `DTEND;TZID=${cal.tz}:${cal.dtend}`, cal.rrule,
+    "SUMMARY:" + icsEscape(cal.title), "DESCRIPTION:" + icsEscape(cal.description)];
+  if (cal.location) L.push("LOCATION:" + icsEscape(cal.location));
+  L.push("URL:" + cal.page, "STATUS:CONFIRMED", "TRANSP:OPAQUE", ...icsAlarm(cal.title, false), "END:VEVENT", "END:VCALENDAR");
+  return L.map(icsFold).join("\r\n") + "\r\n";
+}
+
+/* ------------------------------------------------------------------ */
+/*  District report: Book of the Month teaser + this month's toolkit   */
+/* ------------------------------------------------------------------ */
+// The one canonical home for prices and dates is /shop/ (data/site/shop.json → db.shop): the report
+// only gives a compact teaser — title, sale price, end date — pointing there and to the official store.
+// digestShop is used by report.js (the district report, /monthly/#report). The monthly digest no longer
+// carries the Book of the Month (it recaps last month); the toolkit's month model has its own (monthly.js botm).
+const moneyFmt = (v, lang) => {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "";
+  try {
+    return new Intl.NumberFormat(LOCALES[lang] || "en-US", { style: "currency", currency: "USD" }).format(n);
+  } catch {
+    return `$${n.toFixed(2)}`;
+  }
+};
+export function digestShop(shop, lang = "en", now = new Date()) {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+  const offers = (shop?.botm || [])
+    .filter((b) => b && b.url && Number.isFinite(Number(b.sale_price)) && (!isYmd(b.ends) || b.ends >= today))
+    .map((b) => {
+      const isLv = b.pub === "lv";
+      let host = "";
+      try { host = new URL(b.url).hostname.replace(/^www\./, ""); } catch { host = isLv ? "aalavina.org" : "aagrapevine.org"; }
+      return {
+        pub: b.pub, isLv, host, raw: b,
+        pubName: isLv ? "La Viña" : "Grapevine",
+        // The title the book is sold under (a Grapevine book in English, a La Viña book in Spanish),
+        // never a translation; the translation is only a small gloss under it (like /shop/).
+        title: b.title || (b.i18n?.title?.[lang]) || "",
+        titleLang: b.lang || (isLv ? "es" : "en"),
+        gloss: b.title && b.i18n?.title?.[lang] && b.i18n.title[lang] !== b.title ? b.i18n.title[lang] : "",
+        machine: Array.isArray(b.machine) && b.machine.includes(lang),
+        url: b.url,
+        image: b.image || "",
+        pct: Number(b.discount_pct) || null,
+        sale: moneyFmt(b.sale_price, lang),
+        price: Number(b.price) > Number(b.sale_price) ? moneyFmt(b.price, lang) : "",
+        ends: isYmd(b.ends) ? b.ends : "",
+        endsLabel: isYmd(b.ends) ? fmt(parseInstant(b.ends), lang, { month: "long", day: "numeric" }) : "", // "October 14" / "14 de octubre"
+      };
+    })
+    // the page language's magazine first
+    .sort((a, b) => ((a.isLv ? "es" : "en") === lang ? 0 : 1) - ((b.isLv ? "es" : "en") === lang ? 0 : 1));
+  const pcts = [...new Set(offers.map((o) => o.pct).filter(Boolean))];
+  // This month's Monthly toolkit page: /monthly/YYYY-MM/ (America/Chicago)
+  const ym = today.slice(0, 7);
+  const monthLabel = fmt(parseInstant(`${ym}-15`), lang, { month: "long", year: "numeric" }); // "September 2026" / "septiembre de 2026"
+  return { offers, pct: pcts.length === 1 ? pcts[0] : null, month: { key: ym, path: `/monthly/${ym}/`, label: monthLabel } };
+}
+
+/**
+ * The committee's Google Drive, as the last sync saw it (data/site/status.json):
+ * root + newest Panel folder (with a direct link), when it was last checked.
+ * Used by the empty states so they can say exactly where a file goes.
+ *
+ * Only the current Panel folder is ever linked. The shared ROOT folder is never
+ * linked from the site (it also holds old panels and loose files, such as event
+ * sign-up sheets), so when the sync did not find a Panel folder, `url` is null
+ * and every "Open Drive folder" button is hidden.
+ */
+export function driveInfo(status, site) {
+  const src = (status?.sources || []).find((s) => s && s.source === "drive") || null;
+  const st = (src && src.stats) || {};
+  const panels = (st.panel_folders || []).filter((p) => p && p.id).sort((a, b) => (Number(b.panel) || 0) - (Number(a.panel) || 0));
+  const p = panels[0] || null;
+  const minPanel = Number(site?.drive?.min_panel) || null;
+  const panel = p
+    ? { number: Number(p.panel) || null, label: p.label || `Panel ${p.panel}`, name: p.name || p.label || `Panel ${p.panel}`, url: `https://drive.google.com/drive/folders/${p.id}` }
+    : minPanel ? { number: minPanel, label: `Panel ${minPanel}`, name: `Panel ${minPanel}`, url: null } : null;
+  return {
+    rootName: st.root || "A65_GV",
+    panel,
+    // Where "Open Drive folder" goes: the current Panel folder, or nowhere (never the root).
+    url: (panel && panel.url) || null,
+    checked: src && src.ok !== null ? src.updated || null : null,
+    ok: src ? src.ok : null,
+    files: Number(st.files ?? src?.count ?? 0) || 0,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Grapevine meetings (data/site/meetings.json → /meetings/#grapevine-meetings) */
+/* ------------------------------------------------------------------ */
+// "20:00" → "8:00 PM" / "8:00 p. m." (the site's Spanish spelling, no-break spaces). The feeds give
+// local Central time as a wall-clock string, so no time zone math is needed (or wanted) here.
+export function clock12(hhmm, lang = "en") {
+  const m = /^(\d{1,2}):(\d{2})/.exec(String(hhmm || ""));
+  if (!m) return "";
+  const h = Number(m[1]) % 24;
+  const h12 = h % 12 || 12;
+  if (lang === "es") return `${h12}:${m[2]} ${h < 12 ? "a. m." : "p. m."}`;
+  return `${h12}:${m[2]} ${h < 12 ? "AM" : "PM"}`;
+}
+
+// Weekday names, 0 = Sunday ("Sunday" / "Domingo" — capitalised: they are headings and options)
+export function weekdayName(d, lang = "en") {
+  try {
+    return cap(new Intl.DateTimeFormat(LOCALES[lang] || "en-US", { weekday: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2023, 0, 1 + Number(d)))));
+  } catch {
+    return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][Number(d)] || "";
+  }
+}
+
+// Lower-case, accents removed: the same folding committee.js uses for the "City, county or group" box.
+const foldText = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
+const pickL = (o, lang) => (o && typeof o === "object" ? o[lang] || o.en || "" : String(o || ""));
+// Type codes shown another way on the card (attendance line, language badge) or that repeat the section
+const GVM_SKIP_TYPES = new Set(["ONL", "TC", "S", "EN", "INACTIVE"]);
+const GVM_ACCESS_TYPES = new Set(["X", "XB"]);
+// Short weekday names for a group's schedule (0 = Sunday): the same in every browser (no Intl quirks)
+const DAY_ABBR = {
+  en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  es: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+};
+
+/**
+ * A set of weekdays as a short label and a spoken one: all seven → "Every day"; three or more in a
+ * row → "Mon–Fri" ("Monday to Friday"); the others one by one → "Sun, Wed" ("Sunday, Wednesday").
+ */
+export function dayRunLabel(days, lang = "en") {
+  const L = lang === "es" ? "es" : "en";
+  const ds = [...new Set((days || []).map(Number))].filter((d) => d >= 0 && d <= 6).sort((a, b) => a - b);
+  if (ds.length === 7) { const s = t("committee.gvm.every_day", L); return { label: s, sr: s }; }
+  const runs = [];
+  for (const d of ds) {
+    const r = runs[runs.length - 1];
+    if (r && d === r[1] + 1) r[1] = d; else runs.push([d, d]);
+  }
+  const short = [], spoken = [];
+  for (const [a, b] of runs) {
+    if (b - a >= 2) {
+      short.push(`${DAY_ABBR[L][a]}–${DAY_ABBR[L][b]}`);
+      spoken.push(t("committee.gvm.day_range", L, { from: weekdayName(a, L), to: weekdayName(b, L) }));
+    } else {
+      for (let d = a; d <= b; d++) { short.push(DAY_ABBR[L][d]); spoken.push(weekdayName(d, L)); }
+    }
+  }
+  return { label: short.join(", "), sr: spoken.join(", ") };
+}
+
+/**
+ * How the region blocks of /meetings/#grapevine-meetings share the card columns. The regions grid has
+ * 12 sub-columns and the cards show 2, 3 or 4 per row (from 640 / 1280 / 1800px — committee.css
+ * .cm-gvg-regions); EVERY card is one column wide (12 / C sub-columns) at every width, so the whole
+ * list reads as one even grid — a card is never stretched. For each column count C:
+ *  · a region with C or more cards takes the whole row (12 sub-columns); its last row fills from the
+ *    left, like any card grid;
+ *  · smaller regions (fewer than C cards) take just their cards' width (n × 12 / C), so the next small
+ *    region can sit beside them on the same row (CSS auto-placement puts it there when it fits).
+ * Sets region.span = { s2, s3, s4 } (sub-columns of the region) and region.span.h1…h4: the grid rows
+ * the region takes (its head + 4 per row of cards: every card's place · name · types · body sit on
+ * rows shared across the regions grid, so cards side by side always line up).
+ * committee.js (cmGvMeetings) runs the same rules on the cards left after filtering.
+ */
+export function packRegions(regions) {
+  for (const r of regions) {
+    const n = r.places.length;
+    r.span = {};
+    for (const C of [1, 2, 3, 4]) r.span["h" + C] = 1 + 4 * Math.max(1, Math.ceil(n / C));
+    for (const C of [2, 3, 4]) r.span["s" + C] = n && n < C ? (n * 12) / C : 12;
+  }
+  return regions;
+}
+
+/**
+ * The Grapevine meetings of data/site/meetings.json, ready for /meetings/:
+ * our Area first, then one group per nearby region. Each region lists its PLACES (`places`: one card
+ * per group and address, with its whole week on it — see place() below) and, for the site search,
+ * its meetings by weekday (`days`). Our Area is also split by office region (`areaGroup.regions`:
+ * [{ id, label, places, placeCount, count, span }], see below), the way the nearby areas are.
+ * Nothing here decides WHICH meetings exist — the data does; this only shapes and labels them.
+ */
+export function gvMeetings(data, lang = "en", site = {}) {
+  const d = data || {};
+  const L = lang === "es" ? "es" : "en";
+  const labels = d.type_labels || {};
+  const sources = Array.isArray(d.sources) ? d.sources : [];
+  const srcById = new Map(sources.map((s) => [s.id, s]));
+  const items = (EMPTY ? [] : Array.isArray(d.items) ? d.items : []).filter((it) => it && it.attendance !== "inactive" && Number.isInteger(Number(it.day)));
+  const countyWord = (c) => (L === "es" ? `condado de ${c}` : `${c} County`);
+
+  const card = (it) => {
+    const types = (it.types || []).map(String);
+    const shown = types.filter((c) => !GVM_SKIP_TYPES.has(c) && !GVM_ACCESS_TYPES.has(c) && labels[c]);
+    // "Grapevine" first (the reason the meeting is here), then the office's other types
+    const badges = shown.sort((a, b) => (a === "GR" ? -1 : b === "GR" ? 1 : 0))
+      .map((c) => ({ code: c, label: pickL(labels[c], L), gv: c === "GR" }));
+    const access = types.some((c) => GVM_ACCESS_TYPES.has(c));
+    const srcs = (it.sources || []).map((id) => srcById.get(id)).filter(Boolean);
+    // The details link goes to the office whose site the meeting's url is on
+    const host = hostOf(it.url);
+    const own = srcs.find((s) => hostOf(s.url) === host) || srcs[0] || null;
+    const texas = !it.state || it.state === "TX";
+    const place = [it.city, texas ? "" : it.state].filter(Boolean).join(", ");
+    const placeLine = [place, it.county ? countyWord(it.county) : ""].filter(Boolean).join(" · ");
+    const att = ["in_person", "online", "hybrid"].includes(it.attendance) ? it.attendance : "in_person";
+    const groupLabel = it.in_area ? "" : pickL(it.nearby?.label, L);
+    return {
+      id: it.id,
+      anchor: "mtg-" + String(it.id || "").replace(/^mtg:/, "").replace(/[^a-z0-9-]/gi, ""),
+      name: it.name || "",
+      day: Number(it.day),
+      time: clock12(it.time, L),
+      end: it.end_time ? clock12(it.end_time, L) : "",
+      location: it.location || "",
+      address: it.address || "",
+      placeLine,
+      approximate: !!it.approximate,
+      attendance: att,
+      spanish: it.lang === "es" || types.includes("S"),
+      textLang: it.lang === "es" ? "es" : "en", // the office's own words (place notes)
+      badges,
+      access,
+      directions: it.directions_url || "",
+      url: it.url || "",
+      siteHost: host,
+      siteName: own ? own.name : "",
+      listedBy: srcs.map((s) => s.name),
+      inArea: !!it.in_area,
+      // the offices that list it (config/site.yml meetings.feeds ids): the first one decides its region
+      srcIds: (it.sources || []).map(String),
+      // what the "City, county or group" box searches (accent- and case-insensitive)
+      search: foldText([it.name, it.city, it.county, it.county ? countyWord(it.county) : "", it.region, it.district, it.state, it.address, it.location, groupLabel].filter(Boolean).join(" ")),
+      // for sorting and grouping the places (place() below)
+      timeRaw: String(it.time || ""),
+      city: it.city || "",
+      county: it.county || "",
+      state: texas ? "" : it.state || "",
+    };
+  };
+
+  /* One card per PLACE: the meetings of one group at one address (or, with no address, in one city),
+     however many times a week it meets. Its week is shown as rows of weekdays with the same times
+     ("Wed–Fri · 6:30 AM"): days whose meetings are alike (same times, same types) share a row.
+     What every meeting of the group has (Open, Wheelchair access, In person …) is said once on the
+     card; what only some have is said next to their time. */
+  const usedAnchors = new Set();
+  const place = (list) => {
+    const week = [...list].sort((a, b) => a.day - b.day || a.timeRaw.localeCompare(b.timeRaw));
+    const first = week[0];
+    const codeSets = list.map((c) => new Set(c.badges.map((b) => b.code)));
+    const common = first.badges.filter((b) => codeSets.every((s) => s.has(b.code)));
+    const commonCodes = new Set(common.map((b) => b.code));
+    const atts = [...new Set(week.map((c) => c.attendance))];
+    const allAccess = list.every((c) => c.access);
+    const allSpanish = list.every((c) => c.spanish);
+    const extrasOf = (c) => [
+      ...c.badges.filter((b) => !commonCodes.has(b.code)).map((b) => b.label),
+      atts.length > 1 ? t("committee.gvm.att_" + c.attendance, L) : "",
+      c.spanish && !allSpanish ? t("committee.weekly.lang_es", L) : "",
+      c.access && !allAccess ? t("committee.gvm.access", L) : "",
+    ].filter(Boolean);
+    // weekdays with the same meetings share a row (in week order, Sunday first)
+    const rowsBySig = new Map();
+    for (let dd = 0; dd < 7; dd++) {
+      const slots = week.filter((c) => c.day === dd).map((c) => ({ c, extras: extrasOf(c) }));
+      if (!slots.length) continue;
+      const sig = slots.map((s) => [s.c.timeRaw, s.c.attendance, ...s.extras].join("|")).join(";");
+      if (!rowsBySig.has(sig)) {
+        rowsBySig.set(sig, { days: [], slots: slots.map((s) => ({ time: s.c.time, att: s.c.attendance, extras: s.extras, ids: [] })) });
+      }
+      const row = rowsBySig.get(sig);
+      row.days.push(dd);
+      slots.forEach((s, i) => row.slots[i].ids.push(s.c.anchor));
+    }
+    const rows = [...rowsBySig.values()].map((r) => ({ ...r, ...dayRunLabel(r.days, L), n: r.days.length }));
+    // #gvg-<group>-<city>: the card's address for links (the site search); unique on the page
+    let anchor = "gvg-" + slugify(`${first.name} ${first.city || first.placeLine}`, 60);
+    for (let i = 2; usedAnchors.has(anchor); i++) anchor = anchor.replace(/-\d+$/, "") + "-" + i;
+    usedAnchors.add(anchor);
+    list.forEach((c) => { c.groupAnchor = anchor; });
+    const pick = (f) => (week.find((c) => c[f]) || {})[f] || "";
+    const listedBy = [...new Set(list.flatMap((c) => c.listedBy))];
+    const withUrl = week.find((c) => c.url) || first;
+    return {
+      anchor,
+      name: first.name,
+      placeLine: first.placeLine,
+      city: first.city,
+      county: first.county,
+      state: first.state,
+      address: pick("address"),
+      location: pick("location"),
+      approximate: list.every((c) => c.approximate),
+      textLang: first.textLang,
+      inArea: first.inArea,
+      srcId: list.map((c) => c.srcIds[0]).find(Boolean) || "",
+      badges: common,
+      access: allAccess,
+      spanish: allSpanish,
+      attendance: atts.length === 1 ? atts[0] : "mixed",
+      attLabel: atts.map((a) => t("committee.gvm.att_" + a, L)).join(" · "),
+      directions: pick("directions"),
+      url: withUrl.url || "",
+      siteHost: withUrl.siteHost || "",
+      listedBy,
+      count: list.length,
+      days: [...new Set(week.map((c) => c.day))],
+      rows,
+      ids: week.map((c) => c.anchor),
+      search: [...new Set(list.map((c) => c.search))].join(" "),
+    };
+  };
+  const placesOf = (cards, sortKey) => {
+    const byKey = new Map();
+    for (const c of cards) {
+      const k = foldText(c.name) + "|" + foldText(c.address || c.placeLine);
+      if (!byKey.has(k)) byKey.set(k, []);
+      byKey.get(k).push(c);
+    }
+    return [...byKey.values()].map(place)
+      .sort((a, b) => sortKey(a).localeCompare(sortKey(b), L) || a.name.localeCompare(b.name, L));
+  };
+  // Our Area: by county, then city (a county-less place after the counties); nearby: by state, then city
+  const areaSort = (p) => `${p.county ? "0" : "1"} ${foldText(p.county)} ${foldText(p.city)}`;
+  const nearbySort = (p) => `${foldText(p.state)} ${foldText(p.city)}`;
+
+  const byDay = (cards) => {
+    const days = [];
+    for (let dd = 0; dd < 7; dd++) {
+      const list = cards.filter((c) => c.day === dd);
+      if (list.length) days.push({ day: dd, name: weekdayName(dd, L), count: list.length, items: list });
+    }
+    return days;
+  };
+
+  const all = items.map(card);
+  const ours = all.filter((c) => c.inArea);
+  const groups = [];
+  const groupList = Array.isArray(d.groups) ? d.groups : [];
+  const areaGroup = groupList.find((g) => g && g.in_area);
+  const region = (id, inArea, label, list) => {
+    const places = placesOf(list, inArea ? areaSort : nearbySort);
+    return { id, inArea, label, count: list.length, days: byDay(list), places, placeCount: places.length };
+  };
+  groups.push(region(areaGroup?.id || "neta65", true, pickL(areaGroup?.label, L) || pickL(site?.meetings?.area_label, L), ours));
+  // Our Area, by office region (config/site.yml meetings.feeds[].region_label, in config order — the
+  // sync copies it into meetings.json sources[].area_label): a place goes under the office of its
+  // first listed source; within a region, by city, then name. Places whose office is not an
+  // in-Area source go to a last region, "Other places in our Area".
+  const areaFeeds = (sources.length
+    ? sources.map((s) => s && { id: s.id, in_area: s.in_area, region_label: s.area_label, name: s.name })
+    : Array.isArray(site?.meetings?.feeds) ? site.meetings.feeds : []).filter((f) => f && f.id && f.in_area);
+  const byCity = (a, b) => foldText(a.city).localeCompare(foldText(b.city), L) || a.name.localeCompare(b.name, L);
+  const areaRegion = (id, label, places) => ({
+    id, label, places: [...places].sort(byCity), placeCount: places.length,
+    count: places.reduce((n, p) => n + p.count, 0),
+  });
+  const areaRegions = [];
+  for (const f of areaFeeds) {
+    const ps = groups[0].places.filter((p) => p.srcId === f.id);
+    if (ps.length) areaRegions.push(areaRegion("area-" + f.id, pickL(f.region_label, L) || f.name || f.id, ps));
+  }
+  const unmapped = groups[0].places.filter((p) => !areaFeeds.some((f) => f.id === p.srcId));
+  if (unmapped.length) areaRegions.push(areaRegion("area-other", t("committee.gvm.area_other", L), unmapped));
+  groups[0].regions = packRegions(areaRegions);
+  const nearbyCards = all.filter((c) => !c.inArea);
+  const placed = new Set();
+  for (const g of groupList) {
+    if (!g || g.in_area) continue;
+    const list = nearbyCards.filter((c) => items.find((it) => it.id === c.id)?.nearby?.id === g.id);
+    if (!list.length) continue;
+    list.forEach((c) => placed.add(c.id));
+    groups.push(region(g.id, false, pickL(g.label, L), list));
+  }
+  // A nearby meeting whose group is missing from `groups` still shows (under its own label)
+  const rest = nearbyCards.filter((c) => !placed.has(c.id));
+  if (rest.length) {
+    const lbl = pickL(items.find((it) => it.id === rest[0].id)?.nearby?.label, L) || t("committee.gvm.nearby_title", L);
+    groups.push(region("nearby-other", false, lbl, rest));
+  }
+  packRegions(groups.slice(1));
+
+  const okSources = sources.filter((s) => s && s.ok === true).map((s) => ({ name: s.name, url: s.url, host: hostOf(s.url) }));
+  const failed = sources.filter((s) => s && s.ok === false).map((s) => s.name);
+  // Where to look without our list: the offices' own sites (never a feed address)
+  const offices = (sources.length ? sources : (site?.meetings?.feeds || []).map((f) => ({ name: f.name, url: f.site })))
+    .filter((s) => s && s.name && /^https:\/\//.test(s.url || "")).map((s) => ({ name: s.name, url: s.url, host: hostOf(s.url) }));
+  const dayCounts = [0, 1, 2, 3, 4, 5, 6].map((dd) => ({ day: dd, name: weekdayName(dd, L), count: all.filter((c) => c.day === dd).length }));
+
+  return {
+    total: all.length,
+    inArea: ours.length,
+    nearby: nearbyCards.length,
+    // groups (places) — one card each
+    places: groups.reduce((n, g) => n + g.placeCount, 0),
+    nearbyPlaces: groups.slice(1).reduce((n, g) => n + g.placeCount, 0),
+    // meetings held in Spanish (lang "es" or the "S" type) — /es/ points to La Viña's weekly open
+    // meeting when there are none
+    spanish: all.filter((c) => c.spanish).length,
+    areaGroup: groups[0],
+    nearbyGroups: groups.slice(1),
+    updated: d.updated || null,
+    okSources,
+    failed,
+    offices,
+    dayCounts,
+  };
+}
+
+/**
+ * The upcoming events, one entry per event — the committee sub-nav's Events count and the /search/ page's Events
+ * tile (cmEventEnds): the moment each is over (ISO), a monthly series once (cmCollapseRecurring), until its last
+ * listed date is over. Committee meetings are not counted. Not the number of cards /events/ shows: since round 30
+ * that page has a card for every date of a series and for every committee meeting, and its filter chips count those.
+ */
+export function upcomingEventEnds(db, lang = "en") {
+  const ends = new Map();
+  for (const e of EMPTY ? [] : normalizeEvents(db?.events?.items || [], {}, lang, { monthsBack: 0, monthsAhead: 0 })) {
+    if (e.past || e.committee) continue;
+    const k = e.recurring && e.series ? `s:${e.series}` : `e:${e.id}`;
+    if (!ends.has(k) || e.expireIso > ends.get(k)) ends.set(k, e.expireIso);
+  }
+  return [...ends.values()];
+}
+
+/**
+ * /events/' months folded behind "Show more" (round 30), by whole calendar years — the owner's words: "make sure all
+ * of 2027 stays visible and in show more button display the 2028 dates". Every date to come has its own card
+ * (through config/site.yml events_until), so the list would run on for two years. Open: the rest of the build's year
+ * (Central time) and, from EVENTS_NEXT_YEAR_FROM (November) on, all of the next year too; every later year is folded,
+ * behind one button after the last open month, "Show 2028 dates (46)". Built on November 13, 2026: November 2026 …
+ * December 2027 open (all of 2027), all of 2028 folded; built any day of 2027 before November: the rest of 2027 open,
+ * all of 2028 still folded; from November 1, 2027: 2027 and 2028 open (nothing left to fold until events_until moves
+ * on). The fold always starts in January, so the button names whole years. The page is rebuilt every day, so the
+ * fold moves with it. Without JavaScript every month shows (events.njk, committee.css :root.js:not(.cm-ev-ready)
+ * [data-dflt-hidden]).
+ */
+export const EVENTS_NEXT_YEAR_FROM = 11;
+
+/** The first folded month of /events/ for a clock, "YYYY-MM": January of the year after the build's (Central
+ *  time), or of the year after that from EVENTS_NEXT_YEAR_FROM (November) on — "2028-01" on 2026-11-13 and all of
+ *  2027 until October 31, "2029-01" from 2027-11-01 (Central midnight, not UTC's). */
+export function eventsFoldFrom(now = new Date()) {
+  const [y, m] = chicagoYmd(now instanceof Date ? now : new Date(now)).slice(0, 7).split("-").map(Number);
+  return `${y + (m >= EVENTS_NEXT_YEAR_FROM ? 2 : 1)}-01`;
+}
+
+/**
+ * The fold of /events/' month list — {% set fold = upcoming | cmEventsFold %} → null when no month is folded,
+ * else { from: the first folded month ("2028-01", eventsFoldFrom), keys: the folded months that have an event, in
+ * order, n: how many events they hold (the "All" count; the page counts again for each filter chip), range: the
+ * words of the button "Show {range} dates ({n})" — the folded year ("2028"), or, when they run into another year,
+ * the first and last of them ("2028 – 2029") }.
+ */
+export function eventsFold(events, now = new Date()) {
+  const from = eventsFoldFrom(now);
+  const folded = (events || []).filter((e) => e && !e.past && String(e.monthKey || "") >= from);
+  if (!folded.length) return null;
+  const keys = [...new Set(folded.map((e) => e.monthKey))].sort();
+  const a = keys[0].slice(0, 4), b = keys[keys.length - 1].slice(0, 4);
+  return { from, keys, n: folded.length, range: a === b ? a : `${a} – ${b}` };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Eleventy registration                                              */
+/* ------------------------------------------------------------------ */
+export default function (eleventyConfig, helpers) {
+  if (helpers) H = { ...H, ...helpers };
+
+  eleventyConfig.addFilter("cmEvents", (items, site, lang) => normalizeEvents(EMPTY ? [] : items, site, lang));
+  // {{ upcoming | cmEventLd(site, lang, pageAbs) }}: /events/'s structured data — the schema.org Events (eventLd)
+  eleventyConfig.addFilter("cmEventLd", (events, site, lang, pageAbs) => eventLd(events, site, lang, pageAbs));
+  // {{ db | cmEventEnds(lang) }}: the upcoming events' end moments (upcomingEventEnds) — their number is the Events count
+  eleventyConfig.addFilter("cmEventEnds", (db, lang) => upcomingEventEnds(db, lang));
+  // {% set dt = db.drive.items | cmDocTabs(lang, site.drive.pinned_flyers) %}: the Portfolio's tabs (documentTabs;
+  // the pins put the committee's pinned flyers first in the flyers tab — /meetings/ and the sub-nav pass none)
+  eleventyConfig.addFilter("cmDocTabs", (items, lang, pins) => documentTabs(EMPTY ? [] : items, lang, pins));
+  // The Portfolio hero card (docTeaser): "Flyers to share" — the pinned flyers first (config/site.yml
+  // drive.pinned_flyers), up to 4 — or "Latest upload"; never the list's first category.
+  //   → { kind, tab, docs, pinned }        {% set teaser = dt | cmDocTeaser(site.drive.pinned_flyers) %}
+  eleventyConfig.addFilter("cmDocTeaser", (dt, pins) => docTeaser(dt, pins));
+  eleventyConfig.addFilter("cmAlbums", (items, lang) => photoAlbums(EMPTY ? [] : items, lang));
+  // /photos/' magazine covers (coverShelf): {% set covers = albums | cmCovers(lang) %} → { albums, mags, years, total }
+  eleventyConfig.addFilter("cmCovers", (albums, lang) => coverShelf(albums, lang));
+  // A committee Drive file on the page it is about (La Viña's flyer on /meetings/, the "Share your
+  // story" flyers, the editorial calendar on /monthly/) — see driveMatch
+  eleventyConfig.addFilter("driveMatch", (items, pattern, category, n) => driveMatch(EMPTY ? [] : items, pattern, category || "", Number(n) || 0));
+  eleventyConfig.addFilter("cmAnnouncements", (items) => announcementList(EMPTY ? [] : items));
+  eleventyConfig.addFilter("cmRule", (cfg, lang) => meetingRuleText(cfg, lang));
+  eleventyConfig.addFilter("cmTimeRange", (cfg, lang) => meetingTimeRange(cfg, lang));
+  // How to join the committee meeting — {{ site.meeting | cmJoin(lang) }} → { platform, url, id, idKey, idLabel
+  // ("Meeting code" for a Google Meet code, "Meeting ID" for a Zoom ID), copyId, passcode, dialIn } (meetingJoin)
+  eleventyConfig.addFilter("cmJoin", (m, lang) => meetingJoin(m, lang));
+  eleventyConfig.addFilter("cmWebcal", (u) => String(u || "").replace(/^https?:\/\//, "webcal://"));
+  // Both weekly open meetings (Grapevine Weekly Open + La Viña), the page language's first — /meetings/#weekly-open
+  eleventyConfig.addFilter("cmWeeklyAll", (items, lang) => weeklyOpenAll(EMPTY ? [] : items, lang));
+  // /events/' "Next 5 weeks" calendar: {% set cal = upcoming | cmCalWeeks(wos, lang, { weeks: 5, spare: 3 }) %} →
+  // the weeks from the Sunday of this week, each day with the events and weekly meetings on it, or null (calendarWeeks)
+  eleventyConfig.addFilter("cmCalWeeks", (events, wos, lang, opt) => calendarWeeks(events, wos, lang, opt || {}));
+  // A weekly open meeting's flyer: {% set wf = w | cmWeeklyFlyer(site, db.drive.items) %} → { view, preview, thumb }
+  // or null (weeklyFlyer) — for ui.flyerThumb / ui.flyerButton, as an event's ev.flyer
+  eleventyConfig.addFilter("cmWeeklyFlyer", (w, site, items) => weeklyFlyer(w, site, EMPTY ? [] : items));
+  // An event's title without the spaces a calendar left inside its brackets (tidyBrackets) — where a page takes
+  // an event's title straight from the data (the Tracker's list of events)
+  eleventyConfig.addFilter("cmTidyTitle", (s) => tidyBrackets(s));
+  // A weekly open meeting's "Add to calendar": {% set wc = w | cmWeeklyCal(site, lang) %} → { gcal, ics } (weeklyCalendar)
+  eleventyConfig.addFilter("cmWeeklyCal", (w, site, lang) => weeklyCalendar(w, site, lang));
+  // "7:00 – 8:00 PM CDT" from two instants (an end after midnight: "7:00 PM – 1:00 AM CST") — clockRange
+  eleventyConfig.addFilter("cmTimeSpan", (start, end, lang) => {
+    const a = parseInstant(start), b = parseInstant(end);
+    return a ? clockRange(a, b || a, lang) : "";
+  });
+  // Grapevine meetings in our Area and nearby (db.meetings) — /meetings/#grapevine-meetings
+  eleventyConfig.addFilter("cmGvMeetings", (data, lang, site) => gvMeetings(data, lang, site));
+  // Text for GLightbox's data-title / data-description. GLightbox puts those values into the
+  // page with innerHTML, so plain autoescaping is not enough (the browser decodes the
+  // attribute first). This returns HTML-escaped text as a normal string; autoescape then
+  // escapes it a second time, and GLightbox ends up showing the name as plain text.
+  // A leading "." is escaped too: GLightbox would treat such a description as a CSS selector.
+  eleventyConfig.addFilter("cmLbText", (s) => esc(s).replace(/^\./, "&#46;"));
+  eleventyConfig.addFilter("cmDriveInfo", (status, site) => driveInfo(status, site));
+
+  // Where a file goes on Drive, as a breadcrumb:
+  // {% cmDrivePath lang, di, "photos/2027 Spring Assembly", "booth.jpg" %}
+  eleventyConfig.addShortcode("cmDrivePath", function (lang, di, folder, file = "") {
+    const L = lang || "en";
+    const d = di || {};
+    const segs = [d.rootName || "A65_GV"];
+    if (d.panel) segs.push(d.panel.name || d.panel.label);
+    const target = String(folder || "").split("/").map((s) => s.trim()).filter(Boolean);
+    // A <p> cannot carry an aria-label (screen readers ignore it), so the label is
+    // visually hidden text at the start, and each chevron reads as "/".
+    const sep = `<span class="cm-path-sep">${icon("chevron-right", "size-3.5")}<span class="sr-only"> / </span></span>`;
+    const parts = segs.map((s) => `<span class="cm-path-seg">${icon("folder", "size-3.5")}<span>${esc(s)}</span></span>`);
+    target.forEach((s, i) => parts.push(`<span class="cm-path-seg is-target">${icon(i === target.length - 1 && !file ? "folder-open" : "folder", "size-3.5")}<span>${esc(s)}</span></span>`));
+    if (file) parts.push(`<span class="cm-path-file">${icon(/\.(jpe?g|png|heic|webp)$/i.test(file) ? "file-image" : "file-text", "size-3.5")}<span>${esc(file)}</span></span>`);
+    return `<p class="cm-path"><span class="sr-only">${esc(t("committee.drive.path_aria", L))}: </span>${parts.join(sep)}</p>`;
+  });
+
+  // "Drive checked Sep 23, 2026 — nothing uploaded yet" (empty states only)
+  eleventyConfig.addShortcode("cmDriveChecked", function (lang, di) {
+    const L = lang || "en";
+    const d = di || {};
+    if (!d.checked) return "";
+    const date = H.fmtDate(d.checked, L, "medium");
+    const bad = d.ok === false;
+    // data-lastmod="skip": the day the Drive was last read is not a change of the page (eleventy/lastmod.js)
+    return `<p class="cm-checked${bad ? " is-warn" : ""}" data-lastmod="skip">${icon(bad ? "triangle-alert" : "circle-check", "size-4")}<span>${esc(t(bad ? "committee.drive.checked_problem" : "committee.drive.checked_empty", L, { date }))}</span></p>`;
+  });
+
+  // A monthly series (the CityWide booth …) by its next date: every date of it still to come after the first gets
+  // `later: true`. Events must be in date order. /events/ lists every date as a card of its own since round 30 (no
+  // "Show every monthly date" switch, no "Then …" line); `later` is what the places that name a series once read:
+  // the page's structured data (eventLd: its next date only), "Save the date" (events.njk) and /photos/' "Next
+  // chance for photos". The host's own listing of a month the rule skips (`seriesOf`: La Viña's workshop the
+  // Thursday before Thanksgiving) is an event of its own, never a later date.
+  eleventyConfig.addFilter("cmCollapseRecurring", (events) => {
+    const first = new Set();
+    for (const e of events || []) {
+      if (!e || !e.recurring || e.past || !e.series) continue;
+      if (first.has(e.series)) e.later = true;
+      else first.add(e.series);
+    }
+    return events;
+  });
+  // /events/' months folded behind "Show 2028 dates (n)": {% set fold = upcoming | cmEventsFold %} (eventsFold, above:
+  // the rest of the build's year is open, from November the next year too: eventsFoldFrom)
+  eleventyConfig.addFilter("cmEventsFold", (events) => eventsFold(events));
+
+  // Share your story (#workshop): the next `n` writing / recording workshops — from the same list
+  // /events/ shows (normalizeEvents: Drive flyers, hand-written events, the GV/LV calendars), upcoming,
+  // with a title like "Grapevine Writing Workshop" or "Taller de Grabación de La Viña" (the page
+  // language's title or the original one). Each card links to the event's own card on /events/.
+  eleventyConfig.addFilter("cmWorkshops", (items, site, lang, n = 3) =>
+    normalizeEvents(EMPTY ? [] : items, site, lang, { monthsBack: 0, monthsAhead: 0 })
+      .filter((e) => !e.past && !e.committee && (WORKSHOP_RE.test(e.title) || WORKSHOP_RE.test(e.item?.title || "")))
+      .slice(0, n));
+
+  // Next committee meeting as an event (for the pinned card & calendar buttons)
+  eleventyConfig.addFilter("cmNextMeeting", (site, lang) => {
+    const evs = normalizeEvents([], site, lang, { monthsBack: 0, monthsAhead: 14 });
+    return evs.find((e) => e.committee && !e.past) || null;
+  });
+  // The guest speakers still to come — {% set spk = site | cmSpeakers(lang) %} → { list: [{ ymd, start, end, name,
+  // position, topic, description }], plain } (meetingSpeakerDates): /meetings/' list, and each countdown's dates
+  eleventyConfig.addFilter("cmSpeakers", (site, lang) => meetingSpeakerDates(site, lang));
+  // "How the evening runs" — {{ site.meeting | cmEvening(lang) }} → { speaker: [{ key, at, about }], plain, until, end,
+  // talkMin } (meetingEvening)
+  eleventyConfig.addFilter("cmEvening", (m, lang) => meetingEvening(m, lang));
+  // One of our monthly series from the settings (the Grapevine Meeting's section on /meetings/), with events.json's
+  // dates where it has them — {{ site | cmSeriesNext("grapevine-meeting", lang, db.events.items) }} (seriesNext)
+  eleventyConfig.addFilter("cmSeriesNext", (site, key, lang, items) => seriesNext(site, key, lang, EMPTY ? [] : items));
+
+  // Rule for the client-side countdown (same shape as GV.nextMeeting expects)
+  // (a missing end = a 1-hour meeting, like everywhere else — see meetingEnd; a first date `starts` when the rule
+  // has one — a recurring_events entry's, the Grapevine Meeting's)
+  eleventyConfig.addFilter("cmRuleObj", (cfg) => {
+    cfg = meetingCfg(cfg);
+    return {
+      weekday: WD[String(cfg.weekday || "wednesday").toLowerCase()] ?? 3,
+      n: Number(cfg.week_of_month || 3),
+      start: meetingStart(cfg),
+      end: meetingEnd(cfg),
+      skip: skipDates(cfg),
+      ...(cfg.starts ? { starts: cfg.starts } : {}),
+    };
+  });
+
+  // Accessible preview modal for Drive files (documents, flyers):
+  // any element with data-cm-preview="<embed url>" opens it (see committee.js).
+  // Uses the native <dialog> element (focus trap, Esc to close, inert page).
+  eleventyConfig.addShortcode("cmPreviewDialog", function (lang) {
+    const L = lang || "en";
+    return `
+<dialog id="cm-preview" class="cm-dialog" aria-labelledby="cm-preview-title">
+  <div class="cm-dialog-inner">
+    <div class="flex items-center gap-2 border-b border-line px-3 py-2.5 sm:px-4">
+      <span class="hidden size-9 shrink-0 place-items-center rounded-lg bg-gv-soft text-gv sm:grid">${icon("eye", "size-4")}</span>
+      <h2 id="cm-preview-title" class="min-w-0 flex-1 truncate font-display text-base font-semibold text-ink sm:text-lg">${esc(t("common.preview", L))}</h2>
+      <a class="btn-secondary btn-sm" data-cm-open href="#" target="_blank" rel="noopener">${icon("external-link", "size-4")}<span class="hidden sm:inline">${esc(t("common.open", L))}</span></a>
+      <a class="btn-secondary btn-sm" data-cm-download href="#" rel="noopener" hidden>${icon("download", "size-4")}<span class="hidden sm:inline">${esc(t("common.download", L))}</span></a>
+      <button type="button" class="grid size-10 shrink-0 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink" data-cm-close aria-label="${esc(t("common.close", L))}">${icon("x", "size-5")}</button>
+    </div>
+    <div class="relative min-h-0 flex-1 bg-surface-2">
+      <p class="cm-dialog-loading">${icon("loader-circle", "size-5 animate-spin")} ${esc(t("common.loading", L))}</p>
+      <iframe class="relative size-full border-0" title="${esc(t("common.preview", L))}" allow="autoplay; fullscreen" referrerpolicy="no-referrer"></iframe>
+    </div>
+    <p class="border-t border-line px-4 py-2 text-xs text-faint">${esc(t("committee.preview.note", L))}</p>
+  </div>
+</dialog>`;
+  });
+
+  // "Subscribe to the calendar" card (the /events/ sidebar, #subscribe; /meetings/ links to it):
+  // {% cmSubscribe lang, site %}
+  // One row per calendar app (a disclosure: its subscribe button + how to set it up), then the
+  // calendar address as its own full-width line with a "Copy calendar address" button, and the
+  // other language's address (it wraps at any character, so it never widens the sidebar).
+  // {% cmSubscribe lang, site, "deadlines" %}: the same card for the story deadlines calendar (/deadlines.ics —
+  // eleventy/filters/monthly.js deadlinesIcs) under the deadlines on /contribute/ (#deadlines-calendar, an h3 in
+  // that section; the three apps side by side from 768px): its own words, and under Google's and Apple's steps
+  // how to keep the reminder its entries carry (Google Calendar ignores it; an iPhone removes it unless told not to).
+  const SUBSCRIBE = {
+    events: { path: "/events.ics", name: "committee.ics.name", eyebrow: "committee.sub.eyebrow", title: "committee.sub.title", text: "committee.sub.text" },
+    deadlines: { path: "/deadlines.ics", name: "read.dlcal.name", eyebrow: "read.dlcal.eyebrow", title: "read.dlcal.title", text: "read.dlcal.text",
+      id: "deadlines-calendar", h: "h3", wide: true, notes: { google: "read.dlcal.google_note", apple: "read.dlcal.apple_note" } },
+  };
+  eleventyConfig.addShortcode("cmSubscribe", function (lang, site, kind) {
+    const L = lang || "en";
+    const K = SUBSCRIBE[kind] || SUBSCRIBE.events;
+    const other = L === "es" ? "en" : "es";
+    const feed = siteAbs(site, localPath(K.path, L));
+    const otherFeed = siteAbs(site, localPath(K.path, other));
+    const webcal = feed.replace(/^https?:\/\//, "webcal://");
+    const name = t(K.name, L);
+    const gcal = "https://calendar.google.com/calendar/r?cid=" + encodeURIComponent(webcal);
+    const outlook = "https://outlook.live.com/calendar/0/addfromweb?url=" + encodeURIComponent(feed) + "&name=" + encodeURIComponent(name);
+    const ext = `<span class="sr-only"> (${esc(t("common.external", L))})</span>`;
+    const rows = [
+      { k: "google", ic: "calendar-plus", href: gcal, label: "Google Calendar", cls: "btn-primary" },
+      { k: "apple", ic: "smartphone", href: webcal, label: t("committee.sub.apple", L), cls: "btn-secondary" },
+      { k: "outlook", ic: "calendar", href: outlook, label: "Outlook", cls: "btn-secondary" },
+    ];
+    const h = K.h || "h2";
+    const note = (k) => (K.notes && K.notes[k] ? `\n        <p>${esc(t(K.notes[k], L))}</p>` : "");
+    return `
+<div${K.id ? ` id="${K.id}"` : ""} class="card cm-subscribe relative overflow-hidden card-pad">
+  <p class="eyebrow text-gv">${esc(t(K.eyebrow, L))}</p>
+  <${h} class="card-h mt-2"><span>${icon("calendar-sync", "size-5")}</span>${esc(t(K.title, L))}</${h}>
+  <p class="mt-2 text-sm leading-relaxed text-muted${K.wide ? " max-w-3xl" : ""}">${esc(t(K.text, L))}</p>
+  <div class="mt-5 grid gap-2${K.wide ? " md:grid-cols-3 md:items-start" : ""}">
+    ${rows.map((r) => `
+    <details class="cm-howto">
+      <summary>${icon(r.ic, "size-4 text-gv")} <span class="min-w-0 hyphens-auto [overflow-wrap:anywhere]">${esc(t(`committee.sub.howto_${r.k}`, L))}</span>${icon("chevron-down", "size-4 ml-auto opacity-60 cm-chev")}</summary>
+      <div class="cm-howto-body">
+        <a class="${r.cls} btn-sm w-full" href="${esc(r.href)}"${r.href.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>${icon(r.ic, "size-4")} ${esc(r.label)}${r.href.startsWith("http") ? ext : ""}</a>
+        <p>${esc(t(`committee.sub.howto_${r.k}_text`, L))}</p>${note(r.k)}
+      </div>
+    </details>`).join("")}
+  </div>
+  <div class="mt-5 border-t border-line pt-5${K.wide ? " md:max-w-xl" : ""}">
+    <p class="eyebrow">${esc(t("committee.sub.url_label", L))}</p>
+    <p class="cm-feed-url mt-2" translate="no">${esc(feed)}</p>
+    <button type="button" class="btn-secondary btn-sm mt-3 w-full" data-js-only data-copy="${esc(feed)}">${icon("copy", "size-4")} ${esc(t("committee.sub.copy_aria", L))}</button>
+    <p class="mt-3 text-xs leading-relaxed text-muted">${esc(t("committee.sub.url_help", L))}</p>
+    <p class="mt-2 text-xs leading-relaxed text-muted">${esc(t("committee.sub.other_lang", L))} <a class="link cm-feed-other" href="${esc(otherFeed)}" hreflang="${other}" translate="no">${esc(otherFeed.replace(/^https?:\/\//, ""))}</a></p>
+  </div>
+</div>`;
+  });
+
+  // Committee section sub-navigation: {% committeeNav lang, "events", db %}
+  // The Events and Bulletin counts go down between builds as those things end: each carries, in
+  // data-gv-expire-count, the moment each thing it counts is over (src/assets/js/app.js GV.expire recounts
+  // it — the moments /events/ and /bulletin/ hide their cards at — and hides it at 0).
+  eleventyConfig.addShortcode("committeeNav", function (lang, current, db) {
+    const L = lang || "en";
+    // upcoming events, one per event: a series once, no committee meetings (upcomingEventEnds; the /search/ page's
+    // Events tile counts the same)
+    const eventEnds = upcomingEventEnds(db, L);
+    // the bulletin's posts: each is over at midnight Central after its `expires` day (bulletin.njk's rule)
+    const posts = announcementList(EMPTY ? [] : db?.announcements?.items);
+    const postEnd = (p) => {
+      const t = chicagoDayEndMs(String(p.extra?.expires || "").slice(0, 10));
+      return Number.isFinite(t) ? new Date(t).toISOString() : "-";
+    };
+    const n = {
+      events: eventEnds.length,
+      portfolio: documentTabs(EMPTY ? [] : db?.drive?.items, L).total,
+      // everything /photos/ shows: the committee's photos and videos and the magazine covers
+      photos: photoAlbums(EMPTY ? [] : db?.drive?.items, L).reduce((s, a) => s + a.count, 0),
+      bulletin: posts.length,
+    };
+    const ends = { events: eventEnds, bulletin: posts.map(postEnd) };
+    const pages = [
+      { key: "meetings", url: "/meetings/", icon: "calendar-clock" },
+      { key: "events", url: "/events/", icon: "calendar-days" },
+      { key: "portfolio", url: "/portfolio/", icon: "folder-open" },
+      { key: "photos", url: "/photos/", icon: "images" },
+      { key: "bulletin", url: "/bulletin/", icon: "megaphone" },
+      // the Tracker's entries live on the visitor's device: no count
+      { key: "tracker", url: "/tracker/", icon: "receipt" },
+    ];
+    const links = pages.map((p) => {
+      const on = p.key === current;
+      const until = ends[p.key] ? ` data-gv-expire-count="${esc(ends[p.key].join(" "))}"` : "";
+      const count = n[p.key] ? `<span class="cm-subnav-count"${until}>${n[p.key]}</span>` : "";
+      return `<a href="${localPath(p.url, L)}" class="cm-subnav-link${on ? " is-current" : ""}"${on ? ' aria-current="page"' : ""}>${icon(p.icon, "size-4")}<span>${esc(t("committee.subnav." + p.key, L))}</span>${count}</a>`;
+    });
+    // page-overlap (main.css): the pill bar tucks into the hero's faded bottom edge — the
+    // shared "page start" for pages whose first block overlaps the hero. The bar (.cm-subnav) keeps
+    // its frame; its inside scrolls sideways on a phone, with a fade on the side that has more
+    // tabs (committee.js marks it .is-overflow / .at-start / .at-end).
+    return `<nav class="container-page page-overlap" aria-label="${esc(t("committee.subnav.aria", L))}"><div class="cm-subnav"><div class="cm-subnav-scroll">${links.join("")}</div></div></nav>`;
+  });
+}

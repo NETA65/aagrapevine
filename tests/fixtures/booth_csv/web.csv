@@ -1,0 +1,8 @@
+id,on,type,text_en,choices_en,correct,source_url,web
+web-blank,,quiz,Which?,a | b,1,https://www.aa.org/aa-grapevine-la-vina,
+web-yes,,quiz,Which?,a | b,1,https://www.aa.org/aa-grapevine-la-vina,Yes
+web-no,,quiz,Which?,a | b,1,https://www.aa.org/aa-grapevine-la-vina,NO
+web-cell-missing,,quiz,Which?,a | b,1,https://www.aa.org/aa-grapevine-la-vina
+web-maybe,,quiz,Which?,a | b,1,https://www.aa.org/aa-grapevine-la-vina,maybe
+web-off-bad,no,quiz,Which?,a | b,1,https://www.aa.org/aa-grapevine-la-vina,booth only
+web-fact,,fact,A fact.,,,https://www.aa.org/aa-grapevine-la-vina,no

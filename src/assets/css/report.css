@@ -1,0 +1,6 @@
+/* /assets/css/report.css — the district-meeting report editor (areas/report.css), only on its page: /monthly/
+   (#report; pageStyles in src/pages/monthly.njk, after monthly.css). One of the page-area stylesheets: see
+   "Page-area styles" at the end of main.css. @reference reads main.css (theme, variants, utilities for @apply)
+   without writing any of it here. */
+@reference "./main.css";
+@import "./areas/report.css";

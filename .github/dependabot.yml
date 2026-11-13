@@ -1,0 +1,86 @@
+# Dependabot keeps the automation's building blocks up to date by opening
+# at most one grouped pull request per month for each kind of update.
+#
+# What to do with these pull requests (see README → "Housekeeping"):
+#   The "Code check (tests and test build)" workflow
+#   (.github/workflows/check.yml) builds the website with the update and
+#   runs the tests. Merge only when the pull request shows a green ✓; a
+#   red ✗ means leave it (the live site is not affected).
+#   * "github-actions" updates keep the daily workflow running when GitHub
+#     retires old versions (the one outside action, in link-check.yml, is
+#     pinned to a commit: the pull request moves the commit and its
+#     "# vX.Y.Z" note together).
+#   * "npm" updates are the site-building tools. After merging, glance at
+#     the next "Website update" run; if it fails, revert the merge (one click).
+#   * "pip" updates are the Python packages of the daily sync — only NEW
+#     MAJOR versions: requirements.txt caps each package below its next
+#     major version (">=2.32,<3"), so every run already installs the newest
+#     minor and patch releases by itself; a new major version (which can
+#     change how a package behaves) waits for this pull request, which
+#     changes the line to allow it. yt-dlp has no cap (it must keep up
+#     with YouTube changes), so it is left out here.
+#   * "pip" in scripts/ops is Playwright, the browser driver of the Code
+#     check's browser checks and of the monthly posters' share pictures
+#     (scripts/ops/requirements-browser.txt). It is pinned to one version,
+#     so every new release — minor and patch too: it must keep up with the
+#     Google Chrome on GitHub's runners — comes as this monthly pull
+#     request, and the Code check runs the browser checks with it.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "chore(actions)"
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      site-tools:
+        patterns: ["*"]
+        update-types: [minor, patch]
+    # Major versions can change how the site is built — upgrade those by hand.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    # Change requirements.txt only when a new release falls outside its range (">=x,<N": a new major version) —
+    # never just to raise the lowest version inside it (Dependabot's default does that).
+    versioning-strategy: increase-if-necessary
+    groups:
+      python-packages:
+        patterns: ["*"]
+        update-types: [major]
+    # Minor and patch releases need no pull request (see above); yt-dlp has no cap to raise.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+      - dependency-name: "yt-dlp"
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 2
+
+  # Playwright, pinned in scripts/ops/requirements-browser.txt (see above): each new release.
+  - package-ecosystem: pip
+    directory: /scripts/ops
+    schedule:
+      interval: monthly
+    allow:
+      - dependency-name: "playwright"
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 1

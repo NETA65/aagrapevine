@@ -1,0 +1,6 @@
+/* /assets/css/presentations.css — the workshop presentations' player (areas/presentations.css), only on the
+   page that opens it: the GVR / RLV 101 hub (pageStyles in src/pages/orientation.njk, after orientation.css).
+   One of the page-area stylesheets: see "Page-area styles" at the end of main.css. @reference reads main.css
+   (theme, variants, utilities for @apply) without writing any of it here. */
+@reference "./main.css";
+@import "./areas/presentations.css";

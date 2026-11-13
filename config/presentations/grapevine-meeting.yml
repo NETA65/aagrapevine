@@ -1,0 +1,481 @@
+# =====================================================================
+#  Grapevine Meeting — the chair's script for our monthly online AA meeting (the first Wednesday, 7:00–8:00 PM
+#  Central, on Google Meet, in the committee meeting's room), as a web presentation on /orientation/ ("Workshop
+#  presentations"). An English-language AA meeting, open to every AA member: the AA Grapevine Statement of Purpose,
+#  a story from AA Grapevine, our meeting in print, read aloud by a member who then starts the sharing, sharing on
+#  its topic, how we support AA Grapevine and Carry the Message, in place of a basket, announcements, and the
+#  Responsibility Statement. The first one: Wednesday, December 2, 2026.
+#  (Never "Grapevine meetings": that is the list of AA groups that read Grapevine, /meetings/#grapevine-meetings.)
+#
+#  The order follows the owner's draft script (November 2026: "Area 65 AA Grapevine Meeting Script"), loosely: its
+#  welcome and housekeeping, the Statement of Purpose in place of the Preamble, the welcome from across Area 65,
+#  the reader who reads the story and starts the sharing, 3 to 5 minutes a share, the wrap-up at about 7:50, how
+#  we support AA Grapevine and Carry the Message, in place of a basket, the announcements from the floor, the chat
+#  message, writing for Grapevine, Tradition Twelve and "who you see here…", and "Keep coming back!". Where the
+#  draft and the site's rules differ, the site's rules win:
+#   · the AA Grapevine Statement of Purpose is NAMED, never quoted (the draft prints it): it is AA Grapevine's own
+#     text, and the site never quotes Grapevine material (only the Preamble, with AA Grapevine's credit line). A
+#     reader reads it aloud from the current issue or from aagrapevine.org/about-us, and its slide names it and says
+#     where to find it. With AA Grapevine's written permission (licensing@aagrapevine.org) it could become a `quote`
+#     slide with their credit line;
+#   · the story is read aloud from the reader's own copy (the printed issue, the app or the website): its title,
+#     issue and topic are the chair's blanks (Customize → Your details); its text is never on a slide, never shared
+#     on the screen (the draft allowed it) and never pasted in the chat — its title, its issue or a link to it on
+#     aagrapevine.org may go there;
+#   · Carry the Message is described, never sold (the draft's "we ask that you help support" is an appeal): a
+#     gift certificate bought in the official store, which AA Grapevine or La Viña turns into a subscription for an
+#     alcoholic in need; AA Grapevine, Inc. takes no contributions, but La Viña is not yet self-supporting (the
+#     draft's "entirely self-supporting" is true of Grapevine only); a member who prefers cash may hand it to us at
+#     our table at the next event, and the committee uses it to buy Carry the Message gift subscriptions;
+#   · the prayers' words are the other decks' (the Serenity Prayer as the committee meeting says it, "courage …
+#     wisdom"; the Responsibility Statement's "hand of A.A."), and the chair says them aloud while the room says
+#     them muted, unless the room is small (an echo);
+#   · Tradition Twelve is said in the notes word for word from its short form (P-52, p. 17, as the booth's quote
+#     and the workshops' Traditions are), with the A.A.W.S. credit in the notes and on the credits page — not a
+#     `quote` slide: tests/test_presentations.py keeps this deck's quote slides to the Serenity Prayer and the
+#     Responsibility Statement;
+#   · our committee's website is {live:site} (the draft's neta65.org is the Area's website, named beside it).
+#
+#  A PowerPoint copy (Drive `slides`, "Grapevine Meeting.pptx", built by aagrapevine-ops\decks\
+#  deck5_grapevine-meeting.py; `drive_title` below) has the same slides and notes, with the facts typed in; the
+#  card links it once it is in the Drive. Changing this file does not change it.
+#
+#  How it is written:
+#   · the facts that change come from the site's data ({live:…}): tonight's date (the Grapevine Meeting's own day,
+#     until midnight Central after it) and the next one, its time and link (config/site.yml recurring_events:
+#     grapevine-meeting, as the Events page lists it), this month's Grapevine, the next story deadlines, the next
+#     committee meeting and its guest speaker. A fact the site has nothing for says where to look ("see the
+#     Events page"), so every sentence around one reads well with that phrase too;
+#   · the message for the Google Meet chat is a page for the chair ("Chat message for Google Meet", Customize →
+#     Prepare, with a Copy button): its web addresses are written out in full, because a copy keeps a link's words
+#     only, and Google Meet's chat makes a full address a link;
+#   · each note's TIME line is `minutes:` (the player writes it): about 58 minutes, so the sharing can run a
+#     little over and the meeting still ends by 8:00 (the hour is the meeting's own: our Google Meet runs on the
+#     committee's Google Workspace account, with no time limit). The title
+#     slide (up before 7:00) and "Thank you" (up while people leave) have the least time a slide can have. Each
+#     "TIP (timekeeping)" line says the same times as the TIME line;
+#   · the notes name the player's buttons with {ui:…}.
+#  The content stays English (an English-language meeting; the owner's decision for every deck); the card, the
+#  version and the blanks' labels are bilingual. Checked by tests/test_presentations.py (and by the build, with
+#  I18N_STRICT=1).
+# =====================================================================
+id: "grapevine-meeting"
+order: 5
+lang: "en"
+title: "Grapevine Meeting"
+short: "Grapevine Meeting"
+eyebrow: "Opening"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 60
+icon: "book-heart"
+tone: "gv"
+drive_title: "Grapevine Meeting"
+card:
+  title:
+    en: "Grapevine Meeting"
+    es: "Reunión de Grapevine"
+  summary:
+    en: "The script for our monthly online AA meeting in English, on Google Meet: the AA Grapevine Statement of Purpose, a story from AA Grapevine read aloud, sharing on its topic, and, instead of a basket, how we support AA Grapevine and Carry the Message, from the Serenity Prayer to the Responsibility Statement."
+    es: "El guion de nuestra reunión mensual de AA en línea, en inglés, por Google Meet: la Declaración de Propósito de AA Grapevine, una historia de AA Grapevine leída en voz alta, lo que compartimos sobre su tema y, en lugar de la canasta, cómo apoyamos a AA Grapevine y Lleva el Mensaje, desde la Oración de la Serenidad hasta la Declaración de Responsabilidad."
+  audience:
+    en: "For whoever chairs the Grapevine Meeting on the first Wednesday of the month, and for its two readers. All AA members are welcome to attend, from across Area 65 and beyond."
+    es: "Para quien coordina la Reunión de Grapevine el primer miércoles del mes, y para las dos personas que leen. Todos los miembros de AA pueden asistir, de cualquier parte del Área 65 o de fuera de ella."
+
+presets:
+  - id: "full"
+    label:
+      en: "The Grapevine Meeting (about 60 minutes)"
+      es: "La Reunión de Grapevine (unos 60 minutos)"
+    minutes: 60
+
+# The chair's blanks (Customize → Your details): they stay on the chair's device until changed. The story is
+# chosen each month (from this month's issue, or any issue the chair likes): its title, issue and topic only.
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "story_title"
+    label: { en: "Tonight's story · its title", es: "La historia de esta noche · su título" }
+    hint: "the story's title"
+  - key: "story_issue"
+    label: { en: "Tonight's story · the issue it is in", es: "La historia de esta noche · el número donde aparece" }
+    hint: "Month YYYY"
+  - key: "story_topic"
+    label: { en: "Tonight's topic, in a few words", es: "El tema de esta noche, en pocas palabras" }
+    hint: "topic"
+  - key: "share_question"
+    label: { en: "A question to open the sharing", es: "Una pregunta para empezar a compartir" }
+    hint: "one question"
+
+slides:
+  # ------------------------------------------------------------------ OPENING
+  # The title slide is up while people arrive: the hour starts when the chair moves on, at 7:00 (0:00 of the TIME
+  # lines). Its date is tonight's until midnight Central after the meeting ({live:grapevine_meeting_day}), so it
+  # reads right during AND after the meeting.
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Grapevine Meeting"
+    subtitle: "An online AA meeting in English · all AA members welcome"
+    lines:
+      - "{fill:presenter}"
+      - "{live:grapevine_meeting_day} · {live:grapevine_meeting_time} · Google Meet"
+    minutes: 0.25
+    notes: |
+      WHEN: Have this slide up while people arrive. The hour starts when you move on, at 7:00 sharp: that is 0:00 in the timing lines of these notes.
+      BEFORE YOU START: make sure you have a reader for the AA Grapevine Statement of Purpose, a reader for tonight's story (who also starts the sharing) and a timekeeper, and that each one knows it.
+      DO: Start the Google Meet ({live:grapevine_meeting_link}) by 6:50 PM Central, signed in to the Google account that owns this Meet link (the organizer of its calendar event): on Google Meet that account is the host, and only it can admit the people who ask to join, so it stays in the call until the end. Check that you can share your screen and that nobody is recording. Have the chat message ready to paste ({ui:customize} → {ui:prepare}: 'Chat message for Google Meet', its Copy button).
+      GOOGLE MEET: Our Google Meet runs on the committee's Google Workspace account, so there is no time limit: open the call at 6:50 PM Central and admit people as they arrive; the call can go on after 8:00 for newcomers' questions.
+      SAY (as people arrive): Welcome, come on in; we're starting in just a moment.
+      UPDATE EACH MONTH: tonight's story ({ui:customize} → {ui:your_details}: its title, the issue it's in and its topic). The date, the time and the panel fill in by themselves. Every orange item in square brackets, on any slide, is something to fill in, and orange always means 'still to fill in'. The page 'Before the meeting', in {ui:customize} → {ui:prepare}, is the chair's checklist.
+      TIP: This presentation, the slides AND these notes, is public on the committee's website. What you type in {ui:customize} stays on this device and is never sent anywhere, but it is shown on screen at the meeting. Use service positions, not names.
+
+  - id: "welcome"
+    layout: "bullets"
+    title: "Welcome to the Grapevine Meeting"
+    items:
+      - "An AA meeting in English, the first Wednesday of each month at 7:00 PM Central, on Google Meet"
+      - "Open to **all AA members**, across Northeast Texas Area 65 and beyond: GVRs, committee members, and any member who loves our meeting in print"
+      - "Please stay muted unless you're speaking: use **Raise hand** (at the bottom of the Meet screen), or unmute when called on"
+      - "Camera on? Mind what's behind you: it protects everyone's anonymity"
+      - "Please don't take photos, screenshots or recordings: this meeting is not recorded"
+    takeaway: "A meeting of the NETA 65 Grapevine & La Viña Committee, for local service. This is not an official AA Grapevine, Inc. meeting."
+    minutes: 1.5
+    notes: |
+      SAY: Hello everyone, and welcome to the Grapevine Meeting! My name is {fill:first_name}, I'm an alcoholic, and I'm your chair tonight.
+      SAY: We meet right here on Google Meet on the first Wednesday of each month at 7:00 PM Central. Our Area's Grapevine and La Viña Committee holds this online AA meeting in English, and it's open to all AA members, across Northeast Texas Area 65 and beyond: whether you're a GVR, a committee member, or simply an AA member who loves our meeting in print.
+      SAY: A few housekeeping notes. To keep the meeting free of background noise, please stay muted when you're not speaking. When it's time to share, use the Raise hand button at the bottom of your Google Meet screen, or simply unmute when I call on you. On Google Meet your name is the one your Google account shows: a first name is all we need. Cameras are up to you; if yours is on, please be mindful of what's behind you, to help protect everyone's anonymity. Please don't take photos or screenshots, and please don't record. We aren't recording tonight either.
+      SAY: One more thing: we read from AA Grapevine, but this is our committee's meeting. We don't speak for AA Grapevine, Inc., and this isn't an official AA Grapevine meeting.
+      DO: Before you say 'we aren't recording', make sure nobody is recording. A member who would rather not show their full name can join from a private browser window, as a guest, with a first name only: you admit them like everyone else.
+
+  # The opening's prayer, as the committee meeting says it: the deck's grape quote slide.
+  - id: "serenity-prayer"
+    layout: "quote"
+    accent: "grape"
+    title: "A moment of silence, then the Serenity Prayer"
+    quote: "God, grant me the serenity to accept the things I cannot change, courage to change the things I can, and wisdom to know the difference."
+    credit: "— The Serenity Prayer"
+    source: "Said at many AA meetings. A.A. World Services does not hold its copyright (aa.org, Terms of Use)."
+    minutes: 1
+    notes: |
+      SAY: Let's open our meeting with a moment of silence to remember the alcoholic who still suffers, inside and outside the rooms. (Pause for about ten seconds.) Thank you. Those who wish, please join me in the Serenity Prayer: stay muted and say it along with me. (Read it slowly, following the words on the screen.)
+      SAY (in a small room of four or five, instead of 'stay muted and say it along with me'): unmute if you'd like, and say it with me.
+      DO: Online, unmuting everyone at once creates an echo: say the prayer aloud yourself while the room says it muted.
+      TIP: 'Those who wish' keeps the invitation open: some members prefer not to pray, and silence is always welcome.
+      TRANSITION: Now let's hear the AA Grapevine Statement of Purpose.
+
+  # In place of the AA Preamble: the AA Grapevine Statement of Purpose, NAMED, never quoted (AA Grapevine, Inc.
+  # holds its copyright and gives no "brief excerpt" permission; the site's rule: Grapevine material is never
+  # quoted, nor paraphrased as if it were the text). The reader reads it aloud from their own copy.
+  - id: "statement-of-purpose"
+    layout: "bullets"
+    accent: "grape"
+    title: "Reading: the AA Grapevine Statement of Purpose"
+    items:
+      - "In place of the AA Preamble, read aloud by tonight's reader, from the current issue of AA Grapevine"
+      - "Also on AA Grapevine's website: [www.aagrapevine.org/about-us](https://www.aagrapevine.org/about-us)"
+      - "AA Grapevine's own words: we read them from the magazine, so they're not on this slide"
+    source: "The Statement of Purpose: AA Grapevine, Inc., in every issue of the magazine and at aagrapevine.org/about-us"
+    minutes: 2.5
+    notes: |
+      SAY: In this meeting, in place of the AA Preamble, we read the AA Grapevine Statement of Purpose, which says what our meeting in print is for. I've asked (first name) to read it for us tonight. (If nobody was asked ahead of time, ask for a volunteer, or read it yourself.)
+      SAY (when the reader has finished): Thank you, (first name)!
+      DO: Ask a reader ahead of time, by e-mail or a private chat, so nobody is put on the spot, and send them the link on the slide. They read it from their own copy: the printed issue, the app, or aagrapevine.org/about-us. Rotate readers from month to month.
+      WHY IT IS NOT ON THE SLIDE: the Statement of Purpose is AA Grapevine's own text, and AA Grapevine, Inc. holds the copyright of its magazine's words. The committee never puts Grapevine or La Viña material on a slide (the AA Preamble, which AA Grapevine lets AA entities reprint with its credit line, is the one exception the committee uses), and never shows a paraphrase as if it were the text. If the committee asks AA Grapevine for written permission (licensing@aagrapevine.org) and gets it, this slide can show the Statement of Purpose word for word, with AA Grapevine's credit line exactly as they give it.
+      IN PLACE OF THE PREAMBLE: many AA meetings open with the AA Preamble; this one reads the Statement of Purpose, which says what AA Grapevine is for.
+      TRANSITION: Before we hear tonight's story, a special welcome.
+
+  - id: "newcomers"
+    layout: "bullets"
+    title: "Welcome from across Area 65"
+    items:
+      - "First time at an AA meeting, or at the Grapevine Meeting? **Welcome!**"
+      - "Visiting from another district, home group or Area? We're glad you're here"
+      - "Say hello: unmute, and tell us your first name and the city, district or home group you're joining from (or type it in the chat)"
+      - "You don't have to share tonight: listening is plenty"
+      - "Questions after the meeting? Write to [grapevine@neta65.org](grapevine@neta65.org)"
+    minutes: 3
+    notes: |
+      TIP (timekeeping): about 3 minutes, from about 7:05 to 7:08.
+      SAY: Since this meeting brings together AA members from all across Northeast Texas Area 65, and sometimes from further away, let's take a brief moment to say hello and get to know who is with us tonight. If you're here at the Grapevine Meeting for the very first time, or visiting from another district, would you like to unmute and introduce yourself? Your first name, and the city, district or home group you're joining from.
+      DO: Pause, so people have time to unmute and greet the group. In a small room, you can go down the participant list and welcome each one by first name; in a large one, invite them to type their first name and where they're from in the chat. Never put anyone on the spot: wait a few seconds, then move on.
+      SAY: Welcome to each and every one of you! We're so glad you're here with us tonight. And if tonight is your first AA meeting: you don't have to share; listening is plenty.
+      DO: If a newcomer stays after the meeting with questions, give them the committee's address, and the Meetings page of the committee website for meetings near them; never ask for their phone number or e-mail in the chat.
+      TIP: The Grapevine is often a newcomer's first AA meeting in print. If someone asks how to get it, say it in a sentence (the committee website's Shop page, {live:site}/shop/, links to both official stores), and keep the evening a meeting, not a sales talk.
+
+  - id: "how-it-works"
+    layout: "bullets"
+    title: "How tonight's meeting works"
+    items:
+      - "A story from AA Grapevine, read aloud by tonight's reader, who then starts the sharing"
+      - "Then the floor is open: sharing on the story's topic, 3 to 5 minutes each"
+      - "At about 7:50 we wrap up: instead of a basket, how we support AA Grapevine and Carry the Message; announcements; the Responsibility Statement by 8:00"
+    minutes: 0.75
+    notes: |
+      SAY: Here's how our hour works. Tonight's reader reads a story from AA Grapevine, our meeting in print, and then starts us off by sharing on it. Then the floor is open for your experience, strength and hope on the story's topic: about three to five minutes each, so everyone who wishes has a turn. At about 7:50 we wrap up the sharing; then, in place of a basket, a word about how we support AA Grapevine and about Carry the Message, our announcements, and the Responsibility Statement, so we close by eight.
+      DO: Tell the room who the timekeeper is (first name), and how they'll signal: a short '1 minute' in the chat, or a raised hand on screen.
+      TRANSITION: Here's tonight's story.
+
+  # ------------------------------------------------------------------ THE STORY
+  - id: "tonights-story"
+    layout: "bullets"
+    eyebrow: "Tonight's story"
+    title: "Tonight's story"
+    items:
+      - "**{fill:story_title}**"
+      - "From the {fill:story_issue} issue of AA Grapevine"
+      - "Tonight's topic: {fill:story_topic}"
+    takeaway: "Read aloud from the reader's own copy: the story itself is never on the screen."
+    minutes: 0.75
+    notes: |
+      SAY: Now it is time for the heart of our meeting. Tonight we'll hear a story from AA Grapevine: '{fill:story_title}', from the {fill:story_issue} issue. Our topic: {fill:story_topic}. I've asked (first name) to read the story for us and to kick off our sharing. Take it away, (first name)!
+      WHICH STORY: one from this month's issue ({live:gv_issue}) is a good start, but any issue works: the chair chooses. Choose a story of about 500 to 1,200 words, so it reads in nine minutes or less and leaves the reader about three minutes to start the sharing.
+      DO: Ask the reader a week ahead, agree on the story, and ask them to share first after reading it. They read from their own copy, the printed magazine, the app or the website.
+      UPDATE ({ui:customize} → {ui:your_details}): the story's title, the issue it is in, and tonight's topic.
+
+  # The reading: a pause card, up while the reader reads and then starts the sharing.
+  - id: "reading"
+    layout: "text"
+    style: "break"
+    eyebrow: "Tonight's story"
+    title: "{fill:story_title}"
+    body: "Read aloud from AA Grapevine, the {fill:story_issue} issue; then our reader starts the sharing"
+    minutes: 12
+    notes: |
+      TIP (timekeeping): about 12 minutes, from about 7:10 to 7:22: the story (nine minutes at most), then the reader's own share to start us off (about 3 minutes). A shorter story leaves more time for sharing.
+      DO: Leave this slide up while the reader reads and shares. Keep everyone muted. If the reader's connection drops, read on from your own copy, or ask them to rejoin and pick up where they stopped.
+      NEVER ON THE SCREEN: don't share the story's page on the screen, and don't paste its text in the chat: the stories are AA Grapevine's, and its copyright policy doesn't allow it without permission. The story's title and issue, or a link to it on aagrapevine.org, may go in the chat.
+      ANONYMITY: Grapevine stories are signed with a first name and last initial, or a first name and a town. Read the byline as it is printed.
+      SAY (if the reader finishes the story and stops): Thank you, (first name). Would you start us off with what the story meant to you?
+      TRANSITION: Thank you so much, (first name), for reading and starting us off!
+
+  # ------------------------------------------------------------------ SHARING
+  - id: "sharing"
+    layout: "qa"
+    eyebrow: "Sharing"
+    title: "The floor is open: {fill:story_topic}"
+    prompts:
+      - "{fill:share_question}"
+      - "What in the story spoke to you?"
+      - "How has Grapevine or La Viña touched your recovery and your service?"
+    note: "About 3 to 5 minutes each, so everyone who wishes has a turn. Raise your hand, or unmute when there's a pause."
+    minutes: 23.5
+    notes: |
+      TIP (timekeeping): about 23½ minutes, from about 7:22 to 7:45: five to seven shares at three to five minutes each. When many hands are up, ask for three minutes each. The timekeeper types '1 minute' in the chat at four minutes (at two minutes once you've asked for three minutes each); thank the member when the time is up.
+      SAY: The floor is now open for discussion. We invite you to share your experience, strength and hope on tonight's story and its topic, {fill:story_topic}, or on how AA Grapevine or La Viña has touched your own recovery and your service. Here's a question, if it helps: {fill:share_question}
+      SAY: Please be mindful of your time, around three to five minutes, so everyone who wishes to share has a turn. You can raise your hand, or unmute when there's a pause. Who would like to share next?
+      DO: Call on raised hands in order, by first name. Wait through the silence; someone usually speaks within ten seconds. If two people unmute at once, call on one by first name and the other next. Members who can't find the raise-hand button may type 'hand' in the chat. After each share, say 'thank you, (first name)'.
+      TIP: Keep it to experience, strength and hope. If a share drifts into outside issues, such as politics, treatment methods, other fellowships or commercial apps, gently bring the meeting back to the topic. No cross-talk: we don't comment on each other's shares.
+
+  - id: "last-shares"
+    layout: "qa"
+    eyebrow: "Sharing"
+    title: "Time for a few more shares"
+    prompts:
+      - "Anyone who hasn't shared yet tonight?"
+      - "A newcomer who would like to share?"
+    note: "We wrap up the sharing at about 7:50."
+    minutes: 5
+    notes: |
+      TIP (timekeeping): about 5 minutes, from about 7:45 to 7:50: one or two more shares. Then wrap up at about 7:50, even in the middle of a good evening: the closing takes the last ten minutes, and the hour ends at 8:00.
+      SAY: We have time for one or two more shares. Is there anyone who hasn't shared yet tonight, or a newcomer who would like to?
+      DO: Give the last turns to people who haven't spoken yet.
+      SAY (at about 7:50): That is all the time we have for sharing tonight. Thank you to everyone who shared and to everyone who listened: both are vital to our recovery.
+
+  # ------------------------------------------------------------------ CLOSING
+  # In place of the Seventh Tradition basket: how we support AA Grapevine, and Carry the Message, in the site's own
+  # words. This meeting has no expenses, so no basket; AA Grapevine, Inc. accepts no contributions (Service Manual
+  # p. 66, F-3 p. 12): members support it by subscribing, giving gift subscriptions, buying its books and other
+  # items and writing for it, and the General Service Board covers the difference for La Viña; a Carry the Message
+  # gift is a purchase in the official store, never a donation; a member who prefers cash may hand it to us at our
+  # table at the next event, and the committee uses it to buy Carry the Message gift subscriptions (common.json
+  # ctm.text). Describe, never sell: no appeal to buy, no amounts.
+  - id: "seventh-tradition"
+    layout: "bullets"
+    eyebrow: "Closing"
+    title: "Instead of a basket: supporting AA Grapevine"
+    items:
+      - "This meeting has no expenses, so we pass no basket"
+      - "AA Grapevine, Inc. takes no contributions: we support it by subscribing, giving gift subscriptions, buying its books and other items, and writing for it (the General Service Board covers the difference for La Viña)"
+      - "**Carry the Message**: a gift certificate from the official store becomes a subscription for an alcoholic in need"
+      - "Online: [www.aagrapevine.org/carry-the-message](https://www.aagrapevine.org/carry-the-message) · La Viña's {lang:es}Lleva el Mensaje{/lang}: [www.aalavina.org/lleva-el-mensaje](https://www.aalavina.org/lleva-el-mensaje)"
+      - "Prefer cash? Hand it to us at our Grapevine and La Viña table at the next event (CityWide Dallas, every 2nd Saturday, 5:30–7:30 PM): the committee uses it to buy Carry the Message gift subscriptions"
+    takeaway: "A purchase, not a donation, in the official stores or through our table: each of us decides."
+    source: "Sources: The A.A. Service Manual, 2024–2026 Edition, p. 66 · Self-Support (F-3) · aagrapevine.org · aalavina.org"
+    minutes: 2
+    notes: |
+      TIP (timekeeping): about 2 minutes, from about 7:50 to 7:52.
+      SAY: Our Seventh Tradition says every AA group ought to be fully self-supporting. Our online meeting has no expenses, so we pass no basket tonight. AA Grapevine is different: it accepts no contributions from groups or members. We support it by subscribing, by giving gift subscriptions, by buying its books and other items, and by writing for it; La Viña isn't self-supporting yet, and the General Service Board covers the difference.
+      SAY: So in place of a basket, we mention Carry the Message. Anyone who wishes can buy a Carry the Message gift certificate in Grapevine's or La Viña's official store, and AA Grapevine or La Viña turns it into a subscription for an alcoholic in need, such as someone in a treatment center, a correctional facility, a detox or a hospital. The addresses are on the screen, and they'll be in the chat in a moment. If you prefer cash, you can hand it to us at our Grapevine and La Viña table at the next event, CityWide Dallas on the second Saturday from 5:30 to 7:30 PM at Lovers Lane United Methodist Church, and the committee uses it to buy Carry the Message gift subscriptions.
+      TIP: Keep it to these sentences: describe, never sell. Never call a purchase a 'contribution to Grapevine' or a donation, never name an amount, and never ask anyone to buy: each member decides. The cash option is the one sentence above, said once. The committee website's Shop page ({live:site}/shop/#carry) has both programs.
+
+  - id: "announcements"
+    layout: "bullets"
+    eyebrow: "Closing"
+    title: "Announcements"
+    items:
+      - "Next Grapevine Meeting: **{live:grapevine_meeting_after}** · {live:grapevine_meeting_time}, the same link"
+      - "Our committee meeting: every 3rd Wednesday, {live:meeting_time}, the same link · next: {live:meeting_day}, {live:speaker_note}"
+      - "This meeting's flyer, to share with your home group and sponsees: [{live:site}/meetings/](/meetings/#grapevine-meeting)"
+      - "Next story deadline (AA Grapevine): {live:next_deadline_gv}"
+      - "Every date and flyer: [{live:site}/events/](/events/) · the Area's website: [neta65.org](https://neta65.org)"
+    takeaway: "Any other Grapevine, La Viña or Area 65 announcements from the floor?"
+    minutes: 3
+    notes: |
+      TIP (timekeeping): about 3 minutes, from about 7:52 to 7:55.
+      SAY: We also have a few announcements. Our next Grapevine Meeting is on {live:grapevine_meeting_after}, at seven, right here on this same Google Meet link. Its flyer is on our committee's website, on the Meetings page: please share it with your home group and sponsees.
+      SAY: On the third Wednesday of each month, also at seven Central, our Area's Grapevine and La Viña Committee meets on this exact same link: next on {live:meeting_day}, {live:speaker_note}. Whether you're a GVR or an RLV, or just curious about Grapevine and La Viña service across Area 65, please join us: any AA member is welcome.
+      SAY: The next Grapevine story deadline is on the screen. Every date and flyer is on our committee website, and the Area's website, neta65.org, has our committee's page too. Are there any other Grapevine, La Viña or Area 65 announcements from the floor tonight?
+      DO: Paste the chat message into the Google Meet chat now ({ui:customize} → {ui:prepare}: 'Chat message for Google Meet', its Copy button): the links and dates of these announcements. Add any announcement from the room that is AA's (a group's anniversary, a district workshop); keep outside events out.
+      GUEST SPEAKER: the slide names the committee meeting's guest speaker, or says 'no guest speaker this month' for a meeting that has none (every meeting before the guest speakers start on January 20, 2027; on December 2's slide, that is December 16, 2026). On a night without one, the members share on a topic until 7:30, then the usual second half.
+      IF IT SAYS TO BE ANNOUNCED: the slide says 'guest speaker: to be announced' when the committee's list doesn't name that month's speaker yet, or on a copy opened long after the website made it. Say that the speaker will be on the committee's Meetings page.
+      STAYS CURRENT: the next Grapevine Meeting and its time, the committee meeting and its guest speaker, and the deadline fill in by themselves from the committee website, and so do the dates in the chat message.
+
+  # Writing for the magazines (aagrapevine.org/submit-your-story asks for "your story … your joke or … your art",
+  # its form takes a photo or art; aalavina.org/comparte takes stories, photos, illustrations and audio, but no
+  # jokes: both read November 11, 2026), the anonymity reminder with Tradition Twelve said word
+  # for word from its short form (P-52, p. 17: credited here and on the credits page), and where we meet next.
+  - id: "before-we-close"
+    layout: "bullets"
+    eyebrow: "Closing"
+    title: "Before we close"
+    items:
+      - "Have a story? Send it to AA Grapevine or La Viña: your experience may help another alcoholic · [{live:site}/contribute/](/contribute/)"
+      - "AA Grapevine: a story, a joke, a photo or art, [www.aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) · La Viña: a story, a photo or art, [www.aalavina.org/comparte](https://www.aalavina.org/comparte)"
+      - "Who you see here, what you hear here, when you leave here, let it stay here"
+      - "See you at our CityWide Dallas table on the 2nd Saturday, at the committee meeting on the 3rd Wednesday, and back here on the 1st Wednesday of next month"
+    minutes: 1.5
+    notes: |
+      TIP (timekeeping): about 1½ minutes, from about 7:55 to 7:57.
+      SAY: Thank you to everyone who joined us tonight, to our readers, and to everyone who shared! Have a story? Send it to AA Grapevine or La Viña: your experience may help another alcoholic. AA Grapevine takes a story, a joke, a photo or art at aagrapevine.org, and La Viña a story, a photo or art at aalavina.org; our committee website's page 'Share your story', on the screen, shows how.
+      SAY: As we prepare to close, let us remember Tradition Twelve: “Anonymity is the spiritual foundation of all our Traditions, ever reminding us to place principles before personalities.” Who you see here, what you hear here, when you leave here, let it stay here.
+      SAY: We look forward to seeing you at our Grapevine and La Viña table at CityWide Dallas on the second Saturday, at our committee meeting on the third Wednesday at 7:00 PM, and back here on the first Wednesday of next month!
+      SOURCE: Tradition Twelve (short form), word for word: reprinted from AA Grapevine and La Viña: Our Meetings in Print (P-52), p. 17, with permission of Alcoholics Anonymous World Services, Inc. Read it exactly as written here.
+      TIP: A photo for Grapevine or La Viña (both magazines' pages take one) keeps everyone's anonymity when nobody is in it: a meeting room, a coffee pot, a sunrise. Jokes go to Grapevine only: La Viña's page doesn't ask for them.
+
+  # The closing, word for word, as the committee meeting says it.
+  - id: "responsibility"
+    layout: "quote"
+    eyebrow: "Closing"
+    title: "Closing: the Responsibility Statement"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    minutes: 1
+    notes: |
+      TIP (timekeeping): even when the sharing ran over, keep this closing: it takes a minute, and the meeting still ends by eight.
+      SAY: Those who wish, please join me in closing with the Responsibility Statement: stay muted and say it along with me. (Read it slowly.)
+      SAY (in a small room of four or five, instead of the line above): Please feel free to unmute your microphones and join me in closing with the Responsibility Statement. (Read it slowly.)
+      DO: As with the prayer, say it aloud yourself: unmuting a larger room all at once makes an echo.
+      TIP: Read the words exactly as they appear on the slide. The wording shouldn't be changed or shortened.
+      AFTER THE MEETING: stay on the Meet for a few minutes for newcomers' questions; if one needs a longer answer, offer to reply by e-mail from grapevine@neta65.org.
+
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you for coming. Keep coming back!"
+    message: |-
+      Next Grapevine Meeting: {live:grapevine_meeting_after}
+      {live:grapevine_meeting_time}, on Google Meet
+    lines:
+      - "The same link every month: {live:grapevine_meeting_link}"
+      - "Questions: grapevine@neta65.org"
+      - "Committee website: {live:site}"
+    minutes: 0.25
+    notes: |
+      WHEN: at the end of the hour: leave this slide up while people say goodbye.
+      SAY: Have a wonderful night, everyone, and thank you for everything you do to carry the message. Keep coming back!
+      DO: Stop sharing your screen only after the last person has left, and end the call for everyone.
+      TIP: The contact on this slide is the committee's service address. Never put a personal phone number or email address here.
+      STAYS CURRENT: the next Grapevine Meeting's date (the one after tonight's, until midnight after the meeting), its time and its link fill in by themselves.
+
+  # ------------------------------------------------------------------ APPENDIX · FOR THE CHAIR
+  # Never in the show: read and printed in Customize → Prepare.
+  - id: "for-the-chair"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    title: "For the chair"
+    subtitle: "Before the meeting, the chat message and the sources. Hidden during the meeting."
+    eyebrow: "Appendix · For the chair"
+    accent: "navy"
+    notes: |
+      NOT PRESENTED: the meeting ends with the 'Thank you' slide just before this one.
+      WHAT'S HERE: a checklist for the week before the meeting and for 6:50 on the night, the message to paste in the Google Meet chat (with its Copy button), and the credits and sources. They are in {ui:customize} → {ui:prepare}, where you can read each one before the meeting, or print it.
+
+  # A checklist: Prepare gives each line a tick box the chair's device remembers.
+  - id: "before-the-meeting"
+    layout: "bullets"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Before the meeting"
+    checklist: true
+    items:
+      - "A week ahead: choose the story; type its title, issue and topic in {ui:customize} → {ui:your_details}"
+      - "A reader for the Statement of Purpose, a reader for the story (who also starts the sharing), a timekeeper: asked by e-mail"
+      - "6:50 PM Central: start the Google Meet signed in to the account that owns the link; nobody recording"
+      - "No time limit (the committee's Google Workspace account): admit people as they arrive"
+      - "The chat message ready to copy (the next page); the story's title and issue for the chat, never its text"
+    notes: |
+      WHEN: the week before the meeting, and on the night.
+      STEP 1: Choose the story, from this month's issue ({live:gv_issue}) or any issue, about 500 to 1,200 words, and a topic for the sharing. Type its title, the issue it's in and its topic in {ui:customize} → {ui:your_details}; the slides show them by themselves.
+      STEP 2: Ask a reader for the Statement of Purpose, a reader for the story, and a timekeeper, by e-mail from grapevine@neta65.org. Ask the story's reader to share first, once they've read it, to start the sharing. Send the reader of the Statement of Purpose the link aagrapevine.org/about-us, in case they have no printed issue.
+      STEP 3: On the night, start the Google Meet by 6:50 PM Central, signed in to the Google account that owns this Meet link (the organizer of its calendar event): only that account can admit the people who ask to join, so whoever chairs needs it. Check that you can share your screen, and that nobody is recording.
+      STEP 4: Open 'Chat message for Google Meet' (the next page) and check it; during the announcements, press its Copy button and paste the message in the Google Meet chat.
+      GOOGLE MEET: Our Google Meet runs on the committee's Google Workspace account, so there is no time limit: open the call at 6:50 PM Central and admit people as they arrive; the call can go on after 8:00 for newcomers' questions.
+      ANONYMITY: first names only, on the screen and in the chat; no screenshots of the Meet tiles; no recordings; nobody's e-mail or phone number in the chat.
+
+  # The message for the Google Meet chat: Customize → Prepare gives a `text` page for the chair a Copy button,
+  # which copies it line by line as plain text, its facts filled in for the day. A link would keep only its words
+  # when copied, so every address is written out in full (Google Meet's chat makes it a link); the official
+  # addresses are config/site.yml's links (carry_the_message, lleva_el_mensaje, area_website).
+  - id: "chat-message"
+    layout: "text"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Chat message for Google Meet"
+    body: |-
+      **🍇 Grapevine Meeting · links and dates 🍇**
+      • Carry the Message: https://www.aagrapevine.org/carry-the-message · La Viña: https://www.aalavina.org/lleva-el-mensaje · or cash at our table at the next event
+      • Our table at CityWide Dallas: every 2nd Saturday, 5:30–7:30 PM, Lovers Lane United Methodist Church
+      • Grapevine Meeting: every 1st Wednesday, {live:grapevine_meeting_time}, on this Google Meet (next: {live:grapevine_meeting_after})
+      • Committee meeting: every 3rd Wednesday, {live:meeting_time}, the same link (next: {live:meeting_next})
+      • Have a story? AA Grapevine: https://www.aagrapevine.org/submit-your-story · La Viña: https://www.aalavina.org/comparte
+      • Dates and flyers: {live:site_url} · NETA 65: https://neta65.org
+    notes: |
+      WHEN: paste it in the Google Meet chat during the announcements ({slide:announcements}); paste it again near the end if many people joined late.
+      HOW: in {ui:customize} → {ui:prepare}, press Copy beside this page: the message goes on your clipboard as plain text, its dates filled in for today. Then click the chat in Google Meet and paste it (Ctrl+V; on a Mac, Cmd+V).
+      IF COPY DOESN'T WORK (some browsers don't let a page copy): press View beside this page, select the message with the mouse, and copy it.
+      WHY THE ADDRESSES ARE WRITTEN OUT: Google Meet's chat turns a full web address into a link; a copy keeps the words of a link only, never where it goes.
+      NEVER IN IT: the story's text, anyone's phone number or personal e-mail. The story's title and issue, or its link on aagrapevine.org, may go in the chat on their own.
+      STAYS CURRENT: the next Grapevine Meeting, the next committee meeting and their times fill in by themselves from the committee website.
+
+  - id: "credits"
+    layout: "credits"
+    facilitator: true
+    eyebrow: "Appendix · For the chair"
+    title: "Credits & sources"
+    sources:
+      - "Serenity Prayer: said at many AA meetings; A.A. World Services does not hold its copyright (aa.org, Terms of Use)"
+      - "The AA Grapevine Statement of Purpose: AA Grapevine, Inc.; read aloud from the magazine or aagrapevine.org/about-us, never reproduced here"
+      - "Tradition Twelve (short form), said in the closing: reprinted from AA Grapevine and La Viña: Our Meetings in Print (P-52), p. 17, with permission of Alcoholics Anonymous World Services, Inc."
+      - "Responsibility Statement: written for the 1965 International Convention, Toronto"
+      - "Tonight's story: AA Grapevine, read aloud from the reader's own copy"
+      - "Self-support: The A.A. Service Manual, 2024–2026 Edition, p. 66; Self-Support (F-3, June 2026)"
+      - "Carry the Message: aagrapevine.org/carry-the-message; La Viña's Lleva el Mensaje: aalavina.org/lleva-el-mensaje"
+      - "Writing for the magazines: aagrapevine.org/submit-your-story (stories, jokes, photos and art; read November 11, 2026); aalavina.org/comparte (stories, photos, illustrations, audio; read November 11, 2026)"
+      - "The order of the meeting: the committee's draft script (November 2026), with the committee website's rules"
+      - "Dates, the issue, the deadline and the committee meeting on the slides: the committee website, {live:site}, as of the date on the title slide"
+    note: |-
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers, artwork or stories are reproduced.
+      A.A.W.S. quotations are reprinted with permission of Alcoholics Anonymous World Services, Inc.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not AA Conference-approved literature and does not speak for AA as a whole or for AA Grapevine, Inc.
+    notes: |
+      NOT PRESENTED: this page keeps the record of where the words and facts come from.
+      SAY (if someone asks): This is our Area committee's meeting. It isn't Conference-approved literature or an official AA Grapevine, Inc. meeting, and it doesn't speak for AA as a whole or for AA Grapevine.
+      COPYRIGHT: AA Grapevine, Inc. owns all Grapevine and La Viña content: its stories, its Statement of Purpose, its Daily Quotes. Writing the magazine's name is fine; its logos, covers, artwork and stories are not reproduced. To quote any of it on a slide, ask AA Grapevine first (licensing@aagrapevine.org), and use the credit line they give.

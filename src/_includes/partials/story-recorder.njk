@@ -1,0 +1,631 @@
+{#- Share your story › "Record your story here": the story recorder (included by src/pages/contribute.njk at the top
+    of #record; the screen is src/assets/js/recorder.js, its logic recorder-core.js). Context from the page: lang,
+    ap (db.audio_project), L (site.links), pubOrder, gvAudio, lvRecord, gvEd / lvEd (the magazines' themes and topics:
+    readEditorial — "What will you talk about?" lists them, read.js recorderTopics).
+    The magazines' numbers come from the same data as the story-line cards below it: the length (minutes_min /
+    minutes_max), the address (Grapevine: its Audio Project address; La Viña: links.lv_email_editorial — the same
+    rule as the cards' "Or record it yourself"), La Viña's permission sentence. Without that data the recorder still
+    records (every take stops at 10 minutes) and points to the official page for the address.
+    Words: the markup's own, plus the #rec-config JSON (recSay: the ones the script writes or announces; recReport: the
+    words of the "Check this device" report, R.report — "d").
+    Without JavaScript the card is hidden (data-js-only) and a short note points to "Or record it yourself". -#}
+{%- set dg = ap.gv or {} -%}
+{%- set dl = ap.lv or {} -%}
+{%- set recMags = { gv: "Grapevine", lv: "La Viña" } -%}
+{%- set recData = { gv: dg, lv: dl } -%}
+{%- set recEmails = { gv: dg.email or "", lv: L.lv_email_editorial or dl.email or "" } -%}
+{%- set recPages = { gv: dg.page_url or gvAudio, lv: dl.page_url or lvRecord } -%}
+{%- set recUpload = { gv: L.gv_share_story, lv: L.lv_share_story } -%}
+{%- set recSay = ["take", "takes_count", "st_countdown", "st_blocked", "mp3_making", "working", "e_new_len", "b_download", "s_attach",
+  "s_upload", "s_upload_btn", "lv_silent", "lv_quiet", "lv_good", "lv_loud",
+  "src_edit", "v_short", "v_long", "mic_n",
+  "w_min1", "w_min", "w_sec1", "w_sec", "m_min", "m_left1", "m_max", "m_hard_soon", "m_hard",
+  "n_silent", "n_interrupted", "n_limit", "n_recovered", "n_low", "n_unsaved", "st_none", "st_reload", "st_full", "st_unsaved",
+  "a_testing", "a_countdown", "a_paused", "a_resumed", "a_discarded", "a_saved", "a_unsaved", "a_deleted", "a_deleted_all",
+  "a_lost", "a_lost_n", "a_retry_failed", "a_reload_failed", "a_damaged_again",
+  "a_starred", "a_unstarred", "a_edited", "a_imported", "a_downloaded", "a_body_copied", "a_keep_on", "a_keep_off",
+  "j_mp3", "j_edit", "j_import", "m_lang_gv", "m_lang_lv",
+  "e_denied", "e_nomic", "e_busy", "e_constraint", "e_other", "e_insecure", "e_no_media", "e_no_audio",
+  "e_import_big", "e_import_long", "e_import_bad", "e_share", "e_job", "e_delete", "leave_rec", "leave_unsaved",
+  "tp_days", "tp_day1", "tp_today", "tp_closed", "a_topic"] -%}
+{#- the report's words (community.recorder.rep_*): its title, the e-mail's, yes / no / unknown, each line's label (l_*)
+    and the words for a fact's codes (v_KEY_CODE) — recorder-core.js report() -#}
+{%- set recReport = ["title", "ask", "short", "ready", "yes", "no", "unknown",
+  "l_when", "l_page", "l_browser", "l_system", "l_app", "l_online", "l_secure", "l_mic_api", "l_mic", "l_record", "l_wasm", "l_mp3",
+  "l_idb", "l_keep", "l_persisted", "l_priv", "l_free", "l_used", "l_wake", "l_share", "l_takes", "l_unsaved", "l_unreadable",
+  "l_error", "l_ua",
+  "v_app_tab", "v_app_installed", "v_app_inapp", "v_mic_granted", "v_mic_denied", "v_mic_prompt",
+  "v_record_worklet", "v_record_script", "v_record_insecure", "v_record_no_media", "v_record_no_audio",
+  "v_mp3_ready", "v_mp3_wait", "v_mp3_failed", "v_mp3_none", "v_idb_ok", "v_idb_failed", "v_idb_none",
+  "v_keep_on", "v_keep_off", "v_priv_yes", "v_priv_maybe", "v_priv_no", "v_error_none"] -%}
+{#- "What will you talk about?": each magazine's coming themes and suggested topics, in its own words -#}
+{%- set recTopics = { gv: gvEd, lv: lvEd } | readRecTopics -%}
+{%- set recCfg = {
+  lang: lang, locale: "es-US" if lang == "es" else "en-US", pub: pubOrder[0],
+  enc: { js: "/assets/vendor/wasm-media-encoder.min.js?v=" ~ build.version, wasm: "/assets/vendor/lame-mp3.wasm?v=" ~ build.version },
+  pubs: {
+    gv: { min: dg.minutes_min or 0, max: dg.minutes_max or 0, email: recEmails.gv, upload: recUpload.gv, page: recPages.gv, name: "Grapevine" },
+    lv: { min: dl.minutes_min or 0, max: dl.minutes_max or 0, email: recEmails.lv, upload: recUpload.lv, page: recPages.lv, name: "La Viña" }
+  },
+  mail: {
+    gv: { subject: "community.recorder.mail_gv_subject" | t("en"), subject_plain: "community.recorder.mail_gv_subject_plain" | t("en"),
+      body: "community.recorder.mail_gv_body" | t("en"), short: "community.recorder.mail_gv_short" | t("en"), permission: "" },
+    lv: { subject: "community.recorder.mail_lv_subject" | t("es"), subject_plain: "community.recorder.mail_lv_subject_plain" | t("es"),
+      body: "community.recorder.mail_lv_body" | t("es"), short: "community.recorder.mail_lv_short" | t("es"), permission: dl.permission_text or "" }
+  },
+  credit: {
+    gv: ["community.recorder.credit_1" | t("en"), "community.recorder.credit_2" | t("en"), "community.recorder.credit_3" | t("en")],
+    lv: ["community.recorder.credit_1" | t("es"), "community.recorder.credit_2" | t("es"), "community.recorder.credit_3" | t("es")]
+  },
+  topics: recTopics,
+  diag: { to: site.contact_email or "", ver: build.version }
+} -%}
+{#- a magazine's length, in the badge's words: "6–8 minutes" / "Up to 7 minutes" ("" without data) -#}
+{% macro recLen(d, lang) -%}
+{%- if d.minutes_min and d.minutes_max %}{{ "community.rec.len_range" | t(lang, {min: d.minutes_min, max: d.minutes_max}) }}{% elif d.minutes_max %}{{ "community.rec.len_max" | t(lang, {max: d.minutes_max}) }}{% endif -%}
+{%- endmacro %}
+{#- one line of a checklist: an icon and the words -#}
+{% macro recCheck(text, icon="circle-check") %}<li class="flex gap-2.5"><span class="mt-0.5 shrink-0 text-vine">{% icon icon, "size-4" %}</span><span class="min-w-0 leading-relaxed">{{ text | safe }}</span></li>{% endmacro %}
+
+<article id="recorder" class="card cm-recorder mb-5 print:hidden" aria-labelledby="recorder-title" data-js-only x-data="storyRecorder">
+{#- (diag: the code's version, new with every deploy, and the address the visible note already names — left out of the
+    page's lastmod fingerprint, eleventy/lastmod.js; nothing else here moves with the day: the topics carry their
+    deadlines, never a count of days) -#}
+<script type="application/json" id="rec-config" data-lastmod="skip:diag">{ {%- for k, v in recCfg %}"{{ k }}": {{ v | jsonScript | safe }}, {% endfor %}"s": { {%- for k in recSay %}"{{ k }}": {{ ("community.recorder." + k) | t(lang) | jsonScript | safe }}{{ "," if not loop.last }}{% endfor -%} }, "d": { {%- for k in recReport %}"{{ k }}": {{ ("community.recorder.rep_" + k) | t(lang) | jsonScript | safe }}{{ "," if not loop.last }}{% endfor -%} }}</script>
+  <div class="cm-rec-head">
+    <p class="eyebrow flex items-center gap-2 text-grape">{% icon "mic", "size-4 shrink-0" %}<span>{{ "community.recorder.eyebrow" | t(lang) }}</span></p>
+    <h3 id="recorder-title" class="card-h mt-2 text-grape" tabindex="-1">{{ "community.recorder.title" | t(lang) }}</h3>
+    <p class="mt-2 max-w-3xl leading-relaxed text-muted">{{ "community.recorder.intro" | t(lang) }}</p>
+  {#- an app's own browser (Facebook, Instagram…): the microphone may be refused there, and its storage is its own -#}
+  <div class="cm-rec-note is-warn mt-4" x-show="inApp" x-cloak>
+    <span class="cm-rec-note-icon">{% icon "triangle-alert", "size-5" %}</span>
+    <div class="min-w-0">
+      <p>{{ "community.recorder.inapp" | t(lang) }} {{ "community.recorder.inapp_keep" | t(lang) }}</p>
+      <p class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+        <button type="button" class="btn-secondary btn-sm" data-copy="{{ '/contribute/' | lurl(lang) | siteUrl(site) }}#record">{% icon "copy", "size-4" %} {{ "community.recorder.b_copy_link" | t(lang) }}</button>
+        <a class="link tap-link" href="{{ '/offline/' | lurl(lang) }}#in-app">{{ "community.recorder.inapp_how" | t(lang) }}</a>
+      </p>
+    </div>
+  </div>
+  </div>
+
+  <div class="cm-rec-grid">
+    {#- ---------------- the magazine ---------------- -#}
+    <fieldset class="cm-rec-mag" :disabled="rec() || state === 'countdown'">
+      <legend class="mb-1.5 text-sm font-semibold text-ink">{{ "community.recorder.mag_legend" | t(lang) }}</legend>
+      <div class="grid grid-cols-2 gap-1 rounded-full border border-line bg-surface-2 p-1">
+        {% for p in pubOrder %}
+        <label class="cm-seg"><input type="radio" name="rec-pub" value="{{ p }}" class="sr-only" :checked="pub === '{{ p }}'" @change="setPub('{{ p }}')"{% if loop.first %} checked{% endif %}><span>{{ ("community.recorder.mag_" + p) | t(lang) }}</span></label>
+        {% endfor %}
+      </div>
+      {% for p in pubOrder %}{%- set len = recLen(recData[p], lang) | trim -%}{% if len %}
+      <p class="mt-2 flex items-center gap-1.5 text-sm text-muted" x-show="pub === '{{ p }}'"{% if not loop.first %} x-cloak{% endif %}><span class="{{ 'text-lv' if p == 'lv' else 'text-gv' }}">{% icon "timer", "size-4" %}</span>{{ "community.recorder.c_length" | t(lang, {len: len | lower}) }}</p>
+      {% endif %}{% endfor %}
+    </fieldset>
+
+    {#- ---------------- what you'll talk about (optional): the magazine's topics in its own words (lang: theirs), the
+        coming issues' themes first with their days left (counted on the device, x-text topicText: the built page holds
+        only the theme's words, so it says the same every day — no new lastmod, no IndexNow ping), then the suggested
+        topics; or the visitor's own words. One list per magazine (the one chosen shows). It fills the e-mail's Topic —
+        and so its subject and the file's name. Grapevine's themes are only ideas: nothing here promises an issue. -#}
+    <div class="cm-rec-topic">
+      {% for p in pubOrder %}{%- set tl = recTopics[p] -%}
+      <label class="grid gap-1 text-sm font-semibold text-ink" x-show="pub === '{{ p }}'"{% if not loop.first %} x-cloak{% endif %}>
+        <span>{{ "community.recorder.tp_label" | t(lang) }} <span class="font-normal text-muted">{{ "community.recorder.tp_optional" | t(lang) }}</span></span>
+        <select class="input h-11 cursor-pointer py-0 text-sm font-medium" :value="topicPick('{{ p }}')" @change="pickTopic('{{ p }}', $event.target.value)" aria-describedby="rec-topic-help">
+          <option value="">{{ "community.recorder.tp_none" | t(lang) }}</option>
+          {% for grp in [["dated", tl | selectattr("dated")], ["topics", tl | rejectattr("dated")]] %}{% if grp[1] | length %}
+          <optgroup label="{{ ('community.recorder.tp_group_' + p + '_' + grp[0]) | t(lang) }}">
+            {% for o in grp[1] %}<option value="{{ o.i }}"{% if o.l != lang %} lang="{{ o.l }}"{% endif %} x-text="topicText('{{ p }}', {{ o.i }})">{{ o.t }}</option>{% endfor %}
+          </optgroup>
+          {% endif %}{% endfor %}
+          <option value="other">{{ "community.recorder.tp_other" | t(lang) }}</option>
+        </select>
+      </label>
+      {% endfor %}
+      <label class="mt-2 grid gap-1 text-sm font-semibold text-ink" x-show="topicPick(pub) === 'other'" x-cloak>{{ "community.recorder.tp_own" | t(lang) }}
+        <input class="input" type="text" autocomplete="off" maxlength="120" x-model="send.topic" x-ref="topicOwn" @change="reprep()">
+      </label>
+      {#- the chosen topic in the page's language, marked when a machine translated it -#}
+      <p class="mt-1.5 flex flex-wrap items-center gap-x-1.5 text-sm text-muted" x-show="topicGloss()" x-cloak>
+        <span lang="{{ lang }}" x-text="topicGloss()"></span>
+        <span class="auto-note" x-show="topicMachine()">{% icon "languages", "size-3" %}{{ "common.auto_translated" | t(lang) }}</span>
+      </p>
+      <p id="rec-topic-help" class="mt-1.5 text-xs leading-relaxed text-muted">{{ "community.recorder.tp_help" | t(lang) }}
+        <span x-show="pub === 'gv'"{% if pubOrder[0] != "gv" %} x-cloak{% endif %}>{{ "community.recorder.tp_gv_ideas" | t(lang) }}</span></p>
+    </div>
+
+    {#- ---------------- the recorder ---------------- -#}
+    <div class="cm-rec-deck" :data-state="state">
+      <p class="cm-rec-status" aria-hidden="true">
+        <span class="cm-rec-dot" :class="{ 'is-on': state === 'recording', 'is-paused': state === 'paused' }"></span>
+        <span x-show="state === 'idle'">{{ "community.recorder.st_idle" | t(lang) }}</span>
+        <span x-show="state === 'asking'" x-cloak>{{ "community.recorder.st_asking" | t(lang) }}</span>
+        <span x-show="state === 'testing'" x-cloak>{{ "community.recorder.st_testing" | t(lang) }}</span>
+        <span x-show="state === 'countdown'" x-cloak x-text="t('st_countdown', { n: count })"></span>
+        <span x-show="state === 'recording'" x-cloak>{{ "community.recorder.st_recording" | t(lang) }}</span>
+        <span x-show="state === 'paused'" x-cloak>{{ "community.recorder.st_paused" | t(lang) }}</span>
+        <span x-show="state === 'blocked'" x-cloak>{{ "community.recorder.st_blocked" | t(lang) }}</span>
+        <span x-show="state === 'saving'" x-cloak>{{ "community.recorder.st_saving" | t(lang) }}</span>
+      </p>
+      {#- the time (samples counted, so a pause or a gap never counts) and where it stands against the magazine's length -#}
+      <p class="cm-rec-clock"><span class="sr-only">{{ "community.recorder.timer" | t(lang) }}: </span><span role="timer" aria-live="off" x-text="clock(sec)">0:00</span></p>
+      <div class="cm-rec-bar" :data-zone="zone()" aria-hidden="true">
+        <span class="cm-rec-bar-fill" :style="'width:' + barPct() + '%'"></span>
+        <span class="cm-rec-bar-mark" x-show="markPct('min') >= 0" x-cloak :style="'left:' + markPct('min') + '%'"></span>
+        <span class="cm-rec-bar-mark is-max" x-show="markPct('max') >= 0" x-cloak :style="'left:' + markPct('max') + '%'"></span>
+      </div>
+      <p class="cm-rec-zone" :data-zone="zone()">
+        {% for p in pubOrder %}{%- set d = recData[p] -%}
+        <span x-show="pub === '{{ p }}' && zone() === 'rest'"{% if not loop.first %} x-cloak{% endif %}>{{ recLen(d, lang) if d.minutes_max else ("community.recorder.z_free" | t(lang)) }}</span>
+        <span x-show="pub === '{{ p }}' && zone() === 'under'" x-cloak>{{ "community.recorder.z_under" | t(lang, {mag: recMags[p], min: d.minutes_min}) }}</span>
+        <span x-show="pub === '{{ p }}' && zone() === 'near'" x-cloak>{{ "community.recorder.z_near" | t(lang, {max: d.minutes_max}) }}</span>
+        <span x-show="pub === '{{ p }}' && zone() === 'over'" x-cloak>{{ "community.recorder.z_over" | t(lang, {mag: recMags[p], max: d.minutes_max}) }}</span>
+        <span x-show="pub === '{{ p }}' && zone() === 'ok'" x-cloak>{% if d.minutes_max %}{{ "community.recorder.z_ok" | t(lang) if d.minutes_min else recLen(d, lang) }}{% else %}{{ "community.recorder.z_free" | t(lang) }}{% endif %}</span>
+        {% endfor %}
+      </p>
+      {#- the level: a bar (decorative) and words, written only when they change -#}
+      <div class="cm-rec-level" x-show="state !== 'idle'" x-cloak>
+        <div class="cm-rec-meter" :data-level="lvl" aria-hidden="true"><span :style="'transform:scaleX(' + (meterPct / 100) + ')'"></span></div>
+        <p class="cm-rec-lvl text-sm font-medium" :data-level="lvl"><span class="sr-only">{{ "community.recorder.level" | t(lang) }}: </span>
+          <span x-show="lvl === 'silent'">{{ "community.recorder.lv_silent" | t(lang) }}</span>
+          <span x-show="lvl === 'quiet'">{{ "community.recorder.lv_quiet" | t(lang) }}</span>
+          <span x-show="lvl === 'good'">{{ "community.recorder.lv_good" | t(lang) }}</span>
+          <span x-show="lvl === 'loud'">{{ "community.recorder.lv_loud" | t(lang) }}</span>
+        </p>
+      </div>
+
+      {#- the buttons: ONE main button whose label follows the state (so the keyboard stays on it from Start to Stop) -#}
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <button type="button" class="btn-primary cm-rec-go" x-ref="go" @click="primary($event)" :aria-disabled="state === 'saving' ? 'true' : null">
+          <span class="inline-flex items-center gap-2" x-show="state === 'idle' || state === 'testing'"><span class="cm-rec-go-dot" aria-hidden="true"></span>{{ "community.recorder.b_start" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="state === 'asking' || state === 'countdown'" x-cloak>{% icon "x", "size-4" %}{{ "community.recorder.b_cancel" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="rec()" x-cloak>{% icon "square", "size-4 cm-rec-fill" %}{{ "community.recorder.b_stop" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="state === 'blocked'" x-cloak>{% icon "play", "size-4" %}{{ "community.recorder.b_continue" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="state === 'saving'" x-cloak>{% icon "loader-circle", "size-4 animate-spin" %}{{ "community.recorder.st_saving" | t(lang) }}</span>
+        </button>
+        <button type="button" class="btn-secondary" data-rec-test x-show="state === 'idle' || state === 'testing' || state === 'asking'" @click="open('test')">
+          <span class="inline-flex items-center gap-2" x-show="state !== 'testing'">{% icon "audio-lines", "size-4" %}{{ "community.recorder.b_test" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="state === 'testing'" x-cloak>{% icon "mic-off", "size-4" %}{{ "community.recorder.b_test_stop" | t(lang) }}</span>
+        </button>
+        <button type="button" class="btn-secondary" x-show="rec()" x-cloak @click="state === 'paused' ? resume() : pause()">
+          <span class="inline-flex items-center gap-2" x-show="state === 'recording'">{% icon "pause", "size-4" %}{{ "community.recorder.b_pause" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="state === 'paused'">{% icon "mic", "size-4" %}{{ "community.recorder.b_resume" | t(lang) }}</span>
+        </button>
+        <button type="button" class="btn-ghost text-danger" x-show="rec()" x-cloak @click="askDiscard(); $nextTick(() => $refs.discardNo && $refs.discardNo.focus())">{% icon "trash-2", "size-4" %} {{ "community.recorder.b_discard" | t(lang) }}</button>
+        <button type="button" class="btn-secondary" x-show="state === 'blocked'" x-cloak @click="close(); $nextTick(() => $refs.go.focus())">{% icon "x", "size-4" %} {{ "community.recorder.b_cancel" | t(lang) }}</button>
+      </div>
+      <div class="cm-rec-confirm" x-show="confirmDiscard && rec()" x-cloak role="group" aria-labelledby="rec-discard-q">
+        <p id="rec-discard-q" class="font-semibold text-ink">{{ "community.recorder.discard_q" | t(lang) }}</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          <button type="button" class="btn-ghost btn-sm text-danger" @click="stop(false)">{% icon "trash-2", "size-4" %} {{ "community.recorder.b_discard_yes" | t(lang) }}</button>
+          <button type="button" class="btn-secondary btn-sm" x-ref="discardNo" @click="confirmDiscard = false; $refs.go.focus()">{{ "community.recorder.b_discard_no" | t(lang) }}</button>
+        </div>
+      </div>
+
+      {#- what went wrong, and what to do -#}
+      <div class="cm-rec-note is-error mt-4" x-show="error" x-cloak>
+        <span class="cm-rec-note-icon">{% icon "circle-alert", "size-5" %}</span>
+        <div class="min-w-0">
+          {% for k in ["denied", "nomic", "busy", "constraint", "other", "insecure", "no_media", "no_audio"] %}
+          <p class="font-semibold" x-show="error === '{{ k }}'">{{ ("community.recorder.e_" + k) | t(lang) }}</p>
+          {% endfor %}
+          {% for h in ["ios", "android", "chrome", "edge", "firefox", "safari", "other"] %}
+          <p class="mt-1" x-show="error === 'denied' && help === '{{ h }}'">{{ ("community.recorder.help_" + h) | t(lang) }}</p>
+          {% endfor %}
+          <p class="mt-1" x-show="['no_media', 'no_audio', 'insecure', 'denied', 'nomic'].includes(error)">{{ "community.recorder.other_ways" | t(lang) }}</p>
+        </div>
+      </div>
+      {#- what happened (the same words are announced) -#}
+      <div class="cm-rec-note mt-4" :class="{ 'is-warn': ['silent', 'interrupted', 'limit', 'blocked', 'low', 'unsaved'].includes(notice) }" x-show="notice" x-cloak>
+        <span class="cm-rec-note-icon">{% icon "info", "size-5" %}</span>
+        <div class="min-w-0">
+          {% for k in ["silent", "interrupted", "recovered", "encoder"] %}
+          <p x-show="notice === '{{ k }}'">{{ ("community.recorder.n_" + k) | t(lang) }}</p>
+          {% endfor %}
+          <p x-show="notice === 'blocked'">{{ "community.recorder.st_blocked" | t(lang) }}</p>
+          <p x-show="notice === 'limit'" x-text="t('n_limit', { max: maxTakes })"></p>
+          <p x-show="notice === 'low'" x-text="t('n_low', { free: size(lowFree) })"></p>
+          {#- a take Stop, Add a recording or Apply made that isn't saved: said here too — on a phone the takes' box is far below -#}
+          <p x-show="notice === 'unsaved'" x-text="t('n_unsaved', { name: noticeName() })"></p>
+        </div>
+      </div>
+
+      {#- the microphone and its options -#}
+      <div class="mt-4 grid gap-3">
+        <label class="grid gap-1 text-sm font-semibold text-ink" x-show="mics.length > 1" x-cloak>{{ "community.recorder.o_mic" | t(lang) }}
+          <select class="input h-11 cursor-pointer py-0 text-sm font-medium" x-model="micId" @change="reopen()" :disabled="rec() || state === 'countdown'">
+            <option value="">{{ "community.recorder.o_mic_default" | t(lang) }}</option>
+            <template x-for="m in mics" :key="m.id"><option :value="m.id" x-text="m.label" :selected="m.id === micId"></option></template>
+          </select>
+        </label>
+        <div>
+          <label class="inline-flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium text-ink">
+            <input type="checkbox" class="cm-switch" x-model="noise" @change="reopen()" :disabled="rec() || state === 'countdown'" aria-describedby="rec-noise-help">
+            {{ "community.recorder.o_noise" | t(lang) }}
+          </label>
+          <p id="rec-noise-help" class="text-xs leading-relaxed text-muted">{{ "community.recorder.o_noise_help" | t(lang) }}</p>
+        </div>
+        <p class="flex gap-2 text-xs leading-relaxed text-muted">{% icon "smartphone", "mt-0.5 size-4 shrink-0" %}<span>{{ "community.recorder.tip_screen" | t(lang) }}</span></p>
+      </div>
+    </div>
+
+    {#- ---------------- what to say first (stays in view while recording, beside the buttons on a wide screen) ---------------- -#}
+    <div class="cm-rec-say">
+      <h4 class="eyebrow flex items-center gap-2 text-vine">{% icon "message-square-quote", "size-4 shrink-0" %}<span>{{ "community.recorder.say_title" | t(lang) }}</span></h4>
+      {% for p in pubOrder %}
+      <div x-show="pub === '{{ p }}'"{% if not loop.first %} x-cloak{% endif %}>
+        {% if p == "lv" %}
+        <ol class="mt-3 space-y-3" role="list">
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">1</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">1. </span>{{ "community.recorder.say_lv_1" | t(lang, {example: '<q lang="es">' ~ ("community.rec.lv_example" | t(lang) | escape) ~ '</q>'}) | safe }}</div></li>
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">2</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">2. </span>{{ "community.recorder.say_lv_2" | t(lang) }}</div></li>
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">3</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">3. </span>
+            {% if dl.permission_text %}{{ "community.recorder.say_lv_3" | t(lang) }}
+            <blockquote class="cm-rec-script" lang="es">“{{ dl.permission_text }}”</blockquote>
+            {% else %}{{ "community.recorder.say_lv_3_short" | t(lang) }}{% endif %}
+          </div></li>
+        </ol>
+        <p class="mt-3 text-xs leading-relaxed text-muted">{{ "community.recorder.say_lv_note" | t(lang) }}</p>
+        {% else %}
+        <ol class="mt-3 space-y-3" role="list">
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">1</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">1. </span>{{ "community.recorder.say_gv_1" | t(lang) }}</div></li>
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">2</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">2. </span>{{ "community.recorder.say_gv_2" | t(lang, {example: '<q lang="en">' ~ ("community.recorder.say_gv_2_example" | t("en") | escape) ~ '</q>'}) | safe }}</div></li>
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">3</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">3. </span>{{ "community.recorder.say_gv_3" | t(lang, {example: '<q lang="en">' ~ ("community.recorder.say_gv_3_example" | t("en") | escape) ~ '</q>'}) | safe }}</div></li>
+          <li class="flex gap-3"><span class="step-num" aria-hidden="true">4</span><div class="min-w-0 flex-1 pt-0.5 leading-relaxed text-ink"><span class="sr-only">4. </span>{{ "community.recorder.say_gv_4" | t(lang, {example: '<q lang="en">' ~ ("community.recorder.say_gv_4_example" | t("en") | escape) ~ '</q>'}) | safe }}</div></li>
+        </ol>
+        <p class="mt-3 text-xs leading-relaxed text-muted">{{ "community.recorder.say_gv_note" | t(lang) }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    {#- ---------------- before you record ---------------- -#}
+    <details class="cm-rec-before group/rb">
+      <summary class="flex min-h-11 cursor-pointer items-center justify-between gap-3 font-semibold text-ink">
+        <span class="flex items-center gap-2"><span class="text-vine">{% icon "list-checks", "size-5" %}</span>{{ "community.recorder.before_title" | t(lang) }}</span>
+        {% icon "chevron-down", "size-4 transition group-open/rb:rotate-180" %}
+      </summary>
+      <ul class="mt-2 space-y-2.5 text-sm text-ink" role="list">
+        {{ recCheck("community.recorder.c_topic" | t(lang), "feather") }}
+        {{ recCheck("community.recorder.c_meeting" | t(lang), "users") }}
+        {% for p in pubOrder %}{%- set len = recLen(recData[p], lang) | trim -%}{% if len %}<li class="flex gap-2.5" x-show="pub === '{{ p }}'"{% if not loop.first %} x-cloak{% endif %}><span class="mt-0.5 shrink-0 text-vine">{% icon "timer", "size-4" %}</span><span class="min-w-0 leading-relaxed">{{ "community.recorder.c_length" | t(lang, {len: len | lower}) }}</span></li>{% endif %}{% endfor %}
+        <li class="flex gap-2.5" x-show="pub === 'gv'"{% if pubOrder[0] != "gv" %} x-cloak{% endif %}><span class="mt-0.5 shrink-0 text-vine">{% icon "hourglass", "size-4" %}</span><span class="min-w-0 leading-relaxed">{{ "community.recorder.c_gv_7" | t(lang) }}</span></li>
+        <li class="flex gap-2.5" x-show="pub === 'lv'"{% if pubOrder[0] != "lv" %} x-cloak{% endif %}><span class="mt-0.5 shrink-0 text-vine">{% icon "languages", "size-4" %}</span><span class="min-w-0 leading-relaxed">{{ "community.recorder.c_lv_lang" | t(lang) }}</span></li>
+        {{ recCheck("community.recorder.c_quiet" | t(lang), "volume-x") }}
+        {{ recCheck("community.recorder.c_mic" | t(lang), "hand") }}
+        {{ recCheck("community.recorder.c_test" | t(lang), "headphones") }}
+        {{ recCheck("community.recorder.c_anon" | t(lang), "shield-check") }}
+        {{ recCheck("community.recorder.c_sr" | t(lang), "headphones") }}
+        {{ recCheck("community.recorder.c_once" | t(lang), "send") }}
+      </ul>
+    </details>
+  </div>
+
+  {#- ---------------- the takes ---------------- -#}
+  <div class="cm-rec-takes-wrap" aria-labelledby="rec-takes-title" role="group">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+      <h4 id="rec-takes-title" class="flex items-center gap-2 font-display text-xl font-semibold text-ink" tabindex="-1">{% icon "audio-waveform", "size-5 text-grape" %}{{ "community.recorder.takes_title" | t(lang) }}</h4>
+      <p class="text-sm text-muted" x-show="takes.length" x-cloak x-text="t('takes_count', { n: takes.length, max: maxTakes })"></p>
+    </div>
+    {#- where the takes are, while that is not simply "on this device" (storeNote): a lasting box, not the one-at-a-time
+        notice (role="status" always in the page: a screen reader hears the box when it appears) -#}
+    <div role="status">
+      <div class="cm-rec-note mt-3" :class="{ 'is-warn': storeNote() !== 'private' }" x-show="storeNote()" x-cloak>
+        <span class="cm-rec-note-icon" x-show="storeNote() !== 'private'">{% icon "triangle-alert", "size-5" %}</span>
+        <span class="cm-rec-note-icon" x-show="storeNote() === 'private'">{% icon "info", "size-5" %}</span>
+        <div class="min-w-0">
+          {% for k in ["none", "reload", "full", "unsaved", "private"] %}
+          <p x-show="storeNote() === '{{ k }}' && !(ios && '{{ k }}' === 'private')">{{ ("community.recorder.st_" + k) | t(lang) }}</p>
+          {% endfor %}
+          {#- (an iPhone or iPad has private tabs) -#}
+          <p x-show="storeNote() === 'private' && ios">{{ "community.recorder.st_private_ios" | t(lang) }}</p>
+          <p class="mt-2" x-show="['reload', 'full', 'unsaved'].includes(storeNote())"><button type="button" class="btn-secondary btn-sm" @click="retry()">{% icon "refresh-cw", "size-4" %} {{ "community.recorder.b_retry" | t(lang) }}</button></p>
+        </div>
+      </div>
+    </div>
+    {#- (not while the device's takes can't be reached: they may be there) -#}
+    <p class="mt-2 text-sm text-muted" x-show="loaded && !takes.length && storeNote() !== 'reload'" x-cloak>{{ "community.recorder.takes_empty" | t(lang) }}</p>
+    {#- a job (an MP3 being made, an edit, a file converted): what, and how far -#}
+    <div class="mt-3" x-show="job" x-cloak>
+      {#- (the words are a status: said once; the percentage is not, it changes all the time) -#}
+      <p class="flex items-center gap-2 text-sm text-ink">{% icon "loader-circle", "size-4 animate-spin text-grape" %}<span role="status" x-text="job ? t('working', { label: job.label }) : ''"></span><span class="tabular-nums" aria-hidden="true" x-text="job ? job.pct + '%' : ''"></span></p>
+      <div class="cm-rec-meter is-job mt-2" aria-hidden="true"><span :style="'transform:scaleX(' + ((job ? job.pct : 0) / 100) + ')'"></span></div>
+    </div>
+    <ol class="mt-4 grid gap-4" role="list" x-show="takes.length" x-cloak>
+      <template x-for="take in takes" :key="take.id">
+        <li class="cm-rec-take" :class="{ 'is-pick': take.starred }">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h5 class="flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold text-ink" :id="'rec-take-' + take.id" tabindex="-1">
+                <span class="min-w-0 [overflow-wrap:anywhere]" x-text="name(take)"></span>
+                <span class="badge-vine" x-show="take.starred">{% icon "star", "size-3.5 cm-rec-fill" %}{{ "community.recorder.pick" | t(lang) }}</span>
+              </h5>
+              <p class="mt-0.5 flex flex-wrap gap-x-2 text-xs text-muted">
+                <span :class="take.pub === 'lv' ? 'text-lv-strong' : 'text-gv-strong'" class="font-semibold" x-text="cfg.pubs[take.pub].name"></span>
+                <span aria-hidden="true">·</span><span x-text="when(take)"></span>
+                <span aria-hidden="true">·</span><span class="font-semibold text-ink"><span aria-hidden="true" x-text="dur(take)"></span><span class="sr-only" x-text="durSpoken(take)"></span></span>
+                <span x-show="showSizes()"><span aria-hidden="true">·</span> <span x-text="size(takeSize(take))"></span></span>
+              </p>
+              {#- not on the device yet (it is in this page only), or on its way there; a browser that keeps nothing: in this
+                  page only, for good (no "yet": nothing will be tried). (A take the browser lost: its own note below.) -#}
+              <p class="mt-1.5 flex flex-wrap gap-1.5" x-show="keep && !take.saved && !take.damaged">
+                <span class="badge bg-lv-soft text-lv-strong" x-show="!take.saving && kept">{% icon "triangle-alert", "size-3.5" %}{{ "community.recorder.t_unsaved" | t(lang) }}</span>
+                <span class="badge bg-lv-soft text-lv-strong" x-show="!take.saving && !kept">{% icon "triangle-alert", "size-3.5" %}{{ "community.recorder.t_only_page" | t(lang) }}</span>
+                <span class="badge-muted" x-show="take.saving">{% icon "loader-circle", "size-3.5 animate-spin" %}{{ "community.recorder.t_saving" | t(lang) }}</span>
+              </p>
+            </div>
+            <button type="button" class="btn-ghost btn-sm -my-1 min-w-11 shrink-0 px-2.5!" x-show="!take.damaged" :class="take.starred ? 'text-vine' : 'text-muted'" @click="star(take)" :aria-pressed="take.starred ? 'true' : 'false'" aria-label="{{ 'community.recorder.pick' | t(lang) }}">
+              <span x-show="!take.starred">{% icon "star", "size-5" %}</span><span x-show="take.starred">{% icon "star", "size-5 cm-rec-fill" %}</span>
+            </button>
+          </div>
+          <svg class="cm-rec-wave" viewBox="0 0 240 40" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path :d="wave(take)"></path></svg>
+          <audio class="cm-rec-audio" controls preload="metadata" x-show="!take.damaged" :src="take.url" :id="'rec-audio-' + take.id" data-rec-audio @play="onPlay($event)" @error="replay(take)" :aria-label="name(take)"></audio>
+          {#- its sound can't be read from this device: kept as it is (Try again reads it again — no reload, which would lose a
+              take only in this page), and Delete works; the browser lost it from the device with no copy in this page
+              (take.lost: a private tab's store that came back empty) — nothing to try, Delete takes it from the list -#}
+          <div class="cm-rec-note is-error mt-2" x-show="take.damaged"><span class="cm-rec-note-icon">{% icon "circle-alert", "size-5" %}</span>
+            <div class="min-w-0"><p x-show="!take.lost">{{ "community.recorder.t_damaged" | t(lang) }}</p>
+              <p x-show="take.lost">{{ "community.recorder.t_lost" | t(lang) }}</p>
+              <p class="mt-2" x-show="!take.lost"><button type="button" class="btn-secondary btn-sm" @click="reread(take)">{% icon "refresh-cw", "size-4" %} {{ "community.recorder.b_retry" | t(lang) }}</button></p></div></div>
+          {#- the length against its magazine, and what the take may need -#}
+          <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs" role="list">
+            <li class="flex items-center gap-1.5 font-semibold text-vine" x-show="verdict(take) === 'ok'">{% icon "circle-check", "size-3.5" %}{{ "community.recorder.v_ok" | t(lang) }}</li>
+            <li class="flex items-center gap-1.5 font-semibold text-lv-strong" x-show="verdict(take) === 'short'">{% icon "hourglass", "size-3.5" %}<span x-text="t('v_short', { min: cfg.pubs[take.pub].min })"></span></li>
+            <li class="flex items-center gap-1.5 font-semibold text-danger" x-show="verdict(take) === 'long'">{% icon "scissors", "size-3.5" %}<span x-text="t('v_long', { max: cfg.pubs[take.pub].max })"></span></li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="quiet(take)">{% icon "volume-1", "size-3.5" %}{{ "community.recorder.h_quiet" | t(lang) }}</li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="loud(take)">{% icon "triangle-alert", "size-3.5" %}{{ "community.recorder.h_loud" | t(lang) }}</li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="take.gaps">{% icon "triangle-alert", "size-3.5" %}{{ "community.recorder.h_gaps" | t(lang) }}</li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="take.src === 'edit'">{% icon "scissors", "size-3.5" %}<span x-text="t('src_edit', { name: t('take', { n: take.from }) })"></span></li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="take.src === 'file'">{% icon "file-audio", "size-3.5" %}{{ "community.recorder.src_file" | t(lang) }}</li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="take.src === 'recovered'">{% icon "life-buoy", "size-3.5" %}{{ "community.recorder.src_recovered" | t(lang) }}</li>
+            <li class="flex items-center gap-1.5 text-muted" x-show="take.noise">{% icon "audio-lines", "size-3.5" %}{{ "community.recorder.noise_on" | t(lang) }}</li>
+          </ul>
+          {#- the actions -#}
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button type="button" class="btn-secondary btn-sm" x-show="!take.damaged" @click="openPanel(take, 'send')" :aria-expanded="openId === take.id && panel === 'send' ? 'true' : 'false'" :aria-controls="'rec-send-' + take.id">{% icon "send", "size-4" %} {{ "community.recorder.b_send" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" x-show="!take.damaged" @click="openPanel(take, 'edit')" :aria-expanded="openId === take.id && panel === 'edit' ? 'true' : 'false'" :aria-controls="'rec-edit-' + take.id">{% icon "scissors", "size-4" %} {{ "community.recorder.b_edit" | t(lang) }}</button>
+            <button type="button" class="btn-ghost btn-sm" x-show="!take.damaged" @click="startRename(take)">{% icon "pencil", "size-4" %} {{ "community.recorder.b_rename" | t(lang) }}</button>
+            <button type="button" class="btn-ghost btn-sm text-danger" @click="confirmId = take.id; $nextTick(() => { const b = document.getElementById('rec-del-no-' + take.id); if (b) b.focus(); })">{% icon "trash-2", "size-4" %} {{ "community.recorder.b_delete" | t(lang) }}</button>
+          </div>
+          {#- rename -#}
+          <template x-if="renameId === take.id">
+            <form class="mt-3 flex flex-wrap items-end gap-2" @submit.prevent="saveRename(take)" @keydown.escape.prevent="cancelRename(take)">
+              <label class="grid min-w-0 flex-1 gap-1 text-sm font-semibold text-ink">{{ "community.recorder.rename_label" | t(lang) }}
+                <input class="input" type="text" maxlength="80" :id="'rec-rename-' + take.id" x-model="renameText" autocomplete="off">
+              </label>
+              <button type="submit" class="btn-secondary btn-sm">{{ "community.recorder.b_save" | t(lang) }}</button>
+              <button type="button" class="btn-ghost btn-sm" @click="cancelRename(take)">{{ "community.recorder.b_cancel" | t(lang) }}</button>
+            </form>
+          </template>
+          {#- delete -#}
+          <template x-if="confirmId === take.id">
+            <div class="cm-rec-confirm" role="group" :aria-labelledby="'rec-del-q-' + take.id">
+              <p class="font-semibold text-ink" :id="'rec-del-q-' + take.id">{{ "community.recorder.delete_q" | t(lang) }}</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <button type="button" class="btn-ghost btn-sm text-danger" @click="remove(take)">{% icon "trash-2", "size-4" %} {{ "community.recorder.b_delete_yes" | t(lang) }}</button>
+                <button type="button" class="btn-secondary btn-sm" :id="'rec-del-no-' + take.id" @click="confirmId = ''; focusTake(take.id)">{{ "community.recorder.b_keep" | t(lang) }}</button>
+              </div>
+            </div>
+          </template>
+
+          {#- ---------- trim or adjust: a new take ---------- -#}
+          <template x-if="openId === take.id && panel === 'edit'">
+            <div class="cm-rec-panel" :id="'rec-edit-' + take.id">
+              <p class="font-semibold text-ink">{{ "community.recorder.e_title" | t(lang) }}</p>
+              <p class="mt-0.5 text-sm text-muted">{{ "community.recorder.e_sub" | t(lang) }}</p>
+              <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                <label class="grid gap-1 text-sm font-semibold text-ink">
+                  <span class="flex justify-between gap-2">{{ "community.recorder.e_start" | t(lang) }} <span class="font-normal tabular-nums text-muted" aria-hidden="true" x-text="trimLabel(edit.start)"></span></span>
+                  <input type="range" class="cm-rec-range" min="0" :max="Math.round(take.samples / take.rate * 10) / 10" step="0.1" x-model.number="edit.start" @input="clampEdit(take, 'start')" :aria-valuetext="trimLabel(edit.start)">
+                </label>
+                <label class="grid gap-1 text-sm font-semibold text-ink">
+                  <span class="flex justify-between gap-2">{{ "community.recorder.e_end" | t(lang) }} <span class="font-normal tabular-nums text-muted" aria-hidden="true" x-text="trimLabel(edit.end)"></span></span>
+                  <input type="range" class="cm-rec-range" min="0" :max="Math.round(take.samples / take.rate * 10) / 10" step="0.1" x-model.number="edit.end" @input="clampEdit(take, 'end')" :aria-valuetext="trimLabel(edit.end)">
+                </label>
+              </div>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <button type="button" class="btn-secondary btn-sm" @click="preview(take, 'start')">{% icon "play", "size-4" %} {{ "community.recorder.e_play_start" | t(lang) }}</button>
+                <button type="button" class="btn-secondary btn-sm" @click="preview(take, 'end')">{% icon "skip-forward", "size-4" %} {{ "community.recorder.e_play_end" | t(lang) }}</button>
+              </div>
+              <label class="mt-3 flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium text-ink">
+                <input type="checkbox" class="size-5 accent-[var(--c-gv)]" x-model="edit.even">{{ "community.recorder.e_even" | t(lang) }}
+              </label>
+              <p class="text-sm text-muted" x-text="t('e_new_len', { time: clock(edit.end - edit.start) })"></p>
+              <p class="cm-rec-note is-warn mt-3" x-show="takes.length >= maxTakes"><span class="cm-rec-note-icon">{% icon "info", "size-5" %}</span><span x-text="t('n_limit', { max: maxTakes })"></span></p>
+              <p class="mt-3 text-sm text-muted" x-show="rec()">{{ "community.recorder.e_wait" | t(lang) }}</p>
+              <button type="button" class="btn-primary btn-sm mt-3" @click="applyEdit(take)" :disabled="takes.length >= maxTakes || rec()">{% icon "scissors", "size-4" %} {{ "community.recorder.e_apply" | t(lang) }}</button>
+            </div>
+          </template>
+
+          {#- ---------- send or save ---------- -#}
+          <template x-if="openId === take.id && panel === 'send'">
+            <div class="cm-rec-panel" :id="'rec-send-' + take.id">
+              <p class="font-semibold text-ink">{{ "community.recorder.s_title" | t(lang) }}</p>
+              <div class="mt-3 grid gap-4 md:grid-cols-2">
+                <fieldset>
+                  <legend class="mb-1.5 text-sm font-semibold text-ink">{{ "community.recorder.s_to" | t(lang) }}</legend>
+                  <div class="grid grid-cols-2 gap-1 rounded-full border border-line bg-surface-2 p-1">
+                    {% for p in pubOrder %}
+                    <label class="cm-seg"><input type="radio" :name="'rec-to-' + take.id" value="{{ p }}" class="sr-only" :checked="send.pub === '{{ p }}'" @change="setTo(take, '{{ p }}')"><span>{{ recMags[p] }}</span></label>
+                    {% endfor %}
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend class="mb-1.5 text-sm font-semibold text-ink">{{ "community.recorder.s_fmt" | t(lang) }}</legend>
+                  <div class="grid gap-1.5">
+                    <label class="cm-rec-opt"><input type="radio" :name="'rec-fmt-' + take.id" value="mp3" :checked="send.fmt === 'mp3'" @change="setFmt(take, 'mp3')" :disabled="!take.mp3Size"><span><strong>MP3</strong> <span class="text-muted" x-text="take.mp3Size ? '· ' + size(take.mp3Size) : ''"></span><span class="block text-xs text-muted">{{ "community.recorder.s_mp3" | t(lang) }}</span></span></label>
+                    <label class="cm-rec-opt"><input type="radio" :name="'rec-fmt-' + take.id" value="wav" :checked="send.fmt === 'wav'" @change="setFmt(take, 'wav')"><span><strong>WAV</strong> <span class="text-muted" x-text="'· ' + size(wavSize(take))"></span><span class="block text-xs text-muted">{{ "community.recorder.s_wav" | t(lang) }}</span></span></label>
+                  </div>
+                </fieldset>
+              </div>
+              {#- a take recorded for the other magazine, or a file made elsewhere: what this magazine asks the recording to start with -#}
+              {% for p in pubOrder %}
+              <p class="cm-rec-note is-warn mt-3" x-show="send.pub === '{{ p }}' && (take.pub !== '{{ p }}' || take.src === 'file')"><span class="cm-rec-note-icon">{% icon "message-square-quote", "size-5" %}</span><span>{{ ("community.recorder.s_opening_" + p) | t(lang) }}</span></p>
+              {% endfor %}
+              <p class="mt-2 text-sm font-semibold text-danger" x-show="send.pub !== take.pub && verdict(take, send.pub) === 'long'" x-text="t('v_long', { max: cfg.pubs[send.pub].max })"></p>
+              <p class="mt-2 text-sm text-muted" x-show="!take.mp3Size && can.wasm && !mp3Fail" x-text="t('mp3_making', { pct: making(take) ? job.pct : 0 })"></p>
+              <p class="cm-rec-note mt-3" x-show="!take.mp3Size && (mp3Fail || !can.wasm)"><span class="cm-rec-note-icon">{% icon "info", "size-5" %}</span><span x-show="can.wasm">{{ "community.recorder.n_encoder" | t(lang) }}</span><span x-show="!can.wasm">{{ "community.recorder.n_no_mp3" | t(lang) }}</span></p>
+              <p class="cm-rec-note is-warn mt-3" x-show="send.fmt === 'wav' && prep.ready && big()"><span class="cm-rec-note-icon">{% icon "triangle-alert", "size-5" %}</span><span>{{ "community.recorder.s_wav_big" | t(lang) }}</span></p>
+
+              {#- 1. save it -#}
+              <p class="mt-4 font-semibold text-ink">{{ "community.recorder.s_step1" | t(lang) }}</p>
+              <div class="mt-2 flex flex-wrap items-center gap-2">
+                <a class="btn-secondary btn-sm" x-show="prep.ready && !(ios && standalone && shareable())" :href="prep.url" :download="fileName(take, send.fmt)" @click="downloaded(take)">{% icon "download", "size-4" %} <span x-text="t('b_download', { fmt: send.fmt.toUpperCase() })"></span></a>
+                <button type="button" class="btn-secondary btn-sm" x-show="prep.ready && ios && shareable()" @click="share(take, false)">{% icon "folder-down", "size-4" %} {{ "community.recorder.b_save_files" | t(lang) }}</button>
+                <span class="inline-flex items-center gap-2 text-sm text-muted" x-show="!prep.ready && !prep.failed" role="status">{% icon "loader-circle", "size-4 animate-spin" %}{{ "community.recorder.s_preparing" | t(lang) }}</span>
+                <span class="text-sm text-muted" x-show="prep.failed">{{ "community.recorder.s_failed" | t(lang) }}</span>
+              </div>
+              <p class="mt-1 text-xs text-muted" x-show="ios && standalone">{{ "community.recorder.s_ios_app" | t(lang) }}</p>
+
+              {#- 2. send it -#}
+              <p class="mt-4 font-semibold text-ink">{{ "community.recorder.s_step2" | t(lang) }}</p>
+              <div class="mt-2 grid gap-3">
+                <div x-show="prep.ready && shareable()">
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" class="btn-primary btn-sm" @click="share(take, true)">{% icon "share-2", "size-4" %} {{ "community.recorder.b_share" | t(lang) }}</button>
+                    {#- the file alone (a sponsor listening first: no message, no details) — on iPhone "Save to Files" is that -#}
+                    <button type="button" class="btn-secondary btn-sm" x-show="!ios" @click="share(take, false)">{% icon "file-audio", "size-4" %} {{ "community.recorder.b_share_file" | t(lang) }}</button>
+                  </div>
+                  <p class="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-muted" x-show="mailTo()">{{ "community.recorder.s_share_hint" | t(lang) }} <strong class="text-ink [overflow-wrap:anywhere]" x-text="mailTo()"></strong>
+                    <button type="button" class="btn-ghost btn-sm -my-1 min-w-11 px-2.5!" :data-copy="mailTo()" :aria-label="'{{ 'common.copy' | t(lang) }}: ' + mailTo()">{% icon "copy", "size-4" %}</button></p>
+                </div>
+                <div x-show="mailTo()">
+                  <div class="flex flex-wrap gap-2">
+                    <a class="btn-secondary btn-sm" :href="mailLink(take, 'mailto').href" @click="mailClick(take, 'mailto')">{% icon "mail", "size-4" %} {{ "community.recorder.b_mail" | t(lang) }}</a>
+                    <a class="btn-ghost btn-sm" :href="mailLink(take, 'gmail').href" target="_blank" rel="noopener" @click="mailClick(take, 'gmail')">Gmail<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+                    <a class="btn-ghost btn-sm" :href="mailLink(take, 'outlook').href" target="_blank" rel="noopener" @click="mailClick(take, 'outlook')">Outlook.com<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+                  </div>
+                  <p class="mt-1.5 flex gap-2 text-sm text-muted">{% icon "paperclip", "mt-0.5 size-4 shrink-0" %}<span x-text="t('s_attach', { file: fileName(take, send.fmt) })"></span></p>
+                  <p class="mt-1 text-sm text-muted" x-show="mailLink(take, 'mailto').cut">{{ "community.recorder.s_cut" | t(lang) }}</p>
+                  <p class="mt-1 text-xs text-muted">{{ "community.recorder.s_web_note" | t(lang) }}</p>
+                </div>
+                <p class="text-sm text-muted" x-show="!mailTo()">{{ "community.recorder.s_no_address" | t(lang) }} <a class="link tap-link" :href="mag().page" target="_blank" rel="noopener">{{ "community.rec.official" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+              </div>
+
+              {#- the e-mail: optional details → a message in the magazine's language -#}
+              <details class="cm-rec-mail mt-4 group/rm">
+                <summary class="flex min-h-11 cursor-pointer items-center justify-between gap-3 text-sm font-semibold text-ink">{{ "community.recorder.f_title" | t(lang) }} {% icon "chevron-down", "size-4 transition group-open/rm:rotate-180" %}</summary>
+                <p class="flex flex-wrap items-center justify-between gap-x-3 text-xs text-muted"><span>{{ "community.recorder.f_note" | t(lang) }}</span>
+                  <button type="button" class="btn-ghost btn-sm" @click="clearDetails()">{% icon "eraser", "size-4" %} {{ "community.recorder.b_clear_details" | t(lang) }}</button></p>
+                <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                  {% for f in [["topic", "text", "off"], ["name", "text", "name"], ["phone", "tel", "tel"], ["email", "email", "email"], ["place", "text", "address-level2"]] %}
+                  <label class="grid gap-1 text-sm font-semibold text-ink">{{ ("community.recorder.f_" + f[0]) | t(lang) }}
+                    <input class="input" type="{{ f[1] }}" autocomplete="{{ f[2] }}" maxlength="120" x-model="send.{{ f[0] }}"{% if f[0] == "topic" %} @change="reprep()"{% endif %}>
+                  </label>
+                  {% endfor %}
+                  <label class="grid gap-1 text-sm font-semibold text-ink">{{ "community.recorder.f_credit" | t(lang) }}
+                    <select class="input h-11 cursor-pointer py-0 text-sm font-medium" x-model="send.credit">
+                      <option value="">{{ "community.recorder.f_credit_0" | t(lang) }}</option>
+                      {% for n in [1, 2, 3] %}<option value="{{ n }}">{{ ("community.recorder.credit_" + n) | t(lang) }}</option>{% endfor %}
+                    </select>
+                  </label>
+                  <label class="grid gap-1 text-sm font-semibold text-ink sm:col-span-2">{{ "community.recorder.f_address" | t(lang) }}
+                    <textarea class="input min-h-20 py-2" rows="2" autocomplete="street-address" maxlength="300" x-model="send.address"></textarea>
+                  </label>
+                </div>
+              </details>
+              <div class="mt-3 rounded-xl bg-surface-2 p-4 text-sm">
+                <p class="eyebrow">{{ "community.recorder.m_title" | t(lang) }} · <span class="normal-case tracking-normal" x-text="t(send.pub === 'lv' ? 'm_lang_lv' : 'm_lang_gv')"></span></p>
+                <dl class="mt-2 grid gap-1.5">
+                  <div class="flex flex-wrap items-center gap-x-2"><dt class="font-semibold text-ink">{{ "community.recorder.m_to" | t(lang) }}:</dt><dd class="[overflow-wrap:anywhere]" x-text="mailTo() || '—'"></dd>
+                    <dd x-show="mailTo()"><button type="button" class="btn-ghost btn-sm -my-1 min-w-11 px-2.5!" :data-copy="mailTo()" :aria-label="'{{ 'common.copy' | t(lang) }}: ' + mailTo()">{% icon "copy", "size-4" %}</button></dd></div>
+                  <div class="flex flex-wrap items-center gap-x-2"><dt class="font-semibold text-ink">{{ "community.recorder.m_subject" | t(lang) }}:</dt><dd class="[overflow-wrap:anywhere]" :lang="send.pub === 'lv' ? 'es' : 'en'" x-text="subject(take)"></dd>
+                    <dd><button type="button" class="btn-ghost btn-sm -my-1 min-w-11 px-2.5!" :data-copy="subject(take)" aria-label="{{ 'common.copy' | t(lang) }}: {{ 'community.recorder.m_subject' | t(lang) }}">{% icon "copy", "size-4" %}</button></dd></div>
+                </dl>
+                <p class="mt-2 font-semibold text-ink">{{ "community.recorder.m_message" | t(lang) }}:</p>
+                <pre class="cm-rec-msg" tabindex="0" role="region" aria-label="{{ 'community.recorder.m_message' | t(lang) }}" :lang="send.pub === 'lv' ? 'es' : 'en'" x-text="body(take)"></pre>
+                <button type="button" class="btn-secondary btn-sm mt-2" :data-copy="body(take)">{% icon "copy", "size-4" %} {{ "community.recorder.b_copy_msg" | t(lang) }}</button>
+              </div>
+              <p class="mt-3 text-sm text-muted"><span x-text="t('s_upload', { mag: mag().name })"></span> <a class="link tap-link" :href="mag().upload" target="_blank" rel="noopener" x-show="mag().upload"><span x-text="t('s_upload_btn', { mag: mag().name })"></span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+              <p class="mt-3 flex gap-2 text-sm leading-relaxed text-ink">{% icon "shield-check", "mt-0.5 size-4 shrink-0 text-vine" %}<span>{{ "community.recorder.s_privacy" | t(lang) }}</span></p>
+            </div>
+          </template>
+        </li>
+      </template>
+    </ol>
+  </div>
+
+  {#- ---------------- a recording made elsewhere ---------------- -#}
+  <div class="cm-rec-tail" x-show="can.import" x-cloak>
+    <div class="min-w-0">
+      <p class="flex items-center gap-2 font-semibold text-ink"><span class="text-grape">{% icon "file-audio", "size-5" %}</span>{{ "community.recorder.i_title" | t(lang) }}</p>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ "community.recorder.i_text" | t(lang) }}</p>
+      <div class="cm-rec-note is-error mt-3" x-show="importErr" x-cloak>
+        <span class="cm-rec-note-icon">{% icon "circle-alert", "size-5" %}</span>
+        <div class="min-w-0">
+          {% for k in ["import_big", "import_long", "import_bad"] %}<p x-show="importErr === '{{ k }}'">{{ ("community.recorder.e_" + k) | t(lang) }}</p>{% endfor %}
+          <p x-show="importErr === 'limit'" x-text="t('n_limit', { max: maxTakes })"></p>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-full">
+      <button type="button" class="btn-secondary btn-sm" @click="$refs.file.click()" :disabled="rec() || state === 'countdown'">{% icon "file-plus", "size-4" %} {{ "community.recorder.b_import" | t(lang) }}</button>
+      <input type="file" class="sr-only" tabindex="-1" aria-hidden="true" x-ref="file" :accept="accept()" @change="addFile($event)">
+    </div>
+  </div>
+
+  {#- ---------------- this device ---------------- -#}
+  <div class="cm-rec-tail">
+    <div class="min-w-0">
+      <p class="flex items-center gap-2 font-semibold text-ink"><span class="text-vine">{% icon "shield-check", "size-5" %}</span>{{ "community.recorder.p_title" | t(lang) }}</p>
+      {#- nothing uploaded; that a closed page or a dropped call loses nothing — only where that holds: not in a private
+          tab (keptLine "private"), nor while nothing is kept or in an app's browser (no keptLine), r10 V2 —; how long
+          this browser keeps them (keptLine: a private tab or window; navigator.storage.persisted; the 7 days of Safari —
+          on an iPhone or iPad Chrome, Firefox, Edge… are "this browser" — and of Safari on a Mac; elsewhere); a shared
+          computer; an iPhone's two places. Each sentence its own element, with a space between them that no tag's
+          whitespace dash may take away: "done.In a private tab" was the result once. -#}
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ "community.recorder.p_text" | t(lang) }}
+        <span x-show="keptLine() && keptLine() !== 'private'" x-cloak>{{ "community.recorder.p_kept_base" | t(lang) }}</span>
+        {% for k in ["private", "yes", "safari", "browser", "mac", "may"] %}<span x-show="keptLine() === '{{ k }}'" x-cloak>{{ ("community.recorder.p_kept_" + k) | t(lang) }}</span>
+        {% endfor %}<span>{{ "community.recorder.p_shared" | t(lang) }}</span>
+        <span x-show="ios && safari" x-cloak>{{ "community.recorder.p_ios_apps" | t(lang) }}</span>
+        <span x-show="ios && !safari" x-cloak>{{ "community.recorder.p_ios_apps_browser" | t(lang) }}</span></p>
+      {#- (not until the device's takes are listed, nor while a take is being made or a job runs) -#}
+      <label class="mt-2 inline-flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium text-ink">
+        <input type="checkbox" class="cm-switch" checked :checked="keep" :disabled="!loaded || busy() || !!job" @change="toggleKeep($event)">
+        {{ "community.recorder.p_keep" | t(lang) }}
+      </label>
+      <p class="text-xs text-muted" x-show="!keep" x-cloak>{{ "community.recorder.p_keep_off" | t(lang) }}</p>
+      <div class="cm-rec-confirm" x-show="confirmKeep" x-cloak role="group" aria-labelledby="rec-keep-q">
+        <p id="rec-keep-q" class="font-semibold text-ink">{{ "community.recorder.keep_q" | t(lang) }}</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          <button type="button" class="btn-ghost btn-sm text-danger" @click="setKeep(false)">{{ "community.recorder.b_keep_off" | t(lang) }}</button>
+          <button type="button" class="btn-secondary btn-sm" id="rec-keep-no" @click="confirmKeep = false">{{ "community.recorder.b_keep_on" | t(lang) }}</button>
+        </div>
+      </div>
+    </div>
+    {#- (not while a take is being made or a job runs: it would be written back afterwards) -#}
+    <div class="min-w-0 max-w-full" x-show="takes.length && !busy() && !job" x-cloak>
+      <button type="button" class="btn-ghost btn-sm text-danger" x-ref="allBtn" x-show="!confirmAll" @click="confirmAll = true; $nextTick(() => $refs.allNo.focus())">{% icon "trash-2", "size-4" %} {{ "community.recorder.b_delete_all" | t(lang) }}</button>
+      <div class="cm-rec-confirm" x-show="confirmAll" role="group" aria-labelledby="rec-all-q">
+        <p id="rec-all-q" class="font-semibold text-ink">{{ "community.recorder.delete_all_q" | t(lang) }}</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          <button type="button" class="btn-ghost btn-sm text-danger" @click="removeAll()">{% icon "trash-2", "size-4" %} {{ "community.recorder.b_delete_all_yes" | t(lang) }}</button>
+          <button type="button" class="btn-secondary btn-sm" x-ref="allNo" @click="confirmAll = false; $nextTick(() => $refs.allBtn.focus())">{{ "community.recorder.b_keep" | t(lang) }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {#- ---------------- having trouble? a report of what this device can do (diagnose → R.report): to copy, or to e-mail
+      to the committee (site.contact_email) — sent by the visitor, never by the page. Made when the panel opens; it asks
+      for nothing (the microphone's permission is only read) and names no take: they are counted. -#}
+  <details class="cm-rec-check group/rc" @toggle="checkOpen($event)">
+    <summary class="flex min-h-11 cursor-pointer items-center justify-between gap-3 font-semibold text-ink">
+      <span class="flex items-center gap-2"><span class="text-grape">{% icon "stethoscope", "size-5" %}</span>{{ "community.recorder.chk_title" | t(lang) }}</span>
+      {% icon "chevron-down", "size-4 shrink-0 transition group-open/rc:rotate-180" %}
+    </summary>
+    <p class="mt-1 max-w-3xl text-sm leading-relaxed text-muted">{{ "community.recorder.chk_intro" | t(lang) }}</p>
+    <p class="mt-3 flex items-center gap-2 text-sm text-ink" x-show="diag.busy" x-cloak>{% icon "loader-circle", "size-4 animate-spin text-grape" %}{{ "community.recorder.chk_busy" | t(lang) }}</p>
+    <div x-show="diag.text" x-cloak>
+      <pre class="cm-rec-msg mt-3" tabindex="0" role="region" aria-label="{{ 'community.recorder.chk_report' | t(lang) }}" x-text="diag.text"></pre>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button type="button" class="btn-secondary btn-sm" :data-copy="diag.text">{% icon "copy", "size-4" %} {{ "community.recorder.chk_copy" | t(lang) }}</button>
+        <a class="btn-secondary btn-sm" x-show="checkTo()" :href="checkMail().href" @click="checkMailClick()">{% icon "mail", "size-4" %} {{ "community.recorder.chk_mail" | t(lang) }}</a>
+        <button type="button" class="btn-ghost btn-sm" @click="diagnose()" :disabled="diag.busy">{% icon "refresh-cw", "size-4" %} {{ "community.recorder.chk_again" | t(lang) }}</button>
+      </div>
+      <p class="mt-2 text-xs leading-relaxed text-muted" x-show="checkTo()">{{ "community.recorder.chk_mail_note" | t(lang, {email: site.contact_email}) }}</p>
+    </div>
+  </details>
+</article>
+<p class="panel-muted mb-5 flex gap-2.5 text-sm leading-relaxed text-muted" data-nojs-only>{% icon "mic", "mt-0.5 size-4 shrink-0 text-grape" %}<span>{{ "community.recorder.nojs" | t(lang) }}</span></p>
