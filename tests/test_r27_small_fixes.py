@@ -8,7 +8,8 @@
                   above the steps only gives the time and the topic;
   * titles      — an event's title without the spaces a calendar left inside its brackets in every place it shows:
                   also the site search (the title and its original), the Tracker's list of events, Home's event
-                  cards, the /digest/ page (and its texts to copy), What's New and the monthly e-mail.
+                  cards, the /digest/ page (and its texts to copy), What's New, the RSS feeds, the district
+                  report's coming events, the Area report's events and the monthly e-mail.
 
     python -m unittest tests.test_r27_small_fixes -v        (or: python -m unittest discover -s tests)
 """
@@ -130,10 +131,10 @@ try {
 }
 """
 
-# Home, /digest/ and What's New with the given events and What's New items → per page, how often each `find` string
-# is in it.
+# Home, /digest/, What's New and the RSS feeds with the given events and What's New items → per page, how often each
+# `find` string is in it.
 PAGES_JS = r"""
-process.env.ONLY = "index.njk,digest.njk,whats-new.njk";
+process.env.ONLY = "index.njk,digest.njk,whats-new.njk,feed.11ty.js";
 process.env.PATH_PREFIX = "/";
 const os = await import("node:os");
 const { Eleventy } = await import("@11ty/eleventy");
@@ -151,13 +152,25 @@ try {
   const pages = await elev.toJSON();
   const res = {};
   for (const p of pages) {
-    if (!/^\/(es\/)?(digest\/|whats-new\/)?$/.test(p.url || "")) continue;
+    if (!/^\/(es\/)?(digest\/|whats-new\/|feed\.xml)?$/.test(p.url || "")) continue;
     res[p.url] = Object.fromEntries(Object.entries(input.find).map(([k, s]) => [k, (p.content || "").split(s).length - 1]));
   }
   out(res);
 } finally {
   fs.rmSync(dir, { recursive: true, force: true });
 }
+"""
+
+
+# The district report (its coming events) and the Area report (its events) with the given events, at `now`
+REPORT_JS = r"""
+const R = await imp("eleventy/filters/report.js");
+const site = { url: "https://example.org/site", links: {} };
+const db = { events: { items: input.events } };
+const m = R.reportModel(db, {}, { ways: [], tips: {}, wayById: {} }, site, new Date(input.now));
+const A = R.areaModel(db, site, new Date(input.now));
+out({ district: Object.fromEntries(["en", "es"].map((l) => [l, m.langs[l].sections.find((s) => s.id === "events").text])),
+      area: Object.fromEntries(A.ev.map((r) => [r.id, r.t])) });
 """
 
 
@@ -180,6 +193,32 @@ class TidyTitles(unittest.TestCase):
             with self.subTest(url=url):
                 self.assertFalse([t for t in titles if re.search(r"\(\s|\s\)", t)], titles)
 
+    def test_the_district_and_area_reports(self):
+        # La Viña's calendar's gathering as data/site/events.json has it (January 29–31, 2027): in the 45 days of the
+        # December and January reports
+        xlii = {**event_item(), "id": "ev:lvcal:zz-xlii-jan", "date": "2027-01-29",
+                "extra": {**event_item()["extra"], "start": "2027-01-29", "end": "2027-01-31", "all_day": True,
+                          "location": "Maude Cobb . Convenció center LONGVIEW TX 75604"}}
+        # an Area assembly from a calendar, with the same stray spaces (the Area report lists the Area's assemblies)
+        asm = {**event_item(), "id": "ev:areacal:zz-asm", "category": "area-calendar", "lang": "en", "date": "2027-01-23",
+               "title": "NETA 65 Winter Assembly ( Tyler, TX )",
+               "i18n": {"title": {"en": "NETA 65 Winter Assembly ( Tyler, TX )",
+                                  "es": "Asamblea de Invierno de NETA 65 ( Tyler, TX )"}},
+               "extra": {**event_item()["extra"], "start": "2027-01-23", "end": "2027-01-23", "all_day": True,
+                         "location": "Tyler, TX"}}
+        r = run_js(self, REPORT_JS, data={"events": [xlii, asm], "now": "2027-01-05T18:00:00Z"})
+        es, en = r["district"]["es"], r["district"]["en"]
+        self.assertIn(TIDY_ES, es)
+        self.assertIn(EN, en)
+        self.assertIn("NETA 65 Winter Assembly (Tyler, TX)", en)
+        self.assertIn("Asamblea de Invierno de NETA 65 (Tyler, TX)", es)
+        for text in (es, en):
+            self.assertNotRegex(text, r"[(¿¡] |\s\)", "a title with the calendar's spaces")
+        self.assertEqual(sorted(r["area"]), ["ev:areacal:zz-asm"], "the Area's assembly (the gathering is neither ours nor one)")
+        row = r["area"]["ev:areacal:zz-asm"]
+        self.assertEqual((row["en"][1], row["es"][1]), ("NETA 65 Winter Assembly (Tyler, TX)",
+                                                        "Asamblea de Invierno de NETA 65 (Tyler, TX)"))
+
     def test_the_monthly_email_tidies_as_the_site_does(self):
         samples = [SPACED, SPACED_ES, EN, "¿ Qué tal ?", "¡  Hola !", "A (\tB\n)", "( )", "(A) ( B )", "", "Sin paréntesis"]
         js = run_js(self, 'const c = await imp("eleventy/filters/committee.js"); out(input.map((s) => c.tidyBrackets(s)));',
@@ -191,7 +230,7 @@ class TidyTitles(unittest.TestCase):
         self.assertEqual(SDM.title_of(event_item(), "es"), TIDY_ES, "an event among what is new")
         self.assertEqual(SDM.title_of({**event_item(), "kind": "article"}, "es"), SPACED_ES, "an event's title only")
 
-    def test_home_the_digest_page_and_whats_new(self):
+    def test_home_the_digest_page_whats_new_and_the_feeds(self):
         held = event_item()                                                          # January 16: the digest's month
         ahead = {**event_item(), "id": "ev:lvcal:zz-xlii-feb", "date": "2027-02-20T15:00:00Z",   # next on Home
                  "extra": {**event_item()["extra"], "start": "2027-02-20T15:00:00Z", "end": "2027-02-20T23:00:00Z"}}
@@ -200,7 +239,7 @@ class TidyTitles(unittest.TestCase):
         r = run_js(self, PAGES_JS, data={"events": [held, ahead], "wn": [new],
                                          "find": {"tidy_es": TIDY_ES, "spaced_es": SPACED_ES, "spaced": SPACED, "en": EN}},
                    timeout=600, now="2027-02-03T18:00:00Z")
-        want = ["/", "/digest/", "/es/", "/es/digest/", "/es/whats-new/", "/whats-new/"]
+        want = ["/", "/digest/", "/es/", "/es/digest/", "/es/feed.xml", "/es/whats-new/", "/feed.xml", "/whats-new/"]
         self.assertEqual(sorted(r), want)
         for url, n in r.items():
             with self.subTest(url=url):

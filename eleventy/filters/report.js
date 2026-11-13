@@ -32,7 +32,7 @@
 import { eventWhen, eventWhere, writersPick, spotlightOf, spotlightHomeDays, writerName, issueLabelOf, issueInSentence, itemIssueName } from "./community.js";
 import { issueName } from "./read.js";
 import { digestShop, weeklyOpenAll, gvMeetings, eventEndMs, chicagoDayEndMs, meetingDates, meetingJoin, meetingSpeaker, meetingSpeakerUntil,
-  recurrenceText, COMMITTEE_MEETING_PATH } from "./committee.js";
+  recurrenceText, COMMITTEE_MEETING_PATH, tidyBrackets } from "./committee.js";
 import { platformOf } from "./access.js";
 import { monthModel, monthTopics, nowDate, chicagoYmd, shortDate, timeRange, monthLabel, midSentence } from "./monthly.js";
 import { botmPriceState, shopPlanPrice, shopNextChange, shopPriceChangeIn, dayLabel } from "./shop.js";
@@ -442,7 +442,9 @@ function sectionsFor(L, ctx) {
         const bits = [L === "es" ? when.replace(/\s*\b(?:CDT|CST|CT)\b/g, " (hora del Centro)") : when];
         if (ev._recurring) bits.push(T("e_monthly"));
         if (ev._tentative) bits.push(T("e_tbc"));
-        out.push(`• ${bits.join(" · ")} — ${clean(H.pickLang(ev, "title", L)) || clean(ev.title)}${where ? ` (${where})` : ""}`);
+        // (its title as /events/ shows it: committee.js tidyBrackets, no spaces a calendar left inside its brackets)
+        const title = tidyBrackets(clean(H.pickLang(ev, "title", L)) || clean(ev.title));
+        out.push(`• ${bits.join(" · ")} — ${title}${where ? ` (${where})` : ""}`);
       }
     } else out.push(T("e_none", { n: EVENT_DAYS }));
     out.push(T("e_all", { url: abs("/events/") }));
@@ -743,7 +745,8 @@ export function areaModel(db = {}, site = {}, now = nowDate()) {
     for (const e of all) {
       const ours = areaOurs(e);
       if (ours !== pass) continue;
-      const titles = LANGS.map((L) => clean(H.pickLang(e, "title", L)) || clean(e.title));
+      // (each title as /events/ shows it: tidyBrackets)
+      const titles = LANGS.map((L) => tidyBrackets(clean(H.pickLang(e, "title", L)) || clean(e.title)));
       const asm = ASSEMBLY.test(titles.join(" ")) || ASSEMBLY.test(clean(e.title));
       if (!ours && !asm) continue;
       const d = areaDays(e);

@@ -5,6 +5,7 @@
 // The channel's <copyright> is the site footer's credit line (footer.reprints).
 import { prepareWhatsNew, hrefOf, escapeXml as x, itemIssueName } from "../../eleventy/filters/community.js";
 import { meetingTitleParts } from "../../eleventy/filters/media.js";
+import { tidyBrackets } from "../../eleventy/filters/committee.js";
 
 const MAX_ITEMS = 100;
 const LANG_TAG = { en: "en-us", es: "es-us" };
@@ -67,9 +68,11 @@ export function render(data) {
   for (const it of items) {
     // A weekly open meeting's episode that its feed calls only by its show's name (La Viña's): its meeting and date,
     // "La Viña Open Meeting, November 5, 2026" (media.js meetingTitleParts) — every episode of it has its own title.
+    // An event's title as /events/ shows it (committee.js tidyBrackets: no spaces a calendar left inside its brackets).
     const mt = meetingTitleParts(it);
+    const raw = String(pick(it, "title", lang) || it.title || "");
     const title = (mt ? `${t(mt.label)}, ${this.fmtDate(mt.date, lang, "medium")}`
-      : String(pick(it, "title", lang) || it.title || "")).replace(/\s+/g, " ").trim();
+      : it.kind === "event" ? tidyBrackets(raw) : raw).replace(/\s+/g, " ").trim();
     if (!title) continue;
     const link = abs(site, hrefOf(it, lang)) || home;
     const summary = String(pick(it, "summary", lang) || "").trim();

@@ -774,8 +774,9 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
  *  the Dates row, the message (monthly.js dateRow) — and the month's calendar file (monthIcs, from shapeEvent), the
  *  site search (library.js tidyTitle: the title and its original), and through cmTidyTitle the Tracker's list of
  *  events, Home's event cards, the /digest/ page (the month's events, an event among what is new; its texts to copy:
- *  community.js monthlyDigestText) and What's New;
- *  the monthly e-mail has its twin (scripts/notify/send_digest.py tidy_brackets). */
+ *  community.js monthlyDigestText) and What's New; the district report's coming events and the Area report's events
+ *  (report.js) and the RSS feeds (src/pages/feed.11ty.js) call it too; the monthly e-mail has its twin
+ *  (scripts/notify/send_digest.py tidy_brackets). */
 export function tidyBrackets(s) {
   return String(s ?? "").replace(/([(¿¡])\s+/g, "$1").replace(/\s+\)/g, ")");
 }
