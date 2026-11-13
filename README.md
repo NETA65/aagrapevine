@@ -2,8 +2,8 @@
 
 [![Website update](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml/badge.svg)](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml)
 
-**Website:** [grapevine.neta65.org](http://grapevine.neta65.org/) ·
-**En español:** [grapevine.neta65.org/es/](http://grapevine.neta65.org/es/)
+**Website:** [grapevine.neta65.org](https://grapevine.neta65.org/) ·
+**En español:** [grapevine.neta65.org/es/](https://grapevine.neta65.org/es/)
 (the old address, neta65.github.io/aagrapevine, forwards there:
 [section 12](#12-using-your-own-address-custom-domain))
 
@@ -126,7 +126,7 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   navegador, y abre los del teléfono de quien la visita («Tu dispositivo»). En Chrome y Samsung Internet
   (Android) basta un toque en **Instalar** (no «Crear acceso directo»); en iPhone, Safari → **Menú de
   página** (iOS 27) o **Más** (iOS 26) → **Compartir** → **Agregar a Inicio**, con **Abrir como app web**
-  activado. Para pasarla a un grupo, envíen el enlace `https://neta65.github.io/aagrapevine/es/offline/#steps`
+  activado. Para pasarla a un grupo, envíen el enlace `https://grapevine.neta65.org/es/offline/#steps`
   (el botón **Enviar esta página** manda ese mismo enlace, y los enlaces a la antigua página de instalación
   llevan allí). En los celulares, un aviso discreto la ofrece a partir de la tercera página visitada (la
   segunda si el navegador permite instalarla con un toque); «Ahora no» = 30 días, y nunca aparece dentro de
@@ -1706,30 +1706,35 @@ Done for the current site (the owner's once-only steps after the move are in
 
 ## 12. Using your own address (custom domain)
 
-The site's address is **grapevine.neta65.org** (since November 12, 2026). The old address,
+The site's address is **grapevine.neta65.org** (since November 12, 2026), on `https://`. The old address,
 neta65.github.io/aagrapevine, forwards every page there, so old links, QR codes and printed flyers keep working.
-These are the steps; 1 and the first half of 2 are done, the rest is the owner's (signed in to GitHub as
-**NETA65**, the repository's admin — another collaborator cannot change the Pages settings):
+Steps 1 and 2 are done, and so is the first publish on `https://` (the Evening refresh of November 12, 2026). What
+is left is the search engines' new properties (below). Changes to the Pages settings are the owner's (signed in to
+GitHub as **NETA65**, the repository's admin — another collaborator cannot change them):
 
 1. **DNS** (done) — whoever manages neta65.org (Bluehost): one **CNAME** record `grapevine` → `neta65.github.io`
    (the GitHub account that owns this repository), and no other record for that name.
-2. **GitHub: Settings → Pages → Custom domain** — `grapevine.neta65.org` → **Save** (done). Then:
-   - Press **Check again** until the page says **DNS check successful**. If it keeps saying *"improperly
-     configured — Domain does not resolve to the GitHub Pages server (NotServedByPagesError)"* while the site
-     opens fine at http://grapevine.neta65.org/, GitHub is getting a wrong answer from the DNS host itself. In
-     November 2026 that was a stray `github.io` zone at Bluehost (it answers for neta65.github.io with a parking
-     address): delete it in Bluehost's Domains / Zone Editor, or ask Bluehost support to, then **Check again**.
-   - Wait for GitHub's certificate: the page says when it is ready (minutes to a few hours after a successful DNS
-     check). Still not there a day later: **Remove** the custom domain → **Save**, type `grapevine.neta65.org`
-     again → **Save** (for those minutes the site is back on the old address), and wait again.
-   - Tick **Enforce HTTPS**.
-   - Then run **Website update** once by hand right away (**Actions → Website update → Run workflow**, tick
-     **skip_crawl** for a quick refresh → **Run workflow**; [section 7](#7-running-the-update-right-now)). Each
-     publish takes the address from the Pages setting, so this run is the one that switches the site's links,
-     sitemap, QR codes, calendar files and e-mail links from `http://` to `https://`. In the run, job **Build
-     website**, step **Work out the site address**, the line must say
+2. **GitHub: Settings → Pages → Custom domain** — `grapevine.neta65.org` → **Save** (done). GitHub's
+   certificate was approved and **Enforce HTTPS** ticked on November 12, 2026; GitHub renews the certificate by
+   itself.
+   - **If the page says** *"improperly configured — Domain does not resolve to the GitHub Pages server
+     (NotServedByPagesError)"* while the site opens fine at https://grapevine.neta65.org/, GitHub is getting a
+     wrong answer from the DNS host itself. In November 2026 that was a stray `github.io` zone at Bluehost (it
+     answers for neta65.github.io with a parking address): delete it in Bluehost's Domains / Zone Editor, or ask
+     Bluehost support to, then press **Check again** until the page says **DNS check successful**.
+   - **If a certificate gets stuck** (the page says it is not ready for a day, or https:// shows a warning):
+     **Remove** the custom domain → **Save**, type `grapevine.neta65.org` again → **Save**, wait for the
+     certificate (minutes to a few hours after a successful DNS check) and tick **Enforce HTTPS** again. For those
+     minutes the old address opens the site without its styles and with broken links, because it was built for
+     the new address; start nothing under **Actions** meanwhile. If a Website update published while the domain
+     was off, run Website update once by hand right after adding the domain again (next bullet).
+   - **After any change of the address** (a domain added or removed, `http://` → `https://`), run **Website
+     update** once by hand (**Actions → Website update → Run workflow**, tick **skip_crawl** for a quick refresh →
+     **Run workflow**; [section 7](#7-running-the-update-right-now)). Each publish takes the address from the
+     Pages setting, so this run is the one that switches the site's links, sitemap, QR codes, calendar files and
+     e-mail links. In the run, job **Build website**, step **Work out the site address**, the line must say
      `Building for https://grapevine.neta65.org with path prefix '/'`. (Without this run the switch comes with the
-     next scheduled or Morning-check run, hours later.)
+     next scheduled or Morning-check run, hours later — as the Evening refresh did on November 12, 2026.)
 3. **Keep `config/site.yml` → `site:` → `url:` as it is** (`https://neta65.github.io/aagrapevine`). The live site
    never uses it: every publish asks GitHub Pages for the address. It is only the address of a build on a
    computer, of the Code check (which builds the site as a project site under `/aagrapevine/` and tests with that
@@ -1743,14 +1748,14 @@ every NETA65 site.
 **What stays behind at the old address:** what a browser keeps for a site belongs to the address it was saved at
 — the Tracker's entries, the story recorder's takes, the theme choice, the installed app and its offline copy. On
 the new address they start empty. Tracker users: **Back up now** before an address change and import the backup
-afterwards. That holds for the switch from `http://` to `https://` too, so tick **Enforce HTTPS** soon, and until
-then the story recorder and the offline copy do not work at all: browsers allow the microphone and the offline
-copy only on `https://`.
+afterwards. That holds for a switch from `http://` to `https://` too. The site has been on `https://` since
+November 12, 2026, so the story recorder and the offline copy work there (browsers allow the microphone and the
+offline copy only on `https://`).
 
 **Search engines after the move** ([12b](#12b-search-engines-google-bing)): with an address of its own, the site's
 own `robots.txt` (`src/robots.njk`) is the one search engines read; it names the sitemap. The weekly link check
-says **Skipped** for the root robots.txt, and step C of 12b is not needed. Once **Enforce HTTPS** is ticked and the
-run above is done, add `https://grapevine.neta65.org/` as a new property in Google Search Console and in Bing
+says **Skipped** for the root robots.txt, and step C of 12b is not needed. The first `https://` publish is done
+(November 12, 2026), so add `https://grapevine.neta65.org/` as a new property in Google Search Console and in Bing
 Webmaster Tools and submit its sitemap there (12b, steps A and B). Keep the old property: it shows Google
 following the forward.
 
@@ -1937,9 +1942,9 @@ the choice is on record. To turn it off again, put the `# ` back.
 
 - **Google and Bing decide what they show, and when.** A submitted sitemap is a hint, not a promise: new pages
   can take days or weeks, not every page is taken, and Google sometimes writes its own description.
-- **No site name above the results.** Google shows a site's name only for a whole address, not for a site in a
-  folder like neta65.github.io/aagrapevine/ — it shows the address instead. With a custom domain (section 12) it
-  could.
+- **A site name above the results takes time.** Google shows a site's name only for the home page of an address
+  of its own, not for a site in a folder (as neta65.github.io/aagrapevine/ was). With grapevine.neta65.org
+  (section 12) it can, once Google has read the new address.
 - **No question-and-answer or step-by-step boxes.** Google retired its FAQ and HowTo results (and the search box
   under a site's link). The questions on `/contribute/` still help search engines and AI tools read the page.
 - **No event listing for online-only events** (Google's own rule), nor for an event whose place has no city,
@@ -2208,7 +2213,7 @@ visitor's own device; nothing is sent anywhere.
 **What to tell your group**
 
 - **Install it.** Send the group the install steps on the **Saved pages & app** page:
-  <https://neta65.github.io/aagrapevine/offline/#steps> (Spanish: `/es/offline/#steps`; its **Send this
+  <https://grapevine.neta65.org/offline/#steps> (Spanish: `/es/offline/#steps`; its **Send this
   page** button shares that link, and old links to the install page land there too). The page is at the
   bottom of every page and under *More* in the phone menu (*Saved pages & app*), and the **Aa** menu leads
   to the steps (**Offline & app** → **Install as an app**). It opens the steps for the phone and browser it
