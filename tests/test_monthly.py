@@ -1260,13 +1260,64 @@ class PosterEveryDate(unittest.TestCase):
                     self.assertEqual(opts[0], built_in, f"{kind}: the build's own column comes first")
                     self.assertEqual(len(opts), len(set(opts)))
                     for o in opts:
-                        self.assertIn(o, p.slots, f"{kind}: no column {o!r}")
+                        # "a+b" (round 27): the dates at the foot of a, flowing on into the head of b — only the
+                        # dates, between two columns the poster has, from a column they may also sit in whole
+                        for part in o.split("+"):
+                            self.assertIn(part, p.slots, f"{kind}: no column {part!r}")
+                        if "+" in o:
+                            self.assertEqual(kind, "mp-dates", f"{o}: only the dates flow on into the next column")
+                            a, b = o.split("+")
+                            self.assertNotEqual(a, b)
+                            self.assertIn(a, opts, f"{o}: the dates may sit in {a} whole too")
                 self.assertEqual(kinds, moving[name.rsplit("-", 1)[0]])
                 self.assertEqual(len(kinds), len(p.movers), "each block once")
                 for slot, orders in p.slots.items():
                     self.assertEqual(orders, sorted(orders), f"column {slot}: the reading order")
                 # the dates are a block of their own wherever they go (the cover's strip and the notebook's row hold them)
                 self.assertRegex(page, r'<section class="mp-b mp-dates" data-mp-order="30"')
+
+    # each layout's rule between its two columns: the rule of the stylesheet that sets it, from --mp-split
+    SPLIT_RULES = {"editorial": r"\.mp-l-editorial \.mp-body \{[^}]*grid-template-columns: var\(--mp-split, {v}\) 1fr;",
+                   "ticket": r"\.mp-ticket \{[^}]*grid-template-columns: minmax\(0, 1fr\) var\(--mp-split, {v}\);",
+                   "split": r"\.mp-l-split \.mp-side \{[^}]*width: var\(--mp-split, {v}\);",
+                   "cork": r"\.mp-l-cork \.mp-board \{[^}]*grid-template-columns: var\(--mp-split, {v}\) 1fr;",
+                   "cover": r"\.mp-l-cover \.mp-cover \{[^}]*grid-template-columns: var\(--mp-split, {v}\) 1fr;",
+                   "notebook": r"\.mp-l-notebook \.mp-row \{[^}]*grid-template-columns: var\(--mp-split, {v}\) 1fr;"}
+
+    def test_the_column_rule_and_blocks_together(self):
+        """Round 27 (DESIGN-27 §B6, "use the empty space"): a column's blocks sit together at its top (no spreading over
+        its height); the rule between a layout's two columns may move a step or two toward the column that needs the
+        room — the steps in the poster (data-mp-widths, the build's first: the stylesheet's own; data-mp-sizes: the
+        column a larger value widens, then the other), the stylesheet reading --mp-split. The fit (assets/js/monthly.js)
+        picks; tests/browser/test_r26b_posters.py checks what it picks."""
+        css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
+        for rule in re.findall(r"\.mp-l-\w+ \.mp-(?:col|content|page|side|main|stub|feature|rail) \{[^}]*\}", css):
+            self.assertNotRegex(rule, r"justify-content: space-(?:between|around|evenly)", rule[:60])
+        for name, page in self.r["html"].items():
+            if name.startswith(("empty", "extras-only")):
+                continue
+            layout = name.rsplit("-", 1)[0]
+            with self.subTest(poster=name):
+                tags = re.findall(r'<div class="[^"]*" (?:data-mp-slot="\w+" )?data-mp-widths="([^"]+)" data-mp-sizes="(\w+) (\w+)"', page)
+                self.assertEqual(len(tags), 1, "one rule between the columns")
+                widths, wide, other = tags[0]
+                vals = widths.split()
+                self.assertEqual(len(vals), len(set(vals)))
+                self.assertGreaterEqual(len(vals), 3)
+                unit = re.fullmatch(r"[\d.]+(fr|px)", vals[0]).group(1)
+                for v in vals:
+                    self.assertRegex(v, rf"^\d+(\.\d+)?{unit}$", "one unit")
+                # a step or two each way at most, the build's in the middle
+                lower = sum(float(v[:-len(unit)]) < float(vals[0][:-len(unit)]) for v in vals)
+                self.assertLessEqual(lower, 2)
+                self.assertLessEqual(len(vals) - 1 - lower, 2)
+                self.assertRegex(css, self.SPLIT_RULES[layout].replace("{v}", re.escape(vals[0])))
+                for slot in (wide, other):
+                    self.assertIn(f'data-mp-slot="{slot}"', page)
+        # the ticket's and the split's masthead stay inside a narrower column; the ticket's notches stay on its perforation
+        self.assertIn(".mp-l-ticket .mp-head { --mp-w: min(540px, calc(912px - var(--mp-split, 372px)));", css)
+        self.assertIn(".mp-l-split .mp-head { --mp-w: min(320px, calc(var(--mp-split, 404px) - 84px));", css)
+        self.assertIn("right: calc(var(--mp-split, 372px) - 26px);", css)
 
     def test_the_share_picture_and_the_png_wait_for_the_fit(self):
         if str(ROOT) not in sys.path:
