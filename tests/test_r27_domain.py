@@ -5,6 +5,9 @@ for a while the site's own address is http://, and with the next publish after "
   * ShortAddresses — the addresses the handouts and print sheets print under a QR code or after a label (GVR / RLV
                      101 and its handout, the orientation decks and lessons, the Shop's sheet) leave out the scheme,
                      http:// as well as https://: "x.test/gvr/", never "http://x.test/gvr/".
+  * BoothSources   — a question's "Source" link to a page of this site, written for grapevine.neta65.org, stays a link
+                     on every build, the Code check's (neta65.github.io/aagrapevine) too (eleventy/filters/booth.js
+                     SOURCE_HOSTS).
 
 (The booth's own pages on an http address: tests/test_booth_csv.py, test_booth_build.py HttpAddress and
 test_booth_core.py; the weekly link check's address: tests/test_automation.py LinkCheck.)
@@ -76,6 +79,35 @@ class ShortAddresses(unittest.TestCase):
             for short in shorts:
                 with self.subTest(url=url, short=short):
                     self.assertRegex(text, r"(?<![/\w])" + re.escape(short), "printed without its scheme")
+
+
+SOURCES_JS = r"""
+const { csvSources } = await imp("eleventy/filters/booth.js");
+out(Object.fromEntries(input.sites.map((s) => [s.url, csvSources(input.csv, s)])));
+"""
+
+
+class BoothSources(unittest.TestCase):
+    """A question's "Source" link to a page of this site (content/booth/booth.csv source_url, written for the live
+    address) stays a link on every build: the live site's, the old address's and the Code check's (built for
+    neta65.github.io/aagrapevine)."""
+
+    def test_the_sites_own_pages_on_every_build(self):
+        csv = ("id,type,text_en,source_url\n"
+               "a,fact,A.,https://grapevine.neta65.org/meetings/#weekly-open\n"
+               "b,fact,B.,https://neta65.github.io/aagrapevine/listen/\n"
+               "c,fact,C.,https://www.aa.org/\n"
+               "d,fact,D.,https://other.example/x\n"
+               "e,fact,E.,https://x.test/shop/\n")
+        sites = [{"url": u} for u in ("https://grapevine.neta65.org", "http://grapevine.neta65.org",
+                                      "https://neta65.github.io/aagrapevine", "https://x.test")]
+        r = run_js(self, SOURCES_JS, data={"csv": csv, "sites": sites})
+        for s in sites:
+            with self.subTest(site=s["url"]):
+                got = r[s["url"]]
+                self.assertEqual(sorted(k for k in got if k in "abc"), ["a", "b", "c"])
+                self.assertNotIn("d", got, "another site is never linked")
+                self.assertEqual("e" in got, s["url"] == "https://x.test", "the build's own host")
 
 
 if __name__ == "__main__":

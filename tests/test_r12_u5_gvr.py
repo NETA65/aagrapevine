@@ -326,7 +326,7 @@ class DailyQuestionsRealCsv(unittest.TestCase):
         r = run_js(self, REAL_JS, data={"site": SITE, "nows": nows}, now=nows[0])
         self.assertEqual(r["playable"], {"en": True, "es": True}, "every question can be answered in its page's language")
         aa = {"www.aa.org", "aa.org", "www.aagrapevine.org", "aagrapevine.org", "www.aalavina.org", "aalavina.org",
-              "neta65.org", "www.neta65.org", "neta65.github.io"}
+              "neta65.org", "www.neta65.org", "grapevine.neta65.org", "neta65.github.io"}
         for lang, runs in r["runs"].items():
             for i, d in enumerate(runs):
                 with self.subTest(lang=lang, now=nows[i]):

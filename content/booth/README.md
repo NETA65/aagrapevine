@@ -36,9 +36,9 @@ their `from` / `until` dates and complete in the page's language. Some rows stay
 
 The booth still shows all of them. After an answer the card shows the row's `explain_*` and its source line, the
 `credit_*` text; that line is a link to the row's `source_url` when the address is on aa.org, aagrapevine.org,
-aalavina.org or neta65.org (with or without `www.`), on `neta65.github.io` (the site's first address, which forwards
-to the new one) or on this site's own host (today `grapevine.neta65.org`) — the link reads "Source" / "Fuente" when
-the row has no `credit_*` — and plain text otherwise. A change to these rows reaches
+aalavina.org or neta65.org (with or without `www.`), on `grapevine.neta65.org` (the site's address), on
+`neta65.github.io` (the site's first address, which forwards to the new one) or on this site's own host — the link
+reads "Source" / "Fuente" when the row has no `credit_*` — and plain text otherwise. A change to these rows reaches
 the card with the next build. More: [how-to/booth.md](../../how-to/booth.md#1-what-it-is).
 
 ## Editing it, and when it shows
@@ -85,7 +85,7 @@ a double quote inside is written twice: `"He said ""hi"""`.
 | `media_url` | video, audio, image (needed) | a YouTube link (watch, youtu.be, shorts, embed — `?t=1m30s` starts it there), or an https `.mp4` / `.webm` video, `.mp3` / `.m4a` / `.ogg` sound, `.jpg` / `.png` / `.webp` picture |
 | `start`, `end` | video, audio | seconds (`90`) or m:ss (`1:30`): play only that part |
 | `qr_url` | qr (needed), any other row | a link shown as a QR code ("Scan to take it home"). For a page of this site write `{site}` and the page: `{site}contribute/` shows the English page's code on English slides and the Spanish page's (`…/es/contribute/`) on Spanish slides; `{site_es}contribute/` shows the Spanish page on every slide; `{site}` alone is the home page. Another site's link shows the same code in both languages. A page, never a document file (`….pdf`): the link's address is printed under the code — link to the page that offers the document |
-| `source_url` | every fact (needed for quiz, truefalse, fact, history, fill) | where the fact can be checked — an https:// link. The booth never shows it. The site's question of the day ([below](#the-question-of-the-day-on-the-website)) links it from a quiz, truefalse or fill row's source line when it is on aa.org, aagrapevine.org, aalavina.org or neta65.org (with or without `www.`) or on this site's own host (today `neta65.github.io`); any other address is never shown |
+| `source_url` | every fact (needed for quiz, truefalse, fact, history, fill) | where the fact can be checked — an https:// link. The booth never shows it. The site's question of the day ([below](#the-question-of-the-day-on-the-website)) links it from a quiz, truefalse or fill row's source line when it is on aa.org, aagrapevine.org, aalavina.org or neta65.org (with or without `www.`), on `grapevine.neta65.org` (the site's address), on `neta65.github.io` (the site's first address, which forwards to the new one) or on this site's own host; any other address is never shown |
 | `notes` | every row | for the committee only — never shown, never checked |
 
 **Languages.** A row is shown in English when it has its English words, in Spanish when it has its Spanish words —

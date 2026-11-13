@@ -1865,12 +1865,13 @@ export function boothCore() {
 }
 
 /** Where a question's "Source" link may lead (csvSources): AA's own sites — aa.org, aagrapevine.org, aalavina.org —
- *  and neta65.org and neta65.github.io (NETA 65's own: the site's first address, which still forwards to it, as the
- *  CSV's source_url of the site's own pages is written), plus this site's own host. Not ALLOWED_HOSTS: that list is
+ *  and neta65.org, grapevine.neta65.org and neta65.github.io (NETA 65's own: the site's address, as the CSV's
+ *  source_url of the site's own pages is written, and its first address, which forwards to it; a build for another
+ *  address, such as the Code check's, keeps them), plus this site's own host. Not ALLOWED_HOSTS: that list is
  *  where the booth may PLAY from (YouTube, the podcast's host), and a link there could lead to anybody's channel or
  *  show (AA's non-affiliation). */
 export const SOURCE_HOSTS = ["aa.org", "www.aa.org", "aagrapevine.org", "www.aagrapevine.org", "aalavina.org",
-  "www.aalavina.org", "neta65.org", "www.neta65.org", "neta65.github.io"];
+  "www.aalavina.org", "neta65.org", "www.neta65.org", "grapevine.neta65.org", "neta65.github.io"];
 
 /** One column of the CSV text, by row id → { id: the cell on one line } (an empty object without that column) — for
  *  the columns the booth itself never uses: source_url, web. The header as checkCsv reads it (any capitalization, the
