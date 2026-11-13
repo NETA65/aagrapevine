@@ -25,7 +25,9 @@ New here? Read sections 1 to 3 of this page (ten minutes), then open the guide f
 ## 1. What the website is
 
 The website of the **Northeast Texas Area 65 (NETA 65) Grapevine & La Viña Committee**:
-<https://neta65.github.io/aagrapevine/>, and in Spanish <https://neta65.github.io/aagrapevine/es/>.
+[grapevine.neta65.org](https://grapevine.neta65.org/), and in Spanish
+[grapevine.neta65.org/es/](https://grapevine.neta65.org/es/) (the old address, neta65.github.io/aagrapevine,
+forwards there: README §12).
 
 - **Two languages, one site.** Every page exists twice: in English (`/events/`) and in Spanish (`/es/events/`).
   Buttons and headings are written in both languages by hand. Content arrives in one language, and free,
@@ -68,7 +70,7 @@ What the committee places, and where:
                       5. publish on GitHub Pages, only if the build and the tests worked
                                                   │
                                                   ▼
-                 https://neta65.github.io/aagrapevine/  and  …/aagrapevine/es/
+                       https://grapevine.neta65.org/  and  …/es/
 ```
 
 In words:

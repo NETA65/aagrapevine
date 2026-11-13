@@ -676,7 +676,7 @@ The player makes two slides of its own:
   **¡Bienvenidos!**, the Spanish name and **La Viña y Grapevine — pregúntanos lo que quieras**. It opens the show
   and comes back every 12 slides. 10 seconds.
 - **About** — always: the site's QR code, **Shared by the NETA 65 Grapevine & La Viña Committee**, **Not an
-  official AA Grapevine, Inc. or A.A.W.S. display**, and the site's address `neta65.github.io/aagrapevine`
+  official AA Grapevine, Inc. or A.A.W.S. display**, and the site's address `grapevine.neta65.org`
   (Spanish: "Compartido por el Comité de Grapevine y La Viña de NETA 65" / "Esta no es una pantalla oficial de AA
   Grapevine, Inc. ni de A.A.W.S."). Every 30 slides, 12 seconds; and the slide that shows whenever nothing else
   can. Keep it on: it is the line that tells visitors the display is ours, not AA Grapevine's.
@@ -1560,7 +1560,7 @@ qr-fun-site,yes,qr,both,qr;online,,,,,,"Our table, in your pocket","Our committe
 ```
 
 On the screen: a big QR code, "Scan to take it home · Escanea para llevártelo", the heading and text, and the
-address printed under the code (`neta65.github.io/aagrapevine`). `{site}` gives the English home on English-led
+address printed under the code (`grapevine.neta65.org`). `{site}` gives the English home on English-led
 slides and `…/es/` on Spanish ones. 14 seconds.
 
 #### video
@@ -1664,8 +1664,8 @@ after the next daily run.
 
 | `qr_url` | English-led slide | Spanish-led slide |
 |---|---|---|
-| `{site}contribute/` | `https://neta65.github.io/aagrapevine/contribute/` | `https://neta65.github.io/aagrapevine/es/contribute/` |
-| `{site}` | the English home | `…/aagrapevine/es/` |
+| `{site}contribute/` | `https://grapevine.neta65.org/contribute/` | `https://grapevine.neta65.org/es/contribute/` |
+| `{site}` | the English home | `…/es/` |
 | `{site_es}meetings/` | `…/es/meetings/` | `…/es/meetings/` (the Spanish page on every slide) |
 | `{site}shop/#carry` | `…/shop/#carry` | `…/es/shop/#carry` |
 | `https://www.aalavina.org/comparte` | the same code on every slide | the same |
@@ -1687,7 +1687,7 @@ Three words in braces are filled in by the player, in each text cell (`title`, `
 |---|---|---|
 | `{event}` | the event's name in the slide's language (the Spanish name on Spanish slides, else the English one); "this event" / "este evento" while none is set or "Show the event name at the top" is off | `Welcome to {event}!` → "Welcome to NETA 65 Spring Assembly!" — with no name, "Welcome to this event!" |
 | `{committee}` | "NETA 65 Grapevine & La Viña Committee" / "Comité de Grapevine y La Viña de NETA 65" | `The {committee} meets online every month` → "The NETA 65 Grapevine & La Viña Committee meets online every month" |
-| `{site}` | the site's address, `neta65.github.io/aagrapevine` | `Everything is at {site}` → "Everything is at neta65.github.io/aagrapevine" |
+| `{site}` | the site's address, `grapevine.neta65.org` | `Everything is at {site}` → "Everything is at grapevine.neta65.org" |
 
 Any other word in braces is a mistake (*text_en: {Event} is not a placeholder the booth knows ({event}, {committee},
 {site})* — capitals count). `{site_es}` works only at the start of a `qr_url`. Spanish tip: event names rarely take
