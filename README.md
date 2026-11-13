@@ -1709,8 +1709,10 @@ Done for the current site (the owner's once-only steps after the move are in
 The site's address is **grapevine.neta65.org** (since November 12, 2026), on `https://`. The old address,
 neta65.github.io/aagrapevine, forwards every page there, so old links, QR codes and printed flyers keep working.
 Steps 1 and 2 are done, and so is the first publish on `https://` (the Evening refresh of November 12, 2026). What
-is left is the search engines' new properties (below). Changes to the Pages settings are the owner's (signed in to
-GitHub as **NETA65**, the repository's admin — another collaborator cannot change them):
+is left (November 12, 2026): deleting the stray `github.io` zone at Bluehost, which still makes **Settings → Pages**
+say "improperly configured" (NotServedByPagesError; step 2, first bullet), and the search engines' new properties
+(below). Changes to the Pages settings are the owner's (signed in to GitHub as **NETA65**, the repository's admin —
+another collaborator cannot change them):
 
 1. **DNS** (done) — whoever manages neta65.org (Bluehost): one **CNAME** record `grapevine` → `neta65.github.io`
    (the GitHub account that owns this repository), and no other record for that name.
