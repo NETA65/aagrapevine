@@ -23,6 +23,8 @@ borders":
                     spreads its blocks over its height; the month's name stays inside its column (the rule may move);
                     dates that flow on into the next column read on (at its head, no heading, the dates at the foot of
                     theirs).
+  * NoDatesFits   — a poster whose dates block has only its "no dates" note (no list) still finishes its fit on every
+                    layout whose dates may flow on into the next column.
 
 Nothing here depends on today's date: the months are the build's, the dates are each page's own.
 """
@@ -357,6 +359,62 @@ class UseTheRoom(unittest.TestCase):
             ctx.close()
             blocked.close()
         self.assertEqual(problems, [], "\n".join(problems))
+
+
+# The poster's own dates block (not the page's #mp-dates list): its list → the macro's "no dates" note.
+_POSTER_DATES = re.compile(r'(<section class="mp-b mp-dates"[^>]*>.*?)<ul class="mp-dlist">.*?</ul>(.*?</section>)', re.S)
+NO_DATES = r"""() => {
+  const p = document.querySelector("[data-mp-poster]"), d = p.querySelector(".mp-dates");
+  return { lists: p.querySelectorAll(".mp-dlist").length, note: !!(d && d.querySelector(".mp-note")),
+           measuring: document.querySelectorAll(".mp-measure").length };
+}"""
+
+
+class NoDatesFits(unittest.TestCase):
+    """A month with no dates and no offers (skip_dates, nothing else that month): the poster's dates block holds only
+    its "no dates" note. On a layout whose dates may flow on into the next column ("a+b", "main+stub"), the fit
+    still finishes (data-mp-fit, its measuring copy gone, no script error): that arrangement cannot be, so it is
+    skipped (src/assets/js/monthly.js arrange()). One month of each such layout, the build's own months."""
+
+    def test_the_fit_finishes_without_a_list_of_dates(self):
+        found: dict[str, str] = {}
+        for month in poster_months():
+            html = (S["site"] / "monthly" / month / "index.html").read_text(encoding="utf-8")
+            layout = re.search(r'class="mp-poster mp-l-([\w-]+)', html)
+            if layout and re.search(r'data-mp-move="[^"]*\+', html):
+                found.setdefault(layout.group(1), month)
+        self.assertTrue(found, "a month whose poster's dates may flow on into the next column")
+
+        def without_list(route):
+            resp = route.fetch()
+            body, n = _POSTER_DATES.subn(r'\1<p class="mp-note">No dates announced yet.</p>\2', resp.text(), count=1)
+            if not n:
+                raise AssertionError(f"{route.request.url}: no poster dates list to replace")
+            route.fulfill(response=resp, body=body, headers={**resp.headers, "content-type": "text/html; charset=utf-8"})
+
+        problems: list[str] = []
+        errors: list[str] = []
+        ctx = new_context(1280, 1400)
+        ctx.route(re.compile(r".*/monthly/\d{4}-\d{2}/$"), without_list)
+        try:
+            for layout, month in sorted(found.items()):
+                path = f"monthly/{month}/"
+                page = open_page(ctx, path, errors)
+                try:
+                    page.wait_for_function(FITTED_ATTR, timeout=20_000)
+                except Exception:
+                    problems.append(f"/{path} ({layout}): the poster never fitted")
+                r = page.evaluate(NO_DATES)
+                page.close()
+                if r["lists"] or not r["note"]:
+                    problems.append(f"/{path} ({layout}): the dates list was not replaced by the note — {r}")
+                if r["measuring"]:
+                    problems.append(f"/{path} ({layout}): the fit's measuring copy is still in the page")
+        finally:
+            ctx.close()
+        self.assertEqual(errors, [])
+        self.assertEqual(problems, [], "\n".join(problems))
+
 
 if __name__ == "__main__":
     unittest.main()

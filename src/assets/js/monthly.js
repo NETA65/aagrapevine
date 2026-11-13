@@ -161,7 +161,8 @@
   // A combo ({ slots, wi, cols }) in place: each movable block in its column, the column rule (sp.vals[wi]), the dates in
   // one or more columns. → the dates' flow ({ dates, from, to, more } when they may flow on from one column into the
   // next), null when they do not, false when this combo cannot be (a flow with a block after the dates in their column,
-  // or before them in the next — the rows that flow on would not read on from where they left off).
+  // or before them in the next — the rows that flow on would not read on from where they left off; or dates with no
+  // list to flow: a month with no dates, where the block holds only its "no dates" note).
   function arrange(root, movers, combo, sp) {
     unflow(root);
     var flow = null;
@@ -176,7 +177,7 @@
     var ord = Number(flow.dates.getAttribute("data-mp-order")) || 0;
     var after = toArray(flow.from.children).some(function (k) { return k !== flow.dates && (Number(k.getAttribute("data-mp-order")) || 0) > ord; });
     var before = !flow.to || toArray(flow.to.children).some(function (k) { var o = Number(k.getAttribute("data-mp-order")); return o >= 10 && o <= ord; });
-    if (after || before) return false;
+    if (after || before || !flow.dates.querySelector(".mp-dlist")) return false;
     // the block the rows flow on into: the dates' own (classes, colours, its place in the reading order next), no heading
     var more = flow.dates.cloneNode(false);
     more.classList.add("mp-dates--more");
