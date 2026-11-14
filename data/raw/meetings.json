@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-11-13T15:37:17Z",
- "attempted": "2026-11-13T15:37:17Z",
+ "updated": "2026-11-14T14:25:17Z",
+ "attempted": "2026-11-14T14:25:17Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -11,17 +11,20 @@
  },
  "stats": {
   "offices": 8,
-  "offices_ok": 8,
-  "listed": 5930,
-  "grapevine": 24,
+  "offices_ok": 7,
+  "listed": 4930,
+  "grapevine": 16,
   "meetings": 23,
   "in_area": 13,
   "nearby": 10,
   "inactive": 0,
   "incomplete": 0,
   "duplicates_merged": 1,
-  "kept_from_before": 0,
-  "requests": 8
+  "kept_from_before": 8,
+  "requests": 9,
+  "warnings": [
+   "OKC Intergroup: feed: the answer is not a meeting list (not JSON); page: no meeting list was found on the office's meetings page"
+  ]
  },
  "items": [
   {
@@ -34,7 +37,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -79,7 +82,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "A",
@@ -126,7 +129,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -171,7 +174,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -216,7 +219,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -261,7 +264,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "D",
@@ -308,7 +311,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "CF",
@@ -355,7 +358,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -400,7 +403,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -445,7 +448,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -492,7 +495,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -539,7 +542,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -584,7 +587,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -629,7 +632,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -676,7 +679,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -721,7 +724,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -766,7 +769,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -811,7 +814,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -858,7 +861,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -904,7 +907,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -955,7 +958,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "C",
@@ -1000,7 +1003,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -1045,7 +1048,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-24T22:38:35Z",
-   "last_seen": "2026-11-07T14:14:51Z",
+   "last_seen": "2026-11-14T14:25:17Z",
    "image": null,
    "tags": [
     "GR",
@@ -1093,8 +1096,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   },
   {
@@ -1107,8 +1110,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   },
   {
@@ -1121,8 +1124,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   },
   {
@@ -1135,8 +1138,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   },
   {
@@ -1149,8 +1152,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   },
   {
@@ -1163,8 +1166,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   },
   {
@@ -1172,14 +1175,13 @@
    "name": "OKC Intergroup",
    "url": "https://okcintergroup.org",
    "lang": "en",
-   "ok": true,
+   "ok": false,
    "count": 8,
-   "method": "feed",
+   "method": null,
    "key_from": null,
-   "error": null,
+   "error": "feed: the answer is not a meeting list (not JSON); page: no meeting list was found on the office's meetings page",
    "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
-   "note": null
+   "attempted": "2026-11-14T14:24:21Z"
   },
   {
    "id": "nwta66",
@@ -1191,8 +1193,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-13T15:36:23Z",
-   "attempted": "2026-11-13T15:36:23Z",
+   "updated": "2026-11-14T14:24:21Z",
+   "attempted": "2026-11-14T14:24:21Z",
    "note": null
   }
  ],

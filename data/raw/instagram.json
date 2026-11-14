@@ -1,11 +1,11 @@
 {
  "source": "instagram",
- "updated": "2026-11-13T15:33:12Z",
- "attempted": "2026-11-13T15:33:12Z",
+ "updated": "2026-11-14T14:17:51Z",
+ "attempted": "2026-11-14T14:17:51Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 2,
+  "added": 5,
   "removed": 0,
   "held": 0
  },
@@ -31,20 +31,170 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 2,
+  "thumbs_downloaded": 5,
   "pruned": 0,
   "thumbs_deleted": 0,
-  "new": 2,
-  "total": 225,
+  "new": 5,
+  "total": 230,
   "per_account": {
-   "gv": 123,
-   "lv": 102
+   "gv": 126,
+   "lv": 104
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DfuNZdJDU2m",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfuNZdJDU2m/",
+   "title": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?”",
+   "summary": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?” “If You Can’t Live or Die, Make Coffee!” Freeport, New York, September 1988, The Home Group: Heartbeat of AA Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-14T12:30:17Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "last_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/DfuNZdJDU2m.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfuNZdJDU2m",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfuNZdJDU2m.webp",
+    "embed_url": "https://www.instagram.com/p/DfuNZdJDU2m/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfuNZdJDU2m/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DfuNZRDDf6q",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfuNZRDDf6q/",
+   "title": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis…",
+   "summary": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis intentos por gobernarla, por controlar mi destino. Estoy agradecido de que hoy, estando sobrio, todavía pueda decir que mi vida se ha vuelto ‘ingobernable’”. \"“Bajo nueva gerencia” COLLEGE PARK, MARYLAND, JUNIO DE 1982 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-14T12:30:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "last_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/DfuNZRDDf6q.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfuNZRDDf6q",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfuNZRDDf6q.webp",
+    "embed_url": "https://www.instagram.com/p/DfuNZRDDf6q/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfuNZRDDf6q/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:Dft_KG2AJow",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dft_KG2AJow/",
+   "title": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+   "summary": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+   "lang": "en",
+   "date": "2026-11-14T10:27:48Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "last_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dft_KG2AJow.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dft_KG2AJow",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dft_KG2AJow.webp",
+    "embed_url": "https://www.instagram.com/p/Dft_KG2AJow/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dft_KG2AJow/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:Dfsp1OuDapB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfsp1OuDapB/",
+   "title": "The December Issue of Grapevine Is Here!",
+   "summary": "The December Issue of Grapevine Is Here! December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities. Visit www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-13T22:00:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "last_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dfsp1OuDapB.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfsp1OuDapB",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfsp1OuDapB.webp",
+    "embed_url": "https://www.instagram.com/p/Dfsp1OuDapB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfsp1OuDapB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:Dfsp1MUDaKC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfsp1MUDaKC/",
+   "title": "La edición de noviembre/diciembre de La Viña: Las fiestas",
+   "summary": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-13T22:00:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "last_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dfsp1MUDaKC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfsp1MUDaKC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfsp1MUDaKC.webp",
+    "embed_url": "https://www.instagram.com/p/Dfsp1MUDaKC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfsp1MUDaKC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DfromhGjVoF",
    "source": "instagram",
@@ -6828,9 +6978,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 17010,
-   "posts": 4008,
+   "posts": 4011,
    "owner_id": "48108439509",
-   "checked": "2026-11-13T15:32:55Z",
+   "checked": "2026-11-14T14:17:33Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-11-13T15:33:12Z"
   },
@@ -6840,9 +6990,9 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2435,
-   "posts": 3031,
+   "posts": 3035,
    "owner_id": "48275839129",
-   "checked": "2026-11-13T15:32:57Z",
+   "checked": "2026-11-14T14:17:36Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-11-13T15:33:12Z"
   }
@@ -7086,7 +7236,7 @@
    "checked": "2026-10-22T13:02:27Z"
   },
   "DeO1HeJDJa6": {
-   "checked": "2026-10-22T13:02:27Z"
+   "checked": "2026-11-14T14:17:36Z"
   },
   "DeO1HexjHK2": {
    "checked": "2026-10-23T12:42:50Z"
@@ -7237,6 +7387,18 @@
   },
   "DewhNVqjeSy": {
    "checked": "2026-11-13T15:32:57Z"
+  },
+  "DewhTx7RbH_": {
+   "checked": "2026-11-14T14:17:36Z"
+  },
+  "DexN0JlDhyO": {
+   "checked": "2026-11-14T14:17:36Z"
+  },
+  "Dey4PvWjRuh": {
+   "checked": "2026-11-14T14:17:36Z"
+  },
+  "Dey4PwaDdfm": {
+   "checked": "2026-11-14T14:17:36Z"
   }
  }
 }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-16T12:55:28Z",
+ "updated": "2026-11-14T14:29:39Z",
  "fixture": false,
  "files": {
   "gv": {
@@ -28,12 +28,63 @@
    "lv": 106
   },
   "texas": {
-   "all": 1267,
-   "gv": 821,
+   "all": 1268,
+   "gv": 822,
    "lv": 446
   }
  },
  "items": [
+  {
+   "id": "wa:64c3646aa542",
+   "key": "https://www.aagrapevine.org/magazine/2026/dec/quiet-service",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/quiet-service",
+   "pub": "gv",
+   "lang": "en",
+   "title": "Quiet Service",
+   "summary": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+   "i18n": {
+    "title": {
+     "en": "Quiet Service",
+     "es": "Servicio silencioso"
+    },
+    "summary": {
+     "en": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+     "es": "¿Por qué no todo el mundo lo alababa por su increíble café? Resulta que ser el gran tiro no es el punto"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "issue_key": "2026-12",
+   "issue_label": "December 2026",
+   "year": 2026,
+   "decade": 2020,
+   "theme": "Sober Holidays and Remote Communities",
+   "writers": [
+    {
+     "name": "Anonymous",
+     "anonymous": true,
+     "place": "Galveston, Texas",
+     "geo": {
+      "scope": "texas",
+      "city": "Galveston",
+      "county": "Galveston",
+      "counties": [
+       "Galveston"
+      ],
+      "state": "TX",
+      "label_en": "Galveston, Texas",
+      "label_es": "Galveston, Texas"
+     }
+    }
+   ],
+   "scope": "texas",
+   "county": "Galveston",
+   "audio": false,
+   "online_exclusive": false,
+   "column": false,
+   "from": "capture"
+  },
   {
    "id": "wa:c65f9c3472b2",
    "key": "https://www.aalavina.org/revista/noviembre-diciembre-2026/ano-de-oro",

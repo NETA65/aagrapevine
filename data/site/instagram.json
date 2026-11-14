@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13T15:33:12Z",
+ "updated": "2026-11-14T14:17:51Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -8,9 +8,9 @@
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
    "followers": 17010,
-   "posts": 4008,
+   "posts": 4011,
    "owner_id": "48108439509",
-   "checked": "2026-11-13T15:32:55Z",
+   "checked": "2026-11-14T14:17:33Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,228 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2435,
-   "posts": 3031,
+   "posts": 3035,
    "owner_id": "48275839129",
-   "checked": "2026-11-13T15:32:57Z",
+   "checked": "2026-11-14T14:17:36Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DfuNZdJDU2m",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfuNZdJDU2m/",
+   "title": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?”",
+   "summary": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?” “If You Can’t Live or Die, Make Coffee!” Freeport, New York, September 1988, The Home Group: Heartbeat of AA Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-14T12:30:17Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/DfuNZdJDU2m.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfuNZdJDU2m",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfuNZdJDU2m.webp",
+    "embed_url": "https://www.instagram.com/p/DfuNZdJDU2m/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfuNZdJDU2m/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?”",
+     "es": "“¿Por qué morar en lo que no puedes hacer? ... ¿Por qué no concentrarse en lo que puedes hacer y hacerlo?"
+    },
+    "summary": {
+     "en": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?” “If You Can’t Live or Die, Make Coffee!” Freeport, New York, September 1988, The Home Group: Heartbeat of AA Daily Quote at www.aagrapevine.org",
+     "es": "“¿Por qué morar en lo que no puedes hacer? ... ¿Por qué no concentrarse en lo que puedes hacer y hacerlo? “¡Si no puedes vivir o morir, haz café!” Freeport, Nueva York, septiembre de 1988, el grupo base: latido del corazón de AA Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DfuNZRDDf6q",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfuNZRDDf6q/",
+   "title": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis…",
+   "summary": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis intentos por gobernarla, por controlar mi destino. Estoy agradecido de que hoy, estando sobrio, todavía pueda decir que mi vida se ha vuelto ‘ingobernable’”. \"“Bajo nueva gerencia” COLLEGE PARK, MARYLAND, JUNIO DE 1982 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-14T12:30:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/DfuNZRDDf6q.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfuNZRDDf6q",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfuNZRDDf6q.webp",
+    "embed_url": "https://www.instagram.com/p/DfuNZRDDf6q/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfuNZRDDf6q/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I realize now that most problems in my life were due to my …",
+     "es": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis…"
+    },
+    "summary": {
+     "en": "“I realize now that most of the problems in my life were due to my attempts to govern it, to control my destiny. I am grateful that today, being sober, I can still say that my life has become ‘ungovernable’.” \"Bajo nueva gerencia\" college park, Maryland, June 1982 De Spiritual Awakenings Daily Quote in www.aalavina.org",
+     "es": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis intentos por gobernarla, por controlar mi destino. Estoy agradecido de que hoy, estando sobrio, todavía pueda decir que mi vida se ha vuelto ‘ingobernable’”. \"“Bajo nueva gerencia” COLLEGE PARK, MARYLAND, JUNIO DE 1982 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dft_KG2AJow",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dft_KG2AJow/",
+   "title": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+   "summary": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+   "lang": "en",
+   "date": "2026-11-14T10:27:48Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dft_KG2AJow.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dft_KG2AJow",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dft_KG2AJow.webp",
+    "embed_url": "https://www.instagram.com/p/Dft_KG2AJow/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dft_KG2AJow/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+     "es": "Estamos en la 9.ª Annual National AA Corrections Conference este fin de semana."
+    },
+    "summary": {
+     "en": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+     "es": "Estamos en la 9.ª Annual National AA Corrections Conference este fin de semana."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfsp1OuDapB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfsp1OuDapB/",
+   "title": "The December Issue of Grapevine Is Here!",
+   "summary": "The December Issue of Grapevine Is Here! December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities. Visit www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-13T22:00:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dfsp1OuDapB.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfsp1OuDapB",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfsp1OuDapB.webp",
+    "embed_url": "https://www.instagram.com/p/Dfsp1OuDapB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfsp1OuDapB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The December Issue of Grapevine Is Here!",
+     "es": "¡El número de diciembre de Grapevine está aquí!"
+    },
+    "summary": {
+     "en": "The December Issue of Grapevine Is Here! December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities. Visit www.aagrapevine.org",
+     "es": "¡El número de diciembre de Grapevine está aquí! El número de diciembre características Sober Holiday Stories. Y puesto que las fiestas son un buen momento para recordar a aquellos que tienen desafíos que llegan a AA, también hay algunas historias útiles de los miembros que viven en comunidades remotas. Visita www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Dfsp1MUDaKC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfsp1MUDaKC/",
+   "title": "La edición de noviembre/diciembre de La Viña: Las fiestas",
+   "summary": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-13T22:00:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dfsp1MUDaKC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfsp1MUDaKC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfsp1MUDaKC.webp",
+    "embed_url": "https://www.instagram.com/p/Dfsp1MUDaKC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfsp1MUDaKC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November/December edition of La Viña: The holidays",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas"
+    },
+    "summary": {
+     "en": "The November/December edition of La Viña: The holidays In this edition we celebrate the holidays from the joy of living that gives us the sobriety. AA Hispanic members share how they have learned to enjoy these dates with freedom, love and gratitude, repairing relationships, creating new memories and finding new reasons to thank life. Visit www.aalavina.org",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DfromhGjVoF",
    "source": "instagram",
@@ -2436,7 +2651,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfKDZlSl-zh",
@@ -2479,7 +2694,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfI2-iJu3-8",

@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-13T15:37:22Z",
- "attempted": "2026-11-13T15:37:22Z",
+ "updated": "2026-11-14T14:25:28Z",
+ "attempted": "2026-11-14T14:25:28Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,15 +15,15 @@
   "upcoming_urls": 14,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 1,
+  "refreshed": 2,
   "failed": 0,
   "pending": 0,
-  "cached": 17,
+  "cached": 15,
   "texas": 2,
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 44
+  "requests": 75
  },
  "items": [
   {
@@ -143,48 +143,6 @@
  ],
  "first_harvest": "2026-09-23T16:43:55Z",
  "cache": {
-  "https://www.aagrapevine.org/get-involved/events/2026-11-06/79th-tri-state-convention-0": {
-   "at": "2026-11-06T15:15:49Z",
-   "ev": {
-    "title": "79th Tri-State Convention",
-    "date_text": "November 6, 2026 - November 8, 2026",
-    "start": "2026-11-06",
-    "end": "2026-11-08",
-    "all_day": true,
-    "location_raw": "Bossier City, Louisiana",
-    "website": "https://www.tristateconvention.org",
-    "lang": "en",
-    "location": "Bossier City, Louisiana",
-    "city": "Bossier City",
-    "state": "LA",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
-  "https://www.aagrapevine.org/get-involved/events/2026-11-06/85th-laurel-highlands-conference": {
-   "at": "2026-11-06T15:15:54Z",
-   "ev": {
-    "title": "85th Laurel Highlands Conference",
-    "date_text": "November 6, 2026 - November 8, 2026",
-    "start": "2026-11-06",
-    "end": "2026-11-08",
-    "all_day": true,
-    "location_raw": "Bolivar, Pennsylvania",
-    "website": "https://www.laurelhighlandsconference.com",
-    "lang": "en",
-    "location": "Bolivar, Pennsylvania",
-    "city": "Bolivar",
-    "state": "PA",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
   "https://www.aagrapevine.org/get-involved/events/2026-11-13/36th-vancouver-roundup": {
    "at": "2026-11-06T15:15:59Z",
    "ev": {
@@ -330,7 +288,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-01-29/xlii-reunion-de-aa-zona-norte-de-texas-aa-un-camino-la-vida": {
-   "at": "2026-10-31T13:49:23Z",
+   "at": "2026-11-14T14:25:22Z",
    "ev": {
     "title": "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )",
     "date_text": "Enero 29, 2027 - Enero 31, 2027",
@@ -347,7 +305,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-05-28/xxiv-encuentro-hispano-de-aa-del-estado-de-kansas-sede-topeka": {
-   "at": "2026-10-31T13:49:28Z",
+   "at": "2026-11-14T14:25:28Z",
    "ev": {
     "title": "XXIV Encuentro Hispano de AA del estado de Kansas sede Topeka",
     "date_text": "Mayo 28, 2027 - Mayo 30, 2027",

@@ -1,7 +1,37 @@
 {
- "updated": "2026-11-13T15:34:40Z",
+ "updated": "2026-11-14T14:21:46Z",
  "fixture": false,
  "issues": [
+  {
+   "id": "gv:2026-12",
+   "publication": "gv",
+   "key": "2026-12",
+   "label": "December 2026",
+   "theme": "Sober Holidays and Remote Communities",
+   "description": "December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities.",
+   "url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/issue_feature_image/public/2026-11/%20Hero%20December%20GV%202026.jpg?itok=_cj2saMB",
+   "cover": "/assets/cache/articles/870c7bae5aa6922e.webp",
+   "hub": "https://www.aagrapevine.org/magazine",
+   "i18n": {
+    "theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "description": {
+     "en": "December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities.",
+     "es": "El número de diciembre características Sober Holiday Stories. Y puesto que las fiestas son un buen momento para recordar a aquellos que tienen desafíos que llegan a AA, también hay algunas historias útiles de los miembros que viven en comunidades remotas."
+    },
+    "label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "lang": "en"
+  },
   {
    "id": "lv:2026-11",
    "publication": "lv",
@@ -124,6 +154,1986 @@
   }
  ],
  "items": [
+  {
+   "id": "gv:2026-12:wits-end",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/wits-end",
+   "title": "At Wit’s End",
+   "summary": "Drink specialA grasshopper walks into a bar. The bartender says, “Hey, we got a drink named after you!”",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/199b5365ae16c320.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": null,
+    "teaser": "Drink specialA grasshopper walks into a bar. The bartender says, “Hey, we got a drink named after you!”",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "At Wit’s End",
+     "es": "At Wit's End"
+    },
+    "summary": {
+     "en": "Drink specialA grasshopper walks into a bar. The bartender says, “Hey, we got a drink named after you!”",
+     "es": "Beba especialUn saltamontes entra en un bar. ¡El cantinero dice: \"Hey, tenemos una bebida llamada por ti!\""
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:who-needs-wizard",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/who-needs-wizard",
+   "title": "Who Needs a Wizard?",
+   "summary": "Before AA, her world was dark and her life a tornado. Turns out a Higher Power had other plans for her",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-2255271329.jpg?itok=49k-RG7t",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Bobbie W.",
+    "author_location": null,
+    "subtitle": "Before AA, her world was dark and her life a tornado. Turns out a Higher Power had other plans for her",
+    "teaser": "I often liken my experience before I got to AA to Dorothy’s world in The Wizard of Oz before the tornado.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Who Needs a Wizard?",
+     "es": "¿Quién necesita un mago?"
+    },
+    "summary": {
+     "en": "Before AA, her world was dark and her life a tornado. Turns out a Higher Power had other plans for her",
+     "es": "Antes de AA, su mundo estaba oscuro y su vida un tornado. Resulta que un Poder Superior tenía otros planes para ella"
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:time-my-dad",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/time-my-dad",
+   "title": "Time With My Dad",
+   "summary": "A mother's wish came true, thanks to AA and the Steps that changed a daughter's life",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_.beautiful_photo_of_an_adult_daughter_and_her_dad_fly-fis_145f0b32-ec35-4916-8b48-bbf8f7f7412b.jpg?itok=M_KppjlW",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Emotional Sobriety",
+    "author": "Nikki O.",
+    "author_location": "Alfred, Maine",
+    "subtitle": "A mother's wish came true, thanks to AA and the Steps that changed a daughter's life",
+    "teaser": "During the last hours of my mother’s life, she lay in a hospital bed and gave me one final instruction: “You have to take care of Dad and Pete.”",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Alfred",
+     "county": null,
+     "counties": [],
+     "state": "ME",
+     "country": "US",
+     "label_en": "Alfred, Maine",
+     "label_es": "Alfred, Maine"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Time With My Dad",
+     "es": "Tiempo con mi papá"
+    },
+    "summary": {
+     "en": "A mother's wish came true, thanks to AA and the Steps that changed a daughter's life",
+     "es": "El deseo de una madre se hizo realidad gracias a AA y a los pasos que cambiaron la vida de una hija"
+    },
+    "section": {
+     "en": "Emotional Sobriety",
+     "es": "Sobriedad emocional"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Alfred, Maine",
+     "es": "Alfred, Maine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:through-someone-elses-eyes",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/through-someone-elses-eyes",
+   "title": "Through Someone Else’s Eyes",
+   "summary": "While heading home from a meeting on a snowy Christmas Eve, a mom is gifted an unexpected burst of gratitude",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_beautiful_photo_of_a_country_road_in_the_snow_nighttime_s_245cc121-e579-45f4-bed1-8080900f4335%20copy.jpg?itok=fgqKY9nL",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Michelle B.",
+    "author_location": "Kelowna, British Columbia",
+    "subtitle": "While heading home from a meeting on a snowy Christmas Eve, a mom is gifted an unexpected burst of gratitude",
+    "teaser": "This past December I went back to the province where I spent the first several years of my sobriety to visit my daughter for the holidays.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Kelowna",
+     "county": null,
+     "counties": [],
+     "state": "BC",
+     "country": "CA",
+     "label_en": "Kelowna, British Columbia",
+     "label_es": "Kelowna, Columbia Británica"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Through Someone Else’s Eyes",
+     "es": "A través de los ojos de alguien else"
+    },
+    "summary": {
+     "en": "While heading home from a meeting on a snowy Christmas Eve, a mom is gifted an unexpected burst of gratitude",
+     "es": "Mientras se dirige a casa de una reunión en una Nochebuena nevada, una madre está obsesionada una inesperada explosión de gratitud"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Kelowna, British Columbia",
+     "es": "Kelowna, Columbia Británica"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:surprise-menu",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/surprise-menu",
+   "title": "Surprise Menu",
+   "summary": "I came to on the morning of August 8, 1990. I was so sick. It took a while to check my surroundings. I heaved a sigh of relief when I realized that I was at home in my own bed.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_Watercolor_illustration_of_two_men_in_a_restaurant_window_3cde36e3-998a-4e4a-a2d8-b0d187b0a82b.jpg?itok=vBZP8O_j",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Step Twelve",
+    "author": "G.H.",
+    "author_location": "Roberts Creek, British Columbia",
+    "subtitle": null,
+    "teaser": "I came to on the morning of August 8, 1990. I was so sick. It took a while to check my surroundings. I heaved a sigh of relief when I realized that I was at home in my own bed.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Roberts Creek",
+     "county": null,
+     "counties": [],
+     "state": "BC",
+     "country": "CA",
+     "label_en": "Roberts Creek, British Columbia",
+     "label_es": "Roberts Creek, Columbia Británica"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Surprise Menu",
+     "es": "Menú sorpresa"
+    },
+    "summary": {
+     "en": "I came to on the morning of August 8, 1990. I was so sick. It took a while to check my surroundings. I heaved a sigh of relief when I realized that I was at home in my own bed.",
+     "es": "Vine a la mañana de 8 de agosto de 1990. Estaba tan enferma. Tardó un tiempo en revisar mis alrededores. He hecho un suspiro de alivio cuando me di cuenta de que estaba en casa en mi propia cama."
+    },
+    "section": {
+     "en": "Step Twelve",
+     "es": "Paso Doce"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Roberts Creek, British Columbia",
+     "es": "Roberts Creek, Columbia Británica"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:staying-connected-down-under",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/staying-connected-down-under",
+   "title": "Staying Connected Down Under",
+   "summary": "A longtimer shares the lengths he’s gone to stay sober in remote places in the Pacific",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-476033100.jpg?itok=vz8m_iT0",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Jim in Tasmania",
+    "author_location": "Devonport, Australia",
+    "subtitle": "A longtimer shares the lengths he’s gone to stay sober in remote places in the Pacific",
+    "teaser": "I got to AA in Sydney, Australia in 1974 after fleeing from Illinois the year before in an attempt to leave my problems behind.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Devonport",
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": "AU",
+     "label_en": "Devonport, Australia",
+     "label_es": "Devonport, Australia"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Staying Connected Down Under",
+     "es": "Mantenerse conectado abajo"
+    },
+    "summary": {
+     "en": "A longtimer shares the lengths he’s gone to stay sober in remote places in the Pacific",
+     "es": "Un veterano comparte las longitudes que ha ido para mantenerse sobrio en lugares remotos en el Pacífico"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Devonport, Australia",
+     "es": "Devonport, Australia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:safe-place-be",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/safe-place-be",
+   "title": "A Safe Place to Be",
+   "summary": "As our AA group’s general service rep, I was planning to read the December 2019 holiday Grapevine story “Oops, Wrong Bar” at our next meeting.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1296975131.jpg?itok=mnwlGRG8",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Linda R.",
+    "author_location": "Bonita Springs, Florida",
+    "subtitle": null,
+    "teaser": "As our AA group’s general service rep, I was planning to read the December 2019 holiday Grapevine story “Oops, Wrong Bar” at our next meeting.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Bonita Springs",
+     "county": null,
+     "counties": [],
+     "state": "FL",
+     "country": "US",
+     "label_en": "Bonita Springs, Florida",
+     "label_es": "Bonita Springs, Florida"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "A Safe Place to Be",
+     "es": "Un lugar seguro para estar"
+    },
+    "summary": {
+     "en": "As our AA group’s general service rep, I was planning to read the December 2019 holiday Grapevine story “Oops, Wrong Bar” at our next meeting.",
+     "es": "Como representante del servicio general de nuestro grupo AA, estaba planeando leer la historia diciembre de 2019 de fiestas Grapevine “Oops, Wrong Bar” en nuestra próxima reunión."
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Bonita Springs, Florida",
+     "es": "Bonita Springs, Florida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:road-gratitude",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/road-gratitude",
+   "title": "Road to Gratitude",
+   "summary": "A photo, a memory of an incredible second chance in life, captured on a family bike ride",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1617766531.jpg?itok=Azyqx7zb",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Matt M.",
+    "author_location": "Oark Park, Illinois",
+    "subtitle": "A photo, a memory of an incredible second chance in life, captured on a family bike ride",
+    "teaser": "My computer background screen is a photo of my two older brothers. They are lying on the grass somewhere between Libertyville and Antioch, Illinois.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Oark Park",
+     "county": null,
+     "counties": [],
+     "state": "IL",
+     "country": "US",
+     "label_en": "Oark Park, Illinois",
+     "label_es": "Oark Park, Illinois"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Road to Gratitude",
+     "es": "Camino a la gratitud"
+    },
+    "summary": {
+     "en": "A photo, a memory of an incredible second chance in life, captured on a family bike ride",
+     "es": "Una foto, un recuerdo de una increíble segunda oportunidad en la vida, capturada en un paseo en bicicleta familiar"
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Oark Park, Illinois",
+     "es": "Oark Park, Illinois"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:remedy-sad-holiday",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/remedy-sad-holiday",
+   "title": "Remedy for a Sad Holiday",
+   "summary": "Good thing this sober mom, alone and full of self-pity on Christmas morning, knew exactly what to do",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1417314586%20copy.jpg?itok=X0b299DJ",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Kate K.",
+    "author_location": "Watertown, Connecticut",
+    "subtitle": "Good thing this sober mom, alone and full of self-pity on Christmas morning, knew exactly what to do",
+    "teaser": "When I got divorced several years ago, one of the first thoughts I had was, I’m not going to have my kids every Christmas. They will be making memories without me.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Watertown",
+     "county": null,
+     "counties": [],
+     "state": "CT",
+     "country": "US",
+     "label_en": "Watertown, Connecticut",
+     "label_es": "Watertown, Connecticut"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Remedy for a Sad Holiday",
+     "es": "Remedio para una triste fiesta"
+    },
+    "summary": {
+     "en": "Good thing this sober mom, alone and full of self-pity on Christmas morning, knew exactly what to do",
+     "es": "Menos mal que esta sobria madre, sola y llena de autocompasión en la mañana de Navidad, sabía exactamente qué hacer"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Watertown, Connecticut",
+     "es": "Watertown, Connecticut"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:quiet-service",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/quiet-service",
+   "title": "Quiet Service",
+   "summary": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/image2.jpg?itok=RUV48cBy",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Tradition Twelve",
+    "author": "Anonymous",
+    "author_location": "Galveston, Texas",
+    "subtitle": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+    "teaser": "Anonymity is an AA principle that I need to continue to practice. Remembering anonymity at the level of press, radio, films and the internet is really not a problem for me.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "texas",
+     "city": "Galveston",
+     "county": "Galveston",
+     "counties": [
+      "Galveston"
+     ],
+     "state": "TX",
+     "country": "US",
+     "label_en": "Galveston, Texas",
+     "label_es": "Galveston, Texas"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Quiet Service",
+     "es": "Servicio silencioso"
+    },
+    "summary": {
+     "en": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+     "es": "¿Por qué no todo el mundo lo alababa por su increíble café? Resulta que ser el gran tiro no es el punto"
+    },
+    "section": {
+     "en": "Tradition Twelve",
+     "es": "Duodécima Tradición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Galveston, Texas",
+     "es": "Galveston, Texas"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:mysterious-circle-chairs",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/mysterious-circle-chairs",
+   "title": "The Mysterious Circle of Chairs",
+   "summary": "What was this place that made Mama happy, while my sisters and I laughed and ate cookies?",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/IMG_4038.jpg?itok=njIHj3g6",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Home Group",
+    "author": "S.N.",
+    "author_location": "Memphis, Tennessee",
+    "subtitle": "What was this place that made Mama happy, while my sisters and I laughed and ate cookies?",
+    "teaser": "I remember running wild in the back of the room while my mom sat quietly in a circle of chairs. People would take turns talking while everyone else nodded.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Memphis",
+     "county": null,
+     "counties": [],
+     "state": "TN",
+     "country": "US",
+     "label_en": "Memphis, Tennessee",
+     "label_es": "Memphis, Tennessee"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "The Mysterious Circle of Chairs",
+     "es": "El misterioso círculo de sillas"
+    },
+    "summary": {
+     "en": "What was this place that made Mama happy, while my sisters and I laughed and ate cookies?",
+     "es": "¿Qué fue este lugar que hizo feliz a mamá, mientras mis hermanas y yo nos reímos y comimos galletas?"
+    },
+    "section": {
+     "en": "Home Group",
+     "es": "Grupo base"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Memphis, Tennessee",
+     "es": "Memphis, Tennessee"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:my-weirdos-my-people",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/my-weirdos-my-people",
+   "title": "My weirdos, My people",
+   "summary": "I didn’t come to AA on a winning streak. I showed up like a raccoon in a 99-cent store parking lot—wild-eyed, greasy and holding onto emotional garbage like it was treasure.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-957796920.jpg?itok=OBnz40Nr",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Corie G.",
+    "author_location": "Mount Washington, Kentucky",
+    "subtitle": null,
+    "teaser": "I didn’t come to AA on a winning streak. I showed up like a raccoon in a 99-cent store parking lot—wild-eyed, greasy and holding onto emotional garbage like it was treasure.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Mount Washington",
+     "county": null,
+     "counties": [],
+     "state": "KY",
+     "country": "US",
+     "label_en": "Mount Washington, Kentucky",
+     "label_es": "Mount Washington, Kentucky"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "My weirdos, My people",
+     "es": "Mis raros, mi gente"
+    },
+    "summary": {
+     "en": "I didn’t come to AA on a winning streak. I showed up like a raccoon in a 99-cent store parking lot—wild-eyed, greasy and holding onto emotional garbage like it was treasure.",
+     "es": "No vine a AA en una racha ganadora. Me presenté como un mapache en un estacionamiento de 99 centavos de la tienda, ojos cerrados, grasientos y aferrarme a la basura emocional como si fuera un tesoro."
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Mount Washington, Kentucky",
+     "es": "Mount Washington, Kentucky"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:my-friend-ben",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/my-friend-ben",
+   "title": "My Friend Ben",
+   "summary": "She had no idea why he kept sharing about his drinking with her. Years later she did",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_photo_two_friends_man_and_woman_sitting_on_a_park_bench_t_5750e349-7df0-488c-a61b-144494e2564d.jpg?itok=A-22Vo0c",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Step Twelve",
+    "author": "Abbie B.",
+    "author_location": "Kennesaw, Georgia",
+    "subtitle": "She had no idea why he kept sharing about his drinking with her. Years later she did",
+    "teaser": "I’d had a long history of heavy drinking and drug use, and I always knew I had a problem.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Kennesaw",
+     "county": null,
+     "counties": [],
+     "state": "GA",
+     "country": "US",
+     "label_en": "Kennesaw, Georgia",
+     "label_es": "Kennesaw, Georgia"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "My Friend Ben",
+     "es": "Mi amigo Ben"
+    },
+    "summary": {
+     "en": "She had no idea why he kept sharing about his drinking with her. Years later she did",
+     "es": "No tenía ni idea de por qué seguía compartiendo su bebida con ella. Años más tarde lo hizo"
+    },
+    "section": {
+     "en": "Step Twelve",
+     "es": "Paso Doce"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Kennesaw, Georgia",
+     "es": "Kennesaw, Georgia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:my-christmas-day-prayer",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/my-christmas-day-prayer",
+   "title": "My Christmas Day Prayer",
+   "summary": "A newcomer is trapped in a blizzard with a bottle of whiskey and a dying husband. Calling Higher Power",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-2172519888.jpg?itok=WYjhGza7",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Spiritual Awakenings",
+    "author": "Mary B.",
+    "author_location": "Buffalo, New York",
+    "subtitle": "A newcomer is trapped in a blizzard with a bottle of whiskey and a dying husband. Calling Higher Power",
+    "teaser": "We had been hearing the warning all week long that the blizzard was coming. By December 23rd it was here in full force. The winds howled and the snow piled higher and higher.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Buffalo",
+     "county": null,
+     "counties": [],
+     "state": "NY",
+     "country": "US",
+     "label_en": "Buffalo, New York",
+     "label_es": "Buffalo, Nueva York"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "My Christmas Day Prayer",
+     "es": "Mi oración del día de Navidad"
+    },
+    "summary": {
+     "en": "A newcomer is trapped in a blizzard with a bottle of whiskey and a dying husband. Calling Higher Power",
+     "es": "Un recién llegado está atrapado en una ventisca con una botella de whisky y un marido moribundo. Llamando a Poder Superior"
+    },
+    "section": {
+     "en": "Spiritual Awakenings",
+     "es": "Despertares espirituales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Buffalo, New York",
+     "es": "Buffalo, Nueva York"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:me-my-friend-god",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/me-my-friend-god",
+   "title": "Me, My Friend & God",
+   "summary": "Should he go to his high school reunion or not? The answer came with a prayer and a whisper",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_a_group_of_adults_having_a_party_in_a_school_gymnasium_th_b8aab6fd-092b-42b9-a213-af8aa6aa350c.jpg?itok=IgfoxVFS",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Spiritual Awakenings",
+    "author": "Kevin C.",
+    "author_location": "Rochester, New York",
+    "subtitle": "Should he go to his high school reunion or not? The answer came with a prayer and a whisper",
+    "teaser": "I had an amazing spiritual experience yesterday. My 40th high school reunion was held last night. I’d had a tough time deciding whether I wanted to go or not.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Rochester",
+     "county": null,
+     "counties": [],
+     "state": "NY",
+     "country": "US",
+     "label_en": "Rochester, New York",
+     "label_es": "Rochester, Nueva York"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Me, My Friend & God",
+     "es": "Yo, mi amigo y Dios"
+    },
+    "summary": {
+     "en": "Should he go to his high school reunion or not? The answer came with a prayer and a whisper",
+     "es": "¿Debería ir a su reunión de la secundaria o no? La respuesta vino con una oración y un susurro"
+    },
+    "section": {
+     "en": "Spiritual Awakenings",
+     "es": "Despertares espirituales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Rochester, New York",
+     "es": "Rochester, Nueva York"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:lifeline-cameroon",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/lifeline-cameroon",
+   "title": "Lifeline in Cameroon",
+   "summary": "Getting sober far away with no AA meetings was tough. Luckily for Lise, AA connected her with Loners Internationalists",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-484207088%20copy.jpg?itok=-sb3mFSE",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Lise O.",
+    "author_location": "Raleigh, North Carolina",
+    "subtitle": "Getting sober far away with no AA meetings was tough. Luckily for Lise, AA connected her with Loners Internationalists",
+    "teaser": "In 1983, I was 27 years old and newly sober. I moved back to Cameroon in West Africa for the second time with my husband, armed with a Big Book, the “Twelve and Twelve” and Grapevine.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Raleigh",
+     "county": null,
+     "counties": [],
+     "state": "NC",
+     "country": "US",
+     "label_en": "Raleigh, North Carolina",
+     "label_es": "Raleigh, Carolina del Norte"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Lifeline in Cameroon",
+     "es": "Línea de vida en Camerún"
+    },
+    "summary": {
+     "en": "Getting sober far away with no AA meetings was tough. Luckily for Lise, AA connected her with Loners Internationalists",
+     "es": "Llegar sobrio lejos sin reuniones de AA fue difícil. Por suerte para Lise, AA la conectó con Loners Internationalists"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Raleigh, North Carolina",
+     "es": "Raleigh, Carolina del Norte"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:letter-editor-december-2026",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/letter-editor-december-2026",
+   "title": "Letter from the Editor",
+   "summary": "Each December we love to feature remote community stories. It’s a perfect time of the year to remember our fellow alcoholics who have a difficult time reaching AA.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/870c7bae5aa6922e.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": null,
+    "teaser": "Each December we love to feature remote community stories. It’s a perfect time of the year to remember our fellow alcoholics who have a difficult time reaching AA.",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Letter from the Editor",
+     "es": "Carta del editor"
+    },
+    "summary": {
+     "en": "Each December we love to feature remote community stories. It’s a perfect time of the year to remember our fellow alcoholics who have a difficult time reaching AA.",
+     "es": "Cada diciembre nos encanta contar con historias comunitarias remotas. Es un momento perfecto del año para recordar a nuestros compañeros alcohólicos que tienen un tiempo difícil alcanzando AA."
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:keeping-myself-check",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/keeping-myself-check",
+   "title": "Keeping myself in check",
+   "summary": "The concept of principles before personalities is a vital part of our AA program. For me, the principles of this program are arrived at over time.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bayone._abstract_illustration_of_a_confident_woman_with_a_sli_8fc0415c-3bc8-4d0f-b486-6d7c62fa6d45_0.jpg?itok=g6fBA1_d",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Tradition Twelve",
+    "author": "Eileen D.",
+    "author_location": "Ellsworth, Maine",
+    "subtitle": null,
+    "teaser": "The concept of principles before personalities is a vital part of our AA program. For me, the principles of this program are arrived at over time.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Ellsworth",
+     "county": null,
+     "counties": [],
+     "state": "ME",
+     "country": "US",
+     "label_en": "Ellsworth, Maine",
+     "label_es": "Ellsworth, Maine"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Keeping myself in check",
+     "es": "Mantenerme en el cheque"
+    },
+    "summary": {
+     "en": "The concept of principles before personalities is a vital part of our AA program. For me, the principles of this program are arrived at over time.",
+     "es": "El concepto de principios ante las personalidades es una parte vital de nuestro programa AA. Para mí, los principios de este programa se llegan a lo largo del tiempo."
+    },
+    "section": {
+     "en": "Tradition Twelve",
+     "es": "Duodécima Tradición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Ellsworth, Maine",
+     "es": "Ellsworth, Maine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:giving-back",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/giving-back",
+   "title": "Giving Back",
+   "summary": "A drunken night on the town turned him into a thief. When amends time came, he had to get creative",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1450813275.jpg?itok=bxHnthg5",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Into Action",
+    "author": "C.L.",
+    "author_location": "Albany, Georgia",
+    "subtitle": "A drunken night on the town turned him into a thief. When amends time came, he had to get creative",
+    "teaser": "In the late 1980s, I was a student at the University of Georgia in Athens, a city known for its vibrant music scene at the time.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Albany",
+     "county": null,
+     "counties": [],
+     "state": "GA",
+     "country": "US",
+     "label_en": "Albany, Georgia",
+     "label_es": "Albany, Georgia"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Giving Back",
+     "es": "Dando la vuelta"
+    },
+    "summary": {
+     "en": "A drunken night on the town turned him into a thief. When amends time came, he had to get creative",
+     "es": "Una noche de borrachos en la ciudad lo convirtió en un ladrón. Cuando llegó el tiempo de enmienda, tuvo que ser creativo"
+    },
+    "section": {
+     "en": "Into Action",
+     "es": "En acción"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Albany, Georgia",
+     "es": "Albany, Georgia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:finding-my-voice",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/finding-my-voice",
+   "title": "Finding My Voice",
+   "summary": "A longtimer who can no longer talk explores new ways to share—and one of them you’re reading right now",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-524396819.jpg?itok=8It3iioK",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Tom W.",
+    "author_location": "Columbus, Ohio",
+    "subtitle": "A longtimer who can no longer talk explores new ways to share—and one of them you’re reading right now",
+    "teaser": "I drank alcoholically for 25 years while I worked in advertising. I very nearly committed suicide at the end of those 25 years.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Columbus",
+     "county": null,
+     "counties": [],
+     "state": "OH",
+     "country": "US",
+     "label_en": "Columbus, Ohio",
+     "label_es": "Columbus, Ohio"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Finding My Voice",
+     "es": "Encontrar mi voz"
+    },
+    "summary": {
+     "en": "A longtimer who can no longer talk explores new ways to share—and one of them you’re reading right now",
+     "es": "Un veterano que ya no puede hablar explora nuevas formas de compartir, y uno de ellos está leyendo ahora mismo"
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Columbus, Ohio",
+     "es": "Columbus, Ohio"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:end-world",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/end-world",
+   "title": "At the End of the World",
+   "summary": "I’m currently in a town called Ushuaia, Argentina. It’s widely known as “the end of the world,” because it’s the southernmost city on Earth. Last night I went to an AA meeting.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-2284085563.jpg?itok=pj6RRXek",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Matt J.",
+    "author_location": "Worthing",
+    "subtitle": null,
+    "teaser": "I’m currently in a town called Ushuaia, Argentina. It’s widely known as “the end of the world,” because it’s the southernmost city on Earth. Last night I went to an AA meeting.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Worthing",
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": "Worthing",
+     "label_es": "Worthing"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "At the End of the World",
+     "es": "Al final del mundo"
+    },
+    "summary": {
+     "en": "I’m currently in a town called Ushuaia, Argentina. It’s widely known as “the end of the world,” because it’s the southernmost city on Earth. Last night I went to an AA meeting.",
+     "es": "Actualmente estoy en un pueblo llamado Ushuaia, Argentina. Es ampliamente conocido como “el fin del mundo”, porque es la ciudad más meridional de la Tierra. Anoche fui a una reunión de AA."
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Worthing",
+     "es": "Worthing"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:discussion-topic",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/discussion-topic",
+   "title": "Discussion Topic",
+   "summary": "Tips for a Sober Holiday",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/default_images/default-article.jpg?itok=tXDNz8f5",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": "Tips for a Sober Holiday",
+    "teaser": "The recently divorced mom of “Remedy for a Sad Holiday” shares how she lifted herself up from self-pity on Christmas by getting out of the house and going to an AA meeting.",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Discussion Topic",
+     "es": "Tema de debate"
+    },
+    "summary": {
+     "en": "Tips for a Sober Holiday",
+     "es": "Consejos para unas fiestas sobrias"
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:dear-grapevine-december-2026",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/dear-grapevine-december-2026",
+   "title": "Dear Grapevine",
+   "summary": "All in the family",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/fe2b5ccb947b951e.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": null,
+    "teaser": "All in the family",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Dear Grapevine",
+     "es": "Dear Grapevine"
+    },
+    "summary": {
+     "en": "All in the family",
+     "es": "Todo en la familia"
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:boise-online-rescue",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/boise-online-rescue",
+   "title": "Boise Online to the Rescue",
+   "summary": "I live in southern Idaho where the nearest AA meeting for me is 20 miles away.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1383696833%20copy.jpg?itok=3Kh4j6NE",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Chicken Dave C.",
+    "author_location": "Albion, Idaho",
+    "subtitle": null,
+    "teaser": "I live in southern Idaho where the nearest AA meeting for me is 20 miles away.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Albion",
+     "county": null,
+     "counties": [],
+     "state": "ID",
+     "country": "US",
+     "label_en": "Albion, Idaho",
+     "label_es": "Albion, Idaho"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Boise Online to the Rescue",
+     "es": "Boise en línea al rescate"
+    },
+    "summary": {
+     "en": "I live in southern Idaho where the nearest AA meeting for me is 20 miles away.",
+     "es": "Vivo en el sur de Idaho donde la reunión de AA más cercana para mí está a 20 millas de distancia."
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Albion, Idaho",
+     "es": "Albion, Idaho"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:anyone-anywhere",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/anyone-anywhere",
+   "title": "Anyone, Anywhere",
+   "summary": "Searching for a Higher Power opened his heart to care for others. It was a journey in service that would fill his life",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-627560520.jpg?itok=4Uy0Vw8U",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Into Action",
+    "author": "D.M.",
+    "author_location": "Standish, Maine",
+    "subtitle": "Searching for a Higher Power opened his heart to care for others. It was a journey in service that would fill his life",
+    "teaser": "When I finally got sober in 1976, I had no idea what lay ahead of me.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Standish",
+     "county": null,
+     "counties": [],
+     "state": "ME",
+     "country": "US",
+     "label_en": "Standish, Maine",
+     "label_es": "Standish, Maine"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Anyone, Anywhere",
+     "es": "Cualquiera, en cualquier lugar"
+    },
+    "summary": {
+     "en": "Searching for a Higher Power opened his heart to care for others. It was a journey in service that would fill his life",
+     "es": "Buscar un Poder Superior abrió su corazón para cuidar a los demás. Fue un viaje en servicio que llenaría su vida"
+    },
+    "section": {
+     "en": "Into Action",
+     "es": "En acción"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Standish, Maine",
+     "es": "Standish, Maine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "gv:2026-12:aa-news",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/aa-news",
+   "title": "AA News",
+   "summary": "Reaching Out to Professionals About AA",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/2a96df7004d9913d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": "Reaching Out to Professionals About AA",
+    "teaser": "Grapevine speaks with Verónica Rodríguez, Class A (non-alcoholic)…",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "AA News",
+     "es": "Noticias AA"
+    },
+    "summary": {
+     "en": "Reaching Out to Professionals About AA",
+     "es": "Llegando a profesionales sobre AA"
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "gv:2026-11:making-amends-my-boss",
    "source": "grapevine",

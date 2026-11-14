@@ -1,7 +1,2233 @@
 {
- "updated": "2026-11-14T00:52:08Z",
+ "updated": "2026-11-14T14:29:39Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DfuNZdJDU2m",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfuNZdJDU2m/",
+   "title": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?”",
+   "summary": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?” “If You Can’t Live or Die, Make Coffee!” Freeport, New York, September 1988, The Home Group: Heartbeat of AA Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-14T12:30:17Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/DfuNZdJDU2m.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfuNZdJDU2m",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfuNZdJDU2m.webp",
+    "embed_url": "https://www.instagram.com/p/DfuNZdJDU2m/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfuNZdJDU2m/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?”",
+     "es": "“¿Por qué morar en lo que no puedes hacer? ... ¿Por qué no concentrarse en lo que puedes hacer y hacerlo?"
+    },
+    "summary": {
+     "en": "“Why dwell on what you can’t do? ... Why not concentrate on what you can do and do it?” “If You Can’t Live or Die, Make Coffee!” Freeport, New York, September 1988, The Home Group: Heartbeat of AA Daily Quote at www.aagrapevine.org",
+     "es": "“¿Por qué morar en lo que no puedes hacer? ... ¿Por qué no concentrarse en lo que puedes hacer y hacerlo? “¡Si no puedes vivir o morir, haz café!” Freeport, Nueva York, septiembre de 1988, el grupo base: latido del corazón de AA Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:30:17Z"
+  },
+  {
+   "id": "ig:DfuNZRDDf6q",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DfuNZRDDf6q/",
+   "title": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis…",
+   "summary": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis intentos por gobernarla, por controlar mi destino. Estoy agradecido de que hoy, estando sobrio, todavía pueda decir que mi vida se ha vuelto ‘ingobernable’”. \"“Bajo nueva gerencia” COLLEGE PARK, MARYLAND, JUNIO DE 1982 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-14T12:30:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/DfuNZRDDf6q.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DfuNZRDDf6q",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DfuNZRDDf6q.webp",
+    "embed_url": "https://www.instagram.com/p/DfuNZRDDf6q/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DfuNZRDDf6q/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I realize now that most problems in my life were due to my …",
+     "es": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis…"
+    },
+    "summary": {
+     "en": "“I realize now that most of the problems in my life were due to my attempts to govern it, to control my destiny. I am grateful that today, being sober, I can still say that my life has become ‘ungovernable’.” \"Bajo nueva gerencia\" college park, Maryland, June 1982 De Spiritual Awakenings Daily Quote in www.aalavina.org",
+     "es": "“Me doy cuenta ahora de que la mayoría de los problemas en mi vida se debían a mis intentos por gobernarla, por controlar mi destino. Estoy agradecido de que hoy, estando sobrio, todavía pueda decir que mi vida se ha vuelto ‘ingobernable’”. \"“Bajo nueva gerencia” COLLEGE PARK, MARYLAND, JUNIO DE 1982 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:30:15Z"
+  },
+  {
+   "id": "gv:2026-12:aa-news",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/aa-news",
+   "title": "AA News",
+   "summary": "Reaching Out to Professionals About AA",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/2a96df7004d9913d.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": "Reaching Out to Professionals About AA",
+    "teaser": "Grapevine speaks with Verónica Rodríguez, Class A (non-alcoholic)…",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "AA News",
+     "es": "Noticias AA"
+    },
+    "summary": {
+     "en": "Reaching Out to Professionals About AA",
+     "es": "Llegando a profesionales sobre AA"
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:anyone-anywhere",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/anyone-anywhere",
+   "title": "Anyone, Anywhere",
+   "summary": "Searching for a Higher Power opened his heart to care for others. It was a journey in service that would fill his life",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-627560520.jpg?itok=4Uy0Vw8U",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Into Action",
+    "author": "D.M.",
+    "author_location": "Standish, Maine",
+    "subtitle": "Searching for a Higher Power opened his heart to care for others. It was a journey in service that would fill his life",
+    "teaser": "When I finally got sober in 1976, I had no idea what lay ahead of me.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Standish",
+     "county": null,
+     "counties": [],
+     "state": "ME",
+     "country": "US",
+     "label_en": "Standish, Maine",
+     "label_es": "Standish, Maine"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Anyone, Anywhere",
+     "es": "Cualquiera, en cualquier lugar"
+    },
+    "summary": {
+     "en": "Searching for a Higher Power opened his heart to care for others. It was a journey in service that would fill his life",
+     "es": "Buscar un Poder Superior abrió su corazón para cuidar a los demás. Fue un viaje en servicio que llenaría su vida"
+    },
+    "section": {
+     "en": "Into Action",
+     "es": "En acción"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Standish, Maine",
+     "es": "Standish, Maine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:boise-online-rescue",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/boise-online-rescue",
+   "title": "Boise Online to the Rescue",
+   "summary": "I live in southern Idaho where the nearest AA meeting for me is 20 miles away.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1383696833%20copy.jpg?itok=3Kh4j6NE",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Chicken Dave C.",
+    "author_location": "Albion, Idaho",
+    "subtitle": null,
+    "teaser": "I live in southern Idaho where the nearest AA meeting for me is 20 miles away.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Albion",
+     "county": null,
+     "counties": [],
+     "state": "ID",
+     "country": "US",
+     "label_en": "Albion, Idaho",
+     "label_es": "Albion, Idaho"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Boise Online to the Rescue",
+     "es": "Boise en línea al rescate"
+    },
+    "summary": {
+     "en": "I live in southern Idaho where the nearest AA meeting for me is 20 miles away.",
+     "es": "Vivo en el sur de Idaho donde la reunión de AA más cercana para mí está a 20 millas de distancia."
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Albion, Idaho",
+     "es": "Albion, Idaho"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:dear-grapevine-december-2026",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/dear-grapevine-december-2026",
+   "title": "Dear Grapevine",
+   "summary": "All in the family",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/fe2b5ccb947b951e.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": null,
+    "teaser": "All in the family",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Dear Grapevine",
+     "es": "Dear Grapevine"
+    },
+    "summary": {
+     "en": "All in the family",
+     "es": "Todo en la familia"
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:discussion-topic",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/discussion-topic",
+   "title": "Discussion Topic",
+   "summary": "Tips for a Sober Holiday",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/default_images/default-article.jpg?itok=tXDNz8f5",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": "Tips for a Sober Holiday",
+    "teaser": "The recently divorced mom of “Remedy for a Sad Holiday” shares how she lifted herself up from self-pity on Christmas by getting out of the house and going to an AA meeting.",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Discussion Topic",
+     "es": "Tema de debate"
+    },
+    "summary": {
+     "en": "Tips for a Sober Holiday",
+     "es": "Consejos para unas fiestas sobrias"
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:end-world",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/end-world",
+   "title": "At the End of the World",
+   "summary": "I’m currently in a town called Ushuaia, Argentina. It’s widely known as “the end of the world,” because it’s the southernmost city on Earth. Last night I went to an AA meeting.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-2284085563.jpg?itok=pj6RRXek",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Matt J.",
+    "author_location": "Worthing",
+    "subtitle": null,
+    "teaser": "I’m currently in a town called Ushuaia, Argentina. It’s widely known as “the end of the world,” because it’s the southernmost city on Earth. Last night I went to an AA meeting.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Worthing",
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": "Worthing",
+     "label_es": "Worthing"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "At the End of the World",
+     "es": "Al final del mundo"
+    },
+    "summary": {
+     "en": "I’m currently in a town called Ushuaia, Argentina. It’s widely known as “the end of the world,” because it’s the southernmost city on Earth. Last night I went to an AA meeting.",
+     "es": "Actualmente estoy en un pueblo llamado Ushuaia, Argentina. Es ampliamente conocido como “el fin del mundo”, porque es la ciudad más meridional de la Tierra. Anoche fui a una reunión de AA."
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Worthing",
+     "es": "Worthing"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:finding-my-voice",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/finding-my-voice",
+   "title": "Finding My Voice",
+   "summary": "A longtimer who can no longer talk explores new ways to share—and one of them you’re reading right now",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-524396819.jpg?itok=8It3iioK",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Tom W.",
+    "author_location": "Columbus, Ohio",
+    "subtitle": "A longtimer who can no longer talk explores new ways to share—and one of them you’re reading right now",
+    "teaser": "I drank alcoholically for 25 years while I worked in advertising. I very nearly committed suicide at the end of those 25 years.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Columbus",
+     "county": null,
+     "counties": [],
+     "state": "OH",
+     "country": "US",
+     "label_en": "Columbus, Ohio",
+     "label_es": "Columbus, Ohio"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Finding My Voice",
+     "es": "Encontrar mi voz"
+    },
+    "summary": {
+     "en": "A longtimer who can no longer talk explores new ways to share—and one of them you’re reading right now",
+     "es": "Un veterano que ya no puede hablar explora nuevas formas de compartir, y uno de ellos está leyendo ahora mismo"
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Columbus, Ohio",
+     "es": "Columbus, Ohio"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:giving-back",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/giving-back",
+   "title": "Giving Back",
+   "summary": "A drunken night on the town turned him into a thief. When amends time came, he had to get creative",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1450813275.jpg?itok=bxHnthg5",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Into Action",
+    "author": "C.L.",
+    "author_location": "Albany, Georgia",
+    "subtitle": "A drunken night on the town turned him into a thief. When amends time came, he had to get creative",
+    "teaser": "In the late 1980s, I was a student at the University of Georgia in Athens, a city known for its vibrant music scene at the time.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Albany",
+     "county": null,
+     "counties": [],
+     "state": "GA",
+     "country": "US",
+     "label_en": "Albany, Georgia",
+     "label_es": "Albany, Georgia"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Giving Back",
+     "es": "Dando la vuelta"
+    },
+    "summary": {
+     "en": "A drunken night on the town turned him into a thief. When amends time came, he had to get creative",
+     "es": "Una noche de borrachos en la ciudad lo convirtió en un ladrón. Cuando llegó el tiempo de enmienda, tuvo que ser creativo"
+    },
+    "section": {
+     "en": "Into Action",
+     "es": "En acción"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Albany, Georgia",
+     "es": "Albany, Georgia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:keeping-myself-check",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/keeping-myself-check",
+   "title": "Keeping myself in check",
+   "summary": "The concept of principles before personalities is a vital part of our AA program. For me, the principles of this program are arrived at over time.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bayone._abstract_illustration_of_a_confident_woman_with_a_sli_8fc0415c-3bc8-4d0f-b486-6d7c62fa6d45_0.jpg?itok=g6fBA1_d",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Tradition Twelve",
+    "author": "Eileen D.",
+    "author_location": "Ellsworth, Maine",
+    "subtitle": null,
+    "teaser": "The concept of principles before personalities is a vital part of our AA program. For me, the principles of this program are arrived at over time.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Ellsworth",
+     "county": null,
+     "counties": [],
+     "state": "ME",
+     "country": "US",
+     "label_en": "Ellsworth, Maine",
+     "label_es": "Ellsworth, Maine"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Keeping myself in check",
+     "es": "Mantenerme en el cheque"
+    },
+    "summary": {
+     "en": "The concept of principles before personalities is a vital part of our AA program. For me, the principles of this program are arrived at over time.",
+     "es": "El concepto de principios ante las personalidades es una parte vital de nuestro programa AA. Para mí, los principios de este programa se llegan a lo largo del tiempo."
+    },
+    "section": {
+     "en": "Tradition Twelve",
+     "es": "Duodécima Tradición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Ellsworth, Maine",
+     "es": "Ellsworth, Maine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:letter-editor-december-2026",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/letter-editor-december-2026",
+   "title": "Letter from the Editor",
+   "summary": "Each December we love to feature remote community stories. It’s a perfect time of the year to remember our fellow alcoholics who have a difficult time reaching AA.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/870c7bae5aa6922e.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": null,
+    "teaser": "Each December we love to feature remote community stories. It’s a perfect time of the year to remember our fellow alcoholics who have a difficult time reaching AA.",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Letter from the Editor",
+     "es": "Carta del editor"
+    },
+    "summary": {
+     "en": "Each December we love to feature remote community stories. It’s a perfect time of the year to remember our fellow alcoholics who have a difficult time reaching AA.",
+     "es": "Cada diciembre nos encanta contar con historias comunitarias remotas. Es un momento perfecto del año para recordar a nuestros compañeros alcohólicos que tienen un tiempo difícil alcanzando AA."
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:lifeline-cameroon",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/lifeline-cameroon",
+   "title": "Lifeline in Cameroon",
+   "summary": "Getting sober far away with no AA meetings was tough. Luckily for Lise, AA connected her with Loners Internationalists",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-484207088%20copy.jpg?itok=-sb3mFSE",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Lise O.",
+    "author_location": "Raleigh, North Carolina",
+    "subtitle": "Getting sober far away with no AA meetings was tough. Luckily for Lise, AA connected her with Loners Internationalists",
+    "teaser": "In 1983, I was 27 years old and newly sober. I moved back to Cameroon in West Africa for the second time with my husband, armed with a Big Book, the “Twelve and Twelve” and Grapevine.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Raleigh",
+     "county": null,
+     "counties": [],
+     "state": "NC",
+     "country": "US",
+     "label_en": "Raleigh, North Carolina",
+     "label_es": "Raleigh, Carolina del Norte"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Lifeline in Cameroon",
+     "es": "Línea de vida en Camerún"
+    },
+    "summary": {
+     "en": "Getting sober far away with no AA meetings was tough. Luckily for Lise, AA connected her with Loners Internationalists",
+     "es": "Llegar sobrio lejos sin reuniones de AA fue difícil. Por suerte para Lise, AA la conectó con Loners Internationalists"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Raleigh, North Carolina",
+     "es": "Raleigh, Carolina del Norte"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:me-my-friend-god",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/me-my-friend-god",
+   "title": "Me, My Friend & God",
+   "summary": "Should he go to his high school reunion or not? The answer came with a prayer and a whisper",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_a_group_of_adults_having_a_party_in_a_school_gymnasium_th_b8aab6fd-092b-42b9-a213-af8aa6aa350c.jpg?itok=IgfoxVFS",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Spiritual Awakenings",
+    "author": "Kevin C.",
+    "author_location": "Rochester, New York",
+    "subtitle": "Should he go to his high school reunion or not? The answer came with a prayer and a whisper",
+    "teaser": "I had an amazing spiritual experience yesterday. My 40th high school reunion was held last night. I’d had a tough time deciding whether I wanted to go or not.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Rochester",
+     "county": null,
+     "counties": [],
+     "state": "NY",
+     "country": "US",
+     "label_en": "Rochester, New York",
+     "label_es": "Rochester, Nueva York"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Me, My Friend & God",
+     "es": "Yo, mi amigo y Dios"
+    },
+    "summary": {
+     "en": "Should he go to his high school reunion or not? The answer came with a prayer and a whisper",
+     "es": "¿Debería ir a su reunión de la secundaria o no? La respuesta vino con una oración y un susurro"
+    },
+    "section": {
+     "en": "Spiritual Awakenings",
+     "es": "Despertares espirituales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Rochester, New York",
+     "es": "Rochester, Nueva York"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:my-christmas-day-prayer",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/my-christmas-day-prayer",
+   "title": "My Christmas Day Prayer",
+   "summary": "A newcomer is trapped in a blizzard with a bottle of whiskey and a dying husband. Calling Higher Power",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-2172519888.jpg?itok=WYjhGza7",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Spiritual Awakenings",
+    "author": "Mary B.",
+    "author_location": "Buffalo, New York",
+    "subtitle": "A newcomer is trapped in a blizzard with a bottle of whiskey and a dying husband. Calling Higher Power",
+    "teaser": "We had been hearing the warning all week long that the blizzard was coming. By December 23rd it was here in full force. The winds howled and the snow piled higher and higher.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Buffalo",
+     "county": null,
+     "counties": [],
+     "state": "NY",
+     "country": "US",
+     "label_en": "Buffalo, New York",
+     "label_es": "Buffalo, Nueva York"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "My Christmas Day Prayer",
+     "es": "Mi oración del día de Navidad"
+    },
+    "summary": {
+     "en": "A newcomer is trapped in a blizzard with a bottle of whiskey and a dying husband. Calling Higher Power",
+     "es": "Un recién llegado está atrapado en una ventisca con una botella de whisky y un marido moribundo. Llamando a Poder Superior"
+    },
+    "section": {
+     "en": "Spiritual Awakenings",
+     "es": "Despertares espirituales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Buffalo, New York",
+     "es": "Buffalo, Nueva York"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:my-friend-ben",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/my-friend-ben",
+   "title": "My Friend Ben",
+   "summary": "She had no idea why he kept sharing about his drinking with her. Years later she did",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_photo_two_friends_man_and_woman_sitting_on_a_park_bench_t_5750e349-7df0-488c-a61b-144494e2564d.jpg?itok=A-22Vo0c",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Step Twelve",
+    "author": "Abbie B.",
+    "author_location": "Kennesaw, Georgia",
+    "subtitle": "She had no idea why he kept sharing about his drinking with her. Years later she did",
+    "teaser": "I’d had a long history of heavy drinking and drug use, and I always knew I had a problem.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Kennesaw",
+     "county": null,
+     "counties": [],
+     "state": "GA",
+     "country": "US",
+     "label_en": "Kennesaw, Georgia",
+     "label_es": "Kennesaw, Georgia"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "My Friend Ben",
+     "es": "Mi amigo Ben"
+    },
+    "summary": {
+     "en": "She had no idea why he kept sharing about his drinking with her. Years later she did",
+     "es": "No tenía ni idea de por qué seguía compartiendo su bebida con ella. Años más tarde lo hizo"
+    },
+    "section": {
+     "en": "Step Twelve",
+     "es": "Paso Doce"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Kennesaw, Georgia",
+     "es": "Kennesaw, Georgia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:my-weirdos-my-people",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/my-weirdos-my-people",
+   "title": "My weirdos, My people",
+   "summary": "I didn’t come to AA on a winning streak. I showed up like a raccoon in a 99-cent store parking lot—wild-eyed, greasy and holding onto emotional garbage like it was treasure.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-957796920.jpg?itok=OBnz40Nr",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Corie G.",
+    "author_location": "Mount Washington, Kentucky",
+    "subtitle": null,
+    "teaser": "I didn’t come to AA on a winning streak. I showed up like a raccoon in a 99-cent store parking lot—wild-eyed, greasy and holding onto emotional garbage like it was treasure.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Mount Washington",
+     "county": null,
+     "counties": [],
+     "state": "KY",
+     "country": "US",
+     "label_en": "Mount Washington, Kentucky",
+     "label_es": "Mount Washington, Kentucky"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "My weirdos, My people",
+     "es": "Mis raros, mi gente"
+    },
+    "summary": {
+     "en": "I didn’t come to AA on a winning streak. I showed up like a raccoon in a 99-cent store parking lot—wild-eyed, greasy and holding onto emotional garbage like it was treasure.",
+     "es": "No vine a AA en una racha ganadora. Me presenté como un mapache en un estacionamiento de 99 centavos de la tienda, ojos cerrados, grasientos y aferrarme a la basura emocional como si fuera un tesoro."
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Mount Washington, Kentucky",
+     "es": "Mount Washington, Kentucky"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:mysterious-circle-chairs",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/mysterious-circle-chairs",
+   "title": "The Mysterious Circle of Chairs",
+   "summary": "What was this place that made Mama happy, while my sisters and I laughed and ate cookies?",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/IMG_4038.jpg?itok=njIHj3g6",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Home Group",
+    "author": "S.N.",
+    "author_location": "Memphis, Tennessee",
+    "subtitle": "What was this place that made Mama happy, while my sisters and I laughed and ate cookies?",
+    "teaser": "I remember running wild in the back of the room while my mom sat quietly in a circle of chairs. People would take turns talking while everyone else nodded.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Memphis",
+     "county": null,
+     "counties": [],
+     "state": "TN",
+     "country": "US",
+     "label_en": "Memphis, Tennessee",
+     "label_es": "Memphis, Tennessee"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "The Mysterious Circle of Chairs",
+     "es": "El misterioso círculo de sillas"
+    },
+    "summary": {
+     "en": "What was this place that made Mama happy, while my sisters and I laughed and ate cookies?",
+     "es": "¿Qué fue este lugar que hizo feliz a mamá, mientras mis hermanas y yo nos reímos y comimos galletas?"
+    },
+    "section": {
+     "en": "Home Group",
+     "es": "Grupo base"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Memphis, Tennessee",
+     "es": "Memphis, Tennessee"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:quiet-service",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/quiet-service",
+   "title": "Quiet Service",
+   "summary": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/image2.jpg?itok=RUV48cBy",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Tradition Twelve",
+    "author": "Anonymous",
+    "author_location": "Galveston, Texas",
+    "subtitle": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+    "teaser": "Anonymity is an AA principle that I need to continue to practice. Remembering anonymity at the level of press, radio, films and the internet is really not a problem for me.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "texas",
+     "city": "Galveston",
+     "county": "Galveston",
+     "counties": [
+      "Galveston"
+     ],
+     "state": "TX",
+     "country": "US",
+     "label_en": "Galveston, Texas",
+     "label_es": "Galveston, Texas"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Quiet Service",
+     "es": "Servicio silencioso"
+    },
+    "summary": {
+     "en": "Why wasn’t everyone praising him for his amazing coffee? Turns out being the big shot isn’t the point",
+     "es": "¿Por qué no todo el mundo lo alababa por su increíble café? Resulta que ser el gran tiro no es el punto"
+    },
+    "section": {
+     "en": "Tradition Twelve",
+     "es": "Duodécima Tradición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Galveston, Texas",
+     "es": "Galveston, Texas"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:remedy-sad-holiday",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/remedy-sad-holiday",
+   "title": "Remedy for a Sad Holiday",
+   "summary": "Good thing this sober mom, alone and full of self-pity on Christmas morning, knew exactly what to do",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1417314586%20copy.jpg?itok=X0b299DJ",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Kate K.",
+    "author_location": "Watertown, Connecticut",
+    "subtitle": "Good thing this sober mom, alone and full of self-pity on Christmas morning, knew exactly what to do",
+    "teaser": "When I got divorced several years ago, one of the first thoughts I had was, I’m not going to have my kids every Christmas. They will be making memories without me.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Watertown",
+     "county": null,
+     "counties": [],
+     "state": "CT",
+     "country": "US",
+     "label_en": "Watertown, Connecticut",
+     "label_es": "Watertown, Connecticut"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Remedy for a Sad Holiday",
+     "es": "Remedio para una triste fiesta"
+    },
+    "summary": {
+     "en": "Good thing this sober mom, alone and full of self-pity on Christmas morning, knew exactly what to do",
+     "es": "Menos mal que esta sobria madre, sola y llena de autocompasión en la mañana de Navidad, sabía exactamente qué hacer"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Watertown, Connecticut",
+     "es": "Watertown, Connecticut"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:road-gratitude",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/road-gratitude",
+   "title": "Road to Gratitude",
+   "summary": "A photo, a memory of an incredible second chance in life, captured on a family bike ride",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1617766531.jpg?itok=Azyqx7zb",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Matt M.",
+    "author_location": "Oark Park, Illinois",
+    "subtitle": "A photo, a memory of an incredible second chance in life, captured on a family bike ride",
+    "teaser": "My computer background screen is a photo of my two older brothers. They are lying on the grass somewhere between Libertyville and Antioch, Illinois.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Oark Park",
+     "county": null,
+     "counties": [],
+     "state": "IL",
+     "country": "US",
+     "label_en": "Oark Park, Illinois",
+     "label_es": "Oark Park, Illinois"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Road to Gratitude",
+     "es": "Camino a la gratitud"
+    },
+    "summary": {
+     "en": "A photo, a memory of an incredible second chance in life, captured on a family bike ride",
+     "es": "Una foto, un recuerdo de una increíble segunda oportunidad en la vida, capturada en un paseo en bicicleta familiar"
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Oark Park, Illinois",
+     "es": "Oark Park, Illinois"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:safe-place-be",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/safe-place-be",
+   "title": "A Safe Place to Be",
+   "summary": "As our AA group’s general service rep, I was planning to read the December 2019 holiday Grapevine story “Oops, Wrong Bar” at our next meeting.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-1296975131.jpg?itok=mnwlGRG8",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Linda R.",
+    "author_location": "Bonita Springs, Florida",
+    "subtitle": null,
+    "teaser": "As our AA group’s general service rep, I was planning to read the December 2019 holiday Grapevine story “Oops, Wrong Bar” at our next meeting.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Bonita Springs",
+     "county": null,
+     "counties": [],
+     "state": "FL",
+     "country": "US",
+     "label_en": "Bonita Springs, Florida",
+     "label_es": "Bonita Springs, Florida"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "A Safe Place to Be",
+     "es": "Un lugar seguro para estar"
+    },
+    "summary": {
+     "en": "As our AA group’s general service rep, I was planning to read the December 2019 holiday Grapevine story “Oops, Wrong Bar” at our next meeting.",
+     "es": "Como representante del servicio general de nuestro grupo AA, estaba planeando leer la historia diciembre de 2019 de fiestas Grapevine “Oops, Wrong Bar” en nuestra próxima reunión."
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Bonita Springs, Florida",
+     "es": "Bonita Springs, Florida"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:staying-connected-down-under",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/staying-connected-down-under",
+   "title": "Staying Connected Down Under",
+   "summary": "A longtimer shares the lengths he’s gone to stay sober in remote places in the Pacific",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-476033100.jpg?itok=vz8m_iT0",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Jim in Tasmania",
+    "author_location": "Devonport, Australia",
+    "subtitle": "A longtimer shares the lengths he’s gone to stay sober in remote places in the Pacific",
+    "teaser": "I got to AA in Sydney, Australia in 1974 after fleeing from Illinois the year before in an attempt to leave my problems behind.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Devonport",
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": "AU",
+     "label_en": "Devonport, Australia",
+     "label_es": "Devonport, Australia"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Staying Connected Down Under",
+     "es": "Mantenerse conectado abajo"
+    },
+    "summary": {
+     "en": "A longtimer shares the lengths he’s gone to stay sober in remote places in the Pacific",
+     "es": "Un veterano comparte las longitudes que ha ido para mantenerse sobrio en lugares remotos en el Pacífico"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Devonport, Australia",
+     "es": "Devonport, Australia"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:surprise-menu",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/surprise-menu",
+   "title": "Surprise Menu",
+   "summary": "I came to on the morning of August 8, 1990. I was so sick. It took a while to check my surroundings. I heaved a sigh of relief when I realized that I was at home in my own bed.",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_Watercolor_illustration_of_two_men_in_a_restaurant_window_3cde36e3-998a-4e4a-a2d8-b0d187b0a82b.jpg?itok=vBZP8O_j",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Step Twelve",
+    "author": "G.H.",
+    "author_location": "Roberts Creek, British Columbia",
+    "subtitle": null,
+    "teaser": "I came to on the morning of August 8, 1990. I was so sick. It took a while to check my surroundings. I heaved a sigh of relief when I realized that I was at home in my own bed.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Roberts Creek",
+     "county": null,
+     "counties": [],
+     "state": "BC",
+     "country": "CA",
+     "label_en": "Roberts Creek, British Columbia",
+     "label_es": "Roberts Creek, Columbia Británica"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Surprise Menu",
+     "es": "Menú sorpresa"
+    },
+    "summary": {
+     "en": "I came to on the morning of August 8, 1990. I was so sick. It took a while to check my surroundings. I heaved a sigh of relief when I realized that I was at home in my own bed.",
+     "es": "Vine a la mañana de 8 de agosto de 1990. Estaba tan enferma. Tardó un tiempo en revisar mis alrededores. He hecho un suspiro de alivio cuando me di cuenta de que estaba en casa en mi propia cama."
+    },
+    "section": {
+     "en": "Step Twelve",
+     "es": "Paso Doce"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Roberts Creek, British Columbia",
+     "es": "Roberts Creek, Columbia Británica"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:through-someone-elses-eyes",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/through-someone-elses-eyes",
+   "title": "Through Someone Else’s Eyes",
+   "summary": "While heading home from a meeting on a snowy Christmas Eve, a mom is gifted an unexpected burst of gratitude",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_beautiful_photo_of_a_country_road_in_the_snow_nighttime_s_245cc121-e579-45f4-bed1-8080900f4335%20copy.jpg?itok=fgqKY9nL",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Featured Section",
+    "author": "Michelle B.",
+    "author_location": "Kelowna, British Columbia",
+    "subtitle": "While heading home from a meeting on a snowy Christmas Eve, a mom is gifted an unexpected burst of gratitude",
+    "teaser": "This past December I went back to the province where I spent the first several years of my sobriety to visit my daughter for the holidays.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Kelowna",
+     "county": null,
+     "counties": [],
+     "state": "BC",
+     "country": "CA",
+     "label_en": "Kelowna, British Columbia",
+     "label_es": "Kelowna, Columbia Británica"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Through Someone Else’s Eyes",
+     "es": "A través de los ojos de alguien else"
+    },
+    "summary": {
+     "en": "While heading home from a meeting on a snowy Christmas Eve, a mom is gifted an unexpected burst of gratitude",
+     "es": "Mientras se dirige a casa de una reunión en una Nochebuena nevada, una madre está obsesionada una inesperada explosión de gratitud"
+    },
+    "section": {
+     "en": "Featured Section",
+     "es": "Sección destacada"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Kelowna, British Columbia",
+     "es": "Kelowna, Columbia Británica"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:time-my-dad",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/time-my-dad",
+   "title": "Time With My Dad",
+   "summary": "A mother's wish came true, thanks to AA and the Steps that changed a daughter's life",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/bahia_.beautiful_photo_of_an_adult_daughter_and_her_dad_fly-fis_145f0b32-ec35-4916-8b48-bbf8f7f7412b.jpg?itok=M_KppjlW",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Emotional Sobriety",
+    "author": "Nikki O.",
+    "author_location": "Alfred, Maine",
+    "subtitle": "A mother's wish came true, thanks to AA and the Steps that changed a daughter's life",
+    "teaser": "During the last hours of my mother’s life, she lay in a hospital bed and gave me one final instruction: “You have to take care of Dad and Pete.”",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "other",
+     "city": "Alfred",
+     "county": null,
+     "counties": [],
+     "state": "ME",
+     "country": "US",
+     "label_en": "Alfred, Maine",
+     "label_es": "Alfred, Maine"
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Time With My Dad",
+     "es": "Tiempo con mi papá"
+    },
+    "summary": {
+     "en": "A mother's wish came true, thanks to AA and the Steps that changed a daughter's life",
+     "es": "El deseo de una madre se hizo realidad gracias a AA y a los pasos que cambiaron la vida de una hija"
+    },
+    "section": {
+     "en": "Emotional Sobriety",
+     "es": "Sobriedad emocional"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    },
+    "author_location": {
+     "en": "Alfred, Maine",
+     "es": "Alfred, Maine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:who-needs-wizard",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/who-needs-wizard",
+   "title": "Who Needs a Wizard?",
+   "summary": "Before AA, her world was dark and her life a tornado. Turns out a Higher Power had other plans for her",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "https://www.aagrapevine.org/sites/default/files/styles/card_image/public/2026-11/GettyImages-2255271329.jpg?itok=49k-RG7t",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "Our Personal Stories",
+    "author": "Bobbie W.",
+    "author_location": null,
+    "subtitle": "Before AA, her world was dark and her life a tornado. Turns out a Higher Power had other plans for her",
+    "teaser": "I often liken my experience before I got to AA to Dorothy’s world in The Wizard of Oz before the tornado.",
+    "free": false,
+    "online_exclusive": false,
+    "department": false,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "Who Needs a Wizard?",
+     "es": "¿Quién necesita un mago?"
+    },
+    "summary": {
+     "en": "Before AA, her world was dark and her life a tornado. Turns out a Higher Power had other plans for her",
+     "es": "Antes de AA, su mundo estaba oscuro y su vida un tornado. Resulta que un Poder Superior tenía otros planes para ella"
+    },
+    "section": {
+     "en": "Our Personal Stories",
+     "es": "Nuestras historias personales"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "gv:2026-12:wits-end",
+   "source": "grapevine",
+   "kind": "article",
+   "url": "https://www.aagrapevine.org/magazine/2026/dec/wits-end",
+   "title": "At Wit’s End",
+   "summary": "Drink specialA grasshopper walks into a bar. The bartender says, “Hey, we got a drink named after you!”",
+   "lang": "en",
+   "date": "2026-11-14",
+   "first_seen": "2026-11-14T14:21:46Z",
+   "image": "/assets/cache/articles/199b5365ae16c320.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "publication": "gv",
+    "issue_label": "December 2026",
+    "issue_key": "2026-12",
+    "issue_date": "2026-12-01",
+    "issue_theme": "Sober Holidays and Remote Communities",
+    "issue_url": "https://www.aagrapevine.org/magazine-issue/december-2026",
+    "topic": "Sober Holidays and Remote Communities",
+    "section": "In Every Issue",
+    "author": null,
+    "author_location": null,
+    "subtitle": null,
+    "teaser": "Drink specialA grasshopper walks into a bar. The bartender says, “Hey, we got a drink named after you!”",
+    "free": false,
+    "online_exclusive": false,
+    "department": true,
+    "geo": {
+     "scope": "unknown",
+     "city": null,
+     "county": null,
+     "counties": [],
+     "state": null,
+     "country": null,
+     "label_en": null,
+     "label_es": null
+    },
+    "pub_date": "2026-11-14"
+   },
+   "i18n": {
+    "title": {
+     "en": "At Wit’s End",
+     "es": "At Wit's End"
+    },
+    "summary": {
+     "en": "Drink specialA grasshopper walks into a bar. The bartender says, “Hey, we got a drink named after you!”",
+     "es": "Beba especialUn saltamontes entra en un bar. ¡El cantinero dice: \"Hey, tenemos una bebida llamada por ti!\""
+    },
+    "section": {
+     "en": "In Every Issue",
+     "es": "En cada edición"
+    },
+    "topic": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_theme": {
+     "en": "Sober Holidays and Remote Communities",
+     "es": "Fiestas sobrias y comunidades remotas"
+    },
+    "issue_label": {
+     "en": "December 2026",
+     "es": "Diciembre 2026"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T12:00:00Z"
+  },
+  {
+   "id": "ig:Dft_KG2AJow",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dft_KG2AJow/",
+   "title": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+   "summary": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+   "lang": "en",
+   "date": "2026-11-14T10:27:48Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dft_KG2AJow.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dft_KG2AJow",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dft_KG2AJow.webp",
+    "embed_url": "https://www.instagram.com/p/Dft_KG2AJow/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dft_KG2AJow/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+     "es": "Estamos en la 9.ª Annual National AA Corrections Conference este fin de semana."
+    },
+    "summary": {
+     "en": "We’re at the 9th Annual National AA Corrections Conference this weekend.",
+     "es": "Estamos en la 9.ª Annual National AA Corrections Conference este fin de semana."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-14T10:27:48Z"
+  },
+  {
+   "id": "ig:Dfsp1MUDaKC",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfsp1MUDaKC/",
+   "title": "La edición de noviembre/diciembre de La Viña: Las fiestas",
+   "summary": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-13T22:00:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dfsp1MUDaKC.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfsp1MUDaKC",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfsp1MUDaKC.webp",
+    "embed_url": "https://www.instagram.com/p/Dfsp1MUDaKC/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfsp1MUDaKC/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The November/December edition of La Viña: The holidays",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas"
+    },
+    "summary": {
+     "en": "The November/December edition of La Viña: The holidays In this edition we celebrate the holidays from the joy of living that gives us the sobriety. AA Hispanic members share how they have learned to enjoy these dates with freedom, love and gratitude, repairing relationships, creating new memories and finding new reasons to thank life. Visit www.aalavina.org",
+     "es": "La edición de noviembre/diciembre de La Viña: Las fiestas En esta edición celebramos las fiestas desde la alegría de vivir que nos regala la sobriedad. Miembros hispanos de AA comparten cómo han aprendido a disfrutar estas fechas con libertad, amor y gratitud, reparando relaciones, creando nuevos recuerdos y encontrando nuevas razones para agradecer a la vida. Visita www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-13T22:00:15Z"
+  },
+  {
+   "id": "ig:Dfsp1OuDapB",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Dfsp1OuDapB/",
+   "title": "The December Issue of Grapevine Is Here!",
+   "summary": "The December Issue of Grapevine Is Here! December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities. Visit www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-13T22:00:15Z",
+   "first_seen": "2026-11-14T14:17:51Z",
+   "image": "/assets/cache/ig/Dfsp1OuDapB.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Dfsp1OuDapB",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Dfsp1OuDapB.webp",
+    "embed_url": "https://www.instagram.com/p/Dfsp1OuDapB/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Dfsp1OuDapB/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "The December Issue of Grapevine Is Here!",
+     "es": "¡El número de diciembre de Grapevine está aquí!"
+    },
+    "summary": {
+     "en": "The December Issue of Grapevine Is Here! December’s issue features Sober Holiday Stories. And since the holidays are a good time to remember those who have challenges reaching AA, there’s also some helpful stories by members living in Remote Communities. Visit www.aagrapevine.org",
+     "es": "¡El número de diciembre de Grapevine está aquí! El número de diciembre características Sober Holiday Stories. Y puesto que las fiestas son un buen momento para recordar a aquellos que tienen desafíos que llegan a AA, también hay algunas historias útiles de los miembros que viven en comunidades remotas. Visita www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-13T22:00:15Z"
+  },
   {
    "id": "ig:DfromhGjVoF",
    "source": "instagram",
@@ -89,6 +2315,228 @@
    ],
    "is_new": true,
    "wn_date": "2026-11-13T12:30:15Z"
+  },
+  {
+   "id": "pdf:113d60d960dc",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Comunidad-whatsapp.pdf",
+   "title": "¡Comunidad de WhatsApp de LV!",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:27:46Z",
+   "image": "/assets/cache/pdf/113d60d960dc4544.webp",
+   "tags": [
+    "postcard"
+   ],
+   "category": "rlv",
+   "status": "ok",
+   "extra": {
+    "host": "www.aalavina.org",
+    "file_url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Comunidad-whatsapp.pdf",
+    "filename": "LV-Comunidad-whatsapp.pdf",
+    "size_bytes": 192737,
+    "pages": 1,
+    "thumb": "/assets/cache/pdf/113d60d960dc4544.webp",
+    "referrers": [
+     {
+      "url": "https://www.aalavina.org/recursos",
+      "title": "Recursos La Viña"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [
+     "¡Comunidad de WhatsApp de LV!"
+    ],
+    "event_date": null,
+    "doc_lang": "es",
+    "multilingual": null,
+    "section": "tarjetas postales",
+    "external": false,
+    "orphan": false
+   },
+   "i18n": {
+    "title": {
+     "en": "WhatsApp Community of LV!",
+     "es": "¡Comunidad de WhatsApp de LV!"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-13T12:00:00Z"
+  },
+  {
+   "id": "pdf:3fdb9ecb7219",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Reunion-abierta.pdf",
+   "title": "Reunión abierta de AA de LV",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:27:46Z",
+   "image": "/assets/cache/pdf/3fdb9ecb72196f97.webp",
+   "tags": [
+    "postcard"
+   ],
+   "category": "rlv",
+   "status": "ok",
+   "extra": {
+    "host": "www.aalavina.org",
+    "file_url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Reunion-abierta.pdf",
+    "filename": "LV-Reunion-abierta.pdf",
+    "size_bytes": 138965,
+    "pages": 1,
+    "thumb": "/assets/cache/pdf/3fdb9ecb72196f97.webp",
+    "referrers": [
+     {
+      "url": "https://www.aalavina.org/recursos",
+      "title": "Recursos La Viña"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [
+     "Reunión abierta de AA de LV"
+    ],
+    "event_date": null,
+    "doc_lang": "es",
+    "multilingual": null,
+    "section": "tarjetas postales",
+    "external": false,
+    "orphan": false
+   },
+   "i18n": {
+    "title": {
+     "en": "AA Open Meeting of LV",
+     "es": "Reunión abierta de AA de LV"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-13T12:00:00Z"
+  },
+  {
+   "id": "pdf:68840e492c4d",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aalavina.org/sites/default/files/2026-11/LV-suscripciones-122026.pdf",
+   "title": "¡Suscríbete hoy!",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:27:46Z",
+   "image": "/assets/cache/pdf/68840e492c4dcfe9.webp",
+   "tags": [
+    "postcard"
+   ],
+   "category": "rlv",
+   "status": "ok",
+   "extra": {
+    "host": "www.aalavina.org",
+    "file_url": "https://www.aalavina.org/sites/default/files/2026-11/LV-suscripciones-122026.pdf",
+    "filename": "LV-suscripciones-122026.pdf",
+    "size_bytes": 172974,
+    "pages": 1,
+    "thumb": "/assets/cache/pdf/68840e492c4dcfe9.webp",
+    "referrers": [
+     {
+      "url": "https://www.aalavina.org/recursos",
+      "title": "Recursos La Viña"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [
+     "¡Suscríbete hoy!"
+    ],
+    "event_date": null,
+    "doc_lang": "es",
+    "multilingual": null,
+    "section": "tarjetas postales",
+    "external": false,
+    "orphan": false
+   },
+   "i18n": {
+    "title": {
+     "en": "Subscribe Today!",
+     "es": "¡Suscríbete hoy!"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-13T12:00:00Z"
+  },
+  {
+   "id": "pdf:91dbe822e132",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aagrapevine.org/sites/default/files/2026-11/GV_News_December-2026.pdf",
+   "title": "GV News December 2026",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:25:59Z",
+   "image": "/assets/cache/pdf/91dbe822e132d341.webp",
+   "tags": [
+    "news"
+   ],
+   "category": "gvr",
+   "status": "ok",
+   "extra": {
+    "host": "www.aagrapevine.org",
+    "file_url": "https://www.aagrapevine.org/sites/default/files/2026-11/GV_News_December-2026.pdf",
+    "filename": "GV_News_December-2026.pdf",
+    "size_bytes": 15838779,
+    "pages": 4,
+    "thumb": "/assets/cache/pdf/91dbe822e132d341.webp",
+    "referrers": [
+     {
+      "url": "https://www.aagrapevine.org/gvr-resources",
+      "title": "GVR Resources"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [],
+    "event_date": null,
+    "doc_lang": "en",
+    "multilingual": null,
+    "section": "GVR Resources",
+    "external": false,
+    "orphan": false
+   },
+   "i18n": {
+    "title": {
+     "en": "GV News December 2026",
+     "es": "Noticias GV diciembre de 2026"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-13T12:00:00Z"
   },
   {
    "id": "drive:covers:gv:2026-11-13",
@@ -238,7 +2686,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 35,
+    "views": 108,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2506,7 +4954,7 @@
     "duration_sec": null,
     "playlists": [],
     "is_short": false,
-    "views": 120,
+    "views": 124,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -2728,7 +5176,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 178,
+    "views": 203,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3508,7 +5956,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 252,
+    "views": 261,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4283,7 +6731,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 198,
+    "views": 196,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -4577,7 +7025,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 291,
+    "views": 298,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -5396,7 +7844,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-31T12:00:00Z"
   },
   {
@@ -5440,7 +7888,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-31T11:30:15Z"
   },
   {
@@ -5484,7 +7932,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-10-31T11:30:14Z"
   },
   {
@@ -5776,7 +8224,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 291,
+    "views": 296,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -5795,1696 +8243,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-10-30T04:25:13Z"
-  },
-  {
-   "id": "pod:wo:8f2aa46749e6",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d",
-   "title": "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2, Episode 18]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 28, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Nate and Debbi, who share their experience…",
-   "lang": "en",
-   "date": "2026-10-30T04:15:00Z",
-   "first_seen": "2026-10-30T07:17:30Z",
-   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
-   "tags": [
-    "season-2"
-   ],
-   "category": "wo",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 79783354,
-    "duration_sec": 3324,
-    "season": 2,
-    "episode": 18,
-    "episode_type": "full",
-    "show": "wo",
-    "show_name": "Grapevine Weekly Open AA Meeting",
-    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "player_url": "https://player.captivate.fm/episode/b07a2e7a-b228-47e4-95dc-c9e0b700399d",
-    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
-    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
-    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
-    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
-    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp",
-    "weekly_open": "grapevine",
-    "meeting_date": "2026-10-28",
-    "generic_title": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, October 28, 2026 [Season 2, Episode 18]",
-     "es": "Grapevine Weekly Open AA Meeting, 28 de octubre de 2026 [Temporada 2, Episodio 18]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on October 28, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Don welcomes speakers Nate and Debbi, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 28 de octubre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Don da la bienvenida a los oradores Nate y Debbi, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-30T04:15:00Z"
-  },
-  {
-   "id": "ig:DfFR15tjXfn",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfFR15tjXfn/",
-   "title": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026",
-   "summary": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-29T15:00:14Z",
-   "first_seen": "2026-10-30T14:20:41Z",
-   "image": "/assets/cache/ig/DfFR15tjXfn.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfFR15tjXfn",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfFR15tjXfn.webp",
-    "embed_url": "https://www.instagram.com/p/DfFR15tjXfn/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfFR15tjXfn/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Serenity Prayer - November / December 2026 Edition",
-     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026"
-    },
-    "summary": {
-     "en": "Serenity Prayer - November / December 2026 www.aalavina.org Edition",
-     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-29T15:00:14Z"
-  },
-  {
-   "id": "ig:DfFR19wjQ4S",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfFR19wjQ4S/",
-   "title": "Serenity Prayer - November issue",
-   "summary": "Serenity Prayer - November issue www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-29T15:00:14Z",
-   "first_seen": "2026-10-30T14:20:41Z",
-   "image": "/assets/cache/ig/DfFR19wjQ4S.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfFR19wjQ4S",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfFR19wjQ4S.webp",
-    "embed_url": "https://www.instagram.com/p/DfFR19wjQ4S/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfFR19wjQ4S/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Serenity Prayer - November issue",
-     "es": "Serenity Prayer - Cuestión de noviembre"
-    },
-    "summary": {
-     "en": "Serenity Prayer - November issue www.aagrapevine.org",
-     "es": "Serenity Prayer - Número de noviembre www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-29T15:00:14Z"
-  },
-  {
-   "id": "ig:DfE5z2WDW0Z",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfE5z2WDW0Z/",
-   "title": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of…",
-   "summary": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.” AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-29T11:30:15Z",
-   "first_seen": "2026-10-29T14:28:23Z",
-   "image": "/assets/cache/ig/DfE5z2WDW0Z.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfE5z2WDW0Z",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfE5z2WDW0Z.webp",
-    "embed_url": "https://www.instagram.com/p/DfE5z2WDW0Z/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfE5z2WDW0Z/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of…",
-     "es": "“Las satisfacciones emocionales e instintivas, vi, eran realmente los dividendos extras de …"
-    },
-    "summary": {
-     "en": "“Emotional and instinctual satisfactions, I saw, were really the extra dividends of having love, offering love, and expressing a love appropriate to each relation of life.” AA Co-Founder, Bill W., January 1958, “The Next Frontier: Emotional Sobriety”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“Las satisfacciones emocionales e instintivas, he visto, eran realmente los dividendos extras de tener amor, ofrecer amor y expresar un amor apropiado a cada relación de la vida.” AA cofundador, Bill W., enero de 1958, “la próxima frontera: Sobriedad emocional”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-29T11:30:15Z"
-  },
-  {
-   "id": "ig:DfE5z1fjVQP",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfE5z1fjVQP/",
-   "title": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi…",
-   "summary": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento”. \"“Doctorado en alcoholismo” GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-29T11:30:14Z",
-   "first_seen": "2026-10-29T14:28:23Z",
-   "image": "/assets/cache/ig/DfE5z1fjVQP.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfE5z1fjVQP",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfE5z1fjVQP.webp",
-    "embed_url": "https://www.instagram.com/p/DfE5z1fjVQP/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfE5z1fjVQP/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“The pride I felt for my intelligence prevented me from seeing the magnitude of my …",
-     "es": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi…"
-    },
-    "summary": {
-     "en": "“The pride I felt for my intelligence prevented me from seeing the magnitude of my ignorance.” \"Doctorate in Alcoholism\" GREENSBORO, CAROLINA DEL NORTE, FEBRUARY 1987 Of The Best of Grapevine, Volume III\" Daily Quote in www.aalavina.org",
-     "es": "“El orgullo que sentía por mi inteligencia me impedía ver la magnitud de mi desconocimiento”. \"“Doctorado en alcoholismo” GREENSBORO, CAROLINA DEL NORTE, FEBRERO DE 1987 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-29T11:30:14Z"
-  },
-  {
-   "id": "ig:DfCYcpnjVeP",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfCYcpnjVeP/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-10-28T12:00:15Z",
-   "first_seen": "2026-10-28T14:06:42Z",
-   "image": "/assets/cache/ig/DfCYcpnjVeP.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfCYcpnjVeP",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfCYcpnjVeP.webp",
-    "embed_url": "https://www.instagram.com/p/DfCYcpnjVeP/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfCYcpnjVeP/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-28T12:00:15Z"
-  },
-  {
-   "id": "ig:DfCVA_2jS3t",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfCVA_2jS3t/",
-   "title": "“Serenity and peace of mind are a direct result of accepting our lives as they are at…",
-   "summary": "“Serenity and peace of mind are a direct result of accepting our lives as they are at this moment, and all the money in the world cannot purchase this kind of peace.” “From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-28T11:30:15Z",
-   "first_seen": "2026-10-28T14:06:42Z",
-   "image": "/assets/cache/ig/DfCVA_2jS3t.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfCVA_2jS3t",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfCVA_2jS3t.webp",
-    "embed_url": "https://www.instagram.com/p/DfCVA_2jS3t/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfCVA_2jS3t/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Serenity and peace of mind are a direct result of accepting our lives as they are at…",
-     "es": "“La serenidad y la paz mental son un resultado directo de aceptar nuestras vidas como están en …"
-    },
-    "summary": {
-     "en": "“Serenity and peace of mind are a direct result of accepting our lives as they are at this moment, and all the money in the world cannot purchase this kind of peace.” “From Rags to Riches,” Cornwall, Ontario, January 2005, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-     "es": "“La serenidad y la paz mental son un resultado directo de aceptar nuestras vidas como están en este momento, y todo el dinero en el mundo no puede comprar este tipo de paz”. “De trapos a riquezas”, Cornwall, Ontario, enero de 2005, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-28T11:30:15Z"
-  },
-  {
-   "id": "ig:DfCVA_hjUtr",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfCVA_hjUtr/",
-   "title": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”.",
-   "summary": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”. \"“Amor” NORTH HOLLYWOOD, CALIFORNIA, SEPTIEMBRE DE 1988 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-28T11:30:15Z",
-   "first_seen": "2026-10-28T14:06:42Z",
-   "image": "/assets/cache/ig/DfCVA_hjUtr.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfCVA_hjUtr",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfCVA_hjUtr.webp",
-    "embed_url": "https://www.instagram.com/p/DfCVA_hjUtr/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfCVA_hjUtr/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“When we love, we see in others what we would want to see in ourselves.”",
-     "es": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”."
-    },
-    "summary": {
-     "en": "“When we love, we see in others what we would want to see in ourselves.” \"Amor\" NORTH HOLLYWOOD, CALIFORNIA, SEPTEMBER 1988 Best of Grapevine, Volume III\" Daily Quote in www.aalavina.org",
-     "es": "“Cuando amamos, vemos en los demás lo que querríamos ver en nosotros mismos”. \"“Amor” NORTH HOLLYWOOD, CALIFORNIA, SEPTIEMBRE DE 1988 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-28T11:30:15Z"
-  },
-  {
-   "id": "ig:DfAITLDDS-J",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfAITLDDS-J/",
-   "title": "From the article “Getting the Help We Need\", October 2026 issue.",
-   "summary": "From the article “Getting the Help We Need\", October 2026 issue. To read more, visit www.aagrapevine.org/magazine",
-   "lang": "en",
-   "date": "2026-10-27T15:00:40Z",
-   "first_seen": "2026-10-28T14:06:42Z",
-   "image": "/assets/cache/ig/DfAITLDDS-J.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfAITLDDS-J",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfAITLDDS-J.webp",
-    "embed_url": "https://www.instagram.com/p/DfAITLDDS-J/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfAITLDDS-J/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "From the article “Getting the Help We Need\", October 2026 issue.",
-     "es": "Desde el artículo “Conseguir la ayuda que necesitamos”, edición de octubre de 2026."
-    },
-    "summary": {
-     "en": "From the article “Getting the Help We Need\", October 2026 issue. To read more, visit www.aagrapevine.org/magazine",
-     "es": "Desde el artículo “Conseguir la ayuda que necesitamos”, edición de octubre de 2026. Para leer más, visite www.aagrapevine.org/magazine"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-27T15:00:40Z"
-  },
-  {
-   "id": "ig:DfAITC9DS8g",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfAITC9DS8g/",
-   "title": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026.",
-   "summary": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026. Para leer más, visite www.aalavina.org/revista",
-   "lang": "es",
-   "date": "2026-10-27T15:00:39Z",
-   "first_seen": "2026-10-28T14:06:42Z",
-   "image": "/assets/cache/ig/DfAITC9DS8g.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfAITC9DS8g",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfAITC9DS8g.webp",
-    "embed_url": "https://www.instagram.com/p/DfAITC9DS8g/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfAITC9DS8g/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "From the article “A High Price”, November / December 2026 edition.",
-     "es": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026."
-    },
-    "summary": {
-     "en": "From the article “A High Price”, November / December 2026 edition. To read more, visit www.aalavina.org/revista",
-     "es": "Del artículo “Un alto precio\", edición de noviembre/diciembre de 2026. Para leer más, visite www.aalavina.org/revista"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-27T15:00:39Z"
-  },
-  {
-   "id": "ig:De_wOGujUKO",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De_wOGujUKO/",
-   "title": "\"There are always the constructive critics, our friends indeed. We should never fail to…",
-   "summary": "\"There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.\" AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-27T11:30:15Z",
-   "first_seen": "2026-10-27T13:21:34Z",
-   "image": "/assets/cache/ig/De_wOGujUKO.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De_wOGujUKO",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De_wOGujUKO.webp",
-    "embed_url": "https://www.instagram.com/p/De_wOGujUKO/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De_wOGujUKO/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "\"There are always the constructive critics, our friends indeed. We should never fail to…",
-     "es": "\"Siempre hay los críticos constructivos, nuestros amigos de hecho. Nunca deberíamos fallar en …"
-    },
-    "summary": {
-     "en": "\"There are always the constructive critics, our friends indeed. We should never fail to give them a careful hearing.\" AA Co-Founder, Bill W., April 1959, “Leadership in AA: Ever a Vital Need”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "\"Siempre hay los críticos constructivos, nuestros amigos de hecho. Nunca debemos dejar de darles una audiencia cuidadosa.\" AA cofundador, Bill W., abril de 1959, “Leadership in AA: Ever a Vital Need”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-27T11:30:15Z"
-  },
-  {
-   "id": "ig:De_wOH8jVeC",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De_wOH8jVeC/",
-   "title": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido…",
-   "summary": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos”. \"“Una larga caída” ARLINGTON, TEXAS, JULIO DE 1994 De Lo mejor del Grapevine, Volumen III \" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-27T11:30:15Z",
-   "first_seen": "2026-10-27T13:21:34Z",
-   "image": "/assets/cache/ig/De_wOH8jVeC.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De_wOH8jVeC",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De_wOH8jVeC.webp",
-    "embed_url": "https://www.instagram.com/p/De_wOH8jVeC/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De_wOH8jVeC/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I am learning to be a mother, friend, grandmother and sister. My friends are for me a united …",
-     "es": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido…"
-    },
-    "summary": {
-     "en": "“I am learning to be a mother, friend, grandmother and sister. My friends are for me a united support group; I must only call them.” \"A Long Fall\" ARLINGTON, TEXAS, JULY 1994 Best of the Grapevine, Volume III \"Daily Quote in www.aalavina.org",
-     "es": "“Estoy aprendiendo a ser madre, amiga, abuela y hermana. Mis amigos son para mí un unido grupo de apoyo; sólo debo llamarlos”. \"“Una larga caída” ARLINGTON, TEXAS, JULIO DE 1994 De Lo mejor del Grapevine, Volumen III \" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-27T11:30:15Z"
-  },
-  {
-   "id": "ev:manual:2026-11-28-lv-writing-workshop-garland",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2026-11-28-lv-writing-workshop-garland",
-   "title": "La Viña Writing Workshop (in Spanish) — Garland",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
-   "lang": "en",
-   "date": "2026-11-29T01:00:00Z",
-   "first_seen": "2026-10-27T06:15:45Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-11-29T01:00:00Z",
-    "end": "2026-11-29T03:00:00Z",
-    "all_day": false,
-    "location": "Grupo Volver a Vivir, 2913 S. Fifth St., Garland, TX 75041",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
-    "flyer_thumb": null,
-    "city": "Garland",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
-    "slug": "2026-11-28-lv-writing-workshop-garland",
-    "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Garland"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Garland",
-     "es": "Taller de Escritura de La Viña — Garland"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-27T06:15:45Z"
-  },
-  {
-   "id": "ev:manual:2026-12-12-lv-writing-workshop-fort-worth",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2026-12-12-lv-writing-workshop-fort-worth",
-   "title": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-   "summary": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
-   "lang": "en",
-   "date": "2026-12-13T01:00:00Z",
-   "first_seen": "2026-10-27T06:15:45Z",
-   "image": null,
-   "tags": [
-    "workshop",
-    "la-vina"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2026-12-13T01:00:00Z",
-    "end": "2026-12-13T03:00:00Z",
-    "all_day": false,
-    "location": "Grupo Nuevo Horizonte, 3302 N Main St, Fort Worth, TX 76106",
-    "online_url": null,
-    "flyer_url": "https://drive.google.com/file/d/1bQus_1upkr1-eI8v-22C3NLrSIv-3F5i/view",
-    "flyer_thumb": null,
-    "city": "Fort Worth",
-    "state": "TX",
-    "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
-    "slug": "2026-12-12-lv-writing-workshop-fort-worth",
-    "file": "content/events/2026-12-12-lv-writing-workshop-fort-worth.md",
-    "own_i18n": {
-     "title": {
-      "es": "Taller de Escritura de La Viña — Fort Worth"
-     },
-     "summary": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-     },
-     "body_md": {
-      "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop (in Spanish) — Fort Worth",
-     "es": "Taller de Escritura de La Viña — Fort Worth"
-    },
-    "summary": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-    },
-    "body_md": {
-     "en": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Nuevo Horizonte in Fort Worth and organized by the District 90 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, and questions and answers, with members sharing what it was like to see their story published.",
-     "es": "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Nuevo Horizonte de Fort Worth. Lo organiza el Comité Permanente de La Viña del Distrito 90: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-27T06:15:45Z"
-  },
-  {
-   "id": "ev:manual:2027-02-21-neta65-winter-acm",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2027-02-21-neta65-winter-acm",
-   "title": "Winter ACM 2027",
-   "summary": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
-   "lang": "en",
-   "date": "2027-02-21T18:00:00Z",
-   "first_seen": "2026-10-26T14:35:09Z",
-   "image": null,
-   "tags": [
-    "neta65",
-    "acm",
-    "panel-77"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2027-02-21T18:00:00Z",
-    "end": "2027-02-21T23:00:00Z",
-    "all_day": false,
-    "location": "Mid-Cities Group, 300 West Pipeline Rd, Hurst, TX 76053",
-    "online_url": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": "Hurst",
-    "state": "TX",
-    "body_md": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
-    "slug": "2027-02-21-neta65-winter-acm",
-    "file": "content/events/2027-02-21-neta65-winter-acm.md",
-    "own_i18n": {
-     "title": {
-      "es": "ACM de Invierno 2027"
-     },
-     "summary": {
-      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
-     },
-     "body_md": {
-      "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
-     }
-    },
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Winter ACM 2027",
-     "es": "ACM de Invierno 2027"
-    },
-    "summary": {
-     "en": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
-     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
-    },
-    "body_md": {
-     "en": "NETA 65's winter Area Committee Meeting (ACM), at the Mid-Cities Group in Hurst.",
-     "es": "La reunión de invierno del Comité de Área de NETA 65 (ACM), en el Mid-Cities Group de Hurst."
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-26T14:35:09Z"
-  },
-  {
-   "id": "ev:manual:2027-04-11-neta65-spring-acm",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2027-04-11-neta65-spring-acm",
-   "title": "Spring ACM 2027",
-   "summary": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
-   "lang": "en",
-   "date": "2027-04-11T17:00:00Z",
-   "first_seen": "2026-10-26T14:35:09Z",
-   "image": null,
-   "tags": [
-    "neta65",
-    "acm",
-    "panel-77"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2027-04-11T17:00:00Z",
-    "end": "2027-04-11T22:00:00Z",
-    "all_day": false,
-    "location": "Venue to be announced",
-    "online_url": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "body_md": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
-    "slug": "2027-04-11-neta65-spring-acm",
-    "file": "content/events/2027-04-11-neta65-spring-acm.md",
-    "tentative": true,
-    "own_i18n": {
-     "title": {
-      "es": "ACM de Primavera 2027"
-     },
-     "summary": {
-      "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "body_md": {
-      "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "location": {
-      "es": "Lugar por anunciarse"
-     }
-    },
-    "location_tba": true,
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Spring ACM 2027",
-     "es": "ACM de Primavera 2027"
-    },
-    "summary": {
-     "en": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
-     "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "body_md": {
-     "en": "NETA 65's spring Area Committee Meeting (ACM), three weeks after the Spring Assembly. The host group and the venue will be announced.",
-     "es": "La reunión de primavera del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Primavera. El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "location": {
-     "en": "Venue to be announced",
-     "es": "Lugar por anunciarse"
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-26T14:35:09Z"
-  },
-  {
-   "id": "ev:manual:2027-07-18-neta65-summer-acm",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2027-07-18-neta65-summer-acm",
-   "title": "Summer ACM 2027",
-   "summary": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
-   "lang": "en",
-   "date": "2027-07-18T17:00:00Z",
-   "first_seen": "2026-10-26T14:35:09Z",
-   "image": null,
-   "tags": [
-    "neta65",
-    "acm",
-    "panel-77"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2027-07-18T17:00:00Z",
-    "end": "2027-07-18T22:00:00Z",
-    "all_day": false,
-    "location": "Venue to be announced",
-    "online_url": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "body_md": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
-    "slug": "2027-07-18-neta65-summer-acm",
-    "file": "content/events/2027-07-18-neta65-summer-acm.md",
-    "tentative": true,
-    "own_i18n": {
-     "title": {
-      "es": "ACM de Verano 2027"
-     },
-     "summary": {
-      "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "body_md": {
-      "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "location": {
-      "es": "Lugar por anunciarse"
-     }
-    },
-    "location_tba": true,
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Summer ACM 2027",
-     "es": "ACM de Verano 2027"
-    },
-    "summary": {
-     "en": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
-     "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "body_md": {
-     "en": "NETA 65's summer Area Committee Meeting (ACM), three weeks after the Summer Assembly. The host group and the venue will be announced.",
-     "es": "La reunión de verano del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Verano. El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "location": {
-     "en": "Venue to be announced",
-     "es": "Lugar por anunciarse"
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-26T14:35:09Z"
-  },
-  {
-   "id": "ev:manual:2027-10-10-neta65-fall-acm",
-   "source": "committee",
-   "kind": "event",
-   "url": "/events/#2027-10-10-neta65-fall-acm",
-   "title": "Fall ACM 2027",
-   "summary": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
-   "lang": "en",
-   "date": "2027-10-10T17:00:00Z",
-   "first_seen": "2026-10-26T14:35:09Z",
-   "image": null,
-   "tags": [
-    "neta65",
-    "acm",
-    "panel-77"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "start": "2027-10-10T17:00:00Z",
-    "end": "2027-10-10T22:00:00Z",
-    "all_day": false,
-    "location": "Venue to be announced",
-    "online_url": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "city": null,
-    "state": null,
-    "body_md": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
-    "slug": "2027-10-10-neta65-fall-acm",
-    "file": "content/events/2027-10-10-neta65-fall-acm.md",
-    "tentative": true,
-    "own_i18n": {
-     "title": {
-      "es": "ACM de Otoño 2027"
-     },
-     "summary": {
-      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "body_md": {
-      "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
-     },
-     "location": {
-      "es": "Lugar por anunciarse"
-     }
-    },
-    "location_tba": true,
-    "past": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Fall ACM 2027",
-     "es": "ACM de Otoño 2027"
-    },
-    "summary": {
-     "en": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
-     "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "body_md": {
-     "en": "NETA 65's fall Area Committee Meeting (ACM), three weeks after the Fall Assembly. The host group and the venue will be announced.",
-     "es": "La reunión de otoño del Comité de Área de NETA 65 (ACM), tres semanas después de la Asamblea de Otoño. El grupo anfitrión y el lugar se anunciarán más adelante."
-    },
-    "location": {
-     "en": "Venue to be announced",
-     "es": "Lugar por anunciarse"
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-10-26T14:35:09Z"
-  },
-  {
-   "id": "ig:De9LbMcjfh1",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De9LbMcjfh1/",
-   "title": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”.",
-   "summary": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”. “Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990. De Lo mejor del Grapevine, Volumen II Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-26T11:30:15Z",
-   "first_seen": "2026-10-26T14:24:10Z",
-   "image": "/assets/cache/ig/De9LbMcjfh1.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De9LbMcjfh1",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De9LbMcjfh1.webp",
-    "embed_url": "https://www.instagram.com/p/De9LbMcjfh1/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De9LbMcjfh1/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Speaking about what bothers me helps me to applaud the power it has over me.”",
-     "es": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”."
-    },
-    "summary": {
-     "en": "“Speaking about what bothers me helps me to applaud the power it has over me.” “Together we can”, Martinsville, West Virginia, January 1990. Best of the Grapevine, Volume II Daily Quote in www.aalavina.org",
-     "es": "“Hablar de lo que me molesta me ayuda a aplacar el poder que tiene sobre mí”. “Juntos podemos”, Martinsville, VIRGINIA OCCIDENTAL, ENERO DE 1990. De Lo mejor del Grapevine, Volumen II Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-26T11:30:15Z"
-  },
-  {
-   "id": "ig:De9LbN9DR-M",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De9LbN9DR-M/",
-   "title": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons…",
-   "summary": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I…",
-   "lang": "en",
-   "date": "2026-10-26T11:30:14Z",
-   "first_seen": "2026-10-26T14:24:10Z",
-   "image": "/assets/cache/ig/De9LbN9DR-M.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De9LbN9DR-M",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De9LbN9DR-M.webp",
-    "embed_url": "https://www.instagram.com/p/De9LbN9DR-M/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De9LbN9DR-M/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons…",
-     "es": "“Me atrajo a AA porque no excluyó a nadie, y estoy agradecido por las lecciones …"
-    },
-    "summary": {
-     "en": "“I was attracted to AA because it excluded no one, and I am grateful for the lessons I’ve learned over the years: that we stop fighting anyone or anything; that it is the details of what I do that make me who I am; that my perception of life is ever-changing and evolving; that the basic ‘suggestions’ I heard when I entered the Fellowship have been a continuous part of my life; that as long as I…",
-     "es": "“Me atraía AA porque no excluía a nadie, y estoy agradecido por las lecciones que he aprendido a lo largo de los años: que dejemos de luchar contra cualquiera o cualquier cosa; que son los detalles de lo que hago que me hacen quien soy; que mi percepción de la vida es siempre cambiante y evolucionado; que las ‘sugerencias’ básicas que escuché cuando entré la Comunidad han sido una parte continua de mi vida; que mientras I …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-26T11:30:14Z"
-  },
-  {
-   "id": "ig:De9HiSMgXPS",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De9HiSMgXPS/",
-   "title": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology…",
-   "summary": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology Workshop.",
-   "lang": "en",
-   "date": "2026-10-26T11:00:04Z",
-   "first_seen": "2026-10-26T14:24:10Z",
-   "image": "/assets/cache/ig/De9HiSMgXPS.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De9HiSMgXPS",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De9HiSMgXPS.webp",
-    "embed_url": "https://www.instagram.com/p/De9HiSMgXPS/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De9HiSMgXPS/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology…",
-     "es": "Don reportes del Foro Regional del Sudeste y Sam visitan la Tecnología AA nacional …"
-    },
-    "summary": {
-     "en": "Don reports from the Southeast Regional Forum and Sam visits the National AA Technology Workshop.",
-     "es": "Don reports from the Foro Regional del Sudeste and Sam visits the National AA Technology Workshop."
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-26T11:00:04Z"
-  },
-  {
-   "id": "yt:hduNr1E0gWE",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=hduNr1E0gWE",
-   "title": "AA Gatherings [Season 11, Episode 17]",
-   "summary": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
-   "lang": "en",
-   "date": "2026-10-26T04:28:19Z",
-   "first_seen": "2026-10-26T14:23:51Z",
-   "image": "https://i.ytimg.com/vi/hduNr1E0gWE/hqdefault.jpg",
-   "tags": [
-    "season-11"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "hduNr1E0gWE",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 2392,
-    "playlists": [
-     "AA Grapevine's Podcast"
-    ],
-    "is_short": false,
-    "views": 312,
-    "is_live_recording": false,
-    "date_approx": false,
-    "season": 11,
-    "episode": 17
-   },
-   "i18n": {
-    "title": {
-     "en": "AA Gatherings [Season 11, Episode 17]",
-     "es": "Reuniones AA [Temporada 11, Episodio 17]"
-    },
-    "summary": {
-     "en": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
-     "es": "Don y Olis discuten los muchos tipos de reuniones AA, incluyendo asambleas, conferencias, convenciones, foros, talleres. Don describe su experiencia reciente en el Foro Regional del Sudeste, y entrevista a varios participantes incluyendo Jennifer, Kim, Kyle y Sonia. Sam visita el Taller Nacional de Tecnología AA en Concord, CA, y demuestra cómo ponemos el AA Grapevine Variedad de media hora …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-26T04:28:19Z"
-  },
-  {
-   "id": "pod:gv:887fc754f895",
-   "source": "podcast",
-   "kind": "episode",
-   "url": "https://player.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081",
-   "title": "AA Gatherings [Season 11, Episode 17]",
-   "summary": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
-   "lang": "en",
-   "date": "2026-10-26T04:15:00Z",
-   "first_seen": "2026-10-26T06:25:49Z",
-   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
-   "tags": [
-    "season-11"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "audio_url": "https://episodes.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_bytes": 47826024,
-    "duration_sec": 2391,
-    "season": 11,
-    "episode": 17,
-    "episode_type": "full",
-    "show": "gv",
-    "show_name": "AA Grapevine's Podcast",
-    "link": "https://www.aagrapevine.org/podcast",
-    "player_url": "https://player.captivate.fm/episode/728dfd76-3da9-4467-8ed3-6273077e5081",
-    "show_web": "https://www.aagrapevine.org/podcasts",
-    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
-    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
-    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
-   },
-   "i18n": {
-    "title": {
-     "en": "AA Gatherings [Season 11, Episode 17]",
-     "es": "Reuniones AA [Temporada 11, Episodio 17]"
-    },
-    "summary": {
-     "en": "Don and Olis discuss the many types of AA gatherings, including assemblies, conferences, conventions, forums, workshops. Don describes his recent experience at the Southeast Regional Forum, and he interviews several participants including Jennifer, Kim, Kyle and Sonia. Sam visits the National AA Technology Workshop in Concord, CA, and demonstrates how we put the AA Grapevine Half Hour Variety…",
-     "es": "Don y Olis discuten los muchos tipos de reuniones AA, incluyendo asambleas, conferencias, convenciones, foros, talleres. Don describe su experiencia reciente en el Foro Regional del Sudeste, y entrevista a varios participantes incluyendo Jennifer, Kim, Kyle y Sonia. Sam visita el Taller Nacional de Tecnología AA en Concord, CA, y demuestra cómo ponemos el AA Grapevine Variedad de media hora …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-26T04:15:00Z"
-  },
-  {
-   "id": "ig:De6-qavDemq",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De6-qavDemq/",
-   "title": "Comparte la experiencia, fortaleza y esperanza del programa de AA.",
-   "summary": "Comparte la experiencia, fortaleza y esperanza del programa de AA. Por tiempo limitado, adquiere una suscripción regular a la revista de AA La Viña y añade suscripciones de regalo adicionales por solo $8 cada una: ¡un descuento del 50% sobre el precio habitual! Como escribió Bill W., cofundador de AA, en junio de 1959: «Cada número de la revista ofrece una visión mensual del pensamiento, el…",
-   "lang": "es",
-   "date": "2026-10-25T15:00:32Z",
-   "first_seen": "2026-10-26T14:24:10Z",
-   "image": "/assets/cache/ig/De6-qavDemq.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De6-qavDemq",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De6-qavDemq.webp",
-    "embed_url": "https://www.instagram.com/p/De6-qavDemq/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De6-qavDemq/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Share the experience, strength and hope of the AA program.",
-     "es": "Comparte la experiencia, fortaleza y esperanza del programa de AA."
-    },
-    "summary": {
-     "en": "Share the experience, strength and hope of the AA program. For limited time, you get a regular subscription to AA La Viña magazine and add additional gift subscriptions for only $8 each: a 50% discount on the usual price! As Bill W., co-founder of AA, June 1959 wrote: \"Each issue of the magazine offers a monthly vision of thought, the …",
-     "es": "Comparte la experiencia, fortaleza y esperanza del programa de AA. Por tiempo limitado, adquiere una suscripción regular a la revista de AA La Viña y añade suscripciones de regalo adicionales por solo $8 cada una: ¡un descuento del 50% sobre el precio habitual! Como escribió Bill W., cofundador de AA, en junio de 1959: «Cada número de la revista ofrece una visión mensual del pensamiento, el…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-25T15:00:32Z"
-  },
-  {
-   "id": "ig:De6-qbSDbyo",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De6-qbSDbyo/",
-   "title": "Share the experience, strength, and hope of the AA program.",
-   "summary": "Share the experience, strength, and hope of the AA program. For a limited time, purchase a regular AA Grapevine magazine subscription and add extra gift subscriptions for just $16 each—that’s 55% off the regular price! As AA co-founder Bill W. wrote in June 1959: \"Each issue of the AA Grapevine offers a monthly vision of the worldwide thought, feeling, and activity of our fellowship. It is our…",
-   "lang": "en",
-   "date": "2026-10-25T15:00:15Z",
-   "first_seen": "2026-10-26T14:24:10Z",
-   "image": "/assets/cache/ig/De6-qbSDbyo.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De6-qbSDbyo",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De6-qbSDbyo.webp",
-    "embed_url": "https://www.instagram.com/p/De6-qbSDbyo/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De6-qbSDbyo/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Share the experience, strength, and hope of the AA program.",
-     "es": "Comparte la experiencia, fortaleza y esperanza del programa AA."
-    },
-    "summary": {
-     "en": "Share the experience, strength, and hope of the AA program. For a limited time, purchase a regular AA Grapevine magazine subscription and add extra gift subscriptions for just $16 each—that’s 55% off the regular price! As AA co-founder Bill W. wrote in June 1959: \"Each issue of the AA Grapevine offers a monthly vision of the worldwide thought, feeling, and activity of our fellowship. It is our…",
-     "es": "Comparte la experiencia, fortaleza y esperanza del programa AA. Por un tiempo limitado, comprar una suscripción regular de la revista AA Grapevine y añadir suscripciones de regalo adicionales para sólo $16 cada uno, ¡eso es el 55% de descuento del precio regular! Como escribió AA cofundador Bill W. en junio de 1959: \"Cada número del AA Grapevine ofrece una visión mensual del pensamiento, el sentimiento y la actividad mundial de nuestro compañerismo. Es nuestro …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-25T15:00:15Z"
-  },
-  {
-   "id": "ig:De6moYrjRE7",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De6moYrjRE7/",
-   "title": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero…",
-   "summary": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y…",
-   "lang": "es",
-   "date": "2026-10-25T11:30:15Z",
-   "first_seen": "2026-10-25T12:38:39Z",
-   "image": "/assets/cache/ig/De6moYrjRE7.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De6moYrjRE7",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De6moYrjRE7.webp",
-    "embed_url": "https://www.instagram.com/p/De6moYrjRE7/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De6moYrjRE7/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“First, we sacrifice alcohol. We had to; if not, he would have killed us. But …",
-     "es": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero…"
-    },
-    "summary": {
-     "en": "“First, we sacrifice alcohol. We had to; if not, he would have killed us. But we couldn't get rid of alcohol while we didn't make other sacrifices. We had to give up petulancy and far-reaching reasoning. We had to throw out the window self-justification, self-confession and anger. We had to leave the crazy competition for winning personal prestige and …",
-     "es": "“Primero, sacrificamos el alcohol. Tuvimos que hacerlo; si no, nos habría matado. Pero no podíamos deshacernos del alcohol mientras no hiciéramos otros sacrificios. Teníamos que renunciar a la petulancia y al razonamiento farsante. Teníamos que echar por la ventana la autojustificación, la auto conmiseración y la ira. Teníamos que abandonar el alocado concurso por ganar prestigio personal y…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-25T11:30:15Z"
-  },
-  {
-   "id": "ig:De6moYvjS1p",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De6moYvjS1p/",
-   "title": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown…",
-   "summary": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.” “Centrifugal Force,” New York, New York, April 2004, AA Grapevine Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-25T11:30:15Z",
-   "first_seen": "2026-10-25T12:38:39Z",
-   "image": "/assets/cache/ig/De6moYvjS1p.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De6moYvjS1p",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De6moYvjS1p.webp",
-    "embed_url": "https://www.instagram.com/p/De6moYvjS1p/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De6moYvjS1p/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown…",
-     "es": "“Necesito avanzar constantemente en AA, más cerca del centro, para evitar ser lanzado …"
-    },
-    "summary": {
-     "en": "“I need to constantly inch forward in AA, closer to the center, to avoid being thrown from the spinning wheel that is my life.” “Centrifugal Force,” New York, New York, April 2004, AA Grapevine Daily Quote at www.aagrapevine.org",
-     "es": "“Necesito avanzar constantemente en AA, más cerca del centro, para evitar ser arrojado de la rueda giratoria que es mi vida.” “Fuerza centrífuga”, Nueva York, abril de 2004, AA Grapevine Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-25T11:30:15Z"
-  },
-  {
-   "id": "ig:De4Z3kml5s5",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De4Z3kml5s5/",
-   "title": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…",
-   "summary": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…",
-   "lang": "es",
-   "date": "2026-10-24T15:00:16Z",
-   "first_seen": "2026-10-25T12:38:39Z",
-   "image": "/assets/cache/ig/De4Z3kml5s5.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De4Z3kml5s5",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De4Z3kml5s5.webp",
-    "embed_url": "https://www.instagram.com/p/De4Z3kml5s5/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De4Z3kml5s5/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "We're here to help! Contact Customer Service Monday through Friday between …",
-     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…"
-    },
-    "summary": {
-     "en": "We're here to help! Contact Customer Service from Monday to Friday between 9:00 a.m. and 5:30 p.m. EST for the following numbers: Spanish: (800) 640-8781 (USA) / +1 (570) 567-0437 (International) English: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (international) French: (212) 870-3456 For all subscription-related queries, including new …",
-     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-24T15:00:16Z"
-  },
-  {
-   "id": "ig:De4Z3oQFyLH",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De4Z3oQFyLH/",
-   "title": "We are here to help! Please contact Customer Service Monday through Friday between 9:00…",
-   "summary": "We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) French: (212) 870-3456 For all subscription-related inquiries, including new subscriptions, address changes, and other…",
-   "lang": "en",
-   "date": "2026-10-24T15:00:14Z",
-   "first_seen": "2026-10-25T12:38:39Z",
-   "image": "/assets/cache/ig/De4Z3oQFyLH.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De4Z3oQFyLH",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De4Z3oQFyLH.webp",
-    "embed_url": "https://www.instagram.com/p/De4Z3oQFyLH/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De4Z3oQFyLH/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "We are here to help! Please contact Customer Service Monday through Friday between 9:00…",
-     "es": "¡Estamos aquí para ayudar! Por favor contacte al Servicio de Atención al Cliente de lunes a viernes entre 9:00 …"
-    },
-    "summary": {
-     "en": "We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) French: (212) 870-3456 For all subscription-related inquiries, including new subscriptions, address changes, and other…",
-     "es": "¡Estamos aquí para ayudar! Póngase en contacto con el Servicio al Cliente de lunes a viernes entre 9:00 a. m. y 5:30 p. m. EST en los siguientes números: Inglés: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (Internacional) Español: (800) 640-8781 (U.S.) / +1 (570) 567-0437 (International) Francés: (212) 870-3456 Para todas las consultas relacionadas con la suscripción, incluyendo nuevas suscripciones, cambios de dirección y otros …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-24T15:00:14Z"
-  },
-  {
-   "id": "ig:De4B1blF5QL",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De4B1blF5QL/",
-   "title": "“Some people think God made life just for happiness, but I find myself unable to share…",
-   "summary": "“Some people think God made life just for happiness, but I find myself unable to share that view. I think he made life for growth and that he permits pain as the touchstone of it all. Happiness -- at the very least, satisfaction -- is a byproduct of really trying to grow. And seasons of real joy are but the occasional byproducts of the process. Which, in eternity, will be the eventual…",
-   "lang": "en",
-   "date": "2026-10-24T11:30:14Z",
-   "first_seen": "2026-10-24T12:05:07Z",
-   "image": "/assets/cache/ig/De4B1blF5QL.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De4B1blF5QL",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De4B1blF5QL.webp",
-    "embed_url": "https://www.instagram.com/p/De4B1blF5QL/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De4B1blF5QL/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Some people think God made life just for happiness, but I find myself unable to share…",
-     "es": "“Algunas personas creen que Dios hizo la vida sólo por la felicidad, pero me encuentro incapaz de compartir …"
-    },
-    "summary": {
-     "en": "“Some people think God made life just for happiness, but I find myself unable to share that view. I think he made life for growth and that he permits pain as the touchstone of it all. Happiness -- at the very least, satisfaction -- is a byproduct of really trying to grow. And seasons of real joy are but the occasional byproducts of the process. Which, in eternity, will be the eventual…",
-     "es": "“Algunas personas creen que Dios hizo la vida sólo por la felicidad, pero me encuentro incapaz de compartir esa visión. Creo que hizo vida para el crecimiento y que permite el dolor como la piedra táctil de todo. La felicidad -- por lo menos, la satisfacción -- es un subproducto de realmente tratar de crecer. Y las estaciones de verdadera alegría son sólo los subproductos ocasionales del proceso. Que, en la eternidad, será el eventual …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-24T11:30:14Z"
-  },
-  {
-   "id": "ig:De4B1cwF7TM",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De4B1cwF7TM/",
-   "title": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal…",
-   "summary": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal vez, nos desintegraríamos. Efectivamente, tendríamos que organizar los servicios para que AA se mantenga simple”. \"“Los servicios hacen funcionar a AA” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1951 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-10-24T11:30:14Z",
-   "first_seen": "2026-10-24T12:05:07Z",
-   "image": "/assets/cache/ig/De4B1cwF7TM.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De4B1cwF7TM",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De4B1cwF7TM.webp",
-    "embed_url": "https://www.instagram.com/p/De4B1cwF7TM/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De4B1cwF7TM/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“We realized that, without having service committees, we would cease to operate and, such …",
-     "es": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal…"
-    },
-    "summary": {
-     "en": "“We realized that, without having service committees, we would cease to operate and, perhaps, disintegrate. Indeed, we would have to organize the services so that AA stays simple.” \"Services run AA\" Bill W., AA co-founder, November 1951 Language of the Heart\" Daily Quote in www.aalavina.org",
-     "es": "“Nos dimos cuenta de que, sin tener comités de servicios, cesaríamos de funcionar y, tal vez, nos desintegraríamos. Efectivamente, tendríamos que organizar los servicios para que AA se mantenga simple”. \"“Los servicios hacen funcionar a AA” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1951 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-24T11:30:14Z"
-  },
-  {
-   "id": "ig:De3BeoJjFUs",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De3BeoJjFUs/",
-   "title": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for…",
-   "summary": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for people to keep because the chairs are hard. October 23-25",
-   "lang": "en",
-   "date": "2026-10-24T02:07:40Z",
-   "first_seen": "2026-10-24T12:05:07Z",
-   "image": "/assets/cache/ig/De3BeoJjFUs.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De3BeoJjFUs",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "carousel",
-    "thumb": "/assets/cache/ig/De3BeoJjFUs.webp",
-    "embed_url": "https://www.instagram.com/p/De3BeoJjFUs/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De3BeoJjFUs/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for…",
-     "es": "Asamblea del Área 79 Port Alberni BC. Alojado por el Distrito 6. Hicieron cojines hechos a mano para …"
-    },
-    "summary": {
-     "en": "Area 79 Assembly Port Alberni BC. Hosted by District 6. They made handmade cushions for people to keep because the chairs are hard. October 23-25",
-     "es": "Asamblea del Área 79 Port Alberni BC. Alojado por el Distrito 6. Hicieron cojines hechos a mano para que la gente guardara porque las sillas son duras. 23–25 de octubre"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-24T02:07:40Z"
-  },
-  {
-   "id": "ig:De1dClCjWPr",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De1dClCjWPr/",
-   "title": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento…",
-   "summary": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad”. \"“Las…",
-   "lang": "es",
-   "date": "2026-10-23T11:30:20Z",
-   "first_seen": "2026-10-23T12:43:07Z",
-   "image": "/assets/cache/ig/De1dClCjWPr.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De1dClCjWPr",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De1dClCjWPr.webp",
-    "embed_url": "https://www.instagram.com/p/De1dClCjWPr/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De1dClCjWPr/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“There is a tendency to classify everything an alcoholic does as ‘… behavior",
-     "es": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento…"
-    },
-    "summary": {
-     "en": "“There is a tendency to classify everything that an alcoholic does as ‘alcoholic behavior’. Actually, it's just human nature … Some emotional and mental peculiarities are considered to be symptoms of alcoholism only because they have alcoholics, but these same characteristics are also observed in those who are not. In fact, they are symptoms of humanity.” \"The …",
-     "es": "“Existe la tendencia de clasificar todo lo que hace un alcohólico como ‘comportamiento de alcohólico’. En verdad, es tan solo la naturaleza humana… Algunas peculiaridades emocionales y mentales se consideran síntomas del alcoholismo únicamente porque las tienen los alcohólicos, pero esas mismas características se observan también en quienes no lo son. De hecho, son síntomas de humanidad”. \"“Las…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-23T11:30:20Z"
-  },
-  {
-   "id": "ig:De1dCpIjQSb",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De1dCpIjQSb/",
-   "title": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This…",
-   "summary": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.” “From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-10-23T11:30:16Z",
-   "first_seen": "2026-10-23T12:43:07Z",
-   "image": "/assets/cache/ig/De1dCpIjQSb.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De1dCpIjQSb",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De1dCpIjQSb.webp",
-    "embed_url": "https://www.instagram.com/p/De1dCpIjQSb/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De1dCpIjQSb/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This…",
-     "es": "“Me sentí aliviado de aprender que no tenía que creer, sólo estaba dispuesto a creer. Este …"
-    },
-    "summary": {
-     "en": "“I was relieved to learn that I didn’t have to believe, only be willing to believe. This I could do.” “From Make-Believe to Belief,” Charleston, West Virginia, June 1981, Voices of Long-Term Sobriety Daily Quote at www.aagrapevine.org",
-     "es": "“Me aliviaba saber que no tenía que creer, sólo estaba dispuesto a creer. Esto podría hacer. “De creer a creer”, Charleston, Virginia Occidental, junio de 1981, voces de sobriedad Cita diaria a largo plazo en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-23T11:30:16Z"
-  },
-  {
-   "id": "ig:De1ciZyg92U",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/De1ciZyg92U/",
-   "title": "This week Don welcomes Kenneth and Liz.",
-   "summary": "This week Don welcomes Kenneth and Liz.",
-   "lang": "en",
-   "date": "2026-10-23T11:28:42Z",
-   "first_seen": "2026-10-23T12:43:07Z",
-   "image": "/assets/cache/ig/De1ciZyg92U.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "De1ciZyg92U",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/De1ciZyg92U.webp",
-    "embed_url": "https://www.instagram.com/p/De1ciZyg92U/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/De1ciZyg92U/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "This week Don welcomes Kenneth and Liz.",
-     "es": "Esta semana Don da la bienvenida a Kenneth y Liz."
-    },
-    "summary": {
-     "en": "This week Don welcomes Kenneth and Liz.",
-     "es": "Esta semana Don da la bienvenida a Kenneth y Liz."
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-10-23T11:28:42Z"
   }
  ]
 }

@@ -1,38 +1,204 @@
 {
  "source": "pdfs",
- "updated": "2026-11-13T15:41:20Z",
- "attempted": "2026-11-13T15:41:20Z",
+ "updated": "2026-11-14T14:29:35Z",
+ "attempted": "2026-11-14T14:29:35Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 4,
   "removed": 0,
   "held": 0
  },
  "stats": {
-  "known_pages": 3445,
-  "crawled_pages": 3445,
+  "known_pages": 3447,
+  "crawled_pages": 3447,
   "never_crawled": 0,
   "never_crawled_events": 0,
-  "pdfs": 133,
+  "pdfs": 137,
   "pdfs_gone": 13,
-  "pdfs_with_details": 133,
-  "pdfs_with_thumbs": 133,
-  "last_run_pages": 28,
-  "fetched": 28,
-  "reused": 14,
-  "new": 0,
+  "pdfs_with_details": 137,
+  "pdfs_with_thumbs": 137,
+  "last_run_pages": 34,
+  "fetched": 34,
+  "reused": 13,
+  "new": 4,
   "not_modified": 0,
   "page_errors": 0,
-  "discovered": 0,
-  "details": 0,
-  "heads": 12,
-  "requests": 43,
+  "discovered": 2,
+  "details": 4,
+  "heads": 6,
+  "requests": 46,
   "pruned_pages": 0,
   "queue_remaining": 0,
   "est_days_to_full": 0.0
  },
  "items": [
+  {
+   "id": "pdf:91dbe822e132",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aagrapevine.org/sites/default/files/2026-11/GV_News_December-2026.pdf",
+   "title": "GV News December 2026",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:25:59Z",
+   "last_seen": "2026-11-14T14:25:59Z",
+   "image": "/assets/cache/pdf/91dbe822e132d341.webp",
+   "tags": [
+    "news"
+   ],
+   "category": "gvr",
+   "status": "ok",
+   "extra": {
+    "host": "www.aagrapevine.org",
+    "file_url": "https://www.aagrapevine.org/sites/default/files/2026-11/GV_News_December-2026.pdf",
+    "filename": "GV_News_December-2026.pdf",
+    "size_bytes": 15838779,
+    "pages": 4,
+    "thumb": "/assets/cache/pdf/91dbe822e132d341.webp",
+    "referrers": [
+     {
+      "url": "https://www.aagrapevine.org/gvr-resources",
+      "title": "GVR Resources"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [],
+    "event_date": null,
+    "doc_lang": "en",
+    "multilingual": null,
+    "section": "GVR Resources",
+    "external": false,
+    "orphan": false
+   }
+  },
+  {
+   "id": "pdf:113d60d960dc",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Comunidad-whatsapp.pdf",
+   "title": "¡Comunidad de WhatsApp de LV!",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:27:46Z",
+   "last_seen": "2026-11-14T14:27:46Z",
+   "image": "/assets/cache/pdf/113d60d960dc4544.webp",
+   "tags": [
+    "postcard"
+   ],
+   "category": "rlv",
+   "status": "ok",
+   "extra": {
+    "host": "www.aalavina.org",
+    "file_url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Comunidad-whatsapp.pdf",
+    "filename": "LV-Comunidad-whatsapp.pdf",
+    "size_bytes": 192737,
+    "pages": 1,
+    "thumb": "/assets/cache/pdf/113d60d960dc4544.webp",
+    "referrers": [
+     {
+      "url": "https://www.aalavina.org/recursos",
+      "title": "Recursos La Viña"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [
+     "¡Comunidad de WhatsApp de LV!"
+    ],
+    "event_date": null,
+    "doc_lang": "es",
+    "multilingual": null,
+    "section": "tarjetas postales",
+    "external": false,
+    "orphan": false
+   }
+  },
+  {
+   "id": "pdf:3fdb9ecb7219",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Reunion-abierta.pdf",
+   "title": "Reunión abierta de AA de LV",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:27:46Z",
+   "last_seen": "2026-11-14T14:27:46Z",
+   "image": "/assets/cache/pdf/3fdb9ecb72196f97.webp",
+   "tags": [
+    "postcard"
+   ],
+   "category": "rlv",
+   "status": "ok",
+   "extra": {
+    "host": "www.aalavina.org",
+    "file_url": "https://www.aalavina.org/sites/default/files/2026-11/LV-Reunion-abierta.pdf",
+    "filename": "LV-Reunion-abierta.pdf",
+    "size_bytes": 138965,
+    "pages": 1,
+    "thumb": "/assets/cache/pdf/3fdb9ecb72196f97.webp",
+    "referrers": [
+     {
+      "url": "https://www.aalavina.org/recursos",
+      "title": "Recursos La Viña"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [
+     "Reunión abierta de AA de LV"
+    ],
+    "event_date": null,
+    "doc_lang": "es",
+    "multilingual": null,
+    "section": "tarjetas postales",
+    "external": false,
+    "orphan": false
+   }
+  },
+  {
+   "id": "pdf:68840e492c4d",
+   "source": "crawl",
+   "kind": "pdf",
+   "url": "https://www.aalavina.org/sites/default/files/2026-11/LV-suscripciones-122026.pdf",
+   "title": "¡Suscríbete hoy!",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-13",
+   "first_seen": "2026-11-14T14:27:46Z",
+   "last_seen": "2026-11-14T14:27:46Z",
+   "image": "/assets/cache/pdf/68840e492c4dcfe9.webp",
+   "tags": [
+    "postcard"
+   ],
+   "category": "rlv",
+   "status": "ok",
+   "extra": {
+    "host": "www.aalavina.org",
+    "file_url": "https://www.aalavina.org/sites/default/files/2026-11/LV-suscripciones-122026.pdf",
+    "filename": "LV-suscripciones-122026.pdf",
+    "size_bytes": 172974,
+    "pages": 1,
+    "thumb": "/assets/cache/pdf/68840e492c4dcfe9.webp",
+    "referrers": [
+     {
+      "url": "https://www.aalavina.org/recursos",
+      "title": "Recursos La Viña"
+     }
+    ],
+    "upload_month": "2026-11",
+    "link_texts": [
+     "¡Suscríbete hoy!"
+    ],
+    "event_date": null,
+    "doc_lang": "es",
+    "multilingual": null,
+    "section": "tarjetas postales",
+    "external": false,
+    "orphan": false
+   }
+  },
   {
    "id": "pdf:a1246e5674cd",
    "source": "crawl",
@@ -85,10 +251,8 @@
    "first_seen": "2026-10-16T12:42:02Z",
    "last_seen": "2026-11-13T15:37:43Z",
    "image": "/assets/cache/pdf/eb32beb4146e5096.webp",
-   "tags": [
-    "news"
-   ],
-   "category": "gvr",
+   "tags": [],
+   "category": "news",
    "status": "ok",
    "extra": {
     "host": "www.aagrapevine.org",
@@ -97,20 +261,15 @@
     "size_bytes": 14470843,
     "pages": 4,
     "thumb": "/assets/cache/pdf/eb32beb4146e5096.webp",
-    "referrers": [
-     {
-      "url": "https://www.aagrapevine.org/gvr-resources",
-      "title": "GVR Resources"
-     }
-    ],
+    "referrers": [],
     "upload_month": "2026-10",
     "link_texts": [],
     "event_date": null,
     "doc_lang": "en",
     "multilingual": null,
-    "section": "GVR Resources",
+    "section": null,
     "external": false,
-    "orphan": false
+    "orphan": true
    }
   },
   {
@@ -5935,10 +6094,10 @@
  ],
  "first_harvest": "2026-09-23T16:31:37Z",
  "crawl": {
-  "known_pages": 3445,
-  "crawled_pages": 3445,
-  "pdfs": 133,
-  "last_run_pages": 28
+  "known_pages": 3447,
+  "crawled_pages": 3447,
+  "pdfs": 137,
+  "last_run_pages": 34
  },
  "hub_problems": []
 }
