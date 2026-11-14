@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-14T14:29:40Z",
- "updated": "2026-11-14T14:29:40Z",
+ "generated": "2026-11-14T17:57:37Z",
+ "updated": "2026-11-14T17:57:37Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-14T14:16:48Z",
-   "attempted": "2026-11-14T14:16:48Z",
-   "count": 255,
-   "new_7d": 213,
+   "updated": "2026-11-14T17:57:13Z",
+   "attempted": "2026-11-14T17:57:13Z",
+   "count": 878,
+   "new_7d": 835,
    "error": null,
    "stats": {
     "mode": "html",
@@ -30,14 +30,14 @@
     "include_loose": false,
     "loose_skipped": 1,
     "skipped_panels": [],
-    "folders": 36,
-    "files": 255,
-    "fetched": 255,
-    "new": 0,
+    "folders": 38,
+    "files": 878,
+    "fetched": 878,
+    "new": 623,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
-     "photos": 194,
+     "photos": 817,
      "flyers": 33,
      "booth": 15,
      "slides": 5,
@@ -47,14 +47,16 @@
      "workshops": 1
     },
     "by_kind": {
-     "photo": 236,
-     "document": 12,
+     "photo": 857,
+     "document": 14,
      "slides": 5,
      "announcement": 1,
      "video_file": 1
     },
     "albums": {
+     "To Organize / Covers": 611,
      "Grapevine covers 2025": 12,
+     "To Organize": 12,
      "Grapevine covers 2024": 12,
      "Grapevine covers 2023": 12,
      "Grapevine covers 2022": 12,
@@ -96,15 +98,17 @@
      "reused": 1
     },
     "forms": {},
-    "requests": 36,
+    "requests": 38,
     "truncated": false,
-    "warnings": [],
+    "warnings": [
+     "2027-2028_Panel77_GVLV/photos/To Organize/Covers has 611 entries — add a GOOGLE_API_KEY secret (or split the folder) so none are missed"
+    ],
     "booth_texts": {
      "reused": 2
     }
    },
    "changes": {
-    "added": 0,
+    "added": 623,
     "removed": 0,
     "held": 0
    },
@@ -115,8 +119,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-14T14:16:48Z",
-   "attempted": "2026-11-14T14:16:48Z",
+   "updated": "2026-11-14T17:57:13Z",
+   "attempted": "2026-11-14T17:57:13Z",
    "count": 2,
    "new_7d": 1,
    "error": null,
@@ -139,8 +143,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-14T14:16:48Z",
-   "attempted": "2026-11-14T14:16:48Z",
+   "updated": "2026-11-14T17:57:13Z",
+   "attempted": "2026-11-14T17:57:13Z",
    "count": 17,
    "new_7d": 0,
    "error": null,
@@ -194,8 +198,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-14T14:25:31Z",
-   "attempted": "2026-11-14T14:25:31Z",
+   "updated": "2026-11-14T17:57:20Z",
+   "attempted": "2026-11-14T17:57:20Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -350,8 +354,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-14T14:16:52Z",
-   "attempted": "2026-11-14T14:16:52Z",
+   "updated": "2026-11-14T17:57:16Z",
+   "attempted": "2026-11-14T17:57:16Z",
    "count": 311,
    "new_7d": 3,
    "error": null,
@@ -368,28 +372,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 269,
       "latest": "2026-11-09T05:15:00Z",
-      "updated": "2026-11-14T14:16:52Z"
+      "updated": "2026-11-14T17:57:16Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 41,
       "latest": "2026-11-13T05:15:00Z",
-      "updated": "2026-11-14T14:16:52Z"
+      "updated": "2026-11-14T17:57:16Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 1,
       "latest": "2026-11-09T05:15:00Z",
-      "updated": "2026-11-14T14:16:52Z"
+      "updated": "2026-11-14T17:57:16Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-13T15:30:08Z",
     "discovered_feeds": [],
-    "seconds": 3.2,
+    "seconds": 3.8,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -602,8 +606,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-14T14:25:38Z",
-   "attempted": "2026-11-14T14:25:38Z",
+   "updated": "2026-11-14T17:57:35Z",
+   "attempted": "2026-11-14T17:57:35Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -696,16 +700,16 @@
   "updated": "2026-11-14T14:29:35Z"
  },
  "translations": {
-  "cached": 4311,
+  "cached": 4315,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 62,
-  "from_cache": 4249,
+  "translated_this_run": 4,
+  "from_cache": 4311,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 3.3,
-  "model_seconds": 2.8,
-  "texts_per_second": 18.6,
+  "seconds": 0.8,
+  "model_seconds": 0.1,
+  "texts_per_second": 5.1,
   "glossary_entries": 269,
   "problems": []
  },
@@ -715,7 +719,7 @@
   "instagram": 230,
   "articles": 325,
   "pdfs": 100,
-  "drive": 239,
+  "drive": 862,
   "editorial": 51,
   "weekly_open": 2,
   "announcements": 2,
