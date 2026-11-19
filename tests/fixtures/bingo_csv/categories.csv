@@ -1,0 +1,7 @@
+id,type,cat,text_en,text_es
+cat-empty,check,,No category,Sin categoría
+cat-unknown,check,games,A new category,Una categoría nueva
+cat-caps,check,FUN,Capital letters,Letras mayúsculas
+info-wrong-cat,info,fun,Information in fun,Información en diversión
+info-ok,info,Meetings,Our meetings,Nuestras reuniones
+info-unknown-cat,info,games,Information in a new category,Información en una categoría nueva

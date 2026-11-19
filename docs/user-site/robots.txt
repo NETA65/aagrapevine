@@ -1,0 +1,52 @@
+# robots.txt for https://neta65.github.io/ - the NETA65 account's GitHub Pages address.
+#
+# What it is: the file search engines read before they visit any page under this address.
+# They read it ONLY here, at the root of the address (never in a folder), so these lines
+# cover every NETA65 site published under it: /GV_Booth/, /Archives_Booth/ and any other
+# public NETA65 repository that uses GitHub Pages - and /aagrapevine/ (the Grapevine /
+# La Viña committee site) only if it is ever served from this address again.
+#
+# Since November 12, 2026 the committee site has its own address, grapevine.neta65.org
+# (its /aagrapevine/ addresses here forward there). There ITS OWN robots.txt counts -
+# https://grapevine.neta65.org/robots.txt, made from src/robots.njk in NETA65/aagrapevine,
+# which names the live sitemap, https://grapevine.neta65.org/sitemap.xml - and nothing in
+# this file reaches it, not even the optional lines at the end: the committee site's own
+# choice about AI training is config/site.yml, search_engines: ai_training ("allow" or
+# "disallow"; README, "Search engines", step D).
+# The Sitemap line below keeps the github.io address on purpose: it is the address
+# config/site.yml site.url keeps for the Code check, the one the Weekly link check
+# compares this file with, and it forwards to the live sitemap.
+#
+# Where it lives: the top folder of the repository NETA65/neta65.github.io. The master
+# copy is docs/user-site/robots.txt in NETA65/aagrapevine; the steps are in that
+# repository's README, section "Search engines". Every Sunday its Weekly link check reads
+# this file and reports in its issue if it ever keeps Google or Bing out of the site or
+# loses the Sitemap line.
+#
+# Everything may be crawled. Keep it that way: never add "Disallow: /" - it would hide
+# every NETA65 site from Google, Bing and every other search engine. No other Disallow
+# lines either: search engines need the sites' styles, scripts and data files to show
+# the pages. (Of the optional lines below: Google-Extended also keeps the sites out of
+# the Gemini apps' answers that quote web pages - never out of Google Search, its AI
+# Overviews or AI Mode.)
+
+User-agent: *
+Allow: /
+
+Sitemap: https://neta65.github.io/aagrapevine/sitemap.xml
+
+# ------------------------------------------------------------------------------------
+# OPTIONAL - the owner's choice, OFF as delivered. To turn it on, delete the "# " at the
+# start of the six lines from "User-agent: GPTBot" to "Disallow: /" (nothing else).
+# It asks the crawlers that collect pages to TRAIN AI models to stay away from every
+# NETA65 site under this address. Search engines (Googlebot, Bingbot) and the crawlers
+# behind AI search answers (OAI-SearchBot for ChatGPT search, Claude-SearchBot,
+# PerplexityBot) stay allowed, so the sites still show in search results and in AI
+# answers that link to them. The Grapevine and La Viña magazines' own websites
+# (aagrapevine.org, aalavina.org) keep GPTBot out the same way.
+# User-agent: GPTBot
+# User-agent: ClaudeBot
+# User-agent: Google-Extended
+# User-agent: CCBot
+# User-agent: Applebot-Extended
+# Disallow: /

@@ -1,0 +1,17 @@
+id,on,type,pub,cat,where,pin,weight,from,until,text_en,text_es,source_url
+people-alias,Sí,NAME,Grapevine,People,"Group; ACM, booth booth",Y,"1,5",2027-03-01,2027-03-15,Find a GVR,Encuentra a un GVR,https://www.aagrapevine.org/gvr-corner
+fun-alias,1,Check,GV & LV,fun,,no,5,,,Smile at someone,Sonríele a alguien,
+bad-on,maybe,check,,fun,,,,,,Bad on,On malo,
+bad-pin,,check,,fun,,always,,,,Bad pin,Pin malo,
+bad-type-empty,,,,fun,,,,,,No type,Sin tipo,
+bad-type,,trivia,,fun,,,,,,A bad type,Un tipo malo,
+bad-pub,,check,AA Grapevine,fun,,,,,,A bad pub,Un pub malo,
+bad-where,,check,,fun,group home-group;online zoom,,,,,A bad where,Un where malo,
+bad-weight,,check,,fun,,,0.25,,,Too light,Muy ligero,
+bad-weight-word,,check,,fun,,,six,,,A word weight,Un peso en letras,
+bad-weight-heavy,,check,,fun,,,5.5,,,Too heavy,Muy pesado,
+bad-dates,,check,,fun,,,,3/1/2027,2027-02-30,Bad dates,Fechas malas,
+bad-order,,check,,fun,,,,2027-05-01,2027-04-01,Until before from,Hasta antes de desde,
+bad-year,,check,,fun,,,,0027-03-01,2207-10-03,Bad years,Años malos,
+bad-source,,check,,history,,,,,,A fact without a link,Un dato sin enlace,www.aagrapevine.org
+bad-source-http,,check,,history,,,,,,A fact on http,Un dato en http,http://www.aagrapevine.org/

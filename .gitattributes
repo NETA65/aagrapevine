@@ -1,0 +1,16 @@
+# Keep LF line endings in the repo and working tree so edits made on Windows and
+# the daily Linux (GitHub Actions) data commits produce clean, small diffs.
+* text=auto eol=lf
+
+# The Tracker's frozen export files (tests/test_expenses_core.py → OlderFiles): kept byte for byte as
+# the page saved them — a BOM and CRLF line ends — so the test reads what a visitor's file really holds
+tests/fixtures/expenses/*.csv -text
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff2 binary
+*.pdf binary

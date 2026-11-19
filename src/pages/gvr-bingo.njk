@@ -1,0 +1,557 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}gvr/bingo/index.html"
+layout: layouts/base.njk
+pageKey: gvr
+titleKey: bingo.title
+descKey: bingo.meta_desc
+bodyClass: bgo-page
+pageScripts: ["/assets/js/bingo-core.js", "/assets/js/bingo.js"]
+pageStyles: ["/assets/css/bingo.css"]
+---
+{#- /gvr/bingo/ — GRAPEVINE & LA VIÑA BINGO (the GVR / RLV corner's bingo cards; pageKey "gvr", so the menu shows the corner
+    as the current page and the breadcrumb search engines read is Home › GVR / RLV corner › Grapevine & La Viña Bingo).
+    A GVR or RLV makes cards for wherever they are going — a home group, a district meeting, an assembly, a workshop,
+    our table, an online meeting —, prints them or saves them as a PDF, and hands them out: squares to meet people, to
+    read and talk about Grapevine and La Viña, to find out when and where we meet.
+    Flow (docs: ui.njk): hero → the builder (#builder: the settings on the left, the live preview on the right and
+    sticky from 1024px; one column on phones and at larger text, with links down to the preview, #bgo-preview: the
+    jump macro) → tips (#tips) → next steps. No page nav (three sections).
+    The squares: content/bingo/bingo.csv (content/bingo/README.md, the owner's guide), read and checked at build by
+    eleventy/filters/bingo.js → the `bingo` global (src/_data/bingo.js). The cards' logic: src/assets/js/bingo-core.js
+    (window.GVBingo: the pool, the seeded draw, the link, the sheet plan); the builder: src/assets/js/bingo.js (Alpine
+    `bingoBuilder`: the form, the preview, the text fitting, printing); the words: src/_i18n/bingo.json (bingo.*: the
+    page's; bingo.ui.*: the builder's; bingo.card.*: the CARD's — both languages, a card's language is chosen apart from
+    the page's); the look: src/assets/css/areas/bingo.css (classes bgo-*; the card is paper — white with dark ink in
+    both themes —, drawn in inches and points).
+    #bingo-data hands the script the squares (bingo.items), the facts the cards print (bingo.info), the categories and
+    occasions, the card words of both languages and the builder's words (eleventy/script-json.js through jsonScript).
+    The QR codes (the site's home in each language) are drawn once at build, as SVG symbols in svg.bgo-qr-defs beside
+    #bgo-print — the print-only container at the end of the page that the script fills with the sheets when printing
+    (html[data-print="bingo"]: only the cards go on paper; the browser's own Print fills it too, on beforeprint).
+    If bingo.js itself does not arrive (a bad connection, a blocker), the notice before .bgo-app (.bgo-alert-load) says
+    so — it needs only Alpine (window.GVBingoBuilder: bingo.js ran); the one inside the component (.bgo-alert) covers
+    the rest (the squares or bingo-core.js missing).
+    Without JavaScript: the builder says it needs it and shows a SAMPLE card the build drew with the very same core
+    (eleventy/filters/bingo-sample.js bingoSample: 5×5, the page's language, game code GV65, today's squares), which
+    prints as it is. Every word from the CSV and the builder goes in as text (autoescape here, textContent / x-text in
+    the script), never as HTML. Anonymity: the squares ask for first names only, and every card says so. -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set C = "bingo.card." -%}
+{%- set cardWords = { title: (C + "title") | t(lang), free: (C + "free") | t(lang), thisEvent: (C + "this_event") | t(lang),
+  label: { name: (C + "label_name") | t(lang), phone: (C + "label_phone") | t(lang), write: (C + "label_write") | t(lang), sign: (C + "label_sign") | t(lang) } } -%}
+{%- set sample = bingo | bingoSample(lang, { rows: 5, cols: 5, words: cardWords }) -%}
+{%- set info = bingo.info or {} -%}
+{%- set otherLang = "en" if lang == "es" else "es" -%}
+
+{#- ======== The card, as the build draws it (the no-JS sample): the same markup the script builds (bingo.js buildCard),
+    the same stylesheet. The squares' sizes come from the core's estimate (fontGuess: the build cannot measure), taken
+    down by mark — 85 % for a tick or an icon, 84 % for a line or a box, 82 % for FREE (measured in Chrome against
+    this stylesheet's squares, both languages: what fits was at least 3 % above those, 2 % for FREE) — a sample's
+    words a little small rather than cut off —, never under 6.5 pt: the sample prints at areas/bingo.css's zoom 0.94
+    (it fits A4 too), 6.1 pt on paper, over the 6 pt floor; the grid itself is sized by the stylesheet (container
+    units), so the card fits its paper. ======== -#}
+{% macro sampleCard(sm, L) %}
+{%- set p = sm.plan.card -%}
+{%- set st = sm.settings -%}
+{%- set cw = "bingo.card." -%}
+<article class="bgo-card" lang="{{ L }}" data-layout="{{ p.layout }}" data-ink="color" data-dense="{{ '1' if sm.card.dense else '0' }}" style="--w:{{ p.w }}in;--h:{{ p.h }}in;--k:{{ p.scale }};--rows:{{ st.rows }};--cols:{{ st.cols }};--side:{{ p.side.w or 2.2 }}in">
+  <header class="bgo-head">
+    <span class="bgo-logo" aria-hidden="true">{% icon "grapes", "bgo-logo-svg" %}</span>
+    <div class="bgo-head-txt">
+      <p class="bgo-title">{{ sm.words.title }}</p>
+      {#- (data-lastmod="skip", since round 35: the sample prints the build's day — a date that moves with the clock,
+          not with the page's content, so the sitemap's date for /gvr/bingo/ ignores it: eleventy/lastmod.js) #}
+      <p class="bgo-sub" data-lastmod="skip">{{ st.date | fmtDate(L, "long") }}</p>
+    </div>
+  </header>
+  {%- if st.showName %}
+  <div class="bgo-names"><p class="bgo-field"><span>{{ (cw + "name_line") | t(L) }}</span></p><p class="bgo-field"><span>{{ (cw + "group_line") | t(L) }}</span></p></div>
+  {%- endif %}
+  <div class="bgo-body">
+    <div class="bgo-gridbox"><div class="bgo-grid" role="list">
+      {%- for c in sm.card.cells %}
+      <div class="bgo-cell" role="listitem" data-type="{{ c.type }}" data-mark="{{ c.mark }}" data-pub="{{ c.pub }}">
+        {%- if c.free %}
+        <span class="bgo-free-mark" aria-hidden="true">{% icon "grapes", "bgo-free-svg" %}</span>
+        {%- endif %}
+        {%- set f = 0.85 if c.mark in ["tick", "icon"] else (0.84 if c.mark in ["line", "box"] else 0.82) %}
+        {%- set pt = ((c.pt * f * 2) | round(0, "floor")) / 2 %}{% if pt < 6.5 %}{% set pt = 6.5 %}{% endif %}
+        {#- (escaped first, then a line break allowed where the script's breakable() allows one in an address and a
+            time range kept whole, as its textIn() does: bingoBreaks; in a label after a "/" between two letters, as
+            its labelText() does) -#}
+        <p class="bgo-txt"><span class="bgo-w{{ ' is-hy' if pt <= 8 }}" style="font-size:{{ pt }}pt">{{ c.text | escape | bingoBreaks | safe }}</span></p>
+        {%- if c.mark == "line" %}
+        <span class="bgo-mk"><span class="bgo-line"></span><span class="bgo-lab">{{ c.label | escape | replace(r/([A-Za-z0-9\u00C0-\u024F])\/(?=[A-Za-z0-9\u00C0-\u024F])/g, "$1/<wbr>") | safe }}</span></span>
+        {%- elif c.mark == "box" %}
+        <span class="bgo-mk"><span class="bgo-lab">{{ c.label | escape | replace(r/([A-Za-z0-9\u00C0-\u024F])\/(?=[A-Za-z0-9\u00C0-\u024F])/g, "$1/<wbr>") | safe }}</span><span class="bgo-box"></span></span>
+        {%- elif c.mark == "tick" %}
+        <span class="bgo-mk"><span class="bgo-tick"></span></span>
+        {%- elif c.mark == "icon" %}
+        {%- set icn = "mail" if (info.email and (info.email in c.text)) else ("globe" if (info.site and (info.site in c.text)) else "calendar-days") %}
+        <span class="bgo-mk"><span class="bgo-ic" aria-hidden="true">{% icon icn, "bgo-ic-svg" %}</span></span>
+        {%- endif %}
+      </div>
+      {%- endfor %}
+    </div></div>
+    {%- if st.showRules or st.showInfo %}
+    <div class="bgo-side">
+      {%- if st.showRules %}
+      <div class="bgo-rules"><p class="bgo-h">{{ (cw + "rules_h") | t(L) }}</p><p class="bgo-rules-txt">{{ (cw + "rules_square") | t(L, { n: st.rows }) }}</p></div>
+      {%- endif %}
+      {%- if st.showInfo %}
+      <div class="bgo-info">
+        <div class="bgo-info-txt">
+          <p class="bgo-h">{{ (cw + "info_h") | t(L) }}</p>
+          {%- if info.gvMeeting %}<p class="bgo-li"><b>{{ (cw + "gv_meeting") | t(L) }}:</b> {{ info.gvMeeting[L] | escape | bingoBreaks | safe }}</p>{% endif %}
+          {%- if info.committeeMeeting %}<p class="bgo-li"><b>{{ (cw + "committee_meeting") | t(L) }}:</b> {{ info.committeeMeeting[L] | escape | bingoBreaks | safe }}</p>{% endif %}
+          <p class="bgo-li"><b>{{ (cw + "write_us") | t(L) }}:</b> {{ info.email | escape | bingoBreaks | safe }}{% if info.site %} · {{ info.site | escape | bingoBreaks | safe }}{% endif %}</p>
+        </div>
+        {%- if info.home and info.home[L] %}
+        <figure class="bgo-qr"><svg class="bgo-qr-svg" aria-hidden="true" focusable="false"><use href="#bgo-qr-{{ L }}"></use></svg><figcaption>{{ (cw + "qr") | t(L) }}</figcaption></figure>
+        {%- endif %}
+      </div>
+      {%- endif %}
+    </div>
+    {%- endif %}
+  </div>
+  <footer class="bgo-foot"><p class="bgo-anon">{{ (cw + "anon") | t(L) }}</p><p class="bgo-meta">{{ (cw + "foot") | t(L, { n: 1, total: 1, code: st.code }) }}{% if info.site %} · {{ info.site }}{% endif %}</p></footer>
+</article>
+{% endmacro %}
+
+{#- The way down to the preview and Print where the builder is one column (a phone, a laptop at larger text: the card
+    comes after all six groups there) — at the top and under the grid's and the squares' lines; a link, never a
+    floating button (main.css: nothing covers content). Hidden where the preview sits beside the settings
+    (areas/bingo.css .bgo-jump), and while there is no card to see (too few squares: the help beside the settings
+    says what to do). -#}
+{% macro jump(L) %}<p class="bgo-jump" x-show="P().ok"><a class="btn-secondary btn-sm" href="#bgo-preview">{% icon "arrow-down", "size-4" %} {{ "bingo.jump_preview" | t(L) }}</a></p>{% endmacro %}
+
+{#- Hero: the page's one task first (btn-light → the builder), then how to play it -#}
+{% call ui.pageHero(lang, "bingo.title" | t(lang), "bingo.hero_sub" | t(lang), "grid-3x3", "bingo.eyebrow" | t(lang)) %}
+  <div class="hero-actions">
+    <a class="btn-light" href="#builder">{% icon "grid-3x3", "size-4" %} {{ "bingo.hero_btn" | t(lang) }}</a>
+    <a class="btn-on-dark" href="#tips">{% icon "lightbulb", "size-4" %} {{ "bingo.hero_tips" | t(lang) }}</a>
+  </div>
+{% endcall %}
+
+{#- ================= The builder =================
+    One Alpine component (bingoBuilder, src/assets/js/bingo.js): the settings (GVBingo's, normalized on every change,
+    kept in this browser and in the address's #hash once a link is made), the preview card (the real card, drawn in
+    inches and scaled to its column) and the actions. Every control is a real button, input or select with its label;
+    a chip that is on says so (aria-pressed; Custom, which opens the rows and columns, says aria-expanded instead).
+    The groups follow the spec: 1 Your game · 2 Grid · 3 Where · 4 Squares · 5 Cards · 6 On each card; the actions
+    and the preview beside them. -#}
+<section id="builder" class="section container-page page-start" aria-labelledby="builder-title">
+  {{ ui.sectionHead("bingo.builder_title" | t(lang), "bingo.builder_sub" | t(lang), "", "", "grid-3x3", { eyebrow: "bingo.builder_eyebrow" | t(lang), tone: "text-grape", id: "builder-title", lang: lang }) }}
+
+  {#- without JavaScript: the sample card, which prints as it is -#}
+  <div class="bgo-nojs" data-nojs-only>
+    <div class="panel-muted bgo-nojs-note">
+      <p class="card-h"><span>{% icon "info", "size-5" %}</span>{{ "bingo.nojs_title" | t(lang) }}</p>
+      <p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ "bingo.nojs_text" | t(lang) }}</p>
+    </div>
+    {%- if sample.ok %}
+    <div class="bgo-sample" aria-label="{{ 'bingo.sample' | t(lang) }}" role="group">
+      <div class="bgo-sample-stage">{{ sampleCard(sample, lang) }}</div>
+    </div>
+    {%- else %}
+    <p class="mt-4 text-sm text-muted">{{ "bingo.nojs_short" | t(lang) }}</p>
+    {%- endif %}
+  </div>
+
+  {#- (outside the component: shown when bingo.js did not run, so there is no component to show the one below) -#}
+  <div class="card card-pad bgo-alert-load" data-js-only x-data x-show="!window.GVBingoBuilder" x-cloak role="alert">
+    <div>
+      <p class="card-h"><span>{% icon "triangle-alert", "size-5" %}</span>{{ "bingo.broken_title" | t(lang) }}</p>
+      <p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ "bingo.broken_text" | t(lang) }}</p>
+      <button type="button" class="btn-secondary btn-sm mt-4" onclick="location.reload()">{% icon "rotate-ccw", "size-4" %} {{ "bingo.reload" | t(lang) }}</button>
+    </div>
+  </div>
+
+  <div class="bgo-app" data-js-only x-data="bingoBuilder('{{ lang }}')">
+    <div class="card card-pad bgo-alert" x-show="broken" x-cloak role="alert">
+      <div>
+        <p class="card-h"><span>{% icon "triangle-alert", "size-5" %}</span>{{ "bingo.broken_title" | t(lang) }}</p>
+        <p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ "bingo.broken_text" | t(lang) }}</p>
+        <button type="button" class="btn-secondary btn-sm mt-4" onclick="location.reload()">{% icon "rotate-ccw", "size-4" %} {{ "bingo.reload" | t(lang) }}</button>
+      </div>
+    </div>
+
+    <div class="bgo-layout" x-show="!broken">
+      {#- ---------- the settings ---------- -#}
+      <div class="bgo-settings">
+        {{ jump(lang) }}
+
+        {#- 1. Your game -#}
+        <fieldset class="card bgo-group">
+          <legend class="bgo-legend"><span class="step-num" aria-hidden="true">1</span><span>{{ "bingo.g_game" | t(lang) }}</span></legend>
+          <div class="bgo-fields">
+            <div class="bgo-field-row">
+              <label class="bgo-label" for="bgo-title">{{ "bingo.f_title" | t(lang) }}</label>
+              <input id="bgo-title" class="input" type="text" maxlength="60" autocomplete="off" :aria-describedby="headCut() ? 'bgo-head-help' : null" :value="s.title" :placeholder="cw().title" @input="set('title', $event.target.value)">
+            </div>
+            <div class="bgo-field-row">
+              <label class="bgo-label" for="bgo-event">{{ "bingo.f_event" | t(lang) }}</label>
+              <input id="bgo-event" class="input" type="text" maxlength="60" autocomplete="off" placeholder="{{ 'bingo.f_event_ph' | t(lang) }}" aria-describedby="bgo-event-help" :aria-describedby="headCut() ? 'bgo-event-help bgo-head-help' : 'bgo-event-help'" :value="s.event" @input="set('event', $event.target.value)">
+              <p id="bgo-event-help" class="bgo-help">{{ "bingo.f_event_help" | t(lang) }}</p>
+              {#- (the title's and the event's help while the card prints them smaller: headCut — the way out, fewer cards on
+                  a sheet, only where there are more than one) -#}
+              <p id="bgo-head-help" class="bgo-help" x-show="headCut()" x-cloak>{{ "bingo.f_head_long" | t(lang) }} <span x-show="perOf() > 1">{{ "bingo.f_head_fix_sheet" | t(lang) }}</span><span x-show="perOf() === 1">{{ "bingo.f_head_fix_grid" | t(lang) }}</span></p>
+            </div>
+            <div class="bgo-field-row bgo-field-half">
+              <label class="bgo-label" for="bgo-date">{{ "bingo.f_date" | t(lang) }}</label>
+              <input id="bgo-date" class="input" type="date" min="2000-01-01" max="2099-12-31" aria-describedby="bgo-date-help" :value="s.date" @change="setDate($event.target.value)">
+              <p id="bgo-date-help" class="bgo-help">{{ "bingo.f_date_help" | t(lang) }}</p>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-lang-l">{{ "bingo.f_lang" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-lang-l">
+                {%- for l in ([lang, otherLang]) %}
+                <button type="button" class="chip" lang="{{ l }}" :aria-pressed="String(s.lang === '{{ l }}')" @click="set('lang', '{{ l }}')">{{ ("bingo.lang_en" | t(lang)) if l == "en" else ("bingo.lang_es" | t(lang)) }}</button>
+                {%- endfor %}
+              </div>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-pub-l">{{ "bingo.f_pub" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-pub-l">
+                {%- for p in (["both", "lv", "gv"] if lang == "es" else ["both", "gv", "lv"]) %}
+                <button type="button" class="chip bgo-chip-{{ p }}" :aria-pressed="String(s.pub === '{{ p }}')" @click="set('pub', '{{ p }}')">{{ ("bingo.pub_both" | t(lang)) if p == "both" else ("La Viña" if p == "lv" else "Grapevine") }}</button>
+                {%- endfor %}
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        {#- 2. Grid -#}
+        <fieldset class="card bgo-group">
+          <legend class="bgo-legend"><span class="step-num" aria-hidden="true">2</span><span>{{ "bingo.g_grid" | t(lang) }}</span></legend>
+          <div class="bgo-fields">
+            <div class="bgo-field-row">
+              <p class="sr-only" id="bgo-grid-l">{{ "bingo.grid_presets" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-grid-l">
+                {%- for n in range(3, 11) %}
+                <button type="button" class="chip bgo-chip-grid" :aria-pressed="String(isPreset({{ n }}))" @click="preset({{ n }})">{{ n }}×{{ n }}</button>
+                {%- endfor %}
+                {#- (a disclosure, not a toggle: aria-expanded only; .is-active gives it the look of a chip that is on) -#}
+                <button type="button" class="chip bgo-chip-grid" aria-controls="bgo-custom" :aria-expanded="String(customOpen())" :class="customOpen() ? 'is-active' : ''" @click="toggleCustom()">{% icon "ruler", "size-4" %}{{ "bingo.grid_custom" | t(lang) }}</button>
+              </div>
+            </div>
+            <div id="bgo-custom" class="bgo-custom" x-show="customOpen()" x-cloak>
+              <div class="bgo-field-row">
+                <label class="bgo-label" for="bgo-rows">{{ "bingo.f_rows" | t(lang) }}</label>
+                <select id="bgo-rows" class="input" @change="set('rows', +$event.target.value)">
+                  {%- for n in range(3, 11) %}<option value="{{ n }}" :selected="s.rows === {{ n }}">{{ n }}</option>{% endfor %}
+                </select>
+              </div>
+              <span class="bgo-times" aria-hidden="true">×</span>
+              <div class="bgo-field-row">
+                <label class="bgo-label" for="bgo-cols">{{ "bingo.f_cols" | t(lang) }}</label>
+                <select id="bgo-cols" class="input" @change="set('cols', +$event.target.value)">
+                  {%- for n in range(3, 11) %}<option value="{{ n }}" :selected="s.cols === {{ n }}">{{ n }}</option>{% endfor %}
+                </select>
+              </div>
+            </div>
+            <p class="bgo-count" aria-live="polite" x-text="squaresLine()"></p>
+            <p class="bgo-help" x-show="smallSquares()" x-cloak>{{ "bingo.f_small_squares" | t(lang) }}</p>
+            {{ jump(lang) }}
+            <div class="bgo-field-row">
+              <label class="bgo-switch-row">
+                {#- (on only when the card has one: an even grid has no middle square, whatever the setting kept) -#}
+                <input type="checkbox" class="cm-switch" :checked="freeOn()" :disabled="!oddGrid()" aria-describedby="bgo-free-help" @change="set('free', $event.target.checked)">
+                <span>{{ "bingo.f_free" | t(lang) }}</span>
+              </label>
+              <p id="bgo-free-help" class="bgo-help" x-show="!oddGrid()">{{ "bingo.f_free_odd" | t(lang) }}</p>
+            </div>
+            <div class="bgo-field-row bgo-field-half" x-show="freeOn()">
+              <label class="bgo-label" for="bgo-free-text">{{ "bingo.f_free_text" | t(lang) }}</label>
+              <input id="bgo-free-text" class="input" type="text" maxlength="16" autocomplete="off" :value="s.freeText" :placeholder="cw().free" @input="set('freeText', $event.target.value)">
+            </div>
+          </div>
+        </fieldset>
+
+        {#- 3. Where are you taking it? -#}
+        {#- (the fieldset is the chips' group: its legend names them, its help line describes them) -#}
+        <fieldset class="card bgo-group" aria-describedby="bgo-where-help">
+          <legend class="bgo-legend"><span class="step-num" aria-hidden="true">3</span><span>{{ "bingo.g_where" | t(lang) }}</span></legend>
+          <div class="bgo-fields">
+            <p class="bgo-help" id="bgo-where-help">{{ "bingo.where_help" | t(lang) }}</p>
+            <div class="bgo-chips">
+              {%- for w in ["any"].concat(bingo.wheres or []) %}
+              <button type="button" class="chip" :aria-pressed="String(s.where === '{{ w }}')" @click="set('where', '{{ w }}')">{{ ("bingo.where." + w) | t(lang) }}</button>
+              {%- endfor %}
+            </div>
+          </div>
+        </fieldset>
+
+        {#- 4. Squares -#}
+        <fieldset class="card bgo-group">
+          <legend class="bgo-legend"><span class="step-num" aria-hidden="true">4</span><span>{{ "bingo.g_squares" | t(lang) }}</span></legend>
+          <div class="bgo-fields">
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-cats-l">{{ "bingo.cats_label" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-cats-l">
+                {%- for c in bingo.cats or [] %}
+                <button type="button" class="chip bgo-chip-cat" :aria-pressed="String(catOn('{{ c }}'))" @click="toggleCat('{{ c }}')"><span>{{ ("bingo.cat." + c) | t(lang) }}</span><span class="bgo-chip-n" x-text="catN('{{ c }}')"></span></button>
+                {%- endfor %}
+              </div>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-info-l">{{ "bingo.f_info" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-info-l" aria-describedby="bgo-info-help">
+                {%- for n in range(0, 5) %}
+                <button type="button" class="chip bgo-chip-num" :aria-pressed="String(s.infoMax === {{ n }})" @click="set('infoMax', {{ n }})">{{ n }}</button>
+                {%- endfor %}
+              </div>
+              <p id="bgo-info-help" class="bgo-help">{{ "bingo.f_info_help" | t(lang) }}</p>
+            </div>
+            {#- the pool, said aloud as it changes (a kind of squares, the occasion); too few: what to do, here too -#}
+            <p class="bgo-pool" aria-live="polite" :class="P().ok ? '' : 'is-short'" x-text="poolLine()"></p>
+            <p class="bgo-help bgo-onecol" x-show="!P().ok" x-cloak x-text="shortText()"></p>
+            {{ jump(lang) }}
+
+            {#- Choose squares yourself: the squares of the card's language and the event's day, by category — each
+                kind a folded list of its own (its rows drawn only while it is open; all open while a search is
+                typed) —; a search; each square with "use it" and "always" (named with the square's words for a
+                screen reader: every "Always" alike says nothing). Drawn only while it is open. -#}
+            <details class="bgo-pick" @toggle="pickOpen = $el.open">
+              <summary class="bgo-pick-sum">
+                {% icon "list-checks", "size-5 shrink-0 text-grape" %}
+                <span class="bgo-pick-sum-t">{{ "bingo.pick_title" | t(lang) }}</span>
+                <span class="bgo-pick-sum-n" x-show="handCount()" x-text="handLine()"></span>
+                {% icon "chevron-down", "bgo-pick-chev size-5 shrink-0 text-muted" %}
+              </summary>
+              <div class="bgo-pick-body">
+                <p class="bgo-help">{{ "bingo.pick_sub" | t(lang) }}</p>
+                <div class="bgo-pick-tools">
+                  <label class="sr-only" for="bgo-pick-q">{{ "bingo.pick_search" | t(lang) }}</label>
+                  <input id="bgo-pick-q" class="input" type="search" autocomplete="off" placeholder="{{ 'bingo.pick_search' | t(lang) }}" x-model.debounce.150ms="q">
+                  <button type="button" class="btn-ghost btn-sm" x-show="handCount()" @click="resetHand()">{% icon "rotate-ccw", "size-4" %} {{ "bingo.pick_reset" | t(lang) }}</button>
+                </div>
+                <template x-if="pickOpen">
+                  <div class="bgo-pick-groups">
+                    <p class="bgo-help" x-show="searching() && !pickGroups().length" x-text="ui('pick_none_found')"></p>
+                    <template x-for="g in pickGroups()" :key="g.cat">
+                      {#- (each kind keeps its own open state, "on": a click on one never re-binds the others; catOpen: the state it
+                          comes back with when the list is drawn again) -#}
+                      <details class="bgo-pick-group" x-data="{ on: catOpen(g.cat) }" :open="on || searching()" @toggle="if (!searching()) { on = $el.open; catToggled(g.cat, on); }">
+                        <summary class="bgo-pick-head">
+                          <span class="bgo-pick-cat" x-text="g.name"></span>
+                          <span class="bgo-chip-n" x-text="g.rows.length"></span>
+                          {% icon "chevron-down", "bgo-pick-chev size-4 shrink-0 text-muted" %}
+                        </summary>
+                        <template x-if="on || searching()">
+                          <div class="bgo-pick-gbody">
+                            <div class="bgo-pick-all">
+                              <button type="button" class="btn-ghost btn-sm" @click="pickAll(g, true)">{{ "bingo.pick_all" | t(lang) }}<span class="sr-only" x-text="': ' + g.name"></span></button>
+                              <button type="button" class="btn-ghost btn-sm" @click="pickAll(g, false)">{{ "bingo.pick_none" | t(lang) }}<span class="sr-only" x-text="': ' + g.name"></span></button>
+                            </div>
+                            <ul class="bgo-pick-list" role="list">
+                              <template x-for="r in g.rows" :key="r.id">
+                                <li class="bgo-pick-row" :class="r.on ? 'is-on' : ''">
+                                  <label class="bgo-pick-use">
+                                    <input type="checkbox" class="bgo-check" :checked="r.on" @change="pick(r.item, $event.target.checked)">
+                                    <span class="bgo-pick-text" :lang="s.lang" x-text="r.text"></span>
+                                    <span class="bgo-pick-pub" :class="r.pub === 'lv' ? 'is-lv' : ''" x-show="r.pub !== 'both'" aria-hidden="true" x-text="ui(r.pub === 'lv' ? 'pub_lv' : 'pub_gv')"></span>
+                                    <span class="sr-only" x-show="r.pub !== 'both'" x-text="r.pub === 'lv' ? ' (La Viña)' : ' (Grapevine)'"></span>
+                                  </label>
+                                  <label class="bgo-pick-pin">
+                                    <input type="checkbox" class="bgo-check" :checked="r.pin" @change="pin(r.item, $event.target.checked)">
+                                    <span>{{ "bingo.pick_always" | t(lang) }}<span class="sr-only" :lang="s.lang" x-text="': ' + r.text"></span></span>
+                                  </label>
+                                </li>
+                              </template>
+                            </ul>
+                          </div>
+                        </template>
+                      </details>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </details>
+          </div>
+        </fieldset>
+
+        {#- 5. Cards -#}
+        <fieldset class="card bgo-group">
+          <legend class="bgo-legend"><span class="step-num" aria-hidden="true">5</span><span>{{ "bingo.g_cards" | t(lang) }}</span></legend>
+          <div class="bgo-fields">
+            <div class="bgo-field-row">
+              <label class="bgo-label" for="bgo-count">{{ "bingo.f_count" | t(lang) }}</label>
+              <div class="bgo-stepper">
+                <button type="button" class="btn-secondary btn-sm bgo-step" :disabled="s.count <= 1" @click="set('count', s.count - 1)">{% icon "minus", "size-4" %}<span class="sr-only">{{ "bingo.f_less" | t(lang) }}</span></button>
+                <input id="bgo-count" class="input bgo-num" type="number" inputmode="numeric" min="1" max="60" step="1" :value="s.count" @input="countInput($event.target.value)" @change="countDone($event.target)">
+                <button type="button" class="btn-secondary btn-sm bgo-step" :disabled="s.count >= 60" @click="set('count', s.count + 1)">{% icon "plus", "size-4" %}<span class="sr-only">{{ "bingo.f_more" | t(lang) }}</span></button>
+              </div>
+            </div>
+            <div class="bgo-chips" role="group" aria-label="{{ 'bingo.f_same_label' | t(lang) }}">
+              <button type="button" class="chip" :aria-pressed="String(!s.same)" @click="set('same', false)">{% icon "shuffle", "size-4" %}{{ "bingo.f_diff" | t(lang) }}</button>
+              <button type="button" class="chip" :aria-pressed="String(s.same)" @click="set('same', true)">{% icon "copy", "size-4" %}{{ "bingo.f_same" | t(lang) }}</button>
+            </div>
+            <div class="bgo-field-row">
+              <label class="bgo-label" for="bgo-code">{{ "bingo.f_code" | t(lang) }}</label>
+              <div class="bgo-code-row">
+                <input id="bgo-code" class="input bgo-code" type="text" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="bgo-code-help" :aria-invalid="codeErr ? 'true' : null" :value="codeDraft" @input="codeDraft = $event.target.value" @change="codeDone()" @keydown.enter.prevent="codeDone()">
+                <button type="button" class="btn-secondary btn-sm" @click="shuffle()">{% icon "dices", "size-4" %} {{ "bingo.shuffle" | t(lang) }}</button>
+              </div>
+              <p id="bgo-code-help" class="bgo-help"><span x-show="!codeErr">{{ "bingo.f_code_help" | t(lang) }}</span><span class="is-err" x-show="codeErr" x-cloak x-text="ui('code_bad')"></span></p>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-per-l">{{ "bingo.f_per" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-per-l" aria-describedby="bgo-per-help">
+                {%- for n in [1, 2, 4] %}
+                <button type="button" class="chip bgo-chip-num" :aria-pressed="String(perOf() === {{ n }})" :disabled="!perOk({{ n }})" @click="set('perSheet', {{ n }})">{{ n }}</button>
+                {%- endfor %}
+              </div>
+              <p id="bgo-per-help" class="bgo-help">{{ "bingo.f_per_help" | t(lang) }}</p>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-paper-l">{{ "bingo.f_paper" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-paper-l">
+                {%- for p in ["letter", "a4"] %}
+                <button type="button" class="chip" :aria-pressed="String(s.paper === '{{ p }}')" @click="set('paper', '{{ p }}')">{{ ("bingo.paper_" + p) | t(lang) }}</button>
+                {%- endfor %}
+              </div>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-orient-l">{{ "bingo.f_orient" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-orient-l">
+                {%- for o in ["portrait", "landscape"] %}
+                <button type="button" class="chip" :aria-pressed="String(s.orient === '{{ o }}')" @click="set('orient', '{{ o }}')"><span class="bgo-orient-ic is-{{ o }}" aria-hidden="true"></span>{{ ("bingo.orient_" + o) | t(lang) }}</button>
+                {%- endfor %}
+              </div>
+            </div>
+            <div class="bgo-field-row">
+              <p class="bgo-label" id="bgo-ink-l">{{ "bingo.f_ink" | t(lang) }}</p>
+              <div class="bgo-chips" role="group" aria-labelledby="bgo-ink-l">
+                <button type="button" class="chip" :aria-pressed="String(s.color)" @click="set('color', true)">{% icon "palette", "size-4" %}{{ "bingo.ink_color" | t(lang) }}</button>
+                <button type="button" class="chip" :aria-pressed="String(!s.color)" @click="set('color', false)">{% icon "droplet", "size-4" %}{{ "bingo.ink_bw" | t(lang) }}</button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        {#- 6. On each card -#}
+        <fieldset class="card bgo-group">
+          <legend class="bgo-legend"><span class="step-num" aria-hidden="true">6</span><span>{{ "bingo.g_on" | t(lang) }}</span></legend>
+          <div class="bgo-fields">
+            <label class="bgo-switch-row"><input type="checkbox" class="cm-switch" :checked="s.showName" @change="set('showName', $event.target.checked)"><span>{{ "bingo.f_names" | t(lang) }}</span></label>
+            <label class="bgo-switch-row"><input type="checkbox" class="cm-switch" :checked="s.showRules" @change="set('showRules', $event.target.checked)"><span>{{ "bingo.f_rules" | t(lang) }}</span></label>
+            <div class="bgo-field-row bgo-indent" x-show="s.showRules">
+              <label class="bgo-label" for="bgo-rules">{{ "bingo.f_rules_text" | t(lang) }}</label>
+              <textarea id="bgo-rules" class="input bgo-textarea" rows="4" maxlength="320" aria-describedby="bgo-rules-help" :lang="s.lang" :placeholder="defaultRules(compactNow())" :value="s.rules" @input="set('rules', $event.target.value)"></textarea>
+              <p id="bgo-rules-help" class="bgo-help" x-show="rulesCut()" x-cloak>{{ "bingo.f_rules_long" | t(lang) }}</p>
+            </div>
+            <label class="bgo-switch-row"><input type="checkbox" class="cm-switch" :checked="s.showInfo" @change="set('showInfo', $event.target.checked)"><span>{{ "bingo.f_strip" | t(lang) }}</span></label>
+            <p class="bgo-anon-note">{% icon "shield-check", "size-4 shrink-0 text-vine" %}<span>{{ "bingo.f_anon" | t(lang) }} <q :lang="s.lang" x-text="cw().anon">{{ "bingo.card.anon" | t(lang) }}</q></span></p>
+          </div>
+        </fieldset>
+      </div>
+
+      {#- ---------- the preview and the actions (sticky beside the settings from 1024px) ---------- -#}
+      <div class="bgo-aside sticky-aside">
+        {#- the actions first (in reach while the column sticks) with how to get a PDF beside Print, "Start over?" when
+            asked, what goes on paper (the sheet line), then the card with its pager, then the note on what this
+            browser keeps (bingo.js scale() keeps the card in the stuck column's view). #bgo-preview: where the one-column builder's links go (jump). -#}
+        <div class="card bgo-preview" id="bgo-preview" x-ref="preview">
+          <h3 class="h-card">{{ "bingo.preview" | t(lang) }}</h3>
+          <div class="bgo-actions">
+            <button type="button" class="btn-primary bgo-print-btn" :disabled="!P().ok || busy" @click="printNow()">{% icon "printer", "size-4" %} {{ "bingo.print" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" @click="copyLink($el)">{% icon "link", "size-4" %} {{ "bingo.copy_link" | t(lang) }}</button>
+            <button type="button" class="btn-ghost btn-sm" x-ref="overBtn" @click="askStartOver()">{% icon "rotate-ccw", "size-4" %} {{ "bingo.start_over" | t(lang) }}</button>
+          </div>
+          {#- Start over? (asked in the page; Escape or "Keep my settings" keeps them) -#}
+          <div class="bgo-confirm" x-show="asking" x-cloak role="group" aria-labelledby="bgo-over-q" @keydown.escape.prevent.stop="keepSettings()">
+            <p id="bgo-over-q" class="bgo-confirm-q">{{ "bingo.over_q" | t(lang) }}</p>
+            <div class="bgo-confirm-btns">
+              <button type="button" class="btn-ghost btn-sm text-danger" @click="startOver()">{% icon "rotate-ccw", "size-4" %} {{ "bingo.over_yes" | t(lang) }}</button>
+              <button type="button" class="btn-secondary btn-sm" x-ref="overNo" @click="keepSettings()">{{ "bingo.over_no" | t(lang) }}</button>
+            </div>
+          </div>
+          {#- how to get a PDF: the line that matters, then the rest folded (headers and footers, an iPhone) -#}
+          <div class="bgo-pdf">
+            <p class="bgo-help">{% icon "file-down", "size-4 shrink-0" %}<span>{{ "bingo.print_help" | t(lang) }}</span></p>
+            <details class="bgo-pdf-more">
+              <summary>{{ "bingo.print_more" | t(lang) }}</summary>
+              <p class="bgo-help">{{ "bingo.print_help_more" | t(lang) }}</p>
+            </details>
+          </div>
+          <p class="bgo-sheet-line" x-show="P().ok" x-text="sheetLine()"></p>
+          <p class="bgo-busy" x-show="busy" x-cloak role="status" x-text="busyText()"></p>
+          <div class="bgo-pager" x-show="P().ok">
+            <button type="button" class="btn-ghost btn-sm bgo-pg" :disabled="idx <= 0" @click="go(-1)">{% icon "chevron-left", "size-4" %}<span class="sr-only">{{ "bingo.prev_card" | t(lang) }}</span></button>
+            <p class="bgo-pager-n" aria-live="polite" x-text="cardLine()"></p>
+            <button type="button" class="btn-ghost btn-sm bgo-pg" :disabled="idx >= s.count - 1" @click="go(1)">{% icon "chevron-right", "size-4" %}<span class="sr-only">{{ "bingo.next_card" | t(lang) }}</span></button>
+            {#- a card drawn small (a phone): its real size, the stage scrolled sideways -#}
+            <button type="button" class="btn-ghost btn-sm bgo-zoom" x-show="zoomOffered()" x-cloak :aria-pressed="String(zoom)" @click="toggleZoom()">{% icon "zoom-in", "size-4" %} {{ "bingo.zoom" | t(lang) }}</button>
+          </div>
+          {#- the card (bingo.js renders it here: the real card, in inches, scaled to the column) -#}
+          <div class="bgo-stage" x-ref="stage" x-show="P().ok" role="group" :aria-label="previewLabel()"></div>
+          <div class="bgo-short" x-show="!P().ok" x-cloak role="status">
+            <p class="card-h"><span>{% icon "circle-alert", "size-5" %}</span><span x-text="ui('short_title')"></span></p>
+            <p class="mt-2 text-sm leading-relaxed text-muted" x-text="shortText()"></p>
+          </div>
+          <div class="bgo-notes">
+            <p class="bgo-saved">{% icon "lock", "size-3 inline -mt-0.5" %} {{ "bingo.saved_note" | t(lang) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{#- ================= Tips ================= -#}
+<section id="tips" class="section section-band" aria-labelledby="tips-title">
+  <div class="container-page">
+    {{ ui.sectionHead("bingo.tips_title" | t(lang), "bingo.tips_sub" | t(lang), "", "", "lightbulb", { eyebrow: "bingo.tips_eyebrow" | t(lang), tone: "text-lv", id: "tips-title", lang: lang }) }}
+    <ul class="grid-cards-4" role="list">
+      {%- for tip in [["home", "bg-gv-soft text-gv"], ["landmark", "bg-lv-soft text-lv"], ["library", "bg-vine-soft text-vine"], ["printer", "bg-grape-soft text-grape"]] %}
+      <li class="card card-pad">
+        <span class="grid size-11 place-items-center rounded-xl {{ tip[1] }}">{% icon tip[0], "size-5" %}</span>
+        <h3 class="h-card mt-3">{{ ("bingo.tip" + loop.index + "_t") | t(lang) }}</h3>
+        <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("bingo.tip" + loop.index) | t(lang) }}</p>
+      </li>
+      {%- endfor %}
+    </ul>
+    <p class="mt-6 flex max-w-3xl items-start gap-2 text-sm leading-relaxed text-muted">{% icon "shield-check", "mt-0.5 size-4 shrink-0 text-vine" %}<span>{{ "bingo.tip_anon" | t(lang) }}</span></p>
+  </div>
+</section>
+
+{#- ================= Next steps ================= -#}
+<section id="next" class="section container-page" aria-labelledby="next-title">
+  {{ ui.sectionHead("bingo.next_title" | t(lang), "bingo.next_sub" | t(lang), "", "", "compass", { eyebrow: "common.next_steps" | t(lang), id: "next-title", lang: lang }) }}
+  {{ ui.nextSteps([
+    { href: "/gvr/" | lurl(lang), title: "nav.gvr" | t(lang), text: "nav.gvr_desc" | t(lang), cta: "bingo.ns_gvr_cta" | t(lang), icon: "badge-check", tone: "vine" },
+    { href: "/events/" | lurl(lang), title: "nav.events" | t(lang), text: "bingo.ns_events" | t(lang), cta: "bingo.ns_events_cta" | t(lang), icon: "calendar-days", tone: "gv" },
+    { href: "/monthly/" | lurl(lang), title: "nav.monthly" | t(lang), text: "bingo.ns_monthly" | t(lang), cta: "bingo.ns_monthly_cta" | t(lang), icon: "megaphone", tone: "lv" },
+    { href: "/contribute/" | lurl(lang), title: "nav.contribute" | t(lang), text: "bingo.ns_contribute" | t(lang), cta: "bingo.ns_contribute_cta" | t(lang), icon: "pen-line", tone: "grape" }
+  ], lang) }}
+</section>
+
+{#- ================= For the script =================
+    The squares and the words (#bingo-data); the icons the cards draw (#bgo-icons: copied by the script, never
+    written as HTML); the print-only container (#bgo-print: a child of <main>, so the print rules can leave out
+    everything else) with the QR codes of both homes, drawn once. -#}
+<script type="application/json" id="bingo-data">{{ {
+  items: bingo.items or [],
+  info: info,
+  cats: bingo.cats or [],
+  wheres: bingo.wheres or [],
+  catNames: "bingo.cat." | tGroup(lang),
+  card: { en: "bingo.card." | tGroup("en"), es: "bingo.card." | tGroup("es") },
+  ui: "bingo.ui." | tGroup(lang)
+} | jsonScript | safe }}</script>
+<template id="bgo-icons">
+  <span data-i="grapes">{% icon "grapes", "bgo-logo-svg" %}</span>
+  <span data-i="free">{% icon "grapes", "bgo-free-svg" %}</span>
+  <span data-i="calendar">{% icon "calendar-days", "bgo-ic-svg" %}</span>
+  <span data-i="mail">{% icon "mail", "bgo-ic-svg" %}</span>
+  <span data-i="globe">{% icon "globe", "bgo-ic-svg" %}</span>
+</template>
+{#- (the QR codes beside the container, not in it: the preview on screen and the sheets on paper both point at them,
+    and each keeps the other hidden — bingo.css keeps this one shown in both) -#}
+<svg width="0" height="0" class="bgo-qr-defs" aria-hidden="true" focusable="false"><defs>
+  {%- if info.home and info.home.en %}{{ info.home.en | cmQrSymbol("bgo-qr-en") | safe }}{% endif -%}
+  {%- if info.home and info.home.es %}{{ info.home.es | cmQrSymbol("bgo-qr-es") | safe }}{% endif -%}
+</defs></svg>
+<div id="bgo-print" class="bgo-print" aria-hidden="true"></div>

@@ -1,0 +1,10 @@
+id,type,cat,text_en,text_es
+fun-ok,check,fun,"Say ""hi"", with a comma in quotes","Di ""hola"", con una coma"
+fun-comma,check,fun,Say hi, with a comma outside quotes,Di hola
+fun-multi,check,fun,"Line one
+Line two",Línea uno
+#fun-comment,check,fun,a draft for later,
+
+,,,,
+fun-unclosed,check,fun,"This quote never ends,Nunca
+fun-lost,check,fun,This row is swallowed,Fila tragada

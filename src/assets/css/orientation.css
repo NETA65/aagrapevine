@@ -1,0 +1,6 @@
+/* /assets/css/orientation.css — GVR / RLV 101 (areas/orientation.css: the hub, the session pages and their
+   slide show), only on those pages (pageStyles in src/pages/orientation.njk and orientation-lesson.njk).
+   One of the page-area stylesheets: see "Page-area styles" at the end of main.css. @reference reads main.css
+   (theme, variants, utilities for @apply) without writing any of it here. */
+@reference "./main.css";
+@import "./areas/orientation.css";

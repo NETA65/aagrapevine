@@ -1,0 +1,46 @@
+{
+  "freshness.quote_came": {
+    "en": "The {date} quotes came in at {time}.",
+    "es": "Hora de llegada de las citas del {date}: {time}."
+  },
+  "freshness.quote_came_one": {
+    "en": "{pub_in}'s quote for {date} came in at {time}; {pub_out}'s has not come in yet.",
+    "es": "Hora de llegada de la cita de {pub_in} del {date}: {time}. La de {pub_out} todavía no ha llegado."
+  },
+  "freshness.quote_missing": {
+    "en": "The {date} quotes have not come in yet.",
+    "es": "Las citas del {date} todavía no han llegado."
+  },
+  "freshness.quote_goal": {
+    "en": "Goal: on the site by {time} every day.",
+    "es": "Meta: en el sitio antes de las {time} todos los días."
+  },
+  "freshness.quote_days_title": {
+    "en": "Daily quote — the last 7 mornings",
+    "es": "Cita del día: las últimas 7 mañanas"
+  },
+  "freshness.quote_days_sub": {
+    "en": "When each day's quotes came in (Central time), against the {time} goal.",
+    "es": "Frente a la meta de las {time}, a qué hora llegaron las citas de cada día (hora del Centro)."
+  },
+  "freshness.quote_col_day": {
+    "en": "Day",
+    "es": "Día"
+  },
+  "freshness.quote_on_time": {
+    "en": "On time",
+    "es": "A tiempo"
+  },
+  "freshness.quote_late": {
+    "en": "Late",
+    "es": "Tarde"
+  },
+  "freshness.quote_none": {
+    "en": "Did not come in",
+    "es": "No llegó"
+  },
+  "freshness.quote_waiting": {
+    "en": "Not yet",
+    "es": "Todavía no"
+  }
+}

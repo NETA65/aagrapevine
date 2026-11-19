@@ -1,0 +1,6 @@
+id,type,pub,tags,title_en,text_en,choices_en,correct,explain_en,text_es,choices_es,media_url,qr_url,source_url
+quiz-one,quiz,gv,history,,When did Grapevine begin?,1935 | 1944 | 1996,2,June 1944.,¿Cuándo empezó Grapevine?,1935 | 1944 | 1996,,{site}contribute/,https://www.aagrapevine.org/history-aa-grapevine
+video-short,video,gv,,A Short,,,,,,,https://www.youtube.com/watch?v=shortVid001,,
+video-dupe,video,lv,,,,,,,,,https://youtu.be/dupeVid0001,,
+audio-dupe,audio,gv,podcast,An episode,,,,,,,https://episodes.captivate.fm/episode/ep-gv-07.mp3,,
+message-event,message,both,,Welcome,Welcome to {event}!,,,,¡Bienvenidos a {event}!,,,{site},

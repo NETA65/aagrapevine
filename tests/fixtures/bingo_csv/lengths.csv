@@ -1,0 +1,11 @@
+id,type,cat,text_en,short_en,label_en,text_es,short_es,label_es
+len-text-90,check,fun,"Ninety characters exactly, the longest text a square may have.............................",Thirty-six for big grids............,,"Noventa caracteres con eñe y acentos: sí, ñandú, corazón..................................","Treinta y seis, con eñe.............",
+len-text-91,check,fun,One character too many for a square........................................................,Short words,,Un texto corto,,
+len-36-no-short,check,fun,"Thirty-six, no short words..........",,,"Treinta y seis: ñ, á, é.............",,
+len-37-no-short,check,fun,"Thirty-seven, no short words.........",,,Un texto corto,,
+len-short-37,check,fun,A text with short words too long,Short words one too long.............,,Un texto corto,,
+len-label-25,write,fun,Your answer,,A label one too long.....,Tu respuesta,,Una etiqueta justa......
+len-placeholder,check,fun,"Meet at {event}: {committee}, {area}, {email}",{email},,Un texto corto,,
+len-short-placeholder,info,meetings,Our meeting {gv_meeting} and {email},{gv_meeting} · {email},,Nuestra reunión: {gv_meeting},Reunión: {gv_meeting_short},
+len-placeholder-no-short,check,fun,"Welcome to {event}, friends!",,,Bienvenidos a {event},,
+len-emoji,check,fun,Hum a tune 🎵........................,,,Tararea 🎵...........................,,

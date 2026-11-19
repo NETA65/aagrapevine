@@ -1,0 +1,14 @@
+id,on,type,cat,text_en,text_es
+fun-ok,yes,check,fun,Hum a song,Tararea una canción
+,yes,check,fun,No id here,Sin id
+Fun-Caps,,check,fun,Capitals,Mayúsculas
+fun with spaces,,check,fun,Spaces,Espacios
+fun--double,,check,fun,Double dash,Guion doble
+-fun-lead,,check,fun,Leading dash,Guion al principio
+fun-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,,check,fun,Too long,Demasiado largo
+fun-ok,,check,fun,Same id again,El mismo id otra vez
+#fun-comment,,check,fun,,
+
+,,,,,
+fun-off,no,check,fun,Switched off but checked,Apagada pero revisada
+fun-off-bad,no,check,fun,,

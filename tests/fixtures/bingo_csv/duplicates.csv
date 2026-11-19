@@ -1,0 +1,15 @@
+id,on,type,cat,text_en,text_es,short_en,short_es
+dup-first,,check,fun,Sing a song,Canta una canción
+dup-caps,,check,fun,SING A SONG,Canta otra canción
+dup-es,,check,fun,Sing another song,CANTA UNA CANCIÓN
+dup-off,no,check,fun,Sing a song,Canta una canción
+dup-bad,,trivia,fun,Hum a tune,Tararea una melodía
+dup-after-bad,,check,fun,Hum a tune,Tararea una melodía
+dup-en-only,,check,fun,sing a song,
+dup-spaces,,check,fun,"  Hum   a  tune ",Tararea otra melodía
+short-first,,check,fun,Name a slogan you heard at your first meeting,Di un lema que oíste en tu primera reunión,A slogan from your first meeting,Un lema de tu primera reunión
+short-caps,,check,fun,Say the slogan you heard first in the rooms,Di el primer lema que oíste en las salas,A SLOGAN from your first meeting,El primer lema que oíste
+short-is-text,,check,fun,Hum any tune you like from a meeting you love,Tararea cualquier melodía de una reunión que amas,Hum a tune,Tararea algo
+text-is-short,,check,fun,A slogan from your first meeting,Un lema nuevo para hoy,,
+short-off,no,check,fun,Recite a slogan from your very first meeting,Recita un lema de tu primerísima reunión,A slogan from your first meeting,Un lema de tu primera reunión
+short-es,,check,fun,Wave hello,Comparte algo por lo que hoy estás agradecido,,UN LEMA DE TU PRIMERA REUNIÓN

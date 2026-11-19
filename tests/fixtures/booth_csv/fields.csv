@@ -1,0 +1,15 @@
+id,on,type,pub,tags,weight,from,until,seconds,reveal,text_en,correct,qr_url,source_url
+tf-alias,Sí,True / False,Grapevine,"History; writing, humor",1.5,2027-03-01,2027-03-15,20,10,Grapevine began in 1944.,verdadero,,https://www.aagrapevine.org/history-aa-grapevine
+qr-alias,1,QR,GV & LV,,"2,5",,,,,Scan for our website.,,{site},
+bad-on,maybe,fact,,,,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-type-empty,,,,,,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-type,,trivia,,,,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-pub,,fact,AA Grapevine,,,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-tags,,fact,,ok #hash toolongtagtoolongtagtoolongtagxyz,,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-weight,,fact,,,0.25,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-weight-word,,fact,,,six,,,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-dates,,fact,,,,3/1/2027,2027-02-30,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-order,,fact,,,,2027-05-01,2027-04-01,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-seconds,,fact,,,,,,200,8,A fact.,,,https://www.aa.org/aa-grapevine-la-vina
+bad-reveal,,truefalse,,,,,,,2,A statement.,true,,https://www.aa.org/aa-grapevine-la-vina
+bad-year,,fact,,,,0027-03-01,2207-10-03,,,A fact.,,,https://www.aa.org/aa-grapevine-la-vina

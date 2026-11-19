@@ -1,0 +1,389 @@
+/* =====================================================================
+   Area styles — Grapevine & La Viña Bingo (/gvr/bingo/: src/pages/gvr-bingo.njk, src/assets/js/bingo.js).
+   Owned by the "bingo" area; class names start with bgo-. Its own stylesheet (/assets/css/bingo.css), linked by
+   that page only. Two parts:
+     · THE BUILDER — the settings, the preview column, the pick list: the site's tokens (var(--c-*)), so light,
+       dark and high contrast work; one column on phones, settings | preview from 1024px (one column again at
+       130 % text and more below 1536px).
+     · THE CARD — paper: always white with dark ink, whatever the screen theme (fixed colours: the card is what
+       prints, as the posters' and the slides' are), drawn in inches and points. Its size comes from the script (or
+       the build, for the no-JS sample): --w / --h the card, --k its scale (0.6–1, the parts' sizes against a whole
+       Letter card), --rows / --cols, --side the side column of a wide card. The squares size themselves from the
+       room the grid gets (.bgo-gridbox is a size container: --c = the square's side, the smaller of its width ÷
+       cols and its height ÷ rows), so the card always fits its paper, with or without JavaScript. Their words get
+       their size from the script, measured (bingo.js fitCards); the build's sample uses the core's estimate. Nothing
+       on a card prints below 6pt (the words, the labels, the small print): bingo.js placeCard chooses the meeting
+       lines and the head's size that keep every square there (THE FLOOR).
+       Black and white (data-ink="bw", the ink saver): no tints, every accent in ink. Only the light tints of the
+       info and FREE squares are printed as they are (print-color-adjust: exact); borders and lines always print.
+       The site's larger text sizes leave the card alone (inches and points), and relaxed spacing (main.css's
+       !important letter, word and line spacing for reading) is undone inside it: a card is a printed sheet.
+   Printing: the script fills #bgo-print (a child of <main>) with the sheets and sets html[data-print="bingo"]: then
+   only they go on paper, one sheet a page (break-after), the paper's size in the @page rule the script adds while
+   printing (no unnamed @page here: every page of the site would print with it; its margin is 0 and each sheet
+   carries the margin as its padding). The browser's own Print with no cards to make prints the builder's note
+   alone. Without JavaScript the page's sample card prints by itself instead, on a portrait page of its own (the
+   named @page bgo-sample).
+   ===================================================================== */
+
+/* ================= THE BUILDER ================= */
+.bgo-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+@media (width >= 64rem) {
+  .bgo-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 2rem; }
+}
+@media (64rem <= width < 96rem) {
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .bgo-layout { grid-template-columns: minmax(0, 1fr); }
+}
+.bgo-settings { display: grid; gap: 1rem; min-width: 0; }
+/* a fieldset is as wide as its content by default (min-inline-size: min-content): never wider than the column */
+.bgo-group { min-width: 0; margin: 0; padding: 1.125rem 1.125rem 1.25rem; }
+@media (width >= 40rem) { .bgo-group { padding: 1.375rem 1.5rem 1.5rem; } }
+/* the legend as a heading inside the card (floated: never on the card's top border) */
+.bgo-legend { float: left; width: 100%; display: flex; align-items: center; gap: 0.625rem; margin: 0 0 1rem; padding: 0;
+  font-family: var(--font-display); font-size: 1.1875rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); }
+.bgo-legend > .step-num { background: var(--c-grape); }
+.bgo-fields { clear: both; display: grid; gap: 1rem; min-width: 0; }
+.bgo-field-row { min-width: 0; }
+@media (width >= 30rem) { .bgo-field-half { max-width: 16rem; } }
+.bgo-label { display: block; margin-bottom: 0.375rem; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.bgo-help { margin-top: 0.375rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
+.bgo-help .is-err, .bgo-help.is-err { color: var(--c-danger); font-weight: 600; }
+.bgo-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; min-width: 0; }
+.bgo-chips > .chip:disabled { opacity: 0.45; cursor: not-allowed; }
+.bgo-chips > .chip:disabled:hover { border-color: var(--c-line); color: var(--c-muted); }
+.bgo-chip-grid, .bgo-chip-num { font-variant-numeric: tabular-nums; }
+.bgo-chip-num { min-width: 2.75rem; justify-content: center; }
+.bgo-chip-n { display: inline-grid; place-items: center; min-width: 1.5rem; padding: 0 0.375rem; border-radius: 999px;
+  background: var(--c-surface-2); color: var(--c-muted); font-size: 0.75rem; font-weight: 600; line-height: 1.25rem; font-variant-numeric: tabular-nums; }
+/* (a darker badge on the pressed chip: its white words 8.8:1 in light, its dark ones 5.3:1 in dark — a white tint
+   left them at 4.1:1) */
+.chip[aria-pressed="true"] > .bgo-chip-n { background: rgb(0 0 0 / 0.2); color: inherit; }
+/* the magazine chips in their own colour when on */
+.chip.bgo-chip-lv[aria-pressed="true"] { background: var(--c-lv); border-color: var(--c-lv); }
+.bgo-orient-ic { display: inline-block; flex-shrink: 0; border: 1.5px solid currentColor; border-radius: 2px; }
+.bgo-orient-ic.is-portrait { width: 0.625rem; height: 0.8125rem; }
+.bgo-orient-ic.is-landscape { width: 0.8125rem; height: 0.625rem; }
+.bgo-custom { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem; }
+.bgo-custom select { width: 6.5rem; }
+.bgo-times { padding-bottom: 0.625rem; font-size: 1.25rem; color: var(--c-muted); }
+.bgo-count { font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.bgo-switch-row { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; cursor: pointer; font-weight: 500; color: var(--c-ink); line-height: 1.35; }
+.bgo-switch-row:has(input:disabled) { color: var(--c-faint); cursor: not-allowed; }
+.bgo-indent { padding-inline-start: 3.5rem; }
+@media (width < 30rem) { .bgo-indent { padding-inline-start: 0; } }
+.bgo-textarea { min-height: 6.5rem; padding-block: 0.625rem; line-height: 1.45; resize: vertical; text-overflow: clip; }
+.bgo-stepper { display: flex; align-items: center; gap: 0.5rem; }
+.bgo-step { min-width: 2.75rem; padding-inline: 0.5rem; }
+.bgo-num { width: 5.5rem; text-align: center; font-variant-numeric: tabular-nums; }
+.bgo-code-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.bgo-code { width: 9.5rem; font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+.bgo-pool { font-size: 0.9375rem; font-weight: 600; color: var(--c-vine); }
+.bgo-pool.is-short { color: var(--c-danger); }
+.bgo-anon-note { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.8125rem; line-height: 1.45; color: var(--c-muted); }
+.bgo-anon-note > svg { margin-top: 0.125rem; }
+.bgo-anon-note q { font-style: italic; color: var(--c-ink); }
+/* the way down to the preview (gvr-bingo.njk jump) and the short pool's help beside the settings: only where the
+   builder is one column — under 1024px, and up to 1536px at 130 % and 150 % text (.bgo-layout above) */
+.bgo-jump { margin: 0; }
+@media (width >= 64rem) { .bgo-jump, .bgo-onecol { display: none; } }
+@media (64rem <= width < 96rem) {
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) :is(.bgo-jump, .bgo-onecol) { display: block; }
+}
+
+/* "Choose squares yourself": a disclosure; in it each kind of squares folds (a summary with its name and count); on
+   a wide screen the list scrolls inside it (about 300 rows), on a phone with the page (a scroll box inside the page
+   catches every swipe there) */
+.bgo-pick { border: 1px solid var(--c-line); border-radius: 0.875rem; background: var(--c-surface); min-width: 0; }
+.bgo-pick-sum { display: flex; align-items: center; gap: 0.625rem; min-height: 3rem; padding: 0.5rem 0.875rem; cursor: pointer; list-style: none;
+  border-radius: inherit; font-weight: 600; color: var(--c-ink); }
+.bgo-pick-sum::-webkit-details-marker { display: none; }
+.bgo-pick-sum:hover .bgo-pick-sum-t { text-decoration: underline; text-underline-offset: 3px; }
+.bgo-pick-sum-t { flex: 1 1 auto; min-width: 0; }
+.bgo-pick-sum-n { flex-shrink: 0; padding: 0.0625rem 0.5rem; border-radius: 999px; background: var(--c-grape-soft); color: var(--c-grape); font-size: 0.75rem; }
+.bgo-pick-chev { transition: rotate 0.15s; }
+.bgo-pick[open] > .bgo-pick-sum .bgo-pick-chev, .bgo-pick-group[open] > .bgo-pick-head .bgo-pick-chev { rotate: 180deg; }
+.bgo-pick-body { padding: 0.75rem 0.875rem 0.875rem; border-top: 1px solid var(--c-line); }
+.bgo-pick-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0.75rem 0 0.25rem; }
+.bgo-pick-tools > .input { flex: 1 1 14rem; min-width: 0; }
+.bgo-pick-groups { margin-top: 0.5rem; }
+@media (width >= 64rem) { .bgo-pick-groups { max-height: 30rem; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; } }
+.bgo-pick-head { display: flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0.25rem 0.125rem; cursor: pointer; list-style: none;
+  border-bottom: 1px solid var(--c-line); }
+.bgo-pick-head::-webkit-details-marker { display: none; }
+.bgo-pick-head:hover .bgo-pick-cat { color: var(--c-ink); }
+.bgo-pick-cat { flex: 0 1 auto; min-width: 0; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-muted); }
+.bgo-pick-head > .bgo-pick-chev { margin-inline-start: auto; }
+.bgo-pick-gbody { padding-bottom: 0.5rem; }
+.bgo-pick-all { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.25rem; padding-top: 0.25rem; }
+.bgo-pick-list { margin: 0; padding: 0; }
+/* a square: "use it" with its words, then "always" — under the words when the line has no room for both (a phone
+   at larger text: side by side, the words got a column a few letters wide) */
+.bgo-pick-row { display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.5rem; border-bottom: 1px dashed var(--c-line); }
+.bgo-pick-use, .bgo-pick-pin { display: flex; align-items: center; gap: 0.625rem; min-height: 2.5rem; padding-block: 0.25rem; cursor: pointer; }
+@media (width < 40rem), (pointer: coarse) { .bgo-pick-use, .bgo-pick-pin { min-height: 2.75rem; } }
+.bgo-pick-use { flex: 1 1 10rem; min-width: 0; }
+.bgo-pick-pin { flex-shrink: 0; margin-inline-start: auto; gap: 0.375rem; font-size: 0.75rem; font-weight: 600; color: var(--c-muted); }
+.bgo-pick-text { flex: 1 1 auto; min-width: 0; font-size: 0.875rem; line-height: 1.4; color: var(--c-muted); overflow-wrap: anywhere; hyphens: auto; }
+.bgo-pick-row.is-on .bgo-pick-text { color: var(--c-ink); }
+.bgo-pick-pub { flex-shrink: 0; padding: 0 0.375rem; border-radius: 999px; background: var(--c-gv-soft); color: var(--c-gv); font-size: 0.6875rem; font-weight: 700; line-height: 1.125rem; }
+.bgo-pick-pub.is-lv { background: var(--c-lv-soft); color: var(--c-lv); }
+.bgo-check { flex-shrink: 0; width: 1.15rem; height: 1.15rem; accent-color: var(--c-grape); cursor: pointer; }
+
+/* the preview column: the card, its pager, the actions (sticky beside the settings: main.css sticky-aside) */
+.bgo-aside { min-width: 0; }
+.bgo-preview { padding: 1.125rem; }
+@media (width >= 40rem) { .bgo-preview { padding: 1.25rem 1.5rem 1.5rem; } }
+.bgo-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.25rem; margin: 0.75rem 0 0.625rem; }
+.bgo-pg { min-width: 2.75rem; padding-inline: 0.5rem; }
+.bgo-pager-n { min-width: 7.5rem; text-align: center; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); font-variant-numeric: tabular-nums; }
+.bgo-zoom[aria-pressed="true"] { background: var(--c-surface-2); color: var(--c-ink); }
+/* the stage: the card at its real size, scaled down (the script: transform + the stage's height); at its real size
+   ("Actual size", .is-zoom) it scrolls sideways */
+.bgo-stage { position: relative; overflow: hidden; min-height: 6rem; }
+.bgo-stage.is-zoom { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.bgo-paper { position: absolute; top: 0; left: 0; transform-origin: 0 0; border-radius: 3px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.16), 0 12px 30px -14px rgb(0 0 0 / 0.38); }
+:root[data-theme="dark"] .bgo-paper { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12), 0 12px 30px -14px rgb(0 0 0 / 0.7); }
+.bgo-short { padding: 1.25rem; border-radius: 0.875rem; background: var(--c-surface-2); }
+.bgo-short .card-h > span:first-child { color: var(--c-danger); }
+.bgo-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.875rem; }
+.bgo-print-btn { flex: 1 1 100%; }
+/* "Start over?" asked in the page */
+.bgo-confirm { margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.875rem; background: var(--c-surface);
+  border: 1px solid color-mix(in srgb, var(--c-danger) 45%, var(--c-line)); }
+.bgo-confirm-q { font-size: 0.875rem; font-weight: 600; line-height: 1.45; color: var(--c-ink); }
+.bgo-confirm-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+/* how to get a PDF, beside Print: its one line, then the rest folded */
+.bgo-pdf { margin-top: 0.625rem; }
+.bgo-pdf > .bgo-help { display: flex; align-items: flex-start; gap: 0.375rem; margin: 0; }
+.bgo-pdf > .bgo-help > svg { margin-top: 0.1875rem; }
+.bgo-pdf-more > summary { display: inline-flex; align-items: center; min-height: 2rem; cursor: pointer; font-size: 0.8125rem; font-weight: 600;
+  color: var(--c-gv); text-decoration: underline; text-underline-offset: 3px; }
+@media (pointer: coarse) { .bgo-pdf-more > summary { min-height: 2.75rem; } }
+.bgo-pdf-more > .bgo-help { margin-top: 0; }
+.bgo-busy { margin-top: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--c-grape); text-align: center; }
+.bgo-notes { display: grid; gap: 0.375rem; margin-top: 0.875rem; padding-top: 0.875rem; border-top: 1px solid var(--c-line); }
+.bgo-notes > p { margin: 0; }
+/* what goes on paper ("10 cards on 3 sheets of Letter paper"): under the print help, above the card — always in view */
+.bgo-sheet-line { margin-top: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--c-ink); }
+.bgo-saved { font-size: 0.75rem; line-height: 1.45; color: var(--c-muted); }
+
+/* without JavaScript: the sample card, shown smaller on a screen (zoom: the layout shrinks with it), real size on paper */
+.bgo-nojs-note { margin-bottom: 1.25rem; }
+.bgo-sample-stage { display: flex; justify-content: center; overflow-x: auto; padding: 0.5rem 0 1rem; }
+.bgo-sample-stage > .bgo-card { zoom: 0.44; box-shadow: 0 1px 2px rgb(0 0 0 / 0.16), 0 12px 30px -14px rgb(0 0 0 / 0.38); }
+@media (width >= 30rem) { .bgo-sample-stage > .bgo-card { zoom: 0.58; } }
+@media (width >= 48rem) { .bgo-sample-stage > .bgo-card { zoom: 0.8; } }
+
+/* ================= THE CARD (paper) ================= */
+.bgo-card {
+  --ink: #1d1a26; --muted: #4f4a60; --hair: #cfc8d8; --write: #8d879a;
+  --gv: #0a5fa8; --gv-soft: #e3eef9; --lv: #b8430b; --lv-soft: #fdece0; --vine: #2f6e2c; --vine-soft: #e5f2e1;
+  --grape: #5b2a86; --grape-soft: #f0e6f8;
+  --k: 1; --lh: 1.3;
+  --pad: calc(0.2in * var(--k)); --gap: calc(0.1in * var(--k));
+  container: bgo-card / inline-size;
+  contain: strict;
+  box-sizing: border-box; display: flex; flex-direction: column; gap: var(--gap);
+  width: var(--w, 7.7in); height: var(--h, 10.2in); padding: var(--pad); overflow: hidden;
+  border: 1pt solid var(--hair); border-radius: calc(0.1in * var(--k));
+  background: #fff; color: var(--ink); color-scheme: light; forced-color-adjust: none;
+  font-family: var(--font-sans); font-size: calc(9pt * var(--k)); font-weight: 400; line-height: var(--lh); text-align: start;
+  -webkit-print-color-adjust: economy; print-color-adjust: economy;
+}
+.bgo-card * { box-sizing: border-box; }
+.bgo-card[data-ink="bw"] { --gv: var(--ink); --lv: var(--ink); --vine: var(--ink); --grape: var(--ink); --write: #77717f; }
+/* the head: the grapes, the title (the display face), the event and its date */
+.bgo-head { flex: none; display: flex; align-items: center; gap: calc(0.12in * var(--k)); padding-bottom: calc(0.07in * var(--k));
+  border-bottom: calc(2.25pt * var(--k)) solid var(--vine); }
+.bgo-logo { flex: none; width: calc(0.44in * var(--k)); height: calc(0.44in * var(--k)); color: var(--grape); }
+.bgo-logo-svg { display: block; width: 100%; height: 100%; }
+.bgo-head-txt { flex: 1 1 auto; min-width: 0; }
+.bgo-title { --lh: 1.08; font-family: var(--font-display); font-size: max(12pt, calc(19pt * var(--k))); font-weight: 600; letter-spacing: -0.005em; color: var(--ink); overflow-wrap: anywhere; }
+.bgo-sub { --lh: 1.25; margin-top: calc(2pt * var(--k)); font-size: max(7pt, calc(9.5pt * var(--k))); font-weight: 600; color: var(--muted); overflow-wrap: anywhere; }
+/* the name & group lines (a drawing) */
+.bgo-names { flex: none; display: flex; gap: calc(0.25in * var(--k)); font-size: max(6.5pt, calc(8.5pt * var(--k))); font-weight: 600; color: var(--muted); }
+.bgo-field { flex: 1 1 0; display: flex; align-items: flex-end; gap: calc(4pt * var(--k)); min-width: 0; white-space: nowrap; }
+.bgo-field::after { content: ""; flex: 1 1 auto; height: calc(0.24in * var(--k)); border-bottom: 0.75pt solid var(--ink); }
+/* the body: the grid with how to play and the meetings strip under it ("stack") or beside it ("side", "top": a wide
+   card) */
+.bgo-body { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; gap: var(--gap); }
+.bgo-gridbox { flex: 1 1 0; min-width: 0; min-height: 0; container-type: size; display: grid; place-items: center; }
+.bgo-grid {
+  --line: 0.75pt;
+  --c: min(calc((100cqw - var(--line) - 3pt) / var(--cols)), calc((100cqh - var(--line) - 3pt) / var(--rows)));
+  display: grid; grid-template-columns: repeat(var(--cols), var(--c)); grid-auto-rows: var(--c);
+  border-top: var(--line) solid var(--ink); border-left: var(--line) solid var(--ink); outline: 1.25pt solid var(--ink);
+}
+/* a square: its words' box, then its mark (a write-in line with its label, an initials box, a tick circle, an icon) */
+.bgo-cell {
+  --accent: var(--vine); --tint: var(--vine-soft);
+  position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden;
+  padding: calc(var(--c) * 0.065) calc(var(--c) * 0.06) calc(var(--c) * 0.055);
+  border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); background: #fff;
+}
+.bgo-cell[data-pub="gv"] { --accent: var(--gv); --tint: var(--gv-soft); }
+.bgo-cell[data-pub="lv"] { --accent: var(--lv); --tint: var(--lv-soft); }
+/* a dense card (big grids, small squares: the short words) — a little more room for the words: tighter padding, lines
+   and labels; the write-in line gets taller with the square from about ¾ inch (room for a hand-written name) up to
+   0.2in, as tall as a 1.2-inch square's — under that the words need the room more (the 6pt floor) */
+.bgo-card[data-dense="1"] .bgo-cell { padding: calc(var(--c) * 0.05) calc(var(--c) * 0.03) calc(var(--c) * 0.04); }
+.bgo-card[data-dense="1"] .bgo-w { --lh: 1.1; }
+.bgo-card[data-dense="1"] .bgo-line { height: clamp(0.085in, calc((var(--c) - 0.55in) * 0.5), 0.2in); }
+.bgo-card[data-dense="1"] .bgo-lab { --lh: 1.05; font-size: clamp(6pt, calc(var(--c) * 0.085), 6.5pt); letter-spacing: 0; }
+.bgo-card[data-dense="1"] .bgo-mk { margin-top: calc(var(--c) * 0.02); }
+/* the fitting's last resort (bingo.js fitCards): words too long for their square even at the smallest size get the
+   room of the write-in line — a thin line, never words cut off */
+.bgo-cell.is-tight .bgo-mk { margin-top: 0; }
+.bgo-cell.is-tight .bgo-line { height: 0.04in; }
+/* the floor's measuring grid (bingo.js floorMisses): the squares the run may draw that it still has to measure at a
+   square size, laid out out of sight inside the grid box for a moment */
+.bgo-probe { position: absolute; top: 0; left: 0; visibility: hidden; pointer-events: none; outline: 0; }
+/* (while bingo.js placeCard lays the card out: its squares empty — their words never change the grid's size) */
+.bgo-card.is-placing .bgo-grid:not(.bgo-probe) > .bgo-cell > * { display: none; }
+.bgo-txt { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; justify-content: safe center; overflow: hidden; }
+.bgo-w { --lh: 1.16; display: block; font-size: 9pt; font-weight: 600; color: var(--ink); text-align: center;
+  overflow-wrap: normal; word-break: normal; hyphens: manual; text-wrap: balance; }
+.bgo-w.is-hy { overflow-wrap: anywhere; hyphens: auto; }
+/* a time range kept on one line, in a square and in the meetings strip: "7 – 8 PM", never "7 –" / "8 PM" (bingo.js
+   textIn; the no-JS sample: eleventy/filters/bingo-sample.js bingoBreaks) */
+.bgo-nb { white-space: nowrap; }
+.bgo-mk { flex: none; display: flex; align-items: flex-end; gap: calc(var(--c) * 0.04); margin-top: calc(var(--c) * 0.03); }
+/* a label breaks between its words (and after a "/": bingo.js labelText), never inside one — unless one word is wider
+   than its line (bingo.js fitCards: .is-hy, never cut off) */
+.bgo-lab { --lh: 1.1; font-size: clamp(6pt, calc(var(--c) * 0.075), 7pt); font-weight: 600; letter-spacing: 0.01em; color: var(--muted); text-align: center; overflow-wrap: normal; }
+.bgo-lab.is-hy { overflow-wrap: anywhere; hyphens: auto; }
+.bgo-cell[data-mark="line"] .bgo-mk { flex-direction: column; align-items: stretch; gap: calc(var(--c) * 0.012); }
+.bgo-line { display: block; height: clamp(0.11in, calc(var(--c) * 0.17), 0.34in); border-bottom: 0.9pt solid var(--accent); }
+.bgo-cell[data-mark="box"] .bgo-mk { align-items: center; justify-content: flex-end; }
+.bgo-cell[data-mark="box"] .bgo-lab { flex: 1 1 auto; min-width: 0; text-align: end; }
+.bgo-box { flex: none; width: clamp(0.2in, calc(var(--c) * 0.3), 0.5in); height: clamp(0.15in, calc(var(--c) * 0.21), 0.36in);
+  border: 0.9pt solid var(--accent); border-radius: 2pt; }
+.bgo-cell[data-mark="tick"] .bgo-mk { justify-content: flex-end; }
+.bgo-tick { display: block; width: clamp(0.1in, calc(var(--c) * 0.15), 0.26in); aspect-ratio: 1; border: 1pt solid var(--accent); border-radius: 50%; }
+.bgo-cell[data-mark="icon"] .bgo-mk { justify-content: center; }
+.bgo-ic { display: block; width: clamp(0.1in, calc(var(--c) * 0.16), 0.28in); color: var(--accent); }
+.bgo-ic-svg { display: block; width: 100%; height: auto; }
+/* an information square: tinted (the one colour that prints as a fill), the words a little lighter */
+.bgo-cell[data-type="info"] { background: var(--tint); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.bgo-cell[data-type="info"] .bgo-w { font-weight: 500; }
+/* the FREE square in the middle: the grapes over its word */
+.bgo-cell[data-type="free"] { background: var(--grape-soft); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.bgo-free-mark { flex: none; align-self: center; width: calc(var(--c) * 0.36); color: var(--grape); }
+.bgo-free-svg { display: block; width: 100%; height: auto; }
+.bgo-cell[data-type="free"] .bgo-w { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.04em; color: var(--grape); }
+.bgo-card[data-ink="bw"] .bgo-cell[data-type="info"], .bgo-card[data-ink="bw"] .bgo-cell[data-type="free"] { background: #fff; }
+/* how to play, and the meetings strip with the QR code: side by side under the grid, or one above the other in the
+   side column of a wide card (the strip's QR beside its words when the column has room for both). A small card
+   (data-compact: 2 or 4 on a sheet) has the short "How to play" and its own smaller floor for their size; the meeting
+   lines are the long, mid or short ones, whichever fit (bingo.js placeCard measures). */
+.bgo-side { flex: none; display: flex; gap: calc(0.12in * var(--k)); min-width: 0; font-size: max(6.5pt, calc(8.25pt * var(--k))); }
+.bgo-card[data-compact="1"] .bgo-side { font-size: max(6pt, calc(8.25pt * var(--k))); }
+.bgo-side > * { min-width: 0; padding: calc(0.07in * var(--k)) calc(0.1in * var(--k)); border: 0.75pt solid var(--hair); border-radius: calc(5pt * var(--k)); }
+.bgo-rules { flex: 1 1 0; }
+.bgo-info { flex: 1.45 1 0; display: flex; align-items: center; gap: calc(0.1in * var(--k)); }
+/* a wide card ("side": landscape, two on a portrait sheet): the grid takes the whole height on the left; the head,
+   the name lines, how to play and the meetings strip make a column of --side on its right; the small print runs
+   under both (the body's two parts become the card grid's own items). "top": the same with the head and the name
+   lines across the top — for a wide card whose column cannot hold the head too (a small landscape card in Spanish,
+   a long typed title): bingo.js chooseLayout tries it when "side" sticks out, or to keep a long typed word whole */
+.bgo-card:is([data-layout="side"], [data-layout="top"]) { display: grid; grid-template-columns: minmax(0, 1fr) var(--side);
+  grid-template-rows: auto auto minmax(0, 1fr) auto; column-gap: calc(var(--gap) * 1.6); row-gap: var(--gap); }
+.bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-body { display: contents; }
+.bgo-card[data-layout="side"] .bgo-head { grid-column: 2; grid-row: 1; align-items: flex-start; }
+.bgo-card[data-layout="side"] .bgo-names { grid-column: 2; grid-row: 2; flex-direction: column; gap: calc(0.04in * var(--k)); }
+.bgo-card[data-layout="side"] .bgo-gridbox { grid-column: 1; grid-row: 1 / 4; }
+.bgo-card[data-layout="top"] .bgo-head { grid-column: 1 / -1; grid-row: 1; }
+.bgo-card[data-layout="top"] .bgo-names { grid-column: 1 / -1; grid-row: 2; }
+.bgo-card[data-layout="top"] .bgo-gridbox { grid-column: 1; grid-row: 3; }
+.bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-side { grid-column: 2; grid-row: 3; min-height: 0; flex-direction: column;
+  gap: calc(0.08in * var(--k)); container: bgo-col / inline-size; }
+.bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-foot { grid-column: 1 / -1; grid-row: 4; }
+.bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-side > * { flex: none; }
+.bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-info { flex-direction: column; align-items: stretch; margin-top: auto; }
+.bgo-card[data-layout="side"] .bgo-title { font-size: max(11pt, calc(17pt * var(--k))); }
+@container bgo-col (width >= 2.7in) {
+  .bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-info { flex-direction: row; align-items: center; }
+}
+/* (a small card's QR code is small: beside the words from a narrower column — one under the other, they would leave
+   the column too tall for the card) */
+@container bgo-col (width >= 1.5in) {
+  .bgo-card[data-compact="1"]:is([data-layout="side"], [data-layout="top"]) .bgo-info { flex-direction: row; align-items: center; }
+}
+.bgo-h { --lh: 1.2; --mb: calc(2pt * var(--k)); margin-bottom: var(--mb); font-size: max(6pt, calc(7.5pt * var(--k))); font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--vine); }
+.bgo-rules-txt { --lh: 1.33; white-space: pre-line; overflow-wrap: anywhere; color: var(--ink); }
+.bgo-info-txt { flex: 1 1 auto; min-width: 0; }
+.bgo-li { --lh: 1.3; color: var(--ink); overflow-wrap: anywhere; }
+.bgo-li + .bgo-li { margin-top: calc(1.5pt * var(--k)); }
+.bgo-li > b { font-weight: 700; }
+/* the QR code, its caption 4 of its squares below it: its own 2-square white edge and 2 more (the quiet zone a reader
+   needs; 0.06 × the width is 2 squares of a 29- or 33-square code) */
+.bgo-qr { --qr-w: calc(0.82in * var(--k)); flex: none; width: var(--qr-w); margin: 0; text-align: center; }
+.bgo-card:is([data-layout="side"], [data-layout="top"]) .bgo-qr { align-self: center; }
+.bgo-qr-svg { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+.bgo-qr > figcaption { --lh: 1.15; margin-top: calc(var(--qr-w) * 0.06); font-size: max(6pt, calc(6.5pt * var(--k))); font-weight: 600; color: var(--muted); }
+/* the small print: anonymity, and which card of which game */
+.bgo-foot { flex: none; display: flex; flex-wrap: wrap; justify-content: space-between; gap: calc(1pt * var(--k)) calc(0.15in * var(--k));
+  padding-top: calc(0.04in * var(--k)); border-top: 0.5pt solid var(--hair); font-size: max(6pt, calc(7pt * var(--k))); color: var(--muted); }
+.bgo-anon { --lh: 1.25; font-style: italic; }
+.bgo-meta { --lh: 1.25; font-variant-numeric: tabular-nums; }
+/* relaxed spacing (main.css: !important spacing on every element for reading) is undone on the card: the same
+   spacing as at the defaults — each line height is a --lh of its own above (main.css's p margin too) */
+@layer base {
+  /* (an id in :not() outweighs main.css's selectors there: an !important in the same layer goes by specificity) */
+  :root:where(.gv-prefs)[data-spacing="relaxed"] body .bgo-card:not(#bgo-x),
+  :root:where(.gv-prefs)[data-spacing="relaxed"] body .bgo-card *:not(#bgo-x) {
+    line-height: var(--lh) !important; letter-spacing: normal !important; word-spacing: normal !important; margin-bottom: var(--mb, 0) !important; }
+}
+/* reduced motion (the device's setting or the "Aa" panel's): no transitions on the card. main.css's reduced-motion
+   rules (@layer base) make every transition 0.01 ms, which still holds a new font size until the next frame, so the
+   script's fitting would measure the old one and the words would stick out of their squares (on screen and on paper).
+   Those rules set only transition-duration, so this transition-property wins (booth.css does the same). */
+@media (prefers-reduced-motion: reduce) {
+  .bgo-card, .bgo-card *, .bgo-card *::before, .bgo-card *::after { transition-property: none !important; }
+}
+:root[data-motion="reduce"] .bgo-card, :root[data-motion="reduce"] .bgo-card *, :root[data-motion="reduce"] .bgo-card *::before,
+:root[data-motion="reduce"] .bgo-card *::after { transition-property: none !important; }
+
+/* ================= PRINTING ================= */
+/* the print-only container: hidden on screen (shown while the script measures it: laid out but out of sight) */
+.bgo-print { display: none; }
+.bgo-print.is-measuring { display: block; position: fixed; top: 0; left: 0; width: 0; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
+.bgo-qr-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+/* a sheet: the printed area (--sw × --sh) inside the paper's margin (--m, its padding: the @page rule the script adds
+   has margin 0, so the print window has no room for its own "Headers and footers") */
+.bgo-sheet { position: relative; display: grid; box-sizing: content-box; width: var(--sw); height: var(--sh); padding: var(--m, 0);
+  gap: var(--gap); align-content: start; justify-content: start;
+  grid-template-columns: repeat(var(--across), var(--cw)); grid-template-rows: repeat(var(--down), var(--ch)); }
+.bgo-sheet > .bgo-card { width: var(--cw); height: var(--ch); }
+/* the cut lines between two cards (their place and length from the script: never across an empty place) */
+.bgo-cut { position: absolute; pointer-events: none; }
+.bgo-cut-v { border-left: 0.75pt dashed #9b95ae; }
+.bgo-cut-h { border-top: 0.75pt dashed #9b95ae; }
+@media print {
+  :root[data-print="bingo"] body > :not(main, svg[data-icon-sprite]),
+  :root[data-print="bingo"] main > :not(#bgo-print, .bgo-qr-defs) { display: none !important; }
+  :root[data-print="bingo"] body { display: block !important; min-height: 0 !important; }
+  :root[data-print="bingo"] main { margin: 0 !important; padding: 0 !important; }
+  :root[data-print="bingo"] .bgo-print { display: block !important; }
+  .bgo-sheet { break-after: page; break-inside: avoid; }
+  .bgo-sheet:last-child { break-after: auto; }
+  .bgo-card { box-shadow: none !important; }
+  /* the browser's own Print with no cards made (too few squares, or the builder not started): the builder's note
+     alone (Not enough squares… / couldn't start), not pages of the settings */
+  :root.js:not([data-print="bingo"]) body.bgo-page > :not(main, svg[data-icon-sprite]),
+  :root.js:not([data-print="bingo"]) .bgo-page main > :not(#builder, .bgo-qr-defs),
+  :root.js:not([data-print="bingo"]) .bgo-page #builder :is(.bgo-settings, .bgo-actions, .bgo-confirm, .bgo-pdf, .bgo-sheet-line, .bgo-busy, .bgo-pager, .bgo-stage, .bgo-notes) { display: none !important; }
+  /* without JavaScript: the sample card alone, a little smaller than a Letter page's area (it fits A4 too) */
+  :root:not(.js) body > :not(main, svg[data-icon-sprite]),
+  :root:not(.js) main > :not(#builder, .bgo-qr-defs),
+  :root:not(.js) #builder > :not(.bgo-nojs),
+  :root:not(.js) .bgo-nojs > :not(.bgo-sample) { display: none !important; }
+  :root:not(.js) body { display: block !important; min-height: 0 !important; }
+  :root:not(.js) main, :root:not(.js) #builder { margin: 0 !important; padding: 0 !important; }
+  :root:not(.js) .bgo-sample-stage { display: block; padding: 0; overflow: visible; }
+  :root:not(.js) .bgo-sample-stage > .bgo-card { zoom: 0.94; margin: 0 auto; page: bgo-sample; }
+}
+/* the sample's own page: portrait whatever the print window was set to (a portrait card: landscape would cut it over
+   two pages). A named page, so no other page of the site prints with it */
+@page bgo-sample { size: portrait; }

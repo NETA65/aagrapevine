@@ -1,0 +1,61 @@
+---
+permalink: /robots.txt
+layout: false
+eleventyExcludeFromCollections: true
+---
+{#- Crawlers read robots.txt ONLY at the root of an address (RFC 9309; Google: "crawlers don't
+    check for robots.txt files in subdirectories"). This file is the live one
+    only with a custom domain — which the site has since November 2026 (grapevine.neta65.org,
+    README §12, "Using your own address"): the site is the root of its address, so THIS file is
+    the root robots.txt search engines read, and the Weekly link check says "Skipped" for it
+    (scripts/ops/root_robots.py).
+    Built as a GitHub Pages PROJECT site (https://neta65.github.io/aagrapevine/ — the fallback
+    address of the Code check and of a build on a computer) it is published at
+    /aagrapevine/robots.txt instead, where no search engine reads it. The file that counts there
+    is https://neta65.github.io/robots.txt, and only the NETA65 account's own user-site
+    repository, NETA65/neta65.github.io, can publish it: its ready-to-upload files are in
+    docs/user-site/, the owner's steps in README → "Search engines" (step C), and the Weekly link
+    check reads it every Sunday for such an address. Without that repository the root answers
+    404, which means "crawl everything".
+    So keep it as it is — everything allowed (Google needs the CSS, scripts and JSON files to
+    show the pages), and the sitemap. Every search engine and every AI search or answer tool
+    (Googlebot, Bingbot, OAI-SearchBot and ChatGPT-User, Claude-SearchBot and Claude-User,
+    PerplexityBot, Applebot, DuckAssistBot …) follows the "User-agent: *" group: naming one of
+    them would only replace that group for it.
+    The ONE exception (since round 35) is the committee's own choice about AI-model TRAINING,
+    config/site.yml search_engines.ai_training (README → "Search engines", step D):
+      "allow"     (the default) the three lines below, nothing else;
+      "disallow"  + one group per training token, each "Disallow: /" — the shared training signal
+                  "__usage_ai-training" (an IETF AI-preferences draft, October 2026: not a crawler and
+                  not a crawl rule, only "do not train on this"; Anthropic reads it now, Microsoft
+                  from February 1, 2027, Google from early 2027, as a Google-Extended "no") and the
+                  training crawlers and tokens of today: GPTBot (OpenAI), ClaudeBot (Anthropic),
+                  Google-Extended (Google's training and Gemini apps' grounding — never Search, AI
+                  Overviews or AI Mode), Applebot-Extended (Apple), CCBot (Common Crawl, the open
+                  crawl many models are trained on) and meta-externalagent (Meta). Named groups replace
+                  "*" only for those names, so the search crawlers and the AI search ones stay
+                  allowed either way (tests/test_seo_robots.py checks both settings with Python's own
+                  robots.txt reader). Never a Disallow line for anything else;
+      anything else counts as "allow" (eleventy/seo-check.js gives a build warning).
+    The Sitemap line needs an absolute URL: site.url comes from config/site.yml (or the
+    SITE_URL the GitHub Action sets). Without one it is left out. -#}
+{%- set aiTraining = (((site.search_engines.ai_training if site.search_engines else "") or "allow") | string | trim | lower) -%}
+{%- set trainingBots = ["GPTBot", "ClaudeBot", "Google-Extended", "Applebot-Extended", "CCBot", "meta-externalagent"] -%}
+User-agent: *
+Allow: /
+{% if aiTraining == "disallow" %}
+
+# No AI-model training, please (the committee's choice). Search engines and AI search
+# answers may still read every page: they follow the group above.
+User-agent: __usage_ai-training
+Disallow: /
+{% for bot in trainingBots %}
+
+User-agent: {{ bot }}
+Disallow: /
+{% endfor %}
+
+{% endif %}
+{% if site.url %}
+Sitemap: {{ site.url }}/sitemap.xml
+{% endif %}

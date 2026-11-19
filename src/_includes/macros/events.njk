@@ -1,0 +1,22 @@
+{#- Macros of the event pages: /events/ (src/pages/events.njk) and, since round 35, an event's own page
+    (src/pages/event-share-leaf.njk). Imported WITH CONTEXT ({% import "macros/events.njk" as evm with context %}, then
+    evm.kindBadge(…)): they read the page's `lang`. -#}
+
+{#- The kind of an event, in words and in its colour (eventTone: eleventy/filters/event-tone.js; the
+    colours are the .ev-tone-* rules in committee.css). The card carries .ev-tone-<kind>; this badge
+    names the kind, so the colour is never the only signal. An event from Grapevine's or La Viña's own
+    calendar keeps saying so ("La Viña calendar"). The Area's own events (an assembly, an ACM, the Area's town
+    hall, its GSR/DCM orientations) share one colour, "Area event"; an assembly itself says "Area assembly"
+    (event-tone.js isAssembly). -#}
+{% macro kindBadge(ev, kind) %}
+{%- set kindIcon = { committee: "users", gv: "grapes", lv: "grapes", booth: "store", assembly: "landmark", other: "map-pin" } -%}
+{%- if kind == "gv" and ev.category == "gv-calendar" %}{% set label = "committee.events.badge_gv" | t(lang) %}
+{%- elif kind == "lv" and ev.category == "lv-calendar" %}{% set label = "committee.events.badge_lv" | t(lang) %}
+{%- elif kind == "assembly" %}{% set label = ("committee.events.badge_assembly" if (ev | isAssembly) else "committee.events.kind.assembly") | t(lang) %}
+{%- elif kind == "other" %}{% set label = ("committee.events.kind.neta" if ev.group == "neta" else "committee.events.kind.event") | t(lang) %}
+{%- else %}{% set label = ("committee.events.kind." + kind) | t(lang) %}{% endif -%}
+{#- (our Grapevine Meeting: "NETA 65" — event-tone.js gives a meeting series of ours no magazine's colour —, online
+    only: the camera, not the map pin) -#}
+{%- set ico = "video" if (kind == "other" and ev.isOnline and not ev.location) else kindIcon[kind] -%}
+<span class="badge ev-badge">{% icon ico, "size-3" %} {{ label }}</span>
+{%- endmacro %}

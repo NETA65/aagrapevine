@@ -1,0 +1,134 @@
+---js
+// (JavaScript front matter: the pagination's `before` and the page's data are functions. The imports are read from
+// the project's top folder, where every build runs — not from this file's folder.)
+import { eventSharePages } from "./src/pages/event-share.11ty.js";
+import { eventPageMeta } from "./eleventy/filters/committee.js";
+
+// the events that have a page of their own (eventSharePages' `leaf`, committee.js eventLeaf), in each language — the
+// share pages template (event-share.11ty.js) writes the others' small pages at the same addresses, never these
+const pagination = {
+  data: "db.events.items", size: 1, alias: "share",
+  before: (items, full) => eventSharePages(items, full.site, full.languages).filter((s) => s.leaf),
+};
+const permalink = (data) => data.share.path + "index.html";
+const layout = "layouts/base.njk";
+// under Events in the menu and the breadcrumb (base.njk: Home → Events → the event)
+const pageKey = "events";
+// the "Add to calendar" menu, its .ics file and the flyer's viewer (src/assets/js/committee.js)
+const pageScripts = ["/assets/js/committee.js"];
+// its title (with its day), the tail of the tab's title, its description and its share picture (the flyer):
+// committee.js eventPageMeta
+const eleventyComputed = {
+  lang: (data) => data.share.lang,
+  title: (data) => eventPageMeta(data.share.ev, data.site, data.share.lang).title,
+  titleTail: (data) => eventPageMeta(data.share.ev, data.site, data.share.lang).titleTail,
+  description: (data) => eventPageMeta(data.share.ev, data.site, data.share.lang).description,
+  ogImage: (data) => eventPageMeta(data.share.ev, data.site, data.share.lang).ogImage,
+};
+---
+{#- An event's own page, since round 35: /events/<its card's anchor>/ (/es/events/…/) — for the events that are
+    LEAVES (eleventy/filters/committee.js eventLeaf: still to come, held at a place with a real address, not a date
+    of a monthly series, not from Grapevine's or La Viña's own calendars, no page of its own on another site — today
+    the district La Viña workshops, the Area's GSR/DCM orientations, its ACMs). Google's event results take only an
+    event that has "a unique URL (a leaf page) and markup on that URL", on "pages that focus on a single event", and
+    a short page about one event is what an AI answer quotes best. Every other event keeps its small share page at
+    the same address (src/pages/event-share.11ty.js: noindex, on to its card); once this event is over, the next
+    build turns this page back into one, and it leaves the sitemap.
+    A page of the site like the others (base.njk): the header and footer, the site's graph with its breadcrumb
+    (Home → Events → the event), its own address as canonical, its twin in the other language (hreflang — eventLeaf
+    asks the same in both languages), indexable and in the sitemap (the [seo] check: its <title> names its day,
+    so two events of one name never share one). Its content, written in the page (no script needed), from the
+    card's own helpers (committee.js shapeEvent):
+      · the Event's structured data FIRST (cmEventPageLd: eventLd for this one event, its url this page — the same
+        facts as on /events/: never a meeting link, ID or passcode, never a person's name);
+      · the hero: the title (h1) and its day and time with the zone ("Sunday, January 17, 2027 · 1:00 – 6:00 PM
+        CST"; a range of days for an event over several), "See all events" (its card on /events/);
+      · the card, as on /events/ (committee.css .cm-event, in its kind's colour): its kind (evm.kindBadge),
+        "Details to be confirmed", its language; the place (as the card writes it, no map link); online too for a
+        hybrid event, its meeting ID or code and who to write to (people see how to join exactly as on the card);
+        the whole description (the card shows 3 lines of a summary: here all of it; a description's own headings
+        start at h2, under the page's h1); Join online, Add to calendar (the card's Google / Outlook links and its
+        .ics file), View flyer, its outside page, Share (this page's address); the flyer's tile from 640px (as on the
+        card; on a phone, "View flyer");
+      · "See all events" again under it.
+    Its share picture stays the one its share page had (the flyer, else the committee's card: base.njk og:image) so
+    link previews look the same. -#}
+{% import "macros/ui.njk" as ui with context %}
+{% import "macros/events.njk" as evm with context %}
+{%- set ev = share.ev -%}
+{%- set kind = ev | eventTone -%}
+{%- set selfAbs = page.url | siteUrl(site) -%}
+{%- set when = ev.rangeLabel if ev.multiDay else ev.shareWhen -%}
+{%- set ld = ev | cmEventPageLd(site, lang, selfAbs) -%}
+{% if ld %}<script type="application/ld+json">{{ ld | rpJson | safe }}</script>{% endif %}
+{% call ui.pageHero(lang, ev.title, when | escape, "calendar-days", "nav.events" | t(lang)) %}
+  <div class="hero-actions">
+    <a class="btn-light" href="{{ share.target }}">{% icon "calendar-days", "size-4" %} {{ "committee.events.page_all" | t(lang) }}</a>
+  </div>
+{% endcall %}
+
+<div class="container-page section pt-10 sm:pt-12">
+<div class="mx-auto max-w-3xl">
+  <article class="card cm-event ev-accent ev-tone-{{ kind }}">
+    {#- the date as a tile from 640px, as on /events/ (the hero says it in words) -#}
+    <div class="cm-date-tile{{ ' cm-tile-range' if ev.tile.range }} max-sm:hidden" aria-hidden="true">
+      <span class="cm-tile-mon">{{ ev.tile.mon }}</span>
+      <span class="cm-tile-day">{{ ev.tile.day }}</span>
+      <span class="cm-tile-wd">{{ ev.tile.wd }}</span>
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="flex flex-wrap items-center gap-1.5">
+        {{ evm.kindBadge(ev, kind) }}
+        {% if ev.tentative %}{{ ui.tentativeBadge(lang) }}{% endif %}
+        {% if not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
+      </div>
+      <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted">
+        <li class="inline-flex min-w-0 items-start gap-1.5">{% icon "map-pin", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0 font-medium text-ink">{{ ev.location }}</span></li>
+        {% if ev.isOnline %}<li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ ("committee.events.online_on" | t(lang, { platform: ev.platform })) if ev.platform else ("committee.events.online" | t(lang)) }}</li>{% endif %}
+        {#- (as on the card: the number moves to the next line in one piece; never quoted by search engines —
+            data-nosnippet, since round 35) -#}
+        {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ ev.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no" data-nosnippet>{{ ev.meetingId }}</span></span></li>{% endif %}
+        {% if ev.contact %}<li class="inline-flex min-w-0 items-center gap-1.5">{% icon "mail", "size-4 shrink-0 text-faint" %} <a class="link tap-link min-w-0 break-words" href="mailto:{{ ev.contact }}" translate="no"><span class="sr-only">{{ "committee.events.contact" | t(lang) }}: </span>{{ ev.contact | replace("@", "@<wbr>") | safe }}</a></li>{% endif %}
+      </ul>
+      {%- set foreign = not ev.ownWords and ev.item.lang and ev.item.lang != lang and ev.item.lang != "und" and not (ev.item | machineFor(lang)) -%}
+      {#- (a meeting ID, Meet code, passcode or meeting address in it: never quoted by search engines — cmNoSnippet,
+          data-nosnippet, as on /events/) -#}
+      {% if ev.body %}
+      <div class="prose-site cm-md mt-4 max-w-none text-[0.95rem]"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.body | md({ h: 2, lang: lang, name: ev.title }) | cmNoSnippet | safe }}</div>
+      {% elif ev.summary %}
+      <p class="mt-4 text-[0.95rem] leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.summary | excerpt(2000) | escape | cmNoSnippet | safe }}</p>
+      {% endif %}
+      {% if ev.item | machineFor(lang) %}<p class="mt-1.5">{{ ui.autoNote(ev.item, lang) }}</p>{% endif %}
+      {#- the card's buttons (committee.css .cm-ev-actions: two columns on a phone, one row from 640px with Share at
+          its end); the "Add to calendar" menu is /events/' own (events.njk calMenu), with the FULL Google / Outlook
+          links and its note written out: one card, so no weight to save (/events/ carries brief ones) -#}
+      <div class="cm-ev-actions">
+        <div class="cm-ev-btns">
+        {% if ev.online %}
+        <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+        {% endif %}
+        <details class="cm-menu">
+          <summary class="btn-secondary btn-sm">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "common.add_to_calendar" | t(lang) }}</span></summary>
+          <div class="cm-menu-panel">
+            <a href="{{ ev.gcal }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Google Calendar</a>
+            <a href="{{ ev.outlook }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Outlook.com</a>
+            <button type="button" data-cm-ics="{{ ev.icsData | json }}" data-cm-js>{% icon "download", "size-4" %} {{ "committee.cal.ics_file" | t(lang) }}</button>
+            <p class="cm-menu-note" data-cm-js>{{ ("committee.cal.reminder_day" if ev.allDay else "committee.cal.reminder_timed") | t(lang) }}</p>
+          </div>
+        </details>
+        {{ ui.flyerButton(ev.flyer, ev.title, lang) }}
+        {% if ev.link and ev.linkExternal and ev.link != (ev.flyer.view if ev.flyer else "") %}
+        <a class="btn-secondary btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.details" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+        {% endif %}
+        </div>
+        {#- (on a phone a row of its own under the buttons, with its word; from 640px at the row's end, as on /events/) -#}
+        <button type="button" class="btn-ghost btn-sm max-sm:mt-2 sm:max-xl:px-2.5" data-js-only data-share="{{ selfAbs }}" data-share-title="{{ ev.title }}" data-share-text="{{ when }}">{% icon "share-2", "size-4" %}<span class="sm:max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>
+      </div>
+    </div>
+    {{ ui.flyerThumb(ev.flyer, ev.title, lang) }}
+  </article>
+  <p class="mt-6"><a class="link tap-link inline-flex items-center gap-1.5" href="{{ share.target }}">{% icon "arrow-left", "size-4 shrink-0" %}{{ "committee.events.page_all" | t(lang) }}</a></p>
+</div>
+</div>
+
+{% cmPreviewDialog lang %}

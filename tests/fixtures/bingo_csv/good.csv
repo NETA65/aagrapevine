@@ -1,0 +1,17 @@
+id,on,type,pub,cat,where,pin,weight,from,until,text_en,short_en,label_en,text_es,short_es,label_es,source_url,notes
+people-gvr-today,yes,name,both,people,,,2,,,Meet a GVR or RLV today,,,Conoce hoy a un RLV o GVR,,,,the notes are never shown
+people-trade-numbers,,phone,,people,group district assembly,,,,,Trade phone numbers with someone you just met,Trade phone numbers,,Intercambia números de teléfono con alguien que acabas de conocer,Intercambia teléfonos,,,
+people-came-farthest,,name,both,people,"assembly; acm, workshop booth",,1.5,,,Find who came the farthest to {event},Who came the farthest?,Name & town,Encuentra a quien vino de más lejos a {event},¿Quién vino de más lejos?,Nombre y ciudad,,
+read-this-month,,write,both,read,,,"2,5",,,"Read a story from this month's issue: your one favorite?",This month's favorite story,Story title,Lee una historia del número de este mes: ¿tu favorita?,Tu historia favorita del mes,Título,,
+write-story-topic,,write,gv,write,,,,,,A topic you could write your own story about,A story you could write,,Un tema sobre el que podrías escribir tu historia,Una historia que podrías escribir,,https://www.aagrapevine.org/guidelines-contributing-grapevine,
+listen-lv-podcast,,check,lv,listen,online,,0.5,,,Listened to La Viña's podcast (in Spanish),Heard La Viña's podcast,,Escuché el podcast de La Viña,,,https://www.aalavina.org/podcast,
+service-why-serve,,sign,both,service,"group, district, committee",,,,,A GVR or RLV tells you why they serve,Why a GVR serves,,Un RLV o GVR te cuenta por qué sirve,,,,
+meetings-gv-meeting,,info,gv,meetings,,yes,,,,Our Grapevine Meeting: {gv_meeting},GV Meeting: {gv_meeting_short},,Nuestra Reunión de Grapevine (en inglés): {gv_meeting},Reunión de GV: {gv_meeting_short},,,
+meetings-committee,,info,both,meetings,,yes,,,,"Our committee meeting, all AA members welcome: {committee_meeting}",Committee: {committee_meeting_short},,"Nuestra reunión del comité, todo miembro de AA es bienvenido: {committee_meeting}",Comité: {committee_meeting_short},,,
+meetings-contact,,info,both,meetings,,yes,,,,Questions or ideas? Write to us: {email},Write: {email},,¿Preguntas o ideas? Escríbenos: {email},Escríbenos: {email},,,
+meetings-site,,info,both,meetings,booth,,,,,Every meeting and event: {site},On the web: {site},,Todas las reuniones y eventos: {site},En la web: {site},,,
+history-first-gv,,write,gv,history,,,,,,Guess the year the first Grapevine came out,First Grapevine: what year?,Year,Adivina el año en que salió el primer Grapevine,Primer Grapevine: ¿qué año?,Año,https://www.aagrapevine.org/history-aa-grapevine,June 1944
+fun-slogan,,write,both,fun,,,,,,Your favorite AA slogan,,Slogan,Tu lema favorito de AA,,Lema,,
+fun-anniversary-month,,name,both,fun,,,,2026-11-01,2027-12-31,Find someone celebrating an AA anniversary this month,AA anniversary this month,,Encuentra a alguien que celebra su aniversario en AA este mes,Aniversario en AA este mes,,,a dated row (from / until)
+fun-off,no,check,both,fun,,,,,,Switched off: checked but never on a card,Switched off,,Apagada: revisada pero nunca en una tarjeta,Apagada,,,
+#fun-draft,,check,both,fun,,,,,,A draft for later,,,Un borrador,,,,a comment row

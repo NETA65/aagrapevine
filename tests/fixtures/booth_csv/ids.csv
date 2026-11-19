@@ -1,0 +1,14 @@
+id,on,type,text_en,source_url
+fact-ok,yes,fact,A fact.,https://www.aa.org/aa-grapevine-la-vina
+,yes,fact,No id here.,https://www.aa.org/aa-grapevine-la-vina
+Fact-Caps,,fact,Capitals.,https://www.aa.org/aa-grapevine-la-vina
+fact with spaces,,fact,Spaces.,https://www.aa.org/aa-grapevine-la-vina
+fact--double,,fact,Double dash.,https://www.aa.org/aa-grapevine-la-vina
+-fact-lead,,fact,Leading dash.,https://www.aa.org/aa-grapevine-la-vina
+fact-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,,fact,Too long.,https://www.aa.org/aa-grapevine-la-vina
+fact-ok,,fact,Same id again.,https://www.aa.org/aa-grapevine-la-vina
+#fact-comment,,fact,,
+
+,,,,
+fact-off,no,fact,Switched off but checked.,https://www.aa.org/aa-grapevine-la-vina
+fact-off-bad,no,fact,,https://www.aa.org/aa-grapevine-la-vina

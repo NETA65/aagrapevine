@@ -1,0 +1,11 @@
+id,type,cat,text_en,short_en,label_en,text_es,short_es,label_es
+es-short-only,check,fun,Wave hello,,,,Saluda,
+es-label-only,write,fun,Your favorite color,,Color,,,Color
+en-only,check,fun,English only,,,,,
+es-only,check,fun,,,,Solo en español,,
+no-text,check,fun,,,,,,
+no-text-label,check,fun,,,Label,,,
+label-check,check,fun,A check with a label,,Label,Una casilla con etiqueta,,Etiqueta
+label-info,info,meetings,Info with a label,,Label,Información con etiqueta,,
+label-ok,write,fun,Your home group's name,,Group,El nombre de tu grupo base,,Grupo
+short-only,check,fun,,Short only,,,Solo corto,

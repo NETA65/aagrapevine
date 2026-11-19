@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Test fixture: the second page of the sitemap — older pages, no upcoming event. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://www.aagrapevine.org/get-involved/events/2019-03-08/spring-fling</loc><lastmod>2019-01-02T00:00:00+00:00</lastmod></url>
+<url><loc>https://www.aagrapevine.org/about-us</loc><lastmod>2025-06-01T00:00:00+00:00</lastmod></url>
+</urlset>

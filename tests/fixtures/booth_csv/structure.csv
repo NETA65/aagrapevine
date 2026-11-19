@@ -1,0 +1,7 @@
+id,type,text_en,source_url
+fact-ok,fact,"A fact, with a comma inside quotes.",https://www.aa.org/aa-grapevine-la-vina
+fact-comma,fact,A fact, with a comma outside quotes.,https://www.aa.org/aa-grapevine-la-vina
+fact-multi,fact,"Line one
+Line two with ""quotes""",https://www.aa.org/aa-grapevine-la-vina
+fact-unclosed,fact,"This quote never ends,https://www.aa.org/aa-grapevine-la-vina
+fact-lost,fact,This row is swallowed,https://www.aa.org/aa-grapevine-la-vina

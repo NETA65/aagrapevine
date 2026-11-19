@@ -1,0 +1,13 @@
+id,type,cat,text_en,short_en,label_en,text_es,short_es,label_es
+ph-gv,info,meetings,Our Grapevine Meeting: {gv_meeting},GV Meeting: {gv_meeting_short},,Nuestra Reunión de Grapevine: {gv_meeting},Reunión de GV: {gv_meeting_short},
+ph-committee,info,meetings,Our committee meeting: {committee_meeting},Committee: {committee_meeting_short},,Nuestra reunión del comité: {committee_meeting},Comité: {committee_meeting_short},
+ph-gv-weekly,info,meetings,GV Weekly Open: {gv_weekly},GV Weekly: {gv_weekly_short},,GV Weekly Open: {gv_weekly},GV Weekly: {gv_weekly_short},
+ph-lv-weekly,info,meetings,La Viña's open meeting: {lv_weekly},LV meeting: {lv_weekly_short},,Reunión Abierta de La Viña: {lv_weekly},Reunión de LV: {lv_weekly_short},
+ph-names,info,meetings,"{committee}, {area}",{site},,"{committee}, {area}",{site},
+ph-contact,info,meetings,Write to us: {email},,,Escríbenos: {email},,
+ph-event,name,people,Find a GVR at {event},,{event},Encuentra a un RLV en {event},Un RLV en {event},{event}
+ph-unknown,check,fun,Welcome to {Event},,,Bienvenidos a {evento},,
+ph-twice,check,fun,{foo} and {foo},{foo},,{foo} y {foo},{foo},
+ph-label,write,fun,Your first name,,{name},Tu nombre de pila,,{nombre}
+ph-empty,check,fun,Empty {} braces,,,Llaves {} vacías,,
+ph-dash,check,fun,Our meeting: {gv-meeting},,,Reunión: {gv-meeting},,

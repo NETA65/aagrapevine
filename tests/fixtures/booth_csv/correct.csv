@@ -1,0 +1,11 @@
+id,type,text_en,choices_en,correct,source_url
+quiz-no-correct,quiz,Which?,a | b | c,,https://www.aa.org/aa-grapevine-la-vina
+quiz-bad-correct,quiz,Which?,a | b | c,first,https://www.aa.org/aa-grapevine-la-vina
+quiz-range,quiz,Which?,a | b | c,4,https://www.aa.org/aa-grapevine-la-vina
+quiz-letter,quiz,Which?,a | b | c,c,https://www.aa.org/aa-grapevine-la-vina
+quiz-letter-range,quiz,Which?,a | b | c,E,https://www.aa.org/aa-grapevine-la-vina
+tf-empty,truefalse,A statement.,,,https://www.aa.org/aa-grapevine-la-vina
+tf-bad,truefalse,A statement.,,maybe,https://www.aa.org/aa-grapevine-la-vina
+tf-f,truefalse,A statement.,,F,https://www.aa.org/aa-grapevine-la-vina
+tf-si,truefalse,A statement.,,sí,https://www.aa.org/aa-grapevine-la-vina
+tf-cierto,truefalse,A statement.,,Cierto,https://www.aa.org/aa-grapevine-la-vina

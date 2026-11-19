@@ -1,0 +1,22 @@
+id,type,title_en,text_en,choices_en,correct,answer_en,explain_en,credit_en,title_es,text_es,choices_es,answer_es,explain_es,credit_es,media_url,qr_url,source_url
+quiz-es-no-choices,quiz,,Which one?,A | B | C,1,,,,,¿Cuál?,,,,,,,https://www.aa.org/aa-grapevine-la-vina
+quote-no-credit,quote,,A quote.,,,,,,,,,,,,,,
+history-no-title,history,,Something happened.,,,,,,,,,,,,,,https://www.aa.org/aa-grapevine-la-vina
+qr-credit-only,qr,,,,,,,,,,,,,Fuente,,{site},
+video-credit-only,video,,,,,,,AA Grapevine,,,,,,,https://youtu.be/V3RzyHdgQCY,,
+prompt-empty,prompt,,,,,,,,,,,,,,,,
+image-neutral,image,,,,,,,,,,,,,,https://www.aa.org/picture.jpg,,
+long-texts,fact,TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT,ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt,,,,eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc,,,,,,,,,https://www.aa.org/aa-grapevine-la-vina
+quiz-long-question,quiz,,qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq,a | b,1,,,,,,,,,,,,https://www.aa.org/aa-grapevine-la-vina
+choices-one,poll,,Which?,Only one,,,,,,,,,,,,,
+choices-seven,poll,,Which?,1 | 2 | 3 | 4 | 5 | 6 | 7,,,,,,,,,,,,,
+choices-empty,poll,,Which?,a || c,,,,,,,,,,,,,
+choices-long,poll,,Which?,a | bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,,,,,,,,,,,,,
+choices-dup,poll,,Which?,Yes | No | yes,,,,,,,,,,,,,
+choices-mismatch,quiz,,Which?,a | b | c,1,,,,,¿Cuál?,a | b,,,,,,https://www.aa.org/aa-grapevine-la-vina
+fill-no-blank,fill,,No blank here.,,,word,,,,,,,,,,,https://www.aa.org/aa-grapevine-la-vina
+fill-two-blanks,fill,,___ and ___.,,,word,,,,,,,,,,,https://www.aa.org/aa-grapevine-la-vina
+scramble-digits,scramble,,Unscramble it.,,,AA2026,,,,,,,,,,,
+scramble-long,scramble,,Unscramble it.,,,ABCDEFGHIJKLMNOPQ,,,,,,,,,,,
+scramble-short,scramble,,Unscramble it.,,,AA,,,,,,,,,,,
+wrong-columns,fact,,A fact.,a | b,1,word,,,,,,,,,https://www.aa.org/x.jpg,,https://www.aa.org/aa-grapevine-la-vina

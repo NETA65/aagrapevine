@@ -1,0 +1,75 @@
+{#- =========================================================================
+    "Did you know? / ¿Sabías que…?" — one question a day from the committee's booth display
+    (content/booth/booth.csv: its quiz, true-or-false and fill-in rows), a small card on About (under the
+    history timeline) and on /gvr/ (#ideas). Import with:
+      {% import "macros/question.njk" as question with context %}
+      {{ question.daily(lang, { id: "about-dyk", sub: "booth.dyk.sub_about" | t(lang) }) }}
+    opts: id (the card's ids start with it — one card per page), sub (the line under the heading), class.
+
+    The build writes only the next week's questions into the page, in the page language (eleventy/filters/
+    booth.js dailyQuestions → the boothDaily filter: a few of the CSV's ~90 rows, never the whole booth file);
+    src/assets/js/read.js dailyQuestion picks today's in Central time, so the card changes every day without a
+    new build, also in a page saved for offline use. La Viña's questions come first on /es/. Tap an answer →
+    right or not, the explanation and its source (a link only to AA's own sites: booth.js csvSources); "Another
+    question" up to three more. Nothing is kept — no score, no streak — and it is never called a quiz. The words
+    are the booth's own (booth.screen.*: True / False, Right!, Show the answer …) plus booth.dyk.*.
+    It needs JavaScript (data-js-only: without it there is no card) and is not printed. One <h3>: the card sits
+    in a section with its own <h2>. data-lastmod="skip": its questions move with the clock, not with what the
+    page says, so they never date the page again in the sitemap (eleventy/lastmod.js).
+    ========================================================================= -#}
+{% macro daily(lang, opts=null) %}
+{%- set o = opts or {} -%}
+{%- set D = booth | boothDaily(lang, site) -%}
+{%- set id = o.id or "dyk" -%}
+{%- set any = [] -%}{%- for d in D.days %}{% if d | length %}{% set _x = any.push(1) %}{% endif %}{% endfor -%}
+{%- if any | length %}
+<div class="card card-pad read-dyk print:hidden{{ (' ' ~ o.class) if o.class }}" x-data="dailyQuestion" x-show="list.length" x-cloak data-js-only data-lastmod="skip"
+     data-t-true="{{ 'booth.screen.true' | t(lang) }}" data-t-false="{{ 'booth.screen.false' | t(lang) }}"
+     data-t-gv="{{ 'booth.screen.gv' | t(lang) }}" data-t-lv="{{ 'booth.screen.lv' | t(lang) }}" data-t-both="{{ 'booth.screen.both' | t(lang) }}"
+     data-t-source="{{ 'booth.dyk.source' | t(lang) }}">
+  <script type="application/json" data-dyk>{{ D | jsonScript | safe }}</script>
+  <div class="flex items-start gap-3">
+    <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-grape-soft text-grape">{% icon "lightbulb", "size-5" %}</span>
+    <div class="min-w-0 flex-1">
+      <h3 id="{{ id }}-title" class="h-card">{{ "booth.screen.fact" | t(lang) }}</h3>
+      {% if o.sub %}<p class="mt-1 text-sm leading-relaxed text-muted">{{ o.sub }}</p>{% endif %}
+    </div>
+  </div>
+  <template x-if="cur()">
+    <div class="mt-4">
+      <p><span :class="pubClass()">{% icon "grapes", "size-3" %} <span x-text="pubName()"></span></span></p>
+      {#- the question: focus comes here after "Another question" (tabindex -1: not in the Tab order) -#}
+      <p id="{{ id }}-q" class="read-dyk-q" tabindex="-1" x-text="cur().text"></p>
+      {#- quiz and true or false: one button per answer; once answered they stay (aria-disabled), marked with an icon
+          and words — the right answer and, when it was another, the visitor's -#}
+      <div class="read-dyk-opts" role="group" aria-labelledby="{{ id }}-q" x-show="cur().type !== 'fill'">
+        <template x-for="(c, k) in options()" :key="cur().text + k">
+          <button type="button" class="read-dyk-opt" :class="{ 'is-right': shown && isRight(k), 'is-wrong': shown && k === picked && !isRight(k) }"
+                  :aria-disabled="shown ? 'true' : 'false'" @click="answer(k)">
+            <span class="min-w-0 flex-1" x-text="c"></span>
+            <span class="read-dyk-mark" x-show="shown && isRight(k)">{% icon "circle-check", "size-5" %}<span class="sr-only"> ({{ "booth.screen.right_answer" | t(lang) }})</span></span>
+            <span class="read-dyk-mark" x-show="shown && k === picked && !isRight(k)">{% icon "circle-x", "size-5" %}<span class="sr-only"> ({{ "booth.screen.your_answer" | t(lang) }})</span></span>
+          </button>
+        </template>
+      </div>
+      {#- fill in the blank: the missing words one tap away -#}
+      <p class="mt-3" x-show="cur().type === 'fill' && !shown"><button type="button" class="btn-secondary btn-sm" @click="reveal()">{% icon "eye", "size-4" %} {{ "booth.screen.show_answer" | t(lang) }}</button></p>
+      {#- the answer: focus comes here once answered, so a screen reader reads it -#}
+      <div class="read-dyk-fb" x-show="shown" tabindex="-1">
+        <p class="read-dyk-verdict" :class="cur().type === 'fill' ? '' : (isRight(picked) ? 'is-right' : 'is-wrong')">
+          <span class="inline-flex items-center gap-2" x-show="cur().type !== 'fill' && isRight(picked)">{% icon "circle-check", "size-5 shrink-0" %} {{ "booth.screen.right" | t(lang) }}</span>
+          <span class="inline-flex items-center gap-2" x-show="cur().type !== 'fill' && !isRight(picked)">{% icon "info", "size-5 shrink-0" %} {{ "booth.screen.wrong" | t(lang) }}</span>
+          <span x-show="cur().type === 'fill'">{{ "booth.screen.answer" | t(lang) }}: <strong x-text="cur().answer"></strong></span>
+        </p>
+        <p class="mt-1.5 text-sm leading-relaxed text-ink" x-show="cur().explain" x-text="cur().explain"></p>
+        <p class="mt-2 text-xs text-muted" x-show="cur().source || cur().credit">
+          <a class="link" x-show="cur().source" :href="cur().source || '#'" target="_blank" rel="noopener"><span x-text="cur().credit || t.source"></span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+          <span x-show="!cur().source" x-text="cur().credit"></span>
+        </p>
+      </div>
+      <p class="mt-4" x-show="more()"><button type="button" class="btn-secondary btn-sm" @click="another()">{% icon "refresh-cw", "size-4" %} {{ "booth.dyk.another" | t(lang) }}</button></p>
+    </div>
+  </template>
+</div>
+{%- endif %}
+{% endmacro %}
