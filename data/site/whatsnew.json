@@ -1,7 +1,60 @@
 {
- "updated": "2026-11-20T01:46:53Z",
+ "updated": "2026-11-20T10:14:39Z",
  "fixture": false,
  "items": [
+  {
+   "id": "pod:wo:e3f6ea2c853b",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/e8d70cb0-b898-44a8-a5c7-2219be17fd7a",
+   "title": "Grapevine Weekly Open AA Meeting, November 18, 2026 [Season 2, Episode 21]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on November 18, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Chris welcomes speakers Bill and Otis, who share their experience…",
+   "lang": "en",
+   "date": "2026-11-20T05:15:00Z",
+   "first_seen": "2026-11-20T10:14:33Z",
+   "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
+   "tags": [
+    "season-2"
+   ],
+   "category": "wo",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/e8d70cb0-b898-44a8-a5c7-2219be17fd7a.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 72653288,
+    "duration_sec": 3027,
+    "season": 2,
+    "episode": 21,
+    "episode_type": "full",
+    "show": "wo",
+    "show_name": "Grapevine Weekly Open AA Meeting",
+    "link": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "player_url": "https://player.captivate.fm/episode/e8d70cb0-b898-44a8-a5c7-2219be17fd7a",
+    "show_web": "https://www.aagrapevine.org/grapevine-weekly-open",
+    "apple": "https://podcasts.apple.com/us/podcast/grapevine-weekly-open-aa-meeting/id1874809908",
+    "spotify": "https://open.spotify.com/show/2jk469TmDC31spPqf8L0SF",
+    "amazon": "https://music.amazon.com/podcasts/8dfb5269-8733-42f3-b075-2d9e596bf4c5/grapevine-weekly-open-aa-meeting",
+    "weekly_open": "grapevine",
+    "meeting_date": "2026-11-18",
+    "generic_title": false,
+    "thumb": "/assets/cache/pod/3e3cd0ac7162b7fe.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting, November 18, 2026 [Season 2, Episode 21]",
+     "es": "Grapevine Weekly Open AA Meeting, 18 de noviembre de 2026 [Temporada 2, Episodio 21]"
+    },
+    "summary": {
+     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on November 18, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Chris welcomes speakers Bill and Otis, who share their experience…",
+     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 18 de noviembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Chris da la bienvenida a los oradores Bill y Otis, que comparten su experiencia …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-20T05:15:00Z"
+  },
   {
    "id": "ev:manual:2026-12-22-lv-intergroup-meeting-fort-worth",
    "source": "committee",
@@ -7866,7 +7919,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-06T05:31:51Z"
   },
   {
@@ -7919,7 +7972,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-06T05:15:00Z"
   },
   {
@@ -8185,50 +8238,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-11-04T13:00:15Z"
-  },
-  {
-   "id": "ig:DfUfKh9jaJn",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfUfKh9jaJn/",
-   "title": "At Wit's End of November 2026",
-   "summary": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
-   "lang": "en",
-   "date": "2026-11-04T12:45:16Z",
-   "first_seen": "2026-11-04T15:32:55Z",
-   "image": "/assets/cache/ig/DfUfKh9jaJn.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfUfKh9jaJn",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfUfKh9jaJn.webp",
-    "embed_url": "https://www.instagram.com/p/DfUfKh9jaJn/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfUfKh9jaJn/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "At Wit's End of November 2026",
-     "es": "At Wit's End de noviembre de 2026"
-    },
-    "summary": {
-     "en": "At Wit's End of November 2026 “We better get these Steps done before Thanksgiving!” —Joe H., Powell River, British Columbia Flex your funny bone If a great caption springs to mind when you look at our following cartoon pictures. www.aagrapevine.org/submit-caption",
-     "es": "¡At Wit's End de noviembre de 2026 “Es mejor que hagamos estos pasos antes de Acción de Gracias!” —Joe H., Powell River, British Columbia Flex your gracioso bone Si una gran capción brota a la mente cuando miras nuestras siguientes imágenes de dibujos animados. www.aagrapevine.org/submit-caption"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-04T12:45:16Z"
   }
  ]
 }
