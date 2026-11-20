@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-19T16:41:32Z",
+ "updated": "2026-11-20T16:17:26Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17044,
-   "posts": 4025,
+   "followers": 17051,
+   "posts": 4030,
    "owner_id": "48108439509",
-   "checked": "2026-11-19T16:41:15Z",
+   "checked": "2026-11-20T16:17:07Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,269 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2436,
-   "posts": 3055,
+   "posts": 3060,
    "owner_id": "48275839129",
-   "checked": "2026-11-19T16:41:18Z",
+   "checked": "2026-11-20T16:17:10Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:Df9qKlWDW5Y",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Df9qKlWDW5Y/",
+   "title": "“El que conciba a Dios como una serie de leyes cósmicas inmutables o un anciano de bata…",
+   "summary": "“El que conciba a Dios como una serie de leyes cósmicas inmutables o un anciano de bata y barba blancas, es total y gloriosamente irrelevante. Lo único importante son mis valores y actitudes, y las acciones que desencadenan”. \"“La fe es acción” CULVER CITY, CALIFORNIA, MAYO DE 1977 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-20T12:30:15Z",
+   "first_seen": "2026-11-20T16:17:25Z",
+   "image": "/assets/cache/ig/Df9qKlWDW5Y.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Df9qKlWDW5Y",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Df9qKlWDW5Y.webp",
+    "embed_url": "https://www.instagram.com/p/Df9qKlWDW5Y/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Df9qKlWDW5Y/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“He who conceives God as a series of immutable cosmic laws or an old man of … robe",
+     "es": "“El que conciba a Dios como una serie de leyes cósmicas inmutables o un anciano de bata…"
+    },
+    "summary": {
+     "en": "“He who conceives God as a series of immutable cosmic laws or an old man of white robe and beard is totally and gloriously irrelevant. The only important thing is my values and attitudes, and the actions that trigger.” \"“Faith is Action” culminate city, California, May 1977 De Spiritual Awakenings” Daily Quote in www.aalavina.org",
+     "es": "“El que conciba a Dios como una serie de leyes cósmicas inmutables o un anciano de bata y barba blancas, es total y gloriosamente irrelevante. Lo único importante son mis valores y actitudes, y las acciones que desencadenan”. \"“La fe es acción” CULVER CITY, CALIFORNIA, MAYO DE 1977 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Df9qKeGDb0p",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Df9qKeGDb0p/",
+   "title": "“Human beings come and go, but principles go on and on.”",
+   "summary": "“Human beings come and go, but principles go on and on.” “People and Principles,” Jackson, Michigan, October 1971, Best of the Grapevine, Volume 2 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-20T12:30:15Z",
+   "first_seen": "2026-11-20T16:17:25Z",
+   "image": "/assets/cache/ig/Df9qKeGDb0p.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Df9qKeGDb0p",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Df9qKeGDb0p.webp",
+    "embed_url": "https://www.instagram.com/p/Df9qKeGDb0p/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Df9qKeGDb0p/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Human beings come and go, but principles go on and on.”",
+     "es": "“Los seres humanos vienen y van, pero los principios siguen y siguen”."
+    },
+    "summary": {
+     "en": "“Human beings come and go, but principles go on and on.” “People and Principles,” Jackson, Michigan, October 1971, Best of the Grapevine, Volume 2 Daily Quote at www.aagrapevine.org",
+     "es": "“Los seres humanos vienen y van, pero los principios siguen y siguen”. “Personas y principios”, Jackson, Michigan, octubre de 1971, lo mejor del Grapevine, volumen 2 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Df9cM-3gn5m",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Df9cM-3gn5m/",
+   "title": "This week meeting leader Chris welcomes speakers Bill and Otis. Season 2, Episode 21",
+   "summary": "This week meeting leader Chris welcomes speakers Bill and Otis. Season 2, Episode 21",
+   "lang": "en",
+   "date": "2026-11-20T10:33:16Z",
+   "first_seen": "2026-11-20T16:17:25Z",
+   "image": "/assets/cache/ig/Df9cM-3gn5m.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Df9cM-3gn5m",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Df9cM-3gn5m.webp",
+    "embed_url": "https://www.instagram.com/p/Df9cM-3gn5m/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Df9cM-3gn5m/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week meeting leader Chris welcomes speakers Bill and Otis. Season 2, Episode 21",
+     "es": "El líder de la reunión de esta semana Chris da la bienvenida a los oradores Bill y Otis. Temporada 2, Episodio 21"
+    },
+    "summary": {
+     "en": "This week meeting leader Chris welcomes speakers Bill and Otis. Season 2, Episode 21",
+     "es": "El líder de la reunión de esta semana Chris da la bienvenida a los oradores Bill y Otis. Temporada 2, Episodio 21"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Df7rItoDXO3",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Df7rItoDXO3/",
+   "title": "Del artículo “Primeras fiestas\", edición de noviembre/diciembre de 2026.",
+   "summary": "Del artículo “Primeras fiestas\", edición de noviembre/diciembre de 2026. Para leer más, visite www.aalavina.org/revista",
+   "lang": "es",
+   "date": "2026-11-19T18:00:16Z",
+   "first_seen": "2026-11-20T16:17:25Z",
+   "image": "/assets/cache/ig/Df7rItoDXO3.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Df7rItoDXO3",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Df7rItoDXO3.webp",
+    "embed_url": "https://www.instagram.com/p/Df7rItoDXO3/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Df7rItoDXO3/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the article “First Parties”, November / December 2026 edition.",
+     "es": "Del artículo “Primeras fiestas\", edición de noviembre/diciembre de 2026."
+    },
+    "summary": {
+     "en": "From the article “First Parties”, November / December 2026 edition. To read more, visit www.aalavina.org/revista",
+     "es": "Del artículo “Primeras fiestas\", edición de noviembre/diciembre de 2026. Para leer más, visite www.aalavina.org/revista"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Df7rIrujXJM",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Df7rIrujXJM/",
+   "title": "From the article “My Friend Ben\", December 2026 issue.",
+   "summary": "From the article “My Friend Ben\", December 2026 issue. To read more, visit www.aagrapevine.org/magazine",
+   "lang": "en",
+   "date": "2026-11-19T18:00:15Z",
+   "first_seen": "2026-11-20T16:17:25Z",
+   "image": "/assets/cache/ig/Df7rIrujXJM.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Df7rIrujXJM",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Df7rIrujXJM.webp",
+    "embed_url": "https://www.instagram.com/p/Df7rIrujXJM/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Df7rIrujXJM/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From the article “My Friend Ben\", December 2026 issue.",
+     "es": "Del artículo “Mi amigo Ben”, edición de diciembre de 2026."
+    },
+    "summary": {
+     "en": "From the article “My Friend Ben\", December 2026 issue. To read more, visit www.aagrapevine.org/magazine",
+     "es": "Del artículo “Mi amigo Ben”, edición de diciembre de 2026. Para leer más, visite www.aagrapevine.org/magazine"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:Df7kdbxuYng",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/Df7kdbxuYng/",
+   "title": "La Viña en Instagram",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-19T17:01:45Z",
+   "first_seen": "2026-11-20T16:17:25Z",
+   "image": "/assets/cache/ig/Df7kdbxuYng.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "Df7kdbxuYng",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/Df7kdbxuYng.webp",
+    "embed_url": "https://www.instagram.com/p/Df7kdbxuYng/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/Df7kdbxuYng/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña on Instagram",
+     "es": "La Viña en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
   {
    "id": "ig:Df7FXrIjTAd",
    "source": "instagram",
@@ -2567,7 +2823,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfZnCS5DR-9",
@@ -2610,7 +2866,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfYRRWjCWlN",
@@ -10017,49 +10273,6 @@
    "is_new": false
   },
   {
-   "id": "ig:DdmAc7el6Rp",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdmAc7el6Rp/",
-   "title": "Letter to Grapevine and La Viña Reps: Grapevine News! To read what’s new for October…",
-   "summary": "Letter to Grapevine and La Viña Reps: Grapevine News! To read what’s new for October, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-22T15:00:26Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdmAc7el6Rp.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdmAc7el6Rp",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "carousel",
-    "thumb": "/assets/cache/ig/DdmAc7el6Rp.webp",
-    "embed_url": "https://www.instagram.com/p/DdmAc7el6Rp/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdmAc7el6Rp/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Letter to Grapevine and La Viña Reps: Grapevine News! To read what’s new for October…",
-     "es": "¡Carta a Grapevine y La Viña Reps: Grapevine News! Para leer lo nuevo para octubre …"
-    },
-    "summary": {
-     "en": "Letter to Grapevine and La Viña Reps: Grapevine News! To read what’s new for October, visit www.aagrapevine.org/gvr-resources Sign up to receive Grapevine emails at www.aagrapevine.org",
-     "es": "¡Carta a Grapevine y La Viña Reps: Grapevine News! Para leer lo nuevo para octubre, visite www.aagrapevine.org/gvr-resources Inscríbase para recibir correos electrónicos Grapevine en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:DdmAc51F06J",
    "source": "instagram",
    "kind": "post",
@@ -10146,49 +10359,6 @@
    "is_new": false
   },
   {
-   "id": "ig:DdloZeCFzMI",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdloZeCFzMI/",
-   "title": "“Faith is more than our greatest gift; its sharing with others is our greatest…",
-   "summary": "“Faith is more than our greatest gift; its sharing with others is our greatest responsibility.” AA Co-Founder, Bill W., April 1961, From: “God As We Understand Him: The Dilemma of No Faith”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-22T11:30:15Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdloZeCFzMI.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdloZeCFzMI",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdloZeCFzMI.webp",
-    "embed_url": "https://www.instagram.com/p/DdloZeCFzMI/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdloZeCFzMI/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Faith is more than our greatest gift; its sharing with others is our greatest…",
-     "es": "“La fe es más que nuestro mayor don; su compartir con otros es nuestro mayor …"
-    },
-    "summary": {
-     "en": "“Faith is more than our greatest gift; its sharing with others is our greatest responsibility.” AA Co-Founder, Bill W., April 1961, From: “God As We Understand Him: The Dilemma of No Faith”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“La fe es más que nuestro mayor don; su compartir con los demás es nuestra mayor responsabilidad”. AA cofundador, Bill W., abril de 1961, de: \"Dios como lo entendemos: el dilema de ninguna fe\", El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:DdjfEdcjfEc",
    "source": "instagram",
    "kind": "post",
@@ -10234,49 +10404,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdjfEY6DeMx",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdjfEY6DeMx/",
-   "title": "From Dennis R., - \"Rose City, Golf Course\"",
-   "summary": "From Dennis R., - \"Rose City, Golf Course\" GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
-   "lang": "en",
-   "date": "2026-09-21T15:30:14Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdjfEY6DeMx.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdjfEY6DeMx",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdjfEY6DeMx.webp",
-    "embed_url": "https://www.instagram.com/p/DdjfEY6DeMx/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdjfEY6DeMx/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "From Dennis R., - \"Rose City, Golf Course\"",
-     "es": "De Dennis R., - \"Ciudad rosada, campo de Golf\""
-    },
-    "summary": {
-     "en": "From Dennis R., - \"Rose City, Golf Course\" GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
-     "es": "¡De Dennis R., - \"ciudad rosada, campo de golf\" Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. ➡️ Las fotos deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },

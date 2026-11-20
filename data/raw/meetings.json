@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-11-19T16:47:43Z",
- "attempted": "2026-11-19T16:47:43Z",
+ "updated": "2026-11-20T16:21:43Z",
+ "attempted": "2026-11-20T16:21:43Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -11,22 +11,17 @@
  },
  "stats": {
   "offices": 8,
-  "offices_ok": 5,
-  "listed": 4156,
-  "grapevine": 13,
+  "offices_ok": 8,
+  "listed": 5930,
+  "grapevine": 24,
   "meetings": 23,
   "in_area": 13,
   "nearby": 10,
   "inactive": 0,
   "incomplete": 0,
   "duplicates_merged": 1,
-  "kept_from_before": 11,
-  "requests": 9,
-  "warnings": [
-   "AA Central Service Office, Tyler: tyler-aa.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept",
-   "OKC Intergroup: feed: the answer is not a meeting list (not JSON); page: no meeting list was found on the office's meetings page",
-   "Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept"
-  ]
+  "kept_from_before": 0,
+  "requests": 8
  },
  "items": [
   {
@@ -1098,8 +1093,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-19T16:44:54Z",
-   "attempted": "2026-11-19T16:44:54Z",
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
    "note": null
   },
   {
@@ -1112,8 +1107,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-19T16:44:54Z",
-   "attempted": "2026-11-19T16:44:54Z",
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
    "note": null
   },
   {
@@ -1121,13 +1116,14 @@
    "name": "AA Central Service Office, Tyler",
    "url": "https://www.tyler-aa.org",
    "lang": "en",
-   "ok": false,
+   "ok": true,
    "count": 3,
-   "method": null,
+   "method": "page",
    "key_from": null,
-   "error": "tyler-aa.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept",
-   "updated": "2026-11-18T16:38:35Z",
-   "attempted": "2026-11-19T16:44:54Z"
+   "error": null,
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
+   "note": null
   },
   {
    "id": "aaespanoldallas",
@@ -1139,8 +1135,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-19T16:44:54Z",
-   "attempted": "2026-11-19T16:44:54Z",
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
    "note": null
   },
   {
@@ -1153,8 +1149,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-19T16:44:54Z",
-   "attempted": "2026-11-19T16:44:54Z",
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
    "note": null
   },
   {
@@ -1167,8 +1163,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-19T16:44:54Z",
-   "attempted": "2026-11-19T16:44:54Z",
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
    "note": null
   },
   {
@@ -1176,26 +1172,28 @@
    "name": "OKC Intergroup",
    "url": "https://okcintergroup.org",
    "lang": "en",
-   "ok": false,
+   "ok": true,
    "count": 8,
-   "method": null,
+   "method": "feed",
    "key_from": null,
-   "error": "feed: the answer is not a meeting list (not JSON); page: no meeting list was found on the office's meetings page",
-   "updated": "2026-11-18T16:38:35Z",
-   "attempted": "2026-11-19T16:44:54Z"
+   "error": null,
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
+   "note": null
   },
   {
    "id": "nwta66",
    "name": "Northwest Texas Area 66",
    "url": "https://nwta66.org",
    "lang": "en",
-   "ok": false,
+   "ok": true,
    "count": 0,
-   "method": null,
+   "method": "feed",
    "key_from": null,
-   "error": "nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept",
-   "updated": "2026-11-18T16:38:35Z",
-   "attempted": "2026-11-19T16:44:54Z"
+   "error": null,
+   "updated": "2026-11-20T16:20:51Z",
+   "attempted": "2026-11-20T16:20:51Z",
+   "note": null
   }
  ],
  "type_labels": {

@@ -1,17 +1,17 @@
 {
  "source": "podcasts",
- "updated": "2026-11-20T10:14:33Z",
- "attempted": "2026-11-20T10:14:33Z",
+ "updated": "2026-11-20T16:16:24Z",
+ "attempted": "2026-11-20T16:16:24Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 1,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "fetched": 314,
-  "new": 1,
+  "new": 0,
   "total": 314,
   "active": 314,
   "gone": 0,
@@ -22,28 +22,28 @@
     "name": "AA Grapevine's Podcast",
     "episodes": 270,
     "latest": "2026-11-16T05:15:00Z",
-    "updated": "2026-11-20T10:14:33Z"
+    "updated": "2026-11-20T16:15:33Z"
    },
    "wo": {
     "ok": true,
     "name": "Grapevine Weekly Open AA Meeting",
     "episodes": 42,
     "latest": "2026-11-20T05:15:00Z",
-    "updated": "2026-11-20T10:14:33Z"
+    "updated": "2026-11-20T16:15:33Z"
    },
    "lvo": {
     "ok": true,
     "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
     "episodes": 2,
     "latest": "2026-11-16T05:15:00Z",
-    "updated": "2026-11-20T10:14:33Z"
+    "updated": "2026-11-20T16:15:33Z"
    }
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
-  "discovery_checked": "2026-11-13T15:30:08Z",
+  "discovery_checked": "2026-11-20T16:16:24Z",
   "discovered_feeds": [],
-  "seconds": 3.2,
+  "seconds": 54.6,
   "artwork": 4,
   "artwork_missing": 0,
   "artwork_removed": 0
@@ -510,7 +510,7 @@
    "lang": "en",
    "date": "2026-10-16T04:15:00Z",
    "first_seen": "2026-10-16T09:57:00Z",
-   "last_seen": "2026-11-13T15:29:24Z",
+   "last_seen": "2026-11-20T16:15:33Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -585,7 +585,7 @@
    "lang": "en",
    "date": "2026-10-09T04:15:00Z",
    "first_seen": "2026-10-09T07:30:20Z",
-   "last_seen": "2026-11-13T15:29:24Z",
+   "last_seen": "2026-11-20T16:15:33Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -660,7 +660,7 @@
    "lang": "en",
    "date": "2026-10-02T04:15:00Z",
    "first_seen": "2026-10-02T04:55:26Z",
-   "last_seen": "2026-11-13T15:29:24Z",
+   "last_seen": "2026-11-20T16:15:33Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -11539,7 +11539,7 @@
   }
  ],
  "discovery": {
-  "checked_at": "2026-11-13T15:30:08Z",
+  "checked_at": "2026-11-20T16:16:24Z",
   "pages_checked": 6,
   "feeds": []
  }
