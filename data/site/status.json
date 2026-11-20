@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-20T16:25:00Z",
- "updated": "2026-11-20T16:25:00Z",
+ "generated": "2026-11-20T20:04:07Z",
+ "updated": "2026-11-20T20:04:07Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-20T16:15:29Z",
-   "attempted": "2026-11-20T16:15:29Z",
+   "updated": "2026-11-20T20:03:44Z",
+   "attempted": "2026-11-20T20:03:44Z",
    "count": 1222,
    "new_7d": 968,
    "error": null,
@@ -132,8 +132,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-20T16:15:30Z",
-   "attempted": "2026-11-20T16:15:30Z",
+   "updated": "2026-11-20T20:03:44Z",
+   "attempted": "2026-11-20T20:03:44Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -156,8 +156,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-20T16:15:30Z",
-   "attempted": "2026-11-20T16:15:30Z",
+   "updated": "2026-11-20T20:03:44Z",
+   "attempted": "2026-11-20T20:03:44Z",
    "count": 21,
    "new_7d": 4,
    "error": null,
@@ -211,8 +211,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-20T16:21:57Z",
-   "attempted": "2026-11-20T16:21:57Z",
+   "updated": "2026-11-20T20:03:50Z",
+   "attempted": "2026-11-20T20:03:50Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -367,8 +367,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-20T16:16:24Z",
-   "attempted": "2026-11-20T16:16:24Z",
+   "updated": "2026-11-20T20:03:47Z",
+   "attempted": "2026-11-20T20:03:47Z",
    "count": 314,
    "new_7d": 3,
    "error": null,
@@ -385,28 +385,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 270,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-20T16:15:33Z"
+      "updated": "2026-11-20T20:03:47Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 42,
       "latest": "2026-11-20T05:15:00Z",
-      "updated": "2026-11-20T16:15:33Z"
+      "updated": "2026-11-20T20:03:47Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 2,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-20T16:15:33Z"
+      "updated": "2026-11-20T20:03:47Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-20T16:16:24Z",
     "discovered_feeds": [],
-    "seconds": 54.6,
+    "seconds": 3.4,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -616,15 +616,15 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-20T16:21:59Z",
-   "attempted": "2026-11-20T16:21:59Z",
+   "updated": "2026-11-20T20:04:06Z",
+   "attempted": "2026-11-20T20:04:06Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
    "stats": {
     "fetched": 2,
     "parsed": 2,
-    "requests": 1,
+    "requests": 2,
     "today": "2026-11-20",
     "new": 0
    },
@@ -710,16 +710,16 @@
   "updated": "2026-11-20T16:24:57Z"
  },
  "translations": {
-  "cached": 4390,
+  "cached": 4384,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 9,
-  "from_cache": 4375,
+  "translated_this_run": 0,
+  "from_cache": 4384,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 1.5,
-  "model_seconds": 1.1,
-  "texts_per_second": 5.9,
+  "seconds": 0.1,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 269,
   "problems": []
  },
