@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-20T16:21:53Z",
- "attempted": "2026-11-20T16:21:53Z",
+ "updated": "2026-11-21T15:34:08Z",
+ "attempted": "2026-11-21T15:34:08Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,15 +15,15 @@
   "upcoming_urls": 11,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 2,
+  "refreshed": 3,
   "failed": 0,
   "pending": 0,
-  "cached": 14,
+  "cached": 11,
   "texas": 2,
   "online_es": 1,
   "items": 3,
   "new": 0,
-  "requests": 44
+  "requests": 47
  },
  "items": [
   {
@@ -143,48 +143,6 @@
  ],
  "first_harvest": "2026-09-23T16:43:55Z",
  "cache": {
-  "https://www.aagrapevine.org/get-involved/events/2026-11-13/36th-vancouver-roundup": {
-   "at": "2026-11-06T15:15:59Z",
-   "ev": {
-    "title": "36th Vancouver RoundUp",
-    "date_text": "November 13, 2026 - November 15, 2026",
-    "start": "2026-11-13",
-    "end": "2026-11-15",
-    "all_day": true,
-    "location_raw": "Vancouver, British Columbia",
-    "website": "https://www.vanroundup.com/",
-    "lang": "en",
-    "location": "Vancouver, British Columbia",
-    "city": "Vancouver",
-    "country": "Canada",
-    "region": "British Columbia",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
-  "https://www.aagrapevine.org/get-involved/events/2026-11-13/international-secular-conference-phoenix-2026": {
-   "at": "2026-11-06T15:16:05Z",
-   "ev": {
-    "title": "International Secular Conference Phoenix 2026",
-    "date_text": "November 13, 2026 - November 15, 2026",
-    "start": "2026-11-13",
-    "end": "2026-11-15",
-    "all_day": true,
-    "location_raw": "Phoenix, Arizona",
-    "website": "https://www.aasecular.org/icsaa-2026",
-    "lang": "en",
-    "location": "Phoenix, Arizona",
-    "city": "Phoenix",
-    "state": "AZ",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
   "https://www.aagrapevine.org/get-involved/events/2026-11-20/37th-mchenrys-soberfest": {
    "at": "2026-11-20T16:21:48Z",
    "ev": {
@@ -227,7 +185,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2026-12-04/14th-chiang-mai-roundup-2026": {
-   "at": "2026-11-07T14:14:56Z",
+   "at": "2026-11-21T15:33:57Z",
    "ev": {
     "title": "14th Chiang Mai Roundup 2026",
     "date_text": "December 4, 2026 - December 6, 2026",
@@ -247,7 +205,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-03-19/southern-maryland-roundup": {
-   "at": "2026-11-07T14:15:01Z",
+   "at": "2026-11-21T15:34:02Z",
    "ev": {
     "title": "Southern Maryland Roundup",
     "date_text": "March 19, 2027 - March 21, 2027",
@@ -268,7 +226,7 @@
    "fails": 0
   },
   "https://www.aalavina.org/get-involved/events/2027-06-11/14a-convencion-nacional-11-12-y-13-de-junio-de-2027-ciudad-de-mexico": {
-   "at": "2026-11-07T14:15:07Z",
+   "at": "2026-11-21T15:34:08Z",
    "ev": {
     "title": "14.a Convención Nacional 11, 12 y 13 de junio de 2027 Ciudad de México «AA una luz de esperanza»",
     "date_text": "Junio 11, 2027 - Junio 13, 2027",
@@ -336,27 +294,6 @@
     "location": "Hilton Head, South Carolina",
     "city": "Hilton Head",
     "state": "SC",
-    "country": "USA",
-    "online": false,
-    "texas": false
-   },
-   "http": 200,
-   "fails": 0
-  },
-  "https://www.aagrapevine.org/get-involved/events/2026-11-13/42nd-annual-wichita-fall-roundup-0": {
-   "at": "2026-11-12T16:07:24Z",
-   "ev": {
-    "title": "42nd Annual Wichita Fall Roundup",
-    "date_text": "November 13, 2026 - November 14, 2026",
-    "start": "2026-11-13",
-    "end": "2026-11-14",
-    "all_day": true,
-    "location_raw": "Wichita, Kansas",
-    "website": "https://www.ictroundup.com/",
-    "lang": "en",
-    "location": "Wichita, Kansas",
-    "city": "Wichita",
-    "state": "KS",
     "country": "USA",
     "online": false,
     "texas": false

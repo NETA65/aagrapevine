@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T16:17:26Z",
+ "updated": "2026-11-21T15:28:57Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17051,
-   "posts": 4030,
+   "followers": 17056,
+   "posts": 4032,
    "owner_id": "48108439509",
-   "checked": "2026-11-20T16:17:07Z",
+   "checked": "2026-11-21T15:28:40Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,100 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2436,
-   "posts": 3060,
+   "followers": 2435,
+   "posts": 3062,
    "owner_id": "48275839129",
-   "checked": "2026-11-20T16:17:10Z",
+   "checked": "2026-11-21T15:28:43Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgAO9dyjR-A",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAO9dyjR-A/",
+   "title": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda…",
+   "summary": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda mi sobriedad. Esto también me demostró cómo debo actuar ante quienes necesitan mi ayuda. Es mi responsabilidad asegurarme de que la mano de AA se le extienda a todo el mundo”. \"“La novia de nadie” MORENO VALLEY, CALIFORNIA, DICIEMBRE DE 1992 De I Am Responsible\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-21T12:30:16Z",
+   "first_seen": "2026-11-21T15:28:57Z",
+   "image": "/assets/cache/ig/DgAO9dyjR-A.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAO9dyjR-A",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAO9dyjR-A.webp",
+    "embed_url": "https://www.instagram.com/p/DgAO9dyjR-A/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAO9dyjR-A/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The others, through their actions, provided me with unconditional support throughout …",
+     "es": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda…"
+    },
+    "summary": {
+     "en": "“The others, through their actions, provided me with unconditional support throughout my sobriety. This also showed me how I should act with those who need my help. It is my responsibility to make sure that the AA hand is extended to everyone.” \"Nobody's Bride\" MORENO VALLEY, CALIFORNIA, 1992 DECEMBER OF I Am Responsible\" Daily Quote in www.aalavina.org",
+     "es": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda mi sobriedad. Esto también me demostró cómo debo actuar ante quienes necesitan mi ayuda. Es mi responsabilidad asegurarme de que la mano de AA se le extienda a todo el mundo”. \"“La novia de nadie” MORENO VALLEY, CALIFORNIA, DICIEMBRE DE 1992 De I Am Responsible\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgAO9djDWfD",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAO9djDWfD/",
+   "title": "“I build today the road I travel tomorrow.”",
+   "summary": "“I build today the road I travel tomorrow.” “Short Takes,” Binghamton, New York, July 1967, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-21T12:30:15Z",
+   "first_seen": "2026-11-21T15:28:57Z",
+   "image": "/assets/cache/ig/DgAO9djDWfD.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAO9djDWfD",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAO9djDWfD.webp",
+    "embed_url": "https://www.instagram.com/p/DgAO9djDWfD/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAO9djDWfD/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I build today the road I travel tomorrow.”",
+     "es": "“Construyo hoy el camino que viajo mañana”."
+    },
+    "summary": {
+     "en": "“I build today the road I travel tomorrow.” “Short Takes,” Binghamton, New York, July 1967, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Construyo hoy el camino que viajo mañana”. “El caballo toma”, Binghamton, Nueva York, julio de 1967, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:Df9qKlWDW5Y",
    "source": "instagram",
@@ -2608,7 +2694,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfcL1OBDRYS",
@@ -2651,7 +2737,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:Dfb6ZgtA-xc",
@@ -10183,49 +10269,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdoNMQyF9Bf",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdoNMQyF9Bf/",
-   "title": "“Excessive guilt or rebellion leads to spiritual poverty.”",
-   "summary": "“Excessive guilt or rebellion leads to spiritual poverty.” AA Co-Founder, Bill W., June 1961, From: “Humility for Today”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-23T11:30:14Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdoNMQyF9Bf.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdoNMQyF9Bf",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdoNMQyF9Bf.webp",
-    "embed_url": "https://www.instagram.com/p/DdoNMQyF9Bf/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdoNMQyF9Bf/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Excessive guilt or rebellion leads to spiritual poverty.”",
-     "es": "“La culpa o la rebelión excesiva conduce a la pobreza espiritual.”"
-    },
-    "summary": {
-     "en": "“Excessive guilt or rebellion leads to spiritual poverty.” AA Co-Founder, Bill W., June 1961, From: “Humility for Today”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“La culpa o la rebelión excesiva conduce a la pobreza espiritual”. AA cofundador, Bill W., junio de 1961, de: “humildad para hoy”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },

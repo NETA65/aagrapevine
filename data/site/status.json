@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-21T11:26:49Z",
- "updated": "2026-11-21T11:26:49Z",
+ "generated": "2026-11-21T15:36:54Z",
+ "updated": "2026-11-21T15:36:54Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-21T11:26:26Z",
-   "attempted": "2026-11-21T11:26:26Z",
+   "updated": "2026-11-21T15:27:49Z",
+   "attempted": "2026-11-21T15:27:49Z",
    "count": 1222,
    "new_7d": 968,
    "error": null,
@@ -132,8 +132,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-21T11:26:26Z",
-   "attempted": "2026-11-21T11:26:26Z",
+   "updated": "2026-11-21T15:27:49Z",
+   "attempted": "2026-11-21T15:27:49Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -156,8 +156,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-21T11:26:26Z",
-   "attempted": "2026-11-21T11:26:26Z",
+   "updated": "2026-11-21T15:27:49Z",
+   "attempted": "2026-11-21T15:27:49Z",
    "count": 21,
    "new_7d": 4,
    "error": null,
@@ -179,10 +179,10 @@
    "label": "Grapevine & La Viña articles",
    "label_es": "Artículos de Grapevine y La Viña",
    "ok": true,
-   "updated": "2026-11-20T16:19:00Z",
-   "attempted": "2026-11-20T16:19:00Z",
+   "updated": "2026-11-21T15:30:19Z",
+   "attempted": "2026-11-21T15:30:19Z",
    "count": 329,
-   "new_7d": 30,
+   "new_7d": 4,
    "error": null,
    "stats": {
     "hub_articles": 56,
@@ -197,7 +197,7 @@
     "details_left": 0,
     "new": 0,
     "total": 329,
-    "requests": 22
+    "requests": 15
    },
    "changes": {
     "added": 0,
@@ -211,8 +211,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-21T11:26:48Z",
-   "attempted": "2026-11-21T11:26:48Z",
+   "updated": "2026-11-21T15:34:13Z",
+   "attempted": "2026-11-21T15:34:13Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -238,8 +238,8 @@
    "label": "Editorial themes (upcoming issues)",
    "label_es": "Temas editoriales (próximos números)",
    "ok": true,
-   "updated": "2026-11-20T16:19:24Z",
-   "attempted": "2026-11-20T16:19:24Z",
+   "updated": "2026-11-21T15:30:39Z",
+   "attempted": "2026-11-21T15:30:39Z",
    "count": 51,
    "new_7d": 0,
    "error": null,
@@ -283,10 +283,10 @@
    "label": "Document library (Grapevine, La Viña and AA)",
    "label_es": "Biblioteca de documentos (La Viña, Grapevine y AA)",
    "ok": true,
-   "updated": "2026-11-20T16:24:57Z",
-   "attempted": "2026-11-20T16:24:57Z",
+   "updated": "2026-11-21T15:36:50Z",
+   "attempted": "2026-11-21T15:36:50Z",
    "count": 100,
-   "new_7d": 4,
+   "new_7d": 0,
    "error": null,
    "stats": {
     "known_pages": 3447,
@@ -297,16 +297,16 @@
     "pdfs_gone": 13,
     "pdfs_with_details": 137,
     "pdfs_with_thumbs": 137,
-    "last_run_pages": 26,
-    "fetched": 26,
-    "reused": 14,
+    "last_run_pages": 27,
+    "fetched": 27,
+    "reused": 13,
     "new": 0,
     "not_modified": 0,
     "page_errors": 0,
     "discovered": 0,
     "details": 0,
-    "heads": 12,
-    "requests": 40,
+    "heads": 0,
+    "requests": 29,
     "pruned_pages": 0,
     "queue_remaining": 0,
     "est_days_to_full": 0.0
@@ -323,8 +323,8 @@
    "label": "YouTube videos",
    "label_es": "Videos de YouTube",
    "ok": true,
-   "updated": "2026-11-20T16:17:06Z",
-   "attempted": "2026-11-20T16:17:06Z",
+   "updated": "2026-11-21T15:28:38Z",
+   "attempted": "2026-11-21T15:28:38Z",
    "count": 551,
    "new_7d": 4,
    "error": null,
@@ -342,7 +342,7 @@
     "gone_checks": 0,
     "gone_marked": 0,
     "fetched": 250,
-    "new": 1,
+    "new": 0,
     "total": 551,
     "active": 551,
     "gone": 0,
@@ -350,13 +350,13 @@
     "shorts": 18,
     "approx_dates": 1,
     "playlists": 32,
-    "seconds": 41.5,
+    "seconds": 45.1,
     "warnings": [
      "details stopped: YouTube answered with a bot check (“confirm you’re not a bot”) — nothing is wrong on our side; videos keep their last known details"
     ]
    },
    "changes": {
-    "added": 1,
+    "added": 0,
     "removed": 0,
     "held": 0
    },
@@ -367,8 +367,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-21T11:26:45Z",
-   "attempted": "2026-11-21T11:26:45Z",
+   "updated": "2026-11-21T15:27:53Z",
+   "attempted": "2026-11-21T15:27:53Z",
    "count": 314,
    "new_7d": 3,
    "error": null,
@@ -385,28 +385,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 270,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-21T11:26:45Z"
+      "updated": "2026-11-21T15:27:53Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 42,
       "latest": "2026-11-20T05:15:00Z",
-      "updated": "2026-11-21T11:26:45Z"
+      "updated": "2026-11-21T15:27:53Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 2,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-21T11:26:45Z"
+      "updated": "2026-11-21T15:27:53Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-20T16:16:24Z",
     "discovered_feeds": [],
-    "seconds": 3.4,
+    "seconds": 3.7,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -423,10 +423,10 @@
    "label": "Instagram posts",
    "label_es": "Publicaciones de Instagram",
    "ok": true,
-   "updated": "2026-11-20T16:17:26Z",
-   "attempted": "2026-11-20T16:17:26Z",
-   "count": 248,
-   "new_7d": 33,
+   "updated": "2026-11-21T15:28:57Z",
+   "attempted": "2026-11-21T15:28:57Z",
+   "count": 249,
+   "new_7d": 30,
    "error": null,
    "stats": {
     "strategy": {
@@ -450,22 +450,22 @@
      "missing": [],
      "removed": []
     },
-    "thumbs_downloaded": 6,
-    "pruned": 3,
-    "thumbs_deleted": 3,
-    "new": 6,
-    "total": 248,
+    "thumbs_downloaded": 2,
+    "pruned": 1,
+    "thumbs_deleted": 1,
+    "new": 2,
+    "total": 249,
     "per_account": {
      "gv": 130,
-     "lv": 118
+     "lv": 119
     },
     "requests": 7,
     "anonymous": true,
     "graph_api": false
    },
    "changes": {
-    "added": 6,
-    "removed": 3,
+    "added": 2,
+    "removed": 1,
     "held": 0
    },
    "held": null
@@ -475,8 +475,8 @@
    "label": "Grapevine Weekly Open meeting",
    "label_es": "Reunión Grapevine Weekly Open",
    "ok": true,
-   "updated": "2026-11-20T16:19:24Z",
-   "attempted": "2026-11-20T16:19:24Z",
+   "updated": "2026-11-21T15:30:44Z",
+   "attempted": "2026-11-21T15:30:44Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -501,8 +501,8 @@
    "label": "GV/LV event calendars",
    "label_es": "Calendarios de eventos de GV/LV",
    "ok": true,
-   "updated": "2026-11-20T16:21:53Z",
-   "attempted": "2026-11-20T16:21:53Z",
+   "updated": "2026-11-21T15:34:08Z",
+   "attempted": "2026-11-21T15:34:08Z",
    "count": 3,
    "new_7d": 0,
    "error": null,
@@ -512,15 +512,15 @@
     "upcoming_urls": 11,
     "kept_from_cache": 0,
     "fetched": 0,
-    "refreshed": 2,
+    "refreshed": 3,
     "failed": 0,
     "pending": 0,
-    "cached": 14,
+    "cached": 11,
     "texas": 2,
     "online_es": 1,
     "items": 3,
     "new": 0,
-    "requests": 44
+    "requests": 47
    },
    "changes": {
     "added": 0,
@@ -534,8 +534,8 @@
    "label": "Book of the Month, prices & specialty items",
    "label_es": "Libro del mes, precios y artículos especiales",
    "ok": true,
-   "updated": "2026-11-20T16:20:33Z",
-   "attempted": "2026-11-20T16:20:33Z",
+   "updated": "2026-11-21T15:32:38Z",
+   "attempted": "2026-11-21T15:32:38Z",
    "count": 62,
    "new_7d": 0,
    "error": null,
@@ -544,8 +544,8 @@
     "plans": 52,
     "specialty": 8,
     "types_refreshed": false,
-    "specialty_refreshed": false,
-    "requests": 12,
+    "specialty_refreshed": true,
+    "requests": 20,
     "images_downloaded": 0
    },
    "changes": {
@@ -560,8 +560,8 @@
    "label": "Record your story by phone (Grapevine & La Viña)",
    "label_es": "Graba tu historia por teléfono (La Viña y Grapevine)",
    "ok": true,
-   "updated": "2026-11-20T16:20:51Z",
-   "attempted": "2026-11-20T16:20:51Z",
+   "updated": "2026-11-21T15:32:53Z",
+   "attempted": "2026-11-21T15:32:53Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -585,15 +585,15 @@
    "label": "Grapevine meetings (our Area and nearby)",
    "label_es": "Reuniones de Grapevine (nuestra Área y cercanas)",
    "ok": true,
-   "updated": "2026-11-20T16:21:43Z",
-   "attempted": "2026-11-20T16:21:43Z",
+   "updated": "2026-11-21T15:33:52Z",
+   "attempted": "2026-11-21T15:33:52Z",
    "count": 23,
    "new_7d": 0,
    "error": null,
    "stats": {
     "offices": 8,
-    "offices_ok": 8,
-    "listed": 5930,
+    "offices_ok": 7,
+    "listed": 5155,
     "grapevine": 24,
     "meetings": 23,
     "in_area": 13,
@@ -602,7 +602,10 @@
     "incomplete": 0,
     "duplicates_merged": 1,
     "kept_from_before": 0,
-    "requests": 8
+    "requests": 9,
+    "warnings": [
+     "Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept"
+    ]
    },
    "changes": {
     "added": 0,
@@ -616,8 +619,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-21T11:26:42Z",
-   "attempted": "2026-11-21T11:26:42Z",
+   "updated": "2026-11-21T15:34:19Z",
+   "attempted": "2026-11-21T15:34:19Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -626,11 +629,11 @@
     "parsed": 2,
     "requests": 2,
     "today": "2026-11-21",
-    "new": 2
+    "new": 0
    },
    "changes": {
-    "added": 2,
-    "removed": 2,
+    "added": 0,
+    "removed": 0,
     "held": 0
    },
    "held": null
@@ -691,13 +694,13 @@
    }
   ]
  },
- "full_update": "2026-11-20T16:21:53Z",
+ "full_update": "2026-11-21T15:34:08Z",
  "crawl": {
-  "attempted": "2026-11-20T16:24:57Z",
+  "attempted": "2026-11-21T15:36:50Z",
   "crawled_pages": 3447,
   "est_days_to_full": 0.0,
   "known_pages": 3447,
-  "last_run_pages": 26,
+  "last_run_pages": 27,
   "never_crawled": 0,
   "never_crawled_events": 0,
   "new": 0,
@@ -707,26 +710,26 @@
   "pdfs_with_details": 137,
   "pdfs_with_thumbs": 100,
   "queue_remaining": 0,
-  "updated": "2026-11-20T16:24:57Z"
+  "updated": "2026-11-21T15:36:50Z"
  },
  "translations": {
-  "cached": 4384,
+  "cached": 4388,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 0,
-  "from_cache": 4384,
+  "translated_this_run": 4,
+  "from_cache": 4382,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.1,
-  "model_seconds": 0.0,
-  "texts_per_second": null,
+  "seconds": 1.7,
+  "model_seconds": 1.0,
+  "texts_per_second": 2.4,
   "glossary_entries": 269,
   "problems": []
  },
  "counts": {
   "videos": 551,
   "episodes": 314,
-  "instagram": 248,
+  "instagram": 249,
   "articles": 329,
   "pdfs": 100,
   "drive": 1206,
@@ -756,7 +759,7 @@
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
    "last_attempt": "2026-11-21T11:26:48Z",
-   "checked_this_run": true,
+   "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,

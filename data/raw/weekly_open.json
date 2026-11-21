@@ -1,7 +1,7 @@
 {
  "source": "weekly_open",
- "updated": "2026-11-20T16:19:24Z",
- "attempted": "2026-11-20T16:19:24Z",
+ "updated": "2026-11-21T15:30:44Z",
+ "attempted": "2026-11-21T15:30:44Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -29,7 +29,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-24T15:46:38Z",
-   "last_seen": "2026-11-14T14:22:12Z",
+   "last_seen": "2026-11-21T15:30:44Z",
    "image": null,
    "tags": [],
    "category": null,

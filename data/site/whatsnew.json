@@ -1,7 +1,95 @@
 {
- "updated": "2026-11-21T11:26:49Z",
+ "updated": "2026-11-21T15:36:53Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DgAO9dyjR-A",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAO9dyjR-A/",
+   "title": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda…",
+   "summary": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda mi sobriedad. Esto también me demostró cómo debo actuar ante quienes necesitan mi ayuda. Es mi responsabilidad asegurarme de que la mano de AA se le extienda a todo el mundo”. \"“La novia de nadie” MORENO VALLEY, CALIFORNIA, DICIEMBRE DE 1992 De I Am Responsible\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-21T12:30:16Z",
+   "first_seen": "2026-11-21T15:28:57Z",
+   "image": "/assets/cache/ig/DgAO9dyjR-A.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAO9dyjR-A",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAO9dyjR-A.webp",
+    "embed_url": "https://www.instagram.com/p/DgAO9dyjR-A/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAO9dyjR-A/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The others, through their actions, provided me with unconditional support throughout …",
+     "es": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda…"
+    },
+    "summary": {
+     "en": "“The others, through their actions, provided me with unconditional support throughout my sobriety. This also showed me how I should act with those who need my help. It is my responsibility to make sure that the AA hand is extended to everyone.” \"Nobody's Bride\" MORENO VALLEY, CALIFORNIA, 1992 DECEMBER OF I Am Responsible\" Daily Quote in www.aalavina.org",
+     "es": "“Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda mi sobriedad. Esto también me demostró cómo debo actuar ante quienes necesitan mi ayuda. Es mi responsabilidad asegurarme de que la mano de AA se le extienda a todo el mundo”. \"“La novia de nadie” MORENO VALLEY, CALIFORNIA, DICIEMBRE DE 1992 De I Am Responsible\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-21T12:30:16Z"
+  },
+  {
+   "id": "ig:DgAO9djDWfD",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAO9djDWfD/",
+   "title": "“I build today the road I travel tomorrow.”",
+   "summary": "“I build today the road I travel tomorrow.” “Short Takes,” Binghamton, New York, July 1967, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-21T12:30:15Z",
+   "first_seen": "2026-11-21T15:28:57Z",
+   "image": "/assets/cache/ig/DgAO9djDWfD.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAO9djDWfD",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAO9djDWfD.webp",
+    "embed_url": "https://www.instagram.com/p/DgAO9djDWfD/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAO9djDWfD/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“I build today the road I travel tomorrow.”",
+     "es": "“Construyo hoy el camino que viajo mañana”."
+    },
+    "summary": {
+     "en": "“I build today the road I travel tomorrow.” “Short Takes,” Binghamton, New York, July 1967, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“Construyo hoy el camino que viajo mañana”. “El caballo toma”, Binghamton, Nueva York, julio de 1967, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-21T12:30:15Z"
+  },
   {
    "id": "ig:Df9qKeGDb0p",
    "source": "instagram",
@@ -160,7 +248,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 37,
+    "views": 101,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1270,7 +1358,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 164,
+    "views": 173,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1490,7 +1578,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 240,
+    "views": 251,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1536,7 +1624,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 148,
+    "views": 160,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -4934,7 +5022,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 270,
+    "views": 276,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7210,7 +7298,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 158,
+    "views": 159,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -7432,7 +7520,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 259,
+    "views": 266,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7861,7 +7949,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-07T12:30:16Z"
   },
   {
@@ -7905,7 +7993,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-07T12:30:15Z"
   },
   {
@@ -7964,7 +8052,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-07T12:00:00Z"
   },
   {
@@ -8142,95 +8230,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-11-06T12:30:17Z"
-  },
-  {
-   "id": "ig:DfZnCS5DR-9",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfZnCS5DR-9/",
-   "title": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.”",
-   "summary": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.” AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-11-06T12:30:14Z",
-   "first_seen": "2026-11-06T15:11:49Z",
-   "image": "/assets/cache/ig/DfZnCS5DR-9.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfZnCS5DR-9",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfZnCS5DR-9.webp",
-    "embed_url": "https://www.instagram.com/p/DfZnCS5DR-9/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfZnCS5DR-9/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.”",
-     "es": "“Todos los avances AA se pueden considerar en términos de sólo dos palabras: humildad y responsabilidad.”"
-    },
-    "summary": {
-     "en": "“All AA progress can be reckoned in terms of just two words: humility and responsibility.” AA Co-Founder, Bill W., January 1966, “The Guidance of AA’s World Affairs”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“Todos los avances AA se pueden considerar en términos de sólo dos palabras: humildad y responsabilidad.” AA cofundador, Bill W., enero de 1966, “la guía de los asuntos mundiales de AA”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-06T12:30:14Z"
-  },
-  {
-   "id": "yt:lNkEZ-5XK2A",
-   "source": "youtube",
-   "kind": "video",
-   "url": "https://www.youtube.com/watch?v=lNkEZ-5XK2A",
-   "title": "Grapevine Weekly Open AA Meeting, November 4, 2026 [Season 2, Episode 19]",
-   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on November 4, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Vera welcomes speakers Bonnie and Kathi, who share their experience…",
-   "lang": "en",
-   "date": "2026-11-06T05:31:51Z",
-   "first_seen": "2026-11-06T15:11:28Z",
-   "image": "https://i.ytimg.com/vi/lNkEZ-5XK2A/hqdefault.jpg",
-   "tags": [
-    "weekly-open",
-    "live"
-   ],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "video_id": "lNkEZ-5XK2A",
-    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": 3278,
-    "playlists": [
-     "Grapevine Weekly Open AA Meeting"
-    ],
-    "is_short": false,
-    "views": 313,
-    "is_live_recording": true,
-    "date_approx": false
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine Weekly Open AA Meeting, November 4, 2026 [Season 2, Episode 19]",
-     "es": "Grapevine Weekly Open AA Meeting, 4 de noviembre de 2026 [Temporada 2, Episodio 19]"
-    },
-    "summary": {
-     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on November 4, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Vera welcomes speakers Bonnie and Kathi, who share their experience…",
-     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 4 de noviembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Vera da la bienvenida a los oradores Bonnie y Kathi, que comparten su experiencia …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-06T05:31:51Z"
   }
  ]
 }
