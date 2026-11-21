@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-11-21T01:24:42Z",
- "attempted": "2026-11-21T01:24:42Z",
+ "updated": "2026-11-21T11:26:42Z",
+ "attempted": "2026-11-21T11:26:42Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-11-20",
-  "new": 0
+  "today": "2026-11-21",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-11-20",
+   "id": "quote:gv:2026-11-21",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote November 20",
+   "title": "Grapevine Daily Quote November 21",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-20",
-   "first_seen": "2026-11-20T10:14:30Z",
-   "last_seen": "2026-11-20T10:14:30Z",
+   "date": "2026-11-21",
+   "first_seen": "2026-11-21T11:26:42Z",
+   "last_seen": "2026-11-21T11:26:42Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "Human beings come and go, but principles go on and on.",
-    "attribution": "“People and Principles,” Jackson, Michigan, October 1971, Best of the Grapevine, Volume 2",
+    "text": "I build today the road I travel tomorrow.",
+    "attribution": "“Short Takes,” Binghamton, New York, July 1967, AA Grapevine",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "November 20",
+    "date_label": "November 21",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84590"
+    "node": "node-84591"
    }
   },
   {
-   "id": "quote:lv:2026-11-20",
+   "id": "quote:lv:2026-11-21",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Noviembre 20",
+   "title": "Cita Diaria con La Viña Noviembre 21",
    "summary": "",
    "lang": "es",
-   "date": "2026-11-20",
-   "first_seen": "2026-11-20T10:14:30Z",
-   "last_seen": "2026-11-20T10:14:30Z",
+   "date": "2026-11-21",
+   "first_seen": "2026-11-21T11:26:42Z",
+   "last_seen": "2026-11-21T11:26:42Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "El que conciba a Dios como una serie de leyes cósmicas inmutables o un anciano de bata y barba blancas, es total y gloriosamente irrelevante. Lo único importante son mis valores y actitudes, y las acciones que desencadenan.",
-    "attribution": "“La fe es acción”. CULVER CITY, CALIFORNIA, MAYO DE 1977",
-    "source": "Spiritual Awakenings",
-    "source_lang": "es",
+    "text": "Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda mi sobriedad. Esto también me demostró cómo debo actuar ante quienes necesitan mi ayuda. Es mi responsabilidad asegurarme de que la mano de AA se le extienda a todo el mundo.",
+    "attribution": "“La novia de nadie”. MORENO VALLEY, CALIFORNIA, DICIEMBRE DE 1992",
+    "source": "I Am Responsible",
+    "source_lang": "en",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "20 de noviembre",
+    "date_label": "21 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84586"
+    "node": "node-84587"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-21",
+    "heading": "Grapevine Daily Quote November 21",
+    "text": "I build today the road I travel tomorrow.",
+    "attribution": "“Short Takes,” Binghamton, New York, July 1967, AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-21T11:26:32Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-11-08T07:30:04Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-11-07",
-    "heading": "Grapevine Daily Quote November 7",
-    "text": "It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.",
-    "attribution": "“A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-11-07T07:18:21Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-21",
+    "heading": "Cita Diaria con La Viña Noviembre 21",
+    "text": "Los demás, a través de sus acciones, me brindaron un apoyo incondicional durante toda mi sobriedad. Esto también me demostró cómo debo actuar ante quienes necesitan mi ayuda. Es mi responsabilidad asegurarme de que la mano de AA se le extienda a todo el mundo.",
+    "attribution": "“La novia de nadie”. MORENO VALLEY, CALIFORNIA, DICIEMBRE DE 1992",
+    "source": "I Am Responsible",
+    "source_lang": "en",
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-21T11:26:42Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-11-08T07:30:14Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-11-07",
-    "heading": "Cita Diaria con La Viña Noviembre 7",
-    "text": "La felicidad no es una estación a la que llegamos, sino una forma de viajar.",
-    "attribution": "“Paso a paso”. MAYO DE 1953. Del AA Grapevine",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-11-07T07:18:31Z"
    }
   ]
  }
