@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-22T00:17:02Z",
- "updated": "2026-11-22T00:17:02Z",
+ "generated": "2026-11-22T09:57:38Z",
+ "updated": "2026-11-22T09:57:38Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-22T00:16:37Z",
-   "attempted": "2026-11-22T00:16:37Z",
+   "updated": "2026-11-22T09:57:15Z",
+   "attempted": "2026-11-22T09:57:15Z",
    "count": 1222,
-   "new_7d": 138,
+   "new_7d": 136,
    "error": null,
    "stats": {
     "mode": "html",
@@ -132,8 +132,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-22T00:16:37Z",
-   "attempted": "2026-11-22T00:16:37Z",
+   "updated": "2026-11-22T09:57:15Z",
+   "attempted": "2026-11-22T09:57:15Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -156,8 +156,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-22T00:16:37Z",
-   "attempted": "2026-11-22T00:16:37Z",
+   "updated": "2026-11-22T09:57:15Z",
+   "attempted": "2026-11-22T09:57:15Z",
    "count": 21,
    "new_7d": 4,
    "error": null,
@@ -211,8 +211,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-22T00:16:45Z",
-   "attempted": "2026-11-22T00:16:45Z",
+   "updated": "2026-11-22T09:57:37Z",
+   "attempted": "2026-11-22T09:57:37Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -367,8 +367,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-22T00:16:40Z",
-   "attempted": "2026-11-22T00:16:40Z",
+   "updated": "2026-11-22T09:57:34Z",
+   "attempted": "2026-11-22T09:57:34Z",
    "count": 314,
    "new_7d": 3,
    "error": null,
@@ -385,28 +385,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 270,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-22T00:16:40Z"
+      "updated": "2026-11-22T09:57:34Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 42,
       "latest": "2026-11-20T05:15:00Z",
-      "updated": "2026-11-22T00:16:40Z"
+      "updated": "2026-11-22T09:57:34Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 2,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-22T00:16:40Z"
+      "updated": "2026-11-22T09:57:34Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-20T16:16:24Z",
     "discovered_feeds": [],
-    "seconds": 3.3,
+    "seconds": 3.4,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -619,8 +619,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-22T00:17:00Z",
-   "attempted": "2026-11-22T00:17:00Z",
+   "updated": "2026-11-22T09:57:30Z",
+   "attempted": "2026-11-22T09:57:30Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -628,12 +628,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-21",
-    "new": 0
+    "today": "2026-11-22",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -650,6 +650,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-11-22",
+    "goal_at": "2026-11-22T11:30:00Z",
+    "gv": "2026-11-22T09:57:20Z",
+    "lv": "2026-11-22T09:57:30Z"
+   },
    {
     "day": "2026-11-21",
     "goal_at": "2026-11-21T11:30:00Z",
@@ -685,12 +691,6 @@
     "goal_at": "2026-11-16T11:30:00Z",
     "gv": "2026-11-16T08:05:45Z",
     "lv": "2026-11-16T08:05:55Z"
-   },
-   {
-    "day": "2026-11-15",
-    "goal_at": "2026-11-15T11:30:00Z",
-    "gv": "2026-11-15T07:57:56Z",
-    "lv": "2026-11-15T07:58:06Z"
    }
   ]
  },
@@ -720,7 +720,7 @@
   "from_cache": 4386,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.2,
+  "seconds": 0.1,
   "model_seconds": 0.0,
   "texts_per_second": null,
   "glossary_entries": 269,
@@ -758,8 +758,8 @@
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
-   "last_attempt": "2026-11-21T11:26:48Z",
-   "checked_this_run": false,
+   "last_attempt": "2026-11-22T09:57:37Z",
+   "checked_this_run": true,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -768,7 +768,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-21",
+  "today": "2026-11-22",
   "home_days": 60,
   "list_days": [
    60,
