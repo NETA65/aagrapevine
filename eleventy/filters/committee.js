@@ -700,6 +700,9 @@ const RESERVED_IDS = new Set([
   "ev-weekly", "ev-weekly-title", "ev-weekly-gv", "ev-weekly-lv",
   // /events/' pinned section (round 30): our two monthly meetings, the next Grapevine Meeting's card
   "ev-pinned", "ev-pinned-title", "ev-next-gvm", "ev-next-gvm-title",
+  // (round 37) a monthly series' own page is /events/series/<key>/ (seriesPagePath): an event whose page were
+  // /events/series/ would sit on top of them
+  "series",
 ]);
 // Anchor for a hand-written item: its file-name slug (the data links to
 // "/events/#<slug>" and "/bulletin/#<slug>"), else a stable fallback.
@@ -874,6 +877,10 @@ function shapeEvent(it, site, lang, now, descOverride) {
   const nDays = Math.round((Date.parse(endYmd + "T12:00:00Z") - Date.parse(startYmd + "T12:00:00Z")) / 864e5) + 1;
   // content/events `tentative: true` (or STATUS:TENTATIVE in an outside calendar): details not final yet.
   const tentative = x.tentative === true;
+  // content/events `cancelled: true` (since round 37; extra.cancelled — db.events.cancelled, never among the events
+  // the pages list): it will not take place. Its notice page (src/pages/event-share-cancelled.njk) and the calendar
+  // feeds' entry (buildIcs: STATUS:CANCELLED, "Cancelled:" before its title, no reminder) read these events.
+  const cancelled = x.cancelled === true;
   const group = eventGroup(it);
   const committee = it.category === "committee";
   // A date of a monthly event from config/site.yml `recurring_events:` (build_data.recurring_events):
@@ -974,11 +981,15 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // out: where("past", true) | whereNot("recurring", true)), so its entry — kept 90 days in the calendar
   // files — links to the page itself, never to a #… it no longer has. (A past one-off event keeps its row
   // there, with this anchor; a committee meeting's page is its section on /meetings/: COMMITTEE_MEETING_PATH.)
+  // A cancelled event has no card on /events/ (since round 37): its link is its notice page while its day is still to
+  // come — at the address its page had (eventPagePath) —, then the top of /events/.
   const anchor = eventAnchor(it);
-  const onEventsPage = !committee && !(recurring && past);
-  const detailsUrl = link && !selfLink
-    ? (link.startsWith("/") ? siteAbs(site, link) : link)
-    : siteAbs(site, localPath("/events/", lang)) + (onEventsPage ? "#" + anchor : "");
+  const onEventsPage = !committee && !(recurring && past) && !cancelled;
+  const detailsUrl = cancelled
+    ? siteAbs(site, !past && EVENT_PAGE_ANCHOR.test(anchor) ? eventPagePath({ anchor }, lang) : localPath("/events/", lang))
+    : link && !selfLink
+      ? (link.startsWith("/") ? siteAbs(site, link) : link)
+      : siteAbs(site, localPath("/events/", lang)) + (onEventsPage ? "#" + anchor : "");
   if (selfLink) link = "";
   // An event that is over (the calendar files keep it 90 days, for their subscribers) still says where it was — its
   // place, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of its summary's
@@ -986,10 +997,27 @@ function shapeEvent(it, site, lang, now, descOverride) {
   // Zoom room, retired with the move to Google Meet, stayed in the files with the workshop of October 3, 2026 that
   // had used it. (The committee meeting's own dates that are over come as "Online": normalizeEvents.)
   const onlineLabel = platform ? t("committee.events.online_on", lang, { platform }) : t("committee.events.online", lang);
-  const joinLink = past ? "" : online || "";
+  // (a cancelled event, like one that is over: no way to join it — its place, or "Online on Zoom", stays)
+  const joinLink = past || cancelled ? "" : online || "";
+  // A cancelled event's own words for people (content/events `cancelled_note:`, extra.cancelled_note {lang: text}):
+  // the page language's, else the other one's — never machine-translated; "" without one. cancelledNoteLang: the
+  // language it is written in (the notice page marks the other language's note lang="…" for screen readers).
+  const notes = cancelled && x.cancelled_note && typeof x.cancelled_note === "object" ? x.cancelled_note : {};
+  const noteOf = (l) => String(notes[l] || "").replace(/\s+/g, " ").trim();
+  const otherLang = lang === "en" ? "es" : "en";
+  const cancelledNoteLang = !cancelled ? "" : noteOf(lang) ? lang : noteOf(otherLang) ? otherLang : "";
+  const cancelledNote = cancelledNoteLang ? noteOf(cancelledNoteLang) : "";
   const descLines = [];
   if (descOverride) descLines.push(descOverride);
-  else {
+  else if (cancelled) {
+    // A cancelled event's calendar entry (since round 37): first that it is cancelled (its own note, else "Cancelled —
+    // this event will not take place."), then its summary without how to join (withoutJoinDetails), then its link
+    // (its notice page) — no join link, no meeting ID, no flyer.
+    descLines.push(cancelledNote ? `${t("evcancel.ics_prefix", lang)}: ${cancelledNote}` : t("evcancel.ics_note", lang));
+    const safe = withoutJoinDetails(summary);
+    if (safe) descLines.push("", safe);
+    descLines.push("", `${t("committee.cal.details", lang)}: ${detailsUrl}`);
+  } else {
     // Google / Outlook links cannot say "tentative" — the first line of the description does.
     if (tentative) descLines.push(`${t("committee.events.tentative", lang)}. ${t("committee.events.tentative_help", lang)}`, "");
     const calSummary = past ? withoutJoinDetails(summary) : summary;
@@ -1034,6 +1062,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
     tile, dateLabel, timeLabel, rangeLabel, monthKey, monthLabel, monthShort,
     shareWhen: [dateLabel, timeLabel].filter(Boolean).join(" · "),
     tentative, locationTba,
+    // (since round 37) it will not take place; its own note ("" without one) and the note's language; its title in the
+    // calendar files — "Cancelled: …" / "Cancelado: …" for a cancelled event (buildIcs), else its title
+    cancelled, cancelledNote, cancelledNoteLang, calTitle: cancelled ? `${t("evcancel.ics_prefix", lang)}: ${title}` : title,
     shortLabel: cap(fmt(tileSrc, lang, { month: "short", day: "numeric", ...tileOpts })).replace(/\.(?=\s|$)/, ""),
     // One line for the next meeting: "Wednesday, October 21 · 7:00 PM CDT" (committee.js keeps it current)
     whenLabel: allDay ? dateLabel : cap(fmt(start, lang, { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
@@ -1053,7 +1084,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
   ev.outlookBrief = brief.outlook;
   // The "Add to calendar → .ics file" download (src/assets/js/committee.js CM.downloadIcs): all-day events
   // as DATE values, end = the last day (the file gets the exclusive DTEND, the day after).
-  ev.icsData = { uid: ev.uid + (lang !== "en" ? "-" + lang : "") + "@neta65-gvlv", title: ev.title, start: ev.startIso, end: ev.endIso, allDay, tentative, description: calDescription, location: calLocation, url: ev.detailsUrl, filename: slugify(ev.title, 40) };
+  // (a cancelled event's: "Cancelled: …" and STATUS:CANCELLED, app.js GV.icsText — `cancelled` only on such an event,
+  // so the cards' data-cm-ics stays as short as before)
+  ev.icsData = { uid: ev.uid + (lang !== "en" ? "-" + lang : "") + "@neta65-gvlv", title: ev.calTitle, start: ev.startIso, end: ev.endIso, allDay, tentative, ...(cancelled ? { cancelled: true } : {}), description: calDescription, location: calLocation, url: ev.detailsUrl, filename: slugify(ev.title, 40) };
   return ev;
 }
 
@@ -1287,19 +1320,29 @@ export function eventPlace(text, extra = {}) {
 // passcode, password, "código de acceso" or "contraseña", a Zoom link or its pwd= token, a Google Meet link.
 const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
 const JOIN_DETAILS = /\bmeeting\s*ids?\b|\bzoom\s*id\b|\bid de zoom\b|\bzoom\W{0,3}\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
-// A summary for the calendars of an event that is over (shapeEvent): its lines as written, without the sentences that
-// say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too many.
-function withoutJoinDetails(s) {
+// A summary for the calendars of an event that is over or cancelled (shapeEvent): its lines as written, without the
+// sentences that say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too
+// many. Exported since round 37: a cancelled event's notice page shows its summary so (event-share-cancelled.njk).
+export function withoutJoinDetails(s) {
   return String(s ?? "").split("\n").flatMap((line) => {
     if (!line.trim()) return [""];
-    const kept = line.split(/(?<=[.!?])\s+/).filter((sentence) => !JOIN_DETAILS.test(sentence)).join(" ").trimEnd();
+    const kept = line.split(/(?<=[.!?])\s+/).filter((sentence) => !saysHowToJoin(sentence)).join(" ").trimEnd();
     return kept.trim() ? [kept] : [];
   }).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+// (round 37) A Google Meet code that a sentence gives without the words "meeting code": "Join with the Google Meet
+// code rva-tmst-vdb.", "Entra con el código rva-tmst-vdb.", "On Meet: rva-tmst-vdb" — "Meet code", or a code's
+// shape (three letters, four, three) a few words after "Meet", "code" or "código" (NOSNIPPET_VALUE's Meet code; in
+// any case here: one sentence too many left out of a copy made for machines is no loss). A sentence that says how to
+// join is one of JOIN_DETAILS's or one of these (withoutJoinDetails, plainLine).
+const MEET_CODE_SENTENCE = /\bmeet\s*code|\b(?:meet|code|c[oó]digo)\b[^.!?]{0,40}?(?<![\w-])[a-z]{3}-[a-z]{4}-[a-z]{3}(?![\w-])/i;
+function saysHowToJoin(sentence) {
+  return JOIN_DETAILS.test(sentence) || MEET_CODE_SENTENCE.test(sentence);
 }
 function plainLine(s, n = 300) {
   const t = String(s ?? "").replace(/<[^>]*>/g, " ").replace(/&(?:nbsp|quot|#39|apos|lt|gt|amp);/g, (e) => PLAIN_ENTITIES[e])
     .replace(/\s+/g, " ").trim()
-    .split(/(?<=[.!?])\s+/).filter((sentence) => !JOIN_DETAILS.test(sentence)).join(" ");
+    .split(/(?<=[.!?])\s+/).filter((sentence) => !saysHowToJoin(sentence)).join(" ");
   return t.length > n ? t.slice(0, n).replace(/\s+\S*$/, "") + "…" : t;
 }
 
@@ -1436,6 +1479,171 @@ export function eventLeaf(ev, site, langs = ["en", "es"]) {
   return ls.every((l) => !!heldAt(ev, eventLocation(ev.item, l).location));
 }
 
+/* ---- Round 37: every event's own page, a page per monthly series (the spine: eleventy/event-pages.js) ---- */
+
+/** Is an event cancelled — a data item (content/events `cancelled: true` → extra.cancelled) or a /events/ event
+ *  (its own `cancelled`, or its record's)? Read the same way wherever an event's page or link is worked out, so a
+ *  cancelled event never gets an ordinary page or a link to one (eventPageHref, eleventy/event-pages.js). */
+export function eventCancelled(x) {
+  if (!x || typeof x !== "object") return false;
+  return x.cancelled === true || x.extra?.cancelled === true || x.item?.cancelled === true || x.item?.extra?.cancelled === true;
+}
+
+/** The address of a monthly series' own page (config/site.yml `recurring_events:` — the CityWide booth, La Viña's
+ *  monthly workshop, the Grapevine Meeting) in a language: "/events/series/<key>/" ("/es/events/series/<key>/").
+ *  Two steps under /events/, so it never meets an event's own page (/events/<anchor>/: "series" is a reserved
+ *  anchor). A key that is not fit for an address (letters, digits and dashes) gets no page: /events/ itself. */
+export function seriesPagePath(key, lang = "en") {
+  const k = String(key ?? "");
+  return `${lang && lang !== "en" ? "/" + lang : ""}/events/${EVENT_PAGE_ANCHOR.test(k) ? `series/${k}/` : ""}`;
+}
+
+/**
+ * Where a link to an event goes, on this site, in a language — a path without the site's address or path prefix
+ * (the `url` filter / siteUrl add those). It takes a /events/ event (normalizeEvents) or a data item (db.events.items):
+ *   - a committee meeting → its section of /meetings/ (COMMITTEE_MEETING_PATH): it has no page of its own;
+ *   - an anchor not fit for an address (EVENT_PAGE_ANCHOR) → its card, "/events/#<anchor>" (the anchor
+ *     percent-encoded: a browser decodes it again to find the card's id);
+ *   - a cancelled event that is over → "/events/" (its notice page is gone, and so is its card);
+ *   - anything else → its own page, "/events/<anchor>/" (eventPagePath): every event /events/ lists has one since
+ *     round 37 — a date of a monthly series, an event that is over (while events.json keeps it) and an upcoming
+ *     cancelled event (its notice) too.
+ * opt: { now — the moment "over" is read at (a data item's; a /events/ event says it: ev.past; default: now),
+ *        plan — eleventy/event-pages.js eventPagePlan's answer: an event it has no page for in this language links
+ *        to its card ("/events/#<anchor>", or "/events/" once it is over) instead of a page that was never written }.
+ */
+export function eventPageHref(x, lang = "en", opt = {}) {
+  const L = lang || "en";
+  const events = localPath("/events/", L);
+  if (!x || typeof x !== "object") return events;
+  const rec = x.item && typeof x.item === "object" ? x.item : x;
+  if (x.committee === true || rec.category === "committee") return localPath(COMMITTEE_MEETING_PATH, L);
+  const anchor = typeof x.anchor === "string" ? x.anchor : eventAnchor(rec);
+  if (!EVENT_PAGE_ANCHOR.test(anchor || "")) return anchor ? events + "#" + encodeURIComponent(anchor) : events;
+  const o = opt || {};
+  const nowMs = o.now === undefined || o.now === null ? Date.now() : new Date(o.now).getTime();
+  const past = typeof x.past === "boolean" ? x.past : rec.extra?.past === true || eventEndMs(rec) <= nowMs;
+  // (cancelled: its notice page while it is still to come — the plan writes no ordinary page for it)
+  if (eventCancelled(x)) return past ? events : eventPagePath({ anchor }, L);
+  if (o.plan && o.plan.byAnchor && !o.plan.byAnchor[anchor]?.[L]) return past ? events : events + "#" + anchor;
+  return eventPagePath({ anchor }, L);
+}
+
+/**
+ * What a monthly series' own page (eleventy/event-pages.js eventPagePlan's hubs; seriesPagePath) gives its layout →
+ * { title, titleTail, description, ogImage }, as eventPageMeta does for an event's:
+ *   title        its title and its rule, "GV/LV booth at CityWide Dallas — Every second Saturday of the month"
+ *                (evkind.series_title): no date in it, so the page's title stays the same month after month. Never
+ *                " · " in it (base.njk puts the tail after one);
+ *   titleTail    "Events — NETA 65" ("Eventos — NETA 65");
+ *   description  its rule with its time ("Every second Saturday of the month · 5:30 – 7:30 PM Central time"), where
+ *                (the next date's place in brief, "Lovers Lane United Methodist Church, Dallas", or "Online on Google
+ *                Meet" — the platform's name only) and its summary without a sentence that says how to join (plainLine)
+ *                or gives its own meeting ID, code or link (withoutJoinValues), one plain line of at most
+ *                EVENT_PAGE_DESC_MAX characters;
+ *   ogImage      the next date's flyer (eventSharePicture), else null (the committee's card).
+ * hub: a plan's hub ({ series }: its next date may be one the host moved, ev.seriesOf) or seriesNext's answer itself.
+ */
+export function seriesPageMeta(hub, site, lang = "en") {
+  const s = (hub && hub.series) || hub || {};
+  const next = s.next || {};
+  const line = (v) => String(v ?? "").replace(/\s+/g, " ").trim();
+  const title = line(s.title || next.title);
+  const place = next.locationTba ? "" : next.location ? placeInBrief(next)
+    : next.isOnline ? (next.platform ? t("committee.events.online_on", lang, { platform: next.platform }) : t("committee.events.online", lang)) : "";
+  const summary = withoutJoinValues(s.summary ?? next.summary, [s.join?.id, s.join?.url, next.meetingId, next.online]);
+  const text = [[line(s.recurrence), place].filter(Boolean).join(" · "), plainLine(summary, 1000)]
+    .filter(Boolean).join(" — ");
+  const picture = shareImage(eventSharePicture(next), site || {});
+  return {
+    title: t("evkind.series_title", lang, { title, when: line(s.recurrenceDay) }).replace(/ · /g, " — "),
+    titleTail: `${t("nav.events", lang)} — NETA 65`,
+    description: clipDescription(text),
+    ogImage: picture ? { src: picture.url, alt: t("committee.events.flyer_alt", lang, { title }) } : null,
+  };
+}
+
+// A page's description cut to EVENT_PAGE_DESC_MAX characters at a word, with its "…" (eventPageMeta's cut).
+function clipDescription(text, max = EVENT_PAGE_DESC_MAX) {
+  return text.length > max ? text.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:·—–-]+$/, "") + "…" : text;
+}
+
+/**
+ * A text without each sentence that gives one of an event's OWN ways in (since round 37): its meeting ID or code, its
+ * online link — a /events/ event's meetingId and online, a series' join.id and join.url — however the text writes it
+ * (spaces, dashes, dots and capitals aside: "815 9593 1777" is "815-9593-1777"; a link with or without its https://
+ * and www.). plainLine leaves out the sentences whose WORDS say how to join (saysHowToJoin: "meeting ID", "Meet code",
+ * a Zoom or Meet link …); this one also those that give the bare value ("Únete aquí: rva-tmst-vdb."). For the copies
+ * made for machines: a series' page head (seriesPageMeta), an event's (eleventy/event-pages.js eventPageHead) and
+ * its Event's description (eventLd), before plainLine. Sentences as plainLine cuts them, line by line; a line with nothing to leave out stays as it is. A
+ * value of fewer than 6 letters and digits is not looked for (too short to tell from other words).
+ */
+export function withoutJoinValues(text, values) {
+  const key = (v) => String(v ?? "").trim().replace(/^https?:\/\//i, "").replace(/^www\./i, "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  const own = [...new Set((Array.isArray(values) ? values : [values]).map(key).filter((k) => k.length >= 6))];
+  const s = String(text ?? "");
+  if (!own.length || !s) return s;
+  return s.split("\n").map((line) => {
+    const sentences = line.split(/(?<=[.!?])\s+/);
+    const kept = sentences.filter((sentence) => !own.some((v) => key(sentence).includes(v)));
+    return kept.length === sentences.length ? line : kept.join(" ");
+  }).join("\n");
+}
+
+// The committee as an Organization for search engines: the site's own (base.njk, "#committee"), by its @id, with the
+// same name as there (config/site.yml committee — English on every page: one @id, one name).
+function committeeOrg(site) {
+  const root = siteUrl("/", site || {});
+  return compact({ "@type": "Organization", "@id": root + "#committee", name: String((site || {}).committee || ""), url: root });
+}
+
+/**
+ * Who holds an event (a /events/ event: normalizeEvents), as eventLd tells search engines → its schema.org
+ * Organization, or null when it is not ours to say. Since round 37 its own function (taken out of eventLd word for
+ * word: the structured data is unchanged), for an event's own page too ("Organized by", eleventy/event-pages.js). In
+ * this order:
+ *   - La Viña or AA Grapevine for their own events we share (ev.host "lv" / "gv": config/site.yml links.lv_home /
+ *     gv_home as their url);
+ *   - null for one from their calendars (ev.group "calendar" without a host: their words, not ours);
+ *   - the committee or group a content/events file names (`organizer:` — "District 87 La Viña Committee", never a
+ *     person — and its optional https `organizer_url:`; only a hand-written event's: the magazines' calendars write
+ *     an extra.organizer too, words read from their pages, never ours to repeat);
+ *   - the Area (config/site.yml area / area_es, area_website) for its own events (eventTone "assembly": an assembly,
+ *     an ACM, its town hall, its GSR/DCM orientations);
+ *   - else the committee (committeeOrg: the site's Organization by its "#committee" @id — isCommitteeOrganizer).
+ */
+export function eventOrganizer(ev, site, lang = "en") {
+  if (!ev) return null;
+  const s = site || {};
+  const pickS = (field) => String((lang !== "en" && s[`${field}_${lang}`]) || s[field] || "");
+  if (ev.host === "lv") return compact({ "@type": "Organization", name: "La Viña", url: s.links?.lv_home || "" });
+  if (ev.host === "gv") return compact({ "@type": "Organization", name: "AA Grapevine", url: s.links?.gv_home || "" });
+  if (ev.group === "calendar") return null;
+  const x = ev.item?.extra || {};
+  const named = ev.category === "manual" ? String(x.organizer || "").replace(/\s+/g, " ").trim() : "";
+  if (named) return compact({ "@type": "Organization", name: named, url: /^https:\/\/[^\s/]+\.[^\s]+$/.test(String(x.organizer_url || "")) ? x.organizer_url : "" });
+  if (eventTone(ev) === "assembly") return compact({ "@type": "Organization", name: pickS("area"), url: s.area_website || "" });
+  return committeeOrg(s);
+}
+
+/** Is an organizer (eventOrganizer's) the committee itself — the site's Organization, by its @id? What decides the
+ *  committee's card as an Event's picture and isAccessibleForFree (eventLd), and "Free" on an event's own page. */
+export function isCommitteeOrganizer(org, site) {
+  return !!org && org["@id"] === siteUrl("/", site || {}) + "#committee";
+}
+
+/** Is an event held in Spanish (a /events/ event; a data item too)? La Viña's own (ev.host "lv"), one from La
+ *  Viña's calendar (category lv-calendar) or a content/events file tagged la-vina — never the page's language. The
+ *  Event's inLanguage "es" (eventLd); since round 37 also an event page's "Language" and its bingo card's language
+ *  (eleventy/event-pages.js). */
+export function heldInSpanish(ev) {
+  if (!ev) return false;
+  const rec = ev.item && typeof ev.item === "object" ? ev.item : ev;
+  const host = typeof ev.host === "string" ? ev.host : eventHost(rec);
+  const tags = Array.isArray(rec.tags) ? rec.tags : [];
+  return host === "lv" || (ev.category ?? rec.category) === "lv-calendar" || tags.includes("la-vina");
+}
+
 /**
  * What an event's own page (a leaf: eventLeaf; src/pages/event-share-leaf.njk) gives its layout → { title,
  * titleTail, description, ogImage }:
@@ -1455,22 +1663,17 @@ export function eventLeaf(ev, site, langs = ["en", "es"]) {
  */
 export const EVENT_PAGE_DESC_MAX = 160;
 export function eventPageMeta(ev, site, lang = "en") {
-  const allDay = !!ev.allDay;
-  const D = { month: "long", day: "numeric", year: "numeric", ...(allDay ? { timeZone: "UTC" } : {}) };
-  const a = allDay ? new Date(ev.startYmd + "T12:00:00Z") : new Date(ev.startMs);
-  const b = allDay ? new Date(ev.endYmd + "T12:00:00Z") : new Date(ev.endMs - 1);
-  const day = ev.multiDay ? fmtRange(a, b, lang, D) : fmt(a, lang, D);
+  const day = eventDay(ev, lang);
   const line = (v) => String(v ?? "").replace(/\s+/g, " ").trim();
   const title = line(ev.title);
   const when = line(ev.multiDay ? ev.rangeLabel : ev.shareWhen);
   const text = [[when, ev.locationTba ? "" : placeInBrief(ev)].filter(Boolean).join(" · "), plainLine(ev.summary, 1000)]
     .filter(Boolean).join(" — ");
-  const max = EVENT_PAGE_DESC_MAX;
   const picture = shareImage(eventSharePicture(ev), site || {});
   return {
     title: t("committee.events.page_title", lang, { title, date: day }),
     titleTail: `${t("nav.events", lang)} — NETA 65`,
-    description: text.length > max ? text.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:·—–-]+$/, "") + "…" : text,
+    description: pageDescription(text),
     ogImage: picture ? { src: picture.url, alt: t("committee.events.flyer_alt", lang, { title }) } : null,
   };
 }
@@ -1488,6 +1691,93 @@ function placeInBrief(ev) {
   return venue || city || whole;
 }
 
+// An event's day(s) as its page's <title> names them: "January 17, 2027", "March 19 – 21, 2027" (eventPageMeta,
+// cancelledPageMeta).
+function eventDay(ev, lang) {
+  const allDay = !!ev.allDay;
+  const D = { month: "long", day: "numeric", year: "numeric", ...(allDay ? { timeZone: "UTC" } : {}) };
+  const a = allDay ? new Date(ev.startYmd + "T12:00:00Z") : new Date(ev.startMs);
+  const b = allDay ? new Date(ev.endYmd + "T12:00:00Z") : new Date(ev.endMs - 1);
+  return ev.multiDay ? fmtRange(a, b, lang, D) : fmt(a, lang, D);
+}
+
+// A page's description as one line cut at a word: at most EVENT_PAGE_DESC_MAX characters with its "…".
+function pageDescription(text) {
+  const max = EVENT_PAGE_DESC_MAX;
+  return text.length > max ? text.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:·—–-]+$/, "") + "…" : text;
+}
+
+// A multi-day event's first and last day, for its notice's sentence ("It was planned from Friday, March 19 to Sunday,
+// March 21, 2027" — evcancel.was_range; "Estaba previsto del viernes, 19 de marzo al domingo, 21 de marzo de 2027"):
+// the year once, on its last day (on both when they differ); a timed one with its start and end times ("Friday, March
+// 19, 6:00 PM" … "Sunday, March 21, 2027, 1:00 PM CDT" — the zone on both when it changes in between) → { from, to }
+// (cancelledPageMeta).
+function dayRange(ev, lang) {
+  const allDay = !!ev.allDay;
+  const zone = allDay ? { timeZone: "UTC" } : {};
+  const a = allDay ? new Date(ev.startYmd + "T12:00:00Z") : new Date(ev.startMs);
+  const b = allDay ? new Date(ev.endYmd + "T12:00:00Z") : new Date(ev.endMs);
+  const D = { weekday: "long", month: "long", day: "numeric", ...zone };
+  const yearOf = (d) => fmt(d, lang, { year: "numeric", ...zone });
+  let from = fmt(a, lang, yearOf(a) === yearOf(b) ? D : { ...D, year: "numeric" });
+  let to = fmt(b, lang, { ...D, year: "numeric" });
+  if (!allDay) {
+    const T = { hour: "numeric", minute: "2-digit" };
+    const zoneOf = (d) => (fmt(d, lang, { hour: "numeric", timeZoneName: "short" }).match(/\S+$/) || [""])[0];
+    from += ", " + fmt(a, lang, zoneOf(a) === zoneOf(b) ? T : { ...T, timeZoneName: "short" });
+    to += ", " + fmt(b, lang, { ...T, timeZoneName: "short" });
+  }
+  return { from, to };
+}
+
+/**
+ * Since round 37: what the notice page of a CANCELLED event (content/events `cancelled: true` — db.events.cancelled;
+ * src/pages/event-share-cancelled.njk, at the address its page had, eventPagePath, while its day is still to come)
+ * gives its layout, and its words → { title, titleTail, description, ogImage, h1, was, when, place }:
+ *   title        "Cancelled: <its title>, <its day(s)>" (evcancel.page_title — the day as eventPageMeta writes it:
+ *                every page's <title> its own);
+ *   titleTail    "Events — NETA 65" ("Eventos — NETA 65"), as eventPageMeta's;
+ *   description  "Cancelled. It was planned for <its day and time> · <its place in brief>." (evcancel.desc; over
+ *                several days "… planned from <first day> to <last day> · …", evcancel.desc_range; an online event:
+ *                "Online on Zoom"; a place to be announced: its day alone), at most 160 characters with its "…" —
+ *                never how to join;
+ *   ogImage      null: the committee's card (base.njk) — never the flyer of an event that will not take place;
+ *   h1           "Cancelled: <its title>" (evcancel.h1);
+ *   was          the sentence that says when and where it was to be held: "It was planned for Saturday, November 28,
+ *                2026, 7:00 – 9:00 PM CST at <its place, as its card writes it>." (evcancel.was; online:
+ *                evcancel.was_online; no place known: evcancel.was_date) — over several days "It was planned from
+ *                Friday, March 19 to Sunday, March 21, 2027 at …" (evcancel.was_range, was_range_online,
+ *                was_range_date: dayRange — never the cards' short "Fri, Mar 19 – Sun, Mar 21", and in Spanish "del …
+ *                al …", never "para el" before a range);
+ *   when         its day and time in words, as that sentence writes them (an all-day event: its day; one over several
+ *                days: "<first day> – <last day>") — in Spanish with its first letter small ("Estaba previsto para el
+ *                sábado, …");
+ *   place        its place as its card writes it ("" online only, or a place to be announced).
+ */
+export function cancelledPageMeta(ev, site, lang = "en") {
+  const line = (v) => String(v ?? "").replace(/\s+/g, " ").trim();
+  const title = line(ev.title);
+  const range = ev.multiDay ? dayRange(ev, lang) : null;
+  const phrase = range ? "" : line(ev.allDay ? ev.dateLabel : [ev.dateLabel, ev.timeLabel].filter(Boolean).join(", "));
+  const when = range ? line(`${range.from} – ${range.to}`) : lang === "es" ? phrase.charAt(0).toLowerCase() + phrase.slice(1) : phrase;
+  const v = range ? { from: line(range.from), to: line(range.to) } : { when };
+  const K = range
+    ? { place: "evcancel.was_range", online: "evcancel.was_range_online", date: "evcancel.was_range_date", desc: "evcancel.desc_range" }
+    : { place: "evcancel.was", online: "evcancel.was_online", date: "evcancel.was_date", desc: "evcancel.desc" };
+  const place = ev.locationTba ? "" : line(ev.location);
+  const online = ev.isOnline ? line(ev.platform ? t("committee.events.online_on", lang, { platform: ev.platform }) : t("committee.events.online", lang)) : "";
+  const brief = place ? placeInBrief(ev) : online;
+  const was = place ? t(K.place, lang, { ...v, place }) : online ? t(K.online, lang, v) : t(K.date, lang, v);
+  return {
+    title: t("evcancel.page_title", lang, { title, date: eventDay(ev, lang) }),
+    titleTail: `${t("nav.events", lang)} — NETA 65`,
+    description: pageDescription(brief ? t(K.desc, lang, { ...v, place: brief }) : `${t("evcancel.ics_prefix", lang)}. ${t(K.date, lang, v)}`),
+    ogImage: null,
+    h1: t("evcancel.h1", lang, { title }),
+    was, when, place,
+  };
+}
+
 /**
  * The schema.org Events of /events/ (events.njk: `upcoming | cmEventLd(site, lang, pageAbs)` → its @graph) and of an
  * event's own page (event-share-leaf.njk: `ev | cmEventPageLd(site, lang, pageAbs)`, its one Event): the events still to
@@ -1496,7 +1786,9 @@ function placeInBrief(ev) {
  *   - name, startDate / endDate (since round 35 the time in the site's zone with its offset, "2027-01-17T13:00:00-06:00"
  *     — localIso: the time the page shows, never a UTC time whose date is the next day's for an evening event —; an
  *     all-day event its days, "2027-03-19"; ev.startIso, the UTC time, stays for the calendar files, the pages' data
- *     and their scripts), eventStatus, url — the event's own page when it has one (since round 35: eventLeaf,
+ *     and their scripts), eventStatus (EventScheduled; since round 37 EventCancelled for a cancelled event — its
+ *     notice page's, event-share-cancelled.njk: such an event is never on /events/ — which keeps every other value
+ *     but `image`), url — the event's own page when it has one (since round 35: eventLeaf,
  *     "/events/<anchor>/"; `opt.url` gives it for that page itself), else its card on this page (pageAbs#anchor);
  *   - eventAttendanceMode Offline, or Mixed for a hybrid event; location — its Place with a PostalAddress
  *     (eventPlace);
@@ -1527,13 +1819,8 @@ export function eventLd(events, site, lang = "en", pageAbs = "", max = 30, opt =
   const page = pageAbs || siteUrl(langPath("/events/", lang), s);
   const root = siteUrl("/", s);
   const tz = validZone(s.timezone);
-  const pickS = (field) => String((lang !== "en" && s[`${field}_${lang}`]) || s[field] || "");
-  const committee = compact({ "@type": "Organization", "@id": root + "#committee", name: String(s.committee || ""), url: root });
-  const area = compact({ "@type": "Organization", name: pickS("area"), url: s.area_website || "" });
-  const hosts = {
-    lv: compact({ "@type": "Organization", name: "La Viña", url: s.links?.lv_home || "" }),
-    gv: compact({ "@type": "Organization", name: "AA Grapevine", url: s.links?.gv_home || "" }),
-  };
+  // (the committee's Organization once: the image and isAccessibleForFree below ask "organizer === committee")
+  const committee = committeeOrg(s);
   // ?v=3: the card shows the site's address (grapevine.neta65.org since round 35) — a new ?v when it changes (base.njk)
   const card = siteUrl(lang === "es" ? "/assets/img/og-default-es.png?v=3" : "/assets/img/og-default.png?v=3", s);
   const out = [];
@@ -1545,28 +1832,27 @@ export function eventLd(events, site, lang = "en", pageAbs = "", max = 30, opt =
     if (!location) continue;
     // an event from Grapevine's or La Viña's own calendar (not one of theirs the committee shares: ev.host)
     const outside = ev.group === "calendar" && !ev.host;
-    // (a content/events file's `organizer:` only: the magazines' calendars write an extra.organizer too — words
-    // read from their pages, never ours to repeat — and their events are `outside` anyway)
-    const x = ev.item?.extra || {};
-    const named = ev.category === "manual" ? String(x.organizer || "").replace(/\s+/g, " ").trim() : "";
-    const organizer = ev.host ? hosts[ev.host] : outside ? null
-      : named ? compact({ "@type": "Organization", name: named, url: /^https:\/\/[^\s/]+\.[^\s]+$/.test(String(x.organizer_url || "")) ? x.organizer_url : "" })
-      : eventTone(ev) === "assembly" ? area : committee;
-    const tags = Array.isArray(ev.item?.tags) ? ev.item.tags : [];
-    const spanish = ev.host === "lv" || ev.category === "lv-calendar" || tags.includes("la-vina");
+    // who holds it (eventOrganizer, since round 37 its own function: an event's page says it in words too)
+    const held = eventOrganizer(ev, s, lang);
+    const organizer = isCommitteeOrganizer(held, s) ? committee : held;
+    const spanish = heldInSpanish(ev);
     const picture = shareImage(eventSharePicture(ev), s);
     // (a timed event: the site's wall time with its offset; an unreadable one — never — its UTC time as before)
     const when = (ms, iso) => (ev.allDay ? iso : localIso(ms, tz) || iso);
     out.push(compact({
       "@type": "Event",
       name: ev.title,
-      description: outside ? "" : plainLine(ev.summary),
+      // (since round 37 never its own meeting ID, code or link either, not even bare: withoutJoinValues)
+      description: outside ? "" : plainLine(withoutJoinValues(ev.summary, [ev.meetingId, ev.online])),
       startDate: when(ev.startMs, ev.startIso),
       endDate: when(ev.endMs, ev.endIso),
-      eventStatus: "https://schema.org/EventScheduled",
+      // (since round 37) a cancelled event — only on its notice page: it is never among /events/' events — keeps
+      // every value it had, as Google asks ("don't remove startDate or location"), with EventCancelled
+      eventStatus: `https://schema.org/${ev.cancelled ? "EventCancelled" : "EventScheduled"}`,
       eventAttendanceMode: `https://schema.org/${ev.isOnline ? "Mixed" : "Offline"}EventAttendanceMode`,
       location,
-      image: picture ? picture.url : organizer === committee ? card : "",
+      // (none for a cancelled event: its flyer advertises an event that will not take place)
+      image: ev.cancelled ? "" : picture ? picture.url : organizer === committee ? card : "",
       organizer,
       isAccessibleForFree: organizer === committee ? true : null,
       inLanguage: spanish ? "es" : "",
@@ -1683,6 +1969,12 @@ export function buildIcs(events, o = {}) {
     push("END:VEVENT");
   }
   for (const ev of events) {
+    // A cancelled event (since round 37: content/events `cancelled: true`, shapeEvent ev.cancelled) keeps its UID,
+    // times and place — a calendar that has it marks THAT entry cancelled (RFC 5545 STATUS:CANCELLED), and the higher
+    // SEQUENCE makes it take the change —, and since not every app shows the status: "Cancelled: …" before its title
+    // (ev.calTitle), free time (TRANSP:TRANSPARENT), no flyer attached and never a reminder, even in the files a member
+    // adds once (alarms: the month's file) — a member who adds that month again gets it corrected.
+    const off = ev.cancelled === true;
     push("BEGIN:VEVENT");
     push("UID:" + uidOf(ev));
     push("DTSTAMP:" + stamp);
@@ -1693,18 +1985,19 @@ export function buildIcs(events, o = {}) {
     } else {
       push("DTSTART:" + utcStamp(new Date(ev.startMs)));
       push("DTEND:" + utcStamp(new Date(ev.endMs)));
-      push("TRANSP:OPAQUE");
+      push(off ? "TRANSP:TRANSPARENT" : "TRANSP:OPAQUE");
     }
-    push("SUMMARY:" + icsEscape(ev.title));
+    push("SUMMARY:" + icsEscape(ev.calTitle || ev.title));
     if (ev.calDescription) push("DESCRIPTION:" + icsEscape(ev.calDescription));
     if (ev.calLocation) push("LOCATION:" + icsEscape(ev.calLocation));
     if (ev.detailsUrl) push("URL:" + ev.detailsUrl);
-    if (ev.flyer && ev.flyer.view) push("ATTACH:" + ev.flyer.view);
+    if (!off && ev.flyer && ev.flyer.view) push("ATTACH:" + ev.flyer.view);
     push("CATEGORIES:" + icsEscape(o.categoryLabel ? o.categoryLabel(ev) : ev.group));
-    // TENTATIVE: details not final yet (content/events `tentative: true`); every other event is CONFIRMED.
-    push("STATUS:" + (ev.tentative ? "TENTATIVE" : "CONFIRMED"));
+    // TENTATIVE: details not final yet (content/events `tentative: true`); CANCELLED: it will not take place; every
+    // other event is CONFIRMED.
+    push("STATUS:" + (off ? "CANCELLED" : ev.tentative ? "TENTATIVE" : "CONFIRMED"));
     push("SEQUENCE:" + seq);
-    if (o.alarms) icsAlarm(ev.title, ev.allDay).forEach(push);
+    if (o.alarms && !off) icsAlarm(ev.title, ev.allDay).forEach(push);
     push("END:VEVENT");
   }
   // No event (no deadline open, a month with nothing in it, a build without data): RFC 5545 §3.6 wants at least one

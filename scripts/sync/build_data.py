@@ -86,6 +86,10 @@ RECURRING_AHEAD_MAX = 24
 RECURRING_KEEP_PAST_DAYS = 90  # dates of the last 90 days stay in events.json (past: true) so calendar
                                # subscribers keep them, like the committee meetings in the .ics feed
 RECURRING_KEY_MAX = 32        # "ev-recurring-<key>-<date>" anchors stay within committee.js slugify()'s 60 characters
+# A cancelled event (since round 37: content/events `cancelled: true` → extra.cancelled) that is over stays in
+# events.json `cancelled` this many days — the calendar feeds keep its STATUS:CANCELLED entry as long as they keep
+# any event that is over (src/pages/events-ics.11ty.js KEEP_PAST_DAYS) — and never takes a PAST_EVENTS_KEEP place.
+CANCELLED_KEEP_PAST_DAYS = 90
 
 # raw source → labels on the /status/ page (order = order shown)
 SOURCES: list[tuple[str, str, str]] = [
@@ -2133,6 +2137,15 @@ def build_events(ctx: Ctx) -> list[dict]:
                 ex["tentative"] = True
             else:
                 ex.pop("tentative", None)
+            # extra.cancelled (since round 37): present (true) only on an event that will not take place — it stays
+            # among the others through every step here (a feed's copy of it is still recognised: never shown as a new
+            # event) and leaves them only when events.json is written (split_cancelled)
+            if ex.get("cancelled") is True or (ex.get("cancelled") and str(ex["cancelled"]).strip().lower()
+                                               in ("1", "true", "yes", "y", "si", "sí", "on")):
+                ex["cancelled"] = True
+            else:
+                ex.pop("cancelled", None)
+                ex.pop("cancelled_note", None)
             # a place that is not known yet ("Venue to be announced"): never shown as an address. The
             # file's own `location` decides; `location_es` / `location_en` only when there is no location.
             base_loc = clean_text(ex.get("location"))
@@ -2166,19 +2179,76 @@ def build_events(ctx: Ctx) -> list[dict]:
     return order_events(ctx, evs.values())
 
 
+def is_cancelled(ev: dict) -> bool:
+    """An event that will not take place (since round 37: content/events `cancelled: true`, announcements.py
+    event_cancelled → extra.cancelled, made exactly True by build_events)."""
+    return (ev.get("extra") or {}).get("cancelled") is True
+
+
+def split_cancelled(events: Iterable[dict]) -> tuple[list[dict], list[dict]]:
+    """events.json's two lists (since round 37), each in the order given: (`items` — every event the pages list —,
+    `cancelled` — the cancelled ones, which no page lists: their address shows a "Cancelled" notice until their day
+    is over, src/pages/event-share-cancelled.njk, and the calendar feeds mark them cancelled). Split when the file is
+    written — after the translations (a notice page in Spanish uses the event's Spanish words) and order_events (the
+    same keep rules) — so a cancelled event stays among the others through every step before: a calendar feed's or
+    La Viña's calendar's copy of it (merge_feed_duplicates, merge_calendar_duplicates) is still recognised as the
+    same event and never shows up as a new one."""
+    items: list[dict] = []
+    cancelled: list[dict] = []
+    for ev in events:
+        (cancelled if is_cancelled(ev) else items).append(ev)
+    return items, cancelled
+
+
+# A Drive file's id in a link to it: "…/file/d/<id>/view", "…open?id=<id>", "…uc?id=<id>", Google's picture of it
+# ("lh3.googleusercontent.com/d/<id>=w600")
+_DRIVE_FILE_ID = re.compile(r"(?:drive\.google\.com/(?:file/d/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)"
+                            r"|googleusercontent\.com/d/)([\w-]{10,})")
+
+
+def _event_drive_ids(ev: dict) -> set[str]:
+    ex = ev.get("extra") or {}
+    out = {m.group(1) for v in (ex.get("flyer_url"), ex.get("flyer_thumb"), ev.get("image"))
+           if isinstance(v, str) and (m := _DRIVE_FILE_ID.search(v))}
+    if ex.get("drive_id"):
+        out.add(str(ex["drive_id"]))
+    return out
+
+
+def cancelled_flyer_ids(events: Iterable[dict]) -> set[str]:
+    """The Drive files that are the flyer of a cancelled event and of no other event (since round 37): What's New
+    leaves them out (plan_whatsnew), and so do the site's flyer lists — the Portfolio, What's New, the search: the
+    build leaves them out of drive.json's and whatsnew.json's items too (src/_data/db.js) — so a cancelled event's
+    flyer is never offered to share, even before it is moved out of the flyers folder on the Drive."""
+    evs = list(events)
+    gone = {fid for ev in evs if is_cancelled(ev) for fid in _event_drive_ids(ev)}
+    kept = {fid for ev in evs if not is_cancelled(ev) for fid in _event_drive_ids(ev)}
+    return gone - kept
+
+
+def drive_file_id(it: dict) -> str:
+    """A drive.json item's Drive file id (extra.file_id, else its id after "drive:")."""
+    return str((it.get("extra") or {}).get("file_id") or str(it.get("id") or "").removeprefix("drive:"))
+
+
 def order_events(ctx: Ctx, events: Iterable[dict]) -> list[dict]:
     """events.json's list: the upcoming events (soonest first, extra.past false), then the past ones kept (newest
-    first, extra.past true). Also used for the events a build carries over from the last one (carry_unreadable)."""
+    first, extra.past true). Also used for the events a build carries over from the last one (carry_unreadable).
+    A cancelled event that is over is kept CANCELLED_KEEP_PAST_DAYS days, outside the PAST_EVENTS_KEEP places (the
+    file's `cancelled` list holds it: split_cancelled)."""
     evs = list(events)
     cutoff = ctx.now_ts - 86400
     upcoming = [e for e in evs if event_end_ts(ctx, e) >= cutoff]
     over = [e for e in evs if event_end_ts(ctx, e) < cutoff and e.get("category") != "committee"]
+    gone = ctx.now_ts - CANCELLED_KEEP_PAST_DAYS * 86400
+    called_off = [e for e in over if is_cancelled(e) and event_end_ts(ctx, e) >= gone]
+    over = [e for e in over if not is_cancelled(e)]
     # Past dates of a recurring event (the last RECURRING_KEEP_PAST_DAYS days) are kept for the calendar
     # feed only — they do not use up the PAST_EVENTS_KEEP places of real past events.
     past = [e for e in over if e.get("category") != "recurring"]
     upcoming.sort(key=lambda e: (event_start_ts(e), e["id"]))
     past.sort(key=lambda e: (-event_start_ts(e), e["id"]))
-    kept = past[:PAST_EVENTS_KEEP] + [e for e in over if e.get("category") == "recurring"]
+    kept = past[:PAST_EVENTS_KEEP] + [e for e in over if e.get("category") == "recurring"] + called_off
     kept.sort(key=lambda e: (-event_start_ts(e), e["id"]))
     for e in upcoming:
         e["extra"]["past"] = False
@@ -2652,9 +2722,12 @@ def finish_meta(meta: dict[str, dict], wanted: list[tuple[dict, str, str, str]],
 
 
 # =========================================================================== What's New
-# Ids the site already uses on its pages (mirror of RESERVED_IDS in eleventy/filters/committee.js).
+# Ids the site already uses on its pages (mirror of RESERVED_IDS in eleventy/filters/committee.js). "series" since
+# round 37: /events/series/<key>/ is a monthly series' own page, so no anchor of the site is "series" — an album
+# named "Series" has no anchor on /photos/ either, and What's New links to /photos/ itself.
 _RESERVED_ANCHORS = {"main", "mobile-drawer", "subscribe", "how-docs", "how-to-post", "share-photos", "albums",
-                     "ev-upcoming-title", "ev-next-title", "cm-preview", "cm-preview-title", "cm-lb-i18n", "item"}
+                     "ev-upcoming-title", "ev-next-title", "cm-preview", "cm-preview-title", "cm-lb-i18n", "item",
+                     "series"}
 
 
 def album_slug(album: str | None) -> str | None:
@@ -2672,8 +2745,10 @@ def album_slug(album: str | None) -> str | None:
 def plan_whatsnew(ctx: Ctx, cols: dict[str, list[dict]]) -> list[tuple[float, dict]]:
     """[(news timestamp, item)] — originals by reference (copied after translation); photo
     groups are new dicts ('N new photos in <album>'). Editorial themes and the Weekly Open
-    meeting are never "news" (their date is a deadline or nothing)."""
+    meeting are never "news" (their date is a deadline or nothing), nor (since round 37) a cancelled event or a Drive
+    flyer that only a cancelled event uses (cancelled_flyer_ids)."""
     out: list[tuple[float, dict]] = []
+    called_off = cancelled_flyer_ids(cols.get("events", []))
     for name in ("articles", "pdfs", "videos", "episodes", "instagram", "announcements"):
         for it in cols.get(name, []):
             if it.get("kind") in NEVER_NEW_KINDS or ctx.back_catalog(it):
@@ -2684,6 +2759,8 @@ def plan_whatsnew(ctx: Ctx, cols: dict[str, list[dict]]) -> list[tuple[float, di
     groups: dict[tuple[str, str], list[tuple[float, dict]]] = {}
     covers: dict[tuple[str, str], list[tuple[float, dict]]] = {}
     for it in cols.get("drive", []):
+        if called_off and drive_file_id(it) in called_off:
+            continue
         if is_cover(it):
             # The magazine covers are news when the site first had them (found_ts — never on the first harvest),
             # whatever issue they are of: ONE entry per magazine per day (Central) — "131 Grapevine covers added" —
@@ -2734,7 +2811,7 @@ def plan_whatsnew(ctx: Ctx, cols: dict[str, list[dict]]) -> list[tuple[float, di
     for (pub, day), members in sorted(covers.items()):
         out.append((max(m[0] for m in members), cover_news(pub, day, [m[1] for m in members])))
     for it in cols.get("events", []):
-        if it.get("category") in SCHEDULED_EVENT_CATEGORIES or it["extra"].get("past"):
+        if it.get("category") in SCHEDULED_EVENT_CATEGORIES or it["extra"].get("past") or is_cancelled(it):
             continue
         f = ctx.found_ts(it, raw_source(it) if it.get("category") != "flyer" else "drive")
         if f and ctx.now_ts - f <= RECENT_EVENT_DAYS * 86400:
@@ -3901,15 +3978,17 @@ def _events_until_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
 
 
 def _assembly_reminders(ctx: Ctx, root: Path, today: date) -> list[dict]:
-    from .announcements import content_files, read_front_matter
+    from .announcements import content_files, event_cancelled, read_front_matter
     days = []
     for p in content_files(root / "content" / "events"):
         try:
             fm, _body = read_front_matter(p)
         except Exception:    # a file with a mistake: announcements.py lists it on /status/
             continue
+        if event_cancelled(fm):     # (since round 37) a cancelled assembly is no assembly to come
+            continue
         tags = fm.get("tags")
-        words = " ".join(str(fm.get(k) or "") for k in ("title", "title_es", "kind")) + " " + \
+        words = " ".join(str(fm.get(k) or "") for k in ("title", "title_es", "kind", "type", "tipo")) + " " + \
             " ".join(str(t) for t in (tags if isinstance(tags, list) else [tags or ""]))
         d = _a_day(fm.get("start"))
         if d and re.search(r"(?i)assembl|asamblea", words):
@@ -4018,9 +4097,12 @@ def carry_unreadable(ctx: Ctx, name: str, doc: dict, prev: Any) -> dict:
         return prev
     if name not in MIXED_FILES:
         return doc
-    have = {i.get("id") for i in doc.get("items") or []}
-    back = [i for i in prev.get("items") or [] if isinstance(i, dict) and i.get("id") not in have
-            and site_source(i) in lost]
+    # (events.json: its cancelled events too — since round 37 its `cancelled` list, split_cancelled — so an event
+    # cancelled in this build never comes back among the events from the last one, and the last one's cancelled
+    # events of the unreadable source stay cancelled)
+    have = {i.get("id") for key in ("items", "cancelled") for i in doc.get(key) or [] if isinstance(i, dict)}
+    olds = [*(prev.get("items") or []), *((prev.get("cancelled") or []) if name == "events" else [])]
+    back = [i for i in olds if isinstance(i, dict) and i.get("id") not in have and site_source(i) in lost]
     if name == "announcements":
         today = ctx.today_local.isoformat()
         back = [i for i in back if not (str((i.get("extra") or {}).get("expires") or "9999")[:10] < today)]
@@ -4030,7 +4112,8 @@ def carry_unreadable(ctx: Ctx, name: str, doc: dict, prev: Any) -> dict:
               len(back), ".json, data/raw/".join(sorted({site_source(i) for i in back})))
     items = [*doc.get("items", []), *back]
     if name == "events":
-        items = order_events(ctx, items)
+        items, cancelled = split_cancelled(order_events(ctx, [*items, *(doc.get("cancelled") or [])]))
+        return {**doc, "items": items, "cancelled": cancelled}
     elif name == "announcements":
         items.sort(key=bulletin_order)
     else:   # whatsnew: newest first, at most WHATSNEW_MAX
@@ -4208,6 +4291,10 @@ def main(argv: list[str] | None = None) -> int:
             doc = {"updated": updated or now, "fixture": False}
             doc.update(meta.get(name) or {})
             doc["items"] = [clean_private(i) for i in cols[name]]
+            if name == "events":
+                # (since round 37) the cancelled events in a list of their own, after the translations and the keep
+                # rules (split_cancelled): no page lists them; their notice pages and the calendar feeds read them
+                doc["items"], doc["cancelled"] = split_cancelled(doc["items"])
             docs[name] = write(name, doc, own_stamp=bool(updated))
             counts[name] = len(docs[name].get("items") or [])
         wn_doc = write("whatsnew", {"updated": now, "fixture": False, "items": [clean_private(i) for i in whatsnew]},

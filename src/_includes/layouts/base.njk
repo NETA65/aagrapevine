@@ -195,11 +195,8 @@
   {%- if shareImg.alt %}
   <meta name="twitter:image:alt" content="{{ shareImg.alt }}">
   {%- endif %}
-  {#- favicon.ico holds a 16px picture only: no sizes="any" (Chrome would prefer it over the 32px PNG on 2x screens) -#}
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo-32x32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo-192x192.png">
-  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png">
+  {#- the grape icon in every size (favicon, Google's search results, bookmarks, the iPhone): partials/icon-links.njk -#}
+  {% include "partials/icon-links.njk" %}
   {#- (Its explanations are Nunjucks comments, like the first head script's: never // lines inside the script.)
       Theme before paint (no flash): the visitor's saved choice ("gvlv-theme", our own key: on the
       github.io address the origin neta65.github.io was shared by every Pages project, where a bare

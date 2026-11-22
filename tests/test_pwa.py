@@ -7,8 +7,9 @@ and Data saver").
   * Strings    — src/_i18n/pwa.json: every key in English AND Spanish, within the length budgets of
                  the design spec; every pwa.* key the offline page uses exists.
   * Pages      — the offline page ("Saved pages & app") is a page like the others: in the sitemap and
-                 the collections, indexed; base.njk links the manifest, loads install-core.js right before
-                 pwa.js and versions styles/scripts with build.version. (Installing as an app — the steps
+                 the collections, indexed; base.njk links the manifest and (partials/icon-links.njk) the iPhone
+                 icon, loads install-core.js right before pwa.js and versions styles/scripts with
+                 build.version. (Installing as an app — the steps
                  on /offline/, install-core.js, the notice, the stand-in's script: test_pwa_install.)
   * Worker     — sw-core.js only handles GET requests to our own origin, revalidates navigations,
                  never skips waiting on its own, and keeps visitors' saved pages across versions — and
@@ -138,7 +139,10 @@ class Pages(unittest.TestCase):
         # light / dark media pair); the theme script sets the dark one before the first paint for a saved "dark"
         self.assertEqual(re.findall(r'<meta name="theme-color"[^>]*>', base), ['<meta name="theme-color" content="#07457c">'])
         self.assertNotIn("prefers-color-scheme", base)
-        self.assertIn('rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png"', base)
+        # the iPhone icon, with the favicons: partials/icon-links.njk (tests/test_r37_icons.py checks them all)
+        self.assertIn('{% include "partials/icon-links.njk" %}', base)
+        self.assertIn('rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png"',
+                      read("src", "_includes", "partials", "icon-links.njk"))
         self.assertIn('@import "./areas/pwa.css";', read("src", "assets", "css", "main.css"))
 
     def test_build_version_ignores_synced_content(self):

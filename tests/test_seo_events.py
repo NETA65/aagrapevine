@@ -207,6 +207,9 @@ for (const lang of ["en", "es"]) {
     capped: C.eventLd(evs, input.site, lang, "", 2).length,
     // every url one address (opt.url)
     given: [...new Set(C.eventLd(evs, input.site, lang, page, 30, { url: "https://x.test/one/" }).map((e) => e.url))],
+    // (since round 37) the same events, cancelled (extra.cancelled) — the Event a cancelled event's notice page gives
+    off: filters.cmEventLd(filters.cmCollapseRecurring(filters.cmEvents(input.items.map((it) => ({ ...it, extra: { ...(it.extra || {}), cancelled: true } })),
+      input.site, lang)).filter((e) => !e.past), input.site, lang, page),
   };
 }
 out(res);
@@ -326,6 +329,8 @@ class EventsOnly(unittest.TestCase):
                     self.assertEqual(set(e) - EVENT_KEYS, set(), anchor)                # nothing else said
                     self.assertTrue(all(v not in ("", None, [], {}) for v in e.values()), anchor)
                     self.assertEqual(e["@type"], "Event")
+                    # (a cancelled event is never among /events/' events — db.events.cancelled: below, and
+                    # tests/test_r37_cancelled.py)
                     self.assertEqual(e["eventStatus"], "https://schema.org/EventScheduled")
                     # its own page (round 35: eventLeaf), else its card on this page
                     page = SITE["url"] + ("/es" if lang == "es" else "") + "/events/"
@@ -334,6 +339,17 @@ class EventsOnly(unittest.TestCase):
                     self.assertEqual(e["location"]["address"]["@type"], "PostalAddress")
                     self.assertEqual(e["location"]["address"]["addressCountry"], "US")
                     self.assertEqual(e["eventAttendanceMode"], MODE("Mixed" if anchor in ("zz-hybrid", "zz-hybrid-codes") else "Offline"))
+                # Since round 37 the same events, cancelled — as a cancelled event's notice page gives its one: every
+                # value kept (Google: "don't remove startDate or location"), EventCancelled, and no picture (its flyer
+                # advertises an event that will not take place)
+                off = {anchor_of(e["url"], SITE["url"] + ("/es" if lang == "es" else "") + "/events/"): e
+                       for e in EventsOnly.res[lang]["off"]}
+                self.assertEqual(list(off), list(by))
+                for anchor, e in off.items():
+                    self.assertEqual(e["eventStatus"], "https://schema.org/EventCancelled", anchor)
+                    self.assertNotIn("image", e, anchor)
+                    self.assertEqual({k: v for k, v in e.items() if k != "eventStatus"},
+                                     {k: v for k, v in by[anchor].items() if k not in ("eventStatus", "image")}, anchor)
                 # the page's own address by default, and at most `max` of them; every url one address when given
                 self.assertEqual(EventsOnly.res[lang]["byDefault"], [e["url"] for e in EventsOnly.res[lang]["ld"]])
                 self.assertEqual(EventsOnly.res[lang]["capped"], 2)

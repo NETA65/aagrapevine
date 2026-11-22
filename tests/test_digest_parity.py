@@ -31,6 +31,7 @@ import sys
 import unittest
 from datetime import date, datetime, timezone
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -64,6 +65,11 @@ if (input.dir) {
   db = {};
   for (const f of fs.readdirSync(input.dir)) if (f.endsWith(".json")) db[f.slice(0, -5)] = JSON.parse(fs.readFileSync(input.dir + "/" + f, "utf8"));
   if (!db.spotlight) db.spotlight = { items: [] };
+  // as src/_data/db.js does (since round 37): the cancelled events out of the events, and the flyers only they use
+  // out of the uploads (eleventy/cancelled-events.js — send_digest.py site_events / cancelled_flyer_ids)
+  const K = await imp("eleventy/cancelled-events.js");
+  if (db.events) K.splitCancelled(db.events, input.events_dir || "-none-");
+  if (db.events) K.hideCancelledFlyers(db);
   site = input.site;
 } else {
   db = (await imp("src/_data/db.js")).default();
@@ -203,6 +209,55 @@ class FixtureParity(SD.DigestCase, Parity):
         self.assertEqual(js[f"2026-10@{iso(SD.OCT1)}"]["events"], ["ev:early"])                # only what has started
         self.assertEqual(early["speaker"], ["2026-10-21", "Rick W.", "How the committee works", "Cómo trabaja el comité"])
         self.assertIsNone(later["speaker"], "November's meeting has no record with a speaker")
+
+
+class CancelledParity(SD.DigestCase, Parity):
+    """Since round 37 a cancelled event (content/events `cancelled: true` → events.json `cancelled`; one still among the
+    events that is marked so, or whose own file says so, or that is in both lists — the build's cut, src/_data/db.js)
+    took place nowhere: neither the page nor the e-mail lists it among the month's events; and a Drive flyer only
+    cancelled events use is no upload of the month (one another event uses too still is)."""
+
+    HEADER = "\n".join(["---", "title: x", "status: cancelled", "---", ""])     # its file (the sync has not read it)
+    FLY_OFF, FLY_SHARED = "1FlyerOffxxxxxxxxxxxxxxxx", "1FlyerSharedxxxxxxxxxxxxx"
+
+    def test_cancelled_events_and_their_flyers(self):
+        self.full_month()
+        events_dir = self.tmp_path / "events"
+        events_dir.mkdir()
+        (events_dir / "2026-09-19-sep-file.md").write_text(self.HEADER, encoding="utf-8")
+        flyer = lambda fid: f"https://drive.google.com/file/d/{fid}/view"   # noqa: E731
+        events = json.loads((self.site_dir / "events.json").read_text(encoding="utf-8"))["items"]
+        self.write("events", {"items": events + [
+            SD.event("ev:manual:sep-live", "2026-09-05T15:00:00Z", "2026-09-05T17:00:00Z", "Live workshop",
+                     flyer_url=flyer(self.FLY_SHARED)),
+            SD.event("ev:manual:sep-off", "2026-09-12T15:00:00Z", "2026-09-12T17:00:00Z", "Marked cancelled",
+                     cancelled=True, flyer_url=flyer(self.FLY_OFF)),
+            SD.event("ev:manual:sep-file", "2026-09-19T15:00:00Z", "2026-09-19T17:00:00Z", "Its file says so",
+                     file="content/events/2026-09-19-sep-file.md"),
+            SD.event("ev:manual:sep-both", "2026-09-20T15:00:00Z", "2026-09-20T17:00:00Z", "In both lists"),
+        ], "cancelled": [
+            SD.event("ev:manual:sep-split", "2026-09-26T15:00:00Z", "2026-09-26T17:00:00Z", "Split by the sync",
+                     cancelled=True, flyer_url=flyer(self.FLY_SHARED)),
+            SD.event("ev:manual:sep-both", "2026-09-20T15:00:00Z", "2026-09-20T17:00:00Z", "In both lists", cancelled=True),
+        ]})
+        drive = json.loads((self.site_dir / "drive.json").read_text(encoding="utf-8"))
+        drive["items"] += [SD.item(f"drive:{fid}", "photo", "drive", "2026-09-15", f"{fid}.jpg", category="flyers",
+                                   url=flyer(fid), extra={"file_id": fid}) for fid in (self.FLY_OFF, self.FLY_SHARED)]
+        self.write("drive", drive)
+        cfg = yaml.safe_load(SD.CONFIG)
+        site = {**cfg["site"], "meeting": cfg.get("meeting") or {}, "digest": cfg.get("digest") or {}, "links": {},
+                "recurring_events": []}
+        cases = [("", SD.OCT1)]
+        with mock.patch.object(D, "EVENTS_DIR", events_dir):
+            js = run_js(self, PICK_JS, data={"dir": str(self.site_dir), "site": site, "events_dir": str(events_dir),
+                                             "cases": [[m, iso(n)] for m, n in cases]})
+            self.compare(js, cases, 2, 3)
+            sep = summary(D.collect(SD.OCT1, None, 3, 2))
+        self.assertIn("ev:manual:sep-live", sep["events"])
+        for iid in ("ev:manual:sep-off", "ev:manual:sep-file", "ev:manual:sep-both", "ev:manual:sep-split"):
+            self.assertNotIn(iid, sep["events"])
+        self.assertIn(f"drive:{self.FLY_SHARED}", sep["news"]["drive"])
+        self.assertNotIn(f"drive:{self.FLY_OFF}", sep["news"]["drive"])
 
 
 class CoverParity(SD.DigestCase, Parity):

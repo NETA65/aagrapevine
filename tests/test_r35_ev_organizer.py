@@ -97,17 +97,24 @@ class TheFile(unittest.TestCase):
 
 
 class TheWorkshops(unittest.TestCase):
-    """The two district workshops of 2026 say who organizes them (their own texts say so)."""
+    """The two district workshops of 2026 say who organizes them (their own texts say so) — copies of their files as
+    they were written (tests/fixtures/events/, since round 37: the real ones in content/events may be deleted once
+    their day is long over — the Garland one was cancelled on 2026-11-22, `cancelled: true` — and a test of the Code
+    check must never depend on the committee's content)."""
+
+    FIXTURES = ROOT / "tests" / "fixtures" / "events"
 
     def test_their_files(self):
         for name, who in (("2026-11-28-lv-writing-workshop-garland.md", "District 87 La Viña Committee"),
                           ("2026-12-12-lv-writing-workshop-fort-worth.md", "District 90 La Viña Committee")):
             with self.subTest(file=name):
-                it = A.parse_event(ROOT / "content" / "events" / name, CHI)
+                it = A.parse_event(self.FIXTURES / name, CHI)
                 self.assertEqual(it["extra"]["organizer"], who)
                 self.assertNotIn("organizer_url", it["extra"])
                 self.assertNotIn("organizer_problem", it["extra"])
                 self.assertIn(who.split(" La Viña")[0], it["summary"])         # "District 87": what its text says
+                # (the organizer stays what search engines are told on the cancelled one's notice page too)
+                self.assertEqual(it["extra"].get("cancelled"), True if "garland" in name else None)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,142 @@
+{
+  "evkind.writing-workshop.label": {
+    "en": "Writing workshop",
+    "es": "Taller de escritura"
+  },
+  "evkind.writing-workshop.phrase": {
+    "en": "a writing workshop",
+    "es": "un taller de escritura"
+  },
+  "evkind.writing-workshop.who": {
+    "en": "Any AA member — no experience needed.",
+    "es": "Cualquier miembro de AA — no hace falta experiencia."
+  },
+  "evkind.recording-workshop.label": {
+    "en": "Recording workshop",
+    "es": "Taller de grabación"
+  },
+  "evkind.recording-workshop.phrase": {
+    "en": "a recording workshop",
+    "es": "un taller de grabación"
+  },
+  "evkind.recording-workshop.who": {
+    "en": "Any AA member — no experience needed.",
+    "es": "Cualquier miembro de AA — no hace falta experiencia."
+  },
+  "evkind.information-workshop.label": {
+    "en": "Information workshop",
+    "es": "Taller de información"
+  },
+  "evkind.information-workshop.phrase": {
+    "en": "an information workshop",
+    "es": "un taller de información"
+  },
+  "evkind.information-workshop.who": {
+    "en": "Any AA member — no experience needed.",
+    "es": "Cualquier miembro de AA — no hace falta experiencia."
+  },
+  "evkind.gvr-orientation.label": {
+    "en": "GVR/RLV orientation",
+    "es": "Orientación para RLV y GVR"
+  },
+  "evkind.gvr-orientation.phrase": {
+    "en": "an orientation for GVRs and RLVs",
+    "es": "una orientación para RLV y GVR"
+  },
+  "evkind.gvr-orientation.who": {
+    "en": "GVRs, RLVs and any AA member who wants to learn about the service.",
+    "es": "RLV, GVR y cualquier miembro de AA que quiera conocer el servicio."
+  },
+  "evkind.gsr-dcm-orientation.label": {
+    "en": "GSR/DCM orientation",
+    "es": "Orientación para RSG y MCD"
+  },
+  "evkind.gsr-dcm-orientation.phrase": {
+    "en": "an orientation for GSRs and DCMs",
+    "es": "una orientación para RSG y MCD"
+  },
+  "evkind.assembly.label": {
+    "en": "Area assembly",
+    "es": "Asamblea de Área"
+  },
+  "evkind.assembly.phrase": {
+    "en": "an Area assembly",
+    "es": "una asamblea de Área"
+  },
+  "evkind.acm.label": {
+    "en": "Area Committee Meeting",
+    "es": "Reunión del Comité de Área"
+  },
+  "evkind.acm.phrase": {
+    "en": "an Area Committee Meeting",
+    "es": "una reunión del Comité de Área"
+  },
+  "evkind.town-hall.label": {
+    "en": "Town hall",
+    "es": "Reunión informativa"
+  },
+  "evkind.town-hall.phrase": {
+    "en": "a town hall",
+    "es": "una reunión informativa"
+  },
+  "evkind.intergroup.label": {
+    "en": "Intergroup meeting",
+    "es": "Reunión de intergrupo"
+  },
+  "evkind.intergroup.phrase": {
+    "en": "an intergroup meeting",
+    "es": "una reunión de intergrupo"
+  },
+  "evkind.booth.label": {
+    "en": "Literature booth",
+    "es": "Mesa de literatura"
+  },
+  "evkind.booth.phrase": {
+    "en": "our Grapevine and La Viña literature table",
+    "es": "nuestra mesa de literatura de La Viña y Grapevine"
+  },
+  "evkind.online-meeting.label": {
+    "en": "Online AA meeting",
+    "es": "Reunión de AA en línea"
+  },
+  "evkind.online-meeting.phrase": {
+    "en": "an online AA meeting",
+    "es": "una reunión de AA en línea"
+  },
+  "evkind.magazine-workshop.label": {
+    "en": "Monthly online workshop",
+    "es": "Taller mensual en línea"
+  },
+  "evkind.magazine-workshop.phrase": {
+    "en": "a monthly online workshop",
+    "es": "un taller mensual en línea"
+  },
+  "evkind.calendar.label": {
+    "en": "Event",
+    "es": "Evento"
+  },
+  "evkind.calendar.phrase": {
+    "en": "an event",
+    "es": "un evento"
+  },
+  "evkind.committee-meeting.label": {
+    "en": "Committee meeting",
+    "es": "Reunión del comité"
+  },
+  "evkind.committee-meeting.phrase": {
+    "en": "our committee's monthly meeting",
+    "es": "la reunión mensual de nuestro comité"
+  },
+  "evkind.other.label": {
+    "en": "Event",
+    "es": "Evento"
+  },
+  "evkind.other.phrase": {
+    "en": "an event",
+    "es": "un evento"
+  },
+  "evkind.series_title": {
+    "en": "{title} — {when}",
+    "es": "{title} — {when}"
+  }
+}

@@ -5,8 +5,9 @@ checks):
   * ThemeFollows   — light / dark switched in one tab reaches the site's other open tab (its header button, its
                      Menu switch, the page colour and the address-bar colour), and a page brought back from the
                      browser's page cache (a "pageshow" with persisted) re-reads the saved choice.
-  * Layout         — the footer logo keeps its shape in the narrow first column (1024–1095px); the Accessibility
-                     page's two Google Meet links are 24px+ apart with a mouse (WCAG 2.5.8), in both languages; the
+  * Layout         — the footer logo (the grape app icon since round 37: a 44px square) keeps its shape in the
+                     narrow first column (1024–1095px); the Accessibility page's two Google Meet links are 24px+
+                     apart with a mouse (WCAG 2.5.8), in both languages; the
                      weekly-meeting cards' title block spans the card from 640px (/meetings/); the booth preview's
                      controls show right under the preview while it plays and the quick settings keep their column.
 """
@@ -65,10 +66,12 @@ class Layout(unittest.TestCase):
             ctx = new_context(width, 800)
             try:
                 page = open_page(ctx, "about/")
-                img = page.locator(".site-footer img[src*='logo-wide']")
+                # the grape app icon since round 37 (the NETA 65 wordmark is the header's only): a 44px square
+                img = page.locator(".site-footer img[src*='app-icon-192']")
                 img.scroll_into_view_if_needed()
                 box = img.bounding_box()
-                self.assertAlmostEqual(box["width"] / box["height"], 128 / 63, delta=0.03, msg=f"{width}px: {box}")
+                self.assertAlmostEqual(box["width"] / box["height"], 1, delta=0.03, msg=f"{width}px: {box}")
+                self.assertAlmostEqual(box["height"], 44, delta=1, msg=f"{width}px: {box}")
             finally:
                 ctx.close()
 

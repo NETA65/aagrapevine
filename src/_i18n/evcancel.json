@@ -1,0 +1,58 @@
+{
+  "evcancel.page_title": {
+    "en": "Cancelled: {title}, {date}",
+    "es": "Cancelado: {title}, {date}"
+  },
+  "evcancel.h1": {
+    "en": "Cancelled: {title}",
+    "es": "Cancelado: {title}"
+  },
+  "evcancel.banner": {
+    "en": "This event has been cancelled. It will not take place.",
+    "es": "Este evento se canceló. No se realizará."
+  },
+  "evcancel.was": {
+    "en": "It was planned for {when} at {place}.",
+    "es": "Estaba previsto para el {when} en {place}."
+  },
+  "evcancel.was_online": {
+    "en": "It was planned for {when}, online.",
+    "es": "Estaba previsto para el {when}, en línea."
+  },
+  "evcancel.was_date": {
+    "en": "It was planned for {when}.",
+    "es": "Estaba previsto para el {when}."
+  },
+  "evcancel.was_range": {
+    "en": "It was planned from {from} to {to} at {place}.",
+    "es": "Estaba previsto del {from} al {to} en {place}."
+  },
+  "evcancel.was_range_online": {
+    "en": "It was planned from {from} to {to}, online.",
+    "es": "Estaba previsto del {from} al {to}, en línea."
+  },
+  "evcancel.was_range_date": {
+    "en": "It was planned from {from} to {to}.",
+    "es": "Estaba previsto del {from} al {to}."
+  },
+  "evcancel.desc": {
+    "en": "Cancelled. It was planned for {when} · {place}.",
+    "es": "Cancelado. Estaba previsto para el {when} · {place}."
+  },
+  "evcancel.desc_range": {
+    "en": "Cancelled. It was planned from {from} to {to} · {place}.",
+    "es": "Cancelado. Estaba previsto del {from} al {to} · {place}."
+  },
+  "evcancel.next_h": {
+    "en": "Coming up instead",
+    "es": "Próximos eventos parecidos"
+  },
+  "evcancel.ics_prefix": {
+    "en": "Cancelled",
+    "es": "Cancelado"
+  },
+  "evcancel.ics_note": {
+    "en": "Cancelled — this event will not take place.",
+    "es": "Cancelado: este evento no se realizará."
+  }
+}

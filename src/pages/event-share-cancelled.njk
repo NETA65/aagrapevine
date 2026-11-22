@@ -1,0 +1,110 @@
+---js
+// (JavaScript front matter: the pagination's `before` and the page's data are functions. The imports are read from
+// the project's top folder, where every build runs — not from this file's folder. Every name here is page data: the
+// pages' plan is eleventy/cancelled-pages.js.)
+import { cancelledPages } from "./eleventy/cancelled-pages.js";
+
+// the cancelled events whose day is not over, in each language (cancelledPages: never at an address an event of the
+// lists has — the event pages templates write those)
+const pagination = {
+  data: "db.events.cancelled", size: 1, alias: "share",
+  before: (cancelled, full) => cancelledPages(cancelled, full.db?.events?.items, full.site, full.languages),
+};
+const permalink = (data) => data.share.path + "index.html";
+const layout = "layouts/base.njk";
+// under Events in the menu and the breadcrumb (base.njk: Home → Events → the notice)
+const pageKey = "events";
+// its title ("Cancelled: <title>, <day>"), the tab title's tail, its description — and the committee's card as its
+// share picture (ogImage null: never the flyer of an event that will not take place)
+const eleventyComputed = {
+  lang: (data) => data.share.lang,
+  title: (data) => data.share.meta.title,
+  titleTail: (data) => data.share.meta.titleTail,
+  description: (data) => data.share.meta.description,
+};
+---
+{#- A cancelled event's notice page, since round 37: /events/<its anchor>/ (/es/events/…/) — the address its page had —
+    for an event that will not take place (content/events `cancelled: true`; db.events.cancelled, never among the events
+    the site lists), from the moment the file says so until its day is over (the pagination's `before` above). Whoever
+    follows a link shared earlier, or a search result, learns that it is cancelled and what else is coming, instead of
+    an Events page that no longer shows it.
+    A page of the site like the others (base.njk): the header and footer, the site's graph with its breadcrumb (Home →
+    Events → the notice), its own address as canonical, its twin in the other language, indexable and in the sitemap —
+    search engines see the change at the address they know (Google: keep the page, with EventCancelled).
+    Written in the page (no script needed):
+      · its Event's structured data FIRST, with every value it had and EventCancelled (cmEventPageLd: eventLd, its url
+        this page, no picture) — only for an event that was to be held at a real address, in both languages;
+      · the hero: "Cancelled: <title>" (h1), the day and time it had, "See all events";
+      · the notice: "This event has been cancelled. It will not take place.", the organizers' own note
+        (`cancelled_note:`), when and where it was planned; its summary, without how to join (a meeting ID, code or
+        link: withoutJoinDetails; cmNoSnippet as everywhere); Share (this page's address);
+      · "Coming up instead": the next events of the same kind (its colour and a tag in common), each to its own page or
+        its card — outside the page's sitemap date (data-lastmod="skip": it changes with those events);
+      · "See all events" again.
+    No flyer, no "Add to calendar", no "Join": nothing invites anyone to come. (data-ev-cancelled on the notice: how the
+    browser checks tell a notice page from an event's own page — tests/browser/test_r35_ev_page.py.) -#}
+{% import "macros/ui.njk" as ui with context %}
+{% import "macros/events.njk" as evm with context %}
+{%- set ev = share.ev -%}
+{%- set m = share.meta -%}
+{%- set kind = ev | eventTone -%}
+{%- set selfAbs = page.url | siteUrl(site) -%}
+{%- set when = ev.rangeLabel if ev.multiDay else ev.shareWhen -%}
+{% if share.ld %}{%- set ld = ev | cmEventPageLd(site, lang, selfAbs) -%}{% if ld %}<script type="application/ld+json">{{ ld | rpJson | safe }}</script>{% endif %}{% endif %}
+{% call ui.pageHero(lang, m.h1, when | escape, "calendar-x", "nav.events" | t(lang)) %}
+  <div class="hero-actions">
+    <a class="btn-light" href="{{ share.target }}">{% icon "calendar-days", "size-4" %} {{ "committee.events.page_all" | t(lang) }}</a>
+  </div>
+{% endcall %}
+
+<div class="container-page section pt-10 sm:pt-12">
+<div class="mx-auto max-w-3xl">
+  <article class="card card-pad border-l-4 border-l-danger" data-ev-cancelled>
+    <div class="flex flex-wrap items-center gap-1.5">
+      {{ evm.kindBadge(ev, kind) }}
+      {% if not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
+    </div>
+    <p class="mt-3 flex items-start gap-2 font-display text-xl font-semibold leading-snug text-ink">{% icon "calendar-x", "mt-1 size-5 shrink-0 text-danger" %}<span>{{ "evcancel.banner" | t(lang) }}</span></p>
+    {#- (the organizers' note in the other language, when they wrote it in that one only: lang="…", so a screen reader
+        reads it in its own language) -#}
+    {% if ev.cancelledNote %}<p class="mt-2 font-medium text-ink"{% if ev.cancelledNoteLang != lang %} lang="{{ ev.cancelledNoteLang }}"{% endif %}>{{ ev.cancelledNote }}</p>{% endif %}
+    <p class="mt-2 leading-relaxed text-muted">{{ m.was }}</p>
+    {%- set foreign = not ev.ownWords and ev.item.lang and ev.item.lang != lang and ev.item.lang != "und" and not (ev.item | machineFor(lang)) -%}
+    {% if share.note %}
+    <div class="mt-4 border-t border-line pt-4">
+      <h2 class="h-card">{{ ev.title }}</h2>
+      <p class="mt-1.5 text-[0.95rem] leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ share.note | excerpt(2000) | escape | cmNoSnippet | safe }}</p>
+      {% if ev.item | machineFor(lang) %}<p class="mt-1.5">{{ ui.autoNote(ev.item, lang) }}</p>{% endif %}
+    </div>
+    {% endif %}
+    <div class="mt-5 flex flex-wrap gap-2">
+      <button type="button" class="btn-ghost btn-sm" data-js-only data-share="{{ selfAbs }}" data-share-title="{{ m.h1 }}" data-share-text="{{ when }}">{% icon "share-2", "size-4" %}<span>{{ "common.share" | t(lang) }}</span></button>
+    </div>
+  </article>
+
+  {#- data-lastmod="skip": these are other events — the block changes when they do, not when this notice does, so it
+      is left out of the page's sitemap date (eleventy/lastmod.js) -#}
+  {% if share.related | length %}
+  <section class="mt-10" aria-labelledby="ev-cancel-next" data-lastmod="skip">
+    <h2 id="ev-cancel-next" class="h-section">{{ "evcancel.next_h" | t(lang) }}</h2>
+    <ul class="mt-4 grid gap-3" role="list">
+      {% for r in share.related %}
+      <li>
+        <a href="{{ r.href }}" class="card card-link cm-mini-card ev-accent ev-tone-{{ r.tone }} group h-full">
+          <span class="cm-date-tile{{ ' cm-tile-range' if r.ev.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ r.ev.tile.mon }}</span><span class="cm-tile-day">{{ r.ev.tile.day }}</span><span class="cm-tile-wd">{{ r.ev.tile.wd }}</span></span>
+          <span class="min-w-0">
+            <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ r.ev.title }}</span>
+            <span class="mt-0.5 block text-sm text-muted">{{ r.ev.rangeLabel if r.ev.multiDay else r.ev.shareWhen }}</span>
+            {% if r.ev.location %}<span class="mt-1 flex items-start gap-1.5 text-sm text-muted{{ ' italic' if r.ev.locationTba }}">{% set rIcon = "hourglass" if r.ev.locationTba else "map-pin" %}{% icon rIcon, "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ r.ev.location }}</span></span>
+            {% elif r.ev.isOnline %}<span class="mt-1 flex items-start gap-1.5 text-sm text-muted">{% icon "video", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ ("committee.events.online_on" | t(lang, { platform: r.ev.platform })) if r.ev.platform else ("committee.events.online" | t(lang)) }}</span></span>{% endif %}
+            {% if r.ev.tentative %}<span class="mt-1.5 block">{{ ui.tentativeBadge(lang) }}</span>{% endif %}
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  <p class="mt-6"><a class="link tap-link inline-flex items-center gap-1.5" href="{{ share.target }}">{% icon "arrow-left", "size-4 shrink-0" %}{{ "committee.events.page_all" | t(lang) }}</a></p>
+</div>
+</div>

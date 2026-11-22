@@ -1,0 +1,18 @@
+{#- The site's icons in a page's <head> — base.njk (every page, the 404 page too) and the small stand-alone pages
+    (the old addresses' redirects, meeting.njk, monthly-past.njk). Always the grape app icon, drawn by
+    scripts/dev/make_app_icons.py (src/assets/img/favicon*, app-icon-192.png, apple-touch-icon-180.png): the NETA 65
+    logo is the header's wordmark only (the owner's rule, round 37).
+      * Google shows ONE favicon per host, read from the home page's rel="icon" links: a square of a multiple of
+        48 px at an address that does not change (no ?v=: a new drawing keeps its file name), in a format it reads —
+        the ICO and the PNGs, never the SVG.
+      * favicon.ico (16, 32 and 48 px, its sizes listed) and favicon.svg are published at the site's root
+        (eleventy.config.js), where browsers also look without a link; so is the iPhone icon (/apple-touch-icon.png).
+      * Browsers pick the size they need: a tab 16 or 32 px (a picture of the ICO, or the SVG), a bookmark or a
+        shortcut 48–192 px.
+    The base plugin adds the path prefix to every href (also on the stand-alone pages). -#}
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/img/app-icon-192.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png">

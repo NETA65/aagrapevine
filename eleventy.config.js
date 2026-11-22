@@ -604,7 +604,20 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/img": "assets/img" });
   eleventyConfig.addPassthroughCopy({ "src/assets/js": "assets/js" });
   eleventyConfig.addPassthroughCopy({ "src/assets/cache": "assets/cache" });
-  eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
+  // The site's icons at its root too, where browsers, Google and link previews look for them without a <link>: the
+  // favicons (16 + 32 + 48 px ICO, SVG) and the iPhone icon under both names Safari and link previews try. Their
+  // sources sit in src/assets/img/ (scripts/dev/make_app_icons.py draws them), so a new drawing changes build.version
+  // — the service worker's app shell (src/pages/sw.11ty.js) takes it up — and they are also at /assets/img/.
+  // (Eleventy keys these copies by their source: the second copy of the iPhone icon names it "./src/…".)
+  // A preview (`npm start`, --serve) copies them all again after a change; only with --incremental does Eleventy copy
+  // a changed icon to /assets/img/ alone (the first entry it matches is the folder above) — so after make_app_icons,
+  // build the whole site (or start the preview again) to refresh these root copies.
+  eleventyConfig.addPassthroughCopy({
+    "src/assets/img/favicon.ico": "favicon.ico",
+    "src/assets/img/favicon.svg": "favicon.svg",
+    "src/assets/img/apple-touch-icon-180.png": "apple-touch-icon.png",
+    "./src/assets/img/apple-touch-icon-180.png": "apple-touch-icon-precomposed.png",
+  });
   if (fs.existsSync("src/CNAME")) eleventyConfig.addPassthroughCopy({ "src/CNAME": "CNAME" });
   eleventyConfig.addPassthroughCopy({ "src/.nojekyll": ".nojekyll" });
   // Pictures and documents saved next to the bulletin's posts (content/bulletin/flyer.jpg) are published

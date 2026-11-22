@@ -16,6 +16,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { beforeFirstDate, safeUrl } from "../../eleventy.config.js";
 import { buildWarning } from "../../eleventy/build-warnings.js";
+// (since round 37) the cancelled events out of db.events.items, into db.events.cancelled, and their flyers out of
+// the Portfolio and What's New — eleventy/cancelled-events.js
+import { hideCancelledFlyers, splitCancelled } from "../../eleventy/cancelled-events.js";
 // config/site.yml as the pages read it: a date of a monthly series before its first date (`starts:`) is left out
 // below (eleventy.config.js beforeFirstDate)
 import readSettings from "./site.js";
@@ -48,6 +51,10 @@ const ARCHIVE_FILE = process.env.WRITERS_ARCHIVE || "";
 // SITE_DATA=<folder> reads every file from that folder instead of data/site (tests: a build that must not depend on
 // the day's data; a file missing there is an empty list, as here).
 const DATA_DIR = process.env.SITE_DATA || path.join("data", "site");
+// "events" also has `cancelled` (since round 37): the events that will not take place — always a list here, never
+// among its `items` (eleventy/cancelled-events.js splitCancelled, below). CONTENT_EVENTS=<folder> reads the
+// hand-written events' files for their `cancelled:` line there instead of content/events (tests).
+const EVENTS_DIR = process.env.CONTENT_EVENTS || path.join("content", "events");
 const FILES = [
   "episodes", "videos", "instagram", "articles", "pdfs", "drive", "events",
   "announcements", "editorial", "weekly_open", "whatsnew", "status",
@@ -120,6 +127,15 @@ export default function () {
     });
     out[name] = data;
   }
+  // A cancelled event that is still among the events (the sync has not read its file's `cancelled:` line yet): out of
+  // them all the same, into db.events.cancelled (a plain log line: the next sync writes it so); then the flyers only
+  // cancelled events use, out of the Portfolio and What's New.
+  const moved = splitCancelled(out.events, EVENTS_DIR);
+  if (moved.length) {
+    console.log(`[events] ${moved.length} cancelled event(s) left out of the lists — the next sync moves them to `
+      + `data/site/events.json cancelled: ${moved.join(", ")}`);
+  }
+  hideCancelledFlyers(out);
   // (a plain log line, never a build warning: it only means the sync has not run since the settings changed)
   let settings = {};
   try { settings = readSettings(); } catch (e) { console.warn(`[content] could not read config/site.yml: ${e.message}`); }

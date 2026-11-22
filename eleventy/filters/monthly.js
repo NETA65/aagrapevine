@@ -1579,9 +1579,10 @@ export function posterShareOn(env = process.env) {
 }
 
 /** The site's calendar events (committee.js normalizeEvents, as /events.ics has them) by id, for monthIcs: the
- *  window's months, and the month before. */
+ *  window's months, and the month before — with (since round 37) the cancelled events (db.events.cancelled), as
+ *  /events.ics has them too. */
 export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate()) {
-  const items = (db.events && db.events.items) || [];
+  const items = [...((db.events && db.events.items) || []), ...((db.events && db.events.cancelled) || [])];
   return new Map(normalizeEvents(items, site, lang === "es" ? "es" : "en", { monthsBack: 1, monthsAhead: WINDOW, now }).map((e) => [e.id, e]));
 }
 
@@ -1596,10 +1597,13 @@ export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate())
  *              worked out from its rule, is written from the same record)
  *   deadlines  the story deadlines the page lists (Grapevine's, La Viña's), each an all-day entry on its day:
  *              "Story deadline: “Fun in Sobriety” — Grapevine", its issue and how to send a story (/contribute/)
+ *   cancelled  (since round 37) the month's cancelled events (db.events.cancelled, which no date row lists — this
+ *              month only the ones not over yet): "Cancelled: …", STATUS:CANCELLED, no reminder (buildIcs), so the
+ *              entry a member added with an earlier copy of the file is corrected when they add it again
  * The calendar's name is the month's ("NETA 65 Grapevine & La Viña — October 2026"). RFC 5545 as buildIcs
  * writes it: CRLF line ends, lines folded at 75 octets, TEXT escaped, UTC times, DATE values for all-day entries.
  * (SEQUENCE and DTSTAMP are buildIcs's, as in /events.ics.) Each entry has the site's one reminder (buildIcs
- * alarms: an hour before; 9 AM the day before a deadline or an all-day event).
+ * alarms: an hour before; 9 AM the day before a deadline or an all-day event) — but a cancelled event's.
  */
 export function monthIcs(m, db = {}, site = {}, lang = "en", now = nowDate(), normalized = null) {
   const L = lang === "es" ? "es" : "en";
@@ -1614,6 +1618,12 @@ export function monthIcs(m, db = {}, site = {}, lang = "en", now = nowDate(), no
     // a date the site's calendar lists; else (a later month's date of a series, worked out from its rule) its record
     const ev = all.get(d.id) || (d.kind !== "committee" && d.src ? normalizeEvents([d.src], site, L, opt).find((e) => e.id === d.id) : null);
     if (ev) events.push(ev);
+  }
+  // (since round 37) the month's cancelled events (db.events.cancelled — never among its dates): their entry as
+  // /events.ics writes it, marked cancelled and with no reminder (buildIcs), so a member who adds the month again gets
+  // the entry they had corrected — this month, only those not over yet
+  for (const ev of all.values()) {
+    if (ev.cancelled && ev.monthKey === m.key && !(m.isCurrent && ev.past) && !events.includes(ev)) events.push(ev);
   }
   const dls = [...(m.deadlines || []).map((d) => deadlineEntry(d, "gv", L, site)), ...(m.lvDeadlines || []).map((d) => deadlineEntry(d, "lv", L, site))];
   const list = [...events, ...dls].sort((a, b) => (a.allDay ? Date.parse(a.startYmd + "T12:00:00Z") : a.startMs)

@@ -5,7 +5,7 @@
 // own name (site.search_engine_name, 16 characters at most — OpenSearch's ShortName), so a bilingual visitor can
 // keep both. Absolute addresses (site.url): the browser keeps this file and uses it away from the site; the HTML
 // base plugin never rewrites an XML file. (Not named "sitemap…": ONLY=sitemap test builds pick src/pages files by
-// the start of their names.)
+// the start of their names.) Its picture is the site's grape favicon at 32 px (scripts/dev/make_app_icons.py).
 import { escapeXml as x } from "../../eleventy/filters/community.js";
 
 export const data = {
@@ -27,7 +27,7 @@ export function render(data) {
     `  <Description>${x(t("search.meta_desc"))}</Description>`,
     `  <Url type="text/html" method="get" template="${x(abs(`${home}search/`))}?q={searchTerms}"/>`,
     `  <Url type="application/opensearchdescription+xml" rel="self" template="${x(abs(`${home}opensearch.xml`))}"/>`,
-    `  <Image width="32" height="32" type="image/png">${x(abs("/assets/img/logo-32x32.png"))}</Image>`,
+    `  <Image width="32" height="32" type="image/png">${x(abs("/assets/img/favicon-32.png"))}</Image>`,
     `  <Language>${lang === "es" ? "es-US" : "en-US"}</Language>`,
     "  <InputEncoding>UTF-8</InputEncoding>",
     "</OpenSearchDescription>",

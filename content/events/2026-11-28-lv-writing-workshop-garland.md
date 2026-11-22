@@ -10,6 +10,10 @@ flyer: "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view"
 # organizer: who search engines are told holds it — the District 87 La Viña committee, as the text below says
 organizer: "District 87 La Viña Committee"
 tags: [workshop, la-vina]
+# cancelled: it will not take place (the owner, 2026-11-22). The file stays: its page says "Cancelled" until Nov 28
+# and the calendar feeds mark it cancelled; nothing else lists it. Delete the file after 2027-02-26 if you like
+# (the feeds drop it 90 days after its day) — content/events/README.md
+cancelled: true
 lang: en
 summary_es: "Taller en español para aprender a escribir tu historia para La Viña, en el Grupo Volver a Vivir de Garland. Lo organiza el Comité Permanente de La Viña del Distrito 87: pautas para colaborar con La Viña, cómo escribir tu experiencia, productos nuevos, trivia, una rifa y preguntas y respuestas; compañeros comparten cómo fue ver publicada su experiencia en La Viña."
 ---

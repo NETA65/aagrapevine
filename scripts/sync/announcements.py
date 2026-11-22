@@ -53,6 +53,12 @@ group that organizes an event when it is not us ("District 87 La Viña Committee
 and `organizer_url:` its https:// page (`extra.organizer` / `extra.organizer_url`, event_organizer): who
 search engines are told holds it; nothing else changes on the page. A line that cannot be used (an
 address in the name, a page that is not https://) is left out and listed on /status/.
+Since round 37 `cancelled: true` (also `canceled:` / `cancelado:` / `cancelada:`, or `status: cancelled`) marks an
+event that will not take place (`extra.cancelled`, event_cancelled; an optional `cancelled_note:` /
+`cancelled_note_es:` says more — `extra.cancelled_note`): keep the file; build_data lists it in events.json
+`cancelled`, never among the events, its address shows a "Cancelled" notice until its day is over and the calendar
+feeds mark it cancelled. `type:` (also `tipo:` / `kind:`) names the event's kind when the site's own guess is wrong
+(`extra.type`, one of EVENT_TYPES; any other value is listed on /status/ and left out — event_type).
 Files whose name starts with "_" or "README" are ignored; other files that do not end in .md
 (any capitalization) are skipped and listed on /status/ — except a bulletin post's pictures and
 documents. The folder is the source of truth:
@@ -544,6 +550,63 @@ def event_organizer(name, url) -> tuple[str | None, str | None, str | None]:
     return org or None, link or None, "; ".join(problems) or None
 
 
+# Since round 37: an event that will not take place — `cancelled: true` (also `canceled:`, `cancelado:`,
+# `cancelada:`, each with true / yes / sí …, as_bool), or `status: cancelled` (canceled / cancelado / cancelada).
+# The file stays: the sync marks the event (extra.cancelled) and build_data writes it to events.json's own
+# `cancelled` list, never among the events (`items`), so no page lists it any more; its address keeps a "Cancelled"
+# notice until its day is over (src/pages/event-share-cancelled.njk) and the calendar feeds mark it cancelled
+# (STATUS:CANCELLED) for 90 days. The build reads the same line straight from the file too (src/_data/db.js), so a
+# build made before the sync already hides the event.
+CANCELLED_KEYS = ("cancelled", "canceled", "cancelado", "cancelada")
+CANCELLED_NOTE_MAX = 300        # characters: one or two sentences ("Moved to January 9 — see the new date.")
+
+
+def event_cancelled(meta: dict) -> bool:
+    """Does a content/events file's header say the event is cancelled (CANCELLED_KEYS, or `status:` one of them)?"""
+    if any(as_bool(meta.get(k)) for k in CANCELLED_KEYS):
+        return True
+    status = meta.get("status")
+    return isinstance(status, str) and clean_text(status).lower() in CANCELLED_KEYS
+
+
+def cancelled_note(meta: dict, lang: str) -> dict[str, str]:
+    """A cancelled event's optional note for people — `cancelled_note:` in the file's language, `cancelled_note_es:` /
+    `cancelled_note_en:` in the other one (also spelled `canceled_note…`) → {lang: text} (extra.cancelled_note): the
+    first line of its calendar entry and of its notice page, instead of the plain "Cancelled" words. Never
+    machine-translated (a note in one language shows in both)."""
+    out: dict[str, str] = {}
+    for prefix in ("cancelled_note", "canceled_note"):
+        for key, where in ((prefix, lang), (f"{prefix}_en", "en"), (f"{prefix}_es", "es")):
+            text = clean_text(meta.get(key)) if isinstance(meta.get(key), str) else ""
+            if text and where not in out:
+                out[where] = truncate(text, CANCELLED_NOTE_MAX)
+    return out
+
+
+# Since round 37: the kinds of event the site knows (eleventy/event-pages.js EVENT_KINDS — the same names: a test
+# checks both lists). The site works an event's kind out from its title, tags and settings; a file names it itself
+# with `type:` (also `tipo:` / `kind:`) only when that guess is wrong. Written as here, or with spaces or capitals
+# ("Writing workshop" → writing-workshop); any other value is left out and listed on /status/ (event_type).
+EVENT_TYPES = ("writing-workshop", "recording-workshop", "information-workshop", "gvr-orientation",
+               "gsr-dcm-orientation", "assembly", "acm", "town-hall", "intergroup", "booth", "online-meeting",
+               "magazine-workshop", "calendar", "committee-meeting", "other")
+
+
+def event_type(meta: dict) -> tuple[str | None, str | None]:
+    """A content/events file's `type:` (else `tipo:`, else `kind:`) → (one of EVENT_TYPES, problem): (None, None) when
+    the file names none; (None, a line for /status/) for a value the site does not know — the line is left out and
+    the site works the kind out itself, as without it."""
+    raw = next((meta.get(k) for k in ("type", "tipo", "kind") if meta.get(k) not in (None, "")), None)
+    if raw is None:
+        return None, None
+    text = clean_text(raw) if isinstance(raw, str) else ""
+    slug = slugify(text) if text else ""
+    if slug in EVENT_TYPES:
+        return slug, None
+    return None, (f"type: “{clean_text(raw)[:40]}” is not a kind the site knows, left out — write one of "
+                  f"{', '.join(EVENT_TYPES)}, or delete the line")
+
+
 # --------------------------------------------------------------------------- bulletin posts
 # A post is whatever Markdown the chair drops in the folder — often pasted from somewhere else, with
 # or without a header. These helpers make any such file read well on the page (the page shows the
@@ -869,6 +932,19 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
         extra["tentative"] = True        # details not final yet: "Details to be confirmed", STATUS:TENTATIVE
     if as_bool(meta.get("confirmed")):
         extra["confirmed"] = True        # the committee checked date, time and place: no calendar feed changes them
+    file_lang = pick_lang(meta, f"{title}. {text}")
+    if event_cancelled(meta):
+        # it will not take place (since round 37): events.json `cancelled`, a "Cancelled" notice at its address,
+        # STATUS:CANCELLED in the calendar feeds — never listed as an event (event_cancelled)
+        extra["cancelled"] = True
+        note = cancelled_note(meta, file_lang)
+        if note:
+            extra["cancelled_note"] = note
+    kind, type_problem = event_type(meta)
+    if kind:
+        extra["type"] = kind             # its kind, when the site's own guess is wrong (event_type; since round 37)
+    if type_problem:
+        extra["type_problem"] = type_problem
     host = event_host(meta.get("host"))
     if host is None:
         # A slip, not a reason to hide the event: "host: District 91" or "host: Grupo Libro Grande" (the group that
@@ -904,7 +980,7 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
     return make_item(
         id=f"ev:manual:{slug}", source="committee", kind="event",
         url=clean_text(meta.get("url")) or f"/events/#{slug}", title=title, summary=truncate(text, 400),
-        lang=pick_lang(meta, f"{title}. {text}"), date=start, image=image, tags=as_tags(meta.get("tags")),
+        lang=file_lang, date=start, image=image, tags=as_tags(meta.get("tags")),
         category="manual", extra=extra,
     )
 
@@ -943,6 +1019,10 @@ def collect(folder: Path, parser, label: str, keep: tuple[str, ...] = ()
         organizer_problem = (it.get("extra") or {}).pop("organizer_problem", None)
         if organizer_problem:
             errors.append(f"{folder.name}/{path.name}: {organizer_problem}"[:400])
+        # a `type:` the site does not know (event_type): the event shows, its kind worked out as without the line
+        type_problem = (it.get("extra") or {}).pop("type_problem", None)
+        if type_problem:
+            errors.append(f"{folder.name}/{path.name}: {type_problem}"[:400])
         # a date to check (a UTC offset that is not Central time's, "05-10-2026"): the item shows, the line is listed
         for note in (it.get("extra") or {}).pop("date_notes", None) or ():
             errors.append(f"{folder.name}/{path.name}: {note}"[:400])

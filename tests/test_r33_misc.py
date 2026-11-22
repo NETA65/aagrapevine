@@ -8,8 +8,9 @@ same things in a real one):
                       anual sobre las prisiones") is not described as the “… Issue” issue / la edición “Edición …”.
   * Markup          — the weekly-meeting cards' title block gets a real class (not an escaped `class=&quot;…`);
                       the monthly posters' miniature wrappers are <div>s (a <span> may not hold the poster's <div>);
-                      the booth preview's figcaption is its figure's last child; the footer logo never shrinks; the
-                      Accessibility page's Google Meet links are 24px+ apart with a mouse.
+                      the booth preview's figcaption is its figure's last child; the footer logo (the grape app
+                      icon since round 37) never shrinks; the Accessibility page's Google Meet links are 24px+
+                      apart with a mouse.
   * Theme           — light / dark follows the site's other open tabs and a page brought back with Back
                       (app.js siteHeader: "storage" and "pageshow"), reading the saved choice and never writing it.
   * HeadScripts     — the two inline <head> scripts of base.njk carry no // comment lines (they went out with every
@@ -162,10 +163,13 @@ class Markup(unittest.TestCase):
         self.assertTrue(fig.rstrip().endswith("</figcaption>"))
 
     def test_the_footer_logo_never_shrinks(self):
+        # since round 37 the grape app icon (the NETA 65 wordmark is the header's only)
         foot = read("src", "_includes", "partials", "footer.njk")
-        tile = re.search(r'<span class="([^"]*)"><img src="/assets/img/logo-wide.png"', foot)
+        tile = re.search(r'<img src="/assets/img/app-icon-192.png" alt="" width="192" height="192" class="([^"]*)"', foot)
         self.assertIsNotNone(tile)
         self.assertIn("shrink-0", tile.group(1).split())
+        self.assertIn("size-11", tile.group(1).split())
+        self.assertNotIn('src="/assets/img/logo-wide.png"', foot)
 
     def test_the_meet_links_are_far_enough_apart(self):
         src = read("src", "pages", "accessibility.njk")

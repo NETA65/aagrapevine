@@ -154,6 +154,8 @@
   // SEQUENCE is highest). ev.tentative → STATUS:TENTATIVE (details not final yet), else CONFIRMED. One reminder
   // (GVTime.icsAlarm, the build's own: an hour before; 9 AM the day before an all-day event or story deadline),
   // with the title only — never the description's meeting link or passcode; none without central-time.js.
+  // ev.cancelled (since round 37, a cancelled event's icsData — committee.js shapeEvent): STATUS:CANCELLED, free time,
+  // no reminder, as the build's calendar files write it (buildIcs).
   GV.icsText = function (ev) {
     function stamp(d) { return new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }
     function day(d) { return (typeof d === "string" ? d : new Date(d).toISOString()).slice(0, 10); }
@@ -165,12 +167,13 @@
       "UID:" + String(ev.uid || stamp(ev.start) + "@neta65-gvlv").replace(/[\r\n]/g, ""), "DTSTAMP:" + stamp(now), "SEQUENCE:" + seq];
     if (ev.allDay) L.push("DTSTART;VALUE=DATE:" + ymd(ev.start), "DTEND;VALUE=DATE:" + ymd(nextDay(ev.end || ev.start)), "TRANSP:TRANSPARENT");
     else L.push("DTSTART:" + stamp(ev.start), "DTEND:" + stamp(ev.end || ev.start));
+    if (ev.cancelled && !ev.allDay) L.push("TRANSP:TRANSPARENT");
     L.push("SUMMARY:" + GV.icsEsc(ev.title));
     if (ev.description) L.push("DESCRIPTION:" + GV.icsEsc(ev.description));
     if (ev.location) L.push("LOCATION:" + GV.icsEsc(ev.location));
     if (ev.url) L.push("URL:" + String(ev.url).replace(/[\s]/g, ""));
-    L.push("STATUS:" + (ev.tentative ? "TENTATIVE" : "CONFIRMED"));
-    if (T && T.icsAlarm) L.push.apply(L, T.icsAlarm(ev.title, !!ev.allDay));
+    L.push("STATUS:" + (ev.cancelled ? "CANCELLED" : ev.tentative ? "TENTATIVE" : "CONFIRMED"));
+    if (T && T.icsAlarm && !ev.cancelled) L.push.apply(L, T.icsAlarm(ev.title, !!ev.allDay));
     L.push("END:VEVENT", "END:VCALENDAR");
     return L.map(GV.icsFold).join("\r\n") + "\r\n";
   };

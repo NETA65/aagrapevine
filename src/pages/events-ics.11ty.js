@@ -23,6 +23,10 @@
 // the UID, words and Zoom details of its own file (/meetings/weekly-open-gv.ics …) and a first date that stays
 // the same from build to build (committee.js weeklyFeed). No reminder in either feed (buildIcs). A meeting with
 // no date, one that is gone, or a COMMITTEE_EMPTY build: no weekly entry.
+// Since round 37 also the cancelled events (db.events.cancelled — content/events `cancelled: true`), kept like
+// every other event (until 90 days after their day): the same UID with STATUS:CANCELLED and "Cancelled:" before
+// the title, so a subscriber's calendar marks the entry it has instead of silently dropping it (committee.js
+// buildIcs).
 import { normalizeEvents, buildIcs, meetingMonthsAhead, weeklyFeed } from "../../eleventy/filters/committee.js";
 
 export const data = {
@@ -38,7 +42,7 @@ export function render(data) {
   const lang = data.lang || "en";
   const t = (k, vars) => (typeof this.t === "function" ? this.t(k, lang, vars) : k);
   const site = data.site || {};
-  const items = process.env.COMMITTEE_EMPTY ? [] : data.db?.events?.items || [];
+  const items = process.env.COMMITTEE_EMPTY ? [] : [...(data.db?.events?.items || []), ...(data.db?.events?.cancelled || [])];
   const weekly = process.env.COMMITTEE_EMPTY ? [] : data.db?.weekly_open?.items || [];
   const now = new Date();
   const cutoff = now.getTime() - KEEP_PAST_DAYS * 864e5;

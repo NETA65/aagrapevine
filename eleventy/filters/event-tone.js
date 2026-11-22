@@ -57,6 +57,10 @@
 // It reads a raw data item (db.events.items), a /events/ event (cmEvents: .committee, .host, .item) and a
 // monthly toolkit date row (kind: committee | recurring | event; .host; .src, the events.json record — not
 // enumerable, read all the same).
+//
+// The colour is not the KIND of an event's own page (round 37): eleventy/event-pages.js eventKind says which of
+// writing workshop, recording workshop, ACM, booth … an event is (what its page links to), reading the same titles
+// (titlesOf, areaOrientation: exported for it) — a colour stays one of the six above.
 
 /** The kinds, in the order a colour key lists them. */
 export const EVENT_TONES = ["committee", "gv", "lv", "booth", "assembly", "other"];
@@ -96,8 +100,9 @@ function recordOf(x) {
  *  its English and Spanish ones (recordOf), then the item's own — a data item's original and translations, or the
  *  title a /events/ event or a date row shows in the page's language, read LAST (before round 33c it came first, and
  *  a date row had no other: the Spanish row of the delegate's town hall never saw the words "Town Hall"). Each title
- *  once. */
-function titlesOf(x) {
+ *  once, in norm's form (lower case, no accents). Exported since round 37: the kind of an event's own page reads the
+ *  same titles in the same order (eleventy/event-pages.js eventKind). */
+export function titlesOf(x) {
   const out = [];
   const add = (v) => { if (typeof v === "string" && v.trim()) { const n = norm(v); if (!out.includes(n)) out.push(n); } };
   const addAll = (o) => {
@@ -113,8 +118,9 @@ function titlesOf(x) {
 
 /** The Area's orientation for GSRs and DCMs (rule 4, round 35) in one title (norm's form): "gsr/dcm orientation 2027
  *  — east", "orientacion para rsg y mcd" — the word orientation, a GSR / DCM (RSG / MCD) word, and no word of ours
- *  (GVR / RLV, Grapevine, La Viña: the committee's own orientation, /orientation/). */
-function areaOrientation(t) {
+ *  (GVR / RLV, Grapevine, La Viña: the committee's own orientation, /orientation/). Exported since round 37 (the
+ *  event pages' kind "gsr-dcm-orientation": eleventy/event-pages.js eventKind). */
+export function areaOrientation(t) {
   return RE.orientation.test(t) && RE.gsrDcm.test(t) && !RE.ours.test(t);
 }
 

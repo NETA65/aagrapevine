@@ -418,19 +418,109 @@ def load_file(name: str) -> dict:
         return {}
 
 
-def load_items(name: str) -> list[dict]:
+def read_items(name: str, key: str = "items") -> list[dict]:
+    """A data/site file's list (`items`, or events.json's `cancelled`) as written — [] when missing or broken."""
     p = SITE_DIR / f"{name}.json"
     shown = f"data/site/{name}.json"
     try:
         with open(p, encoding="utf-8") as f:
             data = json.load(f)
-        items = data.get("items") if isinstance(data, dict) else None
+        items = data.get(key) if isinstance(data, dict) else None
         return [i for i in (items or []) if isinstance(i, dict)]
     except FileNotFoundError:
-        log(f"{shown} not found — section will be empty")
+        if key == "items":
+            log(f"{shown} not found — section will be empty")
     except Exception as e:  # corrupt JSON must never stop the digest
-        log(f"could not read {shown}: {e}")
+        if key == "items":
+            log(f"could not read {shown}: {e}")
     return []
+
+
+def load_items(name: str) -> list[dict]:
+    """A data/site file's items as the site reads them (src/_data/db.js): since round 37 events.json's without its
+    cancelled events and drive.json's without the flyers only cancelled events use (site_events)."""
+    if name == "events":
+        return site_events()[0]
+    items = read_items(name)
+    if name == "drive":
+        gone = cancelled_flyer_ids()
+        if gone:
+            items = [i for i in items if drive_file_id(i) not in gone]
+    return items
+
+
+# ---------------------------------------------------------------------------- cancelled events
+# Copies of eleventy/cancelled-events.js (src/_data/db.js) — keep them equal (tests/test_digest_parity.py): a
+# cancelled event (content/events `cancelled: true`, events.json `cancelled`) took place nowhere, so the edition
+# never lists it among the month's events; and a Drive flyer only cancelled events use is no upload of the month
+# (the site hides it from the Portfolio and What's New). Also an event still among events.json's `items` that is
+# marked cancelled, or whose own file says so (the sync has not run since), or that is in both lists.
+EVENTS_DIR = ROOT / "content" / "events"
+CANCELLED_KEY = re.compile(r"^(?:cancelled|canceled|cancelado|cancelada)$")
+CANCELLED_WORD = re.compile(r"(?i)^(?:cancelled|canceled|cancelado|cancelada)$")
+TRUE_WORD = re.compile(r"(?i)^(?:1|true|yes|y|si|sí|on)$")
+_FRONT = re.compile(r"^﻿?---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)")
+_HEADER_LINE = re.compile(r"^([a-z_]+)[ \t]*:[ \t]*(?:\"([^\"]*)\"|'([^']*)'|([^#]*?))[ \t]*(?:#.*)?$")
+DRIVE_FILE_ID = re.compile(r"(?:drive\.google\.com/(?:file/d/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)"
+                           r"|googleusercontent\.com/d/)([\w-]{10,})")
+
+
+def cancelled_in_file(it: dict) -> bool:
+    """cancelled-events.js cancelledInFile: does a hand-written event's own file (extra.file, read in EVENTS_DIR)
+    say it is cancelled?"""
+    ex = it.get("extra") if isinstance(it.get("extra"), dict) else {}
+    file = ex.get("file") if it.get("category") == "manual" and isinstance(ex.get("file"), str) else ""
+    if not re.fullmatch(r"(?i)content/events/[^/\\]+\.md", file or ""):
+        return False
+    try:
+        head = _FRONT.match((EVENTS_DIR / file.rsplit("/", 1)[1]).read_text(encoding="utf-8"))
+    except Exception:       # gone, or not readable: the data decides
+        return False
+    for line in re.split(r"\r?\n", head.group(1)) if head else []:
+        m = _HEADER_LINE.match(line)
+        if not m:
+            continue
+        v = next((g for g in m.groups()[1:] if g is not None), "").strip()
+        if (CANCELLED_KEY.match(m.group(1)) and TRUE_WORD.match(v)) or (m.group(1) == "status" and CANCELLED_WORD.match(v)):
+            return True
+    return False
+
+
+def site_events() -> tuple[list[dict], list[dict]]:
+    """cancelled-events.js splitCancelled: (events.json's events, its cancelled events)."""
+    cancelled = [i for i in read_items("events", "cancelled") if i.get("kind") == "event" and isinstance(i.get("extra"), dict)]
+    have = {i.get("id") for i in cancelled}
+    items = []
+    for it in read_items("events"):
+        ex = it.get("extra") if isinstance(it.get("extra"), dict) else None
+        if it.get("id") in have:
+            continue
+        if it.get("kind") == "event" and ex is not None and (ex.get("cancelled") is True or cancelled_in_file(it)):
+            cancelled.append(it)
+            have.add(it.get("id"))
+            continue
+        items.append(it)
+    return items, cancelled
+
+
+def _event_drive_ids(it: dict) -> set[str]:
+    ex = it.get("extra") if isinstance(it.get("extra"), dict) else {}
+    out = {m.group(1) for v in (ex.get("flyer_url"), ex.get("flyer_thumb"), it.get("image"))
+           if isinstance(v, str) and (m := DRIVE_FILE_ID.search(v))}
+    return out | ({str(ex["drive_id"])} if ex.get("drive_id") else set())
+
+
+def drive_file_id(it: dict) -> str:
+    ex = it.get("extra") if isinstance(it.get("extra"), dict) else {}
+    return str(ex.get("file_id") or str(it.get("id") or "").removeprefix("drive:"))
+
+
+def cancelled_flyer_ids() -> set[str]:
+    """cancelled-events.js hideCancelledFlyers: the Drive files that are the flyer of a cancelled event and of no
+    other event."""
+    items, cancelled = site_events()
+    gone = {fid for it in cancelled for fid in _event_drive_ids(it)}
+    return gone - {fid for it in items for fid in _event_drive_ids(it)} if gone else set()
 
 
 # ---------------------------------------------------------------------------- time
@@ -1864,7 +1954,10 @@ def subject_of(data: dict, cfg: dict) -> str:
 def render_html(data: dict, cfg: dict, links: Links, max_per: int, subject: str) -> str:
     site = cfg.get("site") or {}
     title = site.get("title") or "Grapevine / La Viña"
-    logo = links.base + "/assets/img/logo-180x180.png"
+    # the masthead's square tile: the site's grape icon (opaque, so safe in Outlook; its navy shows while it loads),
+    # never the NETA 65 wordmark — that is the site header's only (round 37). (logo-180x180.png stays in
+    # src/assets/img/: e-mails already sent show it.)
+    logo = links.base + "/assets/img/apple-touch-icon-180.png"
     ed = data["edition"]
     preheader = shorten(intro(data, "en"), 140)
 
@@ -1901,7 +1994,7 @@ def render_html(data: dict, cfg: dict, links: Links, max_per: int, subject: str)
   style="width:100%;max-width:600px;background:{C['surface']};border:1px solid {C['line']};border-radius:12px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:{C['ink']};">
 <tr><td style="padding:22px 32px;background:{C['gv_strong']};border-radius:12px 12px 0 0;">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-    <td style="padding-right:14px;vertical-align:middle;"><img src="{_esc(logo)}" width="48" height="48" alt="" style="display:block;border:0;border-radius:10px;background:#ffffff;"></td>
+    <td style="padding-right:14px;vertical-align:middle;"><img src="{_esc(logo)}" width="48" height="48" alt="" style="display:block;border:0;border-radius:10px;background:#0b2f55;"></td>
     <td style="vertical-align:middle;">
       <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.2;color:#ffffff;font-weight:bold;">{_esc(title)} · {_esc(T['en']['masthead'])}</div>
       <div style="font-size:13px;color:#cfe3f6;margin-top:3px;">{_esc(committee)} · {_esc(month_label(ed['key'], 'en'))}</div>

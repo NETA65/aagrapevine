@@ -5,7 +5,8 @@
 //   base      the site's base path ("/aagrapevine/" on GitHub Pages, "/" on a custom domain)
 //   tz        the site's time zone (config/site.yml site.timezone, as src/_data/site.js checked it): the worker
 //             has no window.SITE, and "this month's page" ({month} below) is the month there
-//   shell     what is saved on install: styles, scripts, the two main fonts and their italics, the logo and app icons,
+//   shell     what is saved on install: styles, scripts, the two main fonts and their italics, the header's logo,
+//             the favicons and the app icon,
 //             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
 //             stand-in for a page not saved; the worker keeps them up to date with the daily content,
 //             which doesn't change the version: sw-core.js refreshOffline); `required` is the part
@@ -102,10 +103,14 @@ export function render(data) {
     // …and their italics (main.css: quotes, the Monthly pages), so a saved page's italic text keeps its face offline
     a("assets/fonts/inter-latin-wght-italic.woff2"),
     a("assets/fonts/fraunces-latin-opsz-italic.woff2"),
+    // the header's NETA 65 wordmark; the grape icon the pages name in their <head> (partials/icon-links.njk): a tab's
+    // favicon (the ICO, the SVG) and the 48 px one; the 192 px app icon (the footer, the install notice, the share
+    // posters)
     a("assets/img/logo-wide.png"),
-    a("assets/img/logo-32x32.png"),
-    a("assets/img/app-icon-192.png"),
     a("favicon.ico"),
+    a("favicon.svg"),
+    a("assets/img/favicon-48.png"),
+    a("assets/img/app-icon-192.png"),
   ];
 
   // (relative to the base, like `save` and `files`; one show and one media folder for both languages)

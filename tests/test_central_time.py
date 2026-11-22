@@ -672,7 +672,11 @@ class CalendarFiles(unittest.TestCase):
           p.clock.now += 3 * 60000;
           p.win.CM.downloadIcs(Object.assign({}, ev, { start: "2026-10-24T16:00:00Z", tentative: false }));
           const bare = page([], { files: ["src/assets/js/app.js"] }).win.GV.icsText(ev);     // without central-time.js
-          out({ a, b, t1, t2: p.downloads.map((d) => d.text), bare });""")
+          // (since round 37) a cancelled event's icsData: STATUS:CANCELLED, free time, no reminder — as buildIcs writes it
+          const off = p.win.GV.icsText(Object.assign({}, ev, { tentative: false, cancelled: true, title: "Cancelled: Workshop" }));
+          const feedOff = C.buildIcs(C.normalizeEvents([{ ...item("2026-10-24T15:00:00Z"), extra: { ...item("2026-10-24T15:00:00Z").extra, cancelled: true } }],
+            {}, "en", { now: new Date("2026-10-06T15:00:00Z") }).filter((e) => e.id === "ev:manual:workshop"), { lang: "en", now: new Date("2026-10-06T15:00:00Z"), alarms: true });
+          out({ a, b, t1, t2: p.downloads.map((d) => d.text), bare, off, feedOff });""")
         field = lambda text, k: [l.split(":", 1)[1] for l in unfold(text) if l.startswith(k + ":")]
         # the calendar feed (/events.ics): the same UID, a higher SEQUENCE after the time changed
         self.assertEqual(field(r["a"], "UID"), field(r["b"], "UID"))
@@ -686,7 +690,16 @@ class CalendarFiles(unittest.TestCase):
         self.assertEqual(field(r["t1"], "UID"), field(r["t2"][0], "UID"))
         self.assertEqual((field(r["t1"], "STATUS"), field(r["t2"][0], "STATUS")), (["TENTATIVE"], ["CONFIRMED"]))
         self.assertEqual(field(r["bare"], "SEQUENCE"), field(r["t1"], "SEQUENCE"), "the same number without the helper")
-        for text in (r["a"], r["t1"], r["t2"][0]):
+        # a cancelled event (since round 37): the browser's file and the build's say the same — the same UID, CANCELLED,
+        # free time and never a reminder (the build's even with alarms on: the month's file)
+        for text in (r["off"], r["feedOff"]):
+            self.assertEqual(field(text, "STATUS"), ["CANCELLED"])
+            self.assertEqual(field(text, "TRANSP"), ["TRANSPARENT"])
+            self.assertEqual(field(text, "SUMMARY"), ["Cancelled: Workshop"])
+            self.assertNotIn("BEGIN:VALARM", text)
+        self.assertEqual(field(r["off"], "UID"), field(r["t1"], "UID"))
+        self.assertEqual(field(r["feedOff"], "UID"), field(r["a"], "UID"))
+        for text in (r["a"], r["t1"], r["t2"][0], r["off"], r["feedOff"]):
             self.assertTrue(all(len(l.encode()) <= 75 for l in text.split("\r\n")))
 
 

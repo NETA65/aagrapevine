@@ -2,7 +2,8 @@
 // /es/feed.xml (Spanish). Titles/summaries are in the feed's language
 // (machine-translated where needed, and marked as such). Podcast episodes
 // carry their audio as an <enclosure>, so podcast apps can use the feed too.
-// The channel's <copyright> is the site footer's credit line (footer.reprints).
+// The channel's <copyright> is the site footer's credit line (footer.reprints); its <image> is the site's grape
+// icon, 96 x 96 (favicon-96.png: RSS 2.0 allows 144 px wide at most, and a reader shows it as the feed's icon).
 import { prepareWhatsNew, hrefOf, escapeXml as x, itemIssueName } from "../../eleventy/filters/community.js";
 import { meetingTitleParts } from "../../eleventy/filters/media.js";
 import { tidyBrackets } from "../../eleventy/filters/committee.js";
@@ -60,9 +61,11 @@ export function render(data) {
   out.push("<generator>Eleventy — NETA 65 Grapevine / La Viña</generator>");
   if (site.contact_email) out.push(`<managingEditor>${x(site.contact_email)} (${x(t("site.tagline"))})</managingEditor>`);
   out.push("<image>");
-  out.push(`<url>${x(abs(site, "/assets/img/logo-192x192.png"))}</url>`);
+  out.push(`<url>${x(abs(site, "/assets/img/favicon-96.png"))}</url>`);
   out.push(`<title>${x(t("feeds.rss_title"))}</title>`);
   out.push(`<link>${x(home)}</link>`);
+  out.push("<width>96</width>");
+  out.push("<height>96</height>");
   out.push("</image>");
 
   for (const it of items) {

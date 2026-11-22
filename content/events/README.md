@@ -117,6 +117,46 @@ or times if they changed, update the description (and `summary_es`), and
 save) shows it as confirmed on the site; subscribed calendars follow the next
 time they refresh.
 
+## Cancelled: `cancelled: true`
+
+When an event is called off, **keep its file** and add one line:
+
+```markdown
+cancelled: true            # also works: yes, sí; canceled:, cancelado:, cancelada:; or status: cancelled
+```
+
+Optional: a short word to people, in the file's language (`cancelled_note_es:` / `cancelled_note_en:` for the
+other one) — one or two sentences, at most 300 characters, shown exactly as written (never machine-translated):
+
+```markdown
+cancelled_note: "The host group could not hold it this month. See you at the next workshop!"
+```
+
+**What happens at the next update** (about 3 minutes after you save):
+
+- The event leaves the Events page, the home page, the monthly toolkit (its dates, poster and message), the search,
+  the booth display, What's New, the presentations and the monthly e-mail.
+- A flyer that only this event uses leaves the Portfolio and What's New by itself. (Moving it on the Drive into the
+  Panel's `private` folder is tidy-up only.)
+- Its old address (the link people may have shared) shows **"This event has been cancelled. It will not take
+  place."**, when and where it was planned, your note, and the next events like it — until its day is over. After
+  that the address no longer exists and sends people to the Events page. Search engines are told the event is
+  cancelled (Google shows "Cancelled" on it).
+- People who subscribed to the site's calendar see the entry turn into **"Cancelled: …"** (no reminder, shown as
+  free time) for 90 days after its day.
+
+**Don't delete the file right away.** Deleting it removes the entry from subscribed calendars without a word,
+turns the shared link into a plain "page not found", and lets the NETA 65 calendar bring the event back. The file
+can go 90 days after the event's day. To undo a cancellation, delete the `cancelled:` line.
+
+This works for an event that has a file here. An event the site makes from a **dated flyer** on the Drive (its
+name starts with a date) is cancelled by moving that flyer into the Panel's `private` folder (or renaming it so
+its name no longer starts with a date). One date of a **monthly series** (`config/site.yml` → `recurring_events:`)
+is cancelled with that series' `skip_dates:`.
+
+Example: the La Viña writing workshop in Garland on November 28, 2026 was cancelled this way on November 22, 2026
+(`2026-11-28-lv-writing-workshop-garland.md`).
+
 ## Online events: `online_url` and `meeting_id`
 
 An event held on Zoom (or another online platform) gives its link instead of — or as well as — a place:

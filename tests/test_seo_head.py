@@ -13,7 +13,8 @@ build renders them:
   * verification — the Bing / Yandex codes of config/site.yml site.search_engines are on the home page (both
                   languages) only, and only when filled in;
   * OpenSearch  — /opensearch.xml and /es/opensearch.xml (src/pages/opensearch.11ty.js) are valid descriptions whose
-                  search address is the page language's /search/?q={searchTerms}, named in every page's <head>;
+                  search address is the page language's /search/?q={searchTerms}, named in every page's <head>, their
+                  picture the site's grape favicon at 32 px (round 37);
   * structured data — ONE schema.org graph at the end of each indexable page's <head> (since round 35: Googlebot
                   reads only a page's first 2 MB; it was at the end of the <body>), so a page's own block (the
                   Events page's events) is the first one in its <body>: the same Organization (the committee, from
@@ -280,8 +281,9 @@ class OpenSearch(Built):
                 self.assertEqual(urls["application/opensearchdescription+xml"].get("rel"), "self")
                 img = doc.find("os:Image", self.NS)
                 self.assertEqual((img.get("width"), img.get("height"), img.get("type")), ("32", "32", "image/png"))
-                self.assertEqual(img.text, SITE_URL + "/assets/img/logo-32x32.png")
-                self.assertTrue((ROOT / "src" / "assets" / "img" / "logo-32x32.png").is_file())
+                # the site's grape favicon at 32 px (round 37: the NETA 65 logo is the header's only)
+                self.assertEqual(img.text, SITE_URL + "/assets/img/favicon-32.png")
+                self.assertTrue((ROOT / "src" / "assets" / "img" / "favicon-32.png").is_file())
                 self.assertEqual(doc.findtext("os:InputEncoding", namespaces=self.NS), "UTF-8")
                 self.assertEqual(doc.findtext("os:Language", namespaces=self.NS), "es-US" if lang == "es" else "en-US")
                 # every page names its language's file

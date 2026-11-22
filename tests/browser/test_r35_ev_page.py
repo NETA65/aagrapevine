@@ -3,7 +3,8 @@
 build and its markup on their own: tests/test_r35_ev_pages.py.
 
   * Phones       — no page of an event scrolls sideways on a 320-pixel phone, nor at 150 % text on a 360-pixel one, in
-                   light, dark and high contrast (English and Spanish); its "Add to calendar" menu opens whole on the
+                   light, dark and high contrast (English and Spanish) — an event's own page, and a cancelled event's
+                   notice when the build has one (since round 37); its "Add to calendar" menu opens whole on the
                    screen and every choice can be clicked.
   * NoErrors     — every event page of the build (the sitemap's /events/<anchor>/) runs without a script error, and
                    stays where it is (no redirect: the small share pages send people on to /events/, these never do).
@@ -22,13 +23,15 @@ from .test_site_in_browser import S, new_context, open_page, setUpModule, tearDo
 THEMES = (("light", "normal"), ("dark", "normal"), ("light", "high"), ("dark", "high"))
 
 
-def event_pages() -> list[str]:
-    """The built site's event pages ("events/<anchor>/", "es/events/<anchor>/"), from its sitemap."""
+def event_pages(cards_only: bool = False) -> list[str]:
+    """The built site's event pages ("events/<anchor>/", "es/events/<anchor>/"), from its sitemap. cards_only: only an
+    event's own page, with its card — not a cancelled event's notice (since round 37: src/pages/
+    event-share-cancelled.njk, data-ev-cancelled — no calendar menu, and no card on /events/ to come from)."""
     sm = (S["site"] / "sitemap.xml").read_text(encoding="utf-8")
     found = []
     for loc in re.findall(r"<loc>([^<]*)</loc>", sm):
         m = re.search(r"/((?:es/)?events/[a-z0-9][a-z0-9-]*/)$", loc)
-        if m:
+        if m and not (cards_only and "data-ev-cancelled" in (S["site"] / m.group(1) / "index.html").read_text(encoding="utf-8")):
             found.append(m.group(1))
     return found
 
@@ -46,9 +49,13 @@ class Phones(unittest.TestCase):
             self.skipTest("no event with a page of its own in this build")
 
     def test_no_sideways_scroll(self):
-        en = next(p for p in self.pages if not p.startswith("es/"))
-        es = next(p for p in self.pages if p.startswith("es/"))
-        for path in (en, es):
+        # the first event page with its card in each language, and the first cancelled event's notice (since round 37:
+        # it sorts first in the sitemap while there is one — each layout checked, never only one of them)
+        cards = event_pages(cards_only=True)
+        notices = [p for p in self.pages if p not in set(cards)]
+        first = lambda group, es: next((p for p in group if p.startswith("es/") == es), None)  # noqa: E731
+        paths = [p for p in (first(group, es) for group in (cards, notices) for es in (False, True)) if p]
+        for path in paths:
             for theme, contrast in THEMES:
                 for width, text in ((320, 100), (360, 150)):
                     with self.subTest(path=path, theme=theme, contrast=contrast, width=width, text=text):
@@ -64,7 +71,10 @@ class Phones(unittest.TestCase):
                             ctx.close()
 
     def test_the_calendar_menu_opens_whole(self):
-        path = self.pages[0]
+        cards = event_pages(cards_only=True)
+        if not cards:
+            self.skipTest("no event page with a card (and its calendar menu) in this build")
+        path = cards[0]
         for width in (320, 1280):
             with self.subTest(width=width):
                 ctx = new_context(width, 800)
@@ -108,7 +118,7 @@ class NoErrors(unittest.TestCase):
 
 class TheCard(unittest.TestCase):
     def test_from_the_card_and_back(self):
-        pages = [p for p in event_pages() if not p.startswith("es/")]
+        pages = [p for p in event_pages(cards_only=True) if not p.startswith("es/")]
         if not pages:
             self.skipTest("no event with a page of its own in this build")
         path = pages[0]
