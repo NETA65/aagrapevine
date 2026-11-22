@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T15:28:52Z",
+ "updated": "2026-11-22T17:53:25Z",
  "fixture": false,
  "items": [
   {
@@ -8007,64 +8007,6 @@
    },
    "machine": [],
    "is_new": true
-  },
-  {
-   "id": "drive:1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
-   "title": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-11-07",
-   "first_seen": "2026-11-07T15:42:17Z",
-   "image": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
-    "mime": "image/png",
-    "name": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
-    "preview_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 7"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop - Grupo Volver a Vivir, Garland",
-     "es": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false
   },
   {
    "id": "drive:1W_ZNeIlpwdNZzrxNtmn75gYArs3-A4n1",

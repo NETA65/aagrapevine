@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-22T15:37:24Z",
- "updated": "2026-11-22T15:37:24Z",
+ "generated": "2026-11-22T17:53:50Z",
+ "updated": "2026-11-22T17:53:50Z",
  "fixture": false,
  "sources": [
   {
@@ -8,9 +8,9 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-22T15:28:52Z",
-   "attempted": "2026-11-22T15:28:52Z",
-   "count": 1222,
+   "updated": "2026-11-22T17:53:25Z",
+   "attempted": "2026-11-22T17:53:25Z",
+   "count": 1221,
    "new_7d": 23,
    "error": null,
    "stats": {
@@ -31,14 +31,14 @@
     "loose_skipped": 1,
     "skipped_panels": [],
     "folders": 110,
-    "files": 1222,
-    "fetched": 1222,
+    "files": 1221,
+    "fetched": 1221,
     "new": 0,
-    "removed": 0,
+    "removed": 1,
     "kept_unverified": 0,
     "by_category": {
      "photos": 1160,
-     "flyers": 34,
+     "flyers": 33,
      "booth": 15,
      "slides": 5,
      "reports": 4,
@@ -47,7 +47,7 @@
      "workshops": 1
     },
     "by_kind": {
-     "photo": 1203,
+     "photo": 1202,
      "document": 12,
      "slides": 5,
      "announcement": 1,
@@ -122,7 +122,7 @@
    },
    "changes": {
     "added": 0,
-    "removed": 0,
+    "removed": 1,
     "held": 0
    },
    "held": null
@@ -132,8 +132,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-22T15:28:52Z",
-   "attempted": "2026-11-22T15:28:52Z",
+   "updated": "2026-11-22T17:53:25Z",
+   "attempted": "2026-11-22T17:53:25Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -156,8 +156,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-22T15:28:52Z",
-   "attempted": "2026-11-22T15:28:52Z",
+   "updated": "2026-11-22T17:53:25Z",
+   "attempted": "2026-11-22T17:53:25Z",
    "count": 21,
    "new_7d": 4,
    "error": null,
@@ -211,8 +211,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-22T15:34:34Z",
-   "attempted": "2026-11-22T15:34:34Z",
+   "updated": "2026-11-22T17:53:33Z",
+   "attempted": "2026-11-22T17:53:33Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -367,8 +367,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-22T15:28:56Z",
-   "attempted": "2026-11-22T15:28:56Z",
+   "updated": "2026-11-22T17:53:29Z",
+   "attempted": "2026-11-22T17:53:29Z",
    "count": 314,
    "new_7d": 3,
    "error": null,
@@ -385,28 +385,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 270,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-22T15:28:56Z"
+      "updated": "2026-11-22T17:53:29Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 42,
       "latest": "2026-11-20T05:15:00Z",
-      "updated": "2026-11-22T15:28:56Z"
+      "updated": "2026-11-22T17:53:29Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 2,
       "latest": "2026-11-16T05:15:00Z",
-      "updated": "2026-11-22T15:28:56Z"
+      "updated": "2026-11-22T17:53:29Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-20T16:16:24Z",
     "discovered_feeds": [],
-    "seconds": 3.8,
+    "seconds": 3.7,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -616,8 +616,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-22T15:34:41Z",
-   "attempted": "2026-11-22T15:34:41Z",
+   "updated": "2026-11-22T17:53:49Z",
+   "attempted": "2026-11-22T17:53:49Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -710,16 +710,16 @@
   "updated": "2026-11-22T15:37:21Z"
  },
  "translations": {
-  "cached": 4396,
+  "cached": 4391,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 10,
-  "from_cache": 4381,
+  "translated_this_run": 0,
+  "from_cache": 4391,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 2.0,
-  "model_seconds": 1.5,
-  "texts_per_second": 5.0,
+  "seconds": 0.2,
+  "model_seconds": 0.0,
+  "texts_per_second": null,
   "glossary_entries": 269,
   "problems": []
  },
@@ -729,11 +729,11 @@
   "instagram": 253,
   "articles": 329,
   "pdfs": 100,
-  "drive": 1206,
+  "drive": 1205,
   "editorial": 51,
   "weekly_open": 2,
   "announcements": 2,
-  "events": 125,
+  "events": 124,
   "whatsnew": 150,
   "shop": 62,
   "writers_archive": 1268,

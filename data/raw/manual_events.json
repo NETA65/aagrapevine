@@ -1,7 +1,7 @@
 {
  "source": "manual_events",
- "updated": "2026-11-22T15:28:52Z",
- "attempted": "2026-11-22T15:28:52Z",
+ "updated": "2026-11-22T17:53:25Z",
+ "attempted": "2026-11-22T17:53:25Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -608,6 +608,7 @@
     "body_md": "A Spanish-language workshop on writing your story for La Viña, hosted by Grupo Volver a Vivir in Garland and organized by the District 87 La Viña committee: guidelines for contributing to La Viña, how to write your story, new products, trivia, a raffle, and questions and answers, with members sharing what it was like to see their story published.",
     "slug": "2026-11-28-lv-writing-workshop-garland",
     "file": "content/events/2026-11-28-lv-writing-workshop-garland.md",
+    "cancelled": true,
     "organizer": "District 87 La Viña Committee",
     "own_i18n": {
      "title": {
