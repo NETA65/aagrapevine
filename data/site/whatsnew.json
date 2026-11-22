@@ -1,7 +1,315 @@
 {
- "updated": "2026-11-22T00:17:01Z",
+ "updated": "2026-11-22T15:37:24Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DgDE6_DjYcO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgDE6_DjYcO/",
+   "title": "Suscripción Digital a La Viña.",
+   "summary": "Suscripción Digital a La Viña. Puede adquirir su suscripción digital a través de la app o de la tienda de La Viña (www.aalavina.org/tienda/suscripciones). ¡Estamos aquí para ayudarle! Comuníquese con Atención al Cliente de lunes a viernes, de 9:00 a. m. a 5:30 p. m., hora del este, a los siguientes números: Español: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800)…",
+   "lang": "es",
+   "date": "2026-11-22T15:00:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgDE6_DjYcO.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgDE6_DjYcO",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgDE6_DjYcO.webp",
+    "embed_url": "https://www.instagram.com/p/DgDE6_DjYcO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgDE6_DjYcO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Digital subscription to La Viña.",
+     "es": "Suscripción Digital a La Viña."
+    },
+    "summary": {
+     "en": "Digital subscription to La Viña. You can purchase your digital subscription through the app or La Viña store (www.aalavina.org/tienda/suscripciones). We're here to help you! Contact Customer Service from Monday to Friday, from 9:00 a.m. to 5:30 p.m., Eastern time, to the following numbers: English: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (International) English: (800) …",
+     "es": "Suscripción Digital a La Viña. Puede adquirir su suscripción digital a través de la app o de la tienda de La Viña (www.aalavina.org/tienda/suscripciones). ¡Estamos aquí para ayudarle! Comuníquese con Atención al Cliente de lunes a viernes, de 9:00 a. m. a 5:30 p. m., hora del este, a los siguientes números: Español: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800)…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-22T15:00:16Z"
+  },
+  {
+   "id": "ig:DgDE63EjWEl",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgDE63EjWEl/",
+   "title": "Digital Grapevine subscription.",
+   "summary": "Digital Grapevine subscription. You can purchase your Digital subscription through the app, or through the Grapevine store (www.aagrapevine.org/store). We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570)…",
+   "lang": "en",
+   "date": "2026-11-22T15:00:15Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgDE63EjWEl.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgDE63EjWEl",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgDE63EjWEl.webp",
+    "embed_url": "https://www.instagram.com/p/DgDE63EjWEl/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgDE63EjWEl/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Digital Grapevine subscription.",
+     "es": "Suscripción Digital Grapevine."
+    },
+    "summary": {
+     "en": "Digital Grapevine subscription. You can purchase your Digital subscription through the app, or through the Grapevine store (www.aagrapevine.org/store). We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570)…",
+     "es": "Suscripción Digital Grapevine. Usted puede comprar su suscripción Digital a través de la aplicación, o a través de la tienda Grapevine (www.aagrapevine.org/store). ¡Estamos aquí para ayudar! Póngase en contacto con el Servicio al Cliente de lunes a viernes entre 9:00 a. m. y 5:30 p. m. EST en los siguientes números: Inglés: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Español: (800) 640-8781 (U.S.) / +1 (570) …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-22T15:00:15Z"
+  },
+  {
+   "id": "ig:DgCzwn7Df3N",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgCzwn7Df3N/",
+   "title": "“The most difficult thing a man can do is turn his eyes inward upon his real self.”",
+   "summary": "“The most difficult thing a man can do is turn his eyes inward upon his real self.” “Bright Promise,” Atlanta, Georgia, July 1956, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-22T12:30:18Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgCzwn7Df3N.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgCzwn7Df3N",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgCzwn7Df3N.webp",
+    "embed_url": "https://www.instagram.com/p/DgCzwn7Df3N/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgCzwn7Df3N/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The most difficult thing a man can do is turn his eyes inward upon his real self.”",
+     "es": "“Lo más difícil que puede hacer un hombre es poner sus ojos en su verdadero yo.”"
+    },
+    "summary": {
+     "en": "“The most difficult thing a man can do is turn his eyes inward upon his real self.” “Bright Promise,” Atlanta, Georgia, July 1956, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+     "es": "“Lo más difícil que puede hacer un hombre es poner sus ojos en su verdadero yo.” “Promesa correcta”, Atlanta, Georgia, julio de 1956, A.A. en prisión: Recluso para preso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-22T12:30:18Z"
+  },
+  {
+   "id": "ig:DgCzwV1DcB3",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgCzwV1DcB3/",
+   "title": "“No todos podemos ser solitarios”.",
+   "summary": "“No todos podemos ser solitarios”. \"“La luz a través de la ventana” LAKE WORTH, FLORIDA, JUNIO DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-22T12:30:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgCzwV1DcB3.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgCzwV1DcB3",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgCzwV1DcB3.webp",
+    "embed_url": "https://www.instagram.com/p/DgCzwV1DcB3/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgCzwV1DcB3/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We can’t all be lonely.”",
+     "es": "“No todos podemos ser solitarios”."
+    },
+    "summary": {
+     "en": "“We can’t all be lonely.” \"The Light Through the Window\" lake worth, Florida, June 1999 From I Am Responsible\" Daily Quote in www.aalavina.org",
+     "es": "“No todos podemos ser solitarios”. \"“La luz a través de la ventana” LAKE WORTH, FLORIDA, JUNIO DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-22T12:30:16Z"
+  },
+  {
+   "id": "ig:DgBTTefG2Pu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgBTTefG2Pu/",
+   "title": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel…",
+   "summary": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel 76 en Riverside, CA.",
+   "lang": "es",
+   "date": "2026-11-21T22:27:14Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgBTTefG2Pu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgBTTefG2Pu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DgBTTefG2Pu.webp",
+    "embed_url": "https://www.instagram.com/p/DgBTTefG2Pu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgBTTefG2Pu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Today is the Second Annual Workshop of the Grapevine and La Viña organized by Area 09, Panel …",
+     "es": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel…"
+    },
+    "summary": {
+     "en": "Today is the Second Annual Workshop of the Grapevine and La Viña organized by Area 09, Panel 76 in Riverside, CA.",
+     "es": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel 76 en Riverside, CA."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-21T22:27:14Z"
+  },
+  {
+   "id": "ig:DgAm_g1DTi5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAm_g1DTi5/",
+   "title": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…",
+   "summary": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes",
+   "lang": "es",
+   "date": "2026-11-21T16:00:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgAm_g1DTi5.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAm_g1DTi5",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAm_g1DTi5.webp",
+    "embed_url": "https://www.instagram.com/p/DgAm_g1DTi5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAm_g1DTi5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Stay up to date with important news from AA Grapevine, AA La Viña and the … Office",
+     "es": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…"
+    },
+    "summary": {
+     "en": "Stay up to date with important news from AA Grapevine, AA La Viña and General Service Office. www.aalavina.org/actualizaciones-importantes",
+     "es": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-21T16:00:16Z"
+  },
+  {
+   "id": "ig:DgAm_eEjaQy",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAm_eEjaQy/",
+   "title": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+   "summary": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+   "lang": "en",
+   "date": "2026-11-21T16:00:15Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgAm_eEjaQy.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAm_eEjaQy",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAm_eEjaQy.webp",
+    "embed_url": "https://www.instagram.com/p/DgAm_eEjaQy/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAm_eEjaQy/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+     "es": "Manténgase actualizado con actualizaciones importantes de AA Grapevine, AA La Viña, y el General …"
+    },
+    "summary": {
+     "en": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+     "es": "Manténgase actualizado con actualizaciones importantes de AA Grapevine, AA La Viña, y la Oficina de Servicios Generales. �www.aagrapevine.org/important-updates"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-21T16:00:15Z"
+  },
   {
    "id": "ig:DgAO9dyjR-A",
    "source": "instagram",
@@ -243,12 +551,12 @@
    "extra": {
     "video_id": "UBEXlU0vYE0",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 3027,
     "playlists": [
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 101,
+    "views": 132,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1353,12 +1661,12 @@
    "extra": {
     "video_id": "zvH9irI3fTM",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 517,
     "playlists": [
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 173,
+    "views": 181,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1573,12 +1881,12 @@
    "extra": {
     "video_id": "c0NhiO2b29c",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 1948,
     "playlists": [
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 251,
+    "views": 261,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1619,12 +1927,12 @@
    "extra": {
     "video_id": "gSWzC51tvl0",
     "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
-    "duration_sec": null,
+    "duration_sec": 3148,
     "playlists": [
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 160,
+    "views": 170,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -5022,7 +5330,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 276,
+    "views": 288,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -7298,7 +7606,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 156,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -7520,7 +7828,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 266,
+    "views": 268,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -7817,7 +8125,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-08T12:30:16Z"
   },
   {
@@ -7861,7 +8169,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-08T12:30:16Z"
   },
   {
@@ -7907,329 +8215,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-11-07T21:52:17Z"
-  },
-  {
-   "id": "ig:DfcL1NfjZ_n",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfcL1NfjZ_n/",
-   "title": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
-   "summary": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-11-07T12:30:16Z",
-   "first_seen": "2026-11-07T14:09:58Z",
-   "image": "/assets/cache/ig/DfcL1NfjZ_n.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfcL1NfjZ_n",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfcL1NfjZ_n.webp",
-    "embed_url": "https://www.instagram.com/p/DfcL1NfjZ_n/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfcL1NfjZ_n/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach…",
-     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a …"
-    },
-    "summary": {
-     "en": "“It is our experience as alcoholics that makes us of unique value ... We can approach sufferers as no one else can.” “A United Message of Recovery,” Decatur, Georgia, May 1994, AA Grapevine Daily Quote at www.aagrapevine.org",
-     "es": "“Es nuestra experiencia como alcohólicos lo que nos hace de valor único... Podemos acercarnos a los que sufren como nadie más puede.” “Un mensaje unido de recuperación”, Decatur, Georgia, mayo de 1994, AA Grapevine Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-07T12:30:16Z"
-  },
-  {
-   "id": "ig:DfcL1OBDRYS",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfcL1OBDRYS/",
-   "title": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”.",
-   "summary": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-11-07T12:30:15Z",
-   "first_seen": "2026-11-07T14:09:58Z",
-   "image": "/assets/cache/ig/DfcL1OBDRYS.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfcL1OBDRYS",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfcL1OBDRYS.webp",
-    "embed_url": "https://www.instagram.com/p/DfcL1OBDRYS/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfcL1OBDRYS/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Happiness is not a station to which we arrive, but a way to travel.”",
-     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”."
-    },
-    "summary": {
-     "en": "“Happiness is not a station to which we arrive, but a way to travel.” \"Paso a paso\" May 1953 From AA Grapevine Daily Quote in www.aalavina.org",
-     "es": "“La felicidad no es una estación a la que llegamos, sino una forma de viajar”. \"“Paso a paso” MAYO DE 1953 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-07T12:30:15Z"
-  },
-  {
-   "id": "drive:1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
-   "title": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-11-07",
-   "first_seen": "2026-11-07T15:42:17Z",
-   "image": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
-   "tags": [
-    "panel-77",
-    "png"
-   ],
-   "category": "flyers",
-   "status": "ok",
-   "extra": {
-    "file_id": "1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
-    "mime": "image/png",
-    "name": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland.png",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "flyers"
-    ],
-    "album": null,
-    "view_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/view",
-    "preview_url": "https://drive.google.com/file/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1AM5FZfV6EcYGNlHGFLlsd6X3HUSvEIJD=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "PNG",
-    "folder_id": "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_url": "https://drive.google.com/drive/folders/1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
-    ],
-    "modified_text": "Nov 7"
-   },
-   "i18n": {
-    "title": {
-     "en": "La Viña Writing Workshop - Grupo Volver a Vivir, Garland",
-     "es": "Taller de Escritura de La Viña - Grupo Volver a Vivir, Garland"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-11-07T12:00:00Z"
-  },
-  {
-   "id": "ig:Dfb6ZgtA-xc",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
-   "title": "This week Vera welcomes Bonnie and Kathi.",
-   "summary": "This week Vera welcomes Bonnie and Kathi.",
-   "lang": "en",
-   "date": "2026-11-07T10:01:37Z",
-   "first_seen": "2026-11-07T14:09:58Z",
-   "image": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dfb6ZgtA-xc",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dfb6ZgtA-xc.webp",
-    "embed_url": "https://www.instagram.com/p/Dfb6ZgtA-xc/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dfb6ZgtA-xc/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "This week Vera welcomes Bonnie and Kathi.",
-     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
-    },
-    "summary": {
-     "en": "This week Vera welcomes Bonnie and Kathi.",
-     "es": "Esta semana Vera da la bienvenida a Bonnie y Kathi."
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-07T10:01:37Z"
-  },
-  {
-   "id": "ig:DfbA8Y2GwNg",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfbA8Y2GwNg/",
-   "title": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
-   "summary": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
-   "lang": "en",
-   "date": "2026-11-07T01:35:39Z",
-   "first_seen": "2026-11-07T14:09:58Z",
-   "image": "/assets/cache/ig/DfbA8Y2GwNg.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfbA8Y2GwNg",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "carousel",
-    "thumb": "/assets/cache/ig/DfbA8Y2GwNg.webp",
-    "embed_url": "https://www.instagram.com/p/DfbA8Y2GwNg/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfbA8Y2GwNg/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape…",
-     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su uva …"
-    },
-    "summary": {
-     "en": "Chip, a special worker at the Central Florida Intergroup Office, shows off his grape suit🍇💜",
-     "es": "Chip, un trabajador especial de la oficina central de Florida Intergrupo, muestra su traje de uva 🍇💜"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-07T01:35:39Z"
-  },
-  {
-   "id": "ig:Dfa_1ebsYrH",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dfa_1ebsYrH/",
-   "title": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…",
-   "summary": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”",
-   "lang": "es",
-   "date": "2026-11-07T01:27:35Z",
-   "first_seen": "2026-11-07T14:09:58Z",
-   "image": "/assets/cache/ig/Dfa_1ebsYrH.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dfa_1ebsYrH",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dfa_1ebsYrH.webp",
-    "embed_url": "https://www.instagram.com/p/Dfa_1ebsYrH/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dfa_1ebsYrH/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Today, November 6 starts the 39th Congress of the Western North Region. Headquarters …",
-     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede…"
-    },
-    "summary": {
-     "en": "Today Friday November 6 starts the 39th Congress of the Western North Region. Headquarters: sound Area south, Mexico. “A Message of Life”",
-     "es": "Hoy viernes 6 de noviembre arranca el 39o Congreso de la Región Norte Poniente. Sede: Area Sonora Sur, México. “Un Mensaje de Vida”"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-07T01:27:35Z"
-  },
-  {
-   "id": "ig:DfZnCc3jSAi",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfZnCc3jSAi/",
-   "title": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta…",
-   "summary": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor”. \"Editorial BILL W., COFUNDADOR DE…",
-   "lang": "es",
-   "date": "2026-11-06T12:30:17Z",
-   "first_seen": "2026-11-06T15:11:49Z",
-   "image": "/assets/cache/ig/DfZnCc3jSAi.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfZnCc3jSAi",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfZnCc3jSAi.webp",
-    "embed_url": "https://www.instagram.com/p/DfZnCc3jSAi/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfZnCc3jSAi/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Suffering is no longer a threat to evade at any cost. When presented …",
-     "es": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta…"
-    },
-    "summary": {
-     "en": "“Suffering is no longer a threat to evade at any cost. When presented, no matter how serious it is, we must understand that it also has a purpose. He is our great teacher, because he reveals our flaws and thus pushes us to the way of progress. The pain that caused us the drink did the same thing. And the same will do any other pain.” \"Bill W. edition, … co-founder",
-     "es": "“El sufrimiento ya no es una amenaza por evadir a cualquier costo. Cuando se presenta, sin importar cuán grave sea, debemos entender que también tiene un propósito. Es nuestro gran maestro, porque nos revela nuestros defectos y, así, nos empuja hacia el camino del progreso. El dolor que nos causaba la bebida hacía lo mismo. Y lo mismo hará cualquier otro dolor”. \"Editorial BILL W., COFUNDADOR DE…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-06T12:30:17Z"
   }
  ]
 }

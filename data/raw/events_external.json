@@ -1,12 +1,12 @@
 {
  "source": "events_external",
- "updated": "2026-11-21T15:34:08Z",
- "attempted": "2026-11-21T15:34:08Z",
+ "updated": "2026-11-22T15:34:31Z",
+ "attempted": "2026-11-22T15:34:31Z",
  "ok": true,
  "error": null,
  "changes": {
   "added": 0,
-  "removed": 0,
+  "removed": 1,
   "held": 0
  },
  "stats": {
@@ -15,15 +15,15 @@
   "upcoming_urls": 11,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 3,
+  "refreshed": 0,
   "failed": 0,
   "pending": 0,
   "cached": 11,
   "texas": 2,
-  "online_es": 1,
-  "items": 3,
+  "online_es": 0,
+  "items": 2,
   "new": 0,
-  "requests": 47
+  "requests": 36
  },
  "items": [
   {
@@ -36,7 +36,7 @@
    "lang": "es",
    "date": "2027-01-29",
    "first_seen": "2026-10-02T22:31:32Z",
-   "last_seen": "2026-11-15T14:57:09Z",
+   "last_seen": "2026-11-22T15:34:31Z",
    "image": null,
    "tags": [
     "texas"
@@ -74,7 +74,7 @@
    "lang": "en",
    "date": "2027-01-08",
    "first_seen": "2026-10-18T12:13:47Z",
-   "last_seen": "2026-11-15T14:57:09Z",
+   "last_seen": "2026-11-22T15:34:31Z",
    "image": null,
    "tags": [
     "texas"
@@ -100,44 +100,6 @@
     "online": false,
     "site": "grapevine",
     "date_text": "January 8, 2027 - January 10, 2027"
-   }
-  },
-  {
-   "id": "ev:lvcal:b0eaaca178cb",
-   "source": "calendar",
-   "kind": "event",
-   "url": "https://www.aalavina.org/get-involved/events/2026-11-21/taller-de-la-vina-grapevine",
-   "title": "Taller de La Viña-Grapevine",
-   "summary": "",
-   "lang": "es",
-   "date": "2026-11-21",
-   "first_seen": "2026-11-01T06:35:15Z",
-   "last_seen": "2026-11-15T14:57:09Z",
-   "image": null,
-   "tags": [
-    "online"
-   ],
-   "category": "lv-calendar",
-   "status": "ok",
-   "extra": {
-    "start": "2026-11-21",
-    "end": null,
-    "all_day": true,
-    "location": "Híbrido: Zoom / Magnolia Center Church of Christ, Riverside, CA",
-    "city": "Riverside",
-    "state": "CA",
-    "country": "USA",
-    "region": null,
-    "online_url": null,
-    "platform": "Zoom",
-    "website": null,
-    "organizer": null,
-    "flyer_url": null,
-    "flyer_thumb": null,
-    "scope": "online",
-    "online": true,
-    "site": "lavina",
-    "date_text": "Noviembre 21, 2026"
    }
   }
  ],

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21T15:28:57Z",
+ "updated": "2026-11-22T15:30:21Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17056,
-   "posts": 4032,
+   "followers": 17061,
+   "posts": 4038,
    "owner_id": "48108439509",
-   "checked": "2026-11-21T15:28:40Z",
+   "checked": "2026-11-22T15:30:02Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,315 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2435,
-   "posts": 3062,
+   "followers": 2437,
+   "posts": 3069,
    "owner_id": "48275839129",
-   "checked": "2026-11-21T15:28:43Z",
+   "checked": "2026-11-22T15:30:05Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgDE6_DjYcO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgDE6_DjYcO/",
+   "title": "Suscripción Digital a La Viña.",
+   "summary": "Suscripción Digital a La Viña. Puede adquirir su suscripción digital a través de la app o de la tienda de La Viña (www.aalavina.org/tienda/suscripciones). ¡Estamos aquí para ayudarle! Comuníquese con Atención al Cliente de lunes a viernes, de 9:00 a. m. a 5:30 p. m., hora del este, a los siguientes números: Español: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800)…",
+   "lang": "es",
+   "date": "2026-11-22T15:00:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgDE6_DjYcO.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgDE6_DjYcO",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgDE6_DjYcO.webp",
+    "embed_url": "https://www.instagram.com/p/DgDE6_DjYcO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgDE6_DjYcO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Digital subscription to La Viña.",
+     "es": "Suscripción Digital a La Viña."
+    },
+    "summary": {
+     "en": "Digital subscription to La Viña. You can purchase your digital subscription through the app or La Viña store (www.aalavina.org/tienda/suscripciones). We're here to help you! Contact Customer Service from Monday to Friday, from 9:00 a.m. to 5:30 p.m., Eastern time, to the following numbers: English: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (International) English: (800) …",
+     "es": "Suscripción Digital a La Viña. Puede adquirir su suscripción digital a través de la app o de la tienda de La Viña (www.aalavina.org/tienda/suscripciones). ¡Estamos aquí para ayudarle! Comuníquese con Atención al Cliente de lunes a viernes, de 9:00 a. m. a 5:30 p. m., hora del este, a los siguientes números: Español: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800)…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgDE63EjWEl",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgDE63EjWEl/",
+   "title": "Digital Grapevine subscription.",
+   "summary": "Digital Grapevine subscription. You can purchase your Digital subscription through the app, or through the Grapevine store (www.aagrapevine.org/store). We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570)…",
+   "lang": "en",
+   "date": "2026-11-22T15:00:15Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgDE63EjWEl.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgDE63EjWEl",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgDE63EjWEl.webp",
+    "embed_url": "https://www.instagram.com/p/DgDE63EjWEl/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgDE63EjWEl/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Digital Grapevine subscription.",
+     "es": "Suscripción Digital Grapevine."
+    },
+    "summary": {
+     "en": "Digital Grapevine subscription. You can purchase your Digital subscription through the app, or through the Grapevine store (www.aagrapevine.org/store). We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570)…",
+     "es": "Suscripción Digital Grapevine. Usted puede comprar su suscripción Digital a través de la aplicación, o a través de la tienda Grapevine (www.aagrapevine.org/store). ¡Estamos aquí para ayudar! Póngase en contacto con el Servicio al Cliente de lunes a viernes entre 9:00 a. m. y 5:30 p. m. EST en los siguientes números: Inglés: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Español: (800) 640-8781 (U.S.) / +1 (570) …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgCzwn7Df3N",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgCzwn7Df3N/",
+   "title": "“The most difficult thing a man can do is turn his eyes inward upon his real self.”",
+   "summary": "“The most difficult thing a man can do is turn his eyes inward upon his real self.” “Bright Promise,” Atlanta, Georgia, July 1956, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-22T12:30:18Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgCzwn7Df3N.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgCzwn7Df3N",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgCzwn7Df3N.webp",
+    "embed_url": "https://www.instagram.com/p/DgCzwn7Df3N/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgCzwn7Df3N/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The most difficult thing a man can do is turn his eyes inward upon his real self.”",
+     "es": "“Lo más difícil que puede hacer un hombre es poner sus ojos en su verdadero yo.”"
+    },
+    "summary": {
+     "en": "“The most difficult thing a man can do is turn his eyes inward upon his real self.” “Bright Promise,” Atlanta, Georgia, July 1956, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+     "es": "“Lo más difícil que puede hacer un hombre es poner sus ojos en su verdadero yo.” “Promesa correcta”, Atlanta, Georgia, julio de 1956, A.A. en prisión: Recluso para preso Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgCzwV1DcB3",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgCzwV1DcB3/",
+   "title": "“No todos podemos ser solitarios”.",
+   "summary": "“No todos podemos ser solitarios”. \"“La luz a través de la ventana” LAKE WORTH, FLORIDA, JUNIO DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-22T12:30:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgCzwV1DcB3.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgCzwV1DcB3",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgCzwV1DcB3.webp",
+    "embed_url": "https://www.instagram.com/p/DgCzwV1DcB3/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgCzwV1DcB3/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We can’t all be lonely.”",
+     "es": "“No todos podemos ser solitarios”."
+    },
+    "summary": {
+     "en": "“We can’t all be lonely.” \"The Light Through the Window\" lake worth, Florida, June 1999 From I Am Responsible\" Daily Quote in www.aalavina.org",
+     "es": "“No todos podemos ser solitarios”. \"“La luz a través de la ventana” LAKE WORTH, FLORIDA, JUNIO DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgBTTefG2Pu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgBTTefG2Pu/",
+   "title": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel…",
+   "summary": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel 76 en Riverside, CA.",
+   "lang": "es",
+   "date": "2026-11-21T22:27:14Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgBTTefG2Pu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgBTTefG2Pu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DgBTTefG2Pu.webp",
+    "embed_url": "https://www.instagram.com/p/DgBTTefG2Pu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgBTTefG2Pu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Today is the Second Annual Workshop of the Grapevine and La Viña organized by Area 09, Panel …",
+     "es": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel…"
+    },
+    "summary": {
+     "en": "Today is the Second Annual Workshop of the Grapevine and La Viña organized by Area 09, Panel 76 in Riverside, CA.",
+     "es": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel 76 en Riverside, CA."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgAm_g1DTi5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAm_g1DTi5/",
+   "title": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…",
+   "summary": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes",
+   "lang": "es",
+   "date": "2026-11-21T16:00:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgAm_g1DTi5.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAm_g1DTi5",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAm_g1DTi5.webp",
+    "embed_url": "https://www.instagram.com/p/DgAm_g1DTi5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAm_g1DTi5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Stay up to date with important news from AA Grapevine, AA La Viña and the … Office",
+     "es": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…"
+    },
+    "summary": {
+     "en": "Stay up to date with important news from AA Grapevine, AA La Viña and General Service Office. www.aalavina.org/actualizaciones-importantes",
+     "es": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgAm_eEjaQy",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAm_eEjaQy/",
+   "title": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+   "summary": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+   "lang": "en",
+   "date": "2026-11-21T16:00:15Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgAm_eEjaQy.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAm_eEjaQy",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAm_eEjaQy.webp",
+    "embed_url": "https://www.instagram.com/p/DgAm_eEjaQy/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAm_eEjaQy/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+     "es": "Manténgase actualizado con actualizaciones importantes de AA Grapevine, AA La Viña, y el General …"
+    },
+    "summary": {
+     "en": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+     "es": "Manténgase actualizado con actualizaciones importantes de AA Grapevine, AA La Viña, y la Oficina de Servicios Generales. �www.aagrapevine.org/important-updates"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DgAO9dyjR-A",
    "source": "instagram",
@@ -2565,7 +2866,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfewoDmjdZY",
@@ -2608,7 +2909,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfdMF0xAfR5",
@@ -10058,92 +10359,6 @@
    "is_new": false
   },
   {
-   "id": "ig:DdrKBQkl9NZ",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdrKBQkl9NZ/",
-   "title": "Serenity Prayer - October issue",
-   "summary": "Serenity Prayer - October issue www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-24T15:00:15Z",
-   "first_seen": "2026-09-24T15:15:00Z",
-   "image": "/assets/cache/ig/DdrKBQkl9NZ.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdrKBQkl9NZ",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdrKBQkl9NZ.webp",
-    "embed_url": "https://www.instagram.com/p/DdrKBQkl9NZ/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdrKBQkl9NZ/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Serenity Prayer - October issue",
-     "es": "Serenity Prayer - Cuestión de octubre"
-    },
-    "summary": {
-     "en": "Serenity Prayer - October issue www.aagrapevine.org",
-     "es": "Serenity Prayer - Cuestión de octubre www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdrCiVJlz6M",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdrCiVJlz6M/",
-   "title": "“There are winners and whiners, and sometimes I seem to embody both. I am, as my friends…",
-   "summary": "“There are winners and whiners, and sometimes I seem to embody both. I am, as my friends remind me, a human being.” Port Townsend, Wash., October 1994, From: “Winners and Whiners”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-24T13:54:51Z",
-   "first_seen": "2026-09-24T15:15:00Z",
-   "image": "/assets/cache/ig/DdrCiVJlz6M.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdrCiVJlz6M",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdrCiVJlz6M.webp",
-    "embed_url": "https://www.instagram.com/p/DdrCiVJlz6M/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdrCiVJlz6M/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“There are winners and whiners, and sometimes I seem to embody both. I am, as my friends…",
-     "es": "“Hay ganadores y silbidos, y a veces parezco encarnar ambos. Lo soy, como mis amigos …"
-    },
-    "summary": {
-     "en": "“There are winners and whiners, and sometimes I seem to embody both. I am, as my friends remind me, a human being.” Port Townsend, Wash., October 1994, From: “Winners and Whiners”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-     "es": "“Hay ganadores y silbidos, y a veces parezco encarnar ambos. Soy, como mis amigos me recuerdan, un ser humano”. Port Townsend, lavado., octubre de 1994, de: “ganadores y silbidos”, Sobriedad emocional: la próxima frontera Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:DdrCh86F-sD",
    "source": "instagram",
    "kind": "post",
@@ -10183,49 +10398,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdoQoCVF20S",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdoQoCVF20S/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-09-23T12:00:14Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdoQoCVF20S.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdoQoCVF20S",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdoQoCVF20S.webp",
-    "embed_url": "https://www.instagram.com/p/DdoQoCVF20S/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdoQoCVF20S/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },

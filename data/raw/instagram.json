@@ -1,12 +1,12 @@
 {
  "source": "instagram",
- "updated": "2026-11-21T15:28:57Z",
- "attempted": "2026-11-21T15:28:57Z",
+ "updated": "2026-11-22T15:30:21Z",
+ "attempted": "2026-11-22T15:30:21Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 2,
-  "removed": 1,
+  "added": 7,
+  "removed": 3,
   "held": 0
  },
  "stats": {
@@ -31,20 +31,230 @@
    "missing": [],
    "removed": []
   },
-  "thumbs_downloaded": 2,
-  "pruned": 1,
-  "thumbs_deleted": 1,
-  "new": 2,
-  "total": 249,
+  "thumbs_downloaded": 7,
+  "pruned": 3,
+  "thumbs_deleted": 3,
+  "new": 7,
+  "total": 253,
   "per_account": {
    "gv": 130,
-   "lv": 119
+   "lv": 123
   },
   "requests": 7,
   "anonymous": true,
   "graph_api": false
  },
  "items": [
+  {
+   "id": "ig:DgDE6_DjYcO",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgDE6_DjYcO/",
+   "title": "Suscripción Digital a La Viña.",
+   "summary": "Suscripción Digital a La Viña. Puede adquirir su suscripción digital a través de la app o de la tienda de La Viña (www.aalavina.org/tienda/suscripciones). ¡Estamos aquí para ayudarle! Comuníquese con Atención al Cliente de lunes a viernes, de 9:00 a. m. a 5:30 p. m., hora del este, a los siguientes números: Español: (800) 640-8781 (EE. UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800)…",
+   "lang": "es",
+   "date": "2026-11-22T15:00:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgDE6_DjYcO.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgDE6_DjYcO",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgDE6_DjYcO.webp",
+    "embed_url": "https://www.instagram.com/p/DgDE6_DjYcO/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgDE6_DjYcO/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DgDE63EjWEl",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgDE63EjWEl/",
+   "title": "Digital Grapevine subscription.",
+   "summary": "Digital Grapevine subscription. You can purchase your Digital subscription through the app, or through the Grapevine store (www.aagrapevine.org/store). We are here to help! Please contact Customer Service Monday through Friday between 9:00 a.m. and 5:30 p.m. EST at the following numbers: English: (800) 631-6025 (U.S.) / +1 (570) 567-0431 (International) Spanish: (800) 640-8781 (U.S.) / +1 (570)…",
+   "lang": "en",
+   "date": "2026-11-22T15:00:15Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgDE63EjWEl.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgDE63EjWEl",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgDE63EjWEl.webp",
+    "embed_url": "https://www.instagram.com/p/DgDE63EjWEl/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgDE63EjWEl/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DgCzwn7Df3N",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgCzwn7Df3N/",
+   "title": "“The most difficult thing a man can do is turn his eyes inward upon his real self.”",
+   "summary": "“The most difficult thing a man can do is turn his eyes inward upon his real self.” “Bright Promise,” Atlanta, Georgia, July 1956, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-22T12:30:18Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgCzwn7Df3N.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgCzwn7Df3N",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgCzwn7Df3N.webp",
+    "embed_url": "https://www.instagram.com/p/DgCzwn7Df3N/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgCzwn7Df3N/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DgCzwV1DcB3",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgCzwV1DcB3/",
+   "title": "“No todos podemos ser solitarios”.",
+   "summary": "“No todos podemos ser solitarios”. \"“La luz a través de la ventana” LAKE WORTH, FLORIDA, JUNIO DE 1999 De I Am Responsible\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-22T12:30:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgCzwV1DcB3.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgCzwV1DcB3",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgCzwV1DcB3.webp",
+    "embed_url": "https://www.instagram.com/p/DgCzwV1DcB3/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgCzwV1DcB3/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DgBTTefG2Pu",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgBTTefG2Pu/",
+   "title": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel…",
+   "summary": "Hoy es el Segundo Taller Anual del Grapevine y La Viña organizado por el Area 09, Panel 76 en Riverside, CA.",
+   "lang": "es",
+   "date": "2026-11-21T22:27:14Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgBTTefG2Pu.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgBTTefG2Pu",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "carousel",
+    "thumb": "/assets/cache/ig/DgBTTefG2Pu.webp",
+    "embed_url": "https://www.instagram.com/p/DgBTTefG2Pu/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgBTTefG2Pu/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DgAm_g1DTi5",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAm_g1DTi5/",
+   "title": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina…",
+   "summary": "Manténgase al día con las noticias importantes de AA Grapevine, AA La Viña y la Oficina de Servicios Generales. www.aalavina.org/actualizaciones-importantes",
+   "lang": "es",
+   "date": "2026-11-21T16:00:16Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgAm_g1DTi5.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAm_g1DTi5",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAm_g1DTi5.webp",
+    "embed_url": "https://www.instagram.com/p/DgAm_g1DTi5/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAm_g1DTi5/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
+  {
+   "id": "ig:DgAm_eEjaQy",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgAm_eEjaQy/",
+   "title": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General…",
+   "summary": "Stay updated with important updates from AA Grapevine, AA La Viña, and the General Service Office. �www.aagrapevine.org/important-updates",
+   "lang": "en",
+   "date": "2026-11-21T16:00:15Z",
+   "first_seen": "2026-11-22T15:30:21Z",
+   "last_seen": "2026-11-22T15:30:21Z",
+   "image": "/assets/cache/ig/DgAm_eEjaQy.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgAm_eEjaQy",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgAm_eEjaQy.webp",
+    "embed_url": "https://www.instagram.com/p/DgAm_eEjaQy/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgAm_eEjaQy/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   }
+  },
   {
    "id": "ig:DgAO9dyjR-A",
    "source": "instagram",
@@ -7054,66 +7264,6 @@
    }
   },
   {
-   "id": "ig:DdrKBQkl9NZ",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdrKBQkl9NZ/",
-   "title": "Serenity Prayer - October issue",
-   "summary": "Serenity Prayer - October issue www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-24T15:00:15Z",
-   "first_seen": "2026-09-24T15:15:00Z",
-   "last_seen": "2026-09-24T15:15:00Z",
-   "image": "/assets/cache/ig/DdrKBQkl9NZ.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdrKBQkl9NZ",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdrKBQkl9NZ.webp",
-    "embed_url": "https://www.instagram.com/p/DdrKBQkl9NZ/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdrKBQkl9NZ/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   }
-  },
-  {
-   "id": "ig:DdrCiVJlz6M",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdrCiVJlz6M/",
-   "title": "“There are winners and whiners, and sometimes I seem to embody both. I am, as my friends…",
-   "summary": "“There are winners and whiners, and sometimes I seem to embody both. I am, as my friends remind me, a human being.” Port Townsend, Wash., October 1994, From: “Winners and Whiners”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-24T13:54:51Z",
-   "first_seen": "2026-09-24T15:15:00Z",
-   "last_seen": "2026-09-24T15:15:00Z",
-   "image": "/assets/cache/ig/DdrCiVJlz6M.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdrCiVJlz6M",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdrCiVJlz6M.webp",
-    "embed_url": "https://www.instagram.com/p/DdrCiVJlz6M/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdrCiVJlz6M/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   }
-  },
-  {
    "id": "ig:DdrCh86F-sD",
    "source": "instagram",
    "kind": "post",
@@ -7136,36 +7286,6 @@
     "thumb": "/assets/cache/ig/DdrCh86F-sD.webp",
     "embed_url": "https://www.instagram.com/p/DdrCh86F-sD/embed/captioned/",
     "permalink": "https://www.instagram.com/p/DdrCh86F-sD/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   }
-  },
-  {
-   "id": "ig:DdoQoCVF20S",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdoQoCVF20S/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-09-23T12:00:14Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "last_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdoQoCVF20S.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdoQoCVF20S",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdoQoCVF20S.webp",
-    "embed_url": "https://www.instagram.com/p/DdoQoCVF20S/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdoQoCVF20S/",
     "is_reel": false,
     "manual": false,
     "strategy": "profile_embed",
@@ -7547,10 +7667,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17056,
-   "posts": 4032,
+   "followers": 17061,
+   "posts": 4038,
    "owner_id": "48108439509",
-   "checked": "2026-11-21T15:28:40Z",
+   "checked": "2026-11-22T15:30:02Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp",
    "_avatar_checked": "2026-11-20T16:17:26Z"
   },
@@ -7559,10 +7679,10 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2435,
-   "posts": 3062,
+   "followers": 2437,
+   "posts": 3069,
    "owner_id": "48275839129",
-   "checked": "2026-11-21T15:28:43Z",
+   "checked": "2026-11-22T15:30:05Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp",
    "_avatar_checked": "2026-11-20T16:17:26Z"
   }
@@ -7604,17 +7724,8 @@
   "DdoNMTdFyaU": {
    "checked": "2026-10-28T14:06:26Z"
   },
-  "DdoQoCVF20S": {
-   "checked": "2026-10-28T14:06:26Z"
-  },
   "DdrCh86F-sD": {
    "checked": "2026-10-28T14:06:26Z"
-  },
-  "DdrCiVJlz6M": {
-   "checked": "2026-10-31T13:44:11Z"
-  },
-  "DdrKBQkl9NZ": {
-   "checked": "2026-10-30T14:20:24Z"
   },
   "DdrKBZ_l5JQ": {
    "checked": "2026-10-30T14:20:24Z"
@@ -7791,10 +7902,10 @@
    "checked": "2026-11-20T16:17:10Z"
   },
   "DeSD1cqpBBA": {
-   "checked": "2026-10-26T14:23:55Z"
+   "checked": "2026-11-22T15:30:05Z"
   },
   "DeSpnvXJxm6": {
-   "checked": "2026-10-26T14:23:55Z"
+   "checked": "2026-11-22T15:30:05Z"
   },
   "DeT-tKZjMTi": {
    "checked": "2026-11-21T15:28:43Z"
@@ -7803,7 +7914,7 @@
    "checked": "2026-11-21T15:28:43Z"
   },
   "DeWjgDBjPU3": {
-   "checked": "2026-10-27T13:21:19Z"
+   "checked": "2026-11-22T15:30:05Z"
   },
   "DeWjgBJjADC": {
    "checked": "2026-10-28T14:06:26Z"
@@ -7987,6 +8098,12 @@
   },
   "De9LbMcjfh1": {
    "checked": "2026-11-21T15:28:43Z"
+  },
+  "De_wOH8jVeC": {
+   "checked": "2026-11-22T15:30:05Z"
+  },
+  "De_wOGujUKO": {
+   "checked": "2026-11-22T15:30:05Z"
   }
  }
 }
