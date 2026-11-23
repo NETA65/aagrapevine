@@ -1,82 +1,95 @@
 {
  "source": "quote",
- "updated": "2026-11-23T00:47:20Z",
- "attempted": "2026-11-23T00:47:20Z",
+ "updated": "2026-11-23T10:57:11Z",
+ "attempted": "2026-11-23T10:57:11Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
-  "removed": 0,
+  "added": 2,
+  "removed": 2,
   "held": 0
  },
  "stats": {
   "fetched": 2,
   "parsed": 2,
   "requests": 2,
-  "today": "2026-11-22",
-  "new": 0
+  "today": "2026-11-23",
+  "new": 2
  },
  "items": [
   {
-   "id": "quote:gv:2026-11-22",
+   "id": "quote:gv:2026-11-23",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-   "title": "Grapevine Daily Quote November 22",
+   "title": "Grapevine Daily Quote November 23",
    "summary": "",
    "lang": "en",
-   "date": "2026-11-22",
-   "first_seen": "2026-11-22T09:57:30Z",
-   "last_seen": "2026-11-22T09:57:30Z",
+   "date": "2026-11-23",
+   "first_seen": "2026-11-23T10:57:11Z",
+   "last_seen": "2026-11-23T10:57:11Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "gv",
-    "text": "The most difficult thing a man can do is turn his eyes inward upon his real self.",
-    "attribution": "“Bright Promise,” Atlanta, Georgia, July 1956, A.A. in Prison: Inmate to Inmate",
+    "text": "When I’m in fear, my sponsor always tells me, ‘Maybe you should get a bigger God.’",
+    "attribution": "“A Bigger God,” Los Angeles, Calif., March 2002, Beginners’ Book: Getting and Staying Sober",
     "source": "",
     "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "date_label": "November 22",
+    "date_label": "November 23",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84592"
+    "node": "node-84593"
    }
   },
   {
-   "id": "quote:lv:2026-11-22",
+   "id": "quote:lv:2026-11-23",
    "source": "quote",
    "kind": "quote",
    "url": "https://www.aalavina.org/#quote-of-the-day",
-   "title": "Cita Diaria con La Viña Noviembre 22",
+   "title": "Cita Diaria con La Viña Noviembre 23",
    "summary": "",
    "lang": "es",
-   "date": "2026-11-22",
-   "first_seen": "2026-11-22T09:57:30Z",
-   "last_seen": "2026-11-22T09:57:30Z",
+   "date": "2026-11-23",
+   "first_seen": "2026-11-23T10:57:11Z",
+   "last_seen": "2026-11-23T10:57:11Z",
    "image": null,
    "tags": [],
    "category": null,
    "status": "ok",
    "extra": {
     "pub": "lv",
-    "text": "No todos podemos ser solitarios.",
-    "attribution": "“La luz a través de la ventana”. LAKE WORTH, FLORIDA, JUNIO DE 1999",
-    "source": "I Am Responsible",
-    "source_lang": "en",
+    "text": "Durante el Undécimo Paso de AA, me di cuenta de que el camino que transitaré mañana se construye hoy.",
+    "attribution": "“Enterrar mi antiguo miedo”. BINGHAMTON, NUEVA YORK, ABRIL DE 1968. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "date_label": "22 de noviembre",
+    "date_label": "23 de noviembre",
     "date_from_heading": true,
     "block": "teaser",
-    "node": "node-84588"
+    "node": "node-84589"
    }
   }
  ],
  "first_harvest": "2026-09-25T14:14:34Z",
  "history": {
   "gv": [
+   {
+    "pub": "gv",
+    "lang": "en",
+    "date": "2026-11-23",
+    "heading": "Grapevine Daily Quote November 23",
+    "text": "When I’m in fear, my sponsor always tells me, ‘Maybe you should get a bigger God.’",
+    "attribution": "“A Bigger God,” Los Angeles, Calif., March 2002, Beginners’ Book: Getting and Staying Sober",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aagrapevine.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
+    "seen": "2026-11-23T10:57:01Z"
+   },
    {
     "pub": "gv",
     "lang": "en",
@@ -245,22 +258,22 @@
     "url": "https://www.aagrapevine.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
     "seen": "2026-11-10T12:47:28Z"
-   },
-   {
-    "pub": "gv",
-    "lang": "en",
-    "date": "2026-11-09",
-    "heading": "Grapevine Daily Quote November 9",
-    "text": "It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I was able to get outside of myself and make some sort of commitment to the group.",
-    "attribution": "“Why Have a Home Group?” Neosho, Missouri, September 1986, The Home Group: Heartbeat of AA",
-    "source": "",
-    "source_lang": null,
-    "url": "https://www.aagrapevine.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/manage/optin?v=001oGSL6wu1SRbyFplJFVXhsJmfiAwT9-c8UsT0fdV_rGWo0nkmyqyZNeqCr7gepkDIDRIYDlBrj6ttjM9WOm4EDDB8yJl8CthuzoJnKQ3qUlp0CvlcGgRGoOKITxJOzyVP1RIKrqxIgSXuW3sVMidP0w0o3wKFt4t9",
-    "seen": "2026-11-09T08:07:20Z"
    }
   ],
   "lv": [
+   {
+    "pub": "lv",
+    "lang": "es",
+    "date": "2026-11-23",
+    "heading": "Cita Diaria con La Viña Noviembre 23",
+    "text": "Durante el Undécimo Paso de AA, me di cuenta de que el camino que transitaré mañana se construye hoy.",
+    "attribution": "“Enterrar mi antiguo miedo”. BINGHAMTON, NUEVA YORK, ABRIL DE 1968. Del AA Grapevine",
+    "source": "",
+    "source_lang": null,
+    "url": "https://www.aalavina.org/#quote-of-the-day",
+    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
+    "seen": "2026-11-23T10:57:11Z"
+   },
    {
     "pub": "lv",
     "lang": "es",
@@ -429,19 +442,6 @@
     "url": "https://www.aalavina.org/#quote-of-the-day",
     "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
     "seen": "2026-11-10T12:47:38Z"
-   },
-   {
-    "pub": "lv",
-    "lang": "es",
-    "date": "2026-11-09",
-    "heading": "Cita Diaria con La Viña Noviembre 9",
-    "text": "La mejor forma de apreciar a AA es idéntica a como se aprecia un vitral: desde adentro.",
-    "attribution": "“Reuniones, reuniones, reuniones”. GRAND RAPIDS, MICHIGAN, OCTUBRE DE 1981",
-    "source": "Happy, Joyous and Free",
-    "source_lang": "en",
-    "url": "https://www.aalavina.org/#quote-of-the-day",
-    "signup_url": "https://visitor.r20.constantcontact.com/d.jsp?llr=bxlrwznab&p=oi&m=bxlrwznab&sit=kh8qe8aib&f=1296d075-37d3-4fbc-99e3-4c207bededf1",
-    "seen": "2026-11-09T08:07:30Z"
    }
   ]
  }

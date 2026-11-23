@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23T00:47:01Z",
+ "updated": "2026-11-23T10:57:15Z",
  "fixture": false,
  "shows": [
   {
@@ -16,7 +16,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
-   "episodes": 270,
+   "episodes": 271,
    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp",
    "i18n": {
     "title": {
@@ -78,7 +78,7 @@
    "apple": "https://podcasts.apple.com/us/podcast/reuni%C3%B3n-abierta-semanal-de-alcoh%C3%B3licos-an%C3%B3nimos-de-la-vi%C3%B1a/id6832543655",
    "spotify": "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC",
    "amazon": null,
-   "episodes": 2,
+   "episodes": 3,
    "thumb": "/assets/cache/pod/3740d966d2cf9aaa.webp",
    "i18n": {
     "description": {
@@ -95,6 +95,106 @@
   }
  ],
  "items": [
+  {
+   "id": "pod:gv:650bd496579c",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/4892ce7a-b7f4-4096-8747-58f5d7fed99a",
+   "title": "God Shot—Make Mine a Double [Season 11, Episode 21]",
+   "summary": "Darla expresses her gratitude for the tiny window of willingness that allowed her to find her way into AA. She tells Olis and Don that she knows she can't repay the people who helped her early on, so she instead carries the message to others. Darla, Olis and Don also discuss the Daily Quote on Sponsorship, and Sean shares his love for Grapevine. If you enjoy this podcast, please tell at least one…",
+   "lang": "en",
+   "date": "2026-11-23T05:15:00Z",
+   "first_seen": "2026-11-23T10:57:15Z",
+   "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/4892ce7a-b7f4-4096-8747-58f5d7fed99a.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 38381714,
+    "duration_sec": 1919,
+    "season": 11,
+    "episode": 21,
+    "episode_type": "full",
+    "show": "gv",
+    "show_name": "AA Grapevine's Podcast",
+    "link": "https://www.aagrapevine.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/4892ce7a-b7f4-4096-8747-58f5d7fed99a",
+    "show_web": "https://www.aagrapevine.org/podcasts",
+    "apple": "https://podcasts.apple.com/us/podcast/aa-grapevines-podcast/id1591924167",
+    "spotify": "https://open.spotify.com/show/714djcL57SFf0Nzf40CL8Q",
+    "amazon": "https://music.amazon.com/podcasts/de231bfa-837b-4a27-a331-a927019cb5d7",
+    "thumb": "/assets/cache/pod/345ae0651cb102a9.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "God Shot—Make Mine a Double [Season 11, Episode 21]",
+     "es": "Dios disparó - hacer mi doble [Temporada 11, Episodio 21]"
+    },
+    "summary": {
+     "en": "Darla expresses her gratitude for the tiny window of willingness that allowed her to find her way into AA. She tells Olis and Don that she knows she can't repay the people who helped her early on, so she instead carries the message to others. Darla, Olis and Don also discuss the Daily Quote on Sponsorship, and Sean shares his love for Grapevine. If you enjoy this podcast, please tell at least one…",
+     "es": "Darla expresa su gratitud por la pequeña ventana de voluntad que le permitió encontrar su camino hacia AA. Le dice a Olis y a Don que sabe que no puede pagar a las personas que la ayudaron temprano, por lo que lleva el mensaje a otros. Darla, Olis y Don también discuten la Cita diaria en padrinazgo, y Sean comparte su amor por Grapevine. Si usted disfruta de este podcast, por favor dígale al menos un …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "pod:lvo:bae1e3248524",
+   "source": "podcast",
+   "kind": "episode",
+   "url": "https://player.captivate.fm/episode/674e916d-93b1-401e-9f8e-6c1a4b481cab",
+   "title": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 3]",
+   "summary": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 19 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…",
+   "lang": "es",
+   "date": "2026-11-23T05:15:00Z",
+   "first_seen": "2026-11-23T10:57:15Z",
+   "image": "https://artwork.captivate.fm/6e33ab9e-e4c7-40bf-ab3e-d19e4f5a4429/LV-Podcast-logo.jpg",
+   "tags": [
+    "season-1"
+   ],
+   "category": "lvo",
+   "status": "ok",
+   "extra": {
+    "audio_url": "https://episodes.captivate.fm/episode/674e916d-93b1-401e-9f8e-6c1a4b481cab.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_bytes": 84146280,
+    "duration_sec": 3506,
+    "season": 1,
+    "episode": 3,
+    "episode_type": "full",
+    "show": "lvo",
+    "show_name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
+    "link": "https://www.aalavina.org/podcast",
+    "player_url": "https://player.captivate.fm/episode/674e916d-93b1-401e-9f8e-6c1a4b481cab",
+    "show_web": "https://www.aalavina.org/podcast",
+    "apple": "https://podcasts.apple.com/us/podcast/reuni%C3%B3n-abierta-semanal-de-alcoh%C3%B3licos-an%C3%B3nimos-de-la-vi%C3%B1a/id6832543655",
+    "spotify": "https://open.spotify.com/show/5LFFf4NfjdZni1TJcG4jZC",
+    "weekly_open": "lavina",
+    "meeting_date": "2026-11-19",
+    "generic_title": true,
+    "thumb": "/assets/cache/pod/3740d966d2cf9aaa.webp"
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Weekly Open Meeting of Alcoholics Anonymous [Season 1, Episode 3]",
+     "es": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 3]"
+    },
+    "summary": {
+     "en": "In this podcast of La Viña, you will listen to the recording of our open meeting of AA in Spanish of November 19, 2026. We meet every Thursday at 12:00 noon, Eastern time, and we hope you can join us. The Zoom code is 871 2036 8287 and the password is 238047. The meeting is recorded and will later be available on all podcast platforms. This …",
+     "es": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 19 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "pod:wo:e3f6ea2c853b",
    "source": "podcast",
@@ -346,7 +446,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "pod:lvo:667729784075",
@@ -397,7 +497,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "pod:wo:43cdc9398618",

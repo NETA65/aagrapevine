@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-22T09:57:38Z",
+ "updated": "2026-11-23T10:57:19Z",
  "fixture": false,
- "today": "2026-11-22",
+ "today": "2026-11-23",
  "home_days": 60,
  "list_days": [
   60,
@@ -11,8 +11,8 @@
  "counts": {
   "60": {
    "neta65": 3,
-   "texas": 8,
-   "all": 107
+   "texas": 7,
+   "all": 85
   },
   "90": {
    "neta65": 4,
