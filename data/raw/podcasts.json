@@ -1,17 +1,17 @@
 {
  "source": "podcasts",
- "updated": "2026-11-23T10:57:15Z",
- "attempted": "2026-11-23T10:57:15Z",
+ "updated": "2026-11-23T19:20:21Z",
+ "attempted": "2026-11-23T19:20:21Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 2,
+  "added": 0,
   "removed": 0,
   "held": 0
  },
  "stats": {
   "fetched": 316,
-  "new": 2,
+  "new": 0,
   "total": 316,
   "active": 316,
   "gone": 0,
@@ -22,21 +22,21 @@
     "name": "AA Grapevine's Podcast",
     "episodes": 271,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-23T10:57:15Z"
+    "updated": "2026-11-23T19:20:21Z"
    },
    "wo": {
     "ok": true,
     "name": "Grapevine Weekly Open AA Meeting",
     "episodes": 42,
     "latest": "2026-11-20T05:15:00Z",
-    "updated": "2026-11-23T10:57:15Z"
+    "updated": "2026-11-23T19:20:21Z"
    },
    "lvo": {
     "ok": true,
     "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
     "episodes": 3,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-23T10:57:15Z"
+    "updated": "2026-11-23T19:20:21Z"
    }
   },
   "missing_from_feed": 0,
@@ -285,7 +285,7 @@
    "lang": "en",
    "date": "2026-11-09T05:15:00Z",
    "first_seen": "2026-11-09T08:07:33Z",
-   "last_seen": "2026-11-16T17:10:00Z",
+   "last_seen": "2026-11-23T19:20:21Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -398,7 +398,7 @@
    "lang": "en",
    "date": "2026-11-02T05:15:00Z",
    "first_seen": "2026-11-02T07:47:16Z",
-   "last_seen": "2026-11-16T17:10:00Z",
+   "last_seen": "2026-11-23T19:20:21Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -473,7 +473,7 @@
    "lang": "en",
    "date": "2026-10-26T04:15:00Z",
    "first_seen": "2026-10-26T06:25:49Z",
-   "last_seen": "2026-11-16T17:10:00Z",
+   "last_seen": "2026-11-23T19:20:21Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -548,7 +548,7 @@
    "lang": "en",
    "date": "2026-10-19T04:15:00Z",
    "first_seen": "2026-10-19T06:21:20Z",
-   "last_seen": "2026-11-16T17:10:00Z",
+   "last_seen": "2026-11-23T19:20:21Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"

@@ -1,18 +1,18 @@
 {
  "source": "events_external",
- "updated": "2026-11-22T15:34:31Z",
- "attempted": "2026-11-22T15:34:31Z",
+ "updated": "2026-11-23T19:25:45Z",
+ "attempted": "2026-11-23T19:25:45Z",
  "ok": true,
  "error": null,
  "changes": {
   "added": 0,
-  "removed": 1,
+  "removed": 0,
   "held": 0
  },
  "stats": {
   "discovery": "sitemap",
   "discovery_complete": true,
-  "upcoming_urls": 11,
+  "upcoming_urls": 10,
   "kept_from_cache": 0,
   "fetched": 0,
   "refreshed": 0,

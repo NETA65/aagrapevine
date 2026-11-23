@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T15:30:00Z",
+ "updated": "2026-11-23T19:21:04Z",
  "fixture": false,
  "playlists": [
   {
@@ -523,6 +523,96 @@
  ],
  "items": [
   {
+   "id": "yt:u9wSKejpS4Q",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=u9wSKejpS4Q",
+   "title": "God Shot—Make Mine a Double [Season 11, Episode 21]",
+   "summary": "Darla expresses her gratitude for the tiny window of willingness that allowed her to find her way into AA. She tells Olis and Don that she knows she can't repay the people who helped her early on, so she instead carries the message to others. Darla, Olis and Don also discuss the Daily Quote on Sponsorship, and Sean shares his love for Grapevine. If you enjoy this podcast, please tell at least one…",
+   "lang": "en",
+   "date": "2026-11-23T05:29:16Z",
+   "first_seen": "2026-11-23T19:21:04Z",
+   "image": "https://i.ytimg.com/vi/u9wSKejpS4Q/hqdefault.jpg",
+   "tags": [
+    "season-11"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "u9wSKejpS4Q",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "AA Grapevine's Podcast"
+    ],
+    "is_short": false,
+    "views": 55,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 11,
+    "episode": 21
+   },
+   "i18n": {
+    "title": {
+     "en": "God Shot—Make Mine a Double [Season 11, Episode 21]",
+     "es": "Dios disparó - hacer mi doble [Temporada 11, Episodio 21]"
+    },
+    "summary": {
+     "en": "Darla expresses her gratitude for the tiny window of willingness that allowed her to find her way into AA. She tells Olis and Don that she knows she can't repay the people who helped her early on, so she instead carries the message to others. Darla, Olis and Don also discuss the Daily Quote on Sponsorship, and Sean shares his love for Grapevine. If you enjoy this podcast, please tell at least one…",
+     "es": "Darla expresa su gratitud por la pequeña ventana de voluntad que le permitió encontrar su camino hacia AA. Le dice a Olis y a Don que sabe que no puede pagar a las personas que la ayudaron temprano, por lo que lleva el mensaje a otros. Darla, Olis y Don también discuten la Cita diaria en padrinazgo, y Sean comparte su amor por Grapevine. Si usted disfruta de este podcast, por favor dígale al menos un …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "yt:0y4fLU2-X-4",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=0y4fLU2-X-4",
+   "title": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 3]",
+   "summary": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 19 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…",
+   "lang": "es",
+   "date": "2026-11-23T05:27:09Z",
+   "first_seen": "2026-11-23T19:21:04Z",
+   "image": "https://i.ytimg.com/vi/0y4fLU2-X-4/hqdefault.jpg",
+   "tags": [
+    "season-1"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "video_id": "0y4fLU2-X-4",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
+    ],
+    "is_short": false,
+    "views": 21,
+    "is_live_recording": false,
+    "date_approx": false,
+    "season": 1,
+    "episode": 3
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña Weekly Open Meeting of Alcoholics Anonymous [Season 1, Episode 3]",
+     "es": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña [Temporada 1, Episodio 3]"
+    },
+    "summary": {
+     "en": "In this podcast of La Viña, you will listen to the recording of our open meeting of AA in Spanish of November 19, 2026. We meet every Thursday at 12:00 noon, Eastern time, and we hope you can join us. The Zoom code is 871 2036 8287 and the password is 238047. The meeting is recorded and will later be available on all podcast platforms. This …",
+     "es": "En este podcast de La Viña, escucharás la grabación de nuestra reunión abierta de AA en español del 19 de noviembre de 2026. Nos reunimos todos los jueves a las 12:00 del mediodía, hora del Este, y esperamos que puedas acompañarnos. El código de Zoom es 871 2036 8287 y la contraseña es 238047. La reunión es grabada y estará disponible posteriormente en todas las plataformas de pódcast. Esta…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
    "id": "yt:UBEXlU0vYE0",
    "source": "youtube",
    "kind": "video",
@@ -548,7 +638,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 132,
+    "views": 159,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -594,7 +684,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 181,
+    "views": 187,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -637,7 +727,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 261,
+    "views": 278,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -682,7 +772,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 170,
+    "views": 177,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -729,7 +819,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 288,
+    "views": 291,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -774,7 +864,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 156,
+    "views": 159,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -793,7 +883,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "yt:z-1spviQWhk",
@@ -819,7 +909,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 268,
+    "views": 275,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -865,7 +955,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 335,
+    "views": 345,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -909,7 +999,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 225,
+    "views": 224,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -952,7 +1042,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 325,
+    "views": 326,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -998,7 +1088,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 307,
+    "views": 310,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -1041,7 +1131,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 343,
+    "views": 344,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1405,7 +1495,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 360,
+    "views": 361,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1452,7 +1542,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 360,
+    "views": 361,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1497,7 +1587,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 485,
+    "views": 486,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -1772,7 +1862,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 450,
+    "views": 451,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1908,7 +1998,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 371,
+    "views": 372,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -1953,7 +2043,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 529,
+    "views": 531,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -3860,7 +3950,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 329,
+    "views": 330,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -4229,7 +4319,7 @@
      "UN DIA A LA VEZ"
     ],
     "is_short": false,
-    "views": 78,
+    "views": 79,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -4916,7 +5006,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 565,
+    "views": 566,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -4959,7 +5049,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 434,
+    "views": 436,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -6943,7 +7033,7 @@
     "duration_sec": 44,
     "playlists": [],
     "is_short": true,
-    "views": 1990,
+    "views": 1993,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -10794,7 +10884,7 @@
      "ESPERANZA Y RECUPERACIÓN"
     ],
     "is_short": false,
-    "views": 307,
+    "views": 309,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -11376,7 +11466,7 @@
      "Sober Women"
     ],
     "is_short": false,
-    "views": 841,
+    "views": 842,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -11552,7 +11642,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 827,
+    "views": 828,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -11816,7 +11906,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 4011,
+    "views": 4021,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -13221,7 +13311,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 806,
+    "views": 807,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -13264,7 +13354,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 728,
+    "views": 729,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -14117,7 +14207,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 730,
+    "views": 735,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -14500,7 +14590,7 @@
      "Blessed"
     ],
     "is_short": false,
-    "views": 1425,
+    "views": 1427,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -20063,7 +20153,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 573,
+    "views": 575,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -20106,7 +20196,7 @@
      "Grapevine and La Viña Apps"
     ],
     "is_short": true,
-    "views": 1269,
+    "views": 1270,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -21799,7 +21889,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 938,
+    "views": 939,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -21840,7 +21930,7 @@
      "La Viña"
     ],
     "is_short": false,
-    "views": 1863,
+    "views": 1865,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -21881,7 +21971,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 6570,
+    "views": 6573,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -22045,7 +22135,7 @@
      "Many Roads to Spirituality"
     ],
     "is_short": false,
-    "views": 2934,
+    "views": 2939,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -22207,7 +22297,7 @@
      "Audios de La Viña del 2017"
     ],
     "is_short": false,
-    "views": 856,
+    "views": 858,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -22740,7 +22830,7 @@
      "From Relapse to Recovery"
     ],
     "is_short": false,
-    "views": 6408,
+    "views": 6410,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23025,7 +23115,7 @@
      "Audios de La Viña del 2018"
     ],
     "is_short": false,
-    "views": 552,
+    "views": 553,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23148,7 +23238,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 800,
+    "views": 801,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23189,7 +23279,7 @@
      "Audios de La Viña del 2019"
     ],
     "is_short": false,
-    "views": 2190,
+    "views": 2192,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23518,7 +23608,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 4854,
+    "views": 4855,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23559,7 +23649,7 @@
      "CTM"
     ],
     "is_short": false,
-    "views": 14802,
+    "views": 14807,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23682,7 +23772,7 @@
      "Voices of Women: “We need to give ourselves time.”"
     ],
     "is_short": false,
-    "views": 2926,
+    "views": 2927,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -23765,7 +23855,7 @@
      "GVR/RLV"
     ],
     "is_short": false,
-    "views": 1532,
+    "views": 1537,
     "is_live_recording": false,
     "date_approx": false
    },
@@ -24048,7 +24138,7 @@
      "Sponsorship: “Willing to go to any length.”"
     ],
     "is_short": false,
-    "views": 3054,
+    "views": 3055,
     "is_live_recording": false,
     "date_approx": false
    },

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T15:30:21Z",
+ "updated": "2026-11-23T19:21:23Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17061,
-   "posts": 4038,
+   "followers": 17064,
+   "posts": 4043,
    "owner_id": "48108439509",
-   "checked": "2026-11-22T15:30:02Z",
+   "checked": "2026-11-23T19:21:05Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,277 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2437,
-   "posts": 3069,
+   "posts": 3074,
    "owner_id": "48275839129",
-   "checked": "2026-11-22T15:30:05Z",
+   "checked": "2026-11-23T19:21:08Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgFwlSKDQ-6",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgFwlSKDQ-6/",
+   "title": "De Javier A., -\"2Golfo de México.\" México . 📣 Envíanos tus mejores fotografías que…",
+   "summary": "De Javier A., -\"2Golfo de México.\" México. 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!",
+   "lang": "es",
+   "date": "2026-11-23T16:00:16Z",
+   "first_seen": "2026-11-23T19:21:23Z",
+   "image": "/assets/cache/ig/DgFwlSKDQ-6.webp",
+   "tags": [
+    "alcoholicosanónimos",
+    "laviña",
+    "aa",
+    "sobriedad",
+    "recuperación"
+   ],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgFwlSKDQ-6",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgFwlSKDQ-6.webp",
+    "embed_url": "https://www.instagram.com/p/DgFwlSKDQ-6/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgFwlSKDQ-6/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Javier A., \"2Golfo from Mexico.\" Mexico. 📣 Send us your best pictures than …",
+     "es": "De Javier A., -\"2Golfo de México.\" México . 📣 Envíanos tus mejores fotografías que…"
+    },
+    "summary": {
+     "en": "From Javier A., \"2Golfo from Mexico.\" Mexico. 📣 Send us your best photos that reflect the joy of living, serenity and other themes of sobriety.. 📣 Please: ➡️ Include your name, the initial of your last name ➡️ Indica where photo was taken, location ➡️ Send your photos to: social@aagrapevine.org Don't let us send your best images!",
+     "es": "De Javier A., -\"2Golfo de México.\" México. 📣 Envíanos tus mejores fotografías que reflejen la alegría de vivir, la serenidad y otros temas de sobriedad.. 📣 Por favor: ➡️ Incluye tu nombre, la inicial de tu apellido ➡️ Indica dónde fue tomada la foto, ubicación ➡️ Envía tus fotos a: social@aagrapevine.org ¡No dejes de enviarnos tus mejores imágenes!"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgFwlMaDVCh",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgFwlMaDVCh/",
+   "title": "From Julie G., - \"Grapevine Pop-up-Shop display at The Way Out Group\" Langley B.C. Canada",
+   "summary": "From Julie G., - \"Grapevine Pop-up-Shop display at The Way Out Group\" Langley B.C. Canada GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+   "lang": "en",
+   "date": "2026-11-23T16:00:15Z",
+   "first_seen": "2026-11-23T19:21:23Z",
+   "image": "/assets/cache/ig/DgFwlMaDVCh.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgFwlMaDVCh",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgFwlMaDVCh.webp",
+    "embed_url": "https://www.instagram.com/p/DgFwlMaDVCh/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgFwlMaDVCh/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "From Julie G., - \"Grapevine Pop-up-Shop display at The Way Out Group\" Langley B.C. Canada",
+     "es": "De Julie G., - \"Grapevine Pop-up-Shop display en The Way Out Group\" Langley B.C. Canadá"
+    },
+    "summary": {
+     "en": "From Julie G., - \"Grapevine Pop-up-Shop display at The Way Out Group\" Langley B.C. Canada GRAPEVINE INSTAGRAM PHOTO CONTEST! Send us your photos to social@aagrapevine.org ➡️ Please include your name and last initial, and location. ➡️ Photos must be anonymity protected (no full-face poses or identifiable images of people.) Looking forward to seeing your images! The contest is ongoing.",
+     "es": "¡De Julie G., - \"Grapevine Pop-up-Shop display en The Way Out Group\" Langley B.C. Canada Grapevine Instagram concurso de fotos! Envíenos sus fotos a social@aagrapevine.org ➡️ Por favor incluya su nombre y su última inicial, y su ubicación. Las fotos ➡️ deben ser protegidas por el anonimato (no poses de cara completa o imágenes identificables de las personas.) ¡Esperando ver sus imágenes! El concurso está en curso."
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgFYjK8jRLA",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgFYjK8jRLA/",
+   "title": "“When I’m in fear, my sponsor always tells me, ‘Maybe you should get a bigger God.’”",
+   "summary": "“When I’m in fear, my sponsor always tells me, ‘Maybe you should get a bigger God.’” “A Bigger God,” Los Angeles, Calif., March 2002, Beginners’ Book: Getting and Staying Sober Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-23T12:30:16Z",
+   "first_seen": "2026-11-23T19:21:23Z",
+   "image": "/assets/cache/ig/DgFYjK8jRLA.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgFYjK8jRLA",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgFYjK8jRLA.webp",
+    "embed_url": "https://www.instagram.com/p/DgFYjK8jRLA/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgFYjK8jRLA/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When I’m in fear, my sponsor always tells me, ‘Maybe you should get a bigger God.’”",
+     "es": "“Cuando estoy en miedo, mi padrino siempre me dice, quizás deberías tener un Dios más grande.”"
+    },
+    "summary": {
+     "en": "“When I’m in fear, my sponsor always tells me, ‘Maybe you should get a bigger God.’” “A Bigger God,” Los Angeles, Calif., March 2002, Beginners’ Book: Getting and Staying Sober Daily Quote at www.aagrapevine.org",
+     "es": "“Cuando estoy en miedo, mi padrino siempre me dice, quizás deberías tener un Dios más grande.” “Un Dios más grande”, los Ángeles, California, marzo de 2002, libro de principiantes: conseguir y permanecer sobrio Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgFYjKzDTnm",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgFYjKzDTnm/",
+   "title": "“Durante el Undécimo Paso de AA, me di cuenta de que el camino que transitaré mañana se…",
+   "summary": "“Durante el Undécimo Paso de AA, me di cuenta de que el camino que transitaré mañana se construye hoy”. \"“Enterrar mi antiguo miedo” BINGHAMTON, NUEVA YORK, ABRIL DE 1968 Del AA Grapevine\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-23T12:30:15Z",
+   "first_seen": "2026-11-23T19:21:23Z",
+   "image": "/assets/cache/ig/DgFYjKzDTnm.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgFYjKzDTnm",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgFYjKzDTnm.webp",
+    "embed_url": "https://www.instagram.com/p/DgFYjKzDTnm/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgFYjKzDTnm/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“During the Eleventh Step of AA, I realized that the road I will travel tomorrow will be …",
+     "es": "“Durante el Undécimo Paso de AA, me di cuenta de que el camino que transitaré mañana se…"
+    },
+    "summary": {
+     "en": "“During the Eleventh Step of AA, I realized that the road that I will drive tomorrow is built today.” \"To bury my old fear\" BINGHAMTON, NEW YORK, APRIL 1968 AA Grapevine Daily Quote in www.aalavina.org",
+     "es": "“Durante el Undécimo Paso de AA, me di cuenta de que el camino que transitaré mañana se construye hoy”. \"“Enterrar mi antiguo miedo” BINGHAMTON, NUEVA YORK, ABRIL DE 1968 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgFOX_AgVdh",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgFOX_AgVdh/",
+   "title": "God Shot—Make Mine a Double",
+   "summary": "God Shot—Make Mine a Double",
+   "lang": "en",
+   "date": "2026-11-23T11:02:32Z",
+   "first_seen": "2026-11-23T19:21:23Z",
+   "image": "/assets/cache/ig/DgFOX_AgVdh.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgFOX_AgVdh",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgFOX_AgVdh.webp",
+    "embed_url": "https://www.instagram.com/p/DgFOX_AgVdh/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgFOX_AgVdh/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "God Shot—Make Mine a Double",
+     "es": "Dios disparó - hacer mi doble"
+    },
+    "summary": {
+     "en": "God Shot—Make Mine a Double",
+     "es": "Dios disparó - hacer mi doble"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgFN5hVu6oL",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgFN5hVu6oL/",
+   "title": "Esta semana, Paola da la bienvenida a Melvin y Fredy. Temporada 1, Episodio 3.",
+   "summary": "Esta semana, Paola da la bienvenida a Melvin y Fredy. Temporada 1, Episodio 3.",
+   "lang": "es",
+   "date": "2026-11-23T10:59:42Z",
+   "first_seen": "2026-11-23T19:21:23Z",
+   "image": "/assets/cache/ig/DgFN5hVu6oL.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgFN5hVu6oL",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgFN5hVu6oL.webp",
+    "embed_url": "https://www.instagram.com/p/DgFN5hVu6oL/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgFN5hVu6oL/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "This week, Paola welcomes Melvin and Fredy. Season 1, Episode 3.",
+     "es": "Esta semana, Paola da la bienvenida a Melvin y Fredy. Temporada 1, Episodio 3."
+    },
+    "summary": {
+     "en": "This week, Paola welcomes Melvin and Fredy. Season 1, Episode 3.",
+     "es": "Esta semana, Paola da la bienvenida a Melvin y Fredy. Temporada 1, Episodio 3."
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DgDE6_DjYcO",
    "source": "instagram",
@@ -2473,7 +2737,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfhtdCoDSo7",
@@ -2522,7 +2786,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfhdXRsgman",
@@ -2565,7 +2829,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfhdKf9OLk1",
@@ -2608,7 +2872,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfhVbDYDX0Z",
@@ -2651,7 +2915,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfhVa_OjSPJ",
@@ -2694,7 +2958,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DffIqUIjZ5g",
@@ -10101,49 +10365,6 @@
    "is_new": false
   },
   {
-   "id": "ig:Ddv7lABFw1z",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Ddv7lABFw1z/",
-   "title": "“Spiritual growth and experiences are not limited to orthodox believers in a deity, any…",
-   "summary": "“Spiritual growth and experiences are not limited to orthodox believers in a deity, any more than the disease of alcoholism is limited to skid-row bums.” Casper, Wyo., September 1969, From: “Is ‘Agnostic’ a Nasty Word?”, AA Grapevine Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-26T11:30:14Z",
-   "first_seen": "2026-09-26T14:34:32Z",
-   "image": "/assets/cache/ig/Ddv7lABFw1z.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Ddv7lABFw1z",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Ddv7lABFw1z.webp",
-    "embed_url": "https://www.instagram.com/p/Ddv7lABFw1z/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Ddv7lABFw1z/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Spiritual growth and experiences are not limited to orthodox believers in a deity, any…",
-     "es": "“El crecimiento espiritual y las experiencias no se limitan a los creyentes ortodoxos en una deidad, ningún …"
-    },
-    "summary": {
-     "en": "“Spiritual growth and experiences are not limited to orthodox believers in a deity, any more than the disease of alcoholism is limited to skid-row bums.” Casper, Wyo., September 1969, From: “Is ‘Agnostic’ a Nasty Word?”, AA Grapevine Daily Quote at www.aagrapevine.org",
-     "es": "“El crecimiento espiritual y las experiencias no se limitan a los creyentes ortodoxos en una deidad, más que la enfermedad del alcoholismo se limita a los bums de esquiar”. Casper, Wyo., septiembre de 1969, de: “es ‘agnóstico’ una palabra desagradable?”, AA Grapevine Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:Ddtu0JsFzEt",
    "source": "instagram",
    "kind": "post",
@@ -10183,92 +10404,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:Ddtu0IQl4Ys",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Ddtu0IQl4Ys/",
-   "title": "From the article “Never Too Young\", September 2026 issue.",
-   "summary": "From the article “Never Too Young\", September 2026 issue. To read more, visit www.aagrapevine.org/magazine",
-   "lang": "en",
-   "date": "2026-09-25T15:00:14Z",
-   "first_seen": "2026-09-25T15:20:59Z",
-   "image": "/assets/cache/ig/Ddtu0IQl4Ys.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Ddtu0IQl4Ys",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Ddtu0IQl4Ys.webp",
-    "embed_url": "https://www.instagram.com/p/Ddtu0IQl4Ys/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Ddtu0IQl4Ys/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "From the article “Never Too Young\", September 2026 issue.",
-     "es": "Del artículo “Never Too Young”, edición de septiembre de 2026."
-    },
-    "summary": {
-     "en": "From the article “Never Too Young\", September 2026 issue. To read more, visit www.aagrapevine.org/magazine",
-     "es": "Del artículo “Never Too Young”, edición de septiembre de 2026. Para leer más, visite www.aagrapevine.org/magazine"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdtWyE6F-w4",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdtWyE6F-w4/",
-   "title": "“During his first AA years every AA has had plenty of the urge to revolt against…",
-   "summary": "“During his first AA years every AA has had plenty of the urge to revolt against authority. I know I did, and can’t claim to be over it yet. I’ve also served my time as a maker of rules, a regulator of other people’s conduct ... I can now look back upon such experiences with much amusement. And gratitude as well.” AA Co-Founder, Bill W., September 1945, From: “’Rules’ Dangerous but Unity Vital”…",
-   "lang": "en",
-   "date": "2026-09-25T11:30:15Z",
-   "first_seen": "2026-09-25T15:20:59Z",
-   "image": "/assets/cache/ig/DdtWyE6F-w4.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdtWyE6F-w4",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdtWyE6F-w4.webp",
-    "embed_url": "https://www.instagram.com/p/DdtWyE6F-w4/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdtWyE6F-w4/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“During his first AA years every AA has had plenty of the urge to revolt against…",
-     "es": "“Durante sus primeros AA años cada AA ha tenido un gran impulso para rebelarse contra …"
-    },
-    "summary": {
-     "en": "“During his first AA years every AA has had plenty of the urge to revolt against authority. I know I did, and can’t claim to be over it yet. I’ve also served my time as a maker of rules, a regulator of other people’s conduct ... I can now look back upon such experiences with much amusement. And gratitude as well.” AA Co-Founder, Bill W., September 1945, From: “’Rules’ Dangerous but Unity Vital”…",
-     "es": "“Durante sus primeros AA años cada AA ha tenido un gran impulso para rebelarse contra la autoridad. Sé que lo hice, y no puedo afirmar que lo haya superado todavía. También he servido mi tiempo como fabricante de reglas, un regulador de la conducta de otras personas ... Ahora puedo mirar atrás sobre tales experiencias con mucha diversión. Y gratitud también”. AA cofundador, Bill W., septiembre de 1945, de: “’rules’ peligroso pero de unidad Vital” …"
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },
