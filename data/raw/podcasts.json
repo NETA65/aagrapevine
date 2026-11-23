@@ -1,7 +1,7 @@
 {
  "source": "podcasts",
- "updated": "2026-11-23T19:20:21Z",
- "attempted": "2026-11-23T19:20:21Z",
+ "updated": "2026-11-23T23:49:31Z",
+ "attempted": "2026-11-23T23:49:31Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -22,28 +22,28 @@
     "name": "AA Grapevine's Podcast",
     "episodes": 271,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-23T19:20:21Z"
+    "updated": "2026-11-23T23:49:31Z"
    },
    "wo": {
     "ok": true,
     "name": "Grapevine Weekly Open AA Meeting",
     "episodes": 42,
     "latest": "2026-11-20T05:15:00Z",
-    "updated": "2026-11-23T19:20:21Z"
+    "updated": "2026-11-23T23:49:31Z"
    },
    "lvo": {
     "ok": true,
     "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
     "episodes": 3,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-23T19:20:21Z"
+    "updated": "2026-11-23T23:49:31Z"
    }
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
   "discovery_checked": "2026-11-20T16:16:24Z",
   "discovered_feeds": [],
-  "seconds": 3.4,
+  "seconds": 3.7,
   "artwork": 4,
   "artwork_missing": 0,
   "artwork_removed": 0
@@ -623,7 +623,7 @@
    "lang": "en",
    "date": "2026-10-12T04:15:00Z",
    "first_seen": "2026-10-12T07:28:42Z",
-   "last_seen": "2026-11-16T21:58:07Z",
+   "last_seen": "2026-11-23T23:49:31Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -698,7 +698,7 @@
    "lang": "en",
    "date": "2026-10-05T04:15:00Z",
    "first_seen": "2026-10-05T05:53:51Z",
-   "last_seen": "2026-11-16T21:58:07Z",
+   "last_seen": "2026-11-23T23:49:31Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
