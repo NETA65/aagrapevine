@@ -1,0 +1,550 @@
+{
+  "evpage.lede.place": {
+    "en": "{title} is {phrase} on {when}, at {place}.",
+    "es": "{title} es {phrase} el {when}, en {place}."
+  },
+  "evpage.lede.place_range": {
+    "en": "{title} is {phrase} from {from} to {to}, at {place}.",
+    "es": "{title} es {phrase} del {from} al {to}, en {place}."
+  },
+  "evpage.lede.online": {
+    "en": "{title} is {phrase} held online on {platform}, on {when}.",
+    "es": "{title} es {phrase} en línea por {platform}, el {when}."
+  },
+  "evpage.lede.online_plain": {
+    "en": "{title} is {phrase} held online, on {when}.",
+    "es": "{title} es {phrase} en línea, el {when}."
+  },
+  "evpage.lede.online_on": {
+    "en": "{title} is {phrase} on {when}, on {platform}.",
+    "es": "{title} es {phrase} el {when}, por {platform}."
+  },
+  "evpage.lede.online_range": {
+    "en": "{title} is {phrase} held online on {platform}, from {from} to {to}.",
+    "es": "{title} es {phrase} en línea por {platform}, del {from} al {to}."
+  },
+  "evpage.lede.online_plain_range": {
+    "en": "{title} is {phrase} held online, from {from} to {to}.",
+    "es": "{title} es {phrase} en línea, del {from} al {to}."
+  },
+  "evpage.lede.online_on_range": {
+    "en": "{title} is {phrase} from {from} to {to}, on {platform}.",
+    "es": "{title} es {phrase} del {from} al {to}, por {platform}."
+  },
+  "evpage.lede.tba": {
+    "en": "{title} is {phrase} on {when}; the place is to be announced.",
+    "es": "{title} es {phrase} el {when}; el lugar está por anunciarse."
+  },
+  "evpage.lede.tba_range": {
+    "en": "{title} is {phrase} from {from} to {to}; the place is to be announced.",
+    "es": "{title} es {phrase} del {from} al {to}; el lugar está por anunciarse."
+  },
+  "evpage.lede.date": {
+    "en": "{title} is {phrase} on {when}.",
+    "es": "{title} es {phrase} el {when}."
+  },
+  "evpage.lede.date_range": {
+    "en": "{title} is {phrase} from {from} to {to}.",
+    "es": "{title} es {phrase} del {from} al {to}."
+  },
+  "evpage.lede.hybrid": {
+    "en": "You can also join online on {platform}.",
+    "es": "También puedes conectarte en línea por {platform}."
+  },
+  "evpage.lede.past": {
+    "en": "{title} took place on {when}.",
+    "es": "{title} se realizó el {when}."
+  },
+  "evpage.lede.past_range": {
+    "en": "{title} took place from {from} to {to}.",
+    "es": "{title} se realizó del {from} al {to}."
+  },
+  "evpage.lede.series": {
+    "en": "{title} is {phrase} held {recurrence}. Next: {next}.",
+    "es": "{title} es {phrase} que se realiza {recurrence}. Próxima fecha: {next}."
+  },
+  "evpage.lede.es": {
+    "en": "It is held in Spanish.",
+    "es": "Es en español."
+  },
+  "evpage.lede.es_past": {
+    "en": "It was held in Spanish.",
+    "es": "Fue en español."
+  },
+  "evpage.lede.org": {
+    "en": "It is organized by {org}.",
+    "es": "Lo organiza {org}."
+  },
+  "evpage.lede.org_past": {
+    "en": "It was organized by {org}.",
+    "es": "Lo organizó {org}."
+  },
+  "evpage.lede.org_area": {
+    "en": "It is organized by {org}.",
+    "es": "Lo organiza el {org}."
+  },
+  "evpage.lede.org_area_past": {
+    "en": "It was organized by {org}.",
+    "es": "Lo organizó el {org}."
+  },
+  "evpage.lede.org_ours": {
+    "en": "It is organized by the {org}.",
+    "es": "Lo organiza el {org}."
+  },
+  "evpage.lede.org_ours_past": {
+    "en": "It was organized by the {org}.",
+    "es": "Lo organizó el {org}."
+  },
+  "evpage.facts.h": {
+    "en": "Quick facts",
+    "es": "Datos rápidos"
+  },
+  "evpage.facts.what": {
+    "en": "What",
+    "es": "Qué"
+  },
+  "evpage.facts.when": {
+    "en": "When",
+    "es": "Cuándo"
+  },
+  "evpage.facts.where": {
+    "en": "Where",
+    "es": "Dónde"
+  },
+  "evpage.facts.language": {
+    "en": "Language",
+    "es": "Idioma"
+  },
+  "evpage.facts.organizer": {
+    "en": "Organized by",
+    "es": "Organiza"
+  },
+  "evpage.facts.cost": {
+    "en": "Cost",
+    "es": "Costo"
+  },
+  "evpage.facts.who": {
+    "en": "Who can come",
+    "es": "Quién puede asistir"
+  },
+  "evpage.facts.repeats": {
+    "en": "Repeats",
+    "es": "Se repite"
+  },
+  "evpage.facts.contact": {
+    "en": "Questions",
+    "es": "Preguntas"
+  },
+  "evpage.where_tba": {
+    "en": "To be announced",
+    "es": "Por anunciarse"
+  },
+  "evpage.lang_en": {
+    "en": "English",
+    "es": "Inglés"
+  },
+  "evpage.lang_es": {
+    "en": "Spanish",
+    "es": "Español"
+  },
+  "evpage.free": {
+    "en": "Free",
+    "es": "Gratis"
+  },
+  "evpage.map": {
+    "en": "Map",
+    "es": "Mapa"
+  },
+  "evpage.map_aria": {
+    "en": "Map of {place}",
+    "es": "Mapa de {place}"
+  },
+  "evpage.status.past": {
+    "en": "This event is over",
+    "es": "Este evento ya pasó"
+  },
+  "evpage.status.past_text": {
+    "en": "Its page stays here for a while. See below for what is coming up next.",
+    "es": "Su página se queda aquí por un tiempo. Abajo verás lo que viene."
+  },
+  "evpage.status.part_of": {
+    "en": "One date of {series}",
+    "es": "Una fecha de {series}"
+  },
+  "evpage.crumb": {
+    "en": "Breadcrumb",
+    "es": "Ruta"
+  },
+  "evpage.sec.prep": {
+    "en": "Get ready",
+    "es": "Para prepararte"
+  },
+  "evpage.sec.prep_sub": {
+    "en": "Presentations, guides and pages that go with this event.",
+    "es": "Presentaciones, guías y páginas que acompañan este evento."
+  },
+  "evpage.sec.more": {
+    "en": "Learn more",
+    "es": "Para saber más"
+  },
+  "evpage.sec.deck": {
+    "en": "Presentation for this event",
+    "es": "Presentación para este evento"
+  },
+  "evpage.sec.deck_close": {
+    "en": "The closest presentation",
+    "es": "La presentación más cercana"
+  },
+  "evpage.sec.deck_card": {
+    "en": "About this presentation",
+    "es": "Sobre esta presentación"
+  },
+  "evpage.sec.deck_minutes": {
+    "en": "About {n} minutes",
+    "es": "Unos {n} minutos"
+  },
+  "evpage.cta.start": {
+    "en": "Start the presentation",
+    "es": "Iniciar la presentación"
+  },
+  "evpage.sec.bingo": {
+    "en": "Make a GVR/RLV Bingo card for this event",
+    "es": "Haz un cartón de Bingo de RLV/GVR para este evento"
+  },
+  "evpage.sec.bingo_text": {
+    "en": "The Bingo builder opens with this event's name, day and kind already filled in: print the cards and bring them.",
+    "es": "El creador de Bingo se abre con el nombre, el día y el tipo de este evento ya puestos: imprime los cartones y llévalos."
+  },
+  "evpage.sec.bingo_cta": {
+    "en": "Make the Bingo cards",
+    "es": "Hacer los cartones de Bingo"
+  },
+  "evpage.sec.next_same": {
+    "en": "Next {kind}",
+    "es": "Próximo: {kind}"
+  },
+  "evpage.sec.coming": {
+    "en": "Coming up",
+    "es": "Lo que viene"
+  },
+  "evpage.sec.next_meeting": {
+    "en": "Our next committee meeting: {when}",
+    "es": "Nuestra próxima reunión del comité: {when}"
+  },
+  "evpage.sec.past_same": {
+    "en": "Past events like this",
+    "es": "Eventos parecidos que ya pasaron"
+  },
+  "evpage.sec.flyers": {
+    "en": "Flyers of similar events",
+    "es": "Volantes de eventos parecidos"
+  },
+  "evpage.sec.flyers_all": {
+    "en": "All flyers",
+    "es": "Todos los volantes"
+  },
+  "evpage.sec.flyer": {
+    "en": "The flyer",
+    "es": "El volante"
+  },
+  "evpage.sec.month": {
+    "en": "This month",
+    "es": "Este mes"
+  },
+  "evpage.sec.month_of": {
+    "en": "In {month}",
+    "es": "En {month}"
+  },
+  "evpage.sec.month_h": {
+    "en": "The magazines this month",
+    "es": "Las revistas de este mes"
+  },
+  "evpage.sec.month_h_of": {
+    "en": "The magazines in {month}",
+    "es": "Las revistas de {month}"
+  },
+  "evpage.sec.toolkit": {
+    "en": "Monthly toolkit for {month}",
+    "es": "Kit del mes de {month}"
+  },
+  "evpage.sec.issue_soon": {
+    "en": "Coming soon",
+    "es": "Próximamente"
+  },
+  "evpage.sec.issue_read": {
+    "en": "See this issue",
+    "es": "Ver esta edición"
+  },
+  "evpage.sec.latest": {
+    "en": "The newest issue",
+    "es": "La edición más reciente"
+  },
+  "evpage.sec.dates": {
+    "en": "Next dates",
+    "es": "Próximas fechas"
+  },
+  "evpage.sec.all_dates": {
+    "en": "All dates",
+    "es": "Todas las fechas"
+  },
+  "evpage.sec.this_date": {
+    "en": "This date",
+    "es": "Esta fecha"
+  },
+  "evpage.sec.join": {
+    "en": "How to join",
+    "es": "Cómo conectarse"
+  },
+  "evpage.sec.official": {
+    "en": "Official page",
+    "es": "Página oficial"
+  },
+  "evpage.res.contribute": {
+    "en": "Share your story",
+    "es": "Comparte tu historia"
+  },
+  "evpage.res.contribute_t": {
+    "en": "How to write for Grapevine and La Viña, step by step.",
+    "es": "Cómo escribir para La Viña y Grapevine, paso a paso."
+  },
+  "evpage.res.tips": {
+    "en": "Writing tips",
+    "es": "Consejos para escribir"
+  },
+  "evpage.res.tips_t": {
+    "en": "Simple tips before you start writing.",
+    "es": "Consejos sencillos antes de empezar a escribir."
+  },
+  "evpage.res.submit": {
+    "en": "Send your story",
+    "es": "Envía tu historia"
+  },
+  "evpage.res.submit_t": {
+    "en": "Where and how to send what you wrote.",
+    "es": "Dónde y cómo enviar lo que escribiste."
+  },
+  "evpage.res.deadlines": {
+    "en": "Story deadlines",
+    "es": "Fechas límite para historias"
+  },
+  "evpage.res.deadlines_t": {
+    "en": "The themes coming up, and when each one's stories are due.",
+    "es": "Los próximos temas y la fecha límite de cada uno."
+  },
+  "evpage.res.deadlines_ics": {
+    "en": "Deadlines calendar (.ics)",
+    "es": "Calendario de fechas límite (.ics)"
+  },
+  "evpage.res.kit": {
+    "en": "Workshop guides (PDF)",
+    "es": "Guías del taller (PDF)"
+  },
+  "evpage.res.kit_t": {
+    "en": "The magazines' own guidelines, ready to print.",
+    "es": "Las pautas de las revistas, listas para imprimir."
+  },
+  "evpage.res.record": {
+    "en": "Record your story",
+    "es": "Graba tu historia"
+  },
+  "evpage.res.record_t": {
+    "en": "Tell your story out loud: record it with your phone, right on our site.",
+    "es": "Cuenta tu historia en voz alta: grábala con tu teléfono, aquí en nuestro sitio."
+  },
+  "evpage.res.record_call": {
+    "en": "Or call {phone}",
+    "es": "O llama al {phone}"
+  },
+  "evpage.res.published": {
+    "en": "Members of our Area in print",
+    "es": "Miembros de nuestra Área publicados"
+  },
+  "evpage.res.published_t": {
+    "en": "Stories by members of our Area that the magazines published.",
+    "es": "Historias de miembros de nuestra Área que publicaron las revistas."
+  },
+  "evpage.res.lesson_t": {
+    "en": "A short session of GVR / RLV 101.",
+    "es": "Una sesión breve de RLV / GVR 101."
+  },
+  "evpage.res.booth": {
+    "en": "Booth display",
+    "es": "Pantalla de la mesa"
+  },
+  "evpage.res.booth_t": {
+    "en": "The slideshow we play on a screen at our literature table: preview it, or start it on this device.",
+    "es": "La presentación que pasamos en una pantalla en nuestra mesa de literatura: mírala o iníciala en este equipo."
+  },
+  "evpage.res.booth_start": {
+    "en": "Start the display",
+    "es": "Iniciar la pantalla"
+  },
+  "evpage.res.displays": {
+    "en": "Photos of our displays",
+    "es": "Fotos de nuestras exhibiciones"
+  },
+  "evpage.res.displays_t": {
+    "en": "Pictures of our literature tables at past events.",
+    "es": "Fotos de nuestras mesas de literatura en eventos pasados."
+  },
+  "evpage.res.offers": {
+    "en": "Current offers",
+    "es": "Ofertas actuales"
+  },
+  "evpage.res.offers_t": {
+    "en": "Discounts and deals from the magazines' stores.",
+    "es": "Descuentos y ofertas de las tiendas de las revistas."
+  },
+  "evpage.res.mags": {
+    "en": "Magazine prices",
+    "es": "Precios de las revistas"
+  },
+  "evpage.res.mags_t": {
+    "en": "Subscriptions and single copies of Grapevine and La Viña.",
+    "es": "Suscripciones y ejemplares de La Viña y Grapevine."
+  },
+  "evpage.res.mag_gv": {
+    "en": "Grapevine",
+    "es": "Grapevine"
+  },
+  "evpage.res.mag_lv": {
+    "en": "La Viña",
+    "es": "La Viña"
+  },
+  "evpage.res.listen": {
+    "en": "Podcasts",
+    "es": "Podcasts"
+  },
+  "evpage.res.listen_t": {
+    "en": "Listen to the magazines' podcasts and audio stories.",
+    "es": "Escucha los podcasts y las historias en audio de las revistas."
+  },
+  "evpage.res.watch": {
+    "en": "Videos",
+    "es": "Videos"
+  },
+  "evpage.res.watch_t": {
+    "en": "Videos from Grapevine and La Viña.",
+    "es": "Videos de La Viña y Grapevine."
+  },
+  "evpage.res.sessions": {
+    "en": "GVR / RLV 101",
+    "es": "RLV / GVR 101"
+  },
+  "evpage.res.sessions_t": {
+    "en": "Six short sessions on the service, at your own pace.",
+    "es": "Seis sesiones breves sobre el servicio, a tu propio ritmo."
+  },
+  "evpage.res.gvr": {
+    "en": "GVR / RLV corner",
+    "es": "Rincón del RLV / GVR"
+  },
+  "evpage.res.gvr_t": {
+    "en": "What a rep does, the first steps and the kits.",
+    "es": "Qué hace un representante, los primeros pasos y los kits."
+  },
+  "evpage.res.gvr_job": {
+    "en": "The job",
+    "es": "El servicio"
+  },
+  "evpage.res.gvr_steps": {
+    "en": "First steps",
+    "es": "Primeros pasos"
+  },
+  "evpage.res.gvr_kits": {
+    "en": "Kits",
+    "es": "Kits"
+  },
+  "evpage.res.register": {
+    "en": "Sign up as a rep",
+    "es": "Regístrate como representante"
+  },
+  "evpage.res.register_t": {
+    "en": "Let the magazines' offices know you serve as a GVR or an RLV.",
+    "es": "Avisa a las oficinas de las revistas que eres RLV o GVR."
+  },
+  "evpage.res.register_gvr": {
+    "en": "As a GVR (Grapevine)",
+    "es": "Como GVR (Grapevine)"
+  },
+  "evpage.res.register_rlv": {
+    "en": "As an RLV (La Viña)",
+    "es": "Como RLV (La Viña)"
+  },
+  "evpage.res.area": {
+    "en": "Our Area's website",
+    "es": "El sitio web de nuestra Área"
+  },
+  "evpage.res.area_t": {
+    "en": "NETA 65: its assemblies, committees and news.",
+    "es": "NETA 65: sus asambleas, comités y noticias."
+  },
+  "evpage.res.official_t": {
+    "en": "The organizers' own page about this event.",
+    "es": "La página de los organizadores sobre este evento."
+  },
+  "evpage.res.official_series": {
+    "en": "The organizers' website",
+    "es": "El sitio web de los organizadores"
+  },
+  "evpage.res.official_series_t": {
+    "en": "Where the gathering itself is described: its program, place and news.",
+    "es": "Donde se describe el evento mismo: su programa, lugar y noticias."
+  },
+  "evpage.res.gvm": {
+    "en": "Grapevine Meeting",
+    "es": "Reunión de Grapevine"
+  },
+  "evpage.res.gvm_t": {
+    "en": "Our monthly online AA meeting, in English.",
+    "es": "Nuestra reunión de AA mensual en línea, en inglés."
+  },
+  "evpage.res.gvm_more": {
+    "en": "What happens at the meeting",
+    "es": "Qué pasa en la reunión"
+  },
+  "evpage.res.gvm_more_t": {
+    "en": "How the hour goes, step by step, on our Meetings page.",
+    "es": "Cómo transcurre la hora, paso a paso, en nuestra página de reuniones."
+  },
+  "evpage.res.weekly": {
+    "en": "Weekly open meetings",
+    "es": "Reuniones abiertas semanales"
+  },
+  "evpage.res.weekly_t": {
+    "en": "Grapevine's and La Viña's own online meetings, every week.",
+    "es": "Las reuniones en línea de La Viña y Grapevine, cada semana."
+  },
+  "evpage.res.read": {
+    "en": "Read the magazines",
+    "es": "Lee las revistas"
+  },
+  "evpage.res.read_t": {
+    "en": "The current issues, and stories you can read online.",
+    "es": "Las ediciones actuales e historias para leer en línea."
+  },
+  "evpage.res.lvshare": {
+    "en": "Send your story to La Viña",
+    "es": "Envía tu historia a La Viña"
+  },
+  "evpage.res.lvshare_t": {
+    "en": "La Viña's own page for sharing your story.",
+    "es": "La página de La Viña para compartir tu historia."
+  },
+  "evpage.res.calfilter": {
+    "en": "More from the magazines' calendars",
+    "es": "Más de los calendarios de las revistas"
+  },
+  "evpage.res.calfilter_t": {
+    "en": "Every event from Grapevine's and La Viña's own calendars.",
+    "es": "Todos los eventos de los calendarios de La Viña y Grapevine."
+  },
+  "evpage.res.bulletin": {
+    "en": "Our bulletin",
+    "es": "Nuestro boletín"
+  },
+  "evpage.res.bulletin_t": {
+    "en": "The latest news and offers from our committee.",
+    "es": "Las últimas noticias y ofertas de nuestro comité."
+  }
+}

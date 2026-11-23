@@ -509,6 +509,13 @@
     "en": "Meeting",
     "es": "Reunión"
   },
+  "search.kind_label.presentation": { "en": "Presentation", "es": "Presentación" },
+  "search.kind_label.issue": { "en": "Magazine issue", "es": "Número de la revista" },
+  "search.kind_label.flyer": { "en": "Flyer", "es": "Volante" },
+  "search.kind_label.section": { "en": "Section", "es": "Sección" },
+  "search.kind_label.month": { "en": "Monthly toolkit", "es": "Kit del mes" },
+  "search.present": { "en": "Start the presentation", "es": "Iniciar la presentación" },
+  "search.next_meeting": { "en": "Next committee meeting: {date}", "es": "Próxima reunión del comité: {date}" },
   "search.src.gv": {
     "en": "Grapevine",
     "es": "Grapevine"
@@ -681,8 +688,8 @@
     "es": "leer revista número artículos historias la viña bimestral"
   },
   "search.kw.listen": {
-    "en": "listen podcast audio episodes spotify apple weekly open meeting recordings la viña spanish",
-    "es": "escuchar podcast audio episodios reunión abierta semanal grabaciones la viña español"
+    "en": "listen podcast audio episodes spotify apple weekly open meeting recordings la viña spanish aa grapevine's podcast spoken stories",
+    "es": "escuchar podcast audio episodios reunión abierta semanal grabaciones la viña español historias habladas"
   },
   "search.kw.watch": {
     "en": "watch video videos youtube asl",
@@ -697,16 +704,16 @@
     "es": "reunión zoom google meet código de la reunión mensual comité orador invitado persona invitada id contraseña clave enlace unirse cuenta regresiva tercer miércoles reunión de grapevine en línea primer miércoles reuniones abiertas semanales la viña jueves español reuniones reuniones de grapevine gr cerca de mí en persona grupos locales cómo llegar oklahoma arkansas áreas cercanas nuevo en aa recién llegado primera reunión cualquier reunión de aa encontrar aa ayuda dejar de beber problema con la bebida es aa para mí app meeting guide intergrupo oficina central aa.org"
   },
   "search.kw.events": {
-    "en": "events calendar workshop booth assembly conference ics",
-    "es": "eventos calendario taller mesa asamblea conferencia"
+    "en": "events calendar upcoming events coming up workshop booth assembly conference our monthly meetings series ics",
+    "es": "eventos calendario próximos eventos lo que viene taller mesa asamblea conferencia nuestras reuniones mensuales serie"
   },
   "search.kw.portfolio": {
-    "en": "portfolio committee documents files reports minutes notes slides workshops drive",
-    "es": "portafolio documentos del comité archivos informes actas notas presentaciones talleres drive"
+    "en": "portfolio committee documents files reports minutes notes meeting notes slides workshops drive flyers",
+    "es": "portafolio documentos del comité archivos informes actas notas notas de reuniones presentaciones talleres drive volantes"
   },
   "search.kw.photos": {
-    "en": "photos pictures albums gallery booth",
-    "es": "fotos imágenes álbumes galería mesa"
+    "en": "photos pictures albums gallery booth anonymity",
+    "es": "fotos imágenes álbumes galería mesa anonimato"
   },
   "search.kw.bulletin": {
     "en": "bulletin board announcements notices news committee updates",
@@ -720,6 +727,7 @@
     "en": "share your story write submit contribute editorial themes deadlines guidelines record phone audio writing workshop recording workshop",
     "es": "comparte tu historia escribir enviar contribuir temas editoriales fechas límite pautas grabar teléfono audio taller de escritura taller de grabación"
   },
+  "search.kw.contribute_faq": { "en": "faq common questions", "es": "faq preguntas frecuentes" },
   "search.kw.shop": {
     "en": "shop store buy order subscribe subscription price prices book of the month books catalog order form magazine app gift carry the message",
     "es": "tienda comprar pedido suscribirse suscripción precio precios libro del mes libros catálogo formulario de pedido revista app regalo lleva el mensaje"
@@ -737,8 +745,8 @@
     "es": "resumen mensual correo boletín edición del mes whatsapp mes pasado novedades"
   },
   "search.kw.share": {
-    "en": "share kit qr code codes print poster posters link table tent",
-    "es": "compartir kit código códigos qr imprimir cartel carteles enlace tarjeta de mesa"
+    "en": "share kit qr code codes print poster posters for meetings link table tent",
+    "es": "compartir kit código códigos qr imprimir cartel carteles para reuniones enlace tarjeta de mesa"
   },
   "search.kw.search": {
     "en": "search find",
@@ -772,9 +780,21 @@
     "en": "Texas published writer",
     "es": "Texas Tejas escritor publicado"
   },
+  "search.kw.event": {
+    "en": "event events",
+    "es": "evento eventos"
+  },
+  "search.kw.upcoming": {
+    "en": "upcoming coming up next",
+    "es": "próximo próximos próxima próximas"
+  },
+  "search.kw.shop_section": {
+    "en": "shop store",
+    "es": "tienda"
+  },
   "search.kw.recurring": {
-    "en": "every month monthly",
-    "es": "cada mes mensual"
+    "en": "every month monthly next date",
+    "es": "cada mes mensual próxima fecha"
   },
   "search.kw.booth": {
     "en": "booth literature table",
@@ -784,6 +804,51 @@
     "en": "online meeting our meeting google meet meeting code first wednesday story read share topic statement of purpose",
     "es": "reunión en línea nuestra reunión google meet código de la reunión primer miércoles historia leer compartir tema declaración de propósito"
   },
+  "search.kw.expenses": {
+    "en": "tracker expenses expense mileage miles driving receipts receipt reimbursement reimburse giveaway gifts literature budget csv spreadsheet treasurer",
+    "es": "registro gastos gasto kilometraje millas manejar recibos recibo reembolso reembolsar obsequios regalos literatura presupuesto csv hoja de cálculo tesorero"
+  },
+  "search.page_desc.instagram": { "en": "The newest posts from AA Grapevine's and La Viña's Instagram accounts.", "es": "Las publicaciones más recientes de las cuentas de Instagram de La Viña y AA Grapevine." },
+  "search.kw.flyer": { "en": "flyer flyers", "es": "volante volantes" },
+  "search.kw.month_kit": { "en": "monthly toolkit kit month poster calendar dates", "es": "kit del mes mensual cartel fechas del mes calendario" },
+  "search.kw.issue": { "en": "current issue this month's issue new issue magazine theme", "es": "edición actual número actual número del mes revista tema" },
+  "search.kw.presentation": { "en": "presentation slides slideshow deck present projector workshop", "es": "presentación diapositivas presentar proyector taller" },
+  "search.kw.next_meeting": { "en": "next meeting committee meeting monthly meeting google meet", "es": "próxima reunión reunión del comité reunión mensual google meet" },
+  "search.kw.botm": { "en": "book of the month books discount sale", "es": "libro del mes libros descuento oferta" },
+  "search.kw.price_change": { "en": "price change new prices subscription prices increase", "es": "cambio de precios nuevos precios precios de suscripción aumento" },
+  "search.sec.about-magazines.x": { "en": "grapevine la viña what they are magazines aa grapevine inc", "es": "la viña grapevine qué son revistas aa grapevine inc" },
+  "search.sec.about-privacy.x": { "en": "privacy anonymity no tracking no ads cookies", "es": "privacidad anonimato sin seguimiento sin anuncios cookies" },
+  "search.sec.read-print.x": { "en": "meeting in print what is grapevine what is la viña", "es": "reunión impresa qué es la viña qué es grapevine" },
+  "search.sec.contribute-record.x": { "en": "record audio recorder voice phone story line audio project", "es": "grabar audio grabadora voz teléfono línea de historias proyecto de audio" },
+  "search.sec.contribute-deadlines.x": { "en": "themes deadlines editorial calendar upcoming issues", "es": "temas fechas límite calendario editorial próximas ediciones" },
+  "search.sec.accessibility-audio.x": { "en": "listen audio podcasts read aloud blind low vision", "es": "escuchar audio podcasts lectura en voz alta ciegos baja visión" },
+  "search.sec.accessibility-feedback.x": { "en": "accessibility statement wcag feedback contact", "es": "declaración de accesibilidad wcag comentarios contacto" },
+  "search.sec.orientation-presenting.x": { "en": "presenting presenter view keys touch screen versions reset", "es": "presentar vista de presentador teclas pantalla táctil versiones restablecer" },
+  "search.sec.shop-carry.x": { "en": "carry the message gift subscription sponsor", "es": "lleva el mensaje suscripción de regalo patrocinar" },
+  "search.sec.shop-help.x": { "en": "customer service help phone orders renewals address change", "es": "servicio al cliente ayuda teléfono pedidos renovaciones cambio de dirección" },
+  "search.sec.about-booth.x": { "en": "booth display screen tv tablet slideshow kiosk literature table", "es": "pantalla exhibidor mesa de literatura televisor tableta presentación" },
+  "search.sec.about-history.s": { "en": "The milestones of Grapevine and La Viña, from the first issue to today.", "es": "Los hitos de La Viña y Grapevine, desde el primer número hasta hoy." },
+  "search.sec.about-history.x": { "en": "history timeline milestones 1944 founded anniversary", "es": "historia cronología hitos 1944 fundación aniversario" },
+  "search.sec.about-committee.x": { "en": "committee who we are chair members northeast texas area 65", "es": "comité quiénes somos coordinador miembros noreste de texas área 65" },
+  "search.sec.gvr-position.x": { "en": "gvr rlv service position what a rep does responsibilities", "es": "rlv gvr puesto de servicio qué hace un representante responsabilidades" },
+  "search.sec.gvr-steps.x": { "en": "new gvr new rlv getting started checklist first steps", "es": "nuevo rlv nuevo gvr empezar lista primeros pasos" },
+  "search.sec.gvr-kits.x": { "en": "resource kit kits handbook official resources postcards guides forms", "es": "kit de recursos kits manual recursos oficiales postales guías formularios" },
+  "search.sec.gvr-ideas.x": { "en": "ideas home group meetings literature table announcements", "es": "ideas grupo base reuniones mesa de literatura anuncios" },
+  "search.sec.gvr-pass.x": { "en": "pass it on welcome a new rep find a rep hand over rotation next gvr", "es": "pásalo bienvenida a un nuevo representante buscar representante entregar rotación próximo rlv" },
+  "search.sec.contribute-submit.x": { "en": "submit send story online email mail", "es": "enviar historia en línea correo electrónico correo postal" },
+  "search.sec.contribute-tips.x": { "en": "writing tips how to write ideas", "es": "consejos para escribir cómo escribir ideas" },
+  "search.sec.contribute-anonymity.x": { "en": "anonymity byline first name last initial", "es": "anonimato firma nombre de pila inicial" },
+  "search.sec.contribute-workshop.x": { "en": "writing workshop host plan group district", "es": "taller de escritura organizar planear grupo distrito" },
+  "search.sec.faq.x": { "en": "faq common questions answers", "es": "faq preguntas frecuentes respuestas" },
+  "search.sec.meetings-new-to-aa.x": { "en": "newcomer new to aa find a meeting help is aa for me", "es": "recién llegado nuevo en aa encontrar una reunión ayuda es aa para mí" },
+  "search.sec.accessibility-asl.x": { "en": "asl american sign language deaf signed videos", "es": "asl lengua de señas americana sordos videos en señas" },
+  "search.sec.accessibility-captions.x": { "en": "captions subtitles videos youtube", "es": "subtítulos videos youtube" },
+  "search.sec.accessibility-phone.x": { "en": "phone call in dial in no internet zoom by phone", "es": "teléfono llamar marcar sin internet zoom por teléfono" },
+  "search.sec.accessibility-print.x": { "en": "print large print letter paper", "es": "imprimir letra grande papel carta" },
+  "search.sec.orientation-facilitators.x": { "en": "facilitator district orientation plan host trainer", "es": "facilitador orientación del distrito plan organizar capacitador" },
+  "search.sec.shop-subscriptions.x": { "en": "subscription subscribe prices plans print digital complete", "es": "precios de suscripción suscribirse suscríbete planes impresa digital completa" },
+  "search.sec.shop-group.x": { "en": "group subscription subscribe home group literature table what it would cost calculator", "es": "suscripción del grupo suscribirse grupo base mesa de literatura lo que costaría calculadora" },
+  "search.sec.shop-catalogs.x": { "en": "catalog catalogs books audio", "es": "catálogo catálogos libros audio" },
   "library.col.reports_empty": {
     "en": "Added here as soon as the committee uploads them",
     "es": "Aparecerán aquí en cuanto el comité los suba"

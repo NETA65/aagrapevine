@@ -195,23 +195,42 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
   `config/site.yml`.
   **Corregir una traducción:** `data/translations/overrides.yml`.
 - **Eventos sin volante** (talleres, asambleas): un archivo en `content/events`. Si todavía faltan
-  detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`.
+  detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`. Si se
+  cancela, se deja el archivo y se agrega `cancelled: true` (desde la ronda 37, noviembre de 2026): el evento sale de
+  todas las listas, su dirección muestra "Cancelado" hasta su día y los calendarios suscritos lo marcan cancelado
+  (así se canceló el taller de La Viña en Garland del 28 de noviembre de 2026).
+- **La página de cada evento** (desde la ronda 37): cada evento tiene su propia página, `/es/events/<evento>/`, que
+  se arma sola al agregarlo — sus datos, un resumen de una frase, la presentación que le corresponde, un cartón de
+  Bingo de RLV/GVR ya preparado para ese evento, los enlaces de su tipo (taller de escritura: Comparte tu historia,
+  las fechas límite, la pantalla de la mesa…), el próximo evento parecido, los volantes de eventos parecidos y las
+  ediciones de La Viña y Grapevine de ese mes —, y cada serie mensual la suya, `/es/events/series/<serie>/`. Si el
+  sitio adivina mal el tipo, `type:` en el archivo lo corrige (guía en inglés: `content/events/README.md`). La
+  búsqueda del sitio encuentra cada evento, cada serie, las secciones de las páginas, los kits del mes, las
+  presentaciones, los volantes, la edición actual, cada historia del archivo de escritores de Texas y la tienda
+  ("tienda"); "eventos" o "próximos eventos" listan los eventos que vienen, y un mes ("marzo", "asamblea de junio")
+  pone primero los de ese mes.
+- **El ícono del sitio** (desde la ronda 37): el ícono de las uvas es el favicon, el de la app y el que Google
+  muestra en los resultados; el logo de NETA 65 queda solo en la barra superior (y en los carteles impresos).
 - **Buscadores y herramientas de IA** (Google, Bing, ChatGPT, Claude, Perplexity…): el sitio ya les da a cada
   página su título y una descripción breve (desde la ronda 35, noviembre de 2026, la portada dice que es un comité
   de Alcohólicos Anónimos), el **mapa del sitio** (`sitemap.xml`) con la fecha en que cambió el contenido de cada
   página, datos estructurados (quién es el comité, qué es cada página, los eventos con lugar y dirección; desde la
-  ronda 35 cada evento presencial próximo con dirección, que no es de una serie mensual ni de los calendarios de
-  Grapevine o La Viña y no tiene página en otro sitio, tiene además su propia página, `/es/events/<evento>/`), una
-  guía breve para herramientas de IA (`/es/llms.txt`) y, después de cada publicación, la lista de páginas que
-  cambiaron (IndexNow: Bing y otros; Google no lo usa). Cómo unirse a una reunión en línea (enlace, ID, código)
-  nunca está en los datos estructurados, y en las páginas de Reuniones, Eventos (y la página propia de cada
-  evento), Cartel QR, Accesibilidad y Páginas guardadas los buscadores no lo citan. (El ID y la contraseña de Zoom
-  de las reuniones abiertas semanales siguen sin esa marca en los textos propios de Grapevine y La Viña — sus
+  ronda 37 la página de cada evento próximo y la de cada serie mensual están en el mapa del sitio — 122 páginas el
+  22 de noviembre de 2026 —, y la de un evento presencial con dirección y sin página en otro sitio lleva además los
+  datos de ese evento; la de una fecha de una serie o de un evento que ya pasó no sale en los buscadores), una
+  guía breve para herramientas de IA (`/es/llms.txt`, desde la ronda 37 con los próximos eventos) y, después de cada publicación, la lista de páginas que
+  cambiaron (IndexNow: Bing y otros; Google no lo usa). Cómo unirse a una reunión en línea (el enlace de cualquier
+  aplicación —Zoom, Google Meet, Teams…—, el ID, el código o cómo llamar por teléfono) nunca está en los datos
+  estructurados, las descripciones de las páginas, `llms.txt` ni los canales RSS, y en las páginas de Reuniones,
+  Eventos (y la página propia de cada evento), Cartel QR, Accesibilidad y Páginas guardadas los buscadores no lo
+  citan. (El ID y la contraseña de Zoom de las reuniones abiertas semanales siguen sin esa marca en los textos
+  propios de Grapevine y La Viña — sus
   podcasts y publicaciones de Instagram — en `/es/listen/`, `/es/whats-new/` y `/es/instagram/`: sección 12b,
   *What AI tools read*.) **Pasos únicos del dueño:** añadir
   `https://grapevine.neta65.org/` en Google Search Console y enviar su `sitemap.xml`, añadirlo en Bing Webmaster
-  Tools y unas revisiones después de la ronda 35 (sección [12b](#12b-search-engines-google-bing), en inglés, pasos
-  A, B y E; el paso C, el repositorio `NETA65/neta65.github.io`, ya no hace falta con la dirección propia). Si los
+  Tools, unas revisiones después de la ronda 35 y, después de la ronda 37, pedir en Search Console que Google vuelva
+  a leer la portada (`/` y `/es/`) por el ícono nuevo (sección [12b](#12b-search-engines-google-bing), en inglés,
+  pasos A, B, E y F; el paso C, el repositorio `NETA65/neta65.github.io`, ya no hace falta con la dirección propia). Si los
   modelos de IA pueden entrenarse con el sitio: `config/site.yml` → `search_engines` → `ai_training` (`"allow"`,
   lo recomendado, o `"disallow"`; paso D).
 - **¿Funciona todo?** Página **/es/status/** del sitio (junto a *Cita del día*: a qué hora llegaron las
@@ -344,6 +363,14 @@ the old `/subscribe/` address redirects there, #anchors included).
 
 What the newer pages do:
 
+- **Every event's own page** (`/events/<event>/`, since round 37, November 2026): each event of the Events page
+  (but the committee meeting) has a page of its own in both languages, made by itself from its file, flyer or
+  settings — its facts, one plain sentence about it, the presentation and the links that fit its kind (a writing
+  workshop: Share your story, the story deadlines, the workshop guides, the booth display), a GVR/RLV Bingo card
+  already filled in for it, the next event like it, similar events' flyers and the month's Grapevine and La Viña
+  issues. Each monthly series has one more, `/events/series/<key>/`, with its next dates. Every link to an event
+  goes there; search engines get the pages of the events to come (section [12b](#12b-search-engines-google-bing)).
+  What each kind shows, `type:` and `cancelled: true`: [content/events/README.md](content/events/README.md).
 - **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer —
   free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026; the holiday gift
   offers, a second 1-year print subscription as a gift for $16 at Grapevine and $8 at La Viña, through December 31
@@ -945,7 +972,7 @@ recurring_events:
 ```
 
 **How far ahead: `events_until`.** A line of its own just above `recurring_events:` says until when the **Events**
-page, the calendar files and the event share pages list the committee meeting and every monthly event:
+page, the calendar files and the events' own pages list the committee meeting and every monthly event:
 
 ```yaml
 events_until: "2028-12-31"          # every date through this day's MONTH: the end of Panel 77
@@ -964,7 +991,11 @@ month and the 12 after it, each monthly event its `months_ahead` dates, as befor
 monthly posters (`/monthly/`, 13 months) work out their dates from the same rule, so there is no need to raise it.
 
 To add another one, copy the whole block (from `- key:` down), paste it under the last one and
-change the values. Every date then shows on the **Events** page (with an "Every month" badge) and in the
+change the values — and give it `starts:`, its first real date (`"YYYY-MM-DD"`, as the Grapevine Meeting's
+block has `starts: "2027-01-06"`, [below](#our-grapevine-meeting-the-1st-wednesday-on-google-meet)). Without it the site also
+counts the rule's dates back before the series began: the calendar feed's past months list dates that never
+happened, and each of them gets a page saying it "took place" (kept out of search engines, but wrong).
+Every date then shows on the **Events** page (with an "Every month" badge) and in the
 **monthly toolkit** (the month's page, poster and message); the next date of each series of ours always
 keeps a place in the home page's **Upcoming events** row (the other places go to the soonest workshops and
 other events, so a busy month never pushes the booth off the home page; a series La Viña or Grapevine
@@ -979,6 +1010,18 @@ on its own, make the monthly e-mail go out. If a block has a mistake (for exampl
 the **Actions** tab shows a yellow **Settings problem** saying what to fix. The same happens for a
 `skip_dates` date that is not one of the event's days (for example the Sunday, or the 1st Saturday):
 that month still shows, and the note gives the date to use instead.
+
+**Each series gets pages of its own, by itself** (since round 37, November 2026): every date has its page,
+`/events/ev-recurring-<key>-<date>/` (for people: search engines are told not to list it), and the series one page
+that stays, `/events/series/<key>/` — for example
+[grapevine.neta65.org/events/series/citywide-dallas/](https://grapevine.neta65.org/events/series/citywide-dallas/):
+how to join (online), its flyer, its next 6 dates (a moved date included, a skipped one never), the links that fit
+it and the month's magazines. That page is in the sitemap; its title has no date ("GV/LV booth at CityWide Dallas —
+Every second Saturday of the month"), and its description names the next one ("… — Next: Saturday, December 12,
+2026. …"), as its line in `/llms.txt` does. The key is its address: keep it the same once published. A block with
+`enabled: false`, or with no date still to come, gets no series page. The kind of event (which presentation, which
+bingo card, which links) comes from the key or the block's words; an optional `type: "booth"` (one of the 15 kinds
+in [content/events/README.md](content/events/README.md#the-kind-of-event-type-optional)) sets it.
 
 #### Something La Viña or Grapevine holds every month (`host:`, online only, its flyer)
 
@@ -1089,8 +1132,9 @@ on December 2, 2026), in the committee meeting's Google Meet room:
 - **`starts`** — the first date. Without it the calendar files, which keep the last 90 days, would list meetings
   that never took place (September to December 2026). A day that is not a 1st Wednesday still counts: the next
   1st Wednesday is the first date, and the run summary says which.
-- **`url`** — here a page of this site (starting with `/`) works too: the card's title and the calendar entry
-  link to the meeting's section on Meetings (`/es/meetings/…` in Spanish).
+- **`url`** — here a page of this site (starting with `/`) works too: the calendar entries link to the meeting's
+  section on Meetings (`/es/meetings/…` in Spanish). (Since round 37 the card's title links to the series' own page,
+  `/events/series/grapevine-meeting/`, like every series.)
 - It is **ours** (no `host:`), so it shows like the CityWide booth: on Events ("Online on Google Meet", **Join
   online**, "Meeting code rva-tmst-vdb"), with its own card in the home page's hero (under the committee meeting's:
   the next date and time, "First meeting" on January 6, 2027, Join and Details), in the calendar feed, the monthly toolkit,
@@ -1373,6 +1417,19 @@ a mistake shows as a red ✗ on the Code check of your save. *Website update* st
 **Details not final yet** (a date is set, the venue is not): add `tentative: true` (or `yes` / `sí`)
 and, for the place, `location: "Venue to be announced"` with `location_es: "Lugar por anunciarse"`.
 The event shows a **"Details to be confirmed"** badge everywhere and calendar apps mark it tentative.
+
+**Called off** (since round 37): keep the file and add `cancelled: true` (optional: `cancelled_note:`, a sentence
+to people). At the next update the event leaves every list, its page shows **"This event has been cancelled. It will
+not take place."** until its day is over (then its address sends people to the Events page), search engines are
+told it is cancelled, and subscribed calendars show "Cancelled: …" for 90 days. Don't delete the file: that would
+remove it from people's calendars without a word. The La Viña writing workshop in Garland on November 28, 2026 was
+the first, cancelled on November 22, 2026. Everything about it, and how to cancel an event that comes from a dated
+flyer or one date of a monthly series: [content/events/README.md → Cancelled](content/events/README.md#cancelled-cancelled-true).
+
+**Every event gets a page of its own** (since round 37): adding the file is enough —
+[content/events/README.md → Its own page](content/events/README.md#its-own-page-automatic) says what it shows for
+each kind of event. When the site takes an event for the wrong kind (the wrong presentation or links on its page),
+add `type:` to the file.
 
 ### When an assembly's details are final
 
@@ -1878,7 +1935,8 @@ following the forward.
 Search engines and AI tools can already find the site: nothing keeps them out, and every page tells them what it
 is. This section says what the site does by itself, the owner's once-only steps that make sure Google and Bing know
 every page (A and B, about 10 minutes; C only for the old project-site address), one optional choice (D), a few
-checks after round 35 (E, November 2026), and what not to expect.
+checks after round 35 (E, November 2026), the steps after round 37's new icon and event pages (F), and what not to
+expect.
 
 ### What the site already tells search engines
 
@@ -1901,13 +1959,14 @@ Nothing to do here: every update writes all of it, in both languages.
   names. A site on an address of its own, such as grapevine.neta65.org, can get one; Google can take weeks to
   show a new name.
 - **The sitemap** — grapevine.neta65.org/sitemap.xml, the list of the pages meant to be found (both languages):
-  90 fixed pages (45 in each language: 26 main pages, the 13 month pages and the 6 GVR / RLV 101 sessions) and,
-  since round 35, the page of each upcoming in-person event (below) — 102 on November 19, 2026. Each one carries
+  90 fixed pages (45 in each language: 26 main pages, the 13 month pages and the 6 GVR / RLV 101 sessions) and the
+  event pages meant to be found (*An event's own page*, below): 122 on November 22, 2026, 32 of them event pages
+  (102 on November 19, 2026, before round 37). Each one carries
   the **date its content last changed**, not the day of the update: the
   site is rebuilt several times a day, and a date that always moves teaches search engines to ignore it. Each
   Website update compares what every page says with what it said in the last publish (GitHub keeps that list for
   the next run), and only a page whose words, links or pictures changed gets a new date. Its run summary says how
-  many: *Sitemap dates: 3 of 102 page(s) got this build's date* (the second number is the sitemap's pages that
+  many: *Sitemap dates: 3 of 122 page(s) got this build's date* (the second number is the sitemap's pages that
   day). The first publish after this was added dated
   every page once. Should the last publish's list ever be unreadable, that run gives no page a date rather than a
   wrong one (*no page got a date this time*), and the next run compares again. A yellow warning *"N of T pages
@@ -1917,7 +1976,10 @@ Nothing to do here: every update writes all of it, in both languages.
   publish after round 35 dates 16 pages anew, in both languages: Home, About, Bulletin, Events, Meetings, Photos
   and Published writers, whose words, links or picture texts changed, and Bingo, whose sample card's date no
   longer counts. It also adds the event pages. What's New changes most days anyway, with its "new this week"
-  count.)
+  count. The first publish after round 37 dates the new event and series pages once, and the pages whose links to
+  an event now go to its page: Home, Events, Contribute, Bulletin, Photos, What's New, the month pages. On the
+  pages of the events the blocks that change with other events — the next of its kind, *Coming up*, past events,
+  similar flyers, the month's magazines — are marked, so a page is dated anew only when its own event changes.)
 - **Structured data** (schema.org): a small block on every page that tells machines who runs the site (the
   committee, part of NETA 65, with its page on neta65.org — never a person's name), what kind of page it is,
   where it sits on the site (Home → GVR / RLV 101 → a session) and, on *Share your story* (`/contribute/`), the
@@ -1931,29 +1993,68 @@ Nothing to do here: every update writes all of it, in both languages.
   that page, the others to their card on `/events/`; its times are Central time with the offset of the day
   ("2027-01-17T13:00:00-06:00", -05:00 in daylight time), as the cards show them. Online-only events (the
   committee meeting, our Grapevine Meeting, La Viña's
-  Zoom workshop) are not given to search engines: Google lists only events people can go to. Their cards,
-  calendar files and share pages are the same as before. How to join online (a meeting ID or meeting code, a
-  passcode, a Zoom or Google Meet link) stays on the page for people but out of this machine-readable copy: it
-  would only help those who look for meetings to disrupt. A committee meeting's guest speaker is never in it
+  Zoom workshop) are not given to search engines: Google lists only events people can go to. Their cards and
+  calendar files are the same as before, and their own pages carry no Event. How to join online (a meeting ID or
+  meeting code, a passcode, the link of any meeting app — Zoom, Google Meet, Microsoft Teams, Webex, GoToMeeting,
+  Jitsi … — or a sentence on joining by phone: "Dial …", "Join by phone", "Marque …", Zoom's "One tap mobile")
+  stays on the page for people but out of this machine-readable copy — and, since round 37, out of every page's
+  description and link preview, `/llms.txt` and the RSS feeds too: it would only help those who look for meetings
+  to disrupt. (Write such details in a sentence of their own, so the rest of the summary is kept.) An event file's
+  `url:` that is a meeting link (a Zoom or Teams room) is never told to search engines as the event's page
+  elsewhere (`sameAs`): put the link in `online_url:`. A committee meeting's guest speaker is never in it
   either (no names for search engines). Who organizes an event: the committee, the Area for the Area's own events
   (an assembly, an ACM, the GSR/DCM orientations), La Viña or AA Grapevine for theirs — or, since round 35, the
   committee or group a `content/events` file names in `organizer:` ("District 87 La Viña Committee", never a
-  person; [content/events/README.md](content/events/README.md)). The Garland and Fort Worth La Viña workshops of
-  November and December 2026 name District 87's and District 90's La Viña committees.
-- **An event's own page** (since round 35) — each upcoming event held at a place with a real address, that is not a
-  date of a monthly series, not from Grapevine's or La Viña's own calendar, and has no page of its own elsewhere
-  (no `url:` to another site's page; the Area's assemblies have theirs on neta65.org), gets a page at
-  `/events/<its card's name>/` and
-  `/es/events/<its card's name>/` — the same address its **Share** button sends, and the card's title links to it.
-  It shows the whole event (day, time, place, description, Add to calendar, flyer, Share, *See all events*), has
-  its date in its title, a description of its day, time, venue and city and the start of its summary (at most 160
-  characters, as every page's), is in the sitemap with its twin and carries the structured data of that one event.
-  Google's event results take only such pages ("a unique URL … that focus on a single event"), and an AI answer
-  quotes a short page about one event far better than the whole Events page. On November 19, 2026 there were six:
-  the Garland (November 28) and Fort Worth (December 12) La Viña workshops, the GSR/DCM orientations of January 17,
-  24 and 31, 2027, and the Winter ACM (February 21, 2027) — 12 pages with the Spanish ones. Once the event is over,
-  the next update turns its address back into the small share page (out of search results), it leaves the sitemap,
-  and IndexNow tells Bing so.
+  person; [content/events/README.md](content/events/README.md)). The Fort Worth La Viña workshop of December 12,
+  2026 names the District 90 La Viña Committee, and the La Viña intergroup meeting of December 22 the Fort Worth
+  Spanish Intergroup. Since round 37 a cancelled event is told as cancelled ("EventCancelled", on its notice page
+  only) until its day is over.
+- **An event's own page** (since round 35 for some events, since round 37 for every event but the committee
+  meeting, whose page is `/meetings/#committee-meeting`) — every event of the Events page has a page at
+  `/events/<its card's name>/` and `/es/events/<its card's name>/`, made by itself at every update from the event's
+  file, flyer, settings or calendar listing: nothing to write, nothing to keep up. Every link to the event goes
+  there — its card's title and **Share** button, the home page, the monthly toolkit, What's New, the search, the
+  RSS feed and the calendar entries' "Details:" line; the card's **Event details** button still opens its page
+  elsewhere. Each page shows the event (day, time, place, description, Join online, Add to calendar, flyer, Share),
+  one plain sentence that says what it is, *Quick facts* (what, when, where with a Map link, language, organizer,
+  "Free" for the committee's own events, who can come), *Get ready* — the links that fit its kind: for a writing
+  workshop the Writing Workshop presentation (`/orientation/?present=writing-workshop`), Share your story, the
+  story deadlines, the workshop guides, the booth display (`/about/#booth`, and **Start the display**,
+  `/about/?booth=start`, never with a `bs` setup in it, which would replace that device's saved booth settings) —
+  and a GVR/RLV Bingo card made for it (for example
+  `/gvr/bingo/#lang=es&mag=lv&where=workshop&event=Taller%20de%20Escritura%20de%20La%20Vi%C3%B1a%20%E2%80%94%20Fort%20Worth&date=2026-12-12`:
+  the builder opens with the event's language, magazine, occasion, name — cut at a word, at most 60 characters —
+  and day; events still to come only), then the next event of its kind, the events coming up, past events like it,
+  the flyers of similar events and the Grapevine and La Viña issues of its month (a Grapevine Meeting's page: the
+  issue's theme, "Coming soon" until it is out, and the newest issue). The whole table, kind by kind:
+  [content/events/README.md → Its own page](content/events/README.md#its-own-page-automatic); a wrong guess is
+  fixed with `type:`. **What search engines get:** a one-off event still to come is in the sitemap with its twin;
+  one held at a real address with no page elsewhere also carries the structured data of that one event (on
+  November 22, 2026: the Fort Worth La Viña workshop of December 12, the La Viña intergroup meeting of December 22,
+  the GSR/DCM orientations of January 17, 24 and 31, 2027, and the Winter ACM of February 21, 2027). Google's event
+  results take only such pages ("a unique URL … that focus on a single event"), and an AI answer quotes a short
+  page about one event far better than the whole Events page. The page of a date of a monthly series, of an event
+  from Grapevine's or La Viña's own calendar and of an event that is over is a full page for people but `noindex`
+  (out of search results and the sitemap). Each page's title has its date ("La Viña Writing Workshop (in Spanish) —
+  Fort Worth, December 12, 2026"; " — <city>" or " — <time>" when two would be the same), the year only once —
+  a title that already has it says "Winter ACM 2027, February 21" — and then a short tail: "· Events — NETA 65",
+  just "· Events" when the title names NETA 65 ("NETA 65 Spring Assembly 2027, March 19 – 21 · Events"), just
+  "· NETA 65" after a title of more than 60 characters (about what a search result shows). Its description is
+  its day, time, venue and city and the start of its summary (at most 160 characters, never how to join). Once the
+  event is over the next update makes its page `noindex` ("This event is over"), takes it out of the sitemap, and
+  IndexNow tells Bing so.
+- **A series' own page** (since round 37) — each monthly series (`recurring_events:`) with a date still to come
+  has `/events/series/<key>/` (+ `/es/`): CityWide Dallas, the Grapevine Meeting and La Viña's monthly workshop on
+  November 22, 2026. Its title has no date ("Grapevine Meeting — Every first Wednesday of the month"), so the
+  address search engines keep never changes; it is in the sitemap, without Event markup (Google wants that only on
+  a page about one date), and lists the next 6 dates, each linked to its date's page. Its description — and its
+  line in `/llms.txt` — names the next date ("… · Online on Google Meet — Next: Wednesday, January 6, 2027. …"), so
+  no one has to work it out from the rule (a month the series skips, a date moved, a series not started yet).
+- **A cancelled event's notice** (since round 37, `cancelled: true` in its `content/events` file) — its page becomes
+  "Cancelled: …", stays in the sitemap with its structured data marked "EventCancelled" until its day is over, then
+  the address is gone (the 404 page sends people to `/events/`); the calendar feeds keep the entry, marked
+  `STATUS:CANCELLED`, for 90 days. Its "Coming up instead" list is outside the page's sitemap date. The La Viña
+  writing workshop in Garland (November 28, 2026) was the first, cancelled on November 22, 2026.
 - **What AI tools read** (since round 35). ChatGPT's, Claude's and Perplexity's crawlers and fetchers read a page's
   HTML as it comes, without running its scripts or applying its styles. So:
   - words the page keeps hidden until they are true are no longer in the HTML before then — "Happening now",
@@ -1967,7 +2068,9 @@ Nothing to do here: every update writes all of it, in both languages.
     an AI Overview, AI Mode or Copilot. People see the page as before. Not marked: the weekly open meetings' Zoom
     ID and passcode where they appear in AA Grapevine's and La Viña's own podcast and Instagram texts, on
     `/listen/`, `/whats-new/` and `/instagram/` (both languages) — their words, shown as they wrote them; whether
-    to mark or trim those is still the owner's question;
+    to mark or trim those is still the owner's question. The RSS feeds, a copy made for machines, leave those
+    sentences out since round 37 (to send the captions word for word again:
+    [how-to/pages-and-code.md → 5.4](how-to/pages-and-code.md#54-files-that-are-not-pages), the `/feed.xml` row);
   - the Google and Outlook calendar links written into `/events/` are brief (title, time, place; no description)
     and the menu adds the full ones when a visitor opens it. That halved what a reader without a browser takes
     from the page — about 145,000 characters of text and link addresses in English and 155,000 in Spanish, from
@@ -1975,20 +2078,43 @@ Nothing to do here: every update writes all of it, in both languages.
     and all of 2027;
   - **`/llms.txt`** and **`/es/llms.txt`**: a short plain-text guide to the site for AI tools (who runs it — and
     that it is not AA Grapevine's or A.A.W.S.'s site —, the monthly meetings as rules, the main pages with their
-    descriptions), made at every build from the same settings and words as the pages, never with a meeting link,
-    ID, passcode or anyone's name. Not in the sitemap. Google says Search does not use such a file, and no major
+    descriptions, and since round 37 *Upcoming events*: the series' pages, then the coming events' pages, soonest
+    first, at most 20, each with its title and description, a series' line always with its next date — never a
+    cancelled event), made at every build from the
+    same settings and words as the pages, never with a meeting link, ID, passcode or anyone's name. Not in the
+    sitemap. Google says Search does not use such a file, and no major
     AI company has said it reads one; it costs nothing and cannot go stale.
 - **Share previews** — the picture, title and description WhatsApp, Facebook, X, iMessage … show when someone
   shares a page. The committee's own card names the site's address, grapevine.neta65.org, since round 35 (its
   address ends in `?v=3`, so the apps fetch the new card instead of the copy they kept); an event's own page shows
-  its flyer.
+  its flyer, a series' page its next date's flyer.
 - **The site's search in the browser** — a browser can add the site's search as one of its search engines
   ("Add search engine"), in English or in Spanish.
+- **The site's icon** (since round 37, November 2026) — the grape icon is the favicon (`/favicon.ico` with 16, 32
+  and 48 px pictures, `/favicon.svg`, `favicon-48.png`, `favicon-96.png`), the app's icon, the icon Google shows next
+  to the site in its results, the browser's search engine (OpenSearch), the RSS feeds and the monthly e-mail's
+  masthead. The NETA 65 logo is the header bar's wordmark only (and the printed posters'). Google reads one favicon
+  per address, from the home page, and takes days to weeks to show a new one: step F.
+- **The site's own search** (since round 37) — finds every event's page and every series' page, an upcoming
+  cancelled event ("Cancelled: …", listed last), the main sections of the long pages, the 13 month toolkits, the
+  presentations, the current Grapevine and La Viña issues, the flyers (each opening the event it is for), the
+  shop's offers and sections, and every story of the Texas writers archive (about 1,245, each opening the story on
+  the magazine's site, by its title, its writers as the byline shows them, their hometowns, its issue or its theme —
+  listed below the newer stories); never a meeting link, ID or code. A few searches people type:
+  - "events" / "eventos", "upcoming events" / "próximos eventos" list every event still to come (17 on November
+    22, 2026);
+  - a month or a day — "march", "marzo", "june 25", "dec 12", "asamblea de junio" — puts the events still to come
+    in it first, before the many posts and stories that name the month;
+  - the weekly open meetings' own section on Meetings (when and how to join) comes before their many recordings;
+  - "shop" / "store" / "tienda" finds the shop, "subscribe" / "suscribirse" its subscriptions;
+  - in Spanish, the committee's Drive slide files are labelled "Diapositivas" (the site's own presentations stay
+    "Presentación"), on the search page, Home's What's New and the Portfolio.
+
+  The Code check makes sure every page of the sitemap can be found by it (a `[search]` warning otherwise).
 - **Pages kept out of search results** — the *Update status* page (`/status/`: the build's own figures), the
-  "page not found" page, the old addresses that forward to new ones, and the small share pages of the events
-  without a page of their own: online only, past, a place still to be announced, a date of a monthly series (the
-  CityWide booth), an event from Grapevine's or La Viña's calendars, or one with its own page elsewhere (the
-  assemblies).
+  "page not found" page, the old addresses that forward to new ones, and (since round 37) the pages of a date of a
+  monthly series (the CityWide booth's December 12, say: its series' page is the one to find), of an event from
+  Grapevine's or La Viña's calendars and of an event that is over — full pages for people, marked `noindex`.
 - **IndexNow, after each publish** — Website update tells Bing, Yandex and the other IndexNow search engines
   exactly which pages changed (only those — every page only the very first time; at most 2,000 a publish), so
   they look at them again soon. The summary of the run's publish part says *IndexNow: 3 changed page(s) sent … —
@@ -2003,12 +2129,16 @@ Nothing to do here: every update writes all of it, in both languages.
   changes the code). Since round 35 also: no page in the sitemap over 1.8 MB of HTML, and no page whose
   structured data ends after 1.5 MB (Googlebot reads only the first 2 MB; the largest page, `/es/photos/`, was
   1.52 MB on November 19, 2026, `/es/events/` 1.23 MB), and `ai_training` (step D) must say `"allow"` or
-  `"disallow"`.
+  `"disallow"`. Since round 37 also (`[search]`): every page of the sitemap has a result in the site's search, every
+  `#anchor` a result links exists, and each language's search index stays at most 1,600,000 bytes (1.6 MB; since
+  the writers archive's stories joined it, about 1.20 MB in English and 1.29 MB in Spanish on November 22, 2026 —
+  about 265 KB and 287 KB as a browser downloads it, compressed).
 
 To see what Google reads on a page, paste its address into Google's Rich Results Test,
-<https://search.google.com/test/rich-results>. For an event, test the event's own page, for example
-`https://grapevine.neta65.org/events/2027-01-17-neta65-gsr-dcm-orientation-central/` (one event, with its address),
-rather than `/events/`.
+<https://search.google.com/test/rich-results>. For an event, test the event's own page rather than `/events/`: for example the Fort Worth La Viña workshop,
+`https://grapevine.neta65.org/events/2026-12-12-lv-writing-workshop-fort-worth/` (one Event, with its address), or
+until November 28, 2026 the Garland notice, `https://grapevine.neta65.org/events/2026-11-28-lv-writing-workshop-garland/`
+(one Event, "EventCancelled").
 
 ### The owner's once-only steps
 
@@ -2026,8 +2156,9 @@ account:
    choose that property.
 2. Left menu → **Indexing → Sitemaps**. Under *Add a new sitemap*, type `sitemap.xml` after the address that is
    already there → **Submit**.
-3. A few minutes to a day later its row says **Success**, with about 100 pages found (90, plus two for each
-   upcoming in-person event that gets a page of its own — *An event's own page*, above). Over the next weeks the
+3. A few minutes to a day later its row says **Success**, with about 120 pages found (122 on November 22, 2026: the
+   90 fixed pages, plus two for each event page and series' page meant to be found — *An event's own page*,
+   above). Over the next weeks the
    **Pages** report shows which pages Google took into its index.
 
 **B. Bing Webmaster Tools: add the site (5 minutes)** — Bing's results also reach DuckDuckGo and Microsoft
@@ -2156,6 +2287,24 @@ update run is green; open `https://grapevine.neta65.org/robots.txt` to see the n
    and Watch pages show their first picture sooner and the phone menu open faster; anything marked *Poor* there is
    worth passing on to whoever helps with the website.
 
+**F. After round 37 (the owner, November 2026)** — once the new icon and the event pages are live:
+
+1. **Ask Google to read the home page again, for the new icon.** In Google Search Console (property
+   `https://grapevine.neta65.org/`) → the search box at the top (**URL Inspection**) → paste
+   `https://grapevine.neta65.org/` → Enter → **Request indexing**. Do the same for `https://grapevine.neta65.org/es/`.
+   Google takes the icon it shows in its results from the home page (one per address), and the icon is not part of
+   the page's content, so the sitemap's date of the home page does not move by itself. The grape can take days to
+   weeks to replace the old icon in Google; nothing else is needed.
+2. **Test two event pages** in Google's Rich Results Test (<https://search.google.com/test/rich-results>): the Fort
+   Worth workshop, `https://grapevine.neta65.org/events/2026-12-12-lv-writing-workshop-fort-worth/` — one Event,
+   with its date, time and address —, and, until November 28, 2026, the Garland notice,
+   `https://grapevine.neta65.org/events/2026-11-28-lv-writing-workshop-garland/` — one Event marked cancelled.
+3. **In Bing Webmaster Tools** → **URL Submission** → submit `https://grapevine.neta65.org/` once. (Website update
+   already tells Bing about every page that changed, IndexNow; this asks it to look at the home page's icon too.)
+4. **After a few weeks, in Search Console** → **Indexing → Pages**: the event pages and the three series' pages
+   should be among the indexed pages. The pages of a series' dates and of events that are over show under
+   *Excluded by 'noindex' tag*: that is right.
+
 ### What not to expect, and what not to do
 
 - **Google and Bing decide what they show, and when.** A submitted sitemap is a hint, not a promise: new pages
@@ -2171,6 +2320,10 @@ update run is green; open `https://grapevine.neta65.org/robots.txt` to see the n
   right; other search engines and AI tools still read them.
 - **`/llms.txt` brings no ranking.** Google says Search does not use it; it is there for the AI tools that read
   one.
+- **No event listing for a series' page or a date's page.** Google lists events only from a page about one event at
+  a place: the CityWide booth's dates stay on `/events/` (by its next date), and its series' page is a page to find,
+  not an event listing.
+- **The new icon is not instant.** Google, Bing and the browsers keep the old favicon for a while (step F).
 - **Nothing to add "for SEO":** no keywords tag (Google ignores it), no sitemap "pings" (Google and Bing retired
   them), no analytics or trackers, no promotional wording and no member's name anywhere (the AA principles,
   [how-to/pages-and-code.md](how-to/pages-and-code.md)).
@@ -2555,7 +2708,7 @@ that page is opened.
 | `src/assets/js/pwa.js`, `src/assets/css/areas/pwa.css` | registration and updates, the "Offline & app" part of the Aa menu (with its install row), the notices (the install notice too), the live parts of `/offline/` (its hero, the saved pages, the install steps), and everything Data saver does |
 | `src/assets/js/install-core.js` | which phone and browser this is (from its user agent — Android tablets asking for desktop sites included), which guide and which Safari step fit it, the name of the app a page is open inside, and the install notice's rules (`RULES`: page views, 20 s, quiet days, limits). Pure functions, tested with real user agents by `tests/test_pwa_install.py` |
 | `src/pages/offline.njk` | *Saved pages & app* (`/offline/`, `/es/offline/`): what is saved on this device, how the site works without a connection, and the install steps (`#steps`): the seven guides — `iphone`, `iphone-other`, `android`, `samsung`, `android-other`, `in-app`, `computer` (their ids are the `#links` the site uses) —, why install it, good to know. The worker also shows it for a page that is not saved when there is no connection (it then says "You're offline" and offers **Try again**). A page like the others: in the sitemap, the search and search engines. The data-attribute contract with pwa.js is in its header comment; the official help links are `app_help_iphone(_es)` and `app_help_android(_es)` in `config/site.yml`. `src/pages/app-redirect.njk` keeps the old install page's address (and its `#guide` links) working |
-| `scripts/dev/make_app_icons.py` | draws `src/assets/img/app-icon-*.png` and `apple-touch-icon-180.png` (`python -m scripts.dev.make_app_icons`) |
+| `scripts/dev/make_app_icons.py` | draws the grape icon's files, all in `src/assets/img/`: the app icons (`app-icon-*.png`, `apple-touch-icon-180.png`) and, since round 37, the favicons (`favicon.ico` with 16, 32 and 48 px pictures, `favicon.svg`, `favicon-32/48/96.png`). `python -m scripts.dev.make_app_icons` draws both sets, `… favicons` the favicons only, `… app` the app icons only. Then run a whole build (or restart `npm start`) to see them: an `--incremental` preview copies a changed icon only to `/assets/img/`, never to `/favicon.ico`, `/favicon.svg` or `/apple-touch-icon*.png`. The NETA 65 logo (`logo-wide.png`) is the header's wordmark only |
 
 **Keeping the install steps current.** Phones move their menus: Safari 26 put Share behind **More**,
 Safari 27 behind **Page Menu**, and Chrome 150 renamed its menu item **Install and create shortcut**.
@@ -2964,7 +3117,7 @@ Nothing to set up: everything here builds itself from the podcast and YouTube sy
 | `src/pages/listen.njk` | the card (macro `lvCard`, `#la-vina-audio`: first on `/es/`, last on `/listen/`) |
 | `src/assets/js/media.js` | the player (`RATES`), `?ep=` (`openLinked`, the `held` flag: nothing saved until the visitor plays, skips or seeks), Watch's `readUrl` / `syncUrl` (`?type=`, `?pl=`, `?lang=`), the share links |
 | `src/assets/js/home.js` | Home's player on Listen's saved places (`gv:audio:pos`, `gv:audio:last`), "Continue listening" |
-| `eleventy/filters/library.js`, `src/assets/js/search.js` | the search index: an episode's `u` is `/listen/?ep=<id>`, its host page the optional `u2` |
+| `eleventy/filters/library.js`, `src/assets/js/search.js` | the search index: an episode's `u` is `/listen/?ep=<id>`, its host page the optional `u2` (since round 37 `u2` is also a presentation's player address; everything else the index holds: [how-to/pages-and-code.md → 5.4](how-to/pages-and-code.md#54-files-that-are-not-pages)) |
 | `tests/test_r12_u1_listen.py`, `tests/browser/test_r12_u1_listen_browser.py` | the card, the addresses, the shared episode, the share texts, Home's places |
 
 ### What's New: new since your last visit

@@ -175,9 +175,10 @@ class PastEventsInTheCalendars(unittest.TestCase):
                 self.assertIn(online_on.format("Zoom"), lines)
                 self.assertEqual(lines[0], {"en": "Learn to write your story. Bring a pen.",
                                             "es": "Aprende a escribir tu historia. Trae una pluma."}[lang])
+                # (its own page since round 37 — kept while events.json keeps the event)
                 self.assertEqual([ln for ln in lines if ln.startswith(details)],
                                  [details + "https://example.org/gv" + ("/es" if lang == "es" else "")
-                                  + "/events/#zz-hybrid-over"])
+                                  + "/events/zz-hybrid-over/"])
                 # the online-only one: "Online on Google Meet" is where it was
                 self.assertEqual(online["location"], online_on.format("Google Meet"))
                 self.assertIn(online_on.format("Google Meet"), online["description"].splitlines())

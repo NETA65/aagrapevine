@@ -372,7 +372,7 @@ def upcoming_meetings(count: int = 12, include_recent_days: int = 0, now: dateti
 
 # --------------------------------------------------------------------------- how far ahead the dates go
 # The months of committee meetings the web pages list — the window of eleventy/filters/committee.js normalizeEvents
-# (/events/, /events.ics, the event share pages): this month (the site's time zone) and the months after it through
+# (/events/, /events.ics, the events' own pages): this month (the site's time zone) and the months after it through
 # the month of config/site.yml `events_until` (since round 30: "2028-12-31", the last day of Panel 77 — on
 # Nov 13, 2026 that is 25 months after this one: 26 meetings, Nov 18, 2026 … Dec 20, 2028), never fewer than
 # MEETING_MONTHS_AHEAD (12) months after this one — so the lists keep rolling a year ahead once that day is near

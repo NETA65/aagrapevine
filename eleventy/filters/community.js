@@ -22,6 +22,9 @@ import { nowDate, addMonths, monthLabel, meetingByRule, issueTheme } from "./mon
 import { shopPriceChangeIn, dayLabel } from "./shop.js";
 // An issue is "current" when /read/ shows it as the newest of its magazine (the page's own rule).
 import { groupIssues, issueName } from "./read.js";
+// (since round 37) an event links to its own page — a series' date to its series' page (hrefOf: eventLink, with the
+// build's plan of the events' pages)
+import { eventLink, eventLinkPlan } from "./event-links.js";
 
 const LOCALES = { en: "en-US", es: "es-US" };
 const DAY = 864e5;
@@ -236,8 +239,12 @@ export function listThumb(src) {
   return smallThumbSeen.get(m[1]) ? `/assets/cache/${m[1]}.sm.webp` : u;
 }
 
-/** Link target for an item (internal paths get the language prefix). */
-export function hrefOf(item, lang) {
+/** Link target for an item (internal paths get the language prefix). An event (since round 37) → its own page on this
+ *  site, whatever its url says — a date of a monthly series its series' page, a committee meeting its section of
+ *  /meetings/ (eleventy/filters/event-links.js eventLink; `plan`: eventLinkPlan's answer, the pages the build writes —
+ *  without it, every event its own page "/events/<anchor>/"). */
+export function hrefOf(item, lang, plan = null) {
+  if (item && item.kind === "event") return eventLink(item, lang, plan);
   const u = item?.url || "";
   if (!u) return "";
   return u.startsWith("/") ? langPath(u, lang) : u;
@@ -257,7 +264,8 @@ function prep(item, now = Date.now()) {
     _group: group,
     _tone: toneOf(item, group),
     _icon: isGroup ? "images" : group === "drive" ? DRIVE_ICONS[item.kind] || "folder-open" : (GROUPS[group] || GROUPS.other).icon,
-    _ext: /^https?:/.test(item.url || ""),
+    // (an event links to its own page on this site since round 37, whatever its url: hrefOf)
+    _ext: item.kind !== "event" && /^https?:/.test(item.url || ""),
     // YouTube dates that are only approximate (old uploads) show month + year, never a time.
     _approx: !!ex.date_approx,
     _hasTime: !!item.date && !isDateOnly(item.date) && !ex.date_approx && item.kind !== "event" && ms(item.date) <= now + DAY,
@@ -951,11 +959,10 @@ export function monthInstagram(posts, profiles = {}) {
 export function monthEventsHeld(db, ed, site = {}, now = Date.now()) {
   const inMonth = (v) => { const d = ymdChicago(v); return !!d && d >= ed.first && d <= ed.last; };
   const all = (db?.events?.items || []).filter((e) => e && e.status !== "gone");
-  // A date of a monthly series without a page of its own (its url is our /events/, where a date that is over is
-  // no longer listed) links to its flyer when it has one — as a dated flyer's event does (send_digest.event_row).
-  const held = (e) => (e.category === "recurring" && !/^https?:/.test(e.url || "") && e.extra?.flyer_url ? { ...e, url: e.extra.flyer_url } : e);
+  // (each links to its own page — a date of a monthly series to its series' page: hrefOf, since round 37; the monthly
+  // e-mail keeps its own links, send_digest.event_row)
   const evs = all.filter((e) => e.category !== "committee" && eventStart(e) && inMonth(eventStart(e)) && ms(eventStart(e)) <= now)
-    .map((e) => prep(held(e), now));
+    .map((e) => prep(e, now));
   const rule = site?.meeting && typeof site.meeting === "object" && Object.keys(site.meeting).length ? site.meeting : null;
   const rec = all.find((e) => String(e.id || "").startsWith(`ev:committee:${ed.key}-`));
   const cm = rec && eventStart(rec) ? { ymd: ymdChicago(eventStart(rec)), start: eventStart(rec), end: rec.extra?.end || null }
@@ -1002,7 +1009,7 @@ export function buildMonthlyDigest(db, opts = {}) {
   // What's New entries since the edition came out (the page's "since" pointer, never in the texts)
   const since = (db?.whatsnew?.items || []).filter((i) => i && i.status !== "gone" && i.wn_date && ymdChicago(i.wn_date) >= ed.outFirst && ms(i.wn_date) <= now + DAY).length;
 
-  return {
+  const md = {
     edition: { ...ed, label: { en: monthLabel(ed.key, "en"), es: monthLabel(ed.key, "es") } },
     // once K is over (midnight Central after its last day), a copy of this page read then says it is
     // last month's edition (digest.njk, src/assets/js/community.js digestPage `stale`)
@@ -1033,6 +1040,10 @@ export function buildMonthlyDigest(db, opts = {}) {
       price: digestPrice(db, now),
     },
   };
+  // (not enumerable — never in a JSON copy of the edition: the build's plan of the events' pages, where the texts'
+  // event links go — monthlyDigestText, hrefOf)
+  Object.defineProperty(md, "links", { value: eventLinkPlan(db, site) });
+  return md;
 }
 
 /** The committee meeting of the month the edition comes out in, while it is still ahead, with its guest speaker
@@ -1162,7 +1173,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
       const [first, ...others] = titleLines(a);
       out.push(`${bullet} ${first}`);
       for (const r of others) out.push(`  ${r}`);
-      out.push(`  ${absUrl(hrefOf(a, main), site)}`);
+      out.push(`  ${absUrl(hrefOf(a, main, md.links), site)}`);
     }
     if (ann.length > per) out.push(more(ann.length - per, "/bulletin/"));
     out.push("");
@@ -1176,7 +1187,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
       const where = eventWhere(ev, main, t);
       out.push(`${bullet} ${eventWhen(ev, main, asOf, { time: false })} — ${first}${where ? ` (${where})` : ""}`);
       for (const r of rest) out.push(`  ${r}`);
-      if (ev.url) out.push(`  ${ev._committee ? url(COMMITTEE_MEETING_PATH) : absUrl(hrefOf(ev, main), site)}`);
+      if (ev.url) out.push(`  ${ev._committee ? url(COMMITTEE_MEETING_PATH) : absUrl(hrefOf(ev, main, md.links), site)}`);
     }
     out.push("");
   }
@@ -1199,7 +1210,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
         out.push(`${bullet} ${first}${item.date ? ` (${fmtDay(item.date, main)})` : ""}`);
         for (const r of others) out.push(`  ${r}`);
       }
-      out.push(`  ${absUrl(hrefOf(item, main), site)}`);
+      out.push(`  ${absUrl(hrefOf(item, main, md.links), site)}`);
     }
     if (drive.length > per) out.push(more(drive.length - per, GROUPS.drive.page));
     out.push("");
@@ -1263,7 +1274,7 @@ export function monthlyDigestText(md, langs, style, site, t, media = {}) {
       const [first, ...others] = titleLines(item);
       out.push(`${bullet} ${first}`);
       for (const r of others) out.push(`  ${r}`);
-      out.push(`  ${absUrl(hrefOf(item, main), site)}`);
+      out.push(`  ${absUrl(hrefOf(item, main, md.links), site)}`);
     }
     if (items.length > per) out.push(more(items.length - per, GROUPS[key].page));
     out.push("");
@@ -1454,7 +1465,8 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmWnSeenList", (days) => wnSeenList(days));
   eleventyConfig.addFilter("cmWnChips", (prepared) => chipList(prepared));
   eleventyConfig.addFilter("cmWnCountRecent", (prepared, days = 7) => countRecent(prepared, days));
-  eleventyConfig.addFilter("cmHref", (item, lang) => hrefOf(item, lang));
+  // {{ it | cmHref(lang, db, site) }}: its link (hrefOf) — db and site (since round 37) for an event's: its own page
+  eleventyConfig.addFilter("cmHref", (item, lang, db, site) => hrefOf(item, lang, db && site ? eventLinkPlan(db, site) : null));
   eleventyConfig.addFilter("cmTeaser", (summary, title) => teaser(summary, title));
   eleventyConfig.addFilter("cmListThumb", (src) => listThumb(src));
   eleventyConfig.addFilter("cmEventWhen", (ev, lang) => eventWhen(ev, lang));

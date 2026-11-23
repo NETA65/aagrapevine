@@ -18,9 +18,10 @@
                     counts what the Events page's own tab counts, "Subscriptions from" is the U.S. store's;
   * La Viña's monthly workshop has one name, the one La Viña uses ("Taller Mensual y Virtual de La Viña");
   * share pictures — a page's `ogImage` (address or { src, width, height, alt }) → og:image / twitter:image;
-                    every event of /events/ has a small share page (/events/<anchor>/) with its flyer as the
-                    picture, which its card's Share button sends (once its event has left the list, the 404 page
-                    sends that address on to /events/); /events/ names its calendar file in <head>.
+                    every event of /events/ (but a committee meeting) has its own page (/events/<anchor>/; since
+                    round 37 a full page, no longer a small share page) with its flyer as the picture, which its
+                    card's Share button sends (once its event has left the list, the 404 page sends that address
+                    on to /events/); /events/ names its calendar file in <head>.
 
     python -m unittest tests.test_site_links -v        (or: python -m unittest discover -s tests)
 """
@@ -551,26 +552,22 @@ def metas(html: str) -> dict[str, list[str]]:
     return out
 
 
-# The event share pages (src/pages/event-share.11ty.js) for these events, rendered by the template's own render()
-# with the build's filters (its `this`; the path prefix "/"), and its pagination's `before` as the build calls it.
-# Since round 35 the Spring Assembly (a place, no page elsewhere) has a page of its own (a leaf: `before` leaves it out,
-# src/pages/event-share-leaf.njk writes it); the small share page itself is checked with the same assembly given its
-# own page on the Area's site (`ownPage`: then it is no leaf).
+# Every event's own page for these events (since round 37 the one plan of src/pages/event-share-leaf.njk,
+# event-share-date.njk and event-share-series.njk: eleventy/event-pages.js eventPagePlan — no more small share pages
+# that forwarded to the card): its address, its tier (a "leaf" carries its Event), where "See all events" goes and
+# its head (eventPageHead: title, description, share picture). The Spring Assembly (a place, no page elsewhere) is a
+# leaf; given its own page on the Area's site (`elsewhere`) it is no leaf, but still a page of its own.
 SHARE_JS = r"""
-const T = await imp("src/pages/event-share.11ty.js");
-const site = (await imp("src/_data/site.js")).default();
-const list = T.eventSharePages(input.items, site, ["en", "es"]);
+const P = await imp("eleventy/event-pages.js");
+const site = { ...(await imp("src/_data/site.js")).default(), built: new Date().toISOString() };
+const plan = (items) => P.eventPagePlan(items, site, ["en", "es"]);
 const elsewhere = input.items.map((it) => (it.id === "ev:manual:2099-03-19-spring-assembly" ? { ...it, url: "https://neta65.org/event/spring-assembly/" } : it));
-const stubs = T.eventSharePages(elsewhere, site, ["en", "es"]);
-const ctx = { t: filters.t, siteUrl: filters.siteUrl, shareImage: filters.shareImage, url: (u) => u };
-const html = Object.fromEntries(stubs.map((s) => [s.path, T.render.call(ctx, { share: s, site })]));
-const twice = T.eventSharePages([elsewhere[0], { ...elsewhere[0], id: elsewhere[0].id + "-copy" }], site, ["en", "es"]).map((s) => s.path);
+const twice = plan([elsewhere[0], { ...elsewhere[0], id: elsewhere[0].id + "-copy" }]).pages.map((p) => p.path);
+const b = plan(elsewhere);
 out({
-  list: list.map((s) => ({ path: s.path, target: s.target, leaf: s.leaf })), html, twice,
-  stubs: stubs.map((s) => ({ path: s.path, leaf: s.leaf })),
-  permalinks: list.map((s) => T.data.permalink({ share: s })),
-  before: T.data.pagination.before(input.items, { site, languages: ["en", "es"] }).map((s) => s.path),
-  data: { layout: T.data.layout, sitemap: T.data.sitemap, eleventyExcludeFromCollections: T.data.eleventyExcludeFromCollections },
+  list: plan(input.items).pages.map((p) => ({ path: p.path, target: p.target, leaf: p.ld, index: p.index })),
+  stubs: b.pages.map((p) => ({ path: p.path, leaf: p.ld, index: p.index })),
+  heads: Object.fromEntries(b.pages.map((p) => [p.path, p.head])), twice,
 });
 """
 
@@ -627,14 +624,17 @@ class BuiltPages(unittest.TestCase):
             self.assertFalse([s for s in shares if "#2099-03-19" in s])
             # a committee meeting's card is shared as it is
             self.assertTrue([s for s in shares if re.search(r"/events/#ev-committee-\d{4}-\d{2}-\d{2}$", s)], lang)
-            # every card shares a page the share pages make (src/pages/event-share.11ty.js: the same events)
+            # every card shares a page of its own (round 37: eleventy/event-pages.js eventPagePlan — the same events)
             pages = {SITE_URL + s["path"] for s in self.shares()["list"]}
             self.assertEqual({s for s in shares if "#" not in s} - pages, set())
-            # an event with a page of its own (round 35: the assembly) — its card's title links to it; the others' not
+            # every card's title links to the event's own page (since round 37: eleventy/filters/event-links.js evHref
+            # — round 35 linked only a leaf's, the assembly's); a date of the monthly booth to the series' page
             self.assertIn(f'<a href="{prefix}/events/2099-03-19-spring-assembly/" class="-my-3 inline-block py-3 hover:text-gv">'
                           "Spring Assembly</a>", html)
             self.assertEqual(re.findall(r'<a href="' + prefix + r'/events/[a-z0-9-]+/" class="-my-3', html),
-                             [f'<a href="{prefix}/events/2099-03-19-spring-assembly/" class="-my-3'])
+                             [f'<a href="{prefix}/events/{a}/" class="-my-3'
+                              for a in ("2099-03-19-spring-assembly", "ev-lvcal-svgflyer", "ev-gvcal-jpgflyer")])
+            self.assertEqual(len(re.findall(r'<a href="' + prefix + r'/events/series/citywide-dallas/" class="-my-3', html)), 2)
 
     def shares(self) -> dict:
         if BuiltPages.share_pages is None:
@@ -643,45 +643,35 @@ class BuiltPages(unittest.TestCase):
 
     def test_every_event_has_a_share_page(self):
         r = self.shares()
-        p = r["html"]
         anchors = ["2099-03-19-spring-assembly", "ev-recurring-citywide-dallas-2099-04-11", "ev-recurring-citywide-dallas-2099-05-09",
                    "ev-recurring-citywide-dallas-2000-01-08", "2000-02-05-old-workshop", "ev-lvcal-svgflyer", "ev-gvcal-jpgflyer"]
-        self.assertEqual(sorted(p), sorted([f"/events/{a}/" for a in anchors] + [f"/es/events/{a}/" for a in anchors]))
-        # (no page for the committee meetings: theirs is /meetings/); the page's address and its pagination
-        self.assertEqual(sorted(r["permalinks"]), sorted(u + "index.html" for u in p))
-        # every event has its address once: the assembly (a place, no page elsewhere) its own page — round 35, a leaf,
-        # in both languages: event-share-leaf.njk —, the others a small share page (this template's pagination)
+        paths = [s["path"] for s in r["list"]]
+        self.assertEqual(sorted(paths), sorted([f"/events/{a}/" for a in anchors] + [f"/es/events/{a}/" for a in anchors]))
+        # (no page for the committee meetings: theirs is /meetings/); every address once
+        self.assertEqual(len(paths), len(set(paths)))
+        # the assembly (a place, no page elsewhere) is a leaf — its Event on its page — in both languages; the other
+        # events still to come and not a monthly date have an indexable page too (round 37); the rest noindex
         self.assertEqual({s["path"] for s in r["list"] if s["leaf"]},
                          {"/events/2099-03-19-spring-assembly/", "/es/events/2099-03-19-spring-assembly/"})
-        self.assertEqual(r["before"], [s["path"] for s in r["list"] if not s["leaf"]])
+        self.assertEqual({s["path"] for s in r["list"] if s["index"]},
+                         {"/events/2099-03-19-spring-assembly/", "/es/events/2099-03-19-spring-assembly/"})
         self.assertEqual([s["path"] for s in r["stubs"] if s["leaf"]], [], "with its page on the Area's site: no leaf")
-        html = p["/events/2099-03-19-spring-assembly/"]
-        m = metas(html)
-        self.assertEqual(m["og:title"], ["Spring Assembly"])
-        self.assertEqual(m["og:url"], [SITE_URL + "/events/2099-03-19-spring-assembly/"])
-        self.assertIn(f'<link rel="canonical" href="{SITE_URL}/events/2099-03-19-spring-assembly/">', html)
-        self.assertEqual(m["og:image"], [f"https://lh3.googleusercontent.com/d/{DRIVE_ID}=w1200"])
-        self.assertEqual(m["twitter:image"], m["og:image"])
-        self.assertEqual(m["og:image:alt"], ["Flyer: Spring Assembly"])
-        self.assertIn("Tyler Convention Center", m["og:description"][0])
-        self.assertIn('<meta name="robots" content="noindex">', html)
-        self.assertNotIn("http-equiv", html)                  # no meta refresh: the previews must stay on this page
-        # (a ?query the link came with goes before the #card)
-        self.assertIn('location.replace("/events/" + location.search + "#2099-03-19-spring-assembly")', html)
-        self.assertIn('<a href="/events/#2099-03-19-spring-assembly">See this event on our Events page →</a>', html)
-        es = p["/es/events/2099-03-19-spring-assembly/"]
-        self.assertIn('<html lang="es">', es)
-        self.assertIn('location.replace("/es/events/" + location.search + "#2099-03-19-spring-assembly")', es)
-        self.assertEqual(metas(es)["og:locale"], ["es_US"])
-        self.assertEqual(metas(es)["og:image:alt"], ["Volante: Spring Assembly"])
-        # a monthly date that has passed has no row any more: the top of the page; a past one-off event keeps its row
-        self.assertIn('location.replace("/events/" + location.search)', p["/events/ev-recurring-citywide-dallas-2000-01-08/"])
-        self.assertIn('location.replace("/events/" + location.search + "#2000-02-05-old-workshop")', p["/events/2000-02-05-old-workshop/"])
+        self.assertIn({"path": "/events/2099-03-19-spring-assembly/", "leaf": False, "index": True}, r["stubs"])
+        # its head: its title with its day, its place in the description, its flyer as the share picture
+        head = r["heads"]["/events/2099-03-19-spring-assembly/"]
+        self.assertTrue(head["title"].startswith("Spring Assembly, "), head)
+        self.assertIn("Tyler Convention Center", head["description"])
+        self.assertEqual(head["ogImage"], {"src": f"https://lh3.googleusercontent.com/d/{DRIVE_ID}=w1200", "alt": "Flyer: Spring Assembly"})
+        self.assertEqual(r["heads"]["/es/events/2099-03-19-spring-assembly/"]["ogImage"]["alt"], "Volante: Spring Assembly")
+        # "See all events": a monthly date that has passed has no row any more (the top of the page); a past one-off
+        # event keeps its row
+        targets = {s["path"]: s["target"] for s in r["list"]}
+        self.assertEqual(targets["/events/ev-recurring-citywide-dallas-2000-01-08/"], "/events/")
+        self.assertEqual(targets["/events/2000-02-05-old-workshop/"], "/events/#2000-02-05-old-workshop")
+        self.assertEqual(targets["/es/events/2099-03-19-spring-assembly/"], "/es/events/#2099-03-19-spring-assembly")
         # a flyer that is not a picture the previews show (an SVG): the committee's card; a JPEG: itself
-        self.assertEqual(metas(p["/events/ev-lvcal-svgflyer/"])["og:image"], [SITE_URL + "/assets/img/og-default.png?v=3"])
-        self.assertEqual(metas(p["/events/ev-gvcal-jpgflyer/"])["og:image"], ["https://www.aagrapevine.org/sites/default/files/flyer.jpg"])
-        # the share pages are no pages of their own for search engines, the sitemap or page lists
-        self.assertEqual(r["data"], {"layout": False, "sitemap": False, "eleventyExcludeFromCollections": True})
+        self.assertIsNone(r["heads"]["/events/ev-lvcal-svgflyer/"]["ogImage"])
+        self.assertEqual(r["heads"]["/events/ev-gvcal-jpgflyer/"]["ogImage"]["src"], "https://www.aagrapevine.org/sites/default/files/flyer.jpg")
         # an anchor met twice keeps one page (never two pages at one address)
         self.assertEqual(r["twice"], ["/events/2099-03-19-spring-assembly/", "/es/events/2099-03-19-spring-assembly/"])
 
@@ -764,7 +754,8 @@ class GoneEventSharePage(unittest.TestCase):
     def test_a_gone_share_page_leads_on_to_the_events_page(self):
         r = run_js(self, NOT_FOUND_JS, needs_modules=False)
         self.assertEqual(r["en"]["replaced"], ["/aagrapevine/events/?utm_source=x#2026-10-07-lv-writing-workshop-mansfield"])
-        self.assertEqual(r["es"]["replaced"], ["/aagrapevine/es/events/#ev-recurring-citywide-dallas-2026-07-11"])
+        # a date of a monthly series, long over: on to its series' page (since round 37; tests/test_r37_links.py)
+        self.assertEqual(r["es"]["replaced"], ["/aagrapevine/es/events/series/citywide-dallas/"])
         self.assertEqual(r["noSlash"]["replaced"], ["/aagrapevine/events/#2026-10-07-lv-writing-workshop-mansfield"])
         # any other missing address keeps the 404 page and its search box
         self.assertEqual((r["deeper"]["replaced"], r["other"]["replaced"]), ([], []))

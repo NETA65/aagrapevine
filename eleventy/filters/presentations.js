@@ -1870,7 +1870,9 @@ export function liveData(kind, options, ctx) {
           // (its time range on one line, as the meeting's: "5:00 – 8:00 PM" never cut at the dash)
           start: iso(e.startMs), end: iso(e.endMs), all_day: !!e.allDay, date_label: e.dateLabel, time_label: oneLine(e.timeLabel),
           title: e.title, place: e.location || "", online: !!e.isOnline, platform: e.platform || "", kind: eventTone(e),
-          url: e.detailsUrl || c.abs("/events/"), series: e.series || e.seriesOf || "",
+          // (its own link, else its card on /events/: committee.js shapeEvent's cardUrl — round 37 left the slides' links
+          // as they were; the calendars' detailsUrl is the event's page on this site since then)
+          url: e.cardUrl || c.abs("/events/"), series: e.series || e.seriesOf || "",
           // details not final yet (an assembly's venue …): the slide says so, as the Events page does
           tentative: !!e.tentative,
         });
@@ -1918,7 +1920,7 @@ export function liveData(kind, options, ctx) {
         zoom_id: lv.first ? nb(lv.first.meetingId) : "",
         url: lv.first ? lv.first.online || "" : "",
         contact: lv.first ? lv.first.contact : "",
-        page: lv.first && lv.first.detailsUrl ? lv.first.detailsUrl : c.abs("/events/"),
+        page: lv.first && lv.first.cardUrl ? lv.first.cardUrl : c.abs("/events/"),
       };
     }
     case "issues":

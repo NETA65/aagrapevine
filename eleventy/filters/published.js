@@ -547,16 +547,24 @@ function pwArchive(db, lang, h) {
 /** db → { total, area, since } — the archive's headline numbers without building the rows (the home page). */
 export function pwArchiveTotals(db) {
   const data = archiveOf(db);
+  const items = pwArchiveItems(db);
+  return { total: items.length, area: items.filter((it) => it.scope === "neta65").length, since: arcSince(data, items).all };
+}
+
+/** db → the archive's stories the page can list, once each (a story page of either magazine, with a title; by its
+ *  key) — the home page's numbers (pwArchiveTotals) and, since round 37's fixer, the site search's entries
+ *  (library.js searchIndex: each story at its page on the magazine's site). */
+export function pwArchiveItems(db) {
   const seen = new Set();
   const items = [];
-  for (const it of data.items) {
+  for (const it of archiveOf(db).items) {
     if (!arcUsable(it)) continue;
     const key = str(it.key).toLowerCase() || str(it.url).toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
     items.push(it);
   }
-  return { total: items.length, area: items.filter((it) => it.scope === "neta65").length, since: arcSince(data, items).all };
+  return items;
 }
 
 /** mailto: link with a subject and a pre-filled body (CRLF line breaks, RFC 6068). */

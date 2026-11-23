@@ -6,12 +6,14 @@
        a letter of its own: "año" never finds "anónimo"; typed without its tilde a
        word still finds the ñ one ("vina" finds "Viña", "ano" finds "año")
      - English + Spanish stop words ignored (so "libro de trabajo" works)
-     - prefix + light fuzzy matching; AND first, falls back to OR ("partial")
+     - prefix + light fuzzy matching; AND first, falls back to OR ("partial"); a word's other number where those
+       can't reach it ("assemblies" finds "assembly", "veces" finds "vez": numberForms)
      - AA's own words in the other language too (BILINGUAL: "sobriety" also finds
        "sobriedad", "padrino" finds "sponsor" — those words exactly, or in the plural: no
        prefix or fuzzy matching on them); those matches come after the others
      - highlight(text, terms) → safe HTML with <mark> around matches
      - fetchJson(url, opts): an index's JSON; a server that doesn't answer within 20 s counts as failed
+     - siteIndex(items): the /search/ page's MiniSearch index of /search-index.json's entries (fields, weights, ranking)
    The /search/ page part only runs when #site-search exists. Its search box sits in the
    block below the hero; #ss-layout (type filters + results) shows only while there is a
    query, #ss-start (tips + browse) only while there is none. A visit that ARRIVES with ?q=
@@ -87,8 +89,22 @@
     "inventory|inventario", "anniversary|aniversario", "resentment|resentimiento", "spirituality/spiritual/spiritually|espiritualidad/espiritual",
     "women/woman|mujeres/mujer", "young people/youth|jóvenes/joven", "corrections/prison|correccionales/cárcel/prisión",
     "workshop|taller", "subscription|suscripción", "one day at a time|un día a la vez",
+    // (round 37: the site's own things — the booth display, flyers, presentations, issues, the month toolkits, the FAQ,
+    // a cancelled event, the workshops' kinds and the orientation)
+    "booth|exhibidor/pantalla", "flyer|volante/folleto", "presentation|presentación", "issue|número/edición", "toolkit|kit",
+    "faq|preguntas frecuentes", "cancelled/canceled|cancelado/cancelada", "recording|grabación", "writing|escritura",
+    "orientation|orientación",
   ];
   var ALT_BOOST = 0.5;
+  // A flyer's rank on any other word than these (kit.siteIndex): below the event it is the flyer of
+  var FLYER_TERM = /^(?:flyers?|volantes?|folletos?)$/, FLYER_RANK = 0.5;
+  // (round 37's fixer) A month or a day of the month, in either language ("december", "dic", "19"): an event still to
+  // come ranks well up on it (DATE_RANK) — "december" lists December's events before the many posts and articles that
+  // name the month in their titles, "march 19" the Spring Assembly before a year of covers. And an entry that is the
+  // place to go itself (`pr`: a weekly open meeting's section — when and how to join) ranks above the many dated
+  // recordings that share its title's words (PRIME_RANK).
+  var DATE_TERM = /^(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|ene(?:ro)?|febrero|marzo|abr(?:il)?|mayo|jun(?:io)?|jul(?:io)?|ago(?:sto)?|septiembre|setiembre|octubre|noviembre|dic(?:iembre)?|\d{1,2})$/;
+  var DATE_RANK = 10, PRIME_RANK = 1.8;
   function wordsOf(s) { return String(s || "").split(SPLIT).map(processTerm).filter(Boolean); }
   var DICT = null; // "<words, ñ as n>" → [the other language's phrases, each a list of words]
   function dict() {
@@ -106,12 +122,26 @@
     });
     return DICT;
   }
-  // A word as typed, then without a plural's -s or -es ("meetings" → "meeting", "reuniones" → "reunion")
+  /* A word's other number where prefix and light fuzzy matching can't reach it (since round 37): a plural in -ies and
+     its singular in -y ("assemblies" ↔ "assembly", "stories" ↔ "story": three letters apart, and "assembly" is no
+     start of "assemblies"), a Spanish plural in -ces and its singular in -z ("veces" ↔ "vez", "luces" ↔ "luz"). A
+     guess that is no word ("series" → "sery", "places" → "plaz") finds nothing: these forms are looked for exactly. */
+  function numberForms(w) {
+    var out = [];
+    if (w.length > 4 && /[^aeiou]ies$/.test(w)) out.push(w.slice(0, -3) + "y");
+    else if (w.length > 3 && /[^aeiou]y$/.test(w)) out.push(w.slice(0, -1) + "ies");
+    if (w.length > 4 && /ces$/.test(w)) out.push(w.slice(0, -3) + "z");
+    else if (w.length > 2 && /z$/.test(w)) out.push(w.slice(0, -1) + "ces");
+    return out;
+  }
+  // A word as typed, then without a plural's -s or -es ("meetings" → "meeting", "reuniones" → "reunion"), then in its
+  // other number (numberForms: "assemblies" → "assembly", "veces" → "vez")
   function forms(w) {
     w = plainN(w);
     var out = [w];
     if (w.length > 3 && /s$/.test(w)) out.push(w.slice(0, -1));
     if (w.length > 4 && /es$/.test(w)) out.push(w.slice(0, -2));
+    numberForms(w).forEach(function (f) { if (out.indexOf(f) === -1) out.push(f); });
     return out;
   }
   // The dictionary's phrase for these words (in any of their forms) → its other-language phrases, or null
@@ -125,16 +155,20 @@
     for (var i = 0; i < keys.length; i++) if (Object.prototype.hasOwnProperty.call(d, keys[i])) return d[keys[i]];
     return null;
   }
-  /* A query's words in groups: AA's words (and phrases, the longest first) with the other language's for them.
-     null when none of its words is one of them (then the query runs as it is). */
+  /* A query's words in groups: AA's words (and phrases, the longest first) with the other language's for them, and a
+     word on its own with its other number (numberForms: `vars`, looked for exactly; a match on one counts as on the
+     word typed). null when none of its words is one of them or has another number (then the query runs as it is). */
   function expand(q) {
     var words = wordsOf(q), groups = [], any = false;
     for (var i = 0, n; i < words.length; i += n) {
       var alts = null;
       for (n = Math.min(4, words.length - i); n > 0; n--) if ((alts = lookup(words.slice(i, i + n)))) break;
       if (!alts) n = 1;
-      groups.push({ words: words.slice(i, i + n), alts: alts || [] });
-      if (alts) any = true;
+      var vars = n === 1 ? numberForms(words[i]) : [];
+      var g = { words: words.slice(i, i + n), alts: alts || [] };
+      if (vars.length) g.vars = vars;
+      groups.push(g);
+      if (alts || vars.length) any = true;
     }
     return any ? { words: words, groups: groups } : null;
   }
@@ -145,16 +179,19 @@
   function exactForms(w) {
     var out = [w, w + "s", w + "es"];
     if (/[^aeiou]y$/.test(w)) out.push(w.slice(0, -1) + "ies");
+    if (/z$/.test(w)) out.push(w.slice(0, -1) + "ces");
     return { combineWith: "OR", queries: out };
   }
   // The query for MiniSearch: every group must match (combine: AND, or OR for "partial") — a group by its own
-  // words or by one of its other-language phrases (each word exactly: exactForms), which counts for less (ALT_BOOST)
+  // words (or a word's other number, exactly: vars) or by one of its other-language phrases (each word exactly:
+  // exactForms), which counts for less (ALT_BOOST)
   function treeOf(ex, combine) {
     var lower = function () { return ALT_BOOST; };
     return {
       combineWith: combine,
       queries: ex.groups.map(function (g) {
         var own = g.words.join(" ");
+        if (g.vars && g.vars.length) own = { combineWith: "OR", queries: [own, { combineWith: "OR", queries: g.vars, prefix: false, fuzzy: false }] };
         if (!g.alts.length) return own;
         return {
           combineWith: "OR",
@@ -165,10 +202,12 @@
       }),
     };
   }
-  // The matches on the words typed first, then the ones found only through the other language's words (alt: true)
+  // The matches on the words typed (or their other number) first, then the ones found only through the other
+  // language's words (alt: true)
   function ranked(hits, ex) {
     var typed = {}, own = [], other = [];
     ex.words.forEach(function (w) { typed[w] = 1; });
+    ex.groups.forEach(function (g) { (g.vars || []).forEach(function (w) { typed[w] = 1; }); });
     hits.forEach(function (h) {
       if ((h.queryTerms || []).some(function (t) { return typed[t]; })) own.push(h);
       else { h.alt = true; other.push(h); }
@@ -224,6 +263,44 @@
       opts.processTerm = indexTerm;
       opts.searchOptions = Object.assign({}, opts.searchOptions, { processTerm: processTerm });
       return new window.MiniSearch(opts);
+    },
+
+    /* The /search/ page's index of /search-index.json's entries (items, in their order: an entry's id is its place in
+       the list) — its fields and their weights (a story's byline `a` too: a writer or a city finds their stories) and
+       its ranking (boostDocument): the site's pages first; then a gentle boost for recent content; a PDF no page links
+       to any more, a past or cancelled event and a past event's flyer ("z") and a year of magazine covers ("lw": its
+       keywords name every month) rank lower; an event still to come ranks higher on a month or a day (DATE_TERM,
+       DATE_RANK), a weekly open meeting's section above its recordings (`pr`, PRIME_RANK). So does a flyer rank lower
+       (FLYER_RANK), on every word but "flyer" / "volante"
+       (FLYER_TERM, the word as the index has it): a flyer repeats its event's title in a short entry, and would come
+       before the event, its presentation and its section — "writing workshop" lists the next workshop first, while
+       "volante" still lists the flyers first. The page's load() and the tests (tests/test_r37_search.py) build it the
+       same way. */
+    siteIndex: function (items) {
+      var boost = { t: 3, o: 2, x: 1.3, s: 0.8, a: 1.3 };
+      var ms = kit.create(["t", "o", "x", "s", "a"], boost, {
+        storeFields: ["k", "d", "z", "lw", "pr"],
+        searchOptions: {
+          boost: boost,
+          combineWith: "AND",
+          prefix: function (term) { return term.length > 1; },
+          fuzzy: function (term) { return term.length > 4 ? 0.2 : false; },
+          boostDocument: function (id, term, stored) {
+            if (!stored) return 1;
+            if (stored.k === "page") return 1.6;
+            var z = (stored.z ? 0.6 : 1) * (stored.lw ? 0.7 : 1) * (stored.pr ? PRIME_RANK : 1)
+              * (stored.k === "flyer" && !FLYER_TERM.test(term) ? FLYER_RANK : 1);
+            if (!stored.d) return z;
+            var age = (Date.now() - new Date(stored.d + "T12:00:00Z").getTime()) / 864e5;
+            if (age < 0 && stored.k === "event" && !stored.z && DATE_TERM.test(term)) z *= DATE_RANK;
+            return z * (age < 0 ? 1.05 : 1 + 0.25 * Math.max(0, 1 - age / 730));
+          },
+        },
+      });
+      ms.addAll((items || []).map(function (e, i) {
+        return { id: i, t: e.t, o: e.o || "", x: e.x || "", s: e.s || "", a: e.a || "", k: e.k, d: e.d || "", z: e.z ? 1 : 0, lw: e.lw ? 1 : 0, pr: e.pr ? 1 : 0 };
+      }));
+      return ms;
     },
 
     /* Run a query. Returns {hits:[{id,score,terms,queryTerms,alt}], partial:bool} — alt: found only through
@@ -369,12 +446,16 @@
     try { numFmt = new Intl.NumberFormat(CFG.locale || (CFG.lang === "es" ? "es-US" : "en-US")); } catch (e) {}
     function num(n) { return numFmt ? numFmt.format(Number(n) || 0) : String(n); }
 
-    var GROUP = { page: "pages", article: "articles", topic: "articles", pdf: "docs", document: "docs", slides: "docs", form: "docs",
+    // Each kind's filter (an unknown kind: "committee") and icon (search.njk ss-icons has them all). Since round 37: a
+    // page's section and a month toolkit are pages, a presentation and a flyer documents, an issue the magazines'.
+    var GROUP = { page: "pages", section: "pages", month: "pages", article: "articles", topic: "articles", issue: "articles",
+      pdf: "docs", document: "docs", slides: "docs", form: "docs", presentation: "docs", flyer: "docs",
       episode: "podcasts", video: "videos", video_file: "videos", post: "instagram",
       album: "committee", photo: "committee", announcement: "committee", event: "committee", meeting: "committee" };
     var KIND_ICON = { article: "book-open", topic: "pen-line", pdf: "file-text", document: "file-text", slides: "presentation", form: "file-pen-line",
       episode: "headphones", video: "circle-play", video_file: "circle-play", post: "instagram", album: "images", announcement: "megaphone",
-      event: "calendar-days", meeting: "video", page: "file-text" };
+      event: "calendar-days", meeting: "video", page: "file-text", section: "bookmark", month: "calendar-range",
+      presentation: "presentation", issue: "newspaper", flyer: "megaphone" };
     var PAGE = 20;
 
     var state = { q: "", kind: "all", shown: PAGE };
@@ -413,27 +494,8 @@
       kit.fetchJson(kit.href(CFG.index), { credentials: "same-origin" })
         .then(function (json) {
           items = (json.items || []).map(function (e, i) { e._i = i; return e; });
-          // a = a story's byline (writer · hometown): searching a writer or a city finds their stories.
-          ms = kit.create(["t", "o", "x", "s", "a"], { t: 3, o: 2, x: 1.3, s: 0.8, a: 1.3 }, {
-            storeFields: ["k", "d", "z"],
-            searchOptions: {
-              boost: { t: 3, o: 2, x: 1.3, s: 0.8, a: 1.3 },
-              combineWith: "AND",
-              prefix: function (term) { return term.length > 1; },
-              fuzzy: function (term) { return term.length > 4 ? 0.2 : false; },
-              // Site pages first; then a gentle boost for recent content. PDFs no page
-              // links to any more and past events ("z") rank lower.
-              boostDocument: function (id, term, stored) {
-                if (!stored) return 1;
-                if (stored.k === "page") return 1.6;
-                var z = stored.z ? 0.6 : 1;
-                if (!stored.d) return z;
-                var age = (Date.now() - new Date(stored.d + "T12:00:00Z").getTime()) / 864e5;
-                return z * (age < 0 ? 1.05 : 1 + 0.25 * Math.max(0, 1 - age / 730));
-              },
-            },
-          });
-          ms.addAll(items.map(function (e) { return { id: e._i, t: e.t, o: e.o || "", x: e.x || "", s: e.s || "", a: e.a || "", k: e.k, d: e.d || "", z: e.z ? 1 : 0 }; }));
+          // (its fields, weights and ranking: kit.siteIndex — an entry's id is its place in the list, e._i)
+          ms = kit.siteIndex(items);
           loading = false;
           loadingEl.hidden = true;
           run();
@@ -456,7 +518,7 @@
       var t = tone(e);
       var img = e.yt ? "https://i.ytimg.com/vi/" + encodeURIComponent(e.yt) + "/mqdefault.jpg" : e.im ? kit.href(e.im) : "";
       var kindLabel = CFG.kinds[e.k] || e.k;
-      var ic = (e.k === "page" || e.k === "meeting") && e.ic ? e.ic : KIND_ICON[e.k] || "file-text";
+      var ic = (e.k === "page" || e.k === "meeting" || e.k === "section") && e.ic ? e.ic : KIND_ICON[e.k] || "file-text";
       var meta = '<span class="ss-kind">' + icon(ic, "size-3.5") + esc(kindLabel) + "</span>";
       if (e.src && e.src !== "site" && CFG.src[e.src] && CFG.src[e.src] !== kindLabel) meta += "<span>" + esc(CFG.src[e.src]) + "</span>";
       if (e.d && e.k !== "page") meta += '<time datetime="' + esc(e.d) + '">' + esc(kit.fmtYmd(e.d, e.dp === "m" ? "month" : "medium")) + "</time>";
@@ -484,8 +546,13 @@
         "</span></a>" + altLink(e) + "</li>";
     }
     /* A second choice beside the result (never inside its link): an episode, which opens in the site's own
-       player, also links to its page at the podcast host (e.u2). */
+       player, also links to its page at the podcast host (e.u2); a presentation, whose result opens its card on
+       /orientation/, also starts it (e.u2: /orientation/?present=<id> — one of our own pages, same tab). */
     function altLink(e) {
+      if (e.u2 && /^\/(?!\/)/.test(e.u2)) {
+        return '<a class="ss-alt" href="' + esc(kit.href(e.u2)) + '">' + icon("monitor-play", "size-3") + " " +
+          esc(e.k === "presentation" ? S.present : S.episodePage) + "</a>";
+      }
       if (!e.u2 || !/^https?:\/\//i.test(e.u2)) return "";
       var host = "";
       try { host = new URL(e.u2).hostname.replace(/^www\./, ""); } catch (x) {}

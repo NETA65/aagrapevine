@@ -198,9 +198,10 @@ class SeoCheck(unittest.TestCase):
 
     def test_a_real_build_of_a_few_pages_passes(self):
         """The real templates (base.njk's head, the event share pages, the sitemap) against the check: a build of a
-        few pages (ONLY=) — its sitemap lists them, and every share page is noindex; since round 35 the events with a
-        page of their own (src/pages/event-share-leaf.njk, picked up by the same ONLY name) are in the sitemap, their
-        own canonical, with a <title> of their own, and the share pages at the other addresses stay noindex."""
+        few pages (ONLY=) — its sitemap lists them; since round 35 the events with a page of their own
+        (src/pages/event-share-leaf.njk, picked up by the same ONLY name) are in the sitemap, their own canonical, with
+        a <title> of their own; since round 37 every other event's page (event-share-date.njk) is noindex, and the
+        monthly series' pages (event-share-series.njk, /events/series/<key>/) are in the sitemap too."""
         r = run_js(self, r"""
           process.env.ONLY = "about,sitemap,event-share";
           const os = await import("node:os");
@@ -214,7 +215,7 @@ class SeoCheck(unittest.TestCase):
             out({ problems: C.seoProblems(pages, base), base,
                   sitemap: (pages.find((p) => p.url === "/sitemap.xml") || {}).content || "",
                   shares: pages.filter((p) => /^\/(es\/)?share\//.test(p.url || "")).length,
-                  events: pages.filter((p) => /^\/(es\/)?events\/[a-z0-9-]+\/$/.test(p.url || ""))
+                  events: pages.filter((p) => /^\/(es\/)?events\/(series\/)?[a-z0-9-]+\/$/.test(p.url || ""))
                     .map((p) => ({ url: p.url, noindex: /<meta name="robots" content="noindex">/.test(p.content) })),
                   planted: C.seoProblems([...pages, { url: "/about/x/", outputPath: dir + "/about/x/index.html",
                     content: (pages.find((p) => p.url === "/about/") || {}).content.replace(/href="[^"]*\/about\/"/g, `href="${base}/about/x/"`) }], base) });
@@ -222,7 +223,8 @@ class SeoCheck(unittest.TestCase):
         self.assertIn(f"<loc>{r['base']}/about/</loc>", r["sitemap"])
         self.assertIn(f"<loc>{r['base']}/es/about/</loc>", r["sitemap"])
         self.assertEqual(r["problems"], [])
-        # every event's address: in the sitemap (its own page) or noindex (its share page) — never both, never neither
+        # every event's address (and every series' page): in the sitemap (an indexable page) or noindex (a series' date,
+        # an outside calendar's event, one that is over) — never both, never neither
         self.assertTrue(r["events"])
         for e in r["events"]:
             self.assertNotEqual(f"<loc>{r['base']}{e['url']}</loc>" in r["sitemap"], e["noindex"], e["url"])

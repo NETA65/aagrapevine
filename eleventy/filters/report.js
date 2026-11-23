@@ -14,7 +14,9 @@
 //              Viña's rotating topics), db.audio_project
 //   shop       db.shop (Book of the Month offers, the lowest subscription prices, a price change AA Grapevine
 //              announced: shopSection — with the section's text from its day, `after`), Carry the Message
-//   events     db.events — the next 45 days (upcomingEvents: a monthly series once, with "every month")
+//   events     db.events — the next 45 days (upcomingEvents: a monthly series once, with "every month"), each with
+//              the link to its own page under it (since round 37: eleventy/filters/event-links.js eventLink — a monthly
+//              series its series' page)
 //   writers    db.spotlight — Area 65 writers of the last 60 days (first name + initial + city)
 //   meetings   db.meetings (committee.js gvMeetings) + `meetings.options` for the county picker
 //   weekly     db.weekly_open (Grapevine on Wednesdays, La Viña on Thursdays)
@@ -38,6 +40,7 @@ import { monthModel, monthTopics, nowDate, chicagoYmd, shortDate, timeRange, mon
 import { botmPriceState, shopPlanPrice, shopNextChange, shopPriceChangeIn, dayLabel } from "./shop.js";
 import { scriptJson } from "../script-json.js";
 import { langLink, monthlyRule } from "../../eleventy.config.js";
+import { eventLink, eventLinkPlan } from "./event-links.js";
 
 const LOC = { en: "en-US", es: "es-US" };
 const DAY = 864e5;
@@ -428,10 +431,13 @@ function sectionsFor(L, ctx) {
     const steps = shopSteps(L, T, ctx, S.shop);
     if (steps.length) A.shop = steps;
   }
-  /* 6. Upcoming events (the next 45 days; a monthly series once, with "every month") */
+  /* 6. Upcoming events (the next 45 days; a monthly series once, with "every month"), each with its own page's link
+        on the line under it — a monthly series its series' page (eventLink, the build's plan of the events' pages) */
   {
     const out = [];
     const evs = ctx.events;
+    const links = eventLinkPlan(db, site);
+    const base = String((site && site.url) || "").replace(/\/+$/, "");
     if (evs.length) {
       out.push(T("e_intro", { n: EVENT_DAYS }));
       for (const ev of evs.slice(0, 10)) {
@@ -445,6 +451,7 @@ function sectionsFor(L, ctx) {
         // (its title as /events/ shows it: committee.js tidyBrackets, no spaces a calendar left inside its brackets)
         const title = tidyBrackets(clean(H.pickLang(ev, "title", L)) || clean(ev.title));
         out.push(`• ${bits.join(" · ")} — ${title}${where ? ` (${where})` : ""}`);
+        out.push(`  ${base}${eventLink(ev, L, links)}`);
       }
     } else out.push(T("e_none", { n: EVENT_DAYS }));
     out.push(T("e_all", { url: abs("/events/") }));

@@ -28,7 +28,8 @@ until its day is over, and the calendar feeds mark the entry their subscribers h
     EventCancelled first in <body> (none for an online-only one), no flyer, no "Add to calendar", no join link, Share
     kept, the organizers' note (lang="es" on the English page when written in Spanish only), the next events of the
     same kind (outside the page's sitemap date: data-lastmod="skip"); none for one whose day is over (no page, no
-    <loc>), none at an address a listed event has; an event only its file calls cancelled gets one too; the [seo]
+    <loc>), one at its address even when a listed event has that anchor too (round 37: one rule); an event only its
+    file calls cancelled gets one too; the [seo]
     check finds nothing.
 
 Runs Eleventy with Node.js (tests/nodejs.py) for the JavaScript parts; those are skipped without Node.js / the npm
@@ -651,6 +652,15 @@ def body_ld(page: str) -> list:
                                               page[page.index("<body"):], re.S)]
 
 
+def head_ld(page: str) -> list:
+    """The site's graph in <head> (base.njk), its nodes."""
+    out = []
+    for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page[:page.index("<body")], re.S):
+        d = json.loads(b)
+        out.extend(d.get("@graph", [d]) if isinstance(d, dict) else d)
+    return out
+
+
 class TheNoticePage(unittest.TestCase):
     r: dict | None = None
     LOC = {"location": "Grupo Uno, 100 Main St, Garland, TX 75041", "city": "Garland", "state": "TX"}
@@ -686,7 +696,8 @@ class TheNoticePage(unittest.TestCase):
                ("workshop", "la-vina"), **cls.LOC),
             # an event in both lists (the sync never writes one so): the cancelled one — a notice
             ev("2099-10-10-both", chi(2099, 10, 10, 19), "Test Both Workshop", "Taller Doble", ("workshop",), **cls.LOC),
-            # an event of the lists whose address a cancelled one (another event) would have: its own page wins
+            # an event of the lists whose address a cancelled one (another event) has: since round 37 ONE rule (the event
+            # pages' plan leaves every cancelled anchor out) — the notice has it; the sync never writes such a pair
             ev("2099-10-17-anchor", chi(2099, 10, 17, 19), "Test Anchor Workshop", "Taller Ancla", ("workshop",), **cls.LOC),
         ]
         cls.cancelled = [
@@ -735,10 +746,11 @@ class TheNoticePage(unittest.TestCase):
             # over: no page, no <loc>
             self.assertNotIn(f"{lang}/events/over/", pages)
             self.assertNotIn(f"{BASE}{lang}/events/over/", sitemap)
-            # an address an event of the lists has is its page, never a notice (and no address is written twice)
+            # a cancelled event's anchor is its notice's, even when an event of the lists has it too (round 37: one
+            # rule, eleventy/event-pages.js cancelledAnchors) — and no address is written twice
             mine = pages[f"{lang}/events/2099-10-17-anchor/"]
-            self.assertIn("Test Anchor Workshop" if not lang else "Taller Ancla", mine)
-            self.assertNotIn("Test Other Workshop" if not lang else "Taller Otro", mine)
+            self.assertIn("Test Other Workshop" if not lang else "Taller Otro", mine)
+            self.assertNotIn("Test Anchor Workshop" if not lang else "Taller Ancla", mine)
         self.assertEqual(self.built()["problems"], [])
 
     def test_the_notice(self):
@@ -774,9 +786,18 @@ class TheNoticePage(unittest.TestCase):
                 self.assertNotIn("zoom.us", main)
                 self.assertIn(f'data-share="{BASE}{lang}/events/2099-11-28-garland/"', main)
                 self.assertNotIn("123 456 7890", words)
-                # coming up instead: the next La Viña events (its own page, else its card) — never the Grapevine one
+                # (round 37's fixer) the visible breadcrumb — the path the site's graph names: Home › Events › the
+                # notice, its title as the tab's (base.njk's BreadcrumbList), as on every event's page
+                crumbs = re.search(r'<nav class="evp-crumbs"[^>]*>(.*?)</nav>', main, re.S)
+                self.assertIsNotNone(crumbs, "a visible breadcrumb")
+                self.assertEqual(re.findall(r'<a [^>]*href="([^"]+)"', crumbs.group(1)), [f"{lang}/", f"{lang}/events/"])
+                here = re.search(r'<span aria-current="page">(.*?)</span>', crumbs.group(1)).group(1)
+                self.assertEqual(html.unescape(here), html.unescape(title).split(" · ")[0])
+                graph = next(x for x in head_ld(p) if x.get("@type") == "BreadcrumbList")
+                self.assertEqual([i["name"] for i in graph["itemListElement"]][-1], html.unescape(here))
+                # coming up instead: the next La Viña events (each its own page: round 37) — never the Grapevine one
                 links = re.findall(r'<a href="([^"]+)" class="card card-link cm-mini-card', main)
-                self.assertEqual(links, [f"{lang}/events/2099-12-12-fort-worth/", f"{lang}/events/#2099-12-19-lv-online"])
+                self.assertEqual(links, [f"{lang}/events/2099-12-12-fort-worth/", f"{lang}/events/2099-12-19-lv-online/"])
                 self.assertIn(f'href="{lang}/events/"', main)
                 # …outside the page's sitemap date: those are other events (eleventy/lastmod.js dropSkipped)
                 self.assertRegex(main, r'<section [^>]*aria-labelledby="ev-cancel-next"[^>]*data-lastmod="skip"')

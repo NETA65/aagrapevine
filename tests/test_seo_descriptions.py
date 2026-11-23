@@ -6,7 +6,7 @@ since November 2026; a value of the test's own, so it judges the strings, never 
 other {placeholder} is left. Facts first, never promotion (AA's Tradition 11): the wording is the
 writer's; this only keeps it whole in the results.
 
-(Pages with their own `description` — the month pages, the stand-alone redirect and share pages — are not covered
+(Pages with their own `description` — the month pages, the stand-alone redirect pages — are not covered
 here; an event's own page keeps to the same 160 characters: tests/test_r35_ev_pages.py, tests/test_seo_events.py.)
 
     python -m unittest tests.test_seo_descriptions -v        (or: python -m unittest discover -s tests)

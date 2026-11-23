@@ -165,7 +165,9 @@ the document search and translation use all their time; "Full update (started by
 | name the committee meeting's and the Grapevine Meeting's flyers on the Drive | [Settings §3.2, the meeting's flyers](settings.md#the-meetings-flyers-flyer_match) |
 | change our monthly Grapevine Meeting (1st Wednesday, Google Meet), or skip one month | [Settings §3.3, our Grapevine Meeting](settings.md#our-grapevine-meeting-grapevine-meeting) |
 | make sure a `content/events` file is read right (a whole date with its year, the right UTC offset) | [Flyers and events §6](flyers-and-events.md#6-write-an-event-by-hand-contentevents) |
-| share one event with its flyer in the link preview (WhatsApp, Facebook) | [Flyers and events §11.1](flyers-and-events.md#111-every-place) (the event share pages) |
+| share one event with its flyer in the link preview (WhatsApp, Facebook) | [Flyers and events §11.1](flyers-and-events.md#111-every-place) (the event's own page: its **Share** button sends it) |
+| know what an event's own page shows (its presentation, bingo card and links, by kind), or fix the kind the site guessed (`type:`) | [`content/events/README.md` → Its own page](../content/events/README.md#its-own-page-automatic) and [→ `type:`](../content/events/README.md#the-kind-of-event-type-optional); [Flyers and events §11.1](flyers-and-events.md#111-every-place) |
+| cancel an event (keep a "Cancelled" notice at its address, tell subscribed calendars) | a `content/events` event: `cancelled: true` — [`content/events/README.md` → Cancelled](../content/events/README.md#cancelled-cancelled-true); a dated-flyer event: move the flyer into the Panel's `private` folder ([Flyers and events §4.11](flyers-and-events.md#411-rename-replace-or-remove-a-flyer-event)); one date of a monthly series: its `skip_dates:` ([§7.5](flyers-and-events.md#75-example-skip-a-month)) |
 | know which reminder an "Add to calendar" file carries, or tell members about the story deadlines calendar (`/deadlines.ics`) | [Flyers and events §11.3](flyers-and-events.md#113-what-goes-into-the-calendar-files) |
 
 ### The bulletin
@@ -264,6 +266,8 @@ the document search and translation use all their time; "Full update (started by
 | add, move or rename a menu item | [Pages and code §12.3](pages-and-code.md#123-add-move-or-rename-a-menu-item) |
 | add a new page | [Pages and code §12.4](pages-and-code.md#124-add-a-new-page-end-to-end) |
 | run the site on my own computer | [Pages and code §3](pages-and-code.md#3-run-the-site-on-your-own-computer) |
+| make the site search find a section of a page, or see what the search holds | [Pages and code §12.11](pages-and-code.md#1211-make-the-site-search-find-a-section-of-a-page) and [§5.4](pages-and-code.md#54-files-that-are-not-pages) (`/search-index.json`) |
+| change the favicon or the app icons (the grape icon) | [Pages and code §12.9](pages-and-code.md#129-change-the-share-picture-the-app-icons-or-the-favicon) |
 | see what search engines are told, or keep a page out of search results | [Pages and code §6.6](pages-and-code.md#66-what-search-engines-read) (`noindex: true`: [§6.1](pages-and-code.md#61-the-page-frame-src_includeslayoutsbasenjk)) |
 | get the site into Google and Bing (the sitemap, Bing, the root robots.txt) | [README → Search engines](../README.md#12b-search-engines-google-bing) |
 

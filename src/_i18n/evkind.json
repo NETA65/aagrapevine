@@ -138,5 +138,9 @@
   "evkind.series_title": {
     "en": "{title} — {when}",
     "es": "{title} — {when}"
+  },
+  "evkind.series_next": {
+    "en": "Next: {next}.",
+    "es": "Próxima fecha: {next}."
   }
 }

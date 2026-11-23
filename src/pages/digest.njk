@@ -242,7 +242,9 @@ pageScripts: ["/assets/js/community.js"]
         {#- The events that took place in P (the month each one started in): the committee meeting, the
             monthly booth, workshops, assemblies, La Viña's monthly workshop — their days only (never a time or
             "every month"). The date box is decoration in the event's colour (eventTone, as on /events/ and the
-            monthly toolkit: La Viña's workshop in La Viña's); the line under the title says the day in words. -#}
+            monthly toolkit: La Viña's workshop in La Viña's); the line under the title says the day in words. Each
+            title links to the event's own page (since round 37: cmHref → community.js hrefOf; a series' date to its
+            series' page, the committee meeting to its section of /meetings/). -#}
         {% if md.events | length %}
         <section class="cm-digest-group" aria-labelledby="dg-events">
           {{ dgHead("dg-events", "calendar-check", "bg-vine-soft text-vine", "community.digest.events_title" | t(lang, { prev: prevW }), "community.digest.events_title" | t(other, { prev: prevWo }), other, md.events | length) }}
@@ -260,7 +262,7 @@ pageScripts: ["/assets/js/community.js"]
                 <span class="font-display {{ 'text-sm' if '–' in dayBox else 'text-lg' }} whitespace-nowrap font-semibold leading-none">{{ dayBox }}</span>
               </span>
               <div class="min-w-0 flex-1">
-                {% if ev.url %}<a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ ev | cmHref(lang) }}"{% if ev._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}{% if ev._ext %}<span class="sr-only"> {{ "community.new_tab" | t(lang) }}</span>{% endif %}</a>{% else %}<span class="font-semibold text-ink">{{ title }}</span>{% endif %}
+                {% if ev.url %}<a class="font-semibold leading-snug text-ink no-underline after:absolute after:inset-0 hover:text-gv" href="{{ ev | cmHref(lang, db, site) }}"{% if ev._ext %} target="_blank" rel="noopener"{% endif %}>{{ title }}{% if ev._ext %}<span class="sr-only"> {{ "community.new_tab" | t(lang) }}</span>{% endif %}</a>{% else %}<span class="font-semibold text-ink">{{ title }}</span>{% endif %}
                 {% if otherTitle and otherTitle != title %}<p class="text-sm italic text-muted" x-show="bi" x-cloak lang="{{ other }}">{{ otherTitle }}</p>{% endif %}
                 {%- set where = ev | cmEventWhere(lang) -%}
                 <p class="mt-0.5 text-xs text-muted">{{ ev | cmEventDays(lang, ed) }}{% if where %} ·&nbsp;<span{% if ev.extra.location_tba %} class="italic"{% endif %}>{{ where }}</span>{% endif %}{% if not ev._committee %} {{ ui.autoNote(ev, lang) }}{% endif %}</p>

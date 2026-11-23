@@ -1,0 +1,39 @@
+---js
+// (JavaScript front matter: the pagination's `before` and the page's data are functions. The imports are read from
+// the project's top folder, where every build runs — not from this file's folder. Every name here is page data.)
+import { eventPageData } from "./eleventy/event-page-model.js";
+
+// the event pages kept OUT of search results, in each language (eventPagePlan's tier "date": a date of a monthly
+// series, an event from Grapevine's or La Viña's own calendar, an event that is over while events.json keeps it) —
+// a full page all the same, for whoever follows a shared link or the card's title
+const pagination = {
+  data: "db.events.items", size: 1, alias: "share",
+  before: (items, full) => eventPageData(full).pages.filter((p) => !p.index),
+};
+const permalink = (data) => data.share.path + "index.html";
+const layout = "layouts/base.njk";
+const pageKey = "events";
+const pageScripts = ["/assets/js/committee.js"];
+// noindex (base.njk: robots noindex, its own canonical, no hreflang, no structured data), out of the sitemap and of
+// the collections (src/pages/sitemap.11ty.js lists a pagination's every page: this template is all noindex)
+const noindex = true;
+const sitemap = false;
+const eleventyExcludeFromCollections = true;
+const eleventyComputed = {
+  lang: (data) => data.share.lang,
+  title: (data) => data.share.head.title,
+  titleTail: (data) => data.share.head.titleTail,
+  description: (data) => data.share.head.description,
+  ogImage: (data) => data.share.head.ogImage,
+};
+---
+{#- Since round 37: the page of an event that search engines should not list — many near-copies (each date of the
+    CityWide booth, of the Grapevine Meeting, of La Viña's monthly workshop: their series' page is the one to find,
+    event-share-series.njk), theirs to describe (Grapevine's and La Viña's own calendars: their pages), or over —, at
+    the address its card's Share button sends (/events/<anchor>/). Before round 37 a small page that sent people on to
+    the card (src/pages/event-share.11ty.js, gone); now the same full page as an indexable one
+    (src/_includes/partials/event-page.njk): its card, its series' next dates, "Get ready", what comes next … An event
+    that is over shows no way to join it (no Join, no meeting ID, no calendar menu, its summary without how to join).
+    Once the event leaves data/site/events.json the address is a 404, which sends people on to /events/
+    (src/assets/js/community.js). -#}
+{% include "partials/event-page.njk" %}

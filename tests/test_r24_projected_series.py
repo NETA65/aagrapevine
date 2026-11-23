@@ -147,9 +147,12 @@ class LaterMonthsKeepTheirJoiningDetails(unittest.TestCase):
                         self.assertIn(link, ev["DESCRIPTION"])
                         self.assertIn(code, ev["DESCRIPTION"])
                         self.assertEqual(ev["LOCATION"], link)
-                        # the same words as the series' dates /events.ics lists (a series without a page of its
-                        # own links its date's card on /events/: "#ev-recurring-zoom-workshop-2027-07-22")
-                        self.assertEqual(ev["DESCRIPTION"], listed["DESCRIPTION"].replace(self.LISTED[series], ymd))
+                        # the same words as the series' dates /events.ics lists — but its link: since round 37 a
+                        # listed date links to its own page (/events/ev-recurring-<series>-<day>/); a later month's
+                        # date has none (events.json does not list it), so it links to its series' page
+                        want = listed["DESCRIPTION"].replace(self.LISTED[series], ymd)
+                        want = want.replace(f"/events/ev-recurring-{series}-{ymd}/", f"/events/series/{series}/")
+                        self.assertEqual(ev["DESCRIPTION"], want)
 
     def test_no_flyer_of_another_month(self):
         view = {i["extra"]["name"]: i["extra"]["view_url"] for i in drive_items(FLYERS)}

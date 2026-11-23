@@ -105,7 +105,8 @@
   {#- A page with `noindex: true` (the Update status page: the build's own figures, new on every update) stays
       out of search results — and out of the sitemap with its `sitemap: false`. It keeps its canonical (its own
       address, so the ?query copies of it count as the same page) but has no hreflang links: they pair pages
-      for search results, and this one is in none (the event share pages do the same). Nothing else changes for
+      for search results, and this one is in none (the events' noindex pages, src/pages/event-share-date.njk, are
+      such pages too: a series' date, an outside calendar's event, one that is over). Nothing else changes for
       visitors; pwa.js only skips its install notice on such a page. #}
   {% if noindex %}
   <meta name="robots" content="noindex">
@@ -256,8 +257,10 @@
   <link rel="stylesheet" href="{{ s }}{{ '&' if '?' in s else '?' }}v={{ build.version }}">
   {%- endfor %}
   {#- Structured data (schema.org) for search engines and the AI search tools that read it: ONE graph on every page
-      that search engines may show — never on the 404 page or a `noindex` one (the forwarding stubs and the event
-      share pages have no layout, so none either). Since round 35 it is the last thing in the <head>: Googlebot reads
+      that search engines may show — never on the 404 page or a `noindex` one (the events' noindex pages,
+      event-share-date.njk, included; the forwarding stubs have no layout, so none either). The events' indexable
+      pages, the series' pages and a cancelled event's notice have this layout, so they carry the graph (and their
+      breadcrumb in it). Since round 35 it is the last thing in the <head>: Googlebot reads
       only the first 2 MB of a page's HTML (Google Search Central, March 2026), and at the end of the <body> it came
       last of all — at byte 1.5 M on /photos/, which grows with every cover album. Everything it needs is page data
       or set above (desc, shareImg …), none of it from the page's content. A page's own block (the Events page's

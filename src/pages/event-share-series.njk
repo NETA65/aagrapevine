@@ -1,0 +1,37 @@
+---js
+// (JavaScript front matter: the pagination's `before` and the page's data are functions. The imports are read from
+// the project's top folder, where every build runs — not from this file's folder. Every name here is page data.)
+import { eventPageData } from "./eleventy/event-page-model.js";
+
+// the monthly series' pages, in each language (eventPagePlan's hubs: each enabled `recurring_events:` entry of the
+// settings with a date still to come in the data) — /events/series/<key>/, two steps under /events/, so never an
+// event's address ("series" is a reserved anchor)
+const pagination = {
+  data: "db.events.items", size: 1, alias: "share",
+  before: (items, full) => eventPageData(full).hubs,
+};
+const permalink = (data) => data.share.path + "index.html";
+const layout = "layouts/base.njk";
+const pageKey = "events";
+const pageScripts = ["/assets/js/committee.js"];
+// its title ("<title> — <how often>": no date, so it stays the same month after month), the tab title's tail, its
+// description (how often, where, its next date — "Next: Thursday, January 28, 2027." —, its summary: ≤ 160
+// characters, never how to join) and its share picture (the next date's flyer): committee.js seriesPageMeta, through
+// eventPageHead
+const eleventyComputed = {
+  lang: (data) => data.share.lang,
+  title: (data) => data.share.head.title,
+  titleTail: (data) => data.share.head.titleTail,
+  description: (data) => data.share.head.description,
+  ogImage: (data) => data.share.head.ogImage,
+};
+---
+{#- Since round 37: a monthly series' own page — the CityWide booth, La Viña's monthly workshop, the Grapevine
+    Meeting, and any series config/site.yml's recurring_events gets later (an enabled entry with a date to come) —,
+    INDEXABLE, in the sitemap with its twin: the page search engines and AI answers should give for "the Grapevine
+    Meeting", while each of its dates has a noindex page (event-share-date.njk). No Event markup (it is not one event:
+    Google's event results want "pages that focus on a single event"); the site's graph only (base.njk). It says how
+    often and when it is held, where (or how to join, its code kept out of search snippets), its next 6 dates (each to
+    its date's page: its own content, so in the page's sitemap date), its flyer, "Get ready", the magazines of its next
+    date's month and how to subscribe: src/_includes/partials/event-page.njk. -#}
+{% include "partials/event-page.njk" %}

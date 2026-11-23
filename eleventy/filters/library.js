@@ -7,9 +7,13 @@
 //   * libCollections(docs,lang)→ quick "collections" (GVR kit, RLV kit, catalogs …)
 //   * libStats(docs)           → hero counters
 //   * libIndexJson(db, lang)   → compact JSON for /library-index.json (client search)
-//   * searchIndexJson(db, nav, lang, site) → compact JSON for /search-index.json
+//   * searchIndexJson(db, nav, lang, site, presentations) → compact JSON for /search-index.json
 //                                 (story entries carry the writer + hometown, `a`; the
-//                                 Published Writers page lists the Texas writers' names/cities)
+//                                 Published Writers page lists the Texas writers' names/cities;
+//                                 since round 37 every event's own page, the series' pages, the
+//                                 month toolkits, the presentations, the current issues, the
+//                                 flyers, the shop's offers and the long pages' sections too —
+//                                 searchIndex below)
 //   * searchSpotlightTile(view, db) → the "Published Writers" browse tile on /search/: the
 //                                 count of the view it links to (normally the /published/
 //                                 default: Area 65 writers, first list_days window), + ?query
@@ -38,9 +42,15 @@ import path from "node:path";
 import { scriptJson } from "../script-json.js";
 import { TZ } from "../../eleventy.config.js"; // the site's time zone (config/site.yml site.timezone)
 import { eventTone } from "./event-tone.js"; // the colour rule: a booth's search words (booth, literature table)
-import { issueName } from "./read.js"; // La Viña's issue as every page names it ("May–June 2027")
+import { issueName, groupIssues, issueView, localizeIssueLabel } from "./read.js"; // La Viña's issue as every page names it ("May–June 2027"); /read/'s current issues
 import { meetingTitleParts } from "./media.js"; // a weekly open meeting episode's own title (its meeting and date)
+import { windowKeys, monthModel, monthLabel, nowDate } from "./monthly.js"; // the month toolkits (/monthly/<YYYY-MM>/)
+import { shopBotm, shopSpecialty, shopOffers, shopPriceChanges } from "./shop.js"; // /shop/'s offers, as the page shows them
+import { pwArchiveItems } from "./published.js"; // the Texas writers archive (/published/#archive), as the page lists it
 import orientationData from "../../src/_data/orientation.js"; // GVR / RLV 101 lessons (config/orientation.yml)
+import historyData from "../../src/_data/history.js"; // the history's milestones (config/history.yml): /about/'s section shows with them
+import siteLanguages from "../../src/_data/languages.js"; // the site's languages (the event pages' plan pairs them)
+import { SEARCH_SECTIONS } from "../search-sections.js"; // the long pages' sections the search finds on their own (round 37)
 
 const EMPTY = () => !!process.env.LIB_EMPTY;
 // Only real web links (or site-relative paths) ever reach an href/src.
@@ -567,6 +577,32 @@ function snippet(s, n = 170) {
 // exact card; if that file ever changes or goes away, fall back to the same rules.
 let committee = {};
 try { committee = await import("./committee.js"); } catch { /* optional */ }
+// Since round 37 an event's result opens its own page, a monthly series' its series' page: the pages the build writes
+// (eleventy/event-pages.js eventPagePlan — the one answer the event pages' templates paginate over, so a result never
+// links a page that was not written) and the cancelled events' notice pages (eleventy/cancelled-pages.js). Without
+// them (a file gone), the cards on /events/ as before.
+let eventPages = {};
+try { eventPages = await import("../event-pages.js"); } catch { /* optional */ }
+let cancelledNotices = {};
+try { cancelledNotices = await import("../cancelled-pages.js"); } catch { /* optional */ }
+// The cancelled events' notice pages (cancelledPages: every language at once — it reads all the events in each, about
+// half a second), worked out once for both languages' indexes: the same lists (db.events: one object for every
+// template) at the same moment of the same site give the same answer — keyed like eventPagePlan's memo, by site.built
+// and site.url, as each template's `site` is a copy of its own. Forgotten at each build's start (eleventy.before).
+let cancelledMemo = null;
+const EMPTY_LIST = Object.freeze([]);
+// The address of every page this build writes (Eleventy's "eleventy.contentMap": every page of every template — a
+// pagination's pages too, in a collection or not), known before any page is rendered; null outside a build (a test, a
+// script). The search links a monthly series' page only when it is among them (searchIndex, hubOf).
+let builtUrls = null;
+function cancelledOnce(cancelled, items, site) {
+  const key = `${site?.built ?? ""}|${site?.url ?? ""}`;
+  const m = cancelledMemo;
+  if (!m || m.cancelled !== cancelled || m.items !== items || m.key !== key) {
+    cancelledMemo = { cancelled, items, key, pages: cancelledNotices.cancelledPages(cancelled, items, site || {}, siteLanguages) };
+  }
+  return cancelledMemo.pages;
+}
 function slug(s, max = 60) {
   if (typeof committee.slugify === "function") { try { return committee.slugify(s, max); } catch { /* fall back */ } }
   return String(s || "").normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
@@ -650,7 +686,18 @@ const lurl = (u, lang) => (!u || /^(https?:|mailto:|tel:|#)/.test(u) ? u : (lang
 // Data items link to our own pages with language-neutral paths ("/bulletin/#slug").
 const isInternal = (u) => typeof u === "string" && /^\/(?!\/)/.test(u);
 
-export function searchIndex(db, nav, lang, helpers, site) {
+/**
+ * The site search's entries in one language (/search-index.json; the fields: src/pages/search-index.11ty.js) —
+ * everything the site shows, each linking where it is: the site's pages, and since round 37 also the sections of its
+ * long pages (eleventy/search-sections.js), the presentations (`extra.presentations`: the `presentations` global,
+ * src/_data/presentations.js — left out when it is not given), the month toolkits, the current issues, the Drive's
+ * flyers, the shop's offers, the next committee meeting, every event's own page (a monthly series' page for a series —
+ * once the build writes it: `extra.pages`, the addresses of the build's pages, when given) and a cancelled event's
+ * notice; then the synced content (stories, documents, episodes, videos, posts, albums …).
+ * The [search] check (eleventy/seo-check.js searchProblems) checks the built result: every page the sitemap lists has
+ * an entry, every link's page and #anchor exists, each language's file stays under its size budget.
+ */
+export function searchIndex(db, nav, lang, helpers, site, extra = {}) {
   const T = (k, vars) => helpers.translateKey(k, lang, vars);
   const P = (it, f) => squish(helpers.pickLang(it, f, lang));
   const both = (k) => [tryKey(helpers, k, "en"), tryKey(helpers, k, "es")].filter(Boolean).join(" ");
@@ -668,7 +715,9 @@ export function searchIndex(db, nav, lang, helpers, site) {
     seenId.add(e.id);
     if (e.im && !SAFE_URL.test(e.im)) e.im = "";
     const o = { id: e.id, k: e.k, t: squish(e.t), u: isInternal(e.u) ? lurl(e.u, lang) : e.u };
-    if (e.u2 && /^https?:\/\//.test(e.u2) && SAFE_URL.test(e.u2)) o.u2 = e.u2; // a second link: an episode's page at its podcast host
+    // a second link: an episode's page at its podcast host; a presentation's "Start the presentation" (one of our own
+    // pages: its path in the page language, as `u`)
+    if (e.u2 && SAFE_URL.test(e.u2)) o.u2 = isInternal(e.u2) ? lurl(e.u2, lang) : e.u2;
     const ol = okLang(e.ol) || okLang(e.l);
     let tl = okLang(e.tl);
     if (e.o && fold(e.o) !== fold(e.t)) {
@@ -689,6 +738,8 @@ export function searchIndex(db, nav, lang, helpers, site) {
     if (e.pw) o.pw = 1;
     if (e.z) o.z = 1;
     if (e.tb) o.tb = 1;
+    if (e.lw) o.lw = 1;
+    if (e.pr) o.pr = 1;
     if (e.ic) o.ic = e.ic;
     if (e.a && squish(e.a)) o.a = squish(e.a);
     out.push(o);
@@ -707,7 +758,8 @@ export function searchIndex(db, nav, lang, helpers, site) {
   // included): searching "Tyler" or "Grayson" offers the page…
   let spotWords = "";
   // …and by those of the writers in its Texas writers archive (db.writers_archive, ≈1,300 stories, all years),
-  // with the archive's own keywords — words, not a search entry per story. Places only, the towns geo knows
+  // with the archive's own keywords — words on the page's entry (each story has an entry of its own too since round
+  // 37's fixer, with its byline as the Library's stories have theirs: "archive stories" below). Places only, the towns geo knows
   // (it found their counties): city, county and label, in geo's spelling ("Fort Worth", not a printed "Forth
   // Worth"). No names and no bylines as printed: first names, initials and bylines such as "Panel 31 delegate"
   // or "Central Office newsletter" would make the page a hit for everyday AA searches ("Bill W.", "delegate").
@@ -754,7 +806,10 @@ export function searchIndex(db, nav, lang, helpers, site) {
       o: tryKey(helpers, p.key, lang === "es" ? "en" : "es"),
       ol: lang === "es" ? "en" : "es",
       s: desc,
-      x: [both(`search.kw.${pk}`), pk === "published" ? spotWords : "", pk === "published" ? arcWords : ""].filter(Boolean).join(" "),
+      // (the Share your story page is also found by "faq" / "preguntas frecuentes": its FAQ — words of its own, as the
+      // open calls for stories share search.kw.contribute and are no FAQ)
+      x: [both(`search.kw.${pk}`), pk === "contribute" ? both("search.kw.contribute_faq") : "",
+        pk === "published" ? spotWords : "", pk === "published" ? arcWords : ""].filter(Boolean).join(" "),
       u: p.url,
       src: "site",
       ic: p.icon || PAGE_ICONS[pk] || "file-text",
@@ -793,6 +848,49 @@ export function searchIndex(db, nav, lang, helpers, site) {
       ol: lang === "es" ? "en" : "es", s: T("bingo.meta_desc"), x: both("search.kw.bingo"), u: "/gvr/bingo/", src: "site", ic: "grid-3x3",
     });
   }
+  const other = lang === "es" ? "en" : "es";
+  /* ---- Since round 37: the sections of the long pages (eleventy/search-sections.js) — "booth display", "FAQ", "New to
+     AA?", "ASL" land on the section itself (/about/#booth-title …), each found by its heading in both languages and its
+     search.sec.<id>.x words; only a page the menus list (its entry is above). Kind "section": results show it (the
+     "Jump to" box keeps to the pages), the Pages filter counts it ---- */
+  safely("sections", () => {
+    let history = null;
+    try { history = historyData(); } catch { history = null; } // (a file the build itself refuses: its page says so)
+    const ctx = { orientation: orientationData(), history };
+    for (const sec of SEARCH_SECTIONS) {
+      if (!seenPage.has(sec.page)) continue;
+      if (typeof sec.shown === "function" && !sec.shown(ctx)) continue; // (the page leaves it out: nothing to find)
+      const tv = typeof sec.titleVars === "function" ? sec.titleVars(ctx) : undefined;
+      const sv = typeof sec.subVars === "function" ? sec.subVars(ctx) : undefined;
+      push({
+        id: "section:" + sec.id, k: "section", t: T(sec.title, tv), tl: lang, o: tryKey(helpers, sec.title, other, tv), ol: other,
+        s: sec.sub ? snippet(T(sec.sub, sv), 200) : "",
+        x: [sec.x ? both(sec.x) : "", sec.page === "/shop/" ? both("search.kw.shop_section") : "",
+          sec.sub ? snippet(tryKey(helpers, sec.sub, other, sv), 200) : ""].filter(Boolean).join(" "),
+        u: `${sec.page}#${sec.anchor}`, src: "site", ic: sec.icon || "file-text",
+      });
+    }
+  });
+  /* ---- The presentations (/orientation/#presentations: config/presentations/<id>.yml — the `presentations` global,
+     handed over by the templates): each deck's card, found by its title and summary in both languages, its audience and
+     "presentation" / "slides" / "diapositivas" (search.kw.presentation); `u` its card (/orientation/#pres-<id>), `u2`
+     "Start the presentation" (/orientation/?present=<id>: the player opens it, search.js altLink) ---- */
+  safely("presentations", () => {
+    const decks = (extra && extra.presentations && Array.isArray(extra.presentations.decks)) ? extra.presentations.decks : [];
+    if (!decks.length || !seenPage.has("/orientation/")) return;
+    const txt = (p, l = lang) => squish((p && typeof p === "object" ? p[l] || p.en || p.es : p) || "");
+    for (const d of decks) {
+      if (!d || typeof d.id !== "string" || !/^[a-z0-9][a-z0-9-]*$/.test(d.id)) continue;
+      const card = d.card || {};
+      push({
+        id: "presentation:" + d.id, k: "presentation", t: txt(card.title) || txt(d.title), tl: lang, o: txt(card.title, other), ol: other,
+        s: snippet(txt(card.summary), 200),
+        x: [txt(card.audience), txt(card.audience, other), snippet(txt(card.summary, other), 200), txt(d.short), both("search.kw.presentation")]
+          .filter(Boolean).join(" "),
+        u: `/orientation/#pres-${d.id}`, u2: `/orientation/?present=${d.id}`, src: "neta",
+      });
+    }
+  });
   if (EMPTY() || !db) return out;
 
   /* ---- articles (Grapevine & La Viña) ----
@@ -818,6 +916,28 @@ export function searchIndex(db, nav, lang, helpers, site) {
           g.scope === "neta65" ? both("search.kw.writer_neta65") : g.scope === "texas" ? both("search.kw.writer_texas") : ""].map(squish)),
         u: it.url, d: ymd(helpers, it.date), l: it.lang, src: lv ? "lv" : "gv",
         im: it.image || "", m: mach(it), n: it.is_new, pw: ex.free === false,
+      });
+    }
+  });
+
+  /* ---- Since round 37: each magazine's CURRENT issue (/read/'s first issue of each: read.js groupIssues, issueView —
+     the card at /read/#gv-current, #lv-current) — found by its theme in both languages, its month and "current issue" /
+     "número actual" (search.kw.issue) ---- */
+  safely("issues", () => {
+    for (const pub of ["gv", "lv"]) {
+      const issue = groupIssues(db.articles, pub)[0];
+      if (!issue) continue;
+      const v = issueView(issue, lang, helpers);
+      const w = issueView(issue, other, helpers);
+      const mag = pub === "lv" ? "La Viña" : "AA Grapevine";
+      push({
+        id: "issue:" + pub, k: "issue", t: v.topic || v.label || mag, tl: v.topic ? v.topicLang : lang,
+        o: w.topic && fold(w.topic) !== fold(v.topic) ? w.topic : "", ol: w.topicLang,
+        s: uniq([T("read.current_issue"), mag, v.label]),
+        x: uniq([w.label, snippet(v.description, 200), both("search.kw.issue"), pub === "lv" ? "La Viña" : "Grapevine"], " "),
+        // (no `d`: the month is in the line — La Viña's issue spans two, "Noviembre / Diciembre 2026")
+        u: `/read/#${pub}-current`, l: pub === "lv" ? "es" : "en",
+        src: pub, im: v.cover || "", m: !!v.topicMachine,
       });
     }
   });
@@ -896,19 +1016,23 @@ export function searchIndex(db, nav, lang, helpers, site) {
     }
   });
 
-  /* ---- Instagram posts (caption is the useful text) ---- */
+  /* ---- Instagram posts (caption is the useful text) — since round 37 without its sentences that say how to join a
+     meeting ("Meeting ID Zoom: 815 9593 1777", a passcode, a Zoom or Meet link: committee.js withoutJoinDetails): the
+     index is a file anyone can read; the post itself, one tap away, still has them ---- */
+  // (on the caption as written, line by line — then made one line, as P does)
+  const noJoin = (s) => squish(typeof committee.withoutJoinDetails === "function" ? committee.withoutJoinDetails(s) : s);
   safely("instagram", () => {
     for (const it of db.instagram?.items || []) {
       if (!ok(it)) continue;
       const ex = it.extra || {};
-      const cap = P(it, "summary");
+      const cap = noJoin(helpers.pickLang(it, "summary", lang));
       const first = cap.split(/(?<=[.!?¡¿])\s|\n/)[0] || "";
       const acct = ex.account === "lv" || it.category === "lv" ? "lv" : "gv";
       // The title is a caption line: in the page language if the caption was translated.
-      const shownOrig = first ? fold(cap) === fold(it.summary) : fold(P(it, "title")) === fold(it.title);
+      const shownOrig = first ? fold(cap) === fold(noJoin(it.summary)) : fold(P(it, "title")) === fold(it.title);
       push({
         id: it.id, k: "post",
-        t: first ? snippet(first, 90) : P(it, "title"),
+        t: first ? snippet(first, 90) : noJoin(P(it, "title")),
         tl: shownOrig ? it.lang : lang,
         o: "",
         s: snippet(cap, 170),
@@ -940,6 +1064,9 @@ export function searchIndex(db, nav, lang, helpers, site) {
             x: uniq([...issues, c.name, c.year ? String(c.year) : "", both("committee.photos.covers_title"), "cover covers portada portadas", both("nav.photos")], " "),
             u: `/photos/?mag=${c.pub}${c.year ? "&year=" + c.year : ""}#${c.id}`, d: ymd(helpers, a.newest), src: c.pub,
             im: (a.cover && a.cover[0] && a.cover[0].thumb) || "", n: a.hasNew,
+            // lw: ranked a little lower (search.js boostDocument × 0.7) — its keywords name all twelve months, so a
+            // search for "december" found 94 cover years before the month's events, issue and toolkit
+            lw: 1,
           });
           continue;
         }
@@ -998,20 +1125,141 @@ export function searchIndex(db, nav, lang, helpers, site) {
   });
 
   /* ---- Events (monthly committee meetings are covered by the Meeting page) ----
-     Upcoming events link to their card on /events/. The "Past events" list there shows
-     the newest PAST_EVENTS_SHOWN past events, each row with the same anchor as its card
-     (a hand-written event's is its file-name slug), and the list opens by itself when a
-     link points into it — so those link to /events/#<anchor> too. Older past events
-     link to their own page elsewhere (e.g. the La Viña calendar) or are left out.
-     A monthly recurring event (config/site.yml `recurring_events:`) is ONE entry: its next
-     date, linking to that card; its past dates are left out (/events/ does not list them). */
-  safely("events", () => {
-    const now = Date.now();
-    let evs = null;
-    let anchored = false; // anchors known = the same ones /events/ renders
-    if (typeof committee.normalizeEvents === "function") {
-      try { evs = committee.normalizeEvents(db.events?.items || [], site || {}, lang); anchored = true; } catch { evs = null; }
+     Since round 37 every event /events/ lists has a page of its own (eleventy/event-pages.js eventPagePlan — the pages
+     the build writes, read at the build's own moment, site.built): a result opens it (committee.js eventPageHref with
+     the plan; its path in the page language, as every `u`), a monthly recurring event (config/site.yml
+     `recurring_events:`) its SERIES' page (/events/series/<key>/: its next dates, how to join) when the plan has one.
+     A series is ONE entry: its next date; its past dates are left out (/events/ does not list them). An event the plan
+     has no page for (an anchor unfit for an address) keeps its card on /events/ while it is upcoming or among the
+     PAST_EVENTS_SHOWN past events the "Past events" list shows (that list opens by itself when a link points into it),
+     else its own page elsewhere (e.g. the La Viña calendar), else no entry. An upcoming CANCELLED event (content/events
+     `cancelled: true` — db.events.cancelled) has one entry too, "Cancelled: <title>, <day>" (its notice page,
+     eleventy/cancelled-pages.js, while it is to come), ranked low (z): a search for "garland" says it is off.
+     Its words (`x`, searched, never shown): its summary without how to join (a meeting ID or code, an online link:
+     committee.js withoutJoinValues, withoutJoinDetails — the index is a public file), its day of the week, city and
+     organizer (never the committee itself: every event of ours is the committee's), "flyer volante" when it has one,
+     and its kind in both languages ("Writing workshop Taller de escritura": event-pages.js eventKind). */
+  // The events in this language as /events/ lists them, at the build's moment, with the plan of their pages — worked
+  // out once (the events, their flyers and the next meeting read them); null without committee.js, or when it cannot
+  // read the events (then the events have their plain /events/#… entries, as before round 37, and every flyer the
+  // Portfolio's flyers).
+  let evCtx;
+  const eventsNow = () => {
+    if (evCtx !== undefined) return evCtx;
+    evCtx = null;
+    if (typeof committee.normalizeEvents !== "function") return evCtx;
+    const built = Date.parse(String(site?.built || ""));
+    const now = Number.isFinite(built) ? new Date(built) : new Date();
+    let evs;
+    try { evs = committee.normalizeEvents(db.events?.items || [], site || {}, lang, { now }); } catch { return evCtx; }
+    let plan = null;
+    if (typeof eventPages.eventPagePlan === "function") {
+      // (the same call as the event pages' templates — db.events.items, site, the site's languages, the cancelled list —
+      // so it is the one plan of the build, worked out once: eventPagePlan's memo)
+      try { plan = eventPages.eventPagePlan(db.events?.items || [], site || {}, siteLanguages, { cancelled: db.events?.cancelled }); } catch { plan = null; }
     }
+    evCtx = { now, evs, plan };
+    return evCtx;
+  };
+  // a path in the page language → the same path language-neutral (push adds the page language's /es once)
+  const neutral = (p) => (lang !== "en" && typeof p === "string" && p.startsWith(`/${lang}/`) ? p.slice(lang.length + 1) : p);
+  const eventsRoot = "/events/";
+  // A series' page (/[es/]events/series/<key>/, src/pages/event-share-series.njk) is linked only when the build writes
+  // it: `extra.pages`, the addresses of the build's pages (the filters hand over the build's own: builtUrls, from
+  // "eleventy.contentMap"), has it; given none (outside a build: a test, a script), the plan's word is taken. Without its
+  // page, a series' date opens its own page — never a page that is not there. (The [search] check, eleventy/seo-check.js,
+  // still flags a series' page the sitemap lists and no entry links.)
+  const written = extra?.pages && typeof extra.pages[Symbol.iterator] === "function"
+    ? new Set([...extra.pages].map((p) => (typeof p === "string" ? p : p && p.url)).filter((u) => typeof u === "string")) : null;
+  /** A series' page for this key in the page language, when the plan has one and the build writes it — else "". */
+  const hubOf = (key, ctx) => {
+    if (!key || !ctx || !ctx.plan || typeof committee.seriesPagePath !== "function") return "";
+    const hub = committee.seriesPagePath(key, lang);
+    return ctx.plan.byPath && ctx.plan.byPath[hub] && (!written || written.has(hub)) ? hub : "";
+  };
+  /** Where an event's result goes (a language-neutral path), or "" — its series' page for a monthly series' date (when
+   *  the plan has one and the build writes it), else its own page (eventPageHref with the plan), else "" (the caller
+   *  falls back to the card). */
+  const pageOf = (ev, ctx) => {
+    if (!ctx || !ctx.plan) return "";
+    const hub = hubOf(ev.recurring ? String(ev.series || ev.item?.extra?.series || "") : "", ctx);
+    if (hub) return neutral(hub);
+    const href = typeof committee.eventPageHref === "function"
+      ? neutral(committee.eventPageHref(ev, lang, { plan: ctx.plan, now: ctx.now }))
+      : "";
+    // (the card, "/events/#…", or /events/ itself: no page of its own)
+    return href && href !== eventsRoot && !href.startsWith(eventsRoot + "#") ? href : "";
+  };
+  const LOC_OF = { en: "en-US", es: "es-US" };
+  /** An event's day(s) of the week in both languages ("Saturday sábado"; over several days: its first and last). */
+  const weekdays = (ev) => {
+    const days = [];
+    const add = (ms, ymdText, allDay) => {
+      const d = allDay ? new Date(`${ymdText}T12:00:00Z`) : new Date(ms);
+      if (Number.isNaN(d.getTime())) return;
+      for (const l of ["en", "es"]) {
+        try { days.push(new Intl.DateTimeFormat(LOC_OF[l], { weekday: "long", timeZone: allDay ? "UTC" : TZ }).format(d)); } catch { /* none */ }
+      }
+    };
+    add(ev.startMs, ev.startYmd, !!ev.allDay);
+    if (ev.multiDay) add(ev.allDay ? NaN : ev.endMs - 1, ev.endYmd, !!ev.allDay);
+    return uniq(days, " ");
+  };
+  /** (round 37's fixer) An event over several days, its first and last day in full in both languages ("March 19, 2027
+   *  March 21, 2027 19 de marzo de 2027 21 de marzo de 2027"): the line it shows gives them in short ("Fri, Mar 19 – Sun,
+   *  Mar 21, 2027"), and "march", "marzo", "june 25", "asamblea de junio" must still find it. Searched, never shown. */
+  const fullDays = (ev) => {
+    if (!ev || !ev.multiDay) return "";
+    const days = [];
+    const at = ev.allDay ? [`${ev.startYmd}T12:00:00Z`, `${ev.endYmd}T12:00:00Z`] : [ev.startMs, ev.endMs - 1];
+    for (const l of ["en", "es"]) {
+      for (const v of at) {
+        const d = new Date(v);
+        if (Number.isNaN(d.getTime())) continue;
+        try { days.push(new Intl.DateTimeFormat(LOC_OF[l], { month: "long", day: "numeric", year: "numeric", timeZone: ev.allDay ? "UTC" : TZ }).format(d)); } catch { /* none */ }
+      }
+    }
+    return uniq(days, " ");
+  };
+  /** An event's city ("Fort Worth"): the data's, else its place's (committee.js eventPlace), else "". */
+  const cityOf = (ev) => {
+    const x = ev.item?.extra || {};
+    if (x.city) return squish(x.city);
+    if (!ev.location || typeof committee.eventPlace !== "function") return "";
+    try { return squish(committee.eventPlace(String(ev.location), x)?.address?.addressLocality || ""); } catch { return ""; }
+  };
+  /** Who holds it, in both languages ("District 87 La Viña Committee", the Area's name …) — never the committee itself
+   *  (committee.js eventOrganizer: the Event's organizer). */
+  const organizerOf = (ev) => {
+    if (typeof committee.eventOrganizer !== "function") return "";
+    const names = [];
+    for (const l of ["en", "es"]) {
+      try {
+        const org = committee.eventOrganizer(ev, site || {}, l);
+        if (org && org.name && !(typeof committee.isCommitteeOrganizer === "function" && committee.isCommitteeOrganizer(org, site || {}))) names.push(org.name);
+      } catch { /* none */ }
+    }
+    return uniq(names, " ");
+  };
+  /** Its kind in both languages ("Writing workshop Taller de escritura"): its page's kind (the plan's), else eventKind. */
+  const kindWords = (ev, ctx) => {
+    const page = ctx?.plan?.byAnchor?.[ev.anchor]?.[lang];
+    let k = page && page.kind;
+    if (!k && typeof eventPages.eventKind === "function") { try { k = eventPages.eventKind(ev, site || {}); } catch { k = null; } }
+    return k && k.label ? both(k.label) : "";
+  };
+  /** A summary as the index may keep it: without a sentence that says how to join or gives the event's own way in. */
+  const safeSummary = (ev, text) => {
+    let s = String(text ?? "");
+    if (typeof committee.withoutJoinValues === "function") s = committee.withoutJoinValues(s, [ev.meetingId, ev.online, ev.item?.extra?.meeting_id, ev.item?.extra?.online_url]);
+    if (typeof committee.withoutJoinDetails === "function") s = committee.withoutJoinDetails(s);
+    return s;
+  };
+  safely("events", () => {
+    const ctx = eventsNow();
+    const now = ctx ? ctx.now.getTime() : Date.now();
+    let evs = ctx ? ctx.evs : null;
+    const anchored = !!evs; // anchors known = the same ones /events/ renders
     if (!evs) {
       evs = (db.events?.items || []).filter((it) => ok(it) && it.kind === "event").map((it) => {
         const t0 = helpers.toDate(it.extra?.end || it.extra?.start || it.date);
@@ -1029,6 +1277,8 @@ export function searchIndex(db, nav, lang, helpers, site) {
     for (const ev of evs) {
       const it = ev.item;
       if (!it || !ok(it) || ev.committee || it.category === "committee") continue;
+      // (a cancelled one has its own entry below, at its notice page)
+      if (ev.cancelled === true || it.extra?.cancelled === true) continue;
       const recurring = it.category === "recurring";
       if (recurring) {
         const k = String(it.extra?.series || it.id);
@@ -1039,9 +1289,9 @@ export function searchIndex(db, nav, lang, helpers, site) {
       // The card's anchor on /events/. (Without committee.js the anchor is a guess, so the
       // data's own "/events/#<slug>" link wins then.)
       const card = !anchored && isInternal(it.url) && it.url.includes("#") ? it.url : "/events/#" + ev.anchor;
-      let u = "";
-      if (!ev.past || pastRows.has(ev.id)) u = card;
-      else if (/^https?:\/\//.test(it.url || "")) u = it.url;
+      let u = anchored ? pageOf(ev, ctx) : "";
+      if (!u && (!ev.past || pastRows.has(ev.id))) u = card;
+      else if (!u && /^https?:\/\//.test(it.url || "")) u = it.url;
       if (!u) continue;
       const start = ex.start || it.date;
       // A recurring event (and a content/events file with title_es / summary_es) is written by the
@@ -1082,19 +1332,241 @@ export function searchIndex(db, nav, lang, helpers, site) {
         // A series' next date left the line shown above (for a phone's sake), but it must still find the series —
         // "october", "oct 22", "22 octubre" find a one-off event by the date in its line. The meta line's `d` is
         // only shown, never searched (search.js), so the date goes with the keywords: searched, never shown.
-        x: [snippet(P(it, "summary"), 120), recurring ? when : "", recurring ? both("search.kw.recurring") : "",
+        x: uniq([snippet(safeSummary(ev, P(it, "summary")), 120), recurring ? when : "", recurring ? both("search.kw.recurring") : "",
           booth ? both("search.kw.booth") : "", ownOnline ? both("search.kw.own_online") : "",
-          tentative ? both("committee.events.tentative") : ""].filter(Boolean).join(" "),
+          tentative ? both("committee.events.tentative") : "",
+          anchored ? weekdays(ev) : "", anchored ? cityOf(ev) : "", anchored ? organizerOf(ev) : "",
+          ev.flyer ? both("search.kw.flyer") : "", anchored ? kindWords(ev, ctx) : "", anchored ? fullDays(ev) : "",
+          // (round 37's fixer) "events", "eventos", "upcoming events", "próximos eventos" find every event — the
+          // magazines' calendars' and ours alike —, "upcoming" only the ones still to come
+          both("search.kw.event"), ev.past ? "" : both("search.kw.upcoming")].map(squish), " "),
         u, d: ymd(helpers, start), l: own ? lang : it.lang,
         src: host || (it.category === "lv-calendar" ? "lv" : it.category === "gv-calendar" ? "gv" : "neta"), m: mach(it), z: ev.past,
         // tb = "Details to be confirmed" (content/events `tentative: true`): search.js shows the badge
         ...(tentative && !ev.past ? { tb: 1 } : {}),
       });
     }
+    // …and every series' page the plan has (and the build writes) gets an entry, even one whose only date to come is a
+    // date the host moved (ev.seriesOf: its own entry opens that date's page): the series' title, its rule, its next date
+    const linked = new Set(out.filter((e) => e.k === "event").map((e) => e.u));
+    for (const hub of ctx && ctx.plan ? ctx.plan.hubs || [] : []) {
+      if (hub.lang !== lang || linked.has(hub.path) || hubOf(hub.key, ctx) !== hub.path) continue;
+      const s = hub.series || {}, next = hub.next || {};
+      push({
+        id: "series:" + hub.key, k: "event", t: tidyTitle(s.title || next.title || hub.key), tl: lang,
+        s: [s.recurrence, next.location || (next.isOnline ? (next.platform ? T("committee.events.online_on", { platform: next.platform }) : T("committee.events.online")) : "")]
+          .filter(Boolean).join(" · "),
+        x: uniq([snippet(safeSummary(next, s.summary || next.summary), 120), next.dateLabel, both("search.kw.recurring"), weekdays(next),
+          kindWords(next, ctx), both("search.kw.event"), both("search.kw.upcoming")].map(squish), " "),
+        u: neutral(hub.path), d: next.startYmd || "", src: next.host === "lv" || next.host === "gv" ? next.host : "neta",
+      });
+    }
+  });
+
+  /* ---- Since round 37: an upcoming CANCELLED event (content/events `cancelled: true`) — one entry, at its notice page
+     (eleventy/cancelled-pages.js cancelledPages: only while it is to come, at the address its page had): "Cancelled:
+     <title>, <day>" (committee.js cancelledPageMeta — the page's own title and description), ranked low (z), found by
+     its title in both languages, its city, day of the week and "cancelled" / "cancelado" ---- */
+  safely("cancelled events", () => {
+    if (typeof cancelledNotices.cancelledPages !== "function") return;
+    const ctx = eventsNow();
+    for (const c of cancelledOnce(db.events?.cancelled || EMPTY_LIST, db.events?.items || EMPTY_LIST, site)) {
+      if (c.lang !== lang || !c.meta) continue;
+      const ev = c.ev || {};
+      const it = ev.item || {};
+      const ex = it.extra || {};
+      const own = typeof committee.ownLangs === "function" ? committee.ownLangs(it).includes(lang) : false;
+      push({
+        id: "cancelled:" + it.id, k: "event", t: c.meta.title, tl: lang, s: c.meta.description,
+        x: uniq([tidyTitle(it.title), tidyTitle(P(it, "title")), both("evcancel.ics_prefix"), weekdays(ev), cityOf(ev), organizerOf(ev),
+          kindWords(ev, ctx), fullDays(ev), both("search.kw.event")].map(squish), " "),
+        u: neutral(c.path), d: ymd(helpers, ex.start || it.date), l: own ? lang : it.lang,
+        src: ex.host === "lv" || ex.host === "gv" ? ex.host : "neta", z: 1,
+      });
+    }
+  });
+
+  /* ---- Since round 37: the NEXT COMMITTEE MEETING (/meetings/#next-meeting-h, the countdown's card) — its day, time
+     and platform (never its guest speaker's name, its link or code), found by "next meeting" / "próxima reunión"
+     (search.kw.next_meeting). The date the page itself shows: the meeting rule's next one (as cmNextMeeting), at the
+     build's moment; the platform the card's "Join on Google Meet" names (config/site.yml meeting: — committee.js
+     meetingJoin; a committee meeting's shaped event has none: its join details live on /meetings/ alone) ---- */
+  safely("next meeting", () => {
+    if (typeof committee.normalizeEvents !== "function" || !seenPage.has("/meetings/")) return;
+    const ctx = eventsNow();
+    const next = committee.normalizeEvents([], site || {}, lang, { monthsBack: 0, monthsAhead: 14, now: ctx ? ctx.now : new Date() })
+      .find((e) => e.committee && !e.past);
+    if (!next) return;
+    const platform = (typeof committee.meetingJoin === "function" ? committee.meetingJoin(site?.meeting, lang).platform : "") || next.platform || "";
+    const where = platform ? T("committee.events.online_on", { platform }) : T("committee.events.online");
+    // (mid-sentence in Spanish, the day of the week takes no capital: "Próxima reunión del comité: miércoles, 16 de
+    // diciembre de 2026" — English keeps its "Wednesday")
+    let date = next.dateLabel || helpers.fmtDate(next.startIso, lang, "long");
+    if (lang === "es" && date) date = date.charAt(0).toLowerCase() + date.slice(1);
+    push({
+      id: "meeting:next-committee", k: "meeting", t: T("search.next_meeting", { date }), tl: lang,
+      s: [next.timeLabel, where].filter(Boolean).join(" · "),
+      // (and the committee's name, config/site.yml committee: "NETA 65 Grapevine & La Viña Committee")
+      x: [both("search.kw.next_meeting"), both("committee.meetings.committee_title"), squish(site?.committee || "")].filter(Boolean).join(" "),
+      u: "/meetings/#next-meeting-h", d: next.startYmd || "", src: "neta", ic: "calendar-clock",
+    });
+  });
+
+  /* ---- Since round 37: the Drive's FLYERS (the Portfolio's flyers tab — pictures, never a Library document: those have
+     their entries above) — each found by its title in both languages and "flyer" / "volante" (search.kw.flyer), opening
+     the page of the event it is the flyer of (normalizeEvents' ev.flyer: its own page, a monthly series' page, or
+     /meetings/#committee-meeting for a committee meeting's) — the soonest one to come, else the latest that is over —,
+     else the weekly open meeting or store offer it is the flyer of, else the Portfolio's flyers
+     (/portfolio/#docs-flyers). A flyer only cancelled events use is not in db.drive any
+     more (src/_data/db.js: eleventy/cancelled-events.js hideCancelledFlyers).
+     A flyer is a picture of what its event's own entry already says, so it never comes before it: its date is its
+     EVENT's (`d`, the recency boost of search.js — never the day it was put on the Drive), it ranks low once its event
+     is over (`z`, as the event itself), and search.js ranks every flyer lower (×0.5) unless the words searched are
+     "flyer" / "volante" (kit.siteIndex: FLYER_TERM) — "writing workshop" lists the next workshop before any flyer, and
+     "committee meeting" the next meeting before the guest speakers' flyers. A flyer whose only event is a date of a
+     monthly series that the host moved and that is over (ev.seriesOf) opens its series' page, not that date's ---- */
+  safely("flyers", () => {
+    const ctx = eventsNow();
+    const FLYER_CATS = new Set(["flyers", "flyer", "volantes"]);
+    const fileId = (url) => (String(url || "").match(/\/d\/([\w-]{10,})/) || String(url || "").match(/[?&]id=([\w-]{10,})/) || [])[1] || "";
+    const meetingPath = committee.COMMITTEE_MEETING_PATH || "/meetings/#committee-meeting";
+    const target = new Map(); // Drive file id → { u, ev, rank }
+    for (const ev of ctx ? ctx.evs : []) {
+      const fid = fileId(ev.flyer && ev.flyer.view);
+      if (!fid || ev.cancelled === true) continue;
+      const u = ev.committee ? meetingPath
+        : (ev.past && ev.seriesOf ? neutral(hubOf(String(ev.seriesOf), ctx)) : "") || pageOf(ev, ctx) || (!ev.past && ev.anchor ? "/events/#" + ev.anchor : "");
+      if (!u) continue;
+      // (the soonest event still to come first, else the latest one over)
+      const rank = ev.past ? [1, -(ev.startMs || 0)] : [0, ev.startMs || 0];
+      const had = target.get(fid);
+      if (!had || rank[0] < had.rank[0] || (rank[0] === had.rank[0] && rank[1] < had.rank[1])) target.set(fid, { u, ev, rank });
+    }
+    // …else a weekly open meeting's flyer, its card on /meetings/#weekly-open (config/site.yml grapevine_weekly_open /
+    // lavina_weekly_open flyer_match: committee.js weeklyFlyer's rule), or a store offer's banner, its offer on /shop/
+    const elsewhere = (fid, u) => { if (fid && !target.has(fid)) target.set(fid, { u, ev: null, rank: [2, 0] }); };
+    // (every flyer its pattern finds, since round 37's fixer — not only the newest, which the card shows: an earlier
+    // one still on the Drive, "Nueva reunión abierta de La Viña …", is about the same meeting)
+    for (const cfg of [site?.grapevine_weekly_open, site?.lavina_weekly_open]) {
+      if (!cfg || !cfg.flyer_match || typeof committee.driveMatch !== "function") continue;
+      for (const f of committee.driveMatch(db.drive?.items || [], cfg.flyer_match, "flyers", 50)) {
+        elsewhere((f.extra && f.extra.file_id) || fileId(f.url), "/meetings/#weekly-open");
+      }
+    }
+    for (const o of shopOffers(site || {}, lang, db.drive?.items || [], (k, l, v) => helpers.translateKey(k, l, v))) {
+      for (const st of o.stores || []) if (st.banner) elsewhere(fileId(st.banner.view) || fileId(st.banner.src), `/shop/#offers-${o.key}`);
+    }
+    for (const it of db.drive?.items || []) {
+      if (!ok(it) || it.kind !== "photo" || !FLYER_CATS.has(String(it.category || "").toLowerCase())) continue;
+      const ex = it.extra || {};
+      const tg = target.get(ex.file_id || fileId(it.url));
+      const ev = tg ? tg.ev : null;
+      const when = ev ? (ev.recurring ? String(ev.recurrence || "").split(" · ")[0] : ev.multiDay && ev.rangeLabel ? ev.rangeLabel
+        : helpers.fmtDate(ev.item?.extra?.start || ev.item?.date, lang, "medium")) : "";
+      push({
+        id: "flyer:" + it.id, k: "flyer", t: P(it, "title"), o: it.title,
+        s: ev ? uniq([tidyTitle(ev.title), when]) : squish(ex.panel_label || ""),
+        x: uniq([both("search.kw.flyer"), it.i18n?.title?.en, it.i18n?.title?.es, ev ? tidyTitle(ev.item?.title) : ""].map(squish), " "),
+        // (its event's day — a flyer of none: the day it was put on the Drive)
+        u: tg ? tg.u : "/portfolio/#docs-flyers", d: ymd(helpers, ev ? ev.item?.extra?.start || ev.item?.date : it.date), l: it.lang, src: "neta",
+        im: ex.thumb_url || it.image || "", m: mach(it), n: it.is_new, z: !!(ev && ev.past),
+      });
+    }
+  });
+
+  /* ---- Since round 37: the MONTH TOOLKITS (/monthly/<YYYY-MM>/: this month and the 12 after it — the window the pages
+     are written for, monthly.js windowKeys) — each by its page's own title and description ("Monthly toolkit: December
+     2026"), found by its month in both languages, the issues' themes, the Books of the Month and "toolkit" / "kit del
+     mes" / "poster" (search.kw.month_kit) ---- */
+  safely("months", () => {
+    if (!seenPage.has("/monthly/")) return;
+    const now = nowDate();
+    for (const key of windowKeys(now)) {
+      const m = monthModel(key, db, {}, site || {}, lang, now);
+      const named = !!(m.gv && /\b(issue|edici[oó]n)\b/i.test(m.gv.theme));
+      push({
+        id: "month:" + key, k: "month", t: T("monthly.month_title", { month: m.title }), tl: lang,
+        s: m.gv ? T(named ? "monthly.month_desc_named" : "monthly.month_desc", { month: m.title, theme: m.gv.theme }) : T("monthly.month_desc_plain", { month: m.title }),
+        x: uniq([monthLabel(key, "en"), monthLabel(key, "es"), m.gv && m.gv.theme, m.gv && m.gv.orig, m.lv && m.lv.theme, m.lv && m.lv.label,
+          ...(m.botm || []).map((b) => b.title), both("search.kw.month_kit")].map(squish), " "),
+        u: `/monthly/${key}/`, d: `${key}-01`, dp: "m", src: "neta",
+      });
+    }
+  });
+
+  /* ---- Since round 37: the SHOP's offers, each to its place on /shop/ (as the page shows them: shop.js) — the Books
+     of the Month (#botm-<gv|lv>-title), the specialty items (#special-<type>: cards, planner, calendar …), an offer the
+     stores announced (#offers-<key>: free shipping …) and a price change AA Grapevine announced (#pc-<key>-before /
+     -after, the notice the page shows now) — kind "section", found by their titles and the shop's words ---- */
+  safely("shop", () => {
+    if (!seenPage.has("/shop/")) return;
+    const shop = db.shop || {};
+    const tt = (k, l, v) => helpers.translateKey(k, l, v);
+    for (const b of shopBotm(shop, lang, "", tt)) {
+      push({
+        id: "botm:" + b.pub, k: "section", t: b.title, tl: b.itemLang, o: b.subtitle || "", ol: lang,
+        s: uniq([T("shop.botm_title"), b.mag, b.startsLabel && b.endsLabel ? `${b.startsLabel} – ${b.endsLabel}` : ""]),
+        x: uniq([snippet(b.blurb, 160), both("shop.botm_title"), both("search.kw.botm"), both("search.kw.shop_section")].map(squish), " "),
+        u: `/shop/#botm-${b.pub}-title`, src: b.pub, im: b.image || "", ic: "book-open",
+      });
+    }
+    for (const sp of shopSpecialty(shop, lang, tt)) {
+      push({
+        id: "shop:" + sp.anchor, k: "section", t: sp.title, tl: sp.titleLang, s: snippet(sp.text, 170),
+        x: uniq([sp.typeName, tryKey(helpers, "shop.special_type_" + sp.type, other), both("shop.special_title"), sp.mag,
+          both("search.kw.shop_section")].map(squish), " "),
+        u: `/shop/#${sp.anchor}`, src: sp.pub, im: sp.image || "", ic: "gift",
+      });
+    }
+    for (const o of shopOffers(site || {}, lang, db.drive?.items || [], tt)) {
+      push({
+        id: "offer:" + o.key, k: "section", t: o.title, tl: o.titleLang, s: o.dates,
+        x: uniq([...(o.stores || []).map((s) => snippet(s.text, 160)), both("shop.offer_eyebrow"), both("search.kw.shop_section")].map(squish), " "),
+        u: `/shop/#offers-${o.key}`, src: "site", ic: o.icon || "truck",
+      });
+    }
+    for (const pc of shopPriceChanges(shop, lang, tt)) {
+      const part = pc.before ? "before" : "after";
+      push({
+        id: "price:" + pc.key, k: "section", t: T("shop.pc_title_" + part, { date: pc.date }), tl: lang,
+        s: snippet(T("shop.pc_lead_" + part, { date: pc.date }), 170), x: [both("search.kw.price_change"), both("search.kw.shop_section")].join(" "),
+        u: `/shop/#pc-${pc.key}-${part}`, src: "gv", ic: part === "before" ? "calendar-clock" : "badge-dollar-sign",
+      });
+    }
+  });
+
+  /* ---- (round 37's fixer) The TEXAS WRITERS ARCHIVE (/published/#archive: db.writers_archive, every year's stories by
+     Texas writers — published.js pwArchiveItems, the stories the page lists): each story → its page on the magazine's
+     site, as the page's rows link it, found by its title (both languages), its writers and their hometowns (`a`), its
+     issue and its theme. Ranked below the newer articles (lw, as a year of covers). A story the Library has already
+     (db.articles, above: its summary, its picture) keeps that entry. A lean entry each (~1,250 of them, ~270 bytes:
+     about a quarter of each index — eleventy/seo-check.js SEARCH_LIMIT): no summary, no date. ---- */
+  safely("archive stories", () => {
+    if (!seenPage.has("/published/")) return;
+    const known = new Set(out.filter((e) => e.k === "article").map((e) => String(e.u).toLowerCase().replace(/\/+$/, "")));
+    for (const it of pwArchiveItems(db)) {
+      const url = String(it.url || "");
+      if (!/^https:\/\//i.test(url) || known.has(url.toLowerCase().replace(/\/+$/, ""))) continue;
+      const lv = it.pub === "lv";
+      const writers = (Array.isArray(it.writers) ? it.writers : []).map((w) => [w && !w.anonymous ? squish(w.name) : "",
+        squish((w && w.geo && w.geo[`label_${lang}`]) || (w && w.place) || "")].filter(Boolean).join(" · ")).filter(Boolean);
+      // (its issue as the page's row names it: "December 2026", "Julio / Agosto 2015" — published.js's rule)
+      const issue = issueName(it.issue_key, lv ? "lv" : "gv", lang) || (it.issue_label ? localizeIssueLabel(String(it.issue_label), lang, lv ? "lv" : "gv") : "");
+      push({
+        id: it.id, k: "article", t: P(it, "title"), o: it.title, ol: it.lang,
+        s: uniq([issue, lv ? "La Viña" : "AA Grapevine"]),
+        a: uniq(writers, "; "),
+        x: squish(it.theme || ""),
+        // (no `d`: the issue is in its line, and an old story needs no recency boost — a lean entry)
+        u: url, l: it.lang, src: lv ? "lv" : "gv", m: mach(it), lw: 1,
+      });
+    }
   });
 
   /* ---- Weekly open meetings (Grapevine + La Viña) → their section on our Meeting page (Zoom ID, passcode,
-     day and time in both languages; the official page is linked from there) ---- */
+     day and time in both languages; the official page is linked from there). Since round 37 the result says "Online on
+     Zoom", never the Zoom ID: the index is a file anyone can read, and the card on /meetings/#weekly-open is the one
+     place that gives how to join ---- */
   safely("weekly_open", () => {
     for (const it of db.weekly_open?.items || []) {
       if (!ok(it)) continue;
@@ -1104,9 +1576,12 @@ export function searchIndex(db, nav, lang, helpers, site) {
       const lv = it.source === "lavina";
       push({
         id: "weekly-open:" + it.id, k: "meeting", t: P(it, "title"), o: it.title,
-        s: [when, ex.zoom_id ? "Zoom " + ex.zoom_id : ""].filter(Boolean).join(" · "),
+        s: [when, ex.zoom_id || ex.zoom_url ? T("committee.events.online_on", { platform: "Zoom" }) : ""].filter(Boolean).join(" · "),
         x: ["zoom", both(lv ? "search.kw.weekly_open_lv" : "search.kw.weekly_open"), it.i18n?.when?.[lang === "es" ? "en" : "es"]].filter(Boolean).join(" "),
         u: "/meetings/#weekly-open", l: it.lang, src: lv ? "lv" : "gv",
+        // (round 37's fixer) where it says when and how to join: ranked above its own dated recordings, which share
+        // its title's words and are newer (search.js boostDocument: `pr`)
+        pr: 1,
       });
     }
   });
@@ -1153,20 +1628,26 @@ export default function (eleventyConfig, helpers) {
   // JSON for <script type="application/json"> blocks: "<" escaped so data can never close the tag.
   eleventyConfig.addFilter("jsonScript", scriptJson); // the shared serializer (eleventy/script-json.js)
   eleventyConfig.addFilter("libIndexJson", (db, lang) => JSON.stringify(libraryIndex(db, lang, helpers)));
-  const searchCache = new Map(); // one index per language per build (search.njk + search-index.json share it)
-  const getSearch = (db, nav, lang, site) => {
-    if (!searchCache.has(lang)) searchCache.set(lang, searchIndex(db, nav, lang, helpers, site));
+  // one index per language per build (search.njk + search-index.json share it — both hand over the same
+  // `presentations` global: the first call builds it), with the addresses of the build's pages (builtUrls)
+  const searchCache = new Map();
+  const getSearch = (db, nav, lang, site, presentations) => {
+    if (!searchCache.has(lang)) searchCache.set(lang, searchIndex(db, nav, lang, helpers, site, { presentations, pages: builtUrls }));
     return searchCache.get(lang);
   };
-  eleventyConfig.on("eleventy.before", () => { searchCache.clear(); spotFile = undefined; });
-  eleventyConfig.addFilter("searchIndexJson", (db, nav, lang, site) => {
-    const items = getSearch(db, nav, lang, site);
+  eleventyConfig.on("eleventy.before", () => { searchCache.clear(); spotFile = undefined; cancelledMemo = null; builtUrls = null; });
+  // (every page's address, once Eleventy knows them all — before the search page and index are rendered)
+  eleventyConfig.on("eleventy.contentMap", ({ urlToInputPath } = {}) => {
+    builtUrls = urlToInputPath && typeof urlToInputPath === "object" ? new Set(Object.keys(urlToInputPath)) : null;
+  });
+  eleventyConfig.addFilter("searchIndexJson", (db, nav, lang, site, presentations) => {
+    const items = getSearch(db, nav, lang, site, presentations);
     return JSON.stringify({ v: 2, lang, built: new Date().toISOString(), count: items.length, items });
   });
   eleventyConfig.addFilter("searchSpotlightTile", (view, db) => spotlightTile(view, db));
-  eleventyConfig.addFilter("searchKindCounts", (db, nav, lang, site) => {
+  eleventyConfig.addFilter("searchKindCounts", (db, nav, lang, site, presentations) => {
     const counts = {};
-    for (const e of getSearch(db, nav, lang, site)) counts[e.k] = (counts[e.k] || 0) + 1;
+    for (const e of getSearch(db, nav, lang, site, presentations)) counts[e.k] = (counts[e.k] || 0) + 1;
     return counts;
   });
 }

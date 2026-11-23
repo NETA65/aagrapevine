@@ -1,7 +1,8 @@
 // /llms.txt (English) and /es/llms.txt (Spanish) — since round 35: a short plain-text guide to the site for AI tools,
 // in the llms.txt layout (llmstxt.org): "# <the site's name>", a "> " summary of who runs the site, the committee's
 // monthly meetings as rules, then "## " lists of the main pages (src/_data/nav.js), each with that page's own meta
-// description, and last the other language's file.
+// description, then (since round 37) "## Upcoming events" — the monthly series' pages and the events still to come
+// that have a page search engines may list —, and last the other language's file.
 //
 // Honest about what it is worth: Google says Google Search does not use llms.txt — it "will neither harm nor help"
 // (Search Central, June 2026) — and no major AI platform (OpenAI, Anthropic, Perplexity, Google, Meta) has said it
@@ -16,10 +17,25 @@
 // every other page. Plain facts, attraction rather than promotion. Every link is absolute, on the site's address
 // (site.url): only pages that are built (a page missing from this build is left out); outside addresses only in the
 // summary (the Area's, the magazines' own sites — config/site.yml). tests/test_r35_head.py checks all of it.
+// The events (since round 37; tests/test_r37_links.py): read from the build's plan of the events' pages
+// (eleventy/event-pages.js eventPagePlan — the same answer the page templates paginate over, and their heads: a
+// paginated page's own title and description, never its pagination's first page's, which the collections give for
+// every one of its addresses), each line "- [<the page's title>](<its address>): <its meta description>": the series'
+// pages first (config/site.yml's order), then the one-off events still to come whose page may be indexed (never a
+// series' date, an event from the magazines' own calendars, one that is over or cancelled — a cancelled one's notice
+// is no event to come), soonest first; at most UPCOMING_MAX of them, and none once the file would pass
+// UPCOMING_BYTES (14 KB: the file stays well under 16 KB). Only pages this build writes (in its collections — a page
+// left out of the build is left out here). The heads never give a meeting's link, ID or code (committee.js
+// withoutJoinValues, plainLine), and each line is checked once more against its event's own (withoutJoinValues).
 // (Not named "sitemap…": ONLY=sitemap test builds pick src/pages files by the start of their names.)
 import { monthlyRule, TZ } from "../../eleventy.config.js";
-import { recurrenceText } from "../../eleventy/filters/committee.js";
+import { recurrenceText, withoutJoinValues } from "../../eleventy/filters/committee.js";
 import { ymdOf } from "../../eleventy/central-time.js";
+import { eventLinkPlan } from "../../eleventy/filters/event-links.js";
+
+// "## Upcoming events": at most this many lines, and no line that would take the file past this size (UTF-8 bytes)
+const UPCOMING_MAX = 20;
+const UPCOMING_BYTES = 14 * 1024;
 
 export const data = {
   pagination: { data: "languages", size: 1, alias: "lang" },
@@ -42,6 +58,7 @@ const WORDS = {
   online: { en: "online", es: "en línea" },
   from: { en: "first meeting {date}", es: "primera reunión el {date}" },
   main: { en: "Main pages", es: "Páginas principales" },
+  upcoming: { en: "Upcoming events", es: "Próximos eventos" },
   optional: { en: "Optional", es: "Opcional" },
   sitemap: { en: "Sitemap", es: "Mapa del sitio" },
   sitemap_desc: {
@@ -149,8 +166,45 @@ export function render(data) {
 
   // last: the sitemap and the other language's guide
   const other = lang === "es" ? "en" : "es";
-  out.push(`## ${word("optional", lang)}`, "");
-  out.push(`- [${word("sitemap", lang)}](${abs("/sitemap.xml")}): ${word("sitemap_desc", lang)}`);
-  out.push(`- [${word("other", lang)}](${abs(other === "en" ? "/llms.txt" : `/${other}/llms.txt`)}): ${word("other_desc", lang)}`);
+  const tail = [`## ${word("optional", lang)}`, ""];
+  tail.push(`- [${word("sitemap", lang)}](${abs("/sitemap.xml")}): ${word("sitemap_desc", lang)}`);
+  tail.push(`- [${word("other", lang)}](${abs(other === "en" ? "/llms.txt" : `/${other}/llms.txt`)}): ${word("other_desc", lang)}`);
+
+  // before them, the events still to come (see the top of this file): line by line while the file stays under
+  // UPCOMING_BYTES
+  const events = upcomingLines(eventLinkPlan(data.db, site, data.languages), lang, built, abs);
+  const size = (lines) => Buffer.byteLength(lines.join("\n") + "\n", "utf8");
+  const kept = [];
+  for (const line of events) {
+    if (kept.length >= UPCOMING_MAX) break;
+    if (size([...out, `## ${word("upcoming", lang)}`, "", ...kept, line, "", ...tail]) > UPCOMING_BYTES) break;
+    kept.push(line);
+  }
+  if (kept.length) out.push(`## ${word("upcoming", lang)}`, "", ...kept, "");
+  out.push(...tail);
   return out.join("\n") + "\n";
+}
+
+/** The "## Upcoming events" lines of a language, in order (see the top of this file): its series' pages (plan.hubs),
+ *  then its pages of events still to come that may be indexed (plan.pages: index, not over — the plan has no
+ *  ordinary page for a cancelled event) — each one this build writes (`built`: the collections' addresses) —, each
+ *  "- [title](address): description" from its head (eventPageHead / seriesPageMeta), without a sentence that gives
+ *  its meeting's own link, ID or code (withoutJoinValues: the event's, the series'). */
+function upcomingLines(plan, lang, built, abs) {
+  const hubs = (plan.hubs || []).filter((h) => h.lang === lang);
+  const pages = (plan.pages || []).filter((p) => p.lang === lang && p.index && p.ev && !p.ev.past && !p.ev.cancelled);
+  const lines = [];
+  for (const p of [...hubs, ...pages]) {
+    if (!p.head || !built.has(p.path)) continue;
+    const ev = p.ev || p.next || {};
+    const join = (p.series && p.series.join) || {};
+    let desc = oneLine(withoutJoinValues(p.head.description, [ev.meetingId, ev.online, join.id, join.url]));
+    // (a series: its next date always — "Next: Thursday, January 28, 2027." — even when its description had to be
+    // cut before it; the rule alone lets a reader work out a date that does not happen: committee.js seriesNextText)
+    const nextText = oneLine(p.head.nextText);
+    if (nextText && desc && !desc.includes(nextText)) desc = `${nextText} ${desc}`;
+    const title = oneLine(p.head.title);
+    if (title && desc) lines.push(`- [${title}](${abs(p.path)}): ${desc}`);
+  }
+  return lines;
 }

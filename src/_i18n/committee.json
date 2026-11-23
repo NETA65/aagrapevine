@@ -711,10 +711,6 @@
     "en": "Flyer: {title}",
     "es": "Volante: {title}"
   },
-  "committee.events.share_go": {
-    "en": "See this event on our Events page",
-    "es": "Ver este evento en nuestra página de eventos"
-  },
   "committee.events.page_title": {
     "en": "{title}, {date}",
     "es": "{title}, {date}"

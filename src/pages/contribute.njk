@@ -716,15 +716,16 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
       </div>
     </div>
     {#- The next writing / recording workshops (cmWorkshops): a date tile in the event's colour
-        (eventTone), the title and the place; each opens its card on /events/. A workshop that has
-        ended hides itself (data-cm-expire, read.js), and the list with it when none is left. -#}
+        (eventTone), the title and the place; each opens its own page (since round 37: evHref,
+        eleventy/filters/event-links.js). A workshop that has ended hides itself (data-cm-expire, read.js),
+        and the list with it when none is left. -#}
     {% if workshops | length %}
     <div class="relative z-10 mt-8 border-t border-white/15 pt-6" data-ws-list>
       <h3 class="eyebrow flex items-center gap-2 font-sans text-white/75">{% icon "calendar-days", "size-4 shrink-0" %}<span>{{ "read.contrib.ws_next" | t(lang) }}</span></h3>
       <ul class="read-ws-list mt-3 grid gap-3{{ ' max-w-xl' if workshops | length == 1 }}" style="--n: {{ workshops | length }}" role="list">
         {% for ev in workshops %}
         <li data-cm-expire="{{ ev.expireIso }}">
-          <a href="{{ '/events/' | lurl(lang) }}#{{ ev.anchor }}" class="card card-link cm-mini-card ev-accent ev-tone-{{ ev | eventTone }} group h-full">
+          <a href="{{ ev | evHref(lang, db, site) }}" class="card card-link cm-mini-card ev-accent ev-tone-{{ ev | eventTone }} group h-full">
             <span class="cm-date-tile{{ ' cm-tile-range' if ev.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ ev.tile.mon }}</span><span class="cm-tile-day">{{ ev.tile.day }}</span><span class="cm-tile-wd">{{ ev.tile.wd }}</span></span>
             <span class="min-w-0">
               <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ ev.title }}</span>

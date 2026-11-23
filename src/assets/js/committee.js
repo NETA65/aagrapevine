@@ -347,9 +347,29 @@
            its update, $nextTick, one more frame), mark its card a moment (.cm-flash: committee.css; a month heading
            is not marked) and move the keyboard there without scrolling again */
         reveal: function (el) {
+          /* (round 37's fixer) The cards are drawn only near the screen (committee.css content-visibility: auto —
+             until then each counts a guessed height): a card far down the list landed above or below the screen once
+             the browser drew those around it at their real heights ("See all events" on a 2027 event's page). So
+             for the jump every card is drawn (.cm-cv-all), it scrolls once the layout is real and once more after
+             it settles; a card once drawn keeps its real height (contain-intrinsic-block-size: auto …), so the class
+             can go a moment later without moving anything. */
+          var root = this.$root;
+          if (root && root.classList) {
+            root.classList.add("cm-cv-all");
+            clearTimeout(root.__cmCvAll);
+            root.__cmCvAll = setTimeout(function () { root.classList.remove("cm-cv-all"); }, 1500);
+          }
           this.$nextTick(function () {
             requestAnimationFrame(function () {
               if (el.scrollIntoView) el.scrollIntoView({ block: "start" });
+              // (where it is on the screen — an old browser without it: no second scroll)
+              var topOf = function () { return el.getBoundingClientRect ? el.getBoundingClientRect().top : 0; };
+              var at = topOf();
+              requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                  if (el.scrollIntoView && Math.abs(topOf() - at) > 2) el.scrollIntoView({ block: "start" });
+                });
+              });
               var box = el.querySelector("article") || el.closest("article");
               if (box) {
                 clearTimeout(box.__cmFlash);

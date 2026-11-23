@@ -909,7 +909,8 @@ for (const lang of ["en", "es"]) {
     row: mm.dates.find((d) => d.id === input.lv), rowTone: eventTone(mm.dates.find((d) => d.id === input.lv)),
     novIds: M.monthModel("2026-11", db, {}, input.site, lang, now).dates.map((d) => d.id),
     msg: M.monthMessage({ mm: both, nw, iss }, [lang], "whatsapp", input.site, t),
-    digest: held && { url: held.url, where: CO.eventWhere(held, lang, t) },
+    // (where its title links: since round 37 the date's series' page — hrefOf with the edition's plan of the pages)
+    digest: held && { url: held.url, href: CO.hrefOf(held, lang, md.links), where: CO.eventWhere(held, lang, t) },
     search: idx.filter((e) => String(e.id).startsWith(input.lvPrefix)),
     boothSearch: idx.filter((e) => String(e.id).startsWith("ev:recurring:citywide-dallas:")),
   };
@@ -1013,34 +1014,35 @@ class LaVinaWorkshopOnPages(unittest.TestCase):
             self.assertIn(f"LOCATION:{ZOOM}", ics)
             self.assertIn(f"ATTACH:https://drive.google.com/file/d/{FLYER_ID}/view", ics)
             self.assertIn(f"CATEGORIES:{category}", ics)
-            self.assertIn("URL:https://example.org/site" + ("/es" if lang == "es" else "") + "/events/#ev-recurring-lv-monthly-workshop-2026-10-22", ics)
+            # (since round 37 its own page: /events/<its anchor>/)
+            self.assertIn("URL:https://example.org/site" + ("/es" if lang == "es" else "") + "/events/ev-recurring-lv-monthly-workshop-2026-10-22/", ics)
 
     def test_a_date_that_took_place_links_to_the_page(self):
-        """/events/ lists only the dates of a series still to come (its "Past events" leave the series out), so the
-        calendar entry of a date that has passed — the calendar files keep it 90 days — links to /events/ itself,
-        never to the #… of a card that is gone: its URL, the "Details:" line, the Google / Outlook links and the
-        card's ".ics file". A date still to come keeps its card's #anchor; the booth, which has a page of its own,
-        links there, past or not."""
+        """Since round 37 every date of a series has a page of its own (/events/<its anchor>/, kept while events.json
+        keeps the date: 90 days once it is over — as long as the calendar files keep its entry), so the calendar
+        entry of a date — still to come or over — links there: its URL, the "Details:" line, the Google / Outlook
+        links and the card's ".ics file"; never the #… of a card on /events/ (gone once the date is over), never the
+        series' outside page (the booth's CityWide site: its page links to that)."""
         from icalendar import Calendar
         for lang in ("en", "es"):
             page = "https://example.org/site" + ("/es" if lang == "es" else "") + "/events/"
             r = self.result()[lang]
             held, nxt, booth = r["held"], r["lv"], r["boothHeld"]
-            self.assertEqual((held["past"], held["detailsUrl"], held["icsUrl"]), (True, page, page), lang)
-            self.assertEqual(held["calDescription"].splitlines()[-1], {"en": "Details: ", "es": "Detalles: "}[lang] + page)
+            own = page + "ev-recurring-lv-monthly-workshop-2026-09-24/"
+            self.assertEqual((held["past"], held["detailsUrl"], held["icsUrl"]), (True, own, own), lang)
+            self.assertEqual(held["calDescription"].splitlines()[-1], {"en": "Details: ", "es": "Detalles: "}[lang] + own)
             self.assertNotIn("#ev-", held["calDescription"])
             self.assertEqual(held["icsDescription"], held["calDescription"])
             self.assertEqual(parse_qs(urlparse(held["gcal"]).query)["details"], [held["calDescription"]])
             self.assertEqual(parse_qs(urlparse(held["outlook"]).query)["body"], [held["calDescription"]])
-            self.assertEqual((nxt["past"], nxt["detailsUrl"]), (False, page + "#ev-recurring-lv-monthly-workshop-2026-10-22"))
-            self.assertEqual((booth["past"], booth["detailsUrl"], booth["icsUrl"]),
-                             (True, "https://citywidedallasaa.org", "https://citywidedallasaa.org"), lang)
+            self.assertEqual((nxt["past"], nxt["detailsUrl"]), (False, page + "ev-recurring-lv-monthly-workshop-2026-10-22/"))
+            booths = page + "ev-recurring-citywide-dallas-2026-09-12/"
+            self.assertEqual((booth["past"], booth["detailsUrl"], booth["icsUrl"]), (True, booths, booths), lang)
             # the calendar file, read back
             uid = "-es@neta65-gvlv" if lang == "es" else "@neta65-gvlv"
             urls = {str(e["UID"]).replace(uid, ""): str(e["URL"]) for e in Calendar.from_ical(r["icsHeld"]).walk("VEVENT")}
-            self.assertEqual(urls, {"ev-recurring-lv-monthly-workshop-2026-09-24": page,
-                                    "ev-recurring-citywide-dallas-2026-09-12": "https://citywidedallasaa.org",
-                                    "ev-recurring-lv-monthly-workshop-2026-10-22": page + "#ev-recurring-lv-monthly-workshop-2026-10-22"})
+            self.assertEqual(urls, {"ev-recurring-lv-monthly-workshop-2026-09-24": own, "ev-recurring-citywide-dallas-2026-09-12": booths,
+                                    "ev-recurring-lv-monthly-workshop-2026-10-22": page + "ev-recurring-lv-monthly-workshop-2026-10-22/"})
 
     def test_the_repeat_line_names_its_time_zone(self):
         """The calendars' description repeats the rule with its time, next to the date's own start and end — which a
@@ -1115,7 +1117,9 @@ class LaVinaWorkshopOnPages(unittest.TestCase):
     def test_digest_and_search(self):
         for lang, word, online in (("en", "Online", "Online on Zoom"), ("es", "En línea", "En línea por Zoom")):
             r = self.result()[lang]
-            self.assertEqual(r["digest"], {"url": f"https://drive.google.com/file/d/{FLYER_ID}/view", "where": word}, lang)
+            # its link: the series' page (since round 37 — no more its flyer: the series' page shows it)
+            self.assertEqual(r["digest"], {"url": "/events/", "href": ("/es" if lang == "es" else "") + "/events/series/lv-monthly-workshop/",
+                                           "where": word}, lang)
             self.assertEqual(len(r["search"]), 1, lang)                  # the series once: its next date
             hit = r["search"][0]
             self.assertEqual(hit["src"], "lv")

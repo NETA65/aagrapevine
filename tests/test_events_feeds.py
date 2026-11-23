@@ -1132,7 +1132,9 @@ try {
                                  { lang, site: input.site, db: { events: { items: input.items } } });
     const all = filters.cmCollapseRecurring(filters.cmEvents(input.items, input.site, lang));
     const pastRows = all.filter((e) => e.past && !e.committee && !e.recurring).reverse().slice(0, 40);
-    res[lang] = { ics, cards: [...all.filter((e) => !e.past), ...pastRows].map((e) => e.anchor) };
+    // (since round 37 every event /events/ lists but the committee meetings has a page of its own: /events/<anchor>/)
+    res[lang] = { ics, cards: [...all.filter((e) => !e.past), ...pastRows].map((e) => e.anchor),
+                  pages: all.filter((e) => !e.committee).map((e) => e.anchor) };
   }
 } finally {
   globalThis.Date = RealDate;
@@ -1198,33 +1200,33 @@ class OurCalendarFiles(TempState):
             self.assertEqual([e for c in cal.walk() for e in (getattr(c, "errors", None) or [])], [])
             entries = {str(e["UID"]).split("@")[0].removesuffix("-es"): e for e in cal.walk("VEVENT")}
             urls = {uid: str(e["URL"]) for uid, e in entries.items()}
-            # the series' dates: over (an hour ago, and in August) → the page; still to come → its card
-            self.assertEqual((urls[lv + "2026-09-24"], urls[lv + "2026-08-27"]), (page, page), lang)
-            self.assertEqual(urls[lv + "2026-10-22"], page + "#" + lv + "2026-10-22")
-            self.assertEqual(urls["ev-recurring-citywide-dallas-2026-09-12"], "https://citywidedallasaa.org")
-            # one-off workshops keep their card's anchor, past or not: "Past events" lists the one that took place
-            self.assertEqual(urls["ev-manual-2026-09-12-gv-writing-workshop-denton"], page + "#2026-09-12-gv-writing-workshop-denton")
-            self.assertEqual(urls["ev-manual-2026-10-24-gv-writing-workshop-tyler"], page + "#2026-10-24-gv-writing-workshop-tyler")
+            # (since round 37) every entry links to its event's own page, /events/<anchor>/ — the series' dates, over
+            # (an hour ago, and in August) or still to come, the booth (never its outside page), the one-off
+            # workshops past or not
+            self.assertEqual((urls[lv + "2026-09-24"], urls[lv + "2026-08-27"]),
+                             (page + lv + "2026-09-24/", page + lv + "2026-08-27/"), lang)
+            self.assertEqual(urls[lv + "2026-10-22"], page + lv + "2026-10-22/")
+            self.assertEqual(urls["ev-recurring-citywide-dallas-2026-09-12"], page + "ev-recurring-citywide-dallas-2026-09-12/")
+            self.assertEqual(urls["ev-manual-2026-09-12-gv-writing-workshop-denton"], page + "2026-09-12-gv-writing-workshop-denton/")
+            self.assertEqual(urls["ev-manual-2026-10-24-gv-writing-workshop-tyler"], page + "2026-10-24-gv-writing-workshop-tyler/")
             details = {"en": "Details: ", "es": "Detalles: "}[lang]
             for uid, e in entries.items():
                 url, desc = urls[uid], str(e.get("DESCRIPTION", "")).splitlines()
                 with self.subTest(lang=lang, uid=uid):
-                    if url.startswith(page + "#"):
-                        self.assertIn(url[len(page) + 1:], res[lang]["cards"])            # the page has that card
-                    elif url == page:                                                # only a series' date that is over
-                        self.assertTrue(uid.startswith(lv), uid)
-                        self.assertLessEqual(e["DTEND"].dt, self.NOW)
-                    elif uid.startswith("ev-committee-"):                     # the committee meeting's section
+                    if uid.startswith("ev-committee-"):                       # the committee meeting's section
                         self.assertEqual(url, "https://example.org/site" + ("/es" if lang == "es" else "")
                                          + "/meetings/#committee-meeting")
-                    else:
-                        self.assertEqual(url, "https://citywidedallasaa.org")
+                    else:                                                     # the event's own page
+                        self.assertTrue(url.startswith(page) and url.endswith("/"), url)
+                        self.assertIn(url[len(page):-1], res[lang]["pages"])
                     self.assertEqual([ln for ln in desc if ln.startswith(details)], [details + url])
                     if uid.startswith("ev-recurring-"):
                         line = next(ln for ln in desc if ln.startswith(("Every ", "Cada ")))
                         self.assertTrue(re.sub("[\u2009\u202f\u00a0]", " ", line).endswith(
                             {"en": " PM Central time", "es": " p. m., hora del Centro"}[lang]), line)
-            self.assertEqual(sum(url == page for url in urls.values()), 3, lang)     # Jul 23, Aug 27, Sep 24
+            # (never the top of /events/ any more: the dates of Jul 23, Aug 27 and Sep 24 that are over have their page)
+            self.assertEqual(sum(url == page for url in urls.values()), 0, lang)
+            self.assertEqual(sum(url.startswith(page + lv) for url in urls.values()), len([u for u in urls if u.startswith(lv)]))
             self.assertGreater(sum(uid.startswith("ev-committee-") for uid in urls), 10, lang)   # 3 months back, 12 on
 
 

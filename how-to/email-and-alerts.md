@@ -586,7 +586,8 @@ línea"*), with links to `/es/` pages. The committee meeting's row always says *
 the platform, and from the January 2027 edition each Grapevine Meeting that took place has a row of its own,
 linking to its section on Meetings, never to the Google Meet room: *"Grapevine Meeting — Wed, Jan 6 · Online"*.
 
-The **HTML part** is a 600-pixel card. It has a dark-blue masthead with the committee logo and the line *"Grapevine /
+The **HTML part** is a 600-pixel card. It has a dark-blue masthead with the site's grape icon
+(`apple-touch-icon-180.png`, on a navy tile; since round 37 — before, the committee logo) and the line *"Grapevine /
 La Viña · Monthly digest"*, then a strip saying *"English first · Versión en español más abajo"*. Each section has a
 coloured heading, and the magazine covers are sent as JPEG pictures, because older Outlook versions cannot show WebP.
 Pictures load from the live site.
@@ -942,7 +943,7 @@ save the "sending" marker, send it, and save the "sent" or "unsent" marker.
 | The From name or the reply address | `site.committee` / `site.contact_email` in `config/site.yml`, or the secrets `DIGEST_FROM` / `DIGEST_REPLY_TO` | — |
 | Who receives it | the secret `DIGEST_TO` (NETA65), or the Google Group | — |
 | Rows per list, or stories per issue | `digest.per_section` / `digest.highlights` in `config/site.yml` | The page reads the same keys. |
-| Header, logo, footer, buttons or colours | `def render_html(` (masthead, footer), `def btn(` inside `render_lang_html` (buttons), `C = {` (colours) | `test_every_text_has_enough_contrast`: every text must stay at least 4.5:1 against its background. |
+| Header, logo, footer, buttons or colours | `def render_html(` (masthead — its picture is `apple-touch-icon-180.png`, the grape icon; `logo-180x180.png` stays on the site only for e-mails already sent —, footer), `def btn(` inside `render_lang_html` (buttons), `C = {` (colours) | `test_every_text_has_enough_contrast`: every text must stay at least 4.5:1 against its background. |
 | Add, remove or reorder a section | `def render_lang_html(` **and** `def render_text(` | The page: [`src/pages/digest.njk`](../src/pages/digest.njk) and `buildMonthlyDigest` / `monthlyDigestText` in [`community.js`](../eleventy/filters/community.js). The section order is tested in `test_dry_run_preview_in_both_languages`. On the page a section is a `<section class="cm-digest-group">` with its title in an `h3` (`dgHead`) and its rows as `li class="cm-avoid-break"`: from 1280px the two newspaper columns turn between two rows, never inside one or right after a title (`community.css` `.cm-dg-body`; in Safari and Firefox it is `src/assets/js/community.js` `digestColumns` that keeps a title with its first row, with an empty box before each `h3` / `h4` and before a list's last row; browser check `DigestColumns` in `tests/browser/test_r13_u3_layout.py`). |
 | Add a detail to an event line (a time, for example) | `def event_row(` | Times are left out **on purpose** (see that function's comment), and `test_nothing_of_what_is_current` forbids "7:00 PM". Event details on the website: [Flyers and events](flyers-and-events.md). |
 | Add a detail to an upload or podcast row | `def item_meta(`, `def item_label(`, `def build_rows(` | The page's `dgList` macro in `digest.njk` |

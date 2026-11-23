@@ -6,8 +6,8 @@
 //   * no two pages the sitemap lists IN ONE LANGUAGE share a <title> (an English page and its Spanish twin may:
 //     /instagram/ and /es/instagram/ are both "Instagram");
 //   * every page that names itself as its canonical and may be indexed is in the sitemap (a new page whose
-//     front matter left it out by mistake) — a page meant to stay out says `noindex: true` (or is a redirect or
-//     share page with a canonical elsewhere);
+//     front matter left it out by mistake) — a page meant to stay out says `noindex: true` (as the events' noindex
+//     pages do, src/pages/event-share-date.njk) or is a redirect with a canonical elsewhere;
 //   * (since round 35) no page the sitemap lists is over 1.8 MB of HTML (PAGE_LIMIT, counted in UTF-8 bytes as the
 //     file is sent, uncompressed): Googlebot reads only the first 2 MB of a page — "any bytes that exist after that
 //     2MB threshold are entirely ignored" (Google Search Central, "Inside Googlebot", March 31, 2026) — so the
@@ -17,7 +17,9 @@
 //     <body> — the Events of /events/ and of an event's own page) ends within the first 1.5 MB (LD_LIMIT): the
 //     check measures where the page's LAST block ends, so it speaks when any one block drifts down the page;
 //   * (since round 35) config/site.yml search_engines.ai_training is "allow" or "disallow" (src/robots.njk): any
-//     other value counts as "allow", and this says so (aiTrainingProblem).
+//     other value counts as "allow", and this says so (aiTrainingProblem);
+//   * (since round 37, "[search]" warnings) the site's own search finds every page the sitemap lists, its links lead
+//     to pages and #anchors that exist, and each language's index stays under its size budget (searchProblems).
 // Never the lengths of titles and descriptions: what fits in a result changes with the engine and the screen, and
 // a long one is a choice of words, not a fault. Not in a dev build of some pages (ONLY=), a `npm start` rebuild
 // (incremental) or a build that writes no files (the tests' toJSON builds): a partial site would be all problems.
@@ -162,14 +164,88 @@ export function seoProblems(results, base) {
   return problems;
 }
 
-/** The "eleventy.after" hook: each problem → buildWarning("seo", …). Synchronous, so it is registered before the
-    build's summing-up (finishBuild) and its warnings count. → the problems ([] when skipped). */
+/** The largest /search-index.json (each language's) the check lets pass, in bytes as written (uncompressed): 1,600,000.
+    About 0.9 MB in November 2026 (≈ 200 KB compressed); since round 37's fixer the Texas writers archive's stories too
+    (library.js "writers archive": ~1,250 lean entries) — 1.2 MB in English, 1.3 MB in Spanish (≈ 265 / 285 KB
+    compressed), so ~300 KB of room for what the site adds each week. /search/ downloads the whole file before its first
+    result, so the check speaks well before a phone on a slow connection waits too long for it (search.js HEAD_TIMEOUT). */
+export const SEARCH_LIMIT = 1600000;
+
+/**
+ * Since round 37, the [search] problems of a built site: what the site search (/search/: /search-index.json and
+ * /es/search-index.json, eleventy/filters/library.js searchIndex) can reach — `results` and `base` as seoProblems' →
+ * ["…", …] in the order found (none: []):
+ *   * every page the sitemap lists is FOUND: an entry of its language's index links it — its `u` once ?… and #… are
+ *     taken off (the paths of both are the site's own, without its address or path prefix: an entry's /es/… path is
+ *     the Spanish index's, a <loc> under `base` is read as seoProblems reads it);
+ *   * every link of an entry to one of our pages (`u`, `u2`: a path ending in "/") is a page of the build, and its
+ *     #anchor an id on that page (a section renamed or removed: eleventy/search-sections.js) — a file's path (no page,
+ *     a passthrough copy the results do not list) is not looked at;
+ *   * each index is at most SEARCH_LIMIT bytes.
+ * A monthly series' page (/events/series/<key>/) is checked like any other: the search links one only once the build
+ * writes it (library.js, collections.all), so a link to one that is missing — or one the sitemap lists that no entry
+ * links (its template left out of the collections) — is a problem like any other.
+ */
+export function searchProblems(results, base) {
+  const all = Array.isArray(results) ? results : [];
+  const sitemap = all.find((r) => r && r.url === "/sitemap.xml");
+  const indexes = all.filter((r) => r && typeof r.url === "string" && /^\/(?:[a-z]{2}\/)?search-index\.json$/.test(r.url) && typeof r.content === "string");
+  if (!sitemap || !indexes.length) return [];
+  const pages = new Map();
+  for (const r of all) {
+    if (r && typeof r.url === "string" && typeof r.content === "string" && /\.html$/.test(String(r.outputPath || ""))) pages.set(r.url, r);
+  }
+  const idCache = new Map();
+  const idsOf = (url) => {
+    if (!idCache.has(url)) idCache.set(url, new Set([...pages.get(url).content.matchAll(/\sid="([^"]+)"/g)].map((m) => unescapeHtml(m[1]))));
+    return idCache.get(url);
+  };
+  const locs = sitemapLocs(sitemap.content).map((loc) => pathOf(loc, base)).filter((p) => p !== null);
+  const problems = [];
+  for (const idx of indexes) {
+    const lang = langOf(idx.url);
+    const bytes = Buffer.byteLength(idx.content, "utf8");
+    if (bytes > SEARCH_LIMIT) {
+      problems.push(`${idx.url} is ${bytes.toLocaleString("en-US")} bytes, over its ${SEARCH_LIMIT.toLocaleString("en-US")}-byte budget — /search/ downloads it whole before its first result (eleventy/seo-check.js SEARCH_LIMIT)`);
+    }
+    let items = [];
+    try { items = JSON.parse(idx.content).items || []; } catch { problems.push(`${idx.url}: not valid JSON`); continue; }
+    const found = new Set();
+    for (const e of Array.isArray(items) ? items : []) {
+      for (const link of [e && e.u, e && e.u2]) {
+        if (typeof link !== "string" || !/^\/(?!\/)/.test(link)) continue;
+        const path = link.replace(/[?#].*$/, "");
+        found.add(path);
+        if (!path.endsWith("/")) continue;
+        const hash = (/#(.+)$/.exec(link) || [])[1] || "";
+        if (!pages.has(path)) {
+          problems.push(`${idx.url}: "${e.t}" (${e.id}) links ${link}, a page the build has not written`);
+          continue;
+        }
+        let id = hash;
+        try { id = decodeURIComponent(hash); } catch { /* as written */ }
+        if (hash && !idsOf(path).has(id)) problems.push(`${idx.url}: "${e.t}" (${e.id}) links ${link}, but ${path} has no id="${id}"`);
+      }
+    }
+    for (const p of locs) {
+      if (langOf(p) === lang && !found.has(p)) problems.push(`${p}: in the sitemap, but no entry of ${idx.url} links it — the site search cannot find it`);
+    }
+  }
+  return problems;
+}
+
+/** The "eleventy.after" hook: each problem → buildWarning("seo", …), and since round 37 each of the site search's
+    (searchProblems) → buildWarning("search", …). Synchronous, so it is registered before the build's summing-up
+    (finishBuild) and its warnings count. → the problems ([] when skipped). */
 export function seoCheck({ results, outputMode, incremental } = {}, env = process.env, configFile = "config/site.yml") {
   if (env.ONLY || incremental || (outputMode && outputMode !== "fs")) return [];
-  const problems = seoProblems(results, siteAddress(env, configFile));
+  const base = siteAddress(env, configFile);
+  const problems = seoProblems(results, base);
   // (the robots.txt setting: once per build, beside the pages' problems)
   const ai = aiTrainingProblem(aiTrainingSetting(configFile));
   if (ai) problems.push(ai);
   for (const p of problems) buildWarning("seo", p);
-  return problems;
+  const search = searchProblems(results, base);
+  for (const p of search) buildWarning("search", p);
+  return [...problems, ...search];
 }

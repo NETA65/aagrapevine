@@ -76,8 +76,9 @@ class Menu(unittest.TestCase):
         self.assertNotIn("prefers-color-scheme", head)
         self.assertNotIn("matchMedia", head)
         self.assertIn('if (t !== "dark") t = "light";', head)
-        # the small forwarding pages (no layout) are light too
-        for name in ("app-redirect.njk", "meeting.njk", "monthly-past.njk", "event-share.11ty.js"):
+        # the small forwarding pages (no layout) are light too (since round 37 every event has a full page in the
+        # site's layout: src/pages/event-share.11ty.js is gone)
+        for name in ("app-redirect.njk", "meeting.njk", "monthly-past.njk"):
             stub = read("src", "pages", name)
             self.assertNotIn("prefers-color-scheme", stub, name)
             self.assertIn("color-scheme: light;", stub, name)

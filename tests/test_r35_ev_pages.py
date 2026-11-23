@@ -1,15 +1,19 @@
 """Round 35 · an event's own page (src/pages/event-share-leaf.njk): the events that are LEAVES (eleventy/filters/
 committee.js eventLeaf — still to come, held at a place with a real address in both languages, not a date of a monthly
 series, not from Grapevine's or La Viña's own calendars, no page of their own elsewhere) get a real page at the address
-their card's Share button sends, /events/<anchor>/ (/es/events/<anchor>/); every other event keeps its small share
-page there (src/pages/event-share.11ty.js: noindex, on to its card). Google's event results take only "a unique URL
-(a leaf page) and markup on that URL", on "pages that focus on a single event"; an AI answer quotes such a page best.
+their card's Share button sends, /events/<anchor>/ (/es/events/<anchor>/). Google's event results take only "a unique
+URL (a leaf page) and markup on that URL", on "pages that focus on a single event"; an AI answer quotes such a page
+best. Since round 37 every other event has a full page there too (no more small share pages that forwarded to the
+card): indexable without Event markup when it is still to come (src/pages/event-share-leaf.njk, eventPagePlan's tier
+"page"), noindex and out of the sitemap for a series' date, an outside calendar's event or one that is over
+(src/pages/event-share-date.njk) — tests/test_r37_event_pages.py checks those pages' sections.
 
 A build of the two templates and the sitemap (ONLY=event-share,sitemap) with these events (SITE_DATA: never the
 day's data), checked as search engines read it:
 
-  * Which pages: the leaves' in both languages, each written once; the others' small share pages, as before
-    (noindex, location.replace, no layout); an event that is over is a small page again, out of the sitemap.
+  * Which pages: the leaves' in both languages, each written once; since round 37 the others' full pages (the site's
+    layout, never location.replace): indexable without Event markup, or noindex (a series' date, an outside calendar's
+    event, one that is over — out of the sitemap).
   * A leaf page: the site's layout (header, footer, the site's graph with its breadcrumb Home → Events → the event),
     its own canonical, its twin by hreflang (+ x-default), indexable, in the sitemap with its pair; its <title> names
     its day (two events of one name never share one) and ends "· Events — NETA 65"; a description of its day, its
@@ -100,6 +104,8 @@ EVENTS = [
          location="Grupo Tres, 300 Main St, Tyler, TX 75702", city="Tyler", state="TX"),
 ]
 LEAVES = ["2099-05-02-test-workshop", "2099-06-06-test-workshop", "2099-03-19-test-assembly"]
+# (since round 37: still to come but no leaf — indexable pages without Event markup; the others noindex pages)
+PAGES = ["2099-04-11-test-acm", "2099-05-09-online-workshop", "2099-07-18-test-tba"]
 STUBS = ["2099-04-11-test-acm", "2099-05-09-online-workshop", "2099-07-18-test-tba", "ev-recurring-citywide-test-2099-04-11",
          "ev-recurring-citywide-test-2099-05-09", "ev-lv-calendar-lvtest", "2000-02-05-old-workshop"]
 
@@ -187,15 +193,17 @@ class EventPages(unittest.TestCase):
             for pre in ("", "/es"):
                 with self.subTest(page=f"{pre}/events/{a}/"):
                     p = self.page(f"{pre}/events/{a}/")
-                    self.assertIn('<meta name="robots" content="noindex">', p)
-                    self.assertIn("location.replace(", p)
-                    self.assertNotIn('<main id="main"', p)                 # the small page, as before
-                    self.assertNotIn("application/ld+json", p)
+                    # (round 37) a full page in the site's layout — indexable when still to come, else noindex —,
+                    # never Event markup (no leaf) and never a forwarding script
+                    self.assertEqual('<meta name="robots" content="noindex">' in p, a not in PAGES)
+                    self.assertNotIn("location.replace(", p)
+                    self.assertIn('<main id="main"', p)
+                    self.assertEqual(body_ld_blocks(p), [])
 
     def test_the_head_search_engines_read(self):
         sm = self.page("/sitemap.xml")
         locs = re.findall(r"<loc>([^<]*)</loc>", sm)
-        self.assertEqual(sorted(locs), sorted(f"{BASE}{pre}/events/{a}/" for a in LEAVES for pre in ("", "/es")))
+        self.assertEqual(sorted(locs), sorted(f"{BASE}{pre}/events/{a}/" for a in LEAVES + PAGES for pre in ("", "/es")))
         titles = {}
         for a in LEAVES:
             for lang, pre in (("en", ""), ("es", "/es")):
@@ -319,13 +327,14 @@ class EventPages(unittest.TestCase):
 
 
 class Templates(unittest.TestCase):
-    """The two templates share one list (eventSharePages' `leaf`), so no address is written twice."""
+    """The templates share one plan (since round 37 eleventy/event-page-model.js eventPageData, from
+    eleventy/event-pages.js eventPagePlan), so no address is written twice."""
 
     def test_the_two_paginations(self):
         leaf = (ROOT / "src" / "pages" / "event-share-leaf.njk").read_text(encoding="utf-8")
-        share = (ROOT / "src" / "pages" / "event-share.11ty.js").read_text(encoding="utf-8")
-        self.assertIn("eventSharePages(items, full.site, full.languages).filter((s) => s.leaf)", leaf)
-        self.assertIn("eventSharePages(items, full.site, full.languages).filter((s) => !s.leaf)", share)
+        share = (ROOT / "src" / "pages" / "event-share-date.njk").read_text(encoding="utf-8")
+        self.assertIn("eventPageData(full).pages.filter((p) => p.index)", leaf)
+        self.assertIn("eventPageData(full).pages.filter((p) => !p.index)", share)
         self.assertIn('const layout = "layouts/base.njk";', leaf)
         self.assertIn('const pageKey = "events";', leaf)
         # (a file of the share pages: the names ONLY= builds pick up together — tests/test_r24_retired_room.py)

@@ -29,7 +29,8 @@ eleventyComputed:
     The hero's right-hand card (the shared hero aside, "Next chance for photos"): the next two in-person
     NETA 65 events — a booth, a workshop, an assembly (db.events through cmEvents: no committee meetings,
     no online events, no later dates of a monthly series, not the magazines' own calendars) — each
-    linking to its card on /events/. Nothing the page shows (no pictures: the albums follow right below;
+    linking to its own page (since round 37: evHref, eleventy/filters/event-links.js; a booth's date: its series'
+    page). Nothing the page shows (no pictures: the albums follow right below;
     no anonymity rules: "Protecting anonymity" has them). Hidden on smaller screens and at larger text. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set albums = db.drive.items | cmAlbums(lang) -%}
@@ -49,7 +50,7 @@ eleventyComputed:
   {%- if photoEvs.length %}
   <ul class="hero-aside-links" role="list">
     {%- for ev in photoEvs %}{% set evTone = ev | eventTone %}
-    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ev.anchor, label: ev.title, text: (ev.rangeLabel if ev.multiDay else ((ev.startIso | fmtDate(lang, "short")) + (" · " + ev.timeLabel if ev.timeLabel else ""))), icon: "calendar-days", tone: toneOf[evTone] or "vine" }, lang) }}</li>
+    <li>{{ ui.heroAsideLink({ href: ev | evHref(lang, db, site), label: ev.title, text: (ev.rangeLabel if ev.multiDay else ((ev.startIso | fmtDate(lang, "short")) + (" · " + ev.timeLabel if ev.timeLabel else ""))), icon: "calendar-days", tone: toneOf[evTone] or "vine" }, lang) }}</li>
     {%- endfor %}
   </ul>
   {%- else %}

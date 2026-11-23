@@ -10,7 +10,10 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
 ---
 {#- SITE-WIDE SEARCH — /assets/js/search.js loads /search-index.json
     (src/pages/search-index.11ty.js: every article, PDF, episode, video, post,
-    committee file/album/announcement/event and the site's own pages) and
+    committee file/album/announcement/event and the site's own pages — since round 37
+    also each event's own page, the series' pages, the long pages' sections, the month
+    toolkits, the presentations, the current issues, the flyers and the shop's offers,
+    each kind with its label in `kinds` below and its icon in ss-icons) and
     searches it with MiniSearch. Reads ?q= (the header search icon links here)
     and ?type=. Everything below the hero is progressive: without JS the
     "browse" links still work.
@@ -19,7 +22,8 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
     type filters sit in a fixed-width sidebar (1024px+) next to the results, which show in
     two columns from 1536px. Before a query: tips + popular searches next to "browse". -#}
 {% import "macros/ui.njk" as ui with context %}
-{%- set counts = db | searchKindCounts(nav, lang, site) -%}
+{#- (the same index as /search-index.json: the presentations too — the `presentations` global) -#}
+{%- set counts = db | searchKindCounts(nav, lang, site, presentations) -%}
 {%- set nDocs = (counts.pdf or 0) + (counts.document or 0) + (counts.slides or 0) + (counts.form or 0) -%}
 {#- Events tile = the count on the Events page's own tab (committee sub-nav): its upcoming events, a monthly
     series once, no committee meetings (cmEventEnds). Each entry is the moment that event is over: the count
@@ -41,7 +45,7 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
     tiles are right below, so the card doesn't repeat them.) -#}
 {%- set fresh = [] -%}{%- set freshKinds = [] -%}
 {%- for it in wnItems | limit(80) -%}
-  {%- set fHref = it | cmHref(lang) -%}
+  {%- set fHref = it | cmHref(lang, db, site) -%}
   {%- if fresh.length < 3 and fHref and not it._isGroup and not (it._group in freshKinds) -%}
     {%- set fTitle = ((it | mediaTitle(lang)) if (it.kind == "episode" or it.kind == "video") else (it | tx("title", lang))) | excerpt(90) -%}
     {%- if fTitle -%}
@@ -209,9 +213,12 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
   })();
 </script>
 
-{#- icons + strings for search.js -#}
+{#- icons + strings for search.js (every icon an entry can name: its kind's — search.js KIND_ICON —, a site page's,
+    a section's (eleventy/search-sections.js, the shop's offers) and a meeting's `ic`) -#}
 <template id="ss-icons">
-  {%- for name in ["file-text", "book-open", "pen-line", "presentation", "file-pen-line", "headphones", "circle-play", "instagram", "images", "megaphone", "calendar-days", "video", "languages", "arrow-up-right", "house", "sparkles", "library", "users", "folder-open", "badge-check", "map", "mail-open", "info", "mail", "qr-code", "search", "activity", "hand-heart", "award", "calendar-clock", "map-pin", "grid-3x3"] %}
+  {%- for name in ["file-text", "book-open", "pen-line", "presentation", "file-pen-line", "headphones", "circle-play", "instagram", "images", "megaphone", "calendar-days", "video", "languages", "arrow-up-right", "house", "sparkles", "library", "users", "folder-open", "badge-check", "map", "mail-open", "info", "mail", "qr-code", "search", "activity", "hand-heart", "award", "calendar-clock", "map-pin", "grid-3x3",
+    "newspaper", "calendar-range", "bookmark", "monitor-play", "history", "list-checks", "lightbulb", "handshake", "send", "shield-check", "circle-help", "hand", "captions", "phone", "printer", "badge-dollar-sign", "gift", "truck", "mic", "accessibility", "heart-handshake",
+    "shopping-bag", "sprout", "calendar-heart", "receipt", "hard-drive-download", "clipboard-list"] %}
   <i data-icon="{{ name }}">{% icon name, "size-4" %}</i>
   {%- endfor %}
 </template>
@@ -225,7 +232,10 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
     pdf: "kind.pdf" | t(lang), document: "kind.document" | t(lang), slides: "kind.slides" | t(lang), form: "kind.form" | t(lang),
     episode: "kind.episode" | t(lang), video: "kind.video" | t(lang), video_file: "kind.video_file" | t(lang), post: "kind.post" | t(lang),
     album: "search.kind_label.album" | t(lang), announcement: "kind.announcement" | t(lang), event: "kind.event" | t(lang),
-    meeting: "search.kind_label.meeting" | t(lang)
+    meeting: "search.kind_label.meeting" | t(lang),
+    section: "search.kind_label.section" | t(lang), month: "search.kind_label.month" | t(lang),
+    presentation: "search.kind_label.presentation" | t(lang), issue: "search.kind_label.issue" | t(lang),
+    flyer: "search.kind_label.flyer" | t(lang)
   },
   groups: {
     pages: "search.kind.pages" | t(lang), articles: "search.kind.articles" | t(lang), docs: "search.kind.docs" | t(lang),
@@ -243,6 +253,6 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
     auto: "common.auto_translated" | t(lang), autoHelp: "common.auto_translated_help" | t(lang), external: "search.external" | t(lang),
     subscriber: "search.subscriber" | t(lang), subscriberTitle: "search.subscriber_title" | t(lang), byline: "search.byline" | t(lang),
     tbc: "committee.events.tentative" | t(lang), tbcHelp: "committee.events.tentative_help" | t(lang),
-    episodePage: "media.episode_page" | t(lang)
+    episodePage: "media.episode_page" | t(lang), present: "search.present" | t(lang)
   }
 } | jsonScript | safe }}</script>

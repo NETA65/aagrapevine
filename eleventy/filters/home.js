@@ -14,9 +14,10 @@ import path from "node:path";
 // The Library's own rules (which documents, which kit / type, which collections),
 // so the home page's quick links show the same numbers as /library/.
 import { libraryDocs, libraryCollections, docKitType, CATEGORIES, COLLECTIONS } from "./library.js";
-// The id of an event's card on /events/ (a monthly recurring event links there), the end of a Central-time
-// day (an all-day event is upcoming through its last day) and the time range /events/ writes (clockRange).
-import { eventAnchor, eventEndMs, eventHost, clockRange } from "./committee.js";
+// The end of a Central-time day (an all-day event is upcoming through its last day), who holds an event and the time
+// range /events/ writes (clockRange). (Where a home event links: its own page — evHref, eleventy/filters/event-links.js,
+// since round 37.)
+import { eventEndMs, eventHost, clockRange } from "./committee.js";
 // The Texas writers archive's headline numbers, counted as /published/#archive counts them.
 import { pwArchiveTotals } from "./published.js";
 // a magazine cover from the committee's Drive (Home's "Committee uploads" leaves them out: homeDrive)
@@ -472,10 +473,6 @@ export default function (eleventyConfig, helpers) {
       online,
     };
   });
-
-  /* The id of an event's card on /events/ ("/events/#" + this): a monthly recurring event's card
-     there carries its "every month" line, the add-to-calendar menu and the organizers' link. */
-  eleventyConfig.addFilter("homeEventAnchor", (e) => (e ? eventAnchor(e) : ""));
 
   /* The bulletin's posts: not expired, pinned first, then newest. */
   eleventyConfig.addFilter("homeAnnouncements", (items) => {

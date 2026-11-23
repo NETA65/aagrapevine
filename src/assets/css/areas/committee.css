@@ -404,6 +404,9 @@
     @media (width >= 96rem) { .cm-event { contain-intrinsic-block-size: auto 15rem; } }
     @media (width >= 120rem) { .cm-event { contain-intrinsic-block-size: auto 13.5rem; } }
     .cm-event:has(.cm-menu[open]) { content-visibility: visible; }
+    /* (round 37's fixer) a link to a card far down the list: every card drawn for the jump (committee.js reveal),
+       so it lands where it is — a moment later each keeps the height it was drawn at */
+    .cm-cv-all .cm-event { content-visibility: visible; }
   }
   @media print { .cm-event { content-visibility: visible; } }
   /* The flyer tile on the right of an event card (events.njk), for EVERY event with a flyer, from 640px (on a
@@ -1201,3 +1204,88 @@ html:not(.cm-js) [data-cm-js] { display: none !important; }
   .cm-live-dot { animation: none; }
 }
 .glightbox-container.cm-lightbox .goverlay { background: rgb(9 10 20 / 0.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+
+/* ---------- Round 37 · an event's own page and a monthly series' page (.evp-*) ----------
+   src/_includes/partials/event-page.njk and macros/event-page.njk (src/pages/event-share-leaf.njk, -date, -series).
+   Phones first: one column — the breadcrumb, the banners, the lede (what a reader, a search engine and a screen
+   reader meet first), the card (its Join and Add to calendar within reach; a series' page: its flyer under it), the
+   quick facts, then the sections; from 64rem the card beside the quick facts (the facts on the right: .evp-top).
+   Every tap target 44px tall (.tap-link, the buttons). */
+@layer components {
+  .evp-crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 0.125rem 0.375rem; font-size: 0.875rem; color: var(--c-muted); }
+  .evp-crumbs li { display: inline-flex; align-items: center; gap: 0.375rem; min-width: 0; }
+  /* (a short link — "Home", "Inicio" — still 44px wide: the tap target's goal both ways) */
+  .evp-crumbs a { min-width: 2.75rem; justify-content: center; }
+  .evp-crumbs [aria-current="page"] { color: var(--c-ink); font-weight: 600; overflow-wrap: anywhere; }
+  .evp-banners { display: grid; gap: 0.5rem; margin-top: 1rem; }
+  .evp-banner { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.75rem 1rem; border-radius: 0.875rem;
+    border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-ink); font-size: 0.95rem; line-height: 1.5; }
+  .evp-banner > svg { margin-top: 0.1rem; color: var(--c-faint); }
+  .evp-banner.is-past { background: var(--c-surface-2, var(--c-surface)); }
+  .evp-banner.is-tbc { border-color: color-mix(in srgb, var(--c-lv) 35%, var(--c-line)); background: var(--c-lv-soft); }
+  .evp-banner.is-tbc > svg { color: var(--c-lv); }
+  .evp-banner.is-series { border-color: color-mix(in srgb, var(--c-gv) 30%, var(--c-line)); background: var(--c-gv-soft); }
+  .evp-banner.is-series > svg { color: var(--c-gv); }
+  .evp-banner.is-series > a { align-self: center; }
+  .evp-lede { margin-top: 1.25rem; max-width: 62ch; font-size: 1.125rem; line-height: 1.6; color: var(--c-ink); text-wrap: pretty; }
+  @media (width >= 40rem) { .evp-lede { font-size: 1.2rem; } }
+  .evp-top { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
+  @media (width >= 64rem) {
+    .evp-top { grid-template-columns: minmax(0, 1fr) 20rem; align-items: start; }
+    .evp-top-facts { grid-column: 2; grid-row: 1; }
+    .evp-top-main { grid-column: 1; grid-row: 1; }
+  }
+  .evp-facts { display: grid; gap: 0.75rem; margin-top: 1rem; }
+  .evp-facts > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.75rem; padding-top: 0.75rem;
+    border-top: 1px solid var(--c-line); }
+  .evp-facts > div:first-child { padding-top: 0; border-top: 0; }
+  @media (width >= 64rem) { .evp-facts > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; } }
+  .evp-facts dt { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-muted); padding-top: 0.15rem; }
+  .evp-facts dd { min-width: 0; font-size: 0.95rem; line-height: 1.5; color: var(--c-ink); overflow-wrap: anywhere; }
+  .evp-fact-line { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.15rem; color: var(--c-muted); }
+  .evp-map { display: flex; width: fit-content; align-items: center; gap: 0.35rem; margin-top: 0.15rem; font-weight: 600; color: var(--c-gv);
+    text-decoration: underline; text-underline-offset: 2px; }
+  .evp-map:hover { color: var(--c-gv-strong); }
+  @media (width < 40rem), (pointer: coarse) { .evp-map { min-height: 2.75rem; } }
+  .evp-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .evp-series-card { border-left-width: 4px; }
+  .evp-mini.is-current { outline: 2px solid var(--c-gv); outline-offset: -2px; }
+  /* (a past event's flyer beside its card — on a phone a smaller one, so the card keeps room for its words) */
+  .evp-mini-thumb { display: block; flex-shrink: 0; width: 2.75rem; height: 3.65rem; object-fit: cover; border-radius: 0.4rem;
+    border: 1px solid var(--c-line); background: var(--c-surface-2, var(--c-surface)); }
+  @media (width >= 40rem) { .evp-mini-thumb { width: 3.5rem; height: 4.6rem; border-radius: 0.5rem; } }
+  /* (round 37's fixer) an event's own page shows its flyer on a phone too: under the card's words and buttons (the
+     /events/ list keeps only its "View flyer" button there — a picture per card would make the list very long) */
+  @media (width < 40rem) {
+    .evp-card.cm-event { flex-wrap: wrap; }
+    .evp-card .cm-flyer-thumb { display: block; width: 10rem; }
+  }
+  .evp-res { display: flex; gap: 0.85rem; padding: 1rem 1.1rem; }
+  .evp-res-icon { display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+    background: var(--c-gv-soft); color: var(--c-gv); }
+  .evp-res-h { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); }
+  .evp-res-link { display: inline-block; padding-block: 0.7rem; margin-block: -0.7rem; text-decoration: none; }
+  .evp-res-link:hover { color: var(--c-gv); text-decoration: underline; text-underline-offset: 2px; }
+  .evp-res-links { display: flex; flex-wrap: wrap; gap: 0 1rem; margin-top: 0.25rem; font-size: 0.875rem; }
+  .evp-flyers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+  @media (width >= 40rem) { .evp-flyers { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .evp-flyer { display: flex; flex-direction: column; gap: 0.5rem; text-decoration: none; color: var(--c-ink); }
+  .evp-flyer-pic { position: relative; display: block; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 0.75rem;
+    border: 1px solid var(--c-line); background: var(--c-surface-2, var(--c-surface)); box-shadow: var(--shadow-lift); }
+  .evp-flyer-pic img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+  .evp-flyer-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--c-faint); }
+  .evp-flyer-title { font-size: 0.875rem; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+  .evp-flyer:hover .evp-flyer-title { color: var(--c-gv); text-decoration: underline; text-underline-offset: 2px; }
+  .evp-issue { display: flex; gap: 1rem; padding: 1rem 1.1rem; align-items: flex-start; }
+  .evp-issue-cover { flex-shrink: 0; width: 4.5rem; aspect-ratio: 480 / 686; overflow: hidden; border-radius: 0.4rem;
+    border: 1px solid var(--c-line); background: var(--tone-soft, var(--c-surface-2)); }
+  .evp-issue-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .evp-issue-blank { display: grid; place-items: center; width: 100%; height: 100%; color: var(--tone, var(--c-faint)); }
+  .evp-issue .eyebrow { color: var(--tone-ink, var(--c-muted)); }
+}
+
+/* (round 37's fixer) …its words take the whole line, so the flyer goes under them — unlayered: the card's words carry
+   the utility flex-1 (flex-basis 0%), which a rule in a layer below the utilities could not override */
+@media (width < 40rem) {
+  .evp-card.cm-event > .flex-1 { flex-basis: 100%; }
+}

@@ -2,7 +2,7 @@
 // cancelledPages(db.events.cancelled, db.events.items, site, languages). A module of its own — not in eleventy/filters/
 // (every file there is loaded as a plugin) and not in the template's front matter (whose top-level names all become
 // page data, merged deep into every page).
-import { normalizeEvents, eventLd, eventLeaf, eventPagePath, cancelledPageMeta, withoutJoinDetails, EVENT_PAGE_ANCHOR } from "./filters/committee.js";
+import { normalizeEvents, eventLd, eventPagePath, cancelledPageMeta, withoutJoinDetails, EVENT_PAGE_ANCHOR } from "./filters/committee.js";
 import { eventTone } from "./filters/event-tone.js";
 
 const RELATED_MAX = 3;
@@ -12,9 +12,11 @@ const tagsOf = (ev) => new Set((Array.isArray(ev.item?.tags) ? ev.item.tags : []
  * The notice pages: one per cancelled event (db.events.cancelled — src/_data/db.js, eleventy/cancelled-events.js;
  * content/events `cancelled: true`) and language whose day is not over at the build's own moment (site.built, as the
  * event pages read it) → [{ lang, ev, path, target, ld, meta, note, related }]. Its address is the one its page had
- * (committee.js eventPagePath: /events/<anchor>/), so a link shared before still works — but never one an event of
- * the lists has (the event pages write those, src/pages/event-share*.11ty.js / .njk: no address is written twice); an
- * anchor not fit for an address, or met twice, gets none. In every language alike (each page has its twin):
+ * (committee.js eventPagePath: /events/<anchor>/), so a link shared before still works. ONE rule says whose an address
+ * is (since round 37, when every event got a page): a cancelled event's anchor is its notice's — the event pages' plan
+ * leaves every cancelled anchor out (eleventy/event-pages.js eventPagePlan: cancelledAnchors), so no address is ever
+ * written twice, and a listed event that shares one (never: the anchor is the file's name) yields it. An anchor not
+ * fit for an address, or met twice, gets none. In every language alike (each page has its twin):
  *   target   where "See all events" goes: /events/ (the event has no card there any more);
  *   ld       its Event, EventCancelled (committee.js eventLd) — only when it was to be held at a place with a real
  *            address in every language, as for every event page;
@@ -22,7 +24,8 @@ const tagsOf = (ev) => new Set((Array.isArray(ev.item?.tags) ? ev.item.tags : []
  *   note     its summary without how to join (withoutJoinDetails);
  *   related  up to RELATED_MAX events still to come of the same kind — the same colour (eventTone) and a tag in
  *            common (a La Viña workshop: the next La Viña workshops and events) —, a monthly series by its next date
- *            only, soonest first: { ev, tone, href } — its own page (eventLeaf), else its card on /events/.
+ *            only, soonest first: { ev, tone, href } — its own page (since round 37 every event the lists show has
+ *            one: /events/<anchor>/), else (an anchor not fit for an address) its card on /events/.
  * Once its day is over, the next build writes no page: the address is a 404 again, which sends people on to /events/
  * (src/assets/js/community.js), and it leaves the sitemap. The calendar feeds keep its STATUS:CANCELLED entry 90 days.
  * COMMITTEE_EMPTY builds: none.
@@ -35,12 +38,11 @@ export function cancelledPages(cancelled, items, site, langs) {
   if (process.env.COMMITTEE_EMPTY || !(cancelled || []).length) return out;
   for (const lang of ls) {
     const listed = normalizeEvents(items || [], site, lang, { now }).filter((e) => !e.committee);
-    const taken = new Set(listed.map((e) => e.anchor));
     const events = lang === "en" ? "/events/" : `/${lang}/events/`;
     const seen = new Set();
     for (const ev of normalizeEvents(cancelled, site, lang, { now })) {
       if (!ev.cancelled || ev.committee || ev.past || ev.endMs <= now.getTime()) continue;
-      if (!EVENT_PAGE_ANCHOR.test(ev.anchor || "") || taken.has(ev.anchor) || seen.has(ev.anchor)) continue;
+      if (!EVENT_PAGE_ANCHOR.test(ev.anchor || "") || seen.has(ev.anchor)) continue;
       seen.add(ev.anchor);
       const path = eventPagePath(ev, lang);
       const abs = String(site?.url || "").replace(/\/+$/, "") + path;
@@ -55,7 +57,7 @@ export function cancelledPages(cancelled, items, site, langs) {
         }
         return true;
       }).slice(0, RELATED_MAX).map((e) => ({ ev: e, tone: eventTone(e),
-        href: eventLeaf(e, site, ls) ? eventPagePath(e, lang) : `${events}#${e.anchor}` }));
+        href: EVENT_PAGE_ANCHOR.test(e.anchor || "") ? eventPagePath(e, lang) : `${events}#${encodeURIComponent(e.anchor)}` }));
       out.push({ lang, ev, path, target: events, ld: eventLd([ev], site, lang, abs, 1, { url: abs }).length > 0,
                  meta: cancelledPageMeta(ev, site, lang), note: withoutJoinDetails(ev.summary), related });
     }

@@ -273,7 +273,9 @@ class Model(unittest.TestCase):
         self.assertEqual([d["id"] for d in m["dates"] if d["past"]], ["ev:ws-oct3"])  # over by an instant, not a day
         self.assertEqual((by["ev:committee:2026-10-21"]["href"], by["ev:committee:2026-10-21"]["external"]), ("/meetings/#committee-meeting", False))
         self.assertEqual(by["ev:committee:2026-10-21"]["overAt"], "2026-10-22T01:00:00.000Z")
-        self.assertEqual((by["ev:rec:2026-10-10"]["href"], by["ev:rec:2026-10-10"]["external"]), ("https://citywidedallasaa.org", True))
+        # (since round 37 an event's own page — eleventy/filters/event-links.js: a series' date its series' page,
+        # here — no series in SITE's settings — the date's own; never its outside page any more, its page links there)
+        self.assertEqual((by["ev:rec:2026-10-10"]["href"], by["ev:rec:2026-10-10"]["external"]), ("/events/ev-rec-2026-10-10/", False))
         self.assertEqual((by["ev:feed"]["category"], by["ev:feed"]["kind"]), ("neta65", "event"))
         # the place once: the city after the title only when the title does not already name it (the page's
         # row, the poster and the message)

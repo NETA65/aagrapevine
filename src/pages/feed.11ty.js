@@ -4,9 +4,15 @@
 // carry their audio as an <enclosure>, so podcast apps can use the feed too.
 // The channel's <copyright> is the site footer's credit line (footer.reprints); its <image> is the site's grape
 // icon, 96 x 96 (favicon-96.png: RSS 2.0 allows 144 px wide at most, and a reader shows it as the feed's icon).
+// An event's item links to the event's own page (since round 37; a date of a monthly series to its series' page:
+// community.js hrefOf with the build's plan of the events' pages — eleventy/filters/event-links.js).
+// A feed is a copy made for machines (feed readers, aggregators, AI tools): since round 37's fixer an item's summary
+// never says how to join a meeting — its sentences with a meeting ID, code, passcode or a meeting app's link are left
+// out (committee.js withoutJoinDetails, as for the search's snippets); the item's page gives them to people.
 import { prepareWhatsNew, hrefOf, escapeXml as x, itemIssueName } from "../../eleventy/filters/community.js";
+import { eventLinkPlan } from "../../eleventy/filters/event-links.js";
 import { meetingTitleParts } from "../../eleventy/filters/media.js";
-import { tidyBrackets } from "../../eleventy/filters/committee.js";
+import { tidyBrackets, withoutJoinDetails } from "../../eleventy/filters/committee.js";
 
 const MAX_ITEMS = 100;
 const LANG_TAG = { en: "en-us", es: "es-us" };
@@ -41,6 +47,7 @@ export function render(data) {
   const home = abs(site, lang === "en" ? "/" : `/${lang}/`);
   const self = abs(site, lang === "en" ? "/feed.xml" : `/${lang}/feed.xml`);
   const items = prepareWhatsNew(db?.whatsnew?.items || []).slice(0, MAX_ITEMS);
+  const links = eventLinkPlan(db, site, data.languages);
   const newest = items.find((i) => i._when)?._when || site.built;
 
   const out = [];
@@ -77,8 +84,8 @@ export function render(data) {
     const title = (mt ? `${t(mt.label)}, ${this.fmtDate(mt.date, lang, "medium")}`
       : it.kind === "event" ? tidyBrackets(raw) : raw).replace(/\s+/g, " ").trim();
     if (!title) continue;
-    const link = abs(site, hrefOf(it, lang)) || home;
-    const summary = String(pick(it, "summary", lang) || "").trim();
+    const link = abs(site, hrefOf(it, lang, links)) || home;
+    const summary = withoutJoinDetails(String(pick(it, "summary", lang) || "")).trim();
     // (the magazine covers added on a day — build_data.cover_news — are the magazines' work, not a committee upload)
     const groupLabel = it.extra?.covers ? t("community.wn.covers_kind") : t(`community.group.${it._group}`);
     const source = sourceName(it);

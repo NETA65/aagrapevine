@@ -63,6 +63,22 @@ DATA_TESTS: dict[str, str] = {
     "test_bingo_csv.Real.test_the_build_fills_every_square":
         "the bingo cards' meeting squares, filled in from the day's weekly open meetings (data/site/weekly_open.json) "
         "and config/site.yml: a meeting the day's data no longer has leaves its square out",
+    "test_r37_search.RealIndex.test_the_size_budget":
+        "the site search's index of the day's data (data/site): each language's at most 1,600,000 bytes",
+    "test_r37_search.RealIndex.test_the_query_table_on_the_days_data":
+        "the site search on the day's data: the flyers, an assembly, the current issues and Book of the Month the day's "
+        "data has (data/site/drive.json, events.json, articles.json, shop.json) found by the round-37 query table, the "
+        "next workshop before a flyer of one that is over, the next committee meeting near the top",
+    "test_r37_search.RealIndex.test_every_new_kind_is_there":
+        "the site search on the day's data: the day's flyers and current issues (data/site/drive.json, articles.json) "
+        "among its entries",
+    "test_r35_ev_weight.Budget.test_what_a_reader_without_a_browser_takes_from_the_page":
+        "/events/ built from the day's events (data/site/events.json): its text and link addresses under 170,000 "
+        "characters in each language — one more monthly series (config/site.yml recurring_events, dated through "
+        "events_until) or many more events can pass it; ThePage tests the cards' own weight on events of its own",
+    "test_r37_search.RealIndex.test_nothing_says_how_to_join":
+        "the site search's index of the day's data: no Zoom ID or meeting link in it, whatever the day's Instagram "
+        "captions, events and weekly open meetings say (data/site/instagram.json, events.json, weekly_open.json)",
 }
 
 # test id prefix (a class, or one test) → which of the committee's files (or which documentation) it judges

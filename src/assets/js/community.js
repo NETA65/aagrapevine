@@ -273,9 +273,15 @@
       var path = location.pathname;
       try { path = decodeURIComponent(path); } catch (e) { /* malformed %-escape: use as-is */ }
       if (path.indexOf(base) === 0) path = path.slice(base.length);
-      // A shared event's page (/events/<its card>/, src/pages/event-share.11ty.js) whose event has left the
-      // events list since: on to the Events page — to that card, should it still be there.
+      // An event's own page (/events/<its card's anchor>/) whose event has left the events list since: on to the
+      // Events page — to that card, should it still be there. Since round 37: a date of a monthly series
+      // (/events/ev-recurring-<series>-YYYY-MM-DD/, its date long over) goes on to its series' page
+      // (/events/series/<series>/), and a series' page that is gone (no date to come) to the Events page itself.
+      var hub = /^((?:es\/)?events\/)series(?:\/[a-z0-9][a-z0-9-]*)?\/?$/.exec(path);
+      if (hub) { location.replace(base + hub[1] + location.search); return; }
       var ev = /^((?:es\/)?events\/)([a-z0-9][a-z0-9-]*)\/?$/.exec(path);
+      var date = ev && /^ev-recurring-([a-z0-9][a-z0-9-]*?)-\d{4}-\d{2}-\d{2}$/.exec(ev[2]);
+      if (date) { location.replace(base + ev[1] + "series/" + date[1] + "/" + location.search); return; }
       if (ev) { location.replace(base + ev[1] + location.search + "#" + ev[2]); return; }
       var words = path.replace(/^es\//, "").replace(/\.[a-z0-9]{2,5}$/i, "")  // any file extension (.html, .php, .pdf …)
         .split(/[\/\-_.+]+/).filter(function (w) { return w && w.length > 2 && !/^(index|grapevine|es|en|www|\d+)$/i.test(w); });

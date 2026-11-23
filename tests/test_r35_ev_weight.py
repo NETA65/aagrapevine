@@ -34,7 +34,10 @@ now" for the page's news.
                      values) — and still on the page, word for word.
   * Budget     — /events/ as the site ships it (data/site, today): its <main> as such a reader takes it — the text and
                  the link addresses — stays under 170,000 characters in each language (it was 292,000 / 320,000 in
-                 round 35, before; 145,000 / 155,000 after), and no card's static link carries a description.
+                 round 35, before; 145,000 / 155,000 after), and no card's static link carries a description. It
+                 judges the day's events, so the Code check runs it and the publish gate does not
+                 (scripts/ops/gate_tests.py DATA_TESTS): an event file or a monthly series the committee adds never
+                 stops the site's updates; ThePage tests the cards' own weight on events of its own.
   * Wiring     — committee.js fills a menu (fillMenu) as it opens, before the panel is placed; the CSS, for the record.
 
 Skipped without Node.js or the site's npm packages (tests/nodejs.py).
@@ -452,7 +455,10 @@ class ThePage(unittest.TestCase):
         p = self.pages()
         leaves = [u for u in p if re.fullmatch(r"(/es)?/events/zz-(hybrid|acm)/", u)]
         self.assertEqual(len(leaves), 4, sorted(p))
-        for url in ["/events/", "/es/events/", *leaves]:
+        # (since round 37 every event has a full page — eleventy/event-pages.js eventPagePlan: each one checked)
+        own = [u for u in p if re.fullmatch(r"(/es)?/events/[a-z0-9-]+/", u)]
+        self.assertGreater(len(own), len(leaves))
+        for url in ["/events/", "/es/events/", *own]:
             page = main_of(p[url])
             with self.subTest(url=url):
                 self.assertEqual(unshielded(page), [])

@@ -415,7 +415,7 @@ series of ours does — but the Grapevine Meeting, below, which has its own card
 | `host` | `neta` (us, the default), `lv` (La Viña) or `gv` (Grapevine). |
 | `flyer_match` | A pattern that finds the series' flyer on the committee's Drive. |
 | `months_ahead` | At least this many dates on `/events/` and in the calendar feeds: 1–24, default 6. With `events_until` ([below](#how-far-ahead-events_until)) every date through its month is listed — more, unless this asks for more still. |
-| `starts` | The first date, `"YYYY-MM-DD"` (optional): no date before it anywhere, not even among the past 90 days the calendar files keep. A day that is not one of the rule's days still counts — the rule's next day is the first date, and the run summary says which. |
+| `starts` | The first date, `"YYYY-MM-DD"` (optional): no date before it anywhere, not even among the past 90 days the calendar files keep. A day that is not one of the rule's days still counts — the rule's next day is the first date, and the run summary says which. **Set it on every new series** (since round 37): without it the rule's dates are counted back before the series began too, so the calendar files' past months list dates that never happened and each gets a page saying it "took place" (`noindex`, but wrong). |
 | `skip_dates` | Months without it: that month's own rule day, `["2026-12-12"]`. |
 
 Unlike `meeting:`, a mistake in one of these keys is always reported. A real mistake skips that one event;
@@ -436,7 +436,7 @@ a yellow **Settings problem**, for example (checked; the entry's number and key 
 #### How far ahead (`events_until:`)
 
 A line of its own, at the top level just above `recurring_events:`, says until when the committee meeting and every
-monthly event are listed on `/events/`, in the calendar files and on the event share pages:
+monthly event are listed on `/events/`, in the calendar files and as the events' own pages:
 
 ```yaml
 events_until: "2028-12-31"          # every date through this day's MONTH — Panel 77 ends Dec 31, 2028

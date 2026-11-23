@@ -56,6 +56,89 @@ whole description below the header, so write the complete Spanish text there.
 Anything you leave out is still translated automatically. Put a value in quotes
 when it contains `: ` (for example `title_es: "Taller: Fort Worth"`).
 
+## Its own page (automatic)
+
+**Adding the file is enough.** About 3 minutes after you save, the event has a page of its own, in English and in
+Spanish: `/events/<file name>/` and `/es/events/<file name>/` — for example
+`https://grapevine.neta65.org/events/2026-12-12-lv-writing-workshop-fort-worth/`. Nothing else to write, and
+nothing to keep up: when you change the file, the page changes with it. A dated flyer on the Drive and every date of
+a monthly series (`config/site.yml` → `recurring_events:`) get a page the same way. (Since round 37, November 2026.)
+
+Every link to the event goes there: its card's title on the Events page and its **Share** button, the home page, the
+monthly toolkit, What's New, the site search, the RSS feed and the calendar entries ("Details: …"). The card's
+**Event details** button still opens the event's page on another site (`url:`), when it has one.
+
+What the page shows, from the top:
+
+- the title, the day, the time and the place, and one plain sentence that says what the event is — "La Viña Writing
+  Workshop (in Spanish) — Fort Worth is a writing workshop on Saturday, December 12, 2026, 7:00 – 9:00 PM CST, at
+  Grupo Nuevo Horizonte, …";
+- the event's card, as on the Events page: **Join online**, **Add to calendar**, **View flyer**, **Share** and the
+  whole description;
+- **Quick facts**: what, when, where (with a **Map** link for an event at a real address), the language, who
+  organizes it, "Free" for the committee's own events, who can come (workshops and GVR/RLV orientations), how often
+  it repeats (a monthly series) and whom to ask;
+- **Get ready**: the links that fit its kind (the table below), the presentation for it, and **Make a GVR/RLV Bingo
+  card for this event** — the bingo builder opens with the event's name, day, magazine and kind already filled in;
+- the next event of the same kind, **Coming up** (the next three events and our next committee meeting), **Past
+  events like this** with their flyers, **Flyers of similar events**, and the Grapevine and La Viña issues of the
+  event's month with that month's toolkit (a Grapevine Meeting's page also shows the newest Grapevine issue);
+- **Subscribe to the calendar**.
+
+| Kind of event | What *Get ready* links |
+|---|---|
+| Writing workshop | the Writing Workshop presentation, Share your story, writing tips, how to send a story, the story deadlines (and their calendar), the workshop guides (PDF), recording your story (and the phone line), members of our Area in print, GVR / RLV 101's *Stories, audio and workshops*, the booth display |
+| Recording workshop | the Writing Workshop presentation (the closest one), recording your story, the workshop guides, the podcasts, members of our Area in print, writing tips, the booth display |
+| Information workshop | the Information Workshop presentation, magazine prices, GVR / RLV 101's *What Grapevine and La Viña are* and *Subscriptions and gifts*, the podcasts, the videos, the booth display, *Your literature table* |
+| GVR/RLV orientation | the Orientation Workshop presentation, GVR / RLV 101, the GVR / RLV corner (the job, first steps, kits), signing up as a GVR or an RLV, GVR / RLV 101's *The GVR / RLV service position* |
+| GSR/DCM orientation | our Area's website, GVR / RLV 101's *The GVR / RLV service position*, the GVR / RLV corner, the booth display, *Your literature table* |
+| Assembly, ACM, town hall | its official page (its `url:` — else our Area's website), the booth display, *Your literature table*, photos of our displays, current offers |
+| Intergroup meeting | magazine prices, current offers, the booth display |
+| Literature booth (CityWide) | the booth display, *Your literature table*, photos of our displays, current offers, magazine prices, our pinned bulletin post |
+| Online AA meeting (our Grapevine Meeting) | the Grapevine Meeting presentation, what happens at the meeting, the weekly open meetings, read the magazines, the podcasts |
+| Monthly online workshop (La Viña's) | the podcasts, sending your story to La Viña, recording your story |
+| An event from Grapevine's or La Viña's own calendar | its own page on their site, and more from the magazines' calendars |
+| Anything else | read the magazines, magazine prices, Share your story, our pinned bulletin post |
+
+A link the site cannot make is left out: a presentation whose file is not in `config/presentations/`, a bulletin
+post when none is pinned, the displays' photos when there is no such album.
+
+**Which pages search engines get.** The page of every one-off event still to come, and each monthly series' own page
+(below), are meant to be found: they are in the sitemap, in both languages. An event held at a real address (a city,
+a state or a ZIP code) with no page of its own elsewhere also carries the machine-readable Event Google's event
+results read. The page of one date of a monthly series, of an event from Grapevine's or La Viña's own calendar and
+of an event that is over is still a full page for people (the Share button sends it), but it tells search engines not
+to list it (`noindex`) and is not in the sitemap. Once an event is over, its page says **This event is over**, keeps
+its summary (without how to join) and the related links, but no Join or Add to calendar; it stays while the site still lists the event (the 12
+newest past events, a series' dates for 90 days). After that the address sends people to the Events page (a series'
+date: to its series' page).
+
+**A monthly series' own page:** `/events/series/<key>/` (for example `/events/series/citywide-dallas/`), with how to
+join (online), its flyer, its quick facts, its next 6 dates — each linked to that date's page, a date the host
+moved included, a cancelled one never — and the same *Get ready* links. A new block under `recurring_events:` gets
+one as soon as one of its dates is in the site's data; a block with `enabled: false`, or with no date still to come,
+gets none. Its title has no date ("GV/LV booth at CityWide Dallas — Every second Saturday of the month"), so it is
+the one address search engines keep for the series.
+
+## The kind of event: `type:` (optional)
+
+The site works out the kind of each event by itself, from its title (in English or Spanish), its tags and where it
+comes from: "Taller de Escritura" is a writing workshop, "Spring Assembly" an assembly, a date of the CityWide series
+a literature booth. The kind decides the page's presentation, its bingo card's occasion and its *Get ready* links
+(above). Write `type:` only when the site guesses wrong:
+
+```markdown
+type: information-workshop     # also works: tipo:, kind:
+```
+
+The 15 kinds: `writing-workshop`, `recording-workshop`, `information-workshop`, `gvr-orientation`,
+`gsr-dcm-orientation`, `assembly`, `acm`, `town-hall`, `intergroup`, `booth`, `online-meeting`, `magazine-workshop`,
+`calendar`, `committee-meeting`, `other`. Spaces and capitals are fine here (`type: Writing workshop`). Any other
+value is ignored (the site guesses, as without the line) and listed under **Event files to fix** in the run summary
+and on the Status page, so you can fix it; the event still shows. A monthly series can take a `type:` too, in its `config/site.yml` block, written exactly as above
+(`type: "booth"`); a file's own `type:` comes first. (Don't name a file `series.md`: `/events/series/` belongs to
+the series' pages, so such a file gets the address `/events/ev-manual-series/` instead.)
+
 ## The place in Spanish: `location_es`
 
 A place is never machine-translated (addresses and group names must stay exactly
@@ -134,14 +217,16 @@ cancelled_note: "The host group could not hold it this month. See you at the nex
 
 **What happens at the next update** (about 3 minutes after you save):
 
-- The event leaves the Events page, the home page, the monthly toolkit (its dates, poster and message), the search,
-  the booth display, What's New, the presentations and the monthly e-mail.
+- The event leaves the Events page, the home page, the monthly toolkit (its dates, poster and message), the booth
+  display, What's New, the presentations, `/llms.txt` and the monthly e-mail. The site search keeps one result for
+  it, **"Cancelled: …"** (listed after the others), which opens the notice below, until its day is over.
 - A flyer that only this event uses leaves the Portfolio and What's New by itself. (Moving it on the Drive into the
   Panel's `private` folder is tidy-up only.)
-- Its old address (the link people may have shared) shows **"This event has been cancelled. It will not take
-  place."**, when and where it was planned, your note, and the next events like it — until its day is over. After
-  that the address no longer exists and sends people to the Events page. Search engines are told the event is
-  cancelled (Google shows "Cancelled" on it).
+- Its own page (`/events/<file name>/`, the link people may have shared) becomes a notice: **"This event has been
+  cancelled. It will not take place."**, when and where it was planned, your note, a **Share** button and the next
+  events like it — until its day is over. No flyer, no **Add to calendar**, no way to join. After that the address
+  no longer exists and sends people to the Events page. Search engines are told the event is cancelled (Google
+  shows "Cancelled" on it), and the notice stays in the sitemap until then.
 - People who subscribed to the site's calendar see the entry turn into **"Cancelled: …"** (no reminder, shown as
   free time) for 90 days after its day.
 
@@ -152,7 +237,8 @@ can go 90 days after the event's day. To undo a cancellation, delete the `cancel
 This works for an event that has a file here. An event the site makes from a **dated flyer** on the Drive (its
 name starts with a date) is cancelled by moving that flyer into the Panel's `private` folder (or renaming it so
 its name no longer starts with a date). One date of a **monthly series** (`config/site.yml` → `recurring_events:`)
-is cancelled with that series' `skip_dates:`.
+is cancelled with that series' `skip_dates:`. When a file here and a dated flyer both list the same event, do both:
+add `cancelled: true` to the file and move the flyer.
 
 Example: the La Viña writing workshop in Garland on November 28, 2026 was cancelled this way on November 22, 2026
 (`2026-11-28-lv-writing-workshop-garland.md`).

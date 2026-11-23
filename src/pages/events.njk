@@ -32,14 +32,16 @@ calendarFeed: "/events.ics"
     agenda's empty slot (#ev-empty-neta) points there.
     The hero's right-hand card (the shared hero aside, "Save the date"): the next Area assembly (event-tone.js
     isAssembly: never an ACM, a town hall or a GSR/DCM orientation) — else the next event from Grapevine's or La
-    Viña's own calendars — never the first one-off event of the list below; its link goes to that event in the list.
+    Viña's own calendars — never the first one-off event of the list below; its link goes to that event's own page
+    (since round 37: evHref, eleventy/filters/event-links.js).
     Hidden on smaller screens and at larger text (the committee sub-nav stays right under the hero, and the event
     is in the list). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set all = db.events.items | cmEvents(site, lang) | cmCollapseRecurring -%}
 {%- set upcoming = all | where("past", false) -%}
-{#- Past list: real one-off events only (a monthly meeting / booth date that has passed is not news — so
-    the calendar entry of such a date links to this page itself, not to a card: committee.js detailsUrl) -#}
+{#- Past list: real one-off events only (a monthly meeting / booth date that has passed is not news — it has no
+    card here any more; since round 37 its calendar entry links to its own date page, /events/<its anchor>/, while
+    events.json keeps it: committee.js detailsUrl) -#}
 {%- set past = all | where("past", true) | whereNot("committee", true) | whereNot("recurring", true) | reverse -%}
 {%- set meetings = upcoming | where("committee", true) -%}
 {%- set next = meetings[0] -%}
@@ -96,16 +98,17 @@ calendarFeed: "/events.ics"
 {#- Structured data (schema.org): the upcoming events held at a place, for search engines' event listings —
     built by cmEventLd (eleventy/filters/committee.js eventLd, where every rule is explained). Google lists only
     events at a physical place with a postal address that the public may attend, so an online-only event (the
-    committee meeting, La Viña's Zoom workshop) gets no Event here — this page, the .ics files and the share pages
-    still show it; a place not known yet is left out too. A hybrid event (a place AND an `online_url`) is "Mixed",
+    committee meeting, La Viña's Zoom workshop) gets no Event here — this page, the .ics files and the events' own
+    pages still show it; a place not known yet is left out too. A hybrid event (a place AND an `online_url`) is "Mixed",
     with its Place. Each Place has a PostalAddress (street, city, state, ZIP code) read from the event's place;
     the description is its summary, the picture its flyer (else the committee's card), sameAs its own page on
     another site; its times are the Central times the cards show, with their offset ("…T13:00:00-06:00"). Only
     facts we know, no personal names: the organizer is La Viña / Grapevine for their own events we share (ev.host),
     nobody for an event from their calendars, the committee or group a content/events file names (`organizer:`),
     the Area for the Area's own events, else the committee (the site's Organization, "#committee"). Its url: the
-    event's own page when it has one (since round 35, committee.js eventLeaf: /events/<anchor>/,
-    src/pages/event-share-leaf.njk — Google lists only events with a page of their own), else its card here.
+    event's own page when that page carries its Event too (a leaf, since round 35: committee.js eventLeaf,
+    /events/<anchor>/, src/pages/event-share-leaf.njk — Google lists only events with a page of their own and
+    markup on it), else its card here (since round 37 every event has a page, but only a leaf's has its Event).
     Since round 35 at the START of the page content, before the hero: Googlebot reads only the first 2 MB of a page's
     HTML (Google, 2026-03) and this page is over 1.3 MB — at its end the block was the first thing to be cut. It is
     the first ld+json block in the page's <body> (tests read that one; since round 35 the site's own graph comes
@@ -116,7 +119,7 @@ calendarFeed: "/events.ics"
 {%- if slot == "side" %}
   {%- if sd %}
   {%- set sdKind = sd | eventTone %}
-  {% call ui.heroAside("committee.events.aside_title" | t(lang), lang, { id: "ev-aside-title", icon: "calendar-heart", href: "#" + sd.anchor, linkLabel: "committee.events.aside_link" | t(lang) }) %}
+  {% call ui.heroAside("committee.events.aside_title" | t(lang), lang, { id: "ev-aside-title", icon: "calendar-heart", href: sd | evHref(lang, db, site), linkLabel: "committee.events.aside_link" | t(lang) }) %}
   <div class="cm-ha-ev ev-tone-{{ sdKind }}">
     <span class="cm-ha-ev-tile{{ ' is-range' if sd.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ sd.tile.mon }}</span><span class="cm-ha-ev-day">{{ sd.tile.day }}</span><span class="cm-ha-ev-wd">{{ sd.tile.wd }}</span></span>
     <div class="min-w-0">
@@ -442,10 +445,13 @@ calendarFeed: "/events.ics"
     <ol class="grid gap-4">
       {% for ev in grp.items %}
       {%- set kind = ev | eventTone %}
-      {#- Share: the event's own small page (src/pages/event-share.11ty.js), whose link preview shows its title, day
-          and flyer — it leads on to this card; since round 35 an event with a page of its own (a leaf: committee.js
-          eventLeaf) has that page at the same address (src/pages/event-share-leaf.njk, linked from it below); a
-          committee meeting's card is shared as it is -#}
+      {#- Share: the event's own page, /events/<anchor>/ (since round 37 every event but a committee meeting has a
+          full one: eleventy/event-pages.js eventPagePlan — src/pages/event-share-leaf.njk while it is to come,
+          event-share-date.njk for a series' date, an outside calendar's event or one that is over), whose link
+          preview shows its title, day and flyer (the card's title links to it below — a series' date to its
+          series' page, /events/series/<key>/). Until round 37 most events had only a small page there that sent
+          people on to this card (src/pages/event-share.11ty.js, gone). A committee meeting's card is shared as it
+          is (its page is /meetings/) -#}
       {%- set shareUrl = (pageAbs + "#" + ev.anchor) if ev.committee else (("/events/" + ev.anchor + "/") | lurl(lang) | siteUrl(site)) %}
       {#- data-group: the filter chips it shows under — one group, or "committee neta" for a committee meeting (a
           NETA 65 event too: cmEvents reads the list; ev.group itself stays "committee" for every other page) -#}
@@ -473,10 +479,12 @@ calendarFeed: "/events.ics"
               {% if ev.isNew %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
               {% if not ev.committee and not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
             </div>
-            {#- the title: a link to the event's own page when it has one (since round 35 — a leaf, committee.js
-                eventLeaf: src/pages/event-share-leaf.njk; a plain link, so search engines find the page), else to
-                its link (an outside page) when that is not its flyer -#}
-            {%- set ownPage = (('/events/' + ev.anchor + '/') | lurl(lang)) if (ev | cmEventLeaf(site)) else "" -%}
+            {#- the title: a link to the event's own page (since round 37 every event has one — eleventy/filters/
+                event-links.js evHref: its page, "/events/<anchor>/"; a date of a monthly series its series' page,
+                "/events/series/<key>/"; a committee meeting its section of /meetings/; a plain link, so search engines
+                find the page), else — an event the build writes no page for — to its link (an outside page) when
+                that is not its flyer -#}
+            {%- set ownPage = ev | evHref(lang, db, site, "page") -%}
             <h3 class="h-card mt-2 text-lg sm:text-xl">
               {%- if ev.link and ev.link != (ev.flyer.view if ev.flyer else "") and not ownPage -%}
               <a href="{{ ev.link }}" class="-my-3 inline-block py-3 hover:text-gv"{% if ev.linkExternal %} target="_blank" rel="noopener"{% endif %}>{{ ev.title }}</a>
@@ -528,9 +536,9 @@ calendarFeed: "/events.ics"
             {#- phones: a two-column grid of equal buttons (an odd last one spans both); from 640px one row,
                 with Share at its end (on a narrow card it wraps with the last button, never alone on a row:
                 committee.css .cm-ev-actions). "Event details" (an outside link) is a button when there is no
-                flyer; with a flyer the title is that link, so the actions stay two — except for an event with a
-                page of its own (ownPage: its title goes there), whose outside link, when it is not its flyer, is
-                the button, as on that page (event-share-leaf.njk). -#}
+                flyer; for an event with a page of its own (ownPage: its title goes there — since round 37 every
+                event's), its outside link, when it is not its flyer, is the button, as on that page; only a card
+                with no page (and a flyer) still has its outside link as its title. -#}
             <div class="cm-ev-actions">
               <div class="cm-ev-btns">
               {% if ev.committee %}

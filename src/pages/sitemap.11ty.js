@@ -13,10 +13,14 @@
 // missing (renamed, excluded by mistake) the build log says so — a build warning (eleventy/build-warnings.js:
 // the Code check fails on it). Not checked in ONLY= dev builds.
 // /offline/ ("Saved pages & app") holds the steps the committee sends to install the site on a phone.
-// An event's own page (since round 35: src/pages/event-share-leaf.njk, the events eleventy/filters/committee.js
-// eventLeaf picks — still to come, at a place, no page of their own elsewhere) is in the collections like any page,
-// so it is listed with its twin while its event is to come; once it is over, its address is a small share page again
-// (src/pages/event-share.11ty.js: out of the collections, noindex) and it leaves the list by itself.
+// The events' own pages (since round 37 every event has one: one plan for all of them, eleventy/event-pages.js
+// eventPagePlan) are in the collections like any page when search engines may list them, so each is listed with its
+// twin: an event still to come (src/pages/event-share-leaf.njk — with its Event markup for the leaves, eventLeaf),
+// a monthly series' page (/events/series/<key>/, event-share-series.njk) and a cancelled event's notice while its day
+// is to come (event-share-cancelled.njk). The rest — each date of a monthly series, an event from Grapevine's or La
+// Viña's own calendar, an event that is over — are noindex pages out of the collections (event-share-date.njk), so an
+// event leaves the list by itself once it is over. (Until round 37 only the leaves had a page; every other event's
+// address was a small noindex page that sent people on to its card, src/pages/event-share.11ty.js, now gone.)
 import { buildWarning } from "../../eleventy/build-warnings.js";
 
 const REQUIRED = ["/", "/whats-new/", "/published/", "/read/", "/monthly/", "/digest/", "/offline/"];

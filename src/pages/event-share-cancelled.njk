@@ -35,6 +35,8 @@ const eleventyComputed = {
       · its Event's structured data FIRST, with every value it had and EventCancelled (cmEventPageLd: eventLd, its url
         this page, no picture) — only for an event that was to be held at a real address, in both languages;
       · the hero: "Cancelled: <title>" (h1), the day and time it had, "See all events";
+      · the breadcrumb Home › Events › the notice — the path the site's graph names (base.njk's BreadcrumbList), as on
+        every event's page (macros/event-page.njk crumbs);
       · the notice: "This event has been cancelled. It will not take place.", the organizers' own note
         (`cancelled_note:`), when and where it was planned; its summary, without how to join (a meeting ID, code or
         link: withoutJoinDetails; cmNoSnippet as everywhere); Share (this page's address);
@@ -45,6 +47,7 @@ const eleventyComputed = {
     browser checks tell a notice page from an event's own page — tests/browser/test_r35_ev_page.py.) -#}
 {% import "macros/ui.njk" as ui with context %}
 {% import "macros/events.njk" as evm with context %}
+{% import "macros/event-page.njk" as evp with context %}
 {%- set ev = share.ev -%}
 {%- set m = share.meta -%}
 {%- set kind = ev | eventTone -%}
@@ -57,9 +60,10 @@ const eleventyComputed = {
   </div>
 {% endcall %}
 
-<div class="container-page section pt-10 sm:pt-12">
+<div class="container-page section pt-6 sm:pt-8">
 <div class="mx-auto max-w-3xl">
-  <article class="card card-pad border-l-4 border-l-danger" data-ev-cancelled>
+  {{ evp.crumbs([{ key: "nav.home", href: "/" | lurl(lang) }, { key: "nav.events", href: "/events/" | lurl(lang) }], m.title) }}
+  <article class="card card-pad mt-6 border-l-4 border-l-danger" data-ev-cancelled>
     <div class="flex flex-wrap items-center gap-1.5">
       {{ evm.kindBadge(ev, kind) }}
       {% if not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}

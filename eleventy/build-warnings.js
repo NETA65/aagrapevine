@@ -7,6 +7,8 @@
 //              two pages of one language share a title; a page that may be indexed is not in the sitemap; (round
 //              35) a page over 1.8 MB of HTML or with structured data that ends past 1.5 MB (Googlebot reads
 //              only the first 2 MB); config/site.yml search_engines.ai_training neither "allow" nor "disallow";
+//   [search]   (round 37, eleventy/seo-check.js searchProblems) the site search misses a page the sitemap lists,
+//              links a page or #anchor the build does not have, or its index is over its size budget;
 //   [links]    a link value in data/site that had to be repaired or hidden (src/_data/db.js — mostly a link
 //              written by hand in content/events or content/bulletin); a link that only lacked its "https://"
 //              ("www.…", "zoom.us/j/…") works once repaired and is a plain "[links] note:" line, not a warning.

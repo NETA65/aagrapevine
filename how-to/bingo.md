@@ -316,6 +316,7 @@ prints the same lines.
 |---|---|
 | `/gvr/bingo/` · `/es/gvr/bingo/` | The builder, its tips and next steps. Not in the menus: there the page counts as part of the GVR / RLV corner (search engines see it as Home › GVR / RLV corner › Grapevine & La Viña Bingo). Not saved for offline use: the cards are printed at home, and `/gvr/` is not saved either |
 | `/gvr/#bingo` · `/es/gvr/#bingo` | The **Bingo** section of the GVR / RLV corner (between *Ideas for your home group* and *Pass it on*, with a **Bingo** chip in the page's "On this page" row): a few words, **Make bingo cards** and a small 3×3 sample card |
+| An event's own page (since round 37) | **Make a GVR/RLV Bingo card for this event** in its *Get ready* part: a link such as `/gvr/bingo/#lang=es&mag=lv&where=workshop&event=Taller%20de%20Escritura%20de%20La%20Vi%C3%B1a%20%E2%80%94%20Fort%20Worth&date=2026-12-12` opens the builder with the event's language (Spanish for an event held in Spanish), magazine, occasion (a workshop, a booth, an assembly, an ACM, online …), name (at most 60 characters, cut at a word) and day already filled in. Events still to come only |
 | `/search/` | A search for "bingo" finds the page |
 
 The squares show only on bingo cards: never on the booth display or any other page.

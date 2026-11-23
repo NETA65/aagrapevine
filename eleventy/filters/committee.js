@@ -235,8 +235,10 @@ export function flyerLinks(view, thumb = "") {
 // an event's share picture (the card's own is 320 px — too small for a preview).
 const SHARE_DRIVE_ID = /drive\.google\.com\/(?:file\/d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)([\w-]{10,})/;
 
-/** The share picture of an event (its flyer): an address, or "" (none — the committee's card). The preview of its
- *  share page (src/pages/event-share.11ty.js) and its picture for search engines (eventLd) — one rule for both. */
+/** The share picture of an event (its flyer): an address, or "" (none — the committee's card). The link preview of
+ *  its own page (eventPageMeta's ogImage; a monthly series' page takes its next date's: seriesPageMeta) and its
+ *  picture for search engines (eventLd) — one rule for all. (Until round 37 the preview was a small share page's,
+ *  src/pages/event-share.11ty.js, gone.) */
 export function eventSharePicture(ev) {
   const f = ev && ev.flyer;
   if (!f) return "";
@@ -789,7 +791,7 @@ export function normalizeEvents(items, site, lang = "en", opt = {}) {
   //    move to Google Meet changed the platform for the dates before it.
   //    The months: the caller's (opt.monthsAhead), else this month and the ones after it through `events_until`'s
   //    month, at least the 12 after it (meetingMonthsAhead — the sync writes a record for each of these dates:
-  //    meeting.window_months, the same number) — /events/, the event share pages and the search take this default,
+  //    meeting.window_months, the same number) — /events/, the events' own pages and the search take this default,
   //    /events.ics asks for the same number itself.
   const ahead = opt.monthsAhead ?? meetingMonthsAhead(site, now);
   for (const d of meetingDates(m, opt.monthsBack ?? 3, ahead, new Date(now))) {
@@ -975,21 +977,37 @@ function shapeEvent(it, site, lang, now, descOverride) {
   const selfLink = /^\/(?:[a-z]{2}\/)?events\/?(?:#.*)?$/.test(link);
   const body = x.body_md ? String(H.pickLang(it, "body_md", lang) || x.body_md || "").trim() : "";
 
-  // Text for calendars. Its link (the .ics URL, "Details: …" in the description): its own page, else its card
-  // on /events/ — but only while /events/ has that card. A date of a monthly series that has passed is not on
-  // the page any more (events.njk lists a series' dates still to come, and its "Past events" leave the series
-  // out: where("past", true) | whereNot("recurring", true)), so its entry — kept 90 days in the calendar
-  // files — links to the page itself, never to a #… it no longer has. (A past one-off event keeps its row
-  // there, with this anchor; a committee meeting's page is its section on /meetings/: COMMITTEE_MEETING_PATH.)
+  // Text for calendars. Its link (the .ics URL, "Details: …" in the description, the Google / Outlook links):
+  // since round 37 the event's OWN page on this site, "/events/<anchor>/" (eventPageHref: every event /events/ lists
+  // has one — a date of a monthly series, one from the magazines' calendars and one that is over too, while
+  // events.json keeps it: 90 days for a series' date, as long as the calendar files keep its entry), never its outside
+  // page (its page links to that) nor its card on /events/. A committee meeting's page is its section on /meetings/
+  // (COMMITTEE_MEETING_PATH), as before; so is a date of a monthly series whose own page is one of ours
+  // (config/site.yml recurring_events `url:` — the Grapevine Meeting's "/meetings/#grapevine-meeting": its countdown,
+  // how to join and its next dates are there): it keeps that link — the countdowns (/meetings/, /events/' pinned
+  // card: cmSeriesNext's next date, worked out from the settings even before events.json lists it) hand ONE date's
+  // link and text to every date they roll on to, so it must be the series' own, never a date's page (nor its series'
+  // page, which is only written while events.json has a date of it still to come).
   // A cancelled event has no card on /events/ (since round 37): its link is its notice page while its day is still to
-  // come — at the address its page had (eventPagePath) —, then the top of /events/.
+  // come — at the address its page had (eventPagePath) —, then the top of /events/. An anchor unfit for an address
+  // (an id written by hand: no page) keeps the old rule (cardUrl).
+  // cardUrl — the link before round 37, kept for the booth's countdown QR code (booth.js) and the presentations'
+  // event rows and La Viña workshop slide (presentations.js), which round 37 leaves as they were: the event's own link
+  // when it has one (an outside page, or one of ours), else its card on /events/ — but only while /events/ has that
+  // card (a date of a monthly series that has passed is not on the page any more: events.njk lists a series' dates
+  // still to come, and its "Past events" leave the series out), else the top of /events/; a cancelled event's: its
+  // notice page, as detailsUrl.
   const anchor = eventAnchor(it);
   const onEventsPage = !committee && !(recurring && past) && !cancelled;
-  const detailsUrl = cancelled
+  const seriesHome = recurring && !!link && !selfLink && link.startsWith("/");
+  const cardUrl = cancelled
     ? siteAbs(site, !past && EVENT_PAGE_ANCHOR.test(anchor) ? eventPagePath({ anchor }, lang) : localPath("/events/", lang))
     : link && !selfLink
       ? (link.startsWith("/") ? siteAbs(site, link) : link)
       : siteAbs(site, localPath("/events/", lang)) + (onEventsPage ? "#" + anchor : "");
+  const detailsUrl = cancelled || seriesHome ? cardUrl
+    : committee || EVENT_PAGE_ANCHOR.test(anchor) ? siteAbs(site, eventPageHref({ anchor, committee, past }, lang))
+    : cardUrl;
   if (selfLink) link = "";
   // An event that is over (the calendar files keep it 90 days, for their subscribers) still says where it was — its
   // place, or "Online on Zoom" — but no longer how to join: no link, no meeting ID or code, and none of its summary's
@@ -1028,8 +1046,14 @@ function shapeEvent(it, site, lang, now, descOverride) {
     if (meetingId && !past) descLines.push(...(online ? [] : [""]), `${t(meetingIdLabelKey, lang)}: ${meetingId}`);
     if (contact) descLines.push(`${t("committee.events.contact", lang)}: ${contact}`);
     if (flyerView) descLines.push(`${t("committee.events.flyer", lang)}: ${flyerView}`);
-    // Date-only outside event: the calendar shows it as all-day, so the note says the time was not listed.
-    if (detailsUrl !== flyerView) descLines.push("", `${t(timeNotListed ? "committee.events.time_not_listed" : "committee.cal.details", lang)}: ${detailsUrl}`);
+    // Date-only outside event: the calendar shows it as all-day, so the note says the time was not listed — and,
+    // since round 37 (its "Details:" line is its page here, which knows no more of the time), points to its own
+    // outside page, the organizer's, which gives it (timeNotListed: it has one; never its flyer, listed above).
+    const timeAt = timeNotListed && link !== flyerView ? link : "";
+    if (timeAt) descLines.push("", `${t("committee.events.time_not_listed", lang)}: ${timeAt}`);
+    if (detailsUrl !== flyerView) {
+      descLines.push(...(timeAt ? [] : [""]), `${t(timeNotListed && !timeAt ? "committee.events.time_not_listed" : "committee.cal.details", lang)}: ${detailsUrl}`);
+    }
   }
   const calDescription = descLines.join("\n").trim();
   const place = locationTba ? "" : location;
@@ -1069,7 +1093,9 @@ function shapeEvent(it, site, lang, now, descOverride) {
     // One line for the next meeting: "Wednesday, October 21 · 7:00 PM CDT" (committee.js keeps it current)
     whenLabel: allDay ? dateLabel : cap(fmt(start, lang, { weekday: "long", month: "long", day: "numeric" })) + " · " + fmt(start, lang, { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
     location, online, link, linkExternal: /^https?:/.test(link || ""),
-    detailsUrl,
+    // the calendars' link (its page here, since round 37) · the link the booth's QR code and the presentations' rows
+    // keep (its own link, else its card: see above)
+    detailsUrl, cardUrl,
     flyer,
     isNew: !!it.is_new && !committee,
     past,
@@ -1215,7 +1241,7 @@ export function seriesNext(site, key, lang = "en", items = [], opt = {}) {
 // only events at a physical place with a postal address that the public may attend (its Event rules, updated
 // 2026-09-08), so an online-only event — the committee meeting's monthly dates (members only, on Google Meet), our
 // Grapevine Meeting (Google Meet), La Viña's workshop on Zoom — gets none: it could only count as an error. The
-// page, the .ics files and the share pages still show it. A hybrid event (a place AND an online link) is "Mixed",
+// page, the .ics files and the events' own pages still show it. A hybrid event (a place AND an online link) is "Mixed",
 // with its place only: Google reads no VirtualLocation, and its link would only have been this page.
 // Only facts the data has, and no personal names: no performer (speakers' names — anonymity: a committee meeting's
 // guest speaker never reaches it), no offers (there are no tickets).
@@ -1311,15 +1337,25 @@ export function eventPlace(text, extra = {}) {
 }
 
 // A summary as one plain line for search engines: no HTML (its few common entities read), single spaces, at most
-// `n` characters (cut at a word, "…" — as the share pages cut theirs) — and without its sentences that say how to
-// join online (a meeting ID or code, a passcode, a Zoom or Google Meet link: "…join on Zoom (meeting ID 815 9593
-// 1777, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting code rva-tmst-vdb)."). The page shows
-// them to people; a copy made for machines only helps those who look for meetings to disrupt.
+// `n` characters (cut at a word, "…" — as an event page's description is cut, eventPageMeta) — and without its
+// sentences that say how to join online (a meeting ID or code, a passcode, a meeting app's link, a dial-in line:
+// "…join on Zoom (meeting ID 815 9593 1777, passcode …).", "…on Google Meet: meet.google.com/rva-tmst-vdb (meeting
+// code rva-tmst-vdb)."). The page shows them to people; a copy made for machines only helps those who look for
+// meetings to disrupt.
 // What counts: "Meeting ID" / "Zoom ID" / "ID de Zoom" / "ID de (la) reunión" (never "meeting ideas"), a Zoom number
 // right after the word ("Zoom 871 2036 8287", "Zoom: 815-9593-1777"), a meeting code / "código de (la) reunión", a
-// passcode, password, "código de acceso" or "contraseña", a Zoom link or its pwd= token, a Google Meet link.
+// passcode, password, "código de acceso" or "contraseña", a Zoom link or its pwd= token, a Google Meet link — since
+// round 37 a link to any meeting app's room (JOIN_HOSTS: Teams, Webex …) and the words that say how to join by phone.
 const PLAIN_ENTITIES = { "&nbsp;": " ", "&quot;": '"', "&#39;": "'", "&apos;": "'", "&lt;": "<", "&gt;": ">", "&amp;": "&" };
-const JOIN_DETAILS = /\bmeeting\s*ids?\b|\bzoom\s*id\b|\bid de zoom\b|\bzoom\W{0,3}\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|meeting\s*code|pass\s*code|password|\bpwd=|zoom\.us\/|meet\.google\.com\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a/i;
+// (round 37) A meeting room's address on any meeting app platformOf knows (PLATFORM_HOSTS: Zoom, Google Meet,
+// Microsoft Teams, Webex, GoToMeeting, Skype, Whereby, Jitsi — and the short links gotomeet.me and meet.jit.si):
+// "zoom.us/j/…", "teams.microsoft.com/l/meetup-join/…", "acme.webex.com/meet/…" — the host, then a "/".
+const JOIN_HOSTS = [...Object.keys(PLATFORM_HOSTS), "gotomeet.me", "meet.jit.si"]
+  .map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+// … and joining by phone: "Dial +1 346 248 7799 to join by phone.", "Join by phone: …", "Marque el +1 346 …",
+// "… para unirse por teléfono.", Zoom's "One tap mobile" and its "+13462487799,,81595931777#".
+const JOIN_BY_PHONE = String.raw`\bdial(?:[\s-]?in)?\b|\bjoin(?:ing)?\s+by\s+(?:tele)?phone\b|\b(?:unirse|[uú]nase|[uú]nete|conectarse|entrar)\s+por\s+tel[eé]fono\b|\bmarqu(?:e|en)\b[^.!?]{0,40}?\d{3}|\bone\s+tap\s+mobile\b|,,\d{6,}`;
+const JOIN_DETAILS = new RegExp(String.raw`\bmeeting\s*ids?\b|\bzoom\s*id\b|\bid de zoom\b|\bzoom\W{0,3}\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|meeting\s*code|pass\s*code|password|\bpwd=|(?:${JOIN_HOSTS})[a-z0-9.-]*\/|id de (?:la )?reuni[oó]n|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|contrase[ñn]a|${JOIN_BY_PHONE}`, "i");
 // A summary for the calendars of an event that is over or cancelled (shapeEvent): its lines as written, without the
 // sentences that say how to join online (JOIN_DETAILS) — a line left with nothing goes, and so does a blank line too
 // many. Exported since round 37: a cancelled event's notice page shows its summary so (event-share-cancelled.njk).
@@ -1358,7 +1394,7 @@ function plainLine(s, n = 300) {
 const NOSNIPPET_VALUE = new RegExp([
   String.raw`(?<=\b(?:meeting\s*id|zoom\s*id|id de zoom|id de (?:la )?reuni[oó]n(?: de zoom)?)\s*(?:[:#]|is|es)?\s*)\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b`,
   String.raw`(?<=\b(?:pass\s*code|password|contrase[ñn]a|c[oó]digo de acceso)\s*(?:[:#]|is|es)?\s*)(?!(?:is|es)\b)(?:(?<=[:#]\s*)|(?=[^\s,;<>()&]*\d))[^\s,;<>()&]*[^\s,;<>()&.:!?]`,
-  String.raw`(?:https?:\/\/)?(?:[a-z0-9-]+\.)*(?:zoom\.us|meet\.google\.com)\/(?:&amp;|[^\s<>"')\]&])*[^\s<>"')\].,;:!?&]`,
+  String.raw`(?:https?:\/\/)?(?:[a-z0-9-]+\.)*(?:${JOIN_HOSTS})[a-z0-9.-]*\/(?:&amp;|[^\s<>"')\]&])*[^\s<>"')\].,;:!?&]`,
   String.raw`(?<=\b(?:meet|code|c[oó]digo|pass\s*code|password|contrase[ñn]a)\b(?:[^.!?;&<>]|&(?:#\d+|#x[\da-f]+|[a-z]+);){0,30})(?<![\w-])(?<meet>[a-z]{3}-[a-z]{4}-[a-z]{3})(?![\w-])`,
 ].join("|"), "gi");
 // The tags a value's words may sit in, just before it ("<strong>Meeting code:</strong> rva-tmst-vdb", "Passcode:<br>
@@ -1372,8 +1408,8 @@ const INLINE_TAG = /^<\/?(?:a|abbr|b|br|cite|code|em|i|kbd|mark|q|s|small|span|s
  * it in a result's snippet, an AI Overview, AI Mode or a Copilot answer (Google allows data-nosnippet on a span, div
  * or section — not on li or dd); people see the page as before, and the words around it can still be quoted. Only
  * text is looked at, never a tag or its attributes (a link's address is not snippet text). The cards' own meeting ID
- * or code line carries data-nosnippet in the template. Machine-made copies (the structured data, the share pages'
- * descriptions) never carry these values at all: plainLine above. Plain text goes through `| escape` first.
+ * or code line carries data-nosnippet in the template. Machine-made copies (the structured data, the event pages'
+ * meta descriptions) never carry these values at all: plainLine above. Plain text goes through `| escape` first.
  * A value's words may be in the text before it, through inline tags (INLINE_TAG: the last 80 characters of it are
  * read with each piece of text); a span is never opened in one piece of text and closed in another.
  */
@@ -1430,19 +1466,27 @@ function heldAt(ev, location) {
 
 // An event's own page on another site (neta65.org's event page, aalavina.org's …): its link when it is one, else "" —
 // never a flyer on Google Drive / Docs, a site's home page (the CityWide booth's link is CityWide's site, not the
-// booth) or a page of our own site (root: its address). eventLd's sameAs, and eventLeaf's "a page elsewhere".
-function ownPageOf(ev, root) {
+// booth) or a page of our own site (root: its address), nor — since round 37 — a meeting's room (a `url:` line that
+// is the event's Zoom or Teams link, platformOf: how to join, with its pwd= token, is no page about the event). eventLd's
+// sameAs, and eventLeaf's "a page elsewhere" (and since round 37 an event page's "Official page": eleventy/event-page-model.js).
+export function ownPageOf(ev, root) {
   const link = ev && ev.linkExternal ? String(ev.link || "") : "";
   try {
     const u = new URL(link);
-    if (!/^(?:drive|docs)\.google\.com$/i.test(u.hostname) && u.pathname.replace(/\/+$/, "") && !link.startsWith(root)) return link;
+    if (!/^(?:drive|docs)\.google\.com$/i.test(u.hostname) && u.pathname.replace(/\/+$/, "") && !link.startsWith(root)
+      && !platformOf(link)) return link;
   } catch { /* no link of its own */ }
   return "";
 }
 
 /** The address of an event's own page on this site in a language: "/events/<its card's anchor>/"
- *  ("/es/events/<anchor>/") — the address its card's Share button sends. Its small share page
- *  (src/pages/event-share.11ty.js), or since round 35, for a leaf (eventLeaf), its page (event-share-leaf.njk). */
+ *  ("/es/events/<anchor>/") — the address its card's Share button sends. Since round 37 a full page for every event
+ *  but a committee meeting (eleventy/event-pages.js eventPagePlan: src/pages/event-share-leaf.njk while it is to come,
+ *  event-share-date.njk for a series' date, an outside calendar's event or one that is over; a cancelled event's
+ *  notice, event-share-cancelled.njk, while its day is to come). Until round 37 only a leaf (eventLeaf, since round
+ *  35) had a page there; every other event a small page that sent people on to its card (src/pages/
+ *  event-share.11ty.js, gone). Where a link to an event goes is eventPageHref's answer (a committee meeting: its
+ *  section of /meetings/; a cancelled event that is over: /events/). */
 export function eventPagePath(ev, lang) {
   return `${lang && lang !== "en" ? "/" + lang : ""}/events/${ev.anchor}/`;
 }
@@ -1451,11 +1495,11 @@ export function eventPagePath(ev, lang) {
 export const EVENT_PAGE_ANCHOR = /^[a-z0-9][a-z0-9-]*$/;
 
 /**
- * Since round 35: does an event get a page of its own on this site — a LEAF? Google's event results take only such
- * pages: "Each event MUST have a unique URL (a leaf page) and markup on that URL" and "The event experience on Google
- * only supports pages that focus on a single event" (its Event rules, 2026-11-19), never a noindex page; and a short
- * page about one event is a far better thing for an AI answer to quote than the whole Events page. Only the events
- * nobody else gives such a page, that search engines may list — an event:
+ * Since round 35: does an event's own page on this site carry its Event — is it a LEAF? Google's event results take
+ * only such pages: "Each event MUST have a unique URL (a leaf page) and markup on that URL" and "The event experience
+ * on Google only supports pages that focus on a single event" (its Event rules, 2026-11-19), never a noindex page;
+ * and a short page about one event is a far better thing for an AI answer to quote than the whole Events page. Only
+ * the events nobody else gives such a page, that search engines may list — an event:
  *   - still to come, not a committee meeting (its page is /meetings/);
  *   - held at a place with a real address in EVERY language of the site (heldAt — the events eventLd gives an Event,
  *     in both languages, so each page has its twin): never online only, never a place "to be announced";
@@ -1466,10 +1510,13 @@ export const EVENT_PAGE_ANCHOR = /^[a-z0-9][a-z0-9-]*$/;
  *   - with no page of its own elsewhere (ownPageOf: the Area's assemblies' neta65.org pages, which search engines
  *     should find — eventLd names it as sameAs);
  *   - with an anchor fit for an address.
- * One answer everywhere: /events/' structured data (the Event's url: its page), the share pages (src/pages/
- * event-share.11ty.js: eventSharePages' `leaf` — a leaf's address is its page, the others' their small share page)
- * and the pages themselves (src/pages/event-share-leaf.njk), so the sitemap. Once the event is over, the next build
- * turns its page back into the small share page (noindex), and it leaves the sitemap. langs: the site's languages.
+ * One answer everywhere: /events/' structured data (the Event's url: its page — else its card there), the events'
+ * page plan (eleventy/event-pages.js eventPageTier: a leaf's page is tier "leaf", the only one with its Event's
+ * markup) and so the pages themselves (src/pages/event-share-leaf.njk) and the sitemap. Since round 37 every other
+ * event has a full page too (tier "page", indexable without Event markup, or "date", noindex), so "leaf" no longer
+ * means "has a page": it means "its page carries its Event". Once the event is over, the next build writes its page
+ * with event-share-date.njk (noindex), and it leaves the sitemap (until round 37 its address went back to a small
+ * share page, src/pages/event-share.11ty.js, gone). langs: the site's languages.
  */
 export function eventLeaf(ev, site, langs = ["en", "es"]) {
   if (!ev || ev.past || ev.committee || ev.recurring || ev.seriesOf || !EVENT_PAGE_ANCHOR.test(ev.anchor || "")) return false;
@@ -1531,16 +1578,19 @@ export function eventPageHref(x, lang = "en", opt = {}) {
 
 /**
  * What a monthly series' own page (eleventy/event-pages.js eventPagePlan's hubs; seriesPagePath) gives its layout →
- * { title, titleTail, description, ogImage }, as eventPageMeta does for an event's:
+ * { title, titleTail, description, nextText, ogImage }, as eventPageMeta does for an event's:
  *   title        its title and its rule, "GV/LV booth at CityWide Dallas — Every second Saturday of the month"
  *                (evkind.series_title): no date in it, so the page's title stays the same month after month. Never
  *                " · " in it (base.njk puts the tail after one);
- *   titleTail    "Events — NETA 65" ("Eventos — NETA 65");
+ *   titleTail    eventsTitleTail: "Events — NETA 65" ("Eventos — NETA 65"), shorter when the title names NETA 65 or
+ *                is long;
  *   description  its rule with its time ("Every second Saturday of the month · 5:30 – 7:30 PM Central time"), where
  *                (the next date's place in brief, "Lovers Lane United Methodist Church, Dallas", or "Online on Google
- *                Meet" — the platform's name only) and its summary without a sentence that says how to join (plainLine)
- *                or gives its own meeting ID, code or link (withoutJoinValues), one plain line of at most
- *                EVENT_PAGE_DESC_MAX characters;
+ *                Meet" — the platform's name only), its next date (nextText, since round 37's fixer) and its summary
+ *                without a sentence that says how to join (plainLine) or gives its own meeting ID, code or link
+ *                (withoutJoinValues), one plain line of at most EVENT_PAGE_DESC_MAX characters;
+ *   nextText     its next date as a sentence, "Next: Thursday, January 28, 2027." (seriesNextText; "" none) — /llms.txt
+ *                adds it even when the description had to be cut;
  *   ogImage      the next date's flyer (eventSharePicture), else null (the committee's card).
  * hub: a plan's hub ({ series }: its next date may be one the host moved, ev.seriesOf) or seriesNext's answer itself.
  */
@@ -1552,15 +1602,39 @@ export function seriesPageMeta(hub, site, lang = "en") {
   const place = next.locationTba ? "" : next.location ? placeInBrief(next)
     : next.isOnline ? (next.platform ? t("committee.events.online_on", lang, { platform: next.platform }) : t("committee.events.online", lang)) : "";
   const summary = withoutJoinValues(s.summary ?? next.summary, [s.join?.id, s.join?.url, next.meetingId, next.online]);
-  const text = [[line(s.recurrence), place].filter(Boolean).join(" · "), plainLine(summary, 1000)]
+  const nextText = seriesNextText(next, lang);
+  const text = [[line(s.recurrence), place].filter(Boolean).join(" · "), [nextText, plainLine(summary, 1000)].filter(Boolean).join(" ")]
     .filter(Boolean).join(" — ");
   const picture = shareImage(eventSharePicture(next), site || {});
+  const pageTitle = t("evkind.series_title", lang, { title, when: line(s.recurrenceDay) }).replace(/ · /g, " — ");
   return {
-    title: t("evkind.series_title", lang, { title, when: line(s.recurrenceDay) }).replace(/ · /g, " — "),
-    titleTail: `${t("nav.events", lang)} — NETA 65`,
+    title: pageTitle,
+    titleTail: eventsTitleTail(pageTitle, lang),
     description: clipDescription(text),
+    nextText,
     ogImage: picture ? { src: picture.url, alt: t("committee.events.flyer_alt", lang, { title }) } : null,
   };
+}
+
+// (round 37's fixer) A series' next date as a sentence — "Next: Thursday, January 28, 2027." ("Próxima fecha: jueves,
+// 28 de enero de 2027."; over several days its range): the rule alone ("Every fourth Thursday") lets a reader, or an
+// AI tool, work out a date that does not happen (a month the series skips, a date the host moved, a series that has
+// not started yet). The rule's line already gives the time. "" when there is no next date.
+function seriesNextText(next, lang) {
+  const day = String((next && (next.multiDay ? next.rangeLabel : next.dateLabel)) ?? "").replace(/\s+/g, " ").trim();
+  if (!day) return "";
+  return t("evkind.series_next", lang, { next: lang === "es" ? day.charAt(0).toLowerCase() + day.slice(1) : day });
+}
+
+/** The tail of an event page's or a series page's <title>, after base.njk's " · " (since round 37's fixer):
+ *  "Events — NETA 65" ("Eventos — NETA 65"); "Events" alone when the title already names NETA 65 ("NETA 65 Spring
+ *  Assembly 2027, March 19 – 21 · Events"), and "NETA 65" alone after a long title (over TITLE_LONG characters: a
+ *  search result shows about 60) — never the same words twice, the useful part first. */
+const TITLE_LONG = 60;
+export function eventsTitleTail(title, lang = "en") {
+  const events = t("nav.events", lang);
+  if (/\bNETA\s*65\b/i.test(String(title ?? ""))) return events;
+  return String(title ?? "").length > TITLE_LONG ? "NETA 65" : `${events} — NETA 65`;
 }
 
 // A page's description cut to EVENT_PAGE_DESC_MAX characters at a word, with its "…" (eventPageMeta's cut).
@@ -1645,21 +1719,21 @@ export function heldInSpanish(ev) {
 }
 
 /**
- * What an event's own page (a leaf: eventLeaf; src/pages/event-share-leaf.njk) gives its layout → { title,
- * titleTail, description, ogImage }:
- *   title        its title and its day(s), "GSR/DCM Orientation 2027 — Central, January 17, 2027"
- *                (committee.events.page_title): the day is what a search result needs, and it keeps two events of
- *                one name apart (the [seo] check: no two pages of a language share a <title>). Never " · " in it:
- *                base.njk puts the tail after one;
- *   titleTail    "Events — NETA 65" ("Eventos — NETA 65"), as the share pages' titles end;
+ * What an event's own page (every tier since round 37 — eleventy/event-pages.js eventPageHead: src/pages/
+ * event-share-leaf.njk, event-share-date.njk) gives its layout → { title, titleTail, description, ogImage }:
+ *   title        its title and its day(s), "GSR/DCM Orientation 2027 — Central, January 17" (committee.events.
+ *                page_title; the year once — eventDay leaves it out when the title gives it): the day is what a
+ *                search result needs, and it keeps two events of one name apart (the [seo] check: no two pages of a
+ *                language share a <title>). Never " · " in it: base.njk puts the tail after one;
+ *   titleTail    eventsTitleTail: "Events — NETA 65" ("Eventos — NETA 65"), "Events" alone when the title names
+ *                NETA 65, "NETA 65" alone after a long title;
  *   description  its day and time, its place in brief (the venue and its city, "Grupo Cinco, Garland": placeInBrief —
  *                the page shows the whole address) and its summary, one plain line cut at a word, at most 160
  *                characters with its "…" (what Google and Bing show whole: every page's description keeps to it,
- *                README → Search engines; the small share pages, never in search results, keep their 200) —
- *                without the summary's sentences that say how to join online (plainLine: the page shows them to
- *                people; a search result's snippet is a machine's copy);
- *   ogImage      its flyer, the link previews' picture as on its share page ({ src, alt }: eventSharePicture, when
- *                it is a picture the previews show), else null — the committee's card (base.njk).
+ *                README → Search engines) — without the summary's sentences that say how to join online
+ *                (plainLine: the page shows them to people; a search result's snippet is a machine's copy);
+ *   ogImage      its flyer, the link previews' picture ({ src, alt }: eventSharePicture, when it is a picture the
+ *                previews show), else null — the committee's card (base.njk).
  */
 export const EVENT_PAGE_DESC_MAX = 160;
 export function eventPageMeta(ev, site, lang = "en") {
@@ -1670,9 +1744,10 @@ export function eventPageMeta(ev, site, lang = "en") {
   const text = [[when, ev.locationTba ? "" : placeInBrief(ev)].filter(Boolean).join(" · "), plainLine(ev.summary, 1000)]
     .filter(Boolean).join(" — ");
   const picture = shareImage(eventSharePicture(ev), site || {});
+  const pageTitle = t("committee.events.page_title", lang, { title, date: day });
   return {
-    title: t("committee.events.page_title", lang, { title, date: day }),
-    titleTail: `${t("nav.events", lang)} — NETA 65`,
+    title: pageTitle,
+    titleTail: eventsTitleTail(pageTitle, lang),
     description: pageDescription(text),
     ogImage: picture ? { src: picture.url, alt: t("committee.events.flyer_alt", lang, { title }) } : null,
   };
@@ -1693,9 +1768,14 @@ function placeInBrief(ev) {
 
 // An event's day(s) as its page's <title> names them: "January 17, 2027", "March 19 – 21, 2027" (eventPageMeta,
 // cancelledPageMeta).
+// (since round 37's fixer) without its year when the title already gives it and the event is held within that year —
+// "Winter ACM 2027, February 21", "NETA 65 Spring Assembly 2027, March 19 – 21": the year once is enough.
 function eventDay(ev, lang) {
   const allDay = !!ev.allDay;
-  const D = { month: "long", day: "numeric", year: "numeric", ...(allDay ? { timeZone: "UTC" } : {}) };
+  const year = String(ev.startYmd || "").slice(0, 4);
+  const sameYear = /^\d{4}$/.test(year) && String(ev.endYmd || ev.startYmd || "").slice(0, 4) === year;
+  const named = sameYear && new RegExp(String.raw`(?<!\d)${year}(?!\d)`).test(String(ev.title ?? ""));
+  const D = { month: "long", day: "numeric", ...(named ? {} : { year: "numeric" }), ...(allDay ? { timeZone: "UTC" } : {}) };
   const a = allDay ? new Date(ev.startYmd + "T12:00:00Z") : new Date(ev.startMs);
   const b = allDay ? new Date(ev.endYmd + "T12:00:00Z") : new Date(ev.endMs - 1);
   return ev.multiDay ? fmtRange(a, b, lang, D) : fmt(a, lang, D);
@@ -1736,7 +1816,7 @@ function dayRange(ev, lang) {
  * gives its layout, and its words → { title, titleTail, description, ogImage, h1, was, when, place }:
  *   title        "Cancelled: <its title>, <its day(s)>" (evcancel.page_title — the day as eventPageMeta writes it:
  *                every page's <title> its own);
- *   titleTail    "Events — NETA 65" ("Eventos — NETA 65"), as eventPageMeta's;
+ *   titleTail    eventsTitleTail, as eventPageMeta's ("Events — NETA 65", "Eventos — NETA 65" …);
  *   description  "Cancelled. It was planned for <its day and time> · <its place in brief>." (evcancel.desc; over
  *                several days "… planned from <first day> to <last day> · …", evcancel.desc_range; an online event:
  *                "Online on Zoom"; a place to be announced: its day alone), at most 160 characters with its "…" —
@@ -1768,9 +1848,10 @@ export function cancelledPageMeta(ev, site, lang = "en") {
   const online = ev.isOnline ? line(ev.platform ? t("committee.events.online_on", lang, { platform: ev.platform }) : t("committee.events.online", lang)) : "";
   const brief = place ? placeInBrief(ev) : online;
   const was = place ? t(K.place, lang, { ...v, place }) : online ? t(K.online, lang, v) : t(K.date, lang, v);
+  const pageTitle = t("evcancel.page_title", lang, { title, date: eventDay(ev, lang) });
   return {
-    title: t("evcancel.page_title", lang, { title, date: eventDay(ev, lang) }),
-    titleTail: `${t("nav.events", lang)} — NETA 65`,
+    title: pageTitle,
+    titleTail: eventsTitleTail(pageTitle, lang),
     description: pageDescription(brief ? t(K.desc, lang, { ...v, place: brief }) : `${t("evcancel.ics_prefix", lang)}. ${t(K.date, lang, v)}`),
     ogImage: null,
     h1: t("evcancel.h1", lang, { title }),
@@ -1780,9 +1861,9 @@ export function cancelledPageMeta(ev, site, lang = "en") {
 
 /**
  * The schema.org Events of /events/ (events.njk: `upcoming | cmEventLd(site, lang, pageAbs)` → its @graph) and of an
- * event's own page (event-share-leaf.njk: `ev | cmEventPageLd(site, lang, pageAbs)`, its one Event): the events still to
- * come that have a place (not one "to be announced"), a monthly series by its next date only, at most `max`. Each one
- * says:
+ * event's own page when it is a leaf (event-share-leaf.njk: `ev | cmEventPageLd(site, lang, pageAbs)`, its one
+ * Event; a cancelled event's notice too, event-share-cancelled.njk): the events still to come that have a place (not
+ * one "to be announced"), a monthly series by its next date only, at most `max`. Each one says:
  *   - name, startDate / endDate (since round 35 the time in the site's zone with its offset, "2027-01-17T13:00:00-06:00"
  *     — localIso: the time the page shows, never a UTC time whose date is the next day's for an evening event —; an
  *     all-day event its days, "2027-03-19"; ev.startIso, the UTC time, stays for the calendar files, the pages' data
@@ -1794,11 +1875,12 @@ export function cancelledPageMeta(ev, site, lang = "en") {
  *     (eventPlace);
  *   - description — its summary as one plain line (≤ 300 characters); none for an event from Grapevine's or La
  *     Viña's own calendar (their words, not ours: their own page tells search engines about it);
- *   - image — its flyer (eventSharePicture, as its share page), else — only for the committee's own events — the
- *     committee's card in the page's language (an event's picture must show that event: Google's rule; the card
- *     names the committee, so it never stands for someone else's);
+ *   - image — its flyer (eventSharePicture, as its own page's link preview), else — only for the committee's own
+ *     events — the committee's card in the page's language (an event's picture must show that event: Google's rule;
+ *     the card names the committee, so it never stands for someone else's);
  *   - sameAs — its own page on another site (ownPageOf: neta65.org's event page, aalavina.org's …): never a flyer on
- *     Google Drive / Docs, a site's home page (the CityWide booth's link is CityWide's site, not the booth) or our own;
+ *     Google Drive / Docs, a site's home page (the CityWide booth's link is CityWide's site, not the booth), our own,
+ *     nor — since round 37 — a meeting's room (a `url:` that is its Zoom or Teams link, with its pwd= token);
  *   - organizer — who holds it, when we know, in this order: La Viña or Grapevine for their own events we share
  *     (ev.host); none for one from their calendars (not ours to say); since round 35 the committee or group a
  *     content/events file names (`organizer:` — "District 87 La Viña Committee", never a person — and its optional
@@ -3429,16 +3511,16 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("cmEvents", (items, site, lang) => normalizeEvents(EMPTY ? [] : items, site, lang));
   // {{ upcoming | cmEventLd(site, lang, pageAbs) }}: /events/'s structured data — the schema.org Events (eventLd)
   eleventyConfig.addFilter("cmEventLd", (events, site, lang, pageAbs) => eventLd(events, site, lang, pageAbs));
-  // {{ ev | cmEventPageLd(site, lang, pageAbs) }} (since round 35): an event's own page's structured data
-  // (src/pages/event-share-leaf.njk) — its ONE Event (eventLd), its url the page itself, with its @context; null when
-  // eventLd gives it none (never for a leaf: eventLeaf asks the same of it)
+  // {{ ev | cmEventPageLd(site, lang, pageAbs) }} (since round 35): a leaf's own page's structured data
+  // (src/_includes/partials/event-page.njk, only when the plan gives the page `ld`; since round 37 also a cancelled
+  // event's notice, event-share-cancelled.njk) — its ONE Event (eventLd), its url the page itself, with its
+  // @context; null when eventLd gives it none (never for a leaf: eventLeaf asks the same of it)
   eleventyConfig.addFilter("cmEventPageLd", (ev, site, lang, pageAbs) => {
     const [e] = eventLd([ev], site, lang, pageAbs, 1, { url: pageAbs });
     return e ? { "@context": "https://schema.org", ...e } : null;
   });
-  // {% if ev | cmEventLeaf(site) %} (since round 35): the event has a page of its own (eventLeaf) — /events/' card
-  // title links to it
-  eleventyConfig.addFilter("cmEventLeaf", (ev, site) => eventLeaf(ev, site));
+  // (round 35's cmEventLeaf is gone since round 37: every event has a page of its own, and /events/' card titles link
+  // to it through evHref — eleventy/filters/event-links.js; eventLeaf itself still decides which pages carry an Event)
   // {{ ev.body | md(…) | cmNoSnippet | safe }} (since round 35): how to join an online meeting kept out of search
   // engines' snippets and AI answers — each value in <span data-nosnippet> (noSnippetJoin; plain text: `| escape` first)
   eleventyConfig.addFilter("cmNoSnippet", (html) => noSnippetJoin(html));

@@ -358,8 +358,12 @@ class EventsPage(unittest.TestCase):
                 # the grey cards (the workshop, the pinned Grapevine Meeting) are all ours: "NETA 65"
                 self.assertEqual(legend["other"], T["committee.events.kind.neta"][lang])
                 # "Save the date": the Spring Assembly — the workshop is first in the list, the ACM is no assembly
-                self.assertIn('href="#zz-spring-assembly"', page)
-                self.assertNotIn('href="#zz-winter-acm"', page)
+                # (its link: since round 37 the assembly's own page)
+                aside = page[page.index('aria-labelledby="ev-aside-title"'):]
+                aside = aside[:aside.index("</section>")]
+                pre = "/es" if lang == "es" else ""
+                self.assertIn(f'href="{pre}/events/zz-spring-assembly/"', aside)
+                self.assertNotIn("zz-winter-acm", aside)
         for url, lang in (("/events/", "en"), ("/es/events/", "es")):
             with self.subTest(url=url, variant="an outside calendar's grey event"):
                 legend = dict(re.findall(r'<li class="ev-tone-(\w+)"><span class="ev-dot" aria-hidden="true"></span>([^<]+)</li>',

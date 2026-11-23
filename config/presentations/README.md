@@ -17,6 +17,16 @@ view, versions, printing, and the presenter's own changes kept on their own devi
 The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
 Spanish, and each presentation is marked "(en inglés)".
 
+**Each event's own page links its presentation** (since round 37, November 2026): in its *Get ready* part, "Start
+the presentation" (`/orientation/?present=<id>`, the player opens at once) and "About this presentation" (its card,
+`/orientation/#pres-<id>`). A writing workshop's page links `writing-workshop`; a recording workshop's the same one,
+as "The closest presentation"; an information workshop's `information-workshop`; a GVR/RLV orientation's
+`orientation-workshop`; the Grapevine Meeting's pages `grapevine-meeting`. The kind of event decides
+(`eleventy/event-pages.js` `EVENT_KINDS`; a `content/events` file can set it with `type:`). A presentation is linked
+only while its file is here: renaming or removing a file takes its link off those pages by itself. (The rows of
+events inside the presentations are not changed: they still link the event's own page elsewhere, else its card on
+the Events page.)
+
 **The PowerPoint copies are separate.** The `.pptx` files in the committee's Drive folder (`slides`, listed on the
 Portfolio page) are snapshots: the first four made on October 1, 2026 and rebuilt with the Google Meet details on
 November 11, 2026, and the Grapevine Meeting's copy being added in November 2026. Changing a file here does not

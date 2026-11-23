@@ -25,10 +25,12 @@ search engines and major AI platforms"; the head of every page, the share card, 
                   committee, Alcoholics Anonymous, Northeast Texas Area 65; not AA Grapevine, Inc.'s or A.A.W.S.'s
                   site; the magazines' and the Area's own addresses, the contact e-mail), the monthly meetings as
                   rules only (ours, online, read like the pages read them: "7:00 PM" counts), "## " lists of the
-                  menu's pages — every link absolute on the site, to a page this build
-                  made, with that page's own meta description — and the other language's file last; no way to join
-                  an online meeting (no link, meeting ID or code, passcode), no guest speaker's name, under 16 KB,
-                  plain text; kept out of the sitemap.
+                  menu's pages and (since round 37) of the events still to come — every link absolute on the site, to
+                  a page this build made (the events' own pages are among the build's: ONLY's event-share), with that
+                  page's own meta description — and the other language's file last; no way to join
+                  an online meeting (no link, meeting ID or code, passcode), no guest speaker's name (outside the
+                  events' own lines: the day's events in their own words, which tests/test_r37_links.py checks on
+                  made-up events), under 16 KB, plain text; kept out of the sitemap.
 
     python -m unittest tests.test_r35_head -v        (or: python -m unittest discover -s tests)
 """
@@ -190,7 +192,8 @@ class PageWeight(unittest.TestCase):
 # the monthly series — so an edit of config/site.yml never fails them.
 ONLY = ("index,whats-new,read.,listen,watch,library.,shop,gvr.,orientation.,monthly.,digest,contribute,published.,"
         "meetings.,events.njk,portfolio,photos,bulletin,tracker,instagram,share.,about,accessibility,offline,search.,"
-        "status,llms,sitemap")
+        "status,llms,sitemap,event-share")
+# (event-share: the events' own pages — since round 37 /llms.txt lists the ones still to come, "## Upcoming events")
 PAGES_JS = r"""
 process.env.ONLY = input.only;
 process.env.PATH_PREFIX = "/";
@@ -324,6 +327,17 @@ JOIN = re.compile(r"meet\.google\.com|zoom\.us|teams\.microsoft|\bpwd=|\bmeeting
                   r"pass\s*code|password|contrase[ñn]a|c[oó]digo de (?:la )?reuni[oó]n|c[oó]digo de acceso|"
                   r"id de (?:la )?reuni[oó]n|\b\d{3}[\s.-]?\d{3,4}[\s.-]?\d{3,4}\b|\b[a-z]{3}-[a-z]{4}-[a-z]{3}\b", re.I)
 LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
+UPCOMING = {"en": "## Upcoming events", "es": "## Próximos eventos"}
+
+
+def without_upcoming(text: str, lang: str) -> str:
+    """The guide without its "## Upcoming events" list (since round 37: the day's events, up to the next "## ")."""
+    lines = text.split("\n")
+    if UPCOMING[lang] not in lines:
+        return text
+    start = lines.index(UPCOMING[lang])
+    end = next(i for i in range(start + 1, len(lines)) if lines[i].startswith("## "))
+    return "\n".join(lines[:start] + lines[end:])
 
 
 class LlmsTxt(unittest.TestCase):
@@ -421,7 +435,10 @@ class LlmsTxt(unittest.TestCase):
         speakers = [s["name"] for s in meeting.get("speakers") or [] if isinstance(s, dict) and s.get("name")]
         codes = [MEETING["meeting_id"], MEETING["passcode"], "pwd=abc", "12345678901", "aaa-bbbb-ccc", "ddd-eeee-fff",
                  *[r.get("meeting_id") for r in RECURRING], meeting.get("meeting_id"), meeting.get("passcode")]
-        for lang, text in self.files().items():
+        # (not "## Upcoming events" — since round 37 the day's events, in their own words: the publish gate judges the
+        # code, never the synced data — tests/test_r37_links.py LlmsTxt checks those lines on made-up events that give
+        # a meeting ID and link, with this JOIN)
+        for lang, text in ((lang, without_upcoming(text, lang)) for lang, text in self.files().items()):
             with self.subTest(lang=lang):
                 self.assertIsNone(JOIN.search(text), JOIN.search(text) and JOIN.search(text).group(0))
                 for code in filter(None, codes):

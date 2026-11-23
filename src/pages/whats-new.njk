@@ -297,7 +297,8 @@ pageScripts: ["/assets/js/community.js"]
                 the podcast host stays as the second link (epHost, "Episode page ↗") -#}
             {%- set isEp = it.kind == "episode" and it.id -%}
             {%- set epHost = (it | cmHref(lang)) if isEp else "" -%}
-            {%- set href = (("/listen/?ep=" + it.id) | lurl(lang)) if isEp else (it | cmHref(lang)) -%}
+            {#- (an event: its own page — a series' date its series' page; db and site say which pages the build writes) -#}
+            {%- set href = (("/listen/?ep=" + it.id) | lurl(lang)) if isEp else (it | cmHref(lang, db, site)) -%}
             {%- set ext = it._ext and not isEp -%}
             {%- set ex = it.extra or {} -%}
             {#- kindLang: the label's language where it can differ from the page's — a show's name is in the show's own

@@ -75,6 +75,8 @@ import { monthlyRule, TZ } from "../../eleventy.config.js";
 import { overnight, wallInstant } from "../central-time.js";
 import { shopFromMonthly, money, shopPriceChangeIn, dayLabel, shopOfferIn, offerDates } from "./shop.js";
 import { groupIssues, issueName, squash } from "./read.js";
+// (since round 37) where a date's title links: the event's own page, a series' page (eleventy/filters/event-links.js)
+import { eventLink, eventLinkPlan } from "./event-links.js";
 
 // Helpers handed over by eleventy.config.js (translateKey …); the fallback keeps the module usable
 // from a plain `node` script too (as report.js).
@@ -315,10 +317,13 @@ const monthCtx = (key, L, now) => ({ first: `${key}-01`, year: key.slice(0, 4), 
  *             hour after it starts without one —, an all-day one at midnight Central after its last day;
  *             the instant /events/ and the home page write too) — the browser marks it "Over" then
  *             (src/assets/js/monthly.js); past = overAt ≤ now (an instant, not a day)
- *   href      where its title links: the committee meeting → /meetings/#committee-meeting (the one home
- *             of its joining details); anything else → its own page (url) or /events/. A monthly series
- *             keeps its own link: its later dates are folded on /events/, where an anchor could land on
- *             a hidden card. external = another site.
+ *   href      where its title links (an English path: the page's lurl puts it in its language): the committee
+ *             meeting → /meetings/#committee-meeting (the one home of its joining details); since round 37 any
+ *             other event → its own page on this site, "/events/<anchor>/", and a date of a monthly series →
+ *             its series' page, "/events/series/<key>/" (eleventy/filters/event-links.js eventLink, with the
+ *             build's plan of the pages: ctx.links — a later month's date worked out from the series' rule has
+ *             no page of its own, its series' page has); an event the build writes no page for → its own link
+ *             (url), else /events/. external = another site.
  *   category  the data's category (eventTone keeps the Grapevine / La Viña calendars' colours)
  *   host      "lv" / "gv" for La Viña's or Grapevine's own event (extra.host — La Viña's monthly workshop):
  *             eventTone gives it that magazine's colour; "" for ours
@@ -343,7 +348,7 @@ function dateRow(e, L, ctx, extra = {}) {
   const timed = !ex.all_day && ex.start && !isYmd(ex.start);
   const shownDay = d.start < ctx.first ? ctx.first : d.start;
   const overAt = iso(eventEndMs(e));
-  const href = extra.kind === "committee" ? COMMITTEE_MEETING_PATH : e.url || "/events/";
+  const href = extra.kind === "committee" ? COMMITTEE_MEETING_PATH : eventLink(e, "en", ctx.links, { page: true }) || e.url || "/events/";
   const title = tidyBrackets(clean(tr(e, "title", L)));
   const city = clean(ex.city);
   const state = clean(ex.state);
@@ -647,6 +652,8 @@ export function monthModel(key, db = {}, carry = {}, site = {}, lang = "en", now
   const events = ((db.events && db.events.items) || []).filter((e) => e && e.kind === "event" && e.status !== "gone");
   const inMonth = (e) => { const d = eventDays(e); return d.start && d.start <= last && d.end >= first; };
   const ctx = monthCtx(key, L, now);
+  // (the build's plan of the events' pages: where each date's title links — dateRow)
+  ctx.links = eventLinkPlan(db, site);
   const committee = committeeRow(events, key, site, L, ctx);
   /* The recurring series (config/site.yml recurring_events:) — events.json lists only the next
      `months_ahead` dates, so a later month's date is worked out from the same rule (like the
@@ -1586,6 +1593,15 @@ export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate())
   return new Map(normalizeEvents(items, site, lang === "es" ? "es" : "en", { monthsBack: 1, monthsAhead: WINDOW, now }).map((e) => [e.id, e]));
 }
 
+// A calendar entry with another link (since round 37: a series' date worked out from its rule, which has no page of
+// its own, links to its series' page): its URL and the "Details: …" line of its description (shapeEvent writes the
+// link into both).
+function withDetailsUrl(ev, url) {
+  if (!url || url === ev.detailsUrl) return ev;
+  const from = String(ev.detailsUrl || "");
+  return { ...ev, detailsUrl: url, calDescription: from ? String(ev.calDescription || "").split(from).join(url) : ev.calDescription };
+}
+
 /**
  * "Add this month's dates to my calendar": a month's dates as an iCalendar file — one static file per month and
  * language beside the month's page (src/pages/monthly-ics.11ty.js, at icsPath), linked from the page's Dates card
@@ -1594,7 +1610,8 @@ export function monthIcsEvents(db = {}, site = {}, lang = "en", now = nowDate())
  *              month only the ones not over yet, as in its message), written exactly as /events.ics writes them
  *              (committee.js normalizeEvents + buildIcs: the same UID, description, joining details, guest
  *              speaker and link — a calendar that has both keeps one copy; a later month's date of a series,
- *              worked out from its rule, is written from the same record)
+ *              worked out from its rule, is written from the same record, its link its series' page: it has no
+ *              page of its own — withDetailsUrl)
  *   deadlines  the story deadlines the page lists (Grapevine's, La Viña's), each an all-day entry on its day:
  *              "Story deadline: “Fun in Sobriety” — Grapevine", its issue and how to send a story (/contribute/)
  *   cancelled  (since round 37) the month's cancelled events (db.events.cancelled, which no date row lists — this
@@ -1616,7 +1633,14 @@ export function monthIcs(m, db = {}, site = {}, lang = "en", now = nowDate(), no
   for (const d of m.dates || []) {
     if (m.isCurrent && d.past) continue;
     // a date the site's calendar lists; else (a later month's date of a series, worked out from its rule) its record
-    const ev = all.get(d.id) || (d.kind !== "committee" && d.src ? normalizeEvents([d.src], site, L, opt).find((e) => e.id === d.id) : null);
+    let ev = all.get(d.id) || (d.kind !== "committee" && d.src ? normalizeEvents([d.src], site, L, opt).find((e) => e.id === d.id) : null);
+    // (since round 37 an entry links to its event's own page — shapeEvent's detailsUrl; a date worked out from the
+    // rule has none — events.json does not list it, so no page is written for it —: its series' page, else /events/;
+    // a series whose own page is one of ours, the Grapevine Meeting's section of /meetings/, keeps that)
+    if (ev && !all.has(d.id) && String(ev.detailsUrl || "").endsWith(`/events/${ev.anchor}/`)) {
+      const page = eventLink(d.src, L, eventLinkPlan(db, site), { page: true }) || (L === "es" ? "/es/events/" : "/events/");
+      ev = withDetailsUrl(ev, String(site.url || "").replace(/\/+$/, "") + page);
+    }
     if (ev) events.push(ev);
   }
   // (since round 37) the month's cancelled events (db.events.cancelled — never among its dates): their entry as

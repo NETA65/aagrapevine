@@ -924,9 +924,11 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
       {%- set info = e | homeEventInfo(L) -%}
       {#- the kind's colour, the same as on /events/ (eventTone: committee · gv · lv · booth · assembly · other) -#}
       {%- set tone = e | eventTone -%}
-      {#- A monthly recurring event (e.g. the CityWide Dallas booth) opens its card on /events/; a committee meeting
-          its section on /meetings/ (whatever url an older sync wrote: the weekly open meetings come first there) -#}
-      {%- set href = (("/events/#" ~ (e | homeEventAnchor)) if e.category == "recurring" else ("/meetings/#committee-meeting" if e.category == "committee" else (e.url or x.flyer_url or x.online_url or "/events/"))) | lurl(L) -%}
+      {#- Its own page (since round 37: evHref, eleventy/filters/event-links.js — "/events/<anchor>/"); a monthly
+          recurring event (e.g. the CityWide Dallas booth) its series' page ("/events/series/<key>/"); a committee
+          meeting its section on /meetings/ (whatever url an older sync wrote: the weekly open meetings come first
+          there). Already in the page's language (never through lurl again). -#}
+      {%- set href = e | evHref(L, D, site) -%}
       {#- its title as /events/ shows it (cmTidyTitle: no spaces a calendar left inside its brackets); etRaw, the
           title before that, says whether it is the original's -#}
       {%- set etRaw = e | tx("title", L) -%}

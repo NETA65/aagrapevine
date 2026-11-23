@@ -109,7 +109,7 @@
 
 import {
   normalizeEvents, eventLeaf, eventPagePath, eventPageMeta, eventAnchor, eventHost, eventPlace, seriesNext,
-  seriesPagePath, seriesPageMeta, heldInSpanish, eventCancelled, tidyBrackets, withoutJoinValues, EVENT_PAGE_ANCHOR,
+  seriesPagePath, seriesPageMeta, eventsTitleTail, heldInSpanish, eventCancelled, tidyBrackets, withoutJoinValues, EVENT_PAGE_ANCHOR,
 } from "./filters/committee.js";
 import { eventTone, titlesOf, areaOrientation } from "./filters/event-tone.js";
 
@@ -398,12 +398,16 @@ export function eventPageTier(ev, site, langs = ["en", "es"]) {
 const BINGO_TEXT_MAX = 60;          // bingo-core.js TEXT_MAX.event
 
 /** A title cut to `n` characters at a word (one word longer than that: cut inside it), no "…" — the bingo card
- *  prints it whole. */
+ *  prints it whole. Never a bracket left open: a cut inside "(…)" keeps the words before it ("XLII Reunión de A.A.
+ *  Zona Norte de Texas (A.A. Un camino a la libertad)" → "XLII Reunión de A.A. Zona Norte de Texas"). */
 function cutAtWord(s, n) {
   const t = String(s ?? "").replace(/\s+/g, " ").trim();
   if (t.length <= n) return t;
-  const c = t.slice(0, n + 1).replace(/\s+\S*$/, "");
-  return (c && c.length <= n ? c : t.slice(0, n)).replace(/[\s,;:·—–-]+$/, "");
+  const w = t.slice(0, n + 1).replace(/\s+\S*$/, "");
+  let c = w && w.length <= n ? w : t.slice(0, n);
+  const open = c.lastIndexOf("(");
+  if (open > 0 && !c.includes(")", open)) c = c.slice(0, open);
+  return c.replace(/[\s,;:·—–-]+$/, "");
 }
 
 /** An event's title in a language: the page's own (ev.title) in the page's language, else its record's
@@ -454,7 +458,9 @@ export function eventPageHead(page, site) {
   if (!page || typeof page !== "object") return null;
   const hub = !!(page.key && page.series);
   const head = hub ? seriesPageMeta(page, site, page.lang) : eventPageMeta(withoutOwnJoin(page.ev), site, page.lang);
-  return page.titleSuffix ? { ...head, title: `${head.title} — ${page.titleSuffix}` } : head;
+  if (!page.titleSuffix) return head;
+  const title = `${head.title} — ${page.titleSuffix}`;
+  return { ...head, title, titleTail: eventsTitleTail(title, page.lang) };
 }
 
 // A /events/ event whose summary gives none of its own ways in (withoutJoinValues: its meeting ID or code, its online

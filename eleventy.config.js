@@ -493,7 +493,7 @@ export function monthlyRule(o, forgiving = false) {
     `starts:`), taken out of a list of events.json items → { kept, dropped (their ids) }. The sync never writes such a
     date (build_data.recurring_events), but data/site/events.json keeps the last sync's dates until the next sync:
     when `starts` moves later — the Grapevine Meeting's from Dec 2, 2026 to Jan 6, 2027 (the owner, Nov 19, 2026) —
-    the old first date would stay on /events/, in the calendar files, on its share page, in the monthly toolkit and
+    the old first date would stay on /events/, in the calendar files, on its own page, in the monthly toolkit and
     the search until then (the Code check builds the pushed commit before the sync has run; a sync that fails
     publishes the old data). The settings are the truth: src/_data/db.js leaves such a date out, once, for every page.
     Only a series with a `starts` (read here as everywhere: monthlyRule) and only its own dates

@@ -6,8 +6,10 @@ build and its markup on their own: tests/test_r35_ev_pages.py.
                    light, dark and high contrast (English and Spanish) — an event's own page, and a cancelled event's
                    notice when the build has one (since round 37); its "Add to calendar" menu opens whole on the
                    screen and every choice can be clicked.
-  * NoErrors     — every event page of the build (the sitemap's /events/<anchor>/) runs without a script error, and
-                   stays where it is (no redirect: the small share pages send people on to /events/, these never do).
+  * NoErrors     — every event page of the build (the sitemap's /events/<anchor>/, and since round 37 the monthly
+                   series' pages /events/series/<key>/) runs without a script error, and stays where it is (no
+                   redirect: since round 37 no event page forwards to /events/ — tests/browser/test_r37_event_page.py
+                   checks the noindex date pages too).
   * TheCard      — /events/' card title of such an event goes to its page; the page's "See all events" goes back to
                    the card (its anchor), and Share offers the page's own address.
 
@@ -24,13 +26,15 @@ THEMES = (("light", "normal"), ("dark", "normal"), ("light", "high"), ("dark", "
 
 
 def event_pages(cards_only: bool = False) -> list[str]:
-    """The built site's event pages ("events/<anchor>/", "es/events/<anchor>/"), from its sitemap. cards_only: only an
-    event's own page, with its card — not a cancelled event's notice (since round 37: src/pages/
-    event-share-cancelled.njk, data-ev-cancelled — no calendar menu, and no card on /events/ to come from)."""
+    """The built site's event pages ("events/<anchor>/", "es/events/<anchor>/"), from its sitemap — and, but with
+    cards_only, the monthly series' pages ("events/series/<key>/", since round 37). cards_only: only an event's own
+    page, with its card — not a cancelled event's notice (since round 37: src/pages/event-share-cancelled.njk,
+    data-ev-cancelled — no calendar menu, and no card on /events/ to come from), nor a series' page."""
     sm = (S["site"] / "sitemap.xml").read_text(encoding="utf-8")
     found = []
     for loc in re.findall(r"<loc>([^<]*)</loc>", sm):
-        m = re.search(r"/((?:es/)?events/[a-z0-9][a-z0-9-]*/)$", loc)
+        m = re.search(r"/((?:es/)?events/[a-z0-9][a-z0-9-]*/)$", loc) or (
+            None if cards_only else re.search(r"/((?:es/)?events/series/[a-z0-9][a-z0-9-]*/)$", loc))
         if m and not (cards_only and "data-ev-cancelled" in (S["site"] / m.group(1) / "index.html").read_text(encoding="utf-8")):
             found.append(m.group(1))
     return found

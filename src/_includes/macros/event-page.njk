@@ -1,0 +1,198 @@
+{#- Round 37 · the parts of an event's own page and a monthly series' page (src/_includes/partials/event-page.njk —
+    src/pages/event-share-leaf.njk, event-share-date.njk, event-share-series.njk). Each part draws a piece of the page's
+    model (eleventy/event-page-model.js: `share.m`), translating its keys (src/_i18n/evpage.json, evkind.json).
+    Imported WITH CONTEXT ({% import "macros/event-page.njk" as evp with context %}): they read the page's `lang`.
+    The styles: areas/committee.css, "Round 37 · an event's own page" (.evp-*). -#}
+{% import "macros/ui.njk" as ui with context %}
+
+{#- The visible breadcrumb: Home › Events › [its series ›] the page — the same path as the site's graph (base.njk's
+    BreadcrumbList: Home → Events → the page). The page itself last, not a link (aria-current). -#}
+{% macro crumbs(list, here) %}
+<nav class="evp-crumbs" aria-label="{{ 'evpage.crumb' | t(lang) }}">
+  <ol role="list">
+    {%- for c in list %}
+    <li><a class="link tap-link" href="{{ c.href }}">{{ (c.key | t(lang)) if c.key else c.label }}</a>{% icon "chevron-right", "size-3.5 shrink-0 text-faint" %}</li>
+    {%- endfor %}
+    <li><span aria-current="page">{{ here }}</span></li>
+  </ol>
+</nav>
+{% endmacro %}
+
+{#- The one-sentence summary at the top (the lede, then whether it is held in Spanish and who organizes it): what a
+    person, a search engine and an AI answer read first — written in the page, never a script's. Never a meeting
+    link, ID or code (the model gives the platform's name only). -#}
+{% macro lede(l, title, phrase) %}
+{%- set vars = { title: title, phrase: phrase, when: l.when, from: l.from, to: l.to, place: l.place, platform: l.platform, recurrence: l.recurrence, next: l.next } -%}
+<p class="evp-lede">{{ l.key | t(lang, vars) }}
+  {%- if l.hybrid %} {{ "evpage.lede.hybrid" | t(lang, { platform: l.hybrid }) }}{% endif %}
+  {%- if l.held %} {{ l.held | t(lang) }}{% endif %}
+  {%- if l.org %} {{ l.orgKey | t(lang, { org: l.org }) }}{% endif %}</p>
+{% endmacro %}
+
+{#- Quick facts: a definition list (what, when, where — with a map for an event still to come at a real address —,
+    language, who organizes it, cost, who can come, how often, who to write to). -#}
+{% macro facts(list) %}
+<section class="card card-pad evp-facts-card" aria-labelledby="evp-facts-h">
+  <h2 id="evp-facts-h" class="card-h"><span class="text-gv">{% icon "info", "size-5" %}</span>{{ "evpage.facts.h" | t(lang) }}</h2>
+  <dl class="evp-facts">
+    {%- for f in list %}
+    <div>
+      <dt>{{ ("evpage.facts." + f.k) | t(lang) }}</dt>
+      <dd>
+        {%- if f.vKey %}{{ f.vKey | t(lang) }}
+        {%- elif f.mail %}<a class="link tap-link break-words" href="mailto:{{ f.v }}" translate="no">{{ f.v | replace("@", "@<wbr>") | safe }}</a>
+        {%- elif f.href %}<a class="link tap-link" href="{{ f.href }}"{% if f.ext %} target="_blank" rel="noopener"{% endif %}>{{ f.v }}{% if f.ext %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span>{% endif %}</a>
+        {%- else %}{{ f.v }}{% endif %}
+        {%- if f.vOnline %}<span class="evp-fact-line">{% icon "video", "size-4 shrink-0 text-faint" %}<span>{{ ("committee.events.online_on" | t(lang, { platform: f.vOnline })) if f.vOnline != "-" else ("committee.events.online" | t(lang)) }}</span></span>{% endif %}
+        {%- if f.map %}<a class="evp-map" href="{{ f.map }}" target="_blank" rel="noopener">{% icon "map", "size-4 shrink-0" %}<span>{{ "evpage.map" | t(lang) }}</span><span class="sr-only"> — {{ "evpage.map_aria" | t(lang, { place: f.v }) }} ({{ 'common.external' | t(lang) }})</span></a>{% endif %}
+      </dd>
+    </div>
+    {%- endfor %}
+  </dl>
+</section>
+{% endmacro %}
+
+{#- The banners above the lede: "This event is over", "Details to be confirmed", "One date of <its series>". -#}
+{% macro banners(b) %}
+{%- if b.past or b.tentative or b.partOf %}
+<div class="evp-banners">
+  {%- if b.past %}
+  <p class="evp-banner is-past">{% icon "history", "size-5 shrink-0" %}<span><strong>{{ "evpage.status.past" | t(lang) }}.</strong> {{ "evpage.status.past_text" | t(lang) }}</span></p>
+  {%- endif %}
+  {%- if b.tentative %}
+  <p class="evp-banner is-tbc">{% icon "calendar-clock", "size-5 shrink-0" %}<span><strong>{{ "committee.events.tentative" | t(lang) }}.</strong> {{ "committee.events.tentative_help" | t(lang) }}</span></p>
+  {%- endif %}
+  {%- if b.partOf %}
+  <p class="evp-banner is-series">{% icon "repeat", "size-5 shrink-0" %}<a class="link tap-link font-semibold" href="{{ b.partOf.href }}">{{ "evpage.status.part_of" | t(lang, { series: b.partOf.title }) }}</a></p>
+  {%- endif %}
+</div>
+{%- endif %}
+{% endmacro %}
+
+{#- A section's heading: an eyebrow, the h2, an optional line under it and an optional link on its right
+    (ui.sectionHead's look, with an id for aria-labelledby). -#}
+{% macro head(id, title, eyebrow="", icon="", sub="", href="", linkLabel="") %}
+{{ ui.sectionHead(title, sub, href, linkLabel, icon, { eyebrow: eyebrow, id: id, lang: lang }) }}
+{% endmacro %}
+
+{#- Other events as small cards (their own pages): the date tile, the title, the day and time, the place or "Online on
+    …", "Details to be confirmed", the flyer's thumbnail when `thumbs`. The current date of a series is marked. -#}
+{% macro minis(list, thumbs=false, cols="sm:grid-cols-2 lg:grid-cols-3") %}
+<ul class="mt-5 grid gap-3 {{ cols }}" role="list">
+  {%- for r in list %}
+  <li>
+    <a href="{{ r.href }}" class="card card-link cm-mini-card evp-mini ev-accent ev-tone-{{ r.tone }} group h-full{{ ' is-current' if r.current }}"{% if r.current %} aria-current="page"{% endif %}>
+      <span class="cm-date-tile{{ ' cm-tile-range' if r.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ r.tile.mon }}</span><span class="cm-tile-day">{{ r.tile.day }}</span><span class="cm-tile-wd">{{ r.tile.wd }}</span></span>
+      <span class="min-w-0 flex-1">
+        {%- if r.title %}
+        <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ r.title }}</span>
+        <span class="mt-0.5 block text-sm text-muted">{{ r.when }}</span>
+        {%- else %}
+        {#- (a date of the series the page is about: its day and time are its name) -#}
+        <span class="block font-semibold leading-snug text-ink group-hover:text-gv">{{ r.when }}</span>
+        {%- endif %}
+        {% if r.location %}<span class="mt-1 flex items-start gap-1.5 text-sm text-muted{{ ' italic' if r.locationTba }}">{% set rIcon = "hourglass" if r.locationTba else "map-pin" %}{% icon rIcon, "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ r.location }}</span></span>
+        {% elif r.isOnline %}<span class="mt-1 flex items-start gap-1.5 text-sm text-muted">{% icon "video", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ ("committee.events.online_on" | t(lang, { platform: r.platform })) if r.platform else ("committee.events.online" | t(lang)) }}</span></span>{% endif %}
+        {% if r.tentative %}<span class="mt-1.5 block">{{ ui.tentativeBadge(lang) }}</span>{% endif %}
+        {% if r.current %}<span class="badge-muted mt-1.5 inline-flex">{{ "evpage.sec.this_date" | t(lang) }}</span>{% endif %}
+      </span>
+      {% if thumbs and r.thumb %}<img class="evp-mini-thumb" src="{{ r.thumb }}" alt="" width="72" height="96" loading="lazy" decoding="async" referrerpolicy="no-referrer">{% endif %}
+    </a>
+  </li>
+  {%- endfor %}
+</ul>
+{% endmacro %}
+
+{#- "Get ready": the kind's presentation (start it, or read about it), its GVR/RLV Bingo card made for this event,
+    then the pages and guides of its kind (the model's resources: a card each, its own links under it). -#}
+{% macro prep(p, past=false) %}
+{%- if p.deck or p.bingo or (p.resources | length) %}
+<section class="mt-12" aria-labelledby="evp-prep-h">
+  {{ head("evp-prep-h", p.heading | t(lang), "", "compass", "" if past else ("evpage.sec.prep_sub" | t(lang))) }}
+  {%- if p.deck or p.bingo %}
+  <div class="mt-5 grid gap-4{{ ' lg:grid-cols-2' if (p.deck and p.bingo) }}">
+    {%- if p.deck %}
+    <article class="card card-pad evp-deck" aria-labelledby="evp-deck-h">
+      <p class="eyebrow flex items-center gap-2 text-grape">{% icon "presentation", "size-4 shrink-0" %}<span>{{ ("evpage.sec.deck_close" if p.deck.close else "evpage.sec.deck") | t(lang) }}</span></p>
+      <h3 id="evp-deck-h" class="h-card mt-2 text-balance">{{ p.deck.title }}</h3>
+      {% if p.deck.summary %}<p class="mt-2 text-sm leading-relaxed text-muted">{{ p.deck.summary }}</p>{% endif %}
+      {% if p.deck.minutes %}<p class="mt-2 inline-flex items-center gap-1.5 text-sm text-muted">{% icon "clock", "size-4 shrink-0 text-faint" %}{{ "evpage.sec.deck_minutes" | t(lang, { n: p.deck.minutes }) }}</p>{% endif %}
+      {#- (the slides are in English, as /orientation/'s card says on a page in another language) #}
+      {%- if lang != "en" %}<p class="mt-2"><span class="badge-muted">{% icon "languages", "size-3" %} {{ "orientation.pres_english" | t(lang) }}</span></p>{% endif %}
+      <div class="evp-btns">
+        <a class="btn-primary btn-sm" href="{{ p.deck.href }}">{% icon "play", "size-4" %} {{ "evpage.cta.start" | t(lang) }}</a>
+        <a class="btn-secondary btn-sm" href="{{ p.deck.card }}">{% icon "info", "size-4" %} {{ "evpage.sec.deck_card" | t(lang) }}</a>
+      </div>
+    </article>
+    {%- endif %}
+    {%- if p.bingo %}
+    <article class="card card-pad evp-bingo" aria-labelledby="evp-bingo-h">
+      <p class="eyebrow flex items-center gap-2 text-vine">{% icon "grid-3x3", "size-4 shrink-0" %}<span>{{ "bingo.title" | t(lang) }}</span></p>
+      <h3 id="evp-bingo-h" class="h-card mt-2 text-balance">{{ "evpage.sec.bingo" | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "evpage.sec.bingo_text" | t(lang) }}</p>
+      <div class="evp-btns">
+        <a class="btn-primary btn-sm" href="{{ p.bingo }}" data-evp-bingo>{% icon "printer", "size-4" %} {{ "evpage.sec.bingo_cta" | t(lang) }}</a>
+      </div>
+    </article>
+    {%- endif %}
+  </div>
+  {%- endif %}
+  {%- if p.resources | length %}
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" role="list">
+    {%- for r in p.resources %}
+    {%- set rTitle = (r.labelKey | t(lang)) if r.labelKey else r.label -%}
+    <li class="card evp-res">
+      <span class="evp-res-icon" aria-hidden="true">{% icon r.icon, "size-5" %}</span>
+      <div class="min-w-0">
+        <h3 class="evp-res-h">{% if r.href %}<a class="evp-res-link" href="{{ r.href }}"{% if r.ext %} target="_blank" rel="noopener"{% endif %}>{{ rTitle }}{% if r.ext %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span>{% endif %}</a>{% else %}{{ rTitle }}{% endif %}</h3>
+        {% if r.textKey %}<p class="mt-1 text-sm leading-relaxed text-muted">{{ r.textKey | t(lang) }}</p>
+        {%- elif r.text %}<p class="mt-1 text-sm leading-relaxed text-muted">{{ r.text }}</p>{% endif %}
+        {%- if r.links | length %}
+        <ul class="evp-res-links" role="list">
+          {%- for l in r.links %}
+          {#- (a file of the site — the deadlines' .ics —: its address in the page's language here, where the build knows
+              which files it writes in each language) -#}
+          <li><a class="link tap-link" href="{{ (l.href | lurl(lang)) if l.file else l.href }}"{% if l.ext %} target="_blank" rel="noopener"{% endif %}{% if l.lang %} lang="{{ l.lang }}"{% endif %}>{{ (l.labelKey | t(lang, l.vars)) if l.labelKey else l.label }}{% if l.ext %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span>{% endif %}</a></li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+      </div>
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+</section>
+{%- endif %}
+{% endmacro %}
+
+{#- Flyers (the series' own, or of similar events): a tile each — the flyer's picture, its title —, opened in the site's
+    viewer (data-cm-preview: committee.js CM.preview, the page's {% cmPreviewDialog %}), without JavaScript in a new
+    tab. -#}
+{% macro flyerTiles(list) %}
+<ul class="evp-flyers" role="list">
+  {%- for f in list %}
+  <li>
+    <a class="evp-flyer" href="{{ f.view }}" target="_blank" rel="noopener" data-cm-preview="{{ f.preview }}" data-cm-title="{{ f.title }}" data-cm-open="{{ f.view }}">
+      <span class="evp-flyer-pic">{% if f.thumb %}<img src="{{ f.thumb }}" alt="" width="240" height="320" loading="lazy" decoding="async" referrerpolicy="no-referrer">{% endif %}<span class="evp-flyer-fallback" aria-hidden="true">{% icon "file-image", "size-8" %}</span></span>
+      <span class="evp-flyer-title"{% if f.titleLang %} lang="{{ f.titleLang }}"{% endif %}>{{ f.title }}</span>
+    </a>
+  </li>
+  {%- endfor %}
+</ul>
+{% endmacro %}
+
+{#- A magazine issue as a tile (the event's month — or the newest issue): its cover, the magazine and the issue, its
+    theme, "See this issue" (its page on the magazine's site), or "Coming soon" while it is not out. -#}
+{% macro issue(x, pub, eyebrow="") %}
+{%- set mag = "Grapevine" if pub == "gv" else "La Viña" -%}
+<article class="card evp-issue cm-tone-{{ pub }}">
+  <span class="evp-issue-cover">{% if x.cover %}<img src="{{ x.cover }}" alt="" width="96" height="137" loading="lazy" decoding="async">{% else %}<span class="evp-issue-blank" aria-hidden="true">{% icon "book-open", "size-7" %}</span>{% endif %}</span>
+  <div class="min-w-0">
+    <p class="eyebrow">{{ (eyebrow + " · " + mag) if eyebrow else mag }}</p>
+    <h3 class="h-card mt-1">{{ (x.label.charAt(0) | upper) + x.label.slice(1) if x.label else mag }}</h3>
+    {% if x.theme %}<p class="mt-1 text-sm leading-relaxed text-ink"{% if x.themeLang and x.themeLang != lang %} lang="{{ x.themeLang }}"{% endif %}>{{ x.theme }}{% if x.soon %} — <span class="font-semibold">{{ "evpage.sec.issue_soon" | t(lang) }}</span>{% endif %}</p>{% endif %}
+    {% if x.url %}<a class="link tap-link mt-1 inline-flex items-center gap-1 text-sm font-semibold" href="{{ x.url }}" target="_blank" rel="noopener">{{ "evpage.sec.issue_read" | t(lang) }}{% icon "arrow-up-right", "size-4 shrink-0" %}<span class="sr-only"> ({{ 'common.external' | t(lang) }})</span></a>
+    {% elif not x.theme %}<p class="mt-1 text-sm font-semibold text-muted">{{ "evpage.sec.issue_soon" | t(lang) }}</p>{% endif %}
+  </div>
+</article>
+{% endmacro %}

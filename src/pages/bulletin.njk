@@ -53,7 +53,7 @@ pageScripts: ["/assets/js/committee.js"]
     <li>{{ ui.heroAsideLink({ href: ("/meetings/" | lurl(lang)) + "#committee-meeting", label: "committee.events.stat_next_meeting" | t(lang), text: (nm.startIso | fmtDate(lang, "short")) + (" · " + nm.timeLabel if nm.timeLabel else ""), icon: "users", tone: "grape" }, lang) }}</li>
     {%- endif %}
     {%- if ne %}
-    <li>{{ ui.heroAsideLink({ href: ("/events/" | lurl(lang)) + "#" + ne.anchor, label: ne.title, text: ("committee.ann.next_event" | t(lang)) + " · " + (ne.rangeLabel if ne.multiDay else ((ne.startIso | fmtDate(lang, "short")) + (" · " + ne.timeLabel if ne.timeLabel else ""))), icon: "calendar-days", tone: toneOf[neKind] or "vine" }, lang) }}</li>
+    <li>{{ ui.heroAsideLink({ href: ne | evHref(lang, db, site), label: ne.title, text: ("committee.ann.next_event" | t(lang)) + " · " + (ne.rangeLabel if ne.multiDay else ((ne.startIso | fmtDate(lang, "short")) + (" · " + ne.timeLabel if ne.timeLabel else ""))), icon: "calendar-days", tone: toneOf[neKind] or "vine" }, lang) }}</li>
     {%- endif %}
   </ul>
   {% endcall %}

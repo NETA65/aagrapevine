@@ -1382,13 +1382,15 @@ function liveEvents(c) {
   const asm = en.find((e) => e.group === "neta" && isAssembly(e) && e.startMs > c.nowMs);
   if (asm) {
     const ae = es.get(asm.id) || asm;
-    // (its card on /events/ — on /es/events/ for the Spanish slides — or its own page; a flyer's document: /events/)
-    const link = c.qrOk(asm.detailsUrl) || page;
+    // (its own page — the Area's, on neta65.org — or its card on /events/, on /es/events/ for the Spanish slides; a
+    // flyer's document: /events/ — committee.js shapeEvent's cardUrl, as before round 37, whose detailsUrl is the
+    // event's page on this site)
+    const link = c.qrOk(asm.cardUrl) || page;
     out.push(liveItem({
       id: `live:countdown:${idSlug(asm.id)}`, type: "countdown", channel: "live-events", langs: ["en", "es"],
       en: { title: BOOTH_WORDS.next_assembly.en, text: asm.title, rows: [eventRow(c, asm, "en")] },
       es: { title: BOOTH_WORDS.next_assembly.es, text: ae.title, rows: [eventRow(c, ae, "es")] },
-      qr: link, qr_es: c.qrOk(ae.detailsUrl) || pageEs, url: link, until_ts: asm.startMs,
+      qr: link, qr_es: c.qrOk(ae.cardUrl) || pageEs, url: link, until_ts: asm.startMs,
     }));
   }
   return out;

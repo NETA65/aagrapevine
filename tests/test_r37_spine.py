@@ -441,6 +441,7 @@ r.join = {
   bare: metaWith(hubOf("grapevine-meeting", "es"), "Reunión en línea. Únete aquí: abc-defg-hij."),
   bareZoom: metaWith(hubOf("lv-monthly-workshop", "en"), "In Spanish. Call in with 123-4567-8901."),
   kept: metaWith(hubOf("grapevine-meeting", "en"), "Bring your two-week-old ideas. Meeting ideas welcome."),
+  keptPlain: K.withoutJoinDetails("Bring your two-week-old ideas. Meeting ideas welcome."),
   eventHead: P.eventPageHead({ ...recPage, ev: { ...recPage.ev, summary: "Bring a friend. Call in with 815 9593 1777.",
     meetingId: "815 9593 1777" } }, site).description,
   eventHeadSame: P.eventPageHead(recPage, site).description === recPage.head.description,
@@ -455,6 +456,30 @@ r.join = {
     K.withoutJoinValues(undefined, ["815 9593 1777"]),
     K.withoutJoinValues("Go to teams.microsoft.com/l/meetup-join/abc now. See you.", ["https://teams.microsoft.com/l/meetup-join/abc"])],
 };
+// … nor any other meeting app's room, nor how to join by phone, wherever a copy is made for machines (the heads —
+// so llms.txt's lines —, the Event's description, a past page's summary); on a page people read, data-nosnippet
+const OTHER_APPS = "Monthly sharing. Join on Microsoft Teams at https://teams.microsoft.com/l/meetup-join/19%3aabc123 today. "
+  + "Our Webex room https://acme.webex.com/meet/xyz is the backup. Dial +1 346 248 7799 to join by phone. "
+  + "Or GoToMeeting: gotomeet.me/neta65 now. Bring a friend.";
+const OTHER_APPS_ES = "Compartimos. Únete por Teams: https://teams.microsoft.com/l/meetup-join/19%3aabc123 ahora. "
+  + "Marque el +1 346 248 7799 para unirse por teléfono. Trae a un amigo.";
+r.otherApps = {
+  eventHead: P.eventPageHead({ ...recPage, ev: { ...recPage.ev, summary: OTHER_APPS } }, site).description,
+  seriesMeta: metaWith(hubOf("grapevine-meeting", "en"), OTHER_APPS),
+  seriesMetaEs: metaWith(hubOf("grapevine-meeting", "es"), OTHER_APPS_ES),
+  ld: K.eventLd([{ ...tyler, summary: OTHER_APPS }], site, "en", site.url + "/events/", 5)[0].description,
+  past: K.withoutJoinDetails(OTHER_APPS + "\nAlso on Skype: https://join.skype.com/AbCd now.\nOne tap mobile: +13462487799,,81595931777#"),
+  pastEs: K.withoutJoinDetails(OTHER_APPS_ES),
+  nosnippet: K.noSnippetJoin('<p>Join on Teams: <a href="https://teams.microsoft.com/l/x1">https://teams.microsoft.com/l/x1</a> '
+    + "or https://acme.webex.com/meet/xyz.</p>"),
+  // a `url:` line that is the event's meeting room is no page of its own elsewhere: never sameAs, still a leaf
+  ownZoom: K.ownPageOf({ linkExternal: true, link: "https://us02web.zoom.us/j/99988877766?pwd=XyZsecret" }, site.url + "/"),
+  ownTeams: K.ownPageOf({ linkExternal: true, link: "https://teams.microsoft.com/l/meetup-join/19%3aabc" }, site.url + "/"),
+  ownArea: K.ownPageOf({ linkExternal: true, link: "https://neta65.org/events/fall-assembly/" }, site.url + "/"),
+  leafZoom: K.eventLeaf({ ...tyler, linkExternal: true, link: "https://us02web.zoom.us/j/99988877766?pwd=XyZsecret" }, site),
+  ldZoom: K.eventLd([{ ...tyler, linkExternal: true, link: "https://us02web.zoom.us/j/99988877766?pwd=XyZsecret" }], site,
+    "en", site.url + "/events/", 5)[0],
+};
 // "series" is no event's anchor (/events/series/ holds the series' pages)
 r.seriesAnchor = [K.eventAnchor({ id: "ev:manual:series", extra: { slug: "series" } }),
   K.eventAnchor({ id: "ev:manual:series-night", extra: { slug: "series-night" } })];
@@ -468,6 +493,17 @@ r.org = {
   areaEs: org(ev("2099-03-19-test-assembly", "es"), "es"), ours: org(ev("2099-02-14-test-recording")),
   oursIsUs: K.isCommitteeOrganizer(org(ev("2099-02-14-test-recording")), site),
   areaIsUs: K.isCommitteeOrganizer(org(ev("2099-03-19-test-assembly")), site), nullIsUs: K.isCommitteeOrganizer(null, site),
+};
+// (round 37's fixer) a page's title gives the year once, and "NETA 65" once
+const asm = ev("2099-03-19-test-assembly"), asmEs = ev("2099-03-19-test-assembly", "es");
+r.titles = {
+  yearEn: K.eventPageMeta({ ...asm, title: "NETA 65 Spring Assembly 2099" }, site, "en"),
+  yearEs: K.eventPageMeta({ ...asmEs, title: "Asamblea de Primavera 2099" }, site, "es"),
+  otherYear: K.eventPageMeta({ ...asm, title: "Spring Assembly 2098 follow-up" }, site, "en").title,
+  noYear: K.eventPageMeta(asm, site, "en").title,
+  tails: [K.eventsTitleTail("Short title", "en"), K.eventsTitleTail("Taller corto", "es"),
+    K.eventsTitleTail("La Viña Monthly Virtual Workshop (in Spanish) — Every fourth Thursday", "en"),
+    K.eventsTitleTail("Asamblea de Otoño de NETA 65", "es")],
 };
 // … the same organizer as the Event /events/ gives search engines, free only when it is the committee's
 const lds = K.eventLd(evs.en, site, "en", site.url + "/events/", 100);
@@ -683,7 +719,10 @@ class ThePlan(Spine):
                     self.assertNotIn(" · ", h["title"])
                     self.assertLessEqual(len(h["description"]), 160)
                     self.assertTrue(h["description"])
-                    self.assertEqual(h["titleTail"], "Events — NETA 65" if lang == "en" else "Eventos — NETA 65")
+                    # (round 37's fixer) never "NETA 65" twice; after a long title the site's name alone
+                    events = "Events" if lang == "en" else "Eventos"
+                    tail = events if re.search(r"\bNETA\s*65\b", h["title"]) else "NETA 65" if len(h["title"]) > 60 else f"{events} — NETA 65"
+                    self.assertEqual(h["titleTail"], tail)
                     for secret in ("abc-defg-hij", "123 4567 8901", "zoom.us", "meet.google.com"):
                         self.assertNotIn(secret, h["description"])
         a, b, c = (self.page("en", f"2099-06-05-twin-{x}") for x in "abc")
@@ -694,6 +733,14 @@ class ThePlan(Spine):
         self.assertEqual(self.page("es", "2099-06-05-twin-b")["head"]["title"], "Test Twin Gathering, 5 de junio de 2099 — Plano")
         self.assertEqual(self.page("en", "2099-02-07-test-writing")["head"]["title"],
                          "Test La Viña Writing Workshop — Tyler, February 7, 2099")
+
+    def test_the_year_and_the_name_once(self):
+        t = json.loads(re.sub(r"[   ]", " ", json.dumps(self.run_spine()["titles"], ensure_ascii=False)))
+        self.assertEqual((t["yearEn"]["title"], t["yearEn"]["titleTail"]), ("NETA 65 Spring Assembly 2099, March 19 – 21", "Events"))
+        self.assertEqual((t["yearEs"]["title"], t["yearEs"]["titleTail"]), ("Asamblea de Primavera 2099, 19–21 de marzo", "Eventos — NETA 65"))
+        self.assertEqual(t["otherYear"], "Spring Assembly 2098 follow-up, March 19 – 21, 2099", "another year in the title: the day's year stays")
+        self.assertEqual(t["noYear"], "Test Spring Assembly, March 19 – 21, 2099")
+        self.assertEqual(t["tails"], ["Events — NETA 65", "Eventos — NETA 65", "NETA 65", "Eventos"])
 
     def test_worked_out_once(self):
         self.assertEqual(self.run_spine()["memo"], [True, False, False, False])
@@ -724,13 +771,18 @@ class TheSeriesPages(Spine):
         self.assertEqual(cw["datePages"][:2], [f"/events/ev-recurring-citywide-dallas-{cw1}/", f"/events/ev-recurring-citywide-dallas-{cw2}/"])
         self.assertEqual(cw["datePages"][2:], [None] * 4, "dates the data does not have yet: no page to link")
         self.assertEqual(cw["head"]["title"], "GV/LV booth at CityWide Test — Every second Saturday of the month")
-        self.assertTrue(cw["head"]["description"].startswith("Every second Saturday of the month · 5:30 – 7:30 PM Central time · Church Uno, Dallas — Our literature table"),
+        # (round 37's fixer) its next date, before its summary: the rule alone lets a reader work out a date that
+        # does not happen (a month it skips, a date the host moved)
+        self.assertTrue(cw["head"]["description"].startswith("Every second Saturday of the month · 5:30 – 7:30 PM Central time · Church Uno, Dallas — "
+                                                             f"Next: Saturday, {cw1:%B} {cw1.day}, {cw1.year}. Our literature table"),
                         cw["head"]["description"])
+        self.assertEqual(cw["head"]["nextText"], f"Next: Saturday, {cw1:%B} {cw1.day}, {cw1.year}.")
         es = hubs[("es", "citywide-dallas")]
         self.assertEqual(es["head"]["title"], "Mesa de GV/LV en CityWide Test — Cada segundo sábado del mes")
         gvm = hubs[("en", "grapevine-meeting")]
         self.assertEqual((gvm["kind"], gvm["source"]), ("online-meeting", "series"))
-        self.assertIn("Online on Google Meet — Online AA meeting in English.", gvm["head"]["description"])
+        self.assertIn("Online on Google Meet — Next: Wednesday, ", gvm["head"]["description"])
+        self.assertIn(". Online AA meeting in English.", gvm["head"]["description"])
         self.assertEqual(gvm["datePages"][0], f"/events/ev-recurring-grapevine-meeting-{gvm1}/")
         lvw = hubs[("es", "lv-monthly-workshop")]
         self.assertIn("En línea por Zoom", lvw["head"]["description"])
@@ -858,15 +910,42 @@ class TheHeadsKeepJoinDetailsOut(Spine):
             with self.subTest(k):
                 for secret in ("abc-defg-hij", "815 9593 1777", "123-4567-8901"):
                     self.assertNotIn(secret, j[k])
-        self.assertTrue(j["meetCode"].endswith("Online on Google Meet — Online AA meeting."), j["meetCode"])
-        self.assertTrue(j["codigo"].endswith("— Reunión en línea."), j["codigo"])
-        self.assertTrue(j["bare"].endswith("— Reunión en línea."), j["bare"])
-        self.assertTrue(j["bareZoom"].endswith("— In Spanish."), j["bareZoom"])
+        self.assertRegex(j["meetCode"], r"Online on Google Meet — Next: [^.]+\. Online AA meeting\.$")
+        self.assertRegex(j["codigo"], r"— Próxima fecha: [^.]+\. Reunión en línea\.$")
+        self.assertRegex(j["bare"], r"— Próxima fecha: [^.]+\. Reunión en línea\.$")
+        self.assertRegex(j["bareZoom"], r"— Next: [^.]+\. In Spanish\.$")
         self.assertTrue(j["eventHead"].endswith("— Bring a friend."), j["eventHead"])
         self.assertEqual(j["ld"], "Come early.")
         self.assertEqual(j["ldBare"], "Come early.", "the Event's description: its own meeting ID, bare")
-        self.assertIn("Bring your two-week-old ideas. Meeting ideas", j["kept"], "no code, no join words: kept")
+        self.assertIn("Bring your two-week-old ideas.", j["kept"], "no code, no join words: kept")
+        self.assertEqual(j["keptPlain"], "Bring your two-week-old ideas. Meeting ideas welcome.", "no code, no join words: kept")
         self.assertTrue(j["eventHeadSame"], "nothing to leave out: the head as eventPageMeta gives it")
+
+    def test_other_meeting_apps_and_phone(self):
+        """Round 37's fixer: Teams, Webex, GoToMeeting, Skype rooms and "dial … to join by phone" sentences say how to
+        join as much as a Zoom link (committee.js JOIN_HOSTS from PLATFORM_HOSTS, JOIN_BY_PHONE)."""
+        o = self.run_spine()["otherApps"]
+        secrets = ("teams.microsoft.com", "webex.com", "gotomeet.me", "skype.com", "346 248 7799", "81595931777",
+                   "abc123", "One tap")
+        for k in ("eventHead", "seriesMeta", "seriesMetaEs", "ld", "past", "pastEs"):
+            with self.subTest(k):
+                for secret in secrets:
+                    self.assertNotIn(secret, o[k])
+        self.assertTrue(o["eventHead"].endswith("— Monthly sharing. Bring a friend."), o["eventHead"])
+        self.assertEqual(o["ld"], "Monthly sharing. Bring a friend.")
+        self.assertEqual(o["past"], "Monthly sharing. Bring a friend.")
+        self.assertEqual(o["pastEs"], "Compartimos. Trae a un amigo.")
+        self.assertRegex(o["seriesMetaEs"], r"— Próxima fecha: [^.]+\. Compartimos\.")
+        # on the page people read: each room's address out of what search engines quote, the link itself kept
+        self.assertIn('href="https://teams.microsoft.com/l/x1"', o["nosnippet"])
+        self.assertIn("<span data-nosnippet>https://teams.microsoft.com/l/x1</span>", o["nosnippet"])
+        self.assertIn("<span data-nosnippet>https://acme.webex.com/meet/xyz</span>.", o["nosnippet"])
+        # a meeting room as an event's `url:` line: no page of its own, never in sameAs
+        self.assertEqual([o["ownZoom"], o["ownTeams"]], ["", ""])
+        self.assertEqual(o["ownArea"], "https://neta65.org/events/fall-assembly/")
+        self.assertTrue(o["leafZoom"], "its room is no page elsewhere: still a leaf")
+        self.assertNotIn("sameAs", o["ldZoom"])
+        self.assertNotIn("XyZsecret", json.dumps(o["ldZoom"]))
 
     def test_without_join_values(self):
         self.assertEqual(self.run_spine()["join"]["values"], [

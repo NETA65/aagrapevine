@@ -194,7 +194,7 @@ for (const lang of ["en", "es"]) {
   // an event's own page: its one Event (cmEventPageLd), its url that page; and what eventPageMeta gives its layout
   const own = {};
   for (const e of evs) {
-    if (!filters.cmEventLeaf(e, input.site)) continue;
+    if (!C.eventLeaf(e, input.site)) continue;
     const at = input.site.url + C.eventPagePath(e, lang);
     own[e.anchor] = { at, ld: filters.cmEventPageLd(e, input.site, lang, at), meta: C.eventPageMeta(e, input.site, lang) };
   }
@@ -223,7 +223,7 @@ out(input.cases.map(([text, extra]) => eventPlace(text, extra)));
 # The real data: every place in data/site/events.json (each language's text), and the Events the page would give at
 # the moment the data was written (its own clock), with what the page knows of each event.
 REAL_JS = r"""
-const { eventPlace } = await imp("eleventy/filters/committee.js");
+const { eventPlace, eventLeaf } = await imp("eleventy/filters/committee.js");
 const site = (await imp("src/_data/site.js")).default();
 const data = JSON.parse(fs.readFileSync("data/site/events.json", "utf8"));
 const items = (data.items || []).filter((it) => it && it.kind === "event" && it.status !== "gone");
@@ -245,12 +245,16 @@ for (const lang of ["en", "es"]) {
       tba: e.locationTba, online: e.isOnline, group: e.group, host: e.host, category: e.category,
       tags: (e.item && e.item.tags) || [], tone: filters.eventTone(e), city: (e.item && e.item.extra && e.item.extra.city) || "",
       scope: (e.item && e.item.extra && e.item.extra.scope) || "",
-      leaf: filters.cmEventLeaf(e, site),
+      leaf: eventLeaf(e, site),
       organizer: (e.category === "manual" && e.item && e.item.extra && e.item.extra.organizer) || "",
       organizerUrl: (e.category === "manual" && e.item && e.item.extra && e.item.extra.organizer_url) || "",
       address: e.location ? ((eventPlace(e.location, e.item && e.item.extra) || {}).address || {}) : {} })),
   };
 }
+// (round 37) every event's own page: its Event only on a leaf's (eleventy/event-pages.js eventPagePlan)
+const plan = (await imp("eleventy/event-pages.js")).eventPagePlan(items, site, ["en", "es"], { cancelled: data.cancelled || [] });
+res.plan = Object.fromEntries(["en", "es"].map((l) => [l, Object.fromEntries(plan.pages.filter((p) => p.lang === l)
+  .map((p) => [p.anchor, { ld: p.ld, index: p.index }]))]));
 out(res);
 """
 
@@ -747,8 +751,12 @@ class RealData(unittest.TestCase):
                     for k in ("startDate", "endDate"):
                         self.assertRegex(e[k], r"^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}-0[56]:00)?$")
             # an event's own page: only one still to come, held at a place, never a monthly series' date or one of the
-            # magazines' calendars (every leaf is among the Events above)
+            # magazines' calendars (every leaf is among the Events above); since round 37 every event but a committee
+            # meeting has a page (the plan), with its Event exactly when it is a leaf
+            plan = self.res["plan"][lang]
+            self.assertEqual({a for a, p in plan.items() if p["ld"]}, {a for a, e in evs.items() if e["leaf"]}, lang)
             for anchor, ev in evs.items():
+                self.assertEqual(anchor in plan, not ev["committee"], anchor)
                 if ev["leaf"]:
                     self.assertIn(anchor, by, lang)
                     self.assertFalse(ev["committee"] or ev["later"] or ev["category"] == "recurring"

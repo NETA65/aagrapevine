@@ -32,7 +32,8 @@ the monthly toolkit · the monthly digest · the search.
 
 Every event on the site comes from one of six places. The daily update reads all of them, merges them,
 removes duplicates, translates titles (English ⇄ Spanish) and publishes one list. That list feeds the
-**Events** page (`/events/`, `/es/events/`), the home page's **Upcoming events**, the calendar files people
+**Events** page (`/events/`, `/es/events/`), each event's own page (since round 37: `/events/<card>/`, section
+[11.1](#111-every-place)), the home page's **Upcoming events**, the calendar files people
 subscribe to (`/events.ics`, `/es/events.ics`), the monthly toolkit (`/monthly/`), the monthly digest
 (`/digest/` and its e-mail), What's New and the RSS feed, the search, and the web presentations.
 
@@ -72,7 +73,9 @@ subscribe to (`/events.ics`, `/es/events.ics`), the monthly toolkit (`/monthly/`
 
 The same event also appears on the home page (if it is among the next four), in both calendar files, in the
 search, in What's New for 30 days, on the March 2027 monthly toolkit, and — after it has taken place — in
-the March monthly digest. Section [11](#11-where-events-show-on-the-website) lists every place.
+the March monthly digest. It also gets a page of its own, by itself (since round 37): `/events/ev-flyer-<file
+id>/` and `/es/events/ev-flyer-<file id>/`, with its flyer, its quick facts, the writing workshop presentation and
+the other links a writing workshop needs. Section [11](#11-where-events-show-on-the-website) lists every place.
 
 > A flyer's name can only carry a date, a time, a time zone, a place and a title. For a description, your
 > own Spanish title, a Zoom link, several days or "details to be confirmed", write a
@@ -379,6 +382,11 @@ meeting ID, contact and host — see [7.6](#76-a-month-when-the-date-moves).)
 If a folder cannot be read during a run, nothing in it is removed — it stays as it was until the next good
 run.
 
+**To cancel a flyer event**, move the flyer into the Panel's `private` folder, or take the date out of its name. At
+the next update the event and its page leave the site, and its old address sends people to the Events page. (An
+event written in a `content/events` file is cancelled with `cancelled: true` instead, which keeps a "Cancelled"
+notice at its address until its day: [6.2](#62-file-rules).)
+
 ---
 
 ## 5. Use a flyer without a date
@@ -521,7 +529,8 @@ a member's full name or phone number.
 | Header | optional, between two `---` lines; a missing closing `---` is an error |
 | **The file name is the event's identity** | It becomes the id `ev:manual:<file name>`, the card's anchor (`/events/#2027-04-17-gv-writing-workshop-garland`) and part of the calendar UID. **Renaming the file makes a new event** (new link, new calendar entry, "New" badge again). Fix things inside the file instead. |
 | Same name twice | the second file is skipped ("duplicate name") |
-| Delete the file | the event disappears at the next update |
+| **Cancel the event** (since round 37) | keep the file and add `cancelled: true` (optional: `cancelled_note:`, one or two sentences to people). The event leaves every list; its page becomes a "Cancelled" notice until its day is over; subscribed calendars show "Cancelled: …" for 90 days. The whole recipe: [`content/events/README.md` → Cancelled](../content/events/README.md#cancelled-cancelled-true). An event from a **dated flyer** has no file: move the flyer into the Panel's `private` folder, or take the date out of its name ([4.11](#411-rename-replace-or-remove-a-flyer-event)). One date of a **monthly series**: its `skip_dates:` ([7.5](#75-example-skip-a-month)) |
+| Delete the file | the event disappears at the next update, without a word to anyone: subscribed calendars lose the entry and its page becomes "not found". Right for a duplicate or a mistake; for an event that was called off, cancel it instead (row above). A cancelled event's file may be deleted 90 days after its day |
 | A file with a mistake | it is skipped and reported; if it was already on the site, its **last good version stays** |
 
 ### 6.3 The smallest file
@@ -554,21 +563,24 @@ Visit our table at the assembly.
 | `end` | a date (the **last** day), a date-time, or a clock time | the event counts as **one hour**; the card shows the start only | time range or date range, calendar end, when the card disappears |
 | `location` | an address, a group, or "Venue to be announced" / "TBA" / "Lugar por anunciarse" | no place line | place line with a map pin, calendar LOCATION, home card, search, toolkit (its city); **never machine-translated**. Write it as `Venue, street, city, TX ZIP` ("Grupo Libro Grande, 623 West Bow, Tyler, TX 75702"): search engines then get each part of the address; a venue's name alone ("Hilton Tyler"), with no city, state or ZIP code, tells them nothing about the event ([11.5](#115-what-search-engines-are-told)) |
 | `location_es` / `location_en` | the place in the other language | a "to be announced" place gets the site's own words in the other language | the other-language page |
-| `url` | the event's own page (best: its page on neta65.org) | `/events/#<file name>` (no title link) | the title becomes a link; an **Event details** button when there is no flyer (since round 35 also beside a flyer when the event has a page of its own here — its title then goes to that page — and the link is not the flyer itself); calendar URL and "Details:" line; matching with the NETA 65 calendar. Since round 35 an event with its own page elsewhere gets no page of its own here (search engines are sent to that page, `sameAs`); without `url:`, an upcoming in-person event gets one ([11.1](#111-every-place)) |
+| `url` | the event's own page elsewhere (best: its page on neta65.org) | no **Event details** button | an **Event details** button (beside a flyer too, when the link is not the flyer itself; the card's title goes to the event's own page here, since round 37 for every event); matching with the NETA 65 calendar. (Until round 37 also the calendar entry's URL and "Details:" line: they are now the event's page here, [11.3](#113-what-goes-into-the-calendar-files).) Every event has a page of its own here too (since round 37, [11.1](#111-every-place)): with `url:` to another site's page it links that page as its **Official page** and carries no Event markup for search engines (they are sent to that page, `sameAs`). A `url:` that is a meeting link (a Zoom, Google Meet or Teams room) is not a page about the event: it is never its Official page or `sameAs`, and the event keeps its Event markup — put a meeting link in `online_url:` instead |
 | `online_url` (`zoom`) | the meeting link | — | **Join online** button; "Online on Zoom" (the platform comes from the link); the calendar LOCATION when there is no place |
 | `meeting_id` | e.g. `"815 9593 1777"` (cut at 40 characters) | — | "Meeting ID 815 9593 1777" on the card and in calendars; also used to recognise the same Zoom room |
 | `flyer` (`flyer_url`) | the Drive link of an **undated** flyer ([5.1](#51-attach-a-flyer-to-a-hand-written-event-flyer)) | — | **View flyer**, the picture beside the card, `ATTACH` + "Flyer:" in calendars |
 | `image` (`flyer_thumb`) | a picture address | — | replaces the flyer picture — only with `flyer:` |
 | `tentative` | `true`, `yes`, `y`, `on`, `1`, `sí`, `si` | final | "Details to be confirmed" / "Detalles por confirmar" badge (events, home, search), first line of the calendar text, `STATUS:TENTATIVE`, "Details to be confirmed" on the monthly toolkit's dates and "details to be confirmed" in the district report |
 | `confirmed` | same values | off | only for the NETA 65 calendar feed: the file's date, time and place always win ([6.6 k](#k-the-neta-65-calendar-and-confirmed-true)) |
+| `cancelled` (since round 37; also `canceled`, `cancelado`, `cancelada`, or `status: cancelled`) | `true`, `yes`, `sí` … | not cancelled | the event leaves every list; its page becomes a "Cancelled" notice until its day; the calendar feeds write `STATUS:CANCELLED` ("Cancelled: …") for 90 days ([6.2](#62-file-rules), [`content/events/README.md`](../content/events/README.md#cancelled-cancelled-true)) |
+| `cancelled_note` (`cancelled_note_es`, `cancelled_note_en`) | one or two sentences to people, at most 300 characters | no note | shown first on the notice and in the calendar entry; never machine-translated (a note in one language only shows on both pages, marked as that language) |
+| `type` (since round 37; also `tipo`, `kind`) | one of the 15 kinds: `writing-workshop`, `recording-workshop`, `information-workshop`, `gvr-orientation`, `gsr-dcm-orientation`, `assembly`, `acm`, `town-hall`, `intergroup`, `booth`, `online-meeting`, `magazine-workshop`, `calendar`, `committee-meeting`, `other` (spaces and capitals are fine) | the site works the kind out from the title, the tags and where the event comes from | the event page's presentation, bingo occasion and *Get ready* links ([11.1](#111-every-place)). Write it only when the site guesses wrong. Any other value → left out + a line in "Event files to fix" (the event still shows) |
 | `host` | `neta` (default), `lv`, `gv` — also `NETA 65`, `committee`, `La Viña`, `lavina`, `Grapevine`, `AA Grapevine` | ours | `lv` / `gv`: shown with the **GV & LV calendars**, in that magazine's colour, with La Viña / AA Grapevine as organizer for search engines (when it is held at a place: search engines are not told about an online-only event). Anything else ("District 91") → shown as ours + a line in "Event files to fix" (the hosting group goes in the description, or in `organizer:`) |
 | `organizer` (since round 35) | the name of the **committee or group** that organizes the event when it is not us — `"District 87 La Viña Committee"` — never a person's name; plain text of at most 100 characters, with no web or e-mail address in it | search engines are told what the site already says: the committee, the Area for its own events, La Viña / AA Grapevine with `host:` | only what search engines are told ([11.5](#115-what-search-engines-are-told)): the event's organizer, by that name on the English and the Spanish page (not with `host: lv` / `gv`, which names La Viña / AA Grapevine); such an event is no longer given "free to attend" or the committee's card as its picture. People see nothing new: the card, the calendars and the colour stay the same. A name that breaks a rule is left out + a line in "Event files to fix" (the event still shows) |
 | `organizer_url` (since round 35) | its web page, an address that starts with `https://` (optional) | no page given | the organizer's page for search engines. Only with an `organizer:`; any other address (no `https://`, no dot in the host) is left out + a line in "Event files to fix" |
 | `lang` (`language`) | `en` / `es` (the first two letters count: `English`, `Español`) | detected from the title and text | the language you wrote in; it decides which way to translate. (`spanish` gives "sp" → ignored, detected instead.) |
 | `title_es` / `title_en` | your own title in the **other** language | machine translation | the other-language title, no "Auto-translated" note, no language pill. A value in the file's own language is ignored. |
 | `summary_es` / `summary_en` | one line, or a block `summary_es: \|` with indented lines | the text below the header, machine-translated | shown **instead of the whole description** on the other-language page |
-| `tags` | `[workshop, la-vina]` or `workshop, la-vina` | — | stored only — shown nowhere |
-| the text below the header | Markdown | — | the card's description; its first 400 characters (plain text) in calendars and search. A meeting ID, Meet code, passcode or written meeting address in it is still shown to people, but since round 35 search engines never quote those values (`data-nosnippet`, [11.5](#115-what-search-engines-are-told)); they are never in the structured data or the share-page descriptions either |
+| `tags` | `[workshop, la-vina]` or `workshop, la-vina` | — | shown nowhere. A few help the site tell the kind of event and its magazine (since round 37): `acm`, `assembly`, `town-hall`, `gsr-dcm-orientation`, `intergroup`, `la-vina`, `grapevine`; `la-vina` also marks it held in Spanish for search engines |
+| the text below the header | Markdown | — | the card's description; its first 400 characters (plain text) in calendars and search. A meeting ID, Meet code, passcode or written meeting address in it is still shown to people, but since round 35 search engines never quote those values (`data-nosnippet`, [11.5](#115-what-search-engines-are-told)); they are never in the structured data or the event pages' descriptions either |
 
 ### 6.5 Start and end: every form
 
@@ -753,8 +765,8 @@ You get "Online on Google Meet" / "En línea por Google Meet" with a video icon 
 button, "Meeting code rva-tmst-vdb", and the Meet link as the calendar LOCATION (here the committee's own room).
 The home card says "Online on Google Meet".
 Search engines are not told about it: Google lists only events held at a place (since 2025), so an online-only
-event gets no structured data ([11.5](#115-what-search-engines-are-told)). Its card, calendar entry and share page
-are as before (an online-only event never gets a page of its own: its **Share** button keeps the small share page).
+event gets no structured data ([11.5](#115-what-search-engines-are-told)). Since round 37 it still has a page of its
+own, `/events/<card>/`, like every event: in the sitemap while it is to come, without the Event markup.
 
 #### f) Hybrid (a place and Zoom)
 
@@ -900,8 +912,9 @@ the calendar files while it is among the 12 newest past events.
 These are silently ignored: `summary:` (the English description is always the text below the header —
 `summary:` works only for bulletin posts), `contact:` (works only in `recurring_events:`), `passcode:`,
 `time:`, `end_date:`, `enabled:`, `publish:`, `expires:`, `platform:` (always taken from the
-link). `tags:` is stored but shown nowhere. (`organizer:` did nothing until round 35; it now names who organizes the
-event for search engines, [6.4](#64-every-field).)
+link). `tags:` is shown nowhere (a few of them help tell the kind of event, [6.4](#64-every-field)). (`organizer:`
+did nothing until round 35; it now names who organizes the event for search engines. Since round 37 `cancelled:` and
+`type:` work too, [6.4](#64-every-field).)
 
 ### 6.8 Mistakes and the messages you get
 
@@ -919,6 +932,7 @@ good version stays.
 | `host: District 91` | `host: “District 91” must be neta (our committee), lv (La Viña) or gv (Grapevine) — shown as ours (NETA 65); the group that hosts it goes in the description` — the event **still shows**, as ours |
 | `organizer: "District 87, district87@example.org"` (since round 35) | `organizer: “…” holds a web or e-mail address — write only the committee's or group's name (its web page goes in organizer_url:); the line is left out` (also: `… is N characters long …` over 100) — the event **still shows**; search engines are told what they were before |
 | `organizer_url: district87.example.org` (since round 35) | `organizer_url: “…” must be a web address that starts with https:// — left out` (without an `organizer:` line: `… goes with an organizer: line (the committee's or group's name) — left out`) |
+| `type: workshop` (since round 37) | `type: “workshop” is not a kind the site knows, left out — write one of writing-workshop, recording-workshop, …, or delete the line` — the event **still shows**, with the kind the site works out itself |
 | a date without its year or day, a time alone, a two-digit year, a wrong UTC offset | see [6.5](#65-start-and-end-every-form) |
 | a `.txt` or `.docx` in the folder | `ignored — only files ending in .md are read (rename it to end in .md)` |
 | two files whose names differ only in capitals, spaces or punctuation (`Spring.md`, `spring.md`) | `duplicate name` — the second one is skipped |
@@ -1013,7 +1027,8 @@ recurring_events:
 
 The third block is our own online meeting, in the committee meeting's Google Meet room (the committee meeting
 is on the 3rd Wednesday, this one on the 1st): its card says "Online on Google Meet" and "Meeting code
-rva-tmst-vdb", its title links to its section on our Meetings page, and it has no date before January 6, 2027
+rva-tmst-vdb", its title links to its series' page (`/events/series/grapevine-meeting/`, since round 37; its
+calendar entries keep linking its section on our Meetings page), and it has no date before January 6, 2027
 (`starts`: there is no meeting on December 2, 2026). An outside calendar that lists the committee meeting in
 that room is never taken for one of its dates. Never call it "Grapevine meetings": that is the list of AA groups
 on `/meetings/#grapevine-meetings`.
@@ -1040,9 +1055,18 @@ on `/meetings/#grapevine-meetings`.
 | `months_ahead` | `1`–`24` | default `6`; outside 1–24 → 6 + note | at least this many upcoming dates on `/events/` and in the calendar files; with `events_until` every date through its month ([7.8](#78-how-far-ahead-events_until)) — whichever list is longer (the `/monthly/` posters work out later months themselves) |
 | `starts` | the first date, `"2027-01-06"` (optional) | not a date → ignored + note; not one of the rule's days → the rule's next day is the first date + a note naming it | no date before it — not on `/events/`, not among the 90 past days the calendar files keep, not on the `/monthly/` posters. Moved later, it counts from the next build: until the next sync, the pages leave out the dates `events.json` still has before it (`src/_data/db.js`, `beforeFirstDate` in `eleventy.config.js`; since round 36) |
 | `skip_dates` | `["2026-12-12"]` (one date without brackets works too) | a value that is not a date, or not one of the rule's days → ignored + a note naming the right date | that month has no date |
+| `type` (since round 37, optional) | one of the 15 kinds of a `content/events` file's `type:` ([6.4](#64-every-field)), written exactly: `"booth"`, `"online-meeting"` … | the kind comes from the key (`citywide-dallas` a literature booth, `grapevine-meeting` an online meeting, `lv-monthly-workshop` a monthly online workshop), else from its words: a booth, `host:` a magazine workshop, online only an online meeting | the series' pages' presentation, bingo occasion and *Get ready* links ([11.1](#111-every-place)); another value is not read |
 
-> **Note:** `enabled: false` is **not** read by the daily update — only the `/monthly/` posters honour it.
-> To stop a series, delete its block (as the comment in `config/site.yml` says).
+> **Note:** `enabled: false` is **not** read by the daily update — only the `/monthly/` posters honour it, and
+> (since round 37) the series' own page, `/events/series/<key>/`, which it leaves out. Its dates still show. To stop
+> a series, delete its block (as the comment in `config/site.yml` says).
+
+**Each series has a page of its own** (since round 37): `/events/series/<key>/` and `/es/events/series/<key>/` — for
+example `/events/series/citywide-dallas/` —, made by itself as soon as one of its dates is in the data: how to join
+(online), its flyer, its quick facts, its next 6 dates (each linked to that date's own page, a moved date included,
+a cancelled one never) and the links its kind needs ([11.1](#111-every-place)). Its title has no date, so it is the
+one address search engines keep for the series; each date's own page is for people (it is `noindex`). The key is
+the address: keep it the same once published.
 
 ### 7.3 Example: add a new monthly booth
 
@@ -1140,7 +1164,7 @@ Block 4 still shows (with the fixes applied); block 5 is skipped. The rest of th
 ### 7.8 How far ahead (`events_until`)
 
 One top-level line just above `recurring_events:` says until when the committee meeting and every monthly event are
-listed — on `/events/`, in `/events.ics` and `/es/events.ics`, and on the event share pages:
+listed — on `/events/`, in `/events.ics` and `/es/events.ics`, and as the events' own pages:
 
 ```yaml
 events_until: "2028-12-31"          # every date through this day's MONTH — Panel 77 ends Dec 31, 2028
@@ -1338,26 +1362,28 @@ A few more timings:
 | Place | English | Spanish | Which events | Notes |
 |---|---|---|---|---|
 | **Events page** | [/events/](https://grapevine.neta65.org/events/) | [/es/events/](https://grapevine.neta65.org/es/events/) | every upcoming date, a card each (every date of a monthly series and every committee meeting too, since round 30 — no "Show every monthly date" switch any more), grouped by month; by whole years: the rest of this year is shown and, from November on, all of the next year too (in November 2026: all of 2027; all through 2027 until October 31, 2027 only 2027's months), a later year is folded behind one button at the end of the list, **Show 2028 dates (n)** (n = the dates it shows for the chip picked; it moves the keyboard to the first month it shows); **Past events** (the 12 newest one-off events). On top, whatever the chip: **Our monthly meetings** (`#ev-pinned`, since round 30): the next committee meeting (the dark card) and the next **Grapevine Meeting** (`#ev-next-gvm`: Join on Google Meet, Meeting details, Add to calendar, its flyer; "First meeting:" before January 6, 2027); then **Weekly open meetings** (`#ev-weekly`, since November 2026): Grapevine's and La Viña's, one card each with *Every week*, the next date, **Join on Zoom** (the meeting's full link, since November 12, 2026), **Meeting details** (to `/meetings/#weekly-open`, the one place with the meeting ID and passcode) and **Add to calendar** (every week) | filter chips: All · Committee meetings · NETA 65 events · GV & LV calendars — *All* shows every card; a committee meeting is a NETA 65 event too, so it shows (and counts) under both chips; each chip counts every date, the folded ones too; `?filter=neta` works; a link to a card (a share, the "Save the date" card, the calendar under the subscription card) shows it whatever the chip or the fold; a **Save the date** card for the next Area assembly (never an ACM, the Area's town hall or a GSR/DCM orientation). The pinned meetings and the weekly open meetings are not events of the list (not counted by the chips); the weekly open meetings show with *All* and *GV & LV calendars* and are not in the months or Home's "Upcoming events" — since round 36 (November 2026) they are in `/events.ics` and `/es/events.ics`, one entry each that repeats every week ([11.3](#113-what-goes-into-the-calendar-files)) |
-| **Home page**, "Upcoming events" | [/](https://grapevine.neta65.org/) | [/es/](https://grapevine.neta65.org/es/) | up to 4 (3 on a phone). The next committee meeting and our Grapevine Meeting are in the top cards instead (since November 2026 the Grapevine Meeting has its own card under the committee meeting's, so it takes no place here). The next date of each other series **we** hold always keeps a place; the rest go to the soonest one-off events | the title links to: a series → its card on `/events/`; otherwise the event's `url`, else its flyer, else its online link — so a **flyer event opens the Drive flyer** |
+| **Home page**, "Upcoming events" | [/](https://grapevine.neta65.org/) | [/es/](https://grapevine.neta65.org/es/) | up to 4 (3 on a phone). The next committee meeting and our Grapevine Meeting are in the top cards instead (since November 2026 the Grapevine Meeting has its own card under the committee meeting's, so it takes no place here). The next date of each other series **we** hold always keeps a place; the rest go to the soonest one-off events | the title links to the event's own page (since round 37; a series → its series' page, `/events/series/<key>/`). Before, a flyer event opened the Drive flyer |
 | **Calendar files** | [/events.ics](https://grapevine.neta65.org/events.ics) | [/es/events.ics](https://grapevine.neta65.org/es/events.ics) | all of `/events/` incl. committee meetings (3 months back; ahead through the month of config/site.yml `events_until` — December 2028 —, never fewer than 12 months: [7.8](#78-how-far-ahead-events_until)); events that ended more than 90 days ago are dropped; since round 36 (November 2026) also the two weekly open meetings (`#ev-weekly`), one entry each that repeats every week ([11.3](#113-what-goes-into-the-calendar-files)) | subscribe from the card **Subscribe to calendar** on `/events/#subscribe` (Google, Apple, Outlook); `/events/` also names the file in its page head (`<link rel="alternate" type="text/calendar">`), so calendar apps can find it |
 | **Add to calendar** button | on each card | | that one event | Google Calendar, Outlook.com, or an Apple / Outlook `.ics` file. Since October 2026 the `.ics` file carries one reminder (1 hour before; 9 AM the day before for an all-day event), and the menu ends with one line that says so: "The .ics file comes with a reminder 1 hour before. Google Calendar skips it and uses your own notification settings." for a timed event, "The .ics file comes with a reminder at 9 AM the day before. Google Calendar skips it and uses your own notification settings." for an all-day one ([11.3](#113-what-goes-into-the-calendar-files)) |
 | **Next 5 weeks** (since November 2026) | [/events/#ev-cal](https://grapevine.neta65.org/events/#ev-cal) | [/es/events/#ev-cal](https://grapevine.neta65.org/es/events/#ev-cal) | every upcoming event of the list on each of its days — the committee meetings and every date of a monthly series too, an assembly on each of its days — and the two weekly open meetings (every Wednesday and Thursday), in the five weeks from this one: a calendar, Sunday first, Central time | the sidebar's card under **Subscribe to calendar**: from 1024px wide it stays in view beside the list while you scroll (the subscription card scrolls away; with larger text it scrolls with the page); below 1024px it comes after the list. Each day shows up to 3 dots in the events' colours (a ring: a weekly meeting; more: "+2"), today has a blue ring. Picking a day shows that day's list under the calendar (time and title, each a link to its card in the list — without JavaScript the day itself goes to its first card); at first it shows today's, else the next day with something on ("Next up"). The page keeps it right between builds: a week that is over goes and the next one shows (three more weeks are in the page, hidden), today and the days before it move on, an event that is over is faded. Not counted by the filter chips and not in the calendar files; nothing to edit — it shows what the list shows |
-| **Share** button, and the event's share page | `/events/<card>/` | `/es/events/<card>/` | every event of `/events/` but the committee meeting, past ones too while they are in the data (since October 2026) | the Share button sends the event's own small page: in WhatsApp, Facebook and other link previews it shows the event's title, day, place and **flyer**, then sends the visitor on to the card on `/events/`. Not in the search or the sitemap. When the event has left the data, the address still lands on `/events/` (the 404 page sends it on). The committee meeting's cards share `/events/#<card>`. Since round 35 an upcoming in-person event has a real page at that address instead (next row) |
-| **An event's own page** (since round 35) | `/events/<card>/` | `/es/events/<card>/` | each upcoming event held at a place with a city, state or ZIP code, that is not a date of a monthly series, not from the GV / LV calendars and has no page of its own elsewhere (no `url:` to another site's page — a flyer on the Drive does not count; the assemblies have theirs on neta65.org) — on November 19, 2026: the Garland and Fort Worth La Viña workshops, the three GSR/DCM orientations and the Winter ACM | the card's **Share** button sends this page, and the card's title links to it. It shows the whole event: its title with the day, time and zone, the kind badge, the place, how to join online when it has that, the **whole** description, **Join online**, **Add to calendar** (Google, Outlook, .ics), **View flyer**, an outside link as **Event details**, **Share**, the flyer, and **See all events** (back to its card). In search results and link previews: the title with its day, "day · time · venue, city — summary" in at most 160 characters (never how to join) and the flyer. It is in the search engines and the sitemap ([11.5](#115-what-search-engines-are-told)). The next update after the event turns it back into the small share page (above), out of the sitemap. Nothing to do: it comes from the event's file, flyer or calendar entry |
+| **Share** button | `/events/<card>/` | `/es/events/<card>/` | every event of `/events/` but the committee meeting | it sends the event's own page (next row): in WhatsApp, Facebook and other link previews it shows the event's title, day, place and **flyer**. The committee meeting's cards share `/events/#<card>`. (Until round 37 most events had only a small share page at that address, which sent the visitor on to the card.) When the event has left the data, the address still lands on `/events/` (the 404 page sends it on; a series' date: to its series' page) |
+| **An event's own page** (since round 35 for a few, since round 37 for every event) | `/events/<card>/` | `/es/events/<card>/` | every event of `/events/` but the committee meeting (its page is `/meetings/#committee-meeting`), past ones too while they are in the data | made by itself at every update — nothing to do. Every link to the event goes there: the card's title and **Share**, the home page, the monthly toolkit, What's New, the RSS feed, the search and the calendar entries; the card's **Event details** button still opens its page elsewhere. It shows a breadcrumb (Home › Events › …), the title and the day, one sentence that says what, when, where and who organizes it, the card (**Join online**, **Add to calendar**, **View flyer**, **Share**, the whole description), **Quick facts** (what, when, where with a **Map** link, the language, who organizes it, "Free" for the committee's own events, who can come, how often, whom to ask), **Get ready** (the presentation for its kind, **Make a GVR/RLV Bingo card for this event** — the builder opens filled in —, and the pages its kind needs: the table in [`content/events/README.md` → Its own page](../content/events/README.md#its-own-page-automatic)), the next event of its kind, **Coming up** (the next 3 events and our next committee meeting), **Past events like this**, **Flyers of similar events**, the Grapevine and La Viña issues of its month and that month's toolkit, and **Subscribe to the calendar**. A series' date also says "One date of …" and links its series' page. Once over: "This event is over", its summary without how to join, no Join and no Add to calendar. A one-off event still to come is in the search engines and the sitemap; a series' date, an event from the GV / LV calendars and an event that is over are `noindex` ([11.5](#115-what-search-engines-are-told)). Its kind comes from its title, tags and source, or from `type:` ([6.4](#64-every-field)) |
+| **A series' own page** (since round 37) | `/events/series/<key>/` | `/es/events/series/<key>/` | each `recurring_events:` series with a date to come in the data (not one with `enabled: false`) — on November 22, 2026 the CityWide booth, the Grapevine Meeting and La Viña's monthly workshop | how to join (online), its flyer, the quick facts, its next 6 dates (each to its date's own page), Get ready, the month's magazines, Subscribe. Its title has no date ("Grapevine Meeting — Every first Wednesday of the month"); in the sitemap. The series' cards on `/events/`, the home page and the search link here ([7.2](#72-every-key)) |
+| **A cancelled event's notice** (since round 37) | `/events/<card>/` | `/es/events/<card>/` | a `content/events` event with `cancelled: true`, until its day is over | "This event has been cancelled. It will not take place.", when and where it was planned, the committee's note, **Share** and the next events like it. In the sitemap, with "EventCancelled" for search engines. After its day the address sends people to `/events/` ([6.2](#62-file-rules)) |
 | **The month's calendar file** | `/monthly/2027-03/` → "Add March's dates to my calendar" | `/es/monthly/2027-03/` | the month's committee meeting, events and series dates (for the current month, those not over yet) and the story deadlines (since October 2026) | `/monthly/2027-03/neta65-grapevine-2027-03-en.ics` (`…-es.ics` under `/es/`); the same `UID`s as `/events.ics`, so a calendar that has both shows each event once; one reminder per entry since October 2026 ([11.3](#113-what-goes-into-the-calendar-files)) |
-| **Monthly toolkit** | [/monthly/](https://grapevine.neta65.org/monthly/), `/monthly/2027-03/` | `/es/monthly/` | every event of the month (series dates worked out from the rule, also for later months) | day or range, time + "Central" / "(hora del Centro)", the **city** when the title does not name it, "Online", "Details to be confirmed", "Over" once past |
-| **District report** (text on `/monthly/`) | | | the next 45 days, at most 10, a series once ("every month") | "details to be confirmed" for tentative events |
-| **Monthly digest** + its e-mail | [/digest/](https://grapevine.neta65.org/digest/) | `/es/digest/` | the events that **took place** in the month covered, plus that month's committee meeting (GV/LV calendar listings are not there: they leave the data the day after they end) | days only; listed, never counted as news; see [E-mail and alerts](email-and-alerts.md) |
-| **What's New** and **RSS** | [/whats-new/](https://grapevine.neta65.org/whats-new/), [/feed.xml](https://grapevine.neta65.org/feed.xml) | `/es/whats-new/`, `/es/feed.xml` | flyer, file, calendar and feed events first seen in the last 30 days and not over — never meetings or series dates | the link is the event's `url` (a flyer event: the Drive flyer) |
-| **Search** | [/search/](https://grapevine.neta65.org/search/) | `/es/search/` | every event except committee meetings; a series once (its next date); past events only while they are in **Past events** | "every month" (a monthly series), "booth / literature table" (a monthly booth) and "details to be confirmed" are searchable words |
-| Bulletin page, "Coming up" | `/bulletin/` | `/es/bulletin/` | the next committee meeting and the next other event | |
-| Photos page, "Next chance for photos" | `/photos/` | `/es/photos/` | the next 2 in-person NETA 65 events (no meetings, online events, GV/LV listings or later series dates) | |
-| Contribute page, workshops | `/contribute/#workshop` | `/es/contribute/` | the next 3 events whose title says "writing workshop", "recording workshop", "taller de escritura" or "taller de grabación" | name a workshop that way to be listed here |
+| **Monthly toolkit** | [/monthly/](https://grapevine.neta65.org/monthly/), `/monthly/2027-03/` | `/es/monthly/` | every event of the month (series dates worked out from the rule, also for later months) | day or range, time + "Central" / "(hora del Centro)", the **city** when the title does not name it, "Online", "Details to be confirmed", "Over" once past; each date links its event's own page (since round 37) |
+| **District report** (text on `/monthly/`) | | | the next 45 days, at most 10, a series once ("every month") | "details to be confirmed" for tentative events; since round 37 each event's line is followed by its page's address |
+| **Monthly digest** + its e-mail | [/digest/](https://grapevine.neta65.org/digest/) | `/es/digest/` | the events that **took place** in the month covered, plus that month's committee meeting (GV/LV calendar listings are not there: they leave the data the day after they end) | days only; listed, never counted as news; see [E-mail and alerts](email-and-alerts.md). Since round 37 the page's events (and its WhatsApp / e-mail texts) link the events' own pages; the monthly e-mail keeps its own links |
+| **What's New** and **RSS** | [/whats-new/](https://grapevine.neta65.org/whats-new/), [/feed.xml](https://grapevine.neta65.org/feed.xml) | `/es/whats-new/`, `/es/feed.xml` | flyer, file, calendar and feed events first seen in the last 30 days and not over — never meetings or series dates | the link is the event's own page (since round 37; before, its `url` or its Drive flyer) |
+| **Search** | [/search/](https://grapevine.neta65.org/search/) | `/es/search/` | every event except committee meetings; a series once; past events only while they are in **Past events**; since round 37 also the Drive flyers, and an upcoming cancelled event | an event's result opens its own page, a series' result its series' page; a cancelled event shows "Cancelled: …" (listed last) until its day. A flyer is found by "flyer" / "volante" and opens the event it is for, listed after that event. "every month" (a monthly series), "booth / literature table" (a monthly booth), "details to be confirmed", the day of the week, the city, the organizer and the kind of event (in both languages) are searchable words |
+| Bulletin page, "Coming up" | `/bulletin/` | `/es/bulletin/` | the next committee meeting and the next other event | each links its own page (since round 37) |
+| Photos page, "Next chance for photos" | `/photos/` | `/es/photos/` | the next 2 in-person NETA 65 events (no meetings, online events, GV/LV listings or later series dates) | each links its own page (since round 37) |
+| Contribute page, workshops | `/contribute/#workshop` | `/es/contribute/` | the next 3 events whose title says "writing workshop", "recording workshop", "taller de escritura" or "taller de grabación" | name a workshop that way to be listed here; each links its own page (since round 37) |
 | Committee menu, "Events" count | | | upcoming events except meetings, a series once | |
 | **Web presentations** | `/orientation/` | `/es/orientation/` | live facts: the next NETA 65 assembly (an event with the badge "Area assembly" — never an ACM, the Area's town hall or a GSR/DCM orientation, which share its colour), event lists filtered by workshops / NETA 65 / calendars / assemblies, La Viña's workshop dates | [Presentations](presentations.md) |
 | **Booth display** | `/about/#booth` | `/es/about/#booth` | a slide with the next 4 events of `/events/` (never committee meetings or our Grapevine Meeting; a monthly series once, its next date), each row until its event is over; a countdown to the next NETA 65 assembly; La Viña's monthly workshop and our Grapevine Meeting in "Meetings you can join"; the next 12 events that are not online-only in the player's "pick the event" (Settings → Event) | a hybrid event shows its place and "Online on Zoom"; a title with a word the booth never shows is left out of the list; [Booth display](booth.md) |
 | The flyer **file** itself | `/portfolio/` (Flyers tab), `/library/` (PDF / document flyers only), home "Shared by the committee" | Spanish versions | every flyer, dated or not | [Photos, slides and reports](photos-slides-reports.md) |
-| **Search engines** (structured data, not shown to visitors) | `/events/`, and an event's own page | `/es/events/`, `/es/events/<card>/` | the upcoming events held at a place with a city, state or ZIP code, a series by its next date (at most 30); on an event's own page that one event | [11.5](#115-what-search-engines-are-told) |
+| **Search engines** (structured data, not shown to visitors) | `/events/`, and an event's own page | `/es/events/`, `/es/events/<card>/` | the upcoming events held at a place with a city, state or ZIP code, a series by its next date (at most 30); on an event's own page that one event, when it is held at such a place and has no page elsewhere. Since round 37 also `/llms.txt` (*Upcoming events*: the series' pages and the coming events' pages) | [11.5](#115-what-search-engines-are-told) |
 | **Status** | [/status/](https://grapevine.neta65.org/status/) | `/es/status/` | — | only the health of the sources: the rows "Committee Google Drive", "Events added by hand" and "GV/LV event calendars", and the "Other calendars" section |
 
 ### 11.2 What each part of an `/events/` card comes from
@@ -1370,7 +1396,7 @@ A few more timings:
 | **Every month** | a series date |
 | **New** | first seen in the last 14 days (never meetings, series dates or past events) |
 | Language pill (EN / ES / FR) | the event's language differs from the page and the committee did not write that language by hand |
-| Title — a link only when `url` is a real page other than the flyer, or (since round 35, first) to the event's own page when it has one (11.1) | `title` / `title_es`; `url` |
+| Title — a link to the event's own page (since round 37 for every event; a series' date → its series' page; the committee meeting → `/meetings/#committee-meeting`; 11.1) | `title` / `title_es` |
 | Date range line | an event over several days |
 | Time line: "2:00 – 5:00 PM CDT", "8:00 PM – 1:00 AM CDT" (past midnight, up to 12 hours; exactly 12: "7:00 PM – 7:00 AM CDT"), "Fri, Oct 16, 7:00 PM – Sat, Oct 17, 12:00 PM CDT" (into the next day for more than 12 hours, since October 2026: the day and date at both ends; Spanish "Vie, 16 de oct, 7:00 p. m. – sáb, 17 de oct, 12:00 p. m. CDT"), "9:00 AM CDT" (no end), "All day", "3 days", "Time not listed — see event details" | start, end (on the night the clocks change, the zone is shown at both ends, also when both fall on that Sunday: "7:00 PM CDT – 1:30 AM CST", "1:00 AM CST – 3:00 AM CDT") |
 | Place with a map pin, or "to be announced" in italics with an hourglass | `location` (`location_es`) |
@@ -1380,7 +1406,7 @@ A few more timings:
 | Repeat line | a series (every date is a card of its own) |
 | Description (formatted) or a 3-line teaser | the text below the header; a series' `summary` |
 | "Auto-translated" | the shown text is a machine translation |
-| Buttons | **Join online** (`online_url`) · **Add to calendar** · **View flyer** (`flyer`) · **Event details** (an outside `url`: when there is no flyer, or — since round 35 — when the card's title goes to the event's own page and the `url` is not its flyer) · **Share** (the event's share page or, since round 35, its own page, 11.1). Since round 35 the Google and Outlook links in the page are brief (title, time, place: no description); the menu puts in the full ones, with the description, as it opens — without JavaScript the brief ones still add the event. The meeting ID or Meet code shown on the card is marked `data-nosnippet` (11.5) |
+| Buttons | **Join online** (`online_url`) · **Add to calendar** · **View flyer** (`flyer`) · **Event details** (an outside `url` that is not its flyer: the card's title goes to the event's own page) · **Share** (the event's own page, 11.1). Since round 35 the Google and Outlook links in the page are brief (title, time, place: no description); the menu puts in the full ones, with the description, as it opens — without JavaScript the brief ones still add the event. The meeting ID or Meet code shown on the card is marked `data-nosnippet` (11.5) |
 | Picture beside the card | the flyer (or `image:`) |
 
 ### 11.3 What goes into the calendar files
@@ -1392,10 +1418,10 @@ A few more timings:
 | `SUMMARY` | the title in the file's language |
 | `DESCRIPTION` | "Details to be confirmed. The date, place or times may still change…" (tentative) · the summary · the repeat line with "Central time" · a "to be announced" place · "Online on Zoom: <link>" (or Google Meet …) · "Meeting ID: …" / "Meeting code: …" · a committee meeting's guest speaker ("Guest speaker: …", "Topic: …", when the speaker's part ends) · "Contact: …" · "Flyer: <link>" · "Details: <page>". An event that is over (the files keep it 90 days) keeps no link or ID: "Online on Zoom" alone, no "Meeting ID" / "Meeting code" line, and none of its summary's sentences that give one ([f) Hybrid](#f-hybrid-a-place-and-zoom)) |
 | `LOCATION` | the place; the online link when there is no place ("Online on Zoom" once the event is over); nothing for "to be announced" |
-| `URL` | the event's own page; else its card on `/events/`; for a dated flyer, the Drive flyer |
+| `URL` | the event's own page on this site — since round 37 for every event, a dated flyer's too (and the same address in the "Details:" line, the Google / Outlook links and a card's `.ics` download). Not for: a committee meeting (`/meetings/#committee-meeting`); a series whose `url:` is one of our pages (the Grapevine Meeting: its section of `/meetings/`); a cancelled event (its notice, then `/events/`); a later month's date worked out from a series' rule, with no page yet (its series' page, else `/events/`). A date-only event from the GV / LV calendars says "Time not listed — see event details: <its organizer's page>", then "Details: <its page here>" |
 | `ATTACH` | the flyer link |
 | `CATEGORIES` | Committee meeting · NETA 65 event · Grapevine / La Viña calendar |
-| `STATUS` | `TENTATIVE` or `CONFIRMED` (also in a single event's **Add to calendar** file, since October 2026) |
+| `STATUS` | `TENTATIVE` or `CONFIRMED` (also in a single event's **Add to calendar** file, since October 2026); since round 37 `CANCELLED` for a cancelled event (with "Cancelled: " before its title, `TRANSP:TRANSPARENT`, no flyer attached and never a reminder; kept 90 days after its day) |
 | `SEQUENCE` | the minutes since 2026-01-01 UTC when the file was made (since October 2026): it grows with every new file, so a calendar app that already has the event takes a changed time instead of keeping the old one |
 | `VALARM` (one reminder) | since October 2026, in the files a member adds once: a card's **Add to calendar → Apple / Outlook (.ics file)** (on `/events/` and `/meetings/`), the home page's next-meeting **Add to calendar** button (no menu: it downloads the `.ics` file at once), the weekly open meetings' files, each month's file and the story deadlines calendar (below). **1 hour before** a timed or online event; **9 AM the day before** for an all-day event or a story deadline, in the member's own time zone (`TRIGGER:-PT1H` / `-PT15H`). Its words are the event's **title only**: the online link, the meeting ID or code, a passcode and a committee meeting's guest speaker stay in the description, and if a title itself holds a link, a passcode or a meeting ID, those are left out of the reminder (ordinary words such as "Conceptos clave del servicio" stay). **Not** in `/events.ics` and `/es/events.ics`, on purpose: a subscriber would get over a hundred alarms. Google Calendar ignores reminders inside calendar files and uses its own notification settings (the menus say so; the deadlines card also tells iPhone users to turn off "Remove Alerts" when they subscribe). The Tracker's "End dates for my calendar (.ics)" keeps its own reminder, with a lead the member chooses. Code: `icsAlarm` / `alarmText` in `eleventy/central-time.js` (the browser has the same code as `window.GVTime`) |
 
@@ -1407,9 +1433,9 @@ UID:ev-flyer-<file id>@neta65-gvlv
 DTSTART:20270314T140000Z
 DTEND:20270314T150000Z
 SUMMARY:Spring Assembly booth
-DESCRIPTION:Flyer: https://drive.google.com/file/d/<file id>/view
+DESCRIPTION:Flyer: https://drive.google.com/file/d/<file id>/view\n\nDetails: https://grapevine.neta65.org/events/ev-flyer-<file id>/
 LOCATION:Tyler Civic Center
-URL:https://drive.google.com/file/d/<file id>/view
+URL:https://grapevine.neta65.org/events/ev-flyer-<file id>/
 ATTACH:https://drive.google.com/file/d/<file id>/view
 CATEGORIES:NETA 65 event
 STATUS:CONFIRMED
@@ -1471,7 +1497,7 @@ rules since 2025), so the list holds only those:
 | At a place (`location:` with a city, a state or a ZIP code), upcoming | an Event: its name, start and end, the place with its address, its picture, its summary (one plain line, at most 300 characters, without a sentence that says how to join online — below) and its own page on another site (neta65.org's event page …); its address: its own page on this site when it has one (below), else its card. A monthly series: its next date only; at most 30 events |
 | Hybrid (`location:` and `online_url:`) | the same, as "mixed attendance": the place only — never the online link, the meeting ID or code, or a passcode |
 | A place that is only a venue's name (`location: "Hilton Tyler"`: no city, state or ZIP code) | nothing — Google wants the venue's address. Write the place in full (below) and the event is listed |
-| Online only (`online_url:` without `location:`; the committee meeting and its guest speakers; our Grapevine Meeting; La Viña's Zoom workshop) | nothing. Its card, calendar entry and share page are as before |
+| Online only (`online_url:` without `location:`; the committee meeting and its guest speakers; our Grapevine Meeting; La Viña's Zoom workshop) | no Event. Its card and calendar entry are as before; since round 37 a one-off online event still to come has its own page in the sitemap, without an Event (below) |
 | A place "to be announced" | nothing until the place is known |
 | From the magazines' calendars, online (La Viña's lists Spanish-language online events from anywhere) | nothing; one with a real place: an Event without organizer or summary (their words; their own page tells search engines about it) |
 
@@ -1484,10 +1510,14 @@ split counts as the street only when it starts with a house number ("1802 West D
 
 **How to join stays on the page.** The summary search engines get leaves out every sentence that says how to join
 online — a meeting ID ("Meeting ID", "Zoom ID") or meeting code, a Zoom number right after the word ("Zoom 871
-2036 8287"), a passcode or password, a `zoom.us` or `meet.google.com` link, and in Spanish "ID de reunión", "ID de
-Zoom", "código de la reunión", "código de acceso", "contraseña" ("meeting ideas" is not a meeting ID: that sentence
-stays). The page itself still shows them to people; a copy made for machines would only help those who look for
-meetings to disrupt. The calendar files leave out the same sentences once an event is over
+2036 8287"), a passcode or password, a meeting app's link (`zoom.us`, `meet.google.com` and, since round 37, every
+other app the site knows: Microsoft Teams, Webex, GoToMeeting, Skype, Whereby, Jitsi), a sentence on joining by
+phone ("Dial +1 346 248 7799 …", "Join by phone", "Marque el …", "… unirse por teléfono", Zoom's "One tap mobile"),
+and in Spanish "ID de reunión", "ID de Zoom", "código de la reunión", "código de acceso", "contraseña" ("meeting
+ideas" is not a meeting ID: that sentence stays). The same sentences are left out of every copy made for machines:
+the pages' descriptions and link previews, `/llms.txt`, the site search and (since round 37) the RSS feeds. The
+page itself still shows them to people; a copy made for machines would only help those who look for meetings to
+disrupt. The calendar files leave out the same sentences once an event is over
 ([f) Hybrid](#f-hybrid-a-place-and-zoom)). Write such details in a sentence of their own ("Join on Zoom: meeting
 ID …, passcode …") so the rest of the summary is kept.
 
@@ -1500,30 +1530,55 @@ write them: "meeting ID 815 9593 1777", "Meet code abc-defg-hij" (or "Google Mee
 
 **Who holds it.** In this order: La Viña or AA Grapevine for a `host: lv` / `gv` event; nobody for an event from
 the magazines' calendars (not ours to say); since round 35 the committee or group a file names in `organizer:`
-(with `organizer_url:` when given, [6.4](#64-every-field)) — the Garland and Fort Worth La Viña workshops of
-November and December 2026 name District 87's and District 90's La Viña committees; the Area for its own events
+(with `organizer_url:` when given, [6.4](#64-every-field)) — the Fort Worth La Viña workshop of December 12, 2026
+names the District 90 La Viña Committee, and the La Viña intergroup meeting of December 22 the Fort Worth Spanish
+Intergroup; the Area for its own events
 (an assembly, an ACM, its town hall, its GSR/DCM orientations); else the committee (by the same name as on every
 page) — only then with "free to attend" and, without a flyer, the committee's card as its picture. An event held
 in Spanish (`host: lv`, a file tagged `la-vina`, La Viña's calendar) is marked Spanish.
 
 **When.** Since round 35 the start and end are Central time with that day's offset, as the card shows them
-(`2026-11-28T19:00:00-06:00`; `-05:00` in daylight time, right on the nights the clocks change); an all-day event
+(`2026-12-12T19:00:00-06:00`; `-05:00` in daylight time, right on the nights the clocks change); an all-day event
 gives its days. The calendar files are unchanged (UTC).
 
-**An event's own page** (since round 35, [11.1](#111-every-place)). Google's event results take only "a unique URL
-(a leaf page) and markup on that URL", on pages that "focus on a single event", and never a page kept out of
-search. So each upcoming event held at a place that nobody else gives a page — not a date of a monthly series, not
-from the magazines' calendars, not one whose `url:` is its page on another site (an assembly's neta65.org page) —
-gets one at `/events/<card>/`: its own
-address in search results, its twin in the other language, in the sitemap, with the same Event as on `/events/`
-(whose `url` is then that page; the others keep their card, `/events/#<card>`). Google's event results are meant
-for events open to the public, so it may leave out an ACM or a GSR/DCM orientation even though the page is right;
-other search engines and AI tools still read it.
+**An event's own page** (since round 35 for a few events, since round 37 for every one, [11.1](#111-every-place)).
+Google's event results take only "a unique URL (a leaf page) and markup on that URL", on pages that "focus on a
+single event", and never a page kept out of search. So the pages tell search engines different things:
+
+| Page | What search engines get |
+|---|---|
+| A one-off event still to come, held at a place with a real address, that nobody else gives a page (not a series' date, not from the magazines' calendars, no `url:` to its page on another site) | in the sitemap with its twin, with the same Event as on `/events/` (whose `url` is then that page). On November 22, 2026: the Fort Worth La Viña workshop (December 12), the La Viña intergroup meeting (December 22), the three GSR/DCM orientations and the Winter ACM |
+| Any other one-off event still to come (an assembly or an ACM with its page on neta65.org, an online-only event, a place still to be announced) | in the sitemap, without an Event on the page: one held at a place keeps its Event on `/events/`, pointing to its card (`/events/#<card>`), and an assembly's `sameAs` sends search engines to its neta65.org page |
+| A monthly series' own page (`/events/series/<key>/`, [7.2](#72-every-key)) | in the sitemap, without an Event (Google wants one only on a page about one date). Its title has no date, so the address search engines keep for the series never changes |
+| A cancelled event's notice, until its day | in the sitemap, its Event marked "EventCancelled" (with no picture) |
+| A series' date, an event from the magazines' calendars, an event that is over | `noindex` and out of the sitemap: a page for people (the **Share** button sends it), never a search result |
+
+On November 22, 2026 that is 16 addresses in each language (13 events, the Garland notice among them, and the 3
+series' pages), 32 of the sitemap's 122. Each page's title names its day ("La Viña Writing Workshop (in Spanish) —
+Fort Worth, December 12, 2026 · NETA 65"; two events of one name on one day get " — <city>" or " — <time>"), the
+year only once ("Winter ACM 2027, February 21 · Events — NETA 65": the title has it already), and a tail that never
+says the same thing twice: "· Events — NETA 65", "· Events" when the title names NETA 65 ("NETA 65 Spring Assembly
+2027, March 19 – 21 · Events"), "· NETA 65" after a title over 60 characters. Its description is "day · time ·
+venue, city — summary", at most 160 characters, never how to join; a series' page's gives its next date ("… —
+Next: Thursday, January 28, 2027. …").
+The page also starts with one plain sentence that says what the event is, and a *Quick facts* list: what an AI
+answer quotes best. The blocks that change with other events (the next of its kind, Coming up, the past ones, the
+similar flyers, the month's magazines) are left out of the page's sitemap date (`data-lastmod="skip"`), so a page is
+dated anew only when its own event changes. Google's event results are meant for events open to the public, so it
+may leave out an ACM or a GSR/DCM orientation even though the page is right; other search engines and AI tools still
+read it.
+
+**`/llms.txt`** and `/es/llms.txt` (the plain-text guide for AI tools, README → "Search engines") list, since round
+37, under *Upcoming events*: the series' pages, then the coming one-off events' pages, soonest first — each line
+"- [its title](its address): its description" (a series' line always with its next date), at most 20, never a
+cancelled event, never a meeting link, ID or code.
 
 To see what Google reads, paste an event's own page into Google's Rich Results Test
 (<https://search.google.com/test/rich-results>) — for example
-`https://grapevine.neta65.org/events/2027-01-17-neta65-gsr-dcm-orientation-central/` — rather than `/events/`. The
-code: `eventLd` in `eleventy/filters/committee.js` (13.2).
+`https://grapevine.neta65.org/events/2026-12-12-lv-writing-workshop-fort-worth/` (one Event, with its address), or
+until November 28, 2026 the Garland notice, `https://grapevine.neta65.org/events/2026-11-28-lv-writing-workshop-garland/`
+(one Event, "EventCancelled") — rather than `/events/`. The code: `eventLd` in `eleventy/filters/committee.js`, the
+page plan in `eleventy/event-pages.js` (13.2).
 
 ---
 
@@ -1621,10 +1676,12 @@ scripts/sync/build_data.py  build_events()   flyer_events() + files + series + m
 | the story deadlines calendar and the deadlines' **Add to my calendar** | [`eleventy/filters/monthly.js`](../eleventy/filters/monthly.js) → `src/pages/deadlines-ics.11ty.js` | `export function deadlineEntry(`, `openDeadlines(`, `deadlinesIcs(`, `deadlineCals(` (filter `mpDeadlineCals`); the card is `{% cmSubscribe lang, site, "deadlines" %}` in `contribute.njk` |
 | which words colour an event | [`eleventy/filters/event-tone.js`](../eleventy/filters/event-tone.js) | `const RE = {` |
 | words treated as "online, not a place" | `eleventy/filters/committee.js` | `const ONLINE_PLACE =` |
-| what search engines are told about the events (11.5) | `eleventy/filters/committee.js` → `src/pages/events.njk` (`cmEventLd`, the first `<script type="application/ld+json">` in the page's `<body>`: since round 35 the site's own graph comes before it, in the `<head>`) | `export function eventLd(` (which events, organizer, picture, `url` …), `export function eventPlace(` (a place → its address), `export function eventSharePicture(` (the flyer picture, shared with the share pages), `export function localIso(` (the times with their offset, since round 35) |
-| which events get a page of their own, and that page (since round 35, 11.1) | `eleventy/filters/committee.js` → [`src/pages/event-share-leaf.njk`](../src/pages/event-share-leaf.njk) (the page) and [`src/pages/event-share.11ty.js`](../src/pages/event-share.11ty.js) (everyone else's small share page at the same kind of address) | `export function eventLeaf(` (the rule: upcoming, at a place in both languages, no series date, not the GV / LV calendars, no page elsewhere), `export function eventPageMeta(` (its title with the day, description, flyer), the filters `cmEventPageLd` (its one Event) and `cmEventLeaf` (the `/events/` card title's link); `export function eventSharePages(` in `event-share.11ty.js` (one list with each event's `leaf` flag, so no address is written twice); the kind badge both pages show: `src/_includes/macros/events.njk` |
+| what search engines are told about the events (11.5) | `eleventy/filters/committee.js` → `src/pages/events.njk` (`cmEventLd`, the first `<script type="application/ld+json">` in the page's `<body>`: since round 35 the site's own graph comes before it, in the `<head>`) | `export function eventLd(` (which events, organizer, picture, `url` …), `export function eventPlace(` (a place → its address), `export function eventSharePicture(` (the flyer picture, shared with the event pages), `export function localIso(` (the times with their offset, since round 35) |
+| which page each event gets, its kind and its links (since round 37, 11.1) | [`eleventy/event-pages.js`](../eleventy/event-pages.js) (the plan, read once per build) → [`eleventy/event-page-model.js`](../eleventy/event-page-model.js) (what each page says) → [`src/pages/event-share-leaf.njk`](../src/pages/event-share-leaf.njk) (the indexable pages), `event-share-date.njk` (the `noindex` ones), `event-share-series.njk` (`/events/series/<key>/`) and `event-share-cancelled.njk` (the notices), all through `src/_includes/partials/event-page.njk` and `macros/event-page.njk` | `EVENT_KINDS` (each kind's presentation, bingo occasion, links and similar-flyer words), `export function eventKind(` (the 15 rules, `type:` first), `eventPageTier(` (leaf · page · date · cancelled · none), `eventPagePlan(` (every page and series' page, both languages), `bingoHref(`; in the model `eventPageData(`; in `committee.js` `eventLeaf(` (an Event on the page) and `eventPageMeta(` (its title, description, flyer); the words: `src/_i18n/evkind.json` (the kinds), `evpage.json` (the pages), `evcancel.json` (the notices). `content/events` `type:` is read by `def event_type(` in `scripts/sync/announcements.py` (`EVENT_TYPES` = the kinds: a test keeps them equal) |
+| where every link to an event goes (since round 37) | [`eleventy/filters/event-links.js`](../eleventy/filters/event-links.js) | the filter `evHref` (`eventLink`: the event's page, a series' date → its series' page, the committee meeting → `/meetings/#committee-meeting`); `eventPageHref(` and `seriesPagePath(` in `committee.js`; the calendar's `detailsUrl` in `function shapeEvent(` |
+| a cancelled event (since round 37) | `scripts/sync/announcements.py` → `scripts/sync/build_data.py` → `src/_data/db.js` | `def event_cancelled(`, `def split_cancelled(` (events.json `cancelled`), `eleventy/cancelled-events.js` (the build's own cut, and the flyers only cancelled events use), `eleventy/cancelled-pages.js` (the notices), `cancelledPageMeta(` and the `cancelled` branch of `buildIcs(` in `committee.js` |
 | who organizes it, for search engines (`organizer:`, since round 35) | `scripts/sync/announcements.py` → `eleventy/filters/committee.js` | `def event_organizer(` (the two lines' rules, `ORGANIZER_MAX = 100`) → `extra.organizer` / `extra.organizer_url`; in `eventLd` the `organizer` order (`const named =`) |
-| the join values search engines never quote (since round 35) | `eleventy/filters/committee.js`; `src/pages/events.njk`, `event-share-leaf.njk` | `export function noSnippetJoin(` (filter `cmNoSnippet`: `NOSNIPPET_VALUE`, the shapes of a meeting ID, a Meet code, a passcode and a meeting address); the card's meeting-ID value `<span data-nosnippet>` in the templates |
+| the join values search engines never quote (since round 35) | `eleventy/filters/committee.js`; `src/pages/events.njk`, the event pages (`src/_includes/partials/event-page.njk`) | `export function noSnippetJoin(` (filter `cmNoSnippet`: `NOSNIPPET_VALUE`, the shapes of a meeting ID, a Meet code, a passcode and a meeting address); the card's meeting-ID value `<span data-nosnippet>` in the templates |
 | button and label texts | [`src/_i18n/committee.json`](../src/_i18n/committee.json) | keys `committee.events.*` (both `en` and `es` are required) |
 | the members' help box on `/events/` | `src/_i18n/committee.json` | `committee.events.how_text`, `how_linked`, `naming_ex1`…`naming_ex3`, `naming_tip` |
 
@@ -1890,7 +1947,12 @@ python -m unittest tests.test_content_events -v      # every real content/events
 python -m unittest tests.test_source_dates -v        # dates read from names and headers (day first, ranges, notes)
 python -m unittest tests.test_events_external -v     # the GV/LV calendars, from saved pages
 python -m unittest tests.test_seo_events -v          # what search engines are told about the events (structured data)
-python -m unittest tests.test_r35_ev_pages -v        # an event's own page and the small share pages (since round 35)
+python -m unittest tests.test_r35_ev_pages -v        # an event's own page with its Event (since round 35)
+python -m unittest tests.test_r37_event_pages -v     # every event's page and series' page: tiers, sections by kind, privacy (round 37)
+python -m unittest tests.test_r37_spine -v           # the kinds, the page plan, the addresses, the bingo link (round 37)
+python -m unittest tests.test_r37_cancelled -v       # cancelled: true — the lists, the notice page, the calendars (round 37)
+python -m unittest tests.test_r37_links -v           # every link to an event, the 404 forwarder, /llms.txt's events (round 37)
+python -m unittest tests.test_r37_search -v          # the site search: events, series, flyers, sections (round 37)
 python -m unittest tests.test_r35_ev_organizer -v    # organizer: and organizer_url: (since round 35)
 python -m unittest tests.test_r35_ev_weight -v       # /events/ for readers without a browser: brief calendar links, data-nosnippet
 python -m unittest tests.test_r36_first_date -v      # a series' first date (starts:) moved later: its old dates gone before the sync
@@ -1943,7 +2005,10 @@ build passed.
 | A file shows the **old** version after an edit | the new version has a mistake | read **Event files to fix** and correct the file |
 | Renamed a file and the event got a new link / "New" again | the file name is the event's identity | keep names; change the content instead |
 | A monthly event shows on a date it should skip | the skip date is not one of the rule's days | read the note in **Settings problems**; it gives the right date |
-| A monthly event still shows after `enabled: false` | the update ignores `enabled` | delete the block |
+| A monthly event still shows after `enabled: false` | the update ignores `enabled` (only its series' page goes) | delete the block |
+| An event's page shows the wrong presentation or the wrong links (since round 37) | the site took it for another kind of event: its title says something else | add `type:` to its file ([6.4](#64-every-field)), or to the series' block ([7.2](#72-every-key)) |
+| A series has no page of its own (`/events/series/<key>/`) | none of its dates is in the data yet (the next update writes it), or its block says `enabled: false` | wait for the next update; remove `enabled: false` |
+| A cancelled event still shows | the next update has not run yet, or the line is misspelled (an unknown line is ignored) | wait about 3 minutes; write `cancelled: true` exactly ([6.2](#62-file-rules)) |
 | A workshop listed on neta65.org is missing | the NETA 65 calendar feed is blocked by Cloudflare | write a `content/events` file |
 | A GV/LV calendar event did not appear after my run | those calendars are read only by the full daily run, and only Texas or online-in-Spanish events are kept | wait for the full run; it may simply be outside Texas |
 | Past event missing from the digest | only the 12 newest past one-off events are kept; GV/LV listings leave the day after | write important events as files; see [13.4](#134-other-changes-people-ask-for) |
