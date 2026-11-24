@@ -1,7 +1,139 @@
 {
- "updated": "2026-11-24T15:22:24Z",
+ "updated": "2026-11-24T19:09:35Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DgH9WEcDWxi",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgH9WEcDWxi/",
+   "title": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos…",
+   "summary": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos necesarios, oscurezcan nuestros objetivos espirituales”. \"“AA no es un gran negocio” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1950 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-24T12:30:18Z",
+   "first_seen": "2026-11-24T18:59:39Z",
+   "image": "/assets/cache/ig/DgH9WEcDWxi.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgH9WEcDWxi",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgH9WEcDWxi.webp",
+    "embed_url": "https://www.instagram.com/p/DgH9WEcDWxi/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgH9WEcDWxi/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We have resolved never to allow neither money nor the administration of … matters",
+     "es": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos…"
+    },
+    "summary": {
+     "en": "“We have resolved never to allow neither money nor the administration of necessary matters, to obscur our spiritual goals.” \"AA is not a big business\" Bill W., AA co-founder, November 1950 Language of the Heart Daily Quote in www.aalavina.org",
+     "es": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos necesarios, oscurezcan nuestros objetivos espirituales”. \"“AA no es un gran negocio” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1950 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-24T12:30:18Z"
+  },
+  {
+   "id": "ig:DgH9WAIjSuJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgH9WAIjSuJ/",
+   "title": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the…",
+   "summary": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the hallmarks of character which Dr. Bob had well implanted in so many of us.” AA Co-Founder, Bill W., September 1950, “We Came of Age”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-24T12:30:14Z",
+   "first_seen": "2026-11-24T18:59:39Z",
+   "image": "/assets/cache/ig/DgH9WAIjSuJ.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgH9WAIjSuJ",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgH9WAIjSuJ.webp",
+    "embed_url": "https://www.instagram.com/p/DgH9WAIjSuJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgH9WAIjSuJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the…",
+     "es": "“Simplicidad, devoción, firmeza y lealtad; estos, recordamos, fueron el …"
+    },
+    "summary": {
+     "en": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the hallmarks of character which Dr. Bob had well implanted in so many of us.” AA Co-Founder, Bill W., September 1950, “We Came of Age”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Simplicidad, devoción, firmeza y lealtad; estos, recordamos, eran los sellos de carácter que Dr. Bob había implantado bien en tantos de nosotros”. AA cofundador, Bill W., septiembre de 1950, “vinimos de edad”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-24T12:30:14Z"
+  },
+  {
+   "id": "ig:DgH6W7qAEqF",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgH6W7qAEqF/",
+   "title": "Your subscription helps us help others with the magazines in prisons and hospitals…",
+   "summary": "Your subscription helps us help others with the magazines in prisons and hospitals, inspiration from our Daily Quotes, weekly podcasts, ASL videos for the deaf, and many other services. Please subscribe today 🍇",
+   "lang": "en",
+   "date": "2026-11-24T12:11:40Z",
+   "first_seen": "2026-11-24T18:59:39Z",
+   "image": "/assets/cache/ig/DgH6W7qAEqF.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgH6W7qAEqF",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgH6W7qAEqF.webp",
+    "embed_url": "https://www.instagram.com/p/DgH6W7qAEqF/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgH6W7qAEqF/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Your subscription helps us help others with the magazines in prisons and hospitals…",
+     "es": "Su suscripción nos ayuda a ayudar a otros con las revistas en prisiones y hospitales …"
+    },
+    "summary": {
+     "en": "Your subscription helps us help others with the magazines in prisons and hospitals, inspiration from our Daily Quotes, weekly podcasts, ASL videos for the deaf, and many other services. Please subscribe today 🍇",
+     "es": "Su suscripción nos ayuda a ayudar a otros con las revistas en prisiones y hospitales, inspirarnos en nuestras citas diarias, podcasts semanales, vídeos ASL para sordos y muchos otros servicios. Por favor, suscríbete hoy 🍇"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-24T12:11:40Z"
+  },
   {
    "id": "ig:DgFwlSKDQ-6",
    "source": "instagram",
@@ -296,7 +428,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 55,
+    "views": 155,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -342,7 +474,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 21,
+    "views": 53,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -1020,7 +1152,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 167,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2130,7 +2262,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 187,
+    "views": 193,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2350,7 +2482,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 278,
+    "views": 287,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2396,7 +2528,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 177,
+    "views": 183,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -5794,7 +5926,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 291,
+    "views": 294,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8070,7 +8202,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 159,
+    "views": 161,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -8091,138 +8223,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-11-09T14:31:49Z"
-  },
-  {
-   "id": "ig:DfhdXRsgman",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfhdXRsgman/",
-   "title": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…",
-   "summary": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
-   "lang": "es",
-   "date": "2026-11-09T13:44:07Z",
-   "first_seen": "2026-11-09T17:38:43Z",
-   "image": "/assets/cache/ig/DfhdXRsgman.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfhdXRsgman",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfhdXRsgman.webp",
-    "embed_url": "https://www.instagram.com/p/DfhdXRsgman/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfhdXRsgman/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "A new open meeting podcast from La Viña: Weekly open meeting of Alcoholics Anonymous …",
-     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos…"
-    },
-    "summary": {
-     "en": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇",
-     "es": "A new open meeting podcast from La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Available on podcast platforms, YouTube and at aalavina.org/podcast. A new episode every Monday.🍇"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-09T13:44:07Z"
-  },
-  {
-   "id": "ig:DfhdKf9OLk1",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfhdKf9OLk1/",
-   "title": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…",
-   "summary": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes.",
-   "lang": "es",
-   "date": "2026-11-09T13:38:35Z",
-   "first_seen": "2026-11-09T17:38:43Z",
-   "image": "/assets/cache/ig/DfhdKf9OLk1.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfhdKf9OLk1",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfhdKf9OLk1.webp",
-    "embed_url": "https://www.instagram.com/p/DfhdKf9OLk1/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfhdKf9OLk1/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "A new podcast of La Viña: Alcoholics Anonymous Weekly Open Meeting of La Viña …",
-     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña…"
-    },
-    "summary": {
-     "en": "A new podcast from La Viña: Weekly Open Meeting of Alcoholics Anonymous from La Viña. Available on podcast, YouTube and aalavina.org/podcast platforms. A new episode every Monday.",
-     "es": "Un nuevo podcast de La Viña: Reunión abierta semanal de Alcohólicos Anónimos de La Viña. Disponible en plataformas de podcast, YouTube y en aalavina.org/podcast. Un nuevo episodio cada lunes."
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-09T13:38:35Z"
-  },
-  {
-   "id": "ig:DfhVbDYDX0Z",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfhVbDYDX0Z/",
-   "title": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
-   "summary": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
-   "lang": "en",
-   "date": "2026-11-09T12:30:17Z",
-   "first_seen": "2026-11-09T17:38:43Z",
-   "image": "/assets/cache/ig/DfhVbDYDX0Z.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfhVbDYDX0Z",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfhVbDYDX0Z.webp",
-    "embed_url": "https://www.instagram.com/p/DfhVbDYDX0Z/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfhVbDYDX0Z/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have…",
-     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que tienen …"
-    },
-    "summary": {
-     "en": "“It’s not the wonderful people I’ve met from throughout these great lands who have helped keep me sober most of the time, but those wonderful people sitting around the table in my hometown who loved me when I could not love, who waited for me to quit lying, who tolerated me when I would be part of nothing, and who never asked me to leave when I was obnoxious. Because of their love and patience, I…",
-     "es": "“No es la gente maravillosa que he conocido en todas estas grandes tierras que me han ayudado a mantenerme sobrio la mayor parte del tiempo, pero esa gente maravillosa sentada alrededor de la mesa en mi ciudad natal que me amaba cuando no podía amar, que me esperaba para dejar de mentir, que me toleraba cuando yo sería parte de la nada, y que nunca me pidió que me fuera cuando era obnoccioso. Debido a su amor y paciencia, I …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-09T12:30:17Z"
   }
  ]
 }

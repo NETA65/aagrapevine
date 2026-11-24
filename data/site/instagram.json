@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23T19:21:23Z",
+ "updated": "2026-11-24T18:59:40Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17064,
-   "posts": 4043,
+   "followers": 17072,
+   "posts": 4046,
    "owner_id": "48108439509",
-   "checked": "2026-11-23T19:21:05Z",
+   "checked": "2026-11-24T18:59:22Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,143 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2437,
-   "posts": 3074,
+   "followers": 2438,
+   "posts": 3076,
    "owner_id": "48275839129",
-   "checked": "2026-11-23T19:21:08Z",
+   "checked": "2026-11-24T18:59:24Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgH9WEcDWxi",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgH9WEcDWxi/",
+   "title": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos…",
+   "summary": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos necesarios, oscurezcan nuestros objetivos espirituales”. \"“AA no es un gran negocio” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1950 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-24T12:30:18Z",
+   "first_seen": "2026-11-24T18:59:39Z",
+   "image": "/assets/cache/ig/DgH9WEcDWxi.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgH9WEcDWxi",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgH9WEcDWxi.webp",
+    "embed_url": "https://www.instagram.com/p/DgH9WEcDWxi/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgH9WEcDWxi/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We have resolved never to allow neither money nor the administration of … matters",
+     "es": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos…"
+    },
+    "summary": {
+     "en": "“We have resolved never to allow neither money nor the administration of necessary matters, to obscur our spiritual goals.” \"AA is not a big business\" Bill W., AA co-founder, November 1950 Language of the Heart Daily Quote in www.aalavina.org",
+     "es": "“Nos hemos resuelto a no permitir nunca que ni el dinero ni la administración de asuntos necesarios, oscurezcan nuestros objetivos espirituales”. \"“AA no es un gran negocio” BILL W., COFUNDADOR DE AA, NOVIEMBRE DE 1950 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgH9WAIjSuJ",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgH9WAIjSuJ/",
+   "title": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the…",
+   "summary": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the hallmarks of character which Dr. Bob had well implanted in so many of us.” AA Co-Founder, Bill W., September 1950, “We Came of Age”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-24T12:30:14Z",
+   "first_seen": "2026-11-24T18:59:39Z",
+   "image": "/assets/cache/ig/DgH9WAIjSuJ.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgH9WAIjSuJ",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgH9WAIjSuJ.webp",
+    "embed_url": "https://www.instagram.com/p/DgH9WAIjSuJ/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgH9WAIjSuJ/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the…",
+     "es": "“Simplicidad, devoción, firmeza y lealtad; estos, recordamos, fueron el …"
+    },
+    "summary": {
+     "en": "“Simplicity, devotion, steadfastness, and loyalty; these, we remembered, were the hallmarks of character which Dr. Bob had well implanted in so many of us.” AA Co-Founder, Bill W., September 1950, “We Came of Age”, The Language of the Heart Daily Quote at www.aagrapevine.org",
+     "es": "“Simplicidad, devoción, firmeza y lealtad; estos, recordamos, eran los sellos de carácter que Dr. Bob había implantado bien en tantos de nosotros”. AA cofundador, Bill W., septiembre de 1950, “vinimos de edad”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgH6W7qAEqF",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgH6W7qAEqF/",
+   "title": "Your subscription helps us help others with the magazines in prisons and hospitals…",
+   "summary": "Your subscription helps us help others with the magazines in prisons and hospitals, inspiration from our Daily Quotes, weekly podcasts, ASL videos for the deaf, and many other services. Please subscribe today 🍇",
+   "lang": "en",
+   "date": "2026-11-24T12:11:40Z",
+   "first_seen": "2026-11-24T18:59:39Z",
+   "image": "/assets/cache/ig/DgH6W7qAEqF.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgH6W7qAEqF",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgH6W7qAEqF.webp",
+    "embed_url": "https://www.instagram.com/p/DgH6W7qAEqF/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgH6W7qAEqF/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Your subscription helps us help others with the magazines in prisons and hospitals…",
+     "es": "Su suscripción nos ayuda a ayudar a otros con las revistas en prisiones y hospitales …"
+    },
+    "summary": {
+     "en": "Your subscription helps us help others with the magazines in prisons and hospitals, inspiration from our Daily Quotes, weekly podcasts, ASL videos for the deaf, and many other services. Please subscribe today 🍇",
+     "es": "Su suscripción nos ayuda a ayudar a otros con las revistas en prisiones y hospitales, inspirarnos en nuestras citas diarias, podcasts semanales, vídeos ASL para sordos y muchos otros servicios. Por favor, suscríbete hoy 🍇"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DgFwlSKDQ-6",
    "source": "instagram",
@@ -10150,49 +10279,6 @@
    "is_new": false
   },
   {
-   "id": "ig:Ddy4Z34lx33",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Ddy4Z34lx33/",
-   "title": "Experience, Strength, and Hope",
-   "summary": "Experience, Strength, and Hope AA Grapevine is pleased to announce our Fall Book Sale—20% off 20 best-selling books! Use coupon code 20BOOKS at checkout to apply your discount. Since 1944, AA Grapevine, has been the publisher of the International Journal of Alcoholics Anonymous. Its primary purpose is to carry the AA message to everyone interested in alcoholism through its publications, which…",
-   "lang": "en",
-   "date": "2026-09-27T15:00:16Z",
-   "first_seen": "2026-09-27T15:12:26Z",
-   "image": "/assets/cache/ig/Ddy4Z34lx33.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Ddy4Z34lx33",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Ddy4Z34lx33.webp",
-    "embed_url": "https://www.instagram.com/p/Ddy4Z34lx33/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Ddy4Z34lx33/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Experience, Strength, and Hope",
-     "es": "Experiencia, fortaleza y esperanza"
-    },
-    "summary": {
-     "en": "Experience, Strength, and Hope AA Grapevine is pleased to announce our Fall Book Sale—20% off 20 best-selling books! Use coupon code 20BOOKS at checkout to apply your discount. Since 1944, AA Grapevine, has been the publisher of the International Journal of Alcoholics Anonymous. Its primary purpose is to carry the AA message to everyone interested in alcoholism through its publications, which…",
-     "es": "¡Experiencia, fortaleza y esperanza AA Grapevine se complace en anunciar nuestra venta de libros de otoño—20% de descuento de 20 libros más vendidos! Utilice el código de cupón 20BOOKS en el checkout para aplicar su descuento. Desde 1944, AA Grapevine, ha sido el editor de la revista internacional de Alcohólicos Anónimos. Su objetivo principal es llevar el mensaje AA a todos los interesados en el alcoholismo a través de sus publicaciones, que …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:Ddy4Z87jW7P",
    "source": "instagram",
    "kind": "post",
@@ -10275,49 +10361,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdygXv4F2OS",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdygXv4F2OS/",
-   "title": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not…",
-   "summary": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not so much what I’m doing as what I’m not doing. I’m not talking. So I’m open; I’m teachable.” Houston, Texas, June 1976, From: “Growth”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-27T11:30:13Z",
-   "first_seen": "2026-09-27T15:12:26Z",
-   "image": "/assets/cache/ig/DdygXv4F2OS.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdygXv4F2OS",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdygXv4F2OS.webp",
-    "embed_url": "https://www.instagram.com/p/DdygXv4F2OS/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdygXv4F2OS/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not…",
-     "es": "“He descubierto una nueva manera de aprender – cerrando mi boca y escuchando... No es …"
-    },
-    "summary": {
-     "en": "“I have discovered a new way to learn – by shutting my mouth and listening ... It’s not so much what I’m doing as what I’m not doing. I’m not talking. So I’m open; I’m teachable.” Houston, Texas, June 1976, From: “Growth”, Emotional Sobriety: The Next Frontier Daily Quote at www.aagrapevine.org",
-     "es": "“He descubierto una nueva manera de aprender – cerrando mi boca y escuchando ... No es tanto lo que estoy haciendo como lo que no estoy haciendo. No estoy hablando. Así que estoy abierto; soy enseñable.” Houston, Texas, junio de 1976, de: “Crecimiento”, Sobriedad emocional: la próxima frontera Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },

@@ -1,7 +1,7 @@
 {
  "source": "shop",
- "updated": "2026-11-23T19:24:30Z",
- "attempted": "2026-11-23T19:24:30Z",
+ "updated": "2026-11-24T19:03:27Z",
+ "attempted": "2026-11-24T19:03:27Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -13,9 +13,9 @@
   "botm": 2,
   "plans": 52,
   "specialty": 8,
-  "types_refreshed": false,
+  "types_refreshed": true,
   "specialty_refreshed": false,
-  "requests": 12,
+  "requests": 18,
   "images_downloaded": 0
  },
  "items": [
@@ -49,7 +49,7 @@
     "offer_text": "Offer good for this title: NOV. 15 thru DEC. 14 Only.",
     "product_name": "Into Action: Stories from AA Grapevine (Softcover)",
     "image_src": "https://www.aagrapevine.org/sites/default/files/styles/product_feature_image/public/product-images/2022-11/0000307_into-action-stories-from-aa-grapevine-softcover.jpeg?itok=ebjS4UhB",
-    "read": "2026-11-23"
+    "read": "2026-11-24"
    }
   },
   {
@@ -82,7 +82,7 @@
     "offer_text": "Oferta válida del 15 de OCTUBRE al 14 de DICIEMbre",
     "product_name": "El Lenguaje del Corazón",
     "image_src": "https://www.aalavina.org/sites/default/files/styles/product_feature_image/public/product-images/2022-11/Icon-lenguaje-del-corazon.png?itok=phQJDwuy",
-    "read": "2026-11-23"
+    "read": "2026-11-24"
    }
   },
   {
@@ -165,7 +165,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-11-17T17:02:33Z",
+   "last_seen": "2026-11-24T19:03:27Z",
    "image": "/assets/cache/shop/e4310a0bbdaaba1e.webp",
    "tags": [],
    "category": "specialty",
@@ -200,7 +200,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-11-17T17:02:33Z",
+   "last_seen": "2026-11-24T19:03:27Z",
    "image": "/assets/cache/shop/d10238ef27517935.webp",
    "tags": [],
    "category": "specialty",
@@ -234,7 +234,7 @@
    "lang": "en",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-11-17T17:02:33Z",
+   "last_seen": "2026-11-24T19:03:27Z",
    "image": "/assets/cache/shop/f764e515dcc666ae.webp",
    "tags": [],
    "category": "specialty",
@@ -268,7 +268,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-11-17T17:02:33Z",
+   "last_seen": "2026-11-24T19:03:27Z",
    "image": "/assets/cache/shop/d79f539ca26cfa33.webp",
    "tags": [],
    "category": "specialty",
@@ -302,7 +302,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-11-17T17:02:33Z",
+   "last_seen": "2026-11-24T19:03:27Z",
    "image": "/assets/cache/shop/bbd9ebbeaac136fc.webp",
    "tags": [],
    "category": "specialty",
@@ -336,7 +336,7 @@
    "lang": "es",
    "date": null,
    "first_seen": "2026-09-27T05:34:48Z",
-   "last_seen": "2026-11-17T17:02:33Z",
+   "last_seen": "2026-11-24T19:03:27Z",
    "image": "/assets/cache/shop/b3647bebf38db744.webp",
    "tags": [],
    "category": "specialty",
@@ -2164,7 +2164,7 @@
    "url": "https://www.aalavina.org/tienda/internacional-suscripciones"
   }
  ],
- "types_checked": "2026-10-25T12:42:11Z",
+ "types_checked": "2026-11-24T19:03:27Z",
  "specialty_checked": "2026-11-21T15:32:38Z",
  "price_memory": {
   "2027-01-01": {
