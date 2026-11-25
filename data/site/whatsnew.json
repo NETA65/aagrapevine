@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-24T19:09:35Z",
+ "updated": "2026-11-25T14:07:16Z",
  "fixture": false,
  "items": [
   {
@@ -7633,7 +7633,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T13:21:17Z"
   },
   {
@@ -7677,7 +7677,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T13:00:17Z"
   },
   {
@@ -7721,7 +7721,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T13:00:15Z"
   },
   {
@@ -7765,7 +7765,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T12:30:16Z"
   },
   {
@@ -7809,7 +7809,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T12:30:15Z"
   },
   {
@@ -7867,7 +7867,7 @@
     }
    },
    "machine": [],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T12:00:00Z"
   },
   {
@@ -7934,7 +7934,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-11T12:00:00Z"
   },
   {
