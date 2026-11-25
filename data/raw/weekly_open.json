@@ -1,7 +1,7 @@
 {
  "source": "weekly_open",
- "updated": "2026-11-24T19:01:42Z",
- "attempted": "2026-11-24T19:01:42Z",
+ "updated": "2026-11-25T18:05:23Z",
+ "attempted": "2026-11-25T18:05:23Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -88,7 +88,7 @@
     "start_local": "12:00",
     "timezone": "America/New_York",
     "time_central": "11 AM Central",
-    "next_start": "2026-11-25T17:00:00Z"
+    "next_start": "2026-12-02T17:00:00Z"
    }
   }
  ],

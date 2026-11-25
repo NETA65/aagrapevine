@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-24T18:59:40Z",
+ "updated": "2026-11-25T18:03:20Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17072,
-   "posts": 4046,
+   "followers": 17083,
+   "posts": 4050,
    "owner_id": "48108439509",
-   "checked": "2026-11-24T18:59:22Z",
+   "checked": "2026-11-25T18:03:03Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,185 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2438,
-   "posts": 3076,
+   "posts": 3080,
    "owner_id": "48275839129",
-   "checked": "2026-11-24T18:59:24Z",
+   "checked": "2026-11-25T18:03:06Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgKlkpCDXzl",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgKlkpCDXzl/",
+   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+   "lang": "en",
+   "date": "2026-11-25T13:00:16Z",
+   "first_seen": "2026-11-25T18:03:20Z",
+   "image": "/assets/cache/ig/DgKlkpCDXzl.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgKlkpCDXzl",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgKlkpCDXzl.webp",
+    "embed_url": "https://www.instagram.com/p/DgKlkpCDXzl/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgKlkpCDXzl/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
+    },
+    "summary": {
+     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
+     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgKlknsjTvt",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgKlknsjTvt/",
+   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
+   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
+   "lang": "es",
+   "date": "2026-11-25T13:00:16Z",
+   "first_seen": "2026-11-25T18:03:20Z",
+   "image": "/assets/cache/ig/DgKlknsjTvt.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgKlknsjTvt",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgKlknsjTvt.webp",
+    "embed_url": "https://www.instagram.com/p/DgKlknsjTvt/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgKlknsjTvt/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
+    },
+    "summary": {
+     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. Podcast respects anonymity and is available in the main …",
+     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgKiI6NjUZ2",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgKiI6NjUZ2/",
+   "title": "“We will still have daydreams ... But they will be constructive dreams, rather than mere…",
+   "summary": "“We will still have daydreams ... But they will be constructive dreams, rather than mere flights of fancy.” “Those Depressions—Make Them Work for Good!” New York, NY, August 1948, Best of the Grapevine, Volume 1 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-25T12:30:16Z",
+   "first_seen": "2026-11-25T18:03:20Z",
+   "image": "/assets/cache/ig/DgKiI6NjUZ2.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgKiI6NjUZ2",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgKiI6NjUZ2.webp",
+    "embed_url": "https://www.instagram.com/p/DgKiI6NjUZ2/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgKiI6NjUZ2/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“We will still have daydreams ... But they will be constructive dreams, rather than mere…",
+     "es": "“Todavía tendremos sueños de día... Pero serán sueños constructivos, más que simples …"
+    },
+    "summary": {
+     "en": "“We will still have daydreams ... But they will be constructive dreams, rather than mere flights of fancy.” “Those Depressions—Make Them Work for Good!” New York, NY, August 1948, Best of the Grapevine, Volume 1 Daily Quote at www.aagrapevine.org",
+     "es": "“Todavía tendremos sueños de día... Pero serán sueños constructivos, en lugar de meros vuelos de fantasía”. “¡Esas depresiones, hacen que trabajen para el bien!” Nueva York, NY, agosto de 1948, mejor del Grapevine, volumen 1 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgKiI5kjQ8H",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgKiI5kjQ8H/",
+   "title": "“El equilibrio emocional que me eludía está regresando a través de la oración”.",
+   "summary": "“El equilibrio emocional que me eludía está regresando a través de la oración”. \"“La oración” SEATTLE, WASHINGTON, ABRIL DE 1974 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-25T12:30:15Z",
+   "first_seen": "2026-11-25T18:03:20Z",
+   "image": "/assets/cache/ig/DgKiI5kjQ8H.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgKiI5kjQ8H",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgKiI5kjQ8H.webp",
+    "embed_url": "https://www.instagram.com/p/DgKiI5kjQ8H/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgKiI5kjQ8H/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“The emotional balance that evaded me is returning through prayer.”",
+     "es": "“El equilibrio emocional que me eludía está regresando a través de la oración”."
+    },
+    "summary": {
+     "en": "“The emotional balance I was evading is returning through prayer.” \"The Prayer\" SEATTLE, WASHINGTON, APRIL 1974 De Spiritual Awakenings\" Daily Quote in www.aalavina.org",
+     "es": "“El equilibrio emocional que me eludía está regresando a través de la oración”. \"“La oración” SEATTLE, WASHINGTON, ABRIL DE 1974 De Spiritual Awakenings\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DgH9WEcDWxi",
    "source": "instagram",
@@ -10150,49 +10322,6 @@
    "is_new": false
   },
   {
-   "id": "ig:Dd1HxPQAyuG",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd1HxPQAyuG/",
-   "title": "In AA We Talk Truth",
-   "summary": "In AA We Talk Truth",
-   "lang": "en",
-   "date": "2026-09-28T11:54:01Z",
-   "first_seen": "2026-09-29T16:34:21Z",
-   "image": "/assets/cache/ig/Dd1HxPQAyuG.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd1HxPQAyuG",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd1HxPQAyuG.webp",
-    "embed_url": "https://www.instagram.com/p/Dd1HxPQAyuG/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd1HxPQAyuG/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "In AA We Talk Truth",
-     "es": "En AA hablamos la verdad"
-    },
-    "summary": {
-     "en": "In AA We Talk Truth",
-     "es": "En AA hablamos la verdad"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:Dd1FKtnl87t",
    "source": "instagram",
    "kind": "post",
@@ -10232,49 +10361,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:Dd1FKs6lyRH",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd1FKs6lyRH/",
-   "title": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had…",
-   "summary": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had no time for living in the present.” Atlanta, Ga., August 2001, From: “How Is My Now?”, Beginner’s Book Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-28T11:30:16Z",
-   "first_seen": "2026-09-29T16:34:21Z",
-   "image": "/assets/cache/ig/Dd1FKs6lyRH.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd1FKs6lyRH",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd1FKs6lyRH.webp",
-    "embed_url": "https://www.instagram.com/p/Dd1FKs6lyRH/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd1FKs6lyRH/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had…",
-     "es": "“Estaba tan ocupado haciendo malabares con las expectativas de mañana que tenía …"
-    },
-    "summary": {
-     "en": "“I was so busy juggling the regrets of the past with the expectations of tomorrow I had no time for living in the present.” Atlanta, Ga., August 2001, From: “How Is My Now?”, Beginner’s Book Daily Quote at www.aagrapevine.org",
-     "es": "“Estaba tan ocupado haciendo malabares con las expectativas del pasado de mañana que no tenía tiempo para vivir en el presente”. Atlanta, Ga., agosto de 2001, de: “¿Cómo es mi ahora?”, Libro del principiante Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },
