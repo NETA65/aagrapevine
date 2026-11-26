@@ -100,9 +100,7 @@ export function render(data) {
     a(`assets/vendor/alpine.min.js?v=${v}`),
     a("assets/fonts/inter-latin-wght-normal.woff2"),
     a("assets/fonts/fraunces-latin-opsz-normal.woff2"),
-    // …and their italics (main.css: quotes, the Monthly pages), so a saved page's italic text keeps its face offline
-    a("assets/fonts/inter-latin-wght-italic.woff2"),
-    a("assets/fonts/fraunces-latin-opsz-italic.woff2"),
+    // (no italic files: main.css "Fonts" — italic text is these faces slanted, offline too)
     // the header's NETA 65 wordmark; the grape icon the pages name in their <head> (partials/icon-links.njk): a tab's
     // favicon (the ICO, the SVG) and the 48 px one; the 192 px app icon (the footer, the install notice, the share
     // posters)

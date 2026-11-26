@@ -44,23 +44,26 @@
    arrangement, so no column is left short and empty. */
 @custom-variant tall-2xl (@media (width >= 96rem) and (height >= 56rem));
 
-/* ---------- Fonts (self-hosted, OFL) ---------- */
+/* ---------- Fonts (self-hosted, OFL) ----------
+   Upright faces only: Inter and Fraunces, Latin + Latin Extended (the extended files load only for a page that
+   has such a letter: unicode-range). No italic files since the UX review of November 2026 — the two (Inter italic
+   52 KB, Fraunces italic 82 KB) were 134 of the ~250 KB of fonts every page loaded, for the magazines' names,
+   quotes and a few notes. Italic text is the upright face slanted by the browser (font-synthesis: style, below):
+   Fraunces' wedge serifs keep it reading as the display face, and Inter's slant is what its own italic mostly is.
+   The fallback faces below have no italic either, for the same reason: what a slow page shows first is slanted
+   the same way, so nothing moves when the web font arrives. */
 @font-face { font-family: "Inter Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Inter Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Inter Variable"; font-style: italic; font-display: swap; font-weight: 100 900;
-  src: url("../fonts/inter-latin-wght-italic.woff2") format("woff2-variations"); }
 @font-face { font-family: "Fraunces Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/fraunces-latin-opsz-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Fraunces Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/fraunces-latin-ext-opsz-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2020, U+2113, U+A720-A7FF; }
-@font-face { font-family: "Fraunces Variable"; font-style: italic; font-display: swap; font-weight: 100 900;
-  src: url("../fonts/fraunces-latin-opsz-italic.woff2") format("woff2-variations"); }
 /* Fallback faces with the web fonts' measurements (Georgia / Arial scaled to the same text width and
    line box — measured in Chrome over a line of English and Spanish at the sizes the site uses: Fraunces'
    optical-size axis makes it wider in small type), so the page doesn't move when the
@@ -74,12 +77,6 @@
   size-adjust: 103.74%; ascent-override: 94.47%; descent-override: 25.06%; line-gap-override: 0%; }
 @font-face { font-family: "Fraunces Fallback"; font-weight: 501 900; src: local("Georgia Bold"), local("Georgia-Bold");
   size-adjust: 91.52%; ascent-override: 107.08%; descent-override: 28.41%; line-gap-override: 0%; }
-@font-face { font-family: "Fraunces Fallback"; font-style: italic; font-weight: 100 500; src: local("Georgia Italic"), local("Georgia-Italic");
-  size-adjust: 97.78%; ascent-override: 100.22%; descent-override: 26.59%; line-gap-override: 0%; }
-@font-face { font-family: "Fraunces Fallback"; font-style: italic; font-weight: 501 900; src: local("Georgia Bold Italic"), local("Georgia-BoldItalic");
-  size-adjust: 87.33%; ascent-override: 112.22%; descent-override: 29.77%; line-gap-override: 0%; }
-@font-face { font-family: "Inter Fallback"; font-style: italic; font-weight: 100 900; src: local("Arial Italic"), local("Arial-ItalicMT");
-  size-adjust: 106.99%; ascent-override: 90.57%; descent-override: 22.53%; line-gap-override: 0%; }
 
 /* ---------- Theme tokens ----------
    Use as Tailwind utilities: bg-paper, bg-surface, text-ink, text-muted,
@@ -176,7 +173,8 @@
 
 /* ---------- Base ---------- */
 @layer base {
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 1.5rem); }
+  /* font-synthesis-style: italic text is the upright face slanted (no italic font files: "Fonts" above) */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 1.5rem); font-synthesis-style: auto; }
   body { @apply bg-paper text-ink font-sans antialiased; font-feature-settings: "cv11", "ss01"; }
   h1, h2, h3, .font-display { font-family: var(--font-display); font-optical-sizing: auto; letter-spacing: -0.01em; }
   a { color: inherit; }
