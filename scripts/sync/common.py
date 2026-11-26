@@ -619,9 +619,9 @@ def as_json(data: Any) -> Any:
     return json.loads(json.dumps(data, ensure_ascii=False, default=_json_default))
 
 
-# Run timestamps: they move on every run although nothing else did. A data file whose only differences are these
-# is not written again (write_json_if_changed, save_raw) — data/site/status.json keeps every run's times instead
-# (build_data: each source's `updated` / `attempted`, from this run's stamps, run_stamps()). Only an envelope's own
+# Run timestamps: they move on every run although nothing else did. A data/raw file whose only differences are these
+# is not written again (save_raw) — data/site/status.json keeps every run's times instead (build_data: each source's
+# `updated` / `attempted`, from this run's stamps, RUN_STAMPS / with_run_stamps). Only an envelope's own
 # top-level times and the timing figures of its `stats` count: a time INSIDE the data (an item's `last_seen`, a
 # feed's `attempted` in data/state, a crawled page's `crawled_at`) is what the next run decides by, and is kept.
 STAMP_KEYS = frozenset({"updated", "attempted", "generated"})

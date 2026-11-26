@@ -1351,8 +1351,9 @@ export function statusView(status, now = Date.now()) {
   // does not work, not a source that "failed" (it is not in the counts above).
   // A feed config/site.yml marks `paused:` (known not to work, e.g. a site that blocks automated readers) has the
   // state "paused" in status.json (build_data.ics_events); `paused` = the reason, `pausedOnPurpose` = true. The
-  // Status page has no badge of its own for it yet, so it is shown with the "blocked" state's words ("can't be read
-  // right now — its events are added by hand"), never as "Not updated yet".
+  // Status page shows it with a "Paused" badge and line of its own (src/pages/status.njk: f.pausedOnPurpose) and
+  // leaves it out of the "calendars unavailable" count; `state` stays "blocked" for anything that knows only the
+  // four states (the blocked words, "can't be read right now", never "Not updated yet").
   const FEED_STATES = new Set(["ok", "blocked", "error", "never"]);
   const feeds = (Array.isArray(status?.feeds) ? status.feeds : []).filter((f) => f && f.url).map((f) => {
     let host = "";

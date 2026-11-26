@@ -13,10 +13,11 @@ buena hasta que la siguiente funcione.
 
 Revise en este orden (cada paso toma unos segundos):
 
-1. **La página de Estado** — [grapevine.neta65.org/es/status/](https://grapevine.neta65.org/es/status/). "Funciona"
-   en verde junto a cada fuente quiere decir que todo está bien. También muestra a qué hora llegó la cita del día
-   cada mañana. El calendario de talleres de NETA 65 aparece como *no se puede leer por ahora* (o **En pausa**): su
-   sitio bloquea a los robots, así que esos eventos se agregan a mano. Es a propósito; no hay nada que hacer.
+1. **La página de Estado** — [grapevine.neta65.org/es/status/](https://grapevine.neta65.org/es/status/). **Al día**
+   en verde junto a cada fuente quiere decir que todo está bien (una fuente con un problema lo dice en rojo). También
+   muestra a qué hora llegó la cita del día cada mañana. Entre los calendarios opcionales, el de talleres de NETA 65
+   aparece **En pausa**: su sitio bloquea a los robots, así que esos eventos se agregan a mano. Es a propósito; no
+   hay nada que hacer.
 2. **La insignia** al principio del [README](../README.md) del repositorio: verde = la última actualización
    funcionó.
 3. **La pestaña Actions** — [github.com/NETA65/aagrapevine/actions](https://github.com/NETA65/aagrapevine/actions).

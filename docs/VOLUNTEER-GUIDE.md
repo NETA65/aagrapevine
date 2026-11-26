@@ -12,10 +12,10 @@ version until the next one works.
 
 Look in this order — each takes a few seconds:
 
-1. **The Status page** — [grapevine.neta65.org/status/](https://grapevine.neta65.org/status/). Green
-   "Working" next to each source means all is well. It also shows when each morning's daily quote came in.
-   The NETA 65 workshop calendar shows as *can't be read right now* (or **Paused**): its site blocks robots, so
-   those events are added by hand — on purpose, nothing to do.
+1. **The Status page** — [grapevine.neta65.org/status/](https://grapevine.neta65.org/status/). A green **OK**
+   next to each source means all is well (a source with a problem says so in red). It also shows when each
+   morning's daily quote came in. Under the optional calendars, the NETA 65 workshop calendar shows **Paused**: its
+   site blocks robots, so those events are added by hand — on purpose, nothing to do.
 2. **The badge** at the top of the repository's [README](../README.md): green = the last update worked.
 3. **The Actions tab** — [github.com/NETA65/aagrapevine/actions](https://github.com/NETA65/aagrapevine/actions).
    Each run has a ✓ (worked) or ✗ (failed). The ones that matter:

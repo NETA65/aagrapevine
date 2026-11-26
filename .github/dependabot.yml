@@ -39,6 +39,9 @@ updates:
     commit-message:
       prefix: "chore(actions)"
     open-pull-requests-limit: 2
+    # a release is proposed only once it is a week old (a broken one is usually pulled or fixed by then)
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: npm
     directory: /
@@ -55,6 +58,9 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     open-pull-requests-limit: 2
+    # a release is proposed only once it is a week old (lucide-static 1.81.0 was hours old when it was taken in)
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: pip
     directory: /
