@@ -2533,6 +2533,45 @@ The matching CSS utilities (cards, buttons, chip rows, `sticky-aside`, `meta-row
 the language banner and never grow taller than the window), and the one gap before the footer is
 the footer's own margin.
 
+### The home page, the menus and Stay updated (the UX review of November 2026)
+
+A review of the site on a phone found the home page 16 screens long (14 sections, about 200 links), the meetings hidden
+under "Committee", committee shorthand in the menus and about 250 KB of fonts on every page. What changed:
+
+- **Home** (`src/pages/index.njk`, its own stylesheet `/assets/css/home.css`) has seven blocks, each a way in to the
+  page that holds the whole of it: the hero (with **Find an AA meeting near you**, AA's own finder, and our two
+  monthly meetings), **Where would you like to start?** — four big buttons: *I'm new to AA* (the "New to AA?" card on
+  Meetings), *I'm a group rep (GVR / RLV)* (the GVR / RLV corner), *I want to write my story* (Share your story, with
+  the next story deadline) and *I want to subscribe* (the Shop's subscriptions) —, the daily quote, the latest
+  magazines (three stories each, and the Book of the Month while it is on), one media row (the newest podcast episode
+  and the newest video), the next three events, and **More on this site** (Bulletin, Library, Published writers,
+  Instagram, Portfolio, Photos, Stay updated). The bulletin's posts, the published writers, the library, Instagram, the
+  committee's uploads and the service band are on their own pages. On a phone the page went from 14,240 to about
+  8,300 pixels.
+- **The menus** (`src/_data/nav.js`): **Meetings** is a top link; the GVR pages say what they are (**Group reps
+  (GVR/RLV)**, **New rep orientation** — the pages keep their own names); **Share your story** leads *Get involved*. The
+  phone menu shows Home and the top links, then *Get involved*, *Committee* and *More* as three folded groups (the
+  one that holds the current page starts open).
+- **The committee pages' tabs** (Meetings · Events · Portfolio · Photos · Bulletin · Tracker) have no counts any more,
+  and on a phone the current tab is brought to the middle of the bar, with a neighbour in view on each side.
+- **Service words** — GVR, RLV, NETA 65, Area 65, DCM, GSR, ACM, Assembly, Delegate, Panel — have a dotted underline
+  where they first appear on Home, the GVR / RLV corner, GVR / RLV 101 and Meetings: a tap (or Enter) shows what the
+  word means, in English or Spanish. The whole list is on the GVR / RLV corner (`/gvr/#glossary`). The words are in
+  `src/_i18n/glossary.json`; a page marks a sentence with `| gloss(lang)` (`eleventy/filters/glossary.js`).
+- **Stay updated** (`/stay-updated/`, `/es/stay-updated/`) gathers every way to keep up: the monthly digest (read it,
+  or ask to get it by e-mail — a ready-made message to the committee's address), the calendars to subscribe to
+  (events, story deadlines), this month's dates and the weekly open meetings as files, the RSS feed, Instagram,
+  YouTube, the podcasts, the app and saved pages, the QR Post and a WhatsApp message. The footer's *Stay updated*
+  column starts with it, and the phone menu's *More* lists it.
+- **The Tracker** reminds, once a month, to keep a copy — a CSV or the full backup — since everything in it lives in
+  the browser (see *The Tracker* below).
+- **Lighter pages:** no italic font files (italic text is the upright face slanted: 134 KB less on every page); the
+  home page, the Library with the site search, and Published writers have stylesheets of their own (main.css 416 →
+  about 345 KB); `/read/` holds the first six stories of each earlier issue, and **Show all N stories** adds the
+  rest from `/read-archive.json` (the page went from 670 to about 330 KB; without JavaScript the issue's *Read on …*
+  link opens its whole table of contents on the magazine's site). The committee pages' tabs no longer count photos
+  and files on every build (2.5 s less per build).
+
 ### Reading & display settings and the Accessibility page
 
 The **Aa** button at the top of every page (in the Menu on phones) opens **Reading & display**: text size
@@ -2751,6 +2790,10 @@ The **Tracker** (Committee menu, <https://grapevine.neta65.org/tracker/>) is a G
 committee chair's own record of what their service costs and gives: miles, purchases, gift
 subscriptions, literature given away and reimbursements. It lives only in that browser — nothing is
 uploaded — so it asks for a backup now and then (**Back up now**: one `.zip` file with the receipt photos).
+Since November 2026 a quiet row above the tabs says so once a month — "Keep a copy of your Tracker" — while the
+ledger has entries and no copy was made within the backup reminder's days (Settings → Reminders, 30 by default; a
+CSV export counts too): **Export CSV (all)**, **Full backup (.zip)** or **Not now** (it then waits for the next
+month; the month is remembered in this browser).
 This describes Tracker 1.2.0 (October 2026).
 
 **What to tell your GVRs**
@@ -3161,8 +3204,12 @@ it:
 - Beside each deadline on Share your story: **Add to my calendar** (Google Calendar, Outlook.com, "Apple / Outlook
   (.ics file)") adds that one deadline; it has the same ID as in the subscribed calendar and the month files, so
   adding it twice never makes a copy.
-- **Home** ("Write for the magazines": **Story deadlines in my calendar**) and **What's New** ("Stay in the loop":
-  **Story deadlines calendar (.ics)**, with a copy button).
+- **Share your story, right under its page nav** (`/contribute/#next-deadlines`, since November 2026): **Next story
+  deadlines** — each magazine's next deadline (its date, the days left, its theme and issue, **Add to my calendar**),
+  then **Subscribe to all deadlines** (the calendar's `webcal://` address, which Apple, Outlook and most phones open),
+  **Google Calendar** and the step-by-step help.
+- **Home** (under the magazines: **Story deadlines in my calendar**), **What's New** ("Stay in the loop":
+  **Story deadlines calendar (.ics)**, with a copy button) and **Stay updated** (`/stay-updated/`).
 
 **One reminder in every "Add to calendar" file.** Each calendar file a member downloads or adds now carries one
 reminder: **1 hour before** a timed or online event (the committee meeting, a workshop, a weekly open meeting),
@@ -3202,8 +3249,9 @@ Spanish. The **New to AA? / ¿Eres nuevo en AA?** card points them to **any** AA
   first), with the three aa.org links and **AA offices in our Area →** to the full card. GitHub Pages answers every
   missing address with the root `/404.html`, a broken Spanish link (`/aagrapevine/es/…`) too: there the Spanish
   card comes first (a tiny script in the page, before it shows; without JavaScript the English one stays first).
-- **Home:** one line near the end, before the "For GVRs, RLVs & districts" band — "New to AA? AA's own sites list
-  the AA meetings near you, in English and in Spanish. First steps →".
+- **Home:** high on the page, the first of the four **Where would you like to start?** buttons — "I'm new to AA:
+  AA's own sites list the AA meetings near you, in English and in Spanish" — opens this card; the hero's **Find an AA
+  meeting near you** opens AA's own finder (`aa_find`) directly.
 
 No phone numbers (nothing to keep current), no outside services and no clinical wording. The site search finds
 the Meetings page for *help*, *new to AA*, *newcomer*, *Meeting Guide*, *intergroup* (*ayuda*, *nuevo en AA*,
@@ -3213,7 +3261,7 @@ red); the offices are the `meetings:` → `feeds` entries with `in_area: true` a
 `lang: es` ones first on `/es/`; never the `feed` address); the Area's site is `site:` → `area_website`. Details:
 how-to/settings.md [§3.11 `links:`](how-to/settings.md#311-links--official-links-used-across-the-site) (the three
 aa.org links) and [§3.9 `meetings:`](how-to/settings.md#39-meetings--grapevine-meetings-near-us) (the offices). For
-maintainers: `src/_includes/macros/ui.njk` (`newcomerCard`, `newcomerLine`), `eleventy/filters/newcomer.js`
+maintainers: `src/_includes/macros/ui.njk` (`newcomerCard`), `eleventy/filters/newcomer.js`
 (`ncOffices`), `src/_i18n/common.json` (`newcomer.*`), `tests/test_r12_u6_newcomers.py`.
 
 ### The GVR / RLV corner: Pass it on and the question of the day

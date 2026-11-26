@@ -169,8 +169,8 @@ folder's is filed under the name's year (a correction). data/raw/drive.json `sta
 `covers_unrecognized` and `covers_fixed` (this run's names that could not be read / were read with a correction) and
 `covers_duplicate` (issues — a magazine and its `key` — that more than one file on the site is of: both show) and
 `stats.warnings` says how many — never which file (the run log is public). The news rules for
-covers are under *is_new / What's New* in §3 and in the monthly digest's table; Home's "Committee uploads"
-(home.js `homeDrive`) never shows one, nor do the booth folder's `booth.json`, the Portfolio and the Library
+covers are under *is_new / What's New* in §3 and in the monthly digest's table; the booth folder's `booth.json`,
+the Portfolio and the Library never show one
 (category `photos`). Since November 2026 the booth display's show, `/about/booth.json`, plays a day's share of them
 from data/site/drive.json, each with the publishers' copyright line (*/about/booth.json* in §3).
 

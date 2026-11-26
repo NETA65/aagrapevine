@@ -912,7 +912,7 @@ the newest), search.
 **Code pointers.** `instagram.py` → `load_manual` (your list), `merge_post` (who wins), `build_item`
 (title, summary, `extra`), `prune`, class `Fetcher` (one method per way of reading). Display:
 `eleventy/filters/media.js` (filters `mediaIgFor`, `mediaIgCaption`, `mediaIgImage`),
-`src/pages/instagram.njk`, home `homeInstagram` in `eleventy/filters/home.js`. Test:
+`src/pages/instagram.njk` (the home page links it from *More on this site* since November 2026). Test:
 `tests/test_sync_pipeline.py`.
 
 ---
