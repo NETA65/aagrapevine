@@ -257,6 +257,8 @@ CONTENT_TESTS: dict[str, str] = {
     "test_r13_u1_gvtopics.Spanish.":
         "data/translations/overrides.yml: Spanish words for every suggested topic Grapevine's /contribute page names",
     # ---- docs/
+    "test_morning.AlarmDocs.":
+        "docs/OPERATIONS.md (documentation): the section on setting up the morning alarm later",
     "test_seo_robots.UserSite.":
         "docs/user-site (documentation): the robots.txt and index.html for NETA65/neta65.github.io, against site.url",
 }

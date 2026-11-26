@@ -238,8 +238,7 @@ class MorningWorkflow(unittest.TestCase):
         self.assertIn("workflow_dispatch", self.on)
         text = (WF / "morning.yml").read_text(encoding="utf-8")
         self.assertIn("https://api.github.com/repos/NETA65/aagrapevine/actions/workflows/morning.yml/dispatches", text)
-        ops = (ROOT / "docs" / "OPERATIONS.md").read_text(encoding="utf-8")
-        self.assertIn("### Set up the cron-job.org alarm later", ops)
+        # (the docs' own section is checked in AlarmDocs below: it judges the documentation, not the code)
 
     def test_the_only_input_is_check_only(self):
         inputs = self.on["workflow_dispatch"]["inputs"]
@@ -2428,3 +2427,13 @@ class QuoteDays(unittest.TestCase):
         self.assertEqual(r["clocks"], [["5:52 AM", "5:52 a. m."], ["1:05 PM", "1:05 p. m."],
                                        ["1:30 AM", "1:30 a. m."]])
         self.assertEqual(r["junk"], [""] * 6)
+
+
+class AlarmDocs(unittest.TestCase):
+    """docs/OPERATIONS.md says how to set up the morning alarm later (it judges the documentation: listed in
+    scripts/ops/gate_tests.py CONTENT_TESTS, so the publish gate does not run it)."""
+
+    def test_the_docs_say_how_to_set_up_the_alarm(self):
+        ops = (ROOT / "docs" / "OPERATIONS.md").read_text(encoding="utf-8")
+        self.assertIn("### Set up the cron-job.org alarm later", ops)
+
