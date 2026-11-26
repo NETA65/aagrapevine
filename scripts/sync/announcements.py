@@ -607,6 +607,48 @@ def event_type(meta: dict) -> tuple[str | None, str | None]:
                   f"{', '.join(EVENT_TYPES)}, or delete the line")
 
 
+# Since the events list's redesign (November 2026): the district that holds an event — `district: 87` (also "District
+# 87", "Distrito 87", "D87") → extra.district "87": shown on the event's card and page, and a filter of /events/
+# (eleventy/filters/event-list.js). Only a district's number: any other value is left out and listed on /status/. Never
+# guessed: a file without the line has no district.
+_DISTRICT = re.compile(r"(?i)^(?:district|distrito|dist\.?|d)?\s*#?\s*(\d{1,3})$")
+
+
+def event_district(meta: dict) -> tuple[str | None, str | None]:
+    """A content/events file's `district:` (else `distrito:`) → (its number as text, problem): (None, None) without the
+    line; (None, a line for /status/) for a value that is not a district's number."""
+    raw = next((meta.get(k) for k in ("district", "distrito") if meta.get(k) not in (None, "")), None)
+    if raw is None:
+        return None, None
+    text = str(raw) if isinstance(raw, int) and not isinstance(raw, bool) else clean_text(raw) if isinstance(raw, str) else ""
+    m = _DISTRICT.match(text.strip())
+    if m and int(m.group(1)) > 0:
+        return str(int(m.group(1))), None
+    return None, (f"district: “{clean_text(str(raw))[:40]}” is not a district number, left out — write the number "
+                  "only (district: 87), or delete the line")
+
+
+# The language an event is held in — `language: es` (also English / Spanish / inglés / español, and `both` /
+# bilingual / bilingüe) → extra.language "en" | "es" | "both": the /events/ language filter (event-list.js heldIn).
+# Without the line the site works it out (La Viña's events, "(in Spanish)" in the title …); any other value is left
+# out and listed on /status/.
+EVENT_LANGUAGES = {"en": "en", "english": "en", "ingles": "en", "es": "es", "spanish": "es", "espanol": "es",
+                   "both": "both", "bilingual": "both", "bilingue": "both", "en-es": "both", "es-en": "both"}
+
+
+def event_language(meta: dict) -> tuple[str | None, str | None]:
+    """A content/events file's `language:` (else `idioma:`) → ("en" | "es" | "both", problem) — (None, None) without
+    the line."""
+    raw = next((meta.get(k) for k in ("language", "idioma") if meta.get(k) not in (None, "")), None)
+    if raw is None:
+        return None, None
+    key = slugify(clean_text(raw)) if isinstance(raw, str) else ""
+    if key in EVENT_LANGUAGES:
+        return EVENT_LANGUAGES[key], None
+    return None, (f"language: “{clean_text(str(raw))[:40]}” is not a language the site knows, left out — write en "
+                  "(English), es (Spanish) or both, or delete the line")
+
+
 # --------------------------------------------------------------------------- bulletin posts
 # A post is whatever Markdown the chair drops in the folder — often pasted from somewhere else, with
 # or without a header. These helpers make any such file read well on the page (the page shows the
@@ -945,6 +987,15 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
         extra["type"] = kind             # its kind, when the site's own guess is wrong (event_type; since round 37)
     if type_problem:
         extra["type_problem"] = type_problem
+    # the district that holds it and the language it is held in (event_district / event_language): the /events/ filters
+    district, district_problem = event_district(meta)
+    if district:
+        extra["district"] = district
+    language, language_problem = event_language(meta)
+    if language:
+        extra["language"] = language
+    if district_problem or language_problem:
+        extra["line_problems"] = [p for p in (district_problem, language_problem) if p]
     host = event_host(meta.get("host"))
     if host is None:
         # A slip, not a reason to hide the event: "host: District 91" or "host: Grupo Libro Grande" (the group that
@@ -1023,6 +1074,10 @@ def collect(folder: Path, parser, label: str, keep: tuple[str, ...] = ()
         type_problem = (it.get("extra") or {}).pop("type_problem", None)
         if type_problem:
             errors.append(f"{folder.name}/{path.name}: {type_problem}"[:400])
+        # a `district:` or `language:` that cannot be used (event_district, event_language): the event shows, the line
+        # is listed
+        for line_problem in (it.get("extra") or {}).pop("line_problems", None) or ():
+            errors.append(f"{folder.name}/{path.name}: {line_problem}"[:400])
         # a date to check (a UTC offset that is not Central time's, "05-10-2026"): the item shows, the line is listed
         for note in (it.get("extra") or {}).pop("date_notes", None) or ():
             errors.append(f"{folder.name}/{path.name}: {note}"[:400])

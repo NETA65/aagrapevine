@@ -2257,6 +2257,71 @@ def order_events(ctx: Ctx, events: Iterable[dict]) -> list[dict]:
     return upcoming + kept
 
 
+# Readable addresses (since the events list's redesign, November 2026): an event made from a dated Drive flyer or
+# taken from an outside calendar gets `extra.slug` — its day and its title, "2026-10-31-grapevine-committee-crash" —
+# so its page is /events/2026-10-31-grapevine-committee-crash/ instead of /events/ev-flyer-1cijzw73s0hbgb4wr6qosuit…/
+# (eleventy/filters/committee.js eventAnchor takes extra.slug as a content/events file's name). The address must not
+# move with every daily update, so a slug is PINNED: made once, the first time the event is seen, and kept from the
+# last events.json by the event's id (a flyer's Drive file, a calendar listing's own id) — a title the flyer's name or
+# the calendar changes later leaves it as it is. Only a new DAY makes a new slug (an address that names the wrong day
+# would mislead): the old one goes to `extra.slug_aliases` (the last READABLE_ALIASES_KEEP), and the site writes a
+# page at each old address — and at the event's old "ev-…" address — that sends the visitor on
+# (src/pages/event-share-redirect.njk). Two events of one day and one title: the later one ends in "-2", "-3" ….
+# A hand-written event (content/events: its file's name already), a monthly date and a committee meeting keep theirs.
+READABLE_SLUG_TITLE_MAX = 60
+READABLE_ALIASES_KEEP = 5
+_OWN_ADDRESS = ("manual", "recurring", "committee")
+
+
+def readable_slug(day: str, title: str) -> str:
+    """An event's readable slug: its day ("YYYY-MM-DD") and its title in a few words — cut at a word, at most
+    READABLE_SLUG_TITLE_MAX characters ("2027-01-29-xlii-reunion-de-a-a-zona-norte-de-texas-a-a-un-camino")."""
+    words = slugify(clean_text(title) or "event", 200)
+    if len(words) > READABLE_SLUG_TITLE_MAX:
+        cut = words[:READABLE_SLUG_TITLE_MAX + 1]
+        words = cut.rsplit("-", 1)[0] if "-" in cut else words[:READABLE_SLUG_TITLE_MAX]
+    return f"{day}-{words.strip('-') or 'event'}"
+
+
+def pin_event_slugs(ctx: Ctx, events: list[dict], previous: Any) -> list[dict]:
+    """Give each event made from a flyer or an outside calendar its readable slug (see above), the last events.json's
+    one when it has one for that id and day (`previous`: that file, items and cancelled). → `events`, changed in
+    place."""
+    prev_doc = previous if isinstance(previous, dict) else {}
+    before: dict[str, dict] = {}
+    for it in [*(prev_doc.get("items") or []), *(prev_doc.get("cancelled") or [])]:
+        if isinstance(it, dict) and it.get("id") and isinstance(it.get("extra"), dict):
+            before.setdefault(str(it["id"]), it["extra"])
+    taken = {str((ev.get("extra") or {}).get("slug")) for ev in events
+             if ev.get("category") in _OWN_ADDRESS and (ev.get("extra") or {}).get("slug")}
+    for ev in events:
+        ex = ev.setdefault("extra", {})
+        if ev.get("category") in _OWN_ADDRESS:
+            continue
+        day = _event_day(ctx, ev)
+        if not day:
+            continue
+        old = before.get(str(ev.get("id")), {})
+        slug = str(old.get("slug") or "")
+        aliases = [a for a in (old.get("slug_aliases") or []) if isinstance(a, str) and a]
+        if slug and not slug.startswith(day + "-"):     # its day changed: a new address, the old one sends people on
+            aliases.append(slug)
+            slug = ""
+        if not slug or slug in taken:
+            base = readable_slug(day, ev.get("title") or "")
+            slug, n = base, 2
+            while slug in taken:
+                slug, n = f"{base}-{n}", n + 1
+        taken.add(slug)
+        ex["slug"] = slug
+        aliases = [a for a in dict.fromkeys(aliases) if a != slug][-READABLE_ALIASES_KEEP:]
+        if aliases:
+            ex["slug_aliases"] = aliases
+        else:
+            ex.pop("slug_aliases", None)
+    return events
+
+
 # =========================================================================== translation
 def other(lang: str) -> str:
     return "es" if lang == "en" else "en"
@@ -4196,7 +4261,9 @@ def main(argv: list[str] | None = None) -> int:
             "editorial": simple(ctx, "editorial"),
             "weekly_open": weekly_open_items(ctx),
             "announcements": build_announcements(ctx),
-            "events": build_events(ctx),
+            # (an event made from a flyer or an outside calendar with its readable address, pinned from the last
+            # events.json: pin_event_slugs)
+            "events": pin_event_slugs(ctx, build_events(ctx), read_json(out_dir / "events.json")),
         }
         enrich_articles(ctx, cols["articles"])
         meta, meta_wanted = build_meta(ctx, i18n)
