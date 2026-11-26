@@ -187,13 +187,13 @@ jobs:
       # the third-party Python packages below are installed and run; only the "Commit refreshed
       # data" step uses it, and removes it again when it is done.
       - name: Check out the repository (latest commit on the branch, including the previous run's data)
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.ref }}
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
@@ -229,7 +229,7 @@ jobs:
 
       - name: Restore translation models from cache
         id: models
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/models
           key: ${{ steps.modelkey.outputs.key }}
@@ -443,7 +443,7 @@ jobs:
 
       - name: Save translation models to cache (only after a fresh download)
         if: ${{ !cancelled() && steps.models_ready.outputs.ready == 'true' }}
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/models
           key: ${{ steps.modelkey.outputs.key }}
@@ -1069,7 +1069,7 @@ jobs:
       # The commit the sync job just pushed (its data included), the same one the tests check out — or, when it
       # named none, the latest main.
       - name: Check out the commit the sync job pushed (with its data)
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.sync.outputs.commit || 'main' }}
           persist-credentials: false
@@ -1079,7 +1079,7 @@ jobs:
         run: echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -1089,7 +1089,7 @@ jobs:
 
       - name: Read GitHub Pages settings
         id: pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Work out the site address
         id: addr
@@ -1148,7 +1148,7 @@ jobs:
       # newest copy saved for this booth.json and booth settings, else the newest of any (most of its files still are).
       - name: Restore the booth display's media (saved between runs)
         id: boothmedia
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/booth-media
           key: booth-media-v1-${{ steps.boothfp.outputs.fp }}
@@ -1197,7 +1197,7 @@ jobs:
         if: ${{ !cancelled() && steps.boothkey.outputs.key != '' && steps.boothkey.outputs.key != steps.boothmedia.outputs.cache-matched-key }}
         continue-on-error: true
         timeout-minutes: 5
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/booth-media
           key: ${{ steps.boothkey.outputs.key }}
@@ -1208,7 +1208,7 @@ jobs:
       # None (the first time, or after 7 days without a run, when GitHub drops it): the build asks the live site.
       - name: Bring back the sitemap dates of the last publish
         continue-on-error: true
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/lastmod
           key: lastmod-v1-${{ github.run_id }}-${{ github.run_attempt }}
@@ -1250,7 +1250,7 @@ jobs:
       # missing picture (the month pages then show the committee's card, as before): it never stops a deploy.
       - name: Set up Python (for the posters' share pictures)
         continue-on-error: true
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
@@ -1392,7 +1392,7 @@ jobs:
       # store: the next run then compares with the last good one again).
       - name: Hand the sitemap dates to the publish job
         continue-on-error: true
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: lastmod-store
           path: _site/lastmod.json
@@ -1401,7 +1401,7 @@ jobs:
 
       # (published by the "publish" job below, once the tests have passed)
       - name: Upload the website
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site
 
@@ -1437,7 +1437,7 @@ jobs:
       commit: ${{ steps.code.outputs.commit }}
     steps:
       - name: Check out the commit the sync job pushed (the one the build job builds)
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.sync.outputs.commit || 'main' }}
           persist-credentials: false
@@ -1465,14 +1465,14 @@ jobs:
       # tests would run again unattended on unchanged code).
       - name: Were these tests passed already?
         id: passed
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/tests-passed
           key: tests-passed-v1-${{ steps.code.outputs.fingerprint }}
 
       - name: Set up Python
         if: ${{ steps.passed.outputs.cache-hit != 'true' }}
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
@@ -1488,7 +1488,7 @@ jobs:
       # would be skipped.
       - name: Set up Node.js (for the tests that run the site's JavaScript)
         if: ${{ steps.passed.outputs.cache-hit != 'true' }}
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -1513,7 +1513,7 @@ jobs:
       - name: Save the pass for the next runs
         if: ${{ steps.passed.outputs.cache-hit != 'true' }}
         continue-on-error: true      # a pass that cannot be saved only means the next run tests again
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/tests-passed
           key: tests-passed-v1-${{ steps.code.outputs.fingerprint }}
@@ -1552,7 +1552,7 @@ jobs:
 
       - name: Publish to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
 
       # IndexNow: now that the changed pages are live, tell Bing, Yandex and the other IndexNow engines about them
@@ -1604,7 +1604,7 @@ jobs:
         id: store
         if: ${{ steps.deployment.outcome == 'success' }}
         continue-on-error: true
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: lastmod-store
           path: .cache/lastmod
@@ -1613,7 +1613,7 @@ jobs:
         # (none after an unreadable store: the build then handed none over, and the download fails — on purpose)
         if: ${{ steps.deployment.outcome == 'success' && steps.store.outcome == 'success' }}
         continue-on-error: true
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .cache/lastmod
           key: lastmod-v1-${{ github.run_id }}-${{ github.run_attempt }}

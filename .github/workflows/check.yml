@@ -73,12 +73,12 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Check out the code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -130,7 +130,7 @@ jobs:
       # 2026 (the bingo cards' 16 among them, about 1½ minutes) 15 on a slow runner (900 s: they all passed, but the
       # step ran out of time then), so the step may take 25 (the job's 30 still covers checkout, build and setup).
       - name: Set up Python (for the browser checks)
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
@@ -156,12 +156,12 @@ jobs:
     timeout-minutes: 25
     steps:
       - name: Check out the code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
@@ -176,7 +176,7 @@ jobs:
       # website's copy of the monthly-digest rules — tests/nodejs.py); without Node.js and the
       # site's packages they would be skipped.
       - name: Set up Node.js (for the tests that run the site's JavaScript)
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm

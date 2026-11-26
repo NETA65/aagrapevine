@@ -828,21 +828,41 @@ class LinkCheck(unittest.TestCase):
 
 # --------------------------------------------------------------------------- outside actions
 class Pinned(unittest.TestCase):
-    def test_every_outside_action_is_pinned_to_a_commit(self):
-        seen = 0
+    """Every action a workflow runs — GitHub's own actions/* too — is pinned to a full commit id with its release as
+    a "# vX.Y.Z" note: a moved tag can never change what runs, and Dependabot's monthly "chore(actions)" pull request
+    moves the commit and the note together (it updates a note that names the pinned commit's release)."""
+
+    def uses(self):
         for f in sorted(WF.glob("*.yml")):
             for line in f.read_text(encoding="utf-8").splitlines():
                 m = re.match(r"^\s*(?:-\s+)?uses:\s*([^\s#]+)\s*(#.*)?$", line)
-                if not m:
-                    continue
-                action, note = m.group(1), (m.group(2) or "")
-                if action.startswith(("actions/", "./")):
-                    continue
-                seen += 1
-                with self.subTest(workflow=f.name, action=action):
-                    self.assertRegex(action, r"^[\w.-]+/[\w./-]+@[0-9a-f]{40}$", "a full commit id")
-                    self.assertRegex(note, r"^# v\d+\.\d+\.\d+$", "its release, for people and Dependabot")
-        self.assertGreaterEqual(seen, 1)
+                if m:
+                    yield f.name, m.group(1), (m.group(2) or "")
+
+    def test_every_action_is_pinned_to_a_commit(self):
+        seen, outside = 0, 0
+        for name, action, note in self.uses():
+            if action.startswith("./"):
+                continue
+            seen += 1
+            outside += not action.startswith("actions/")
+            with self.subTest(workflow=name, action=action):
+                self.assertRegex(action, r"^[\w.-]+/[\w./-]+@[0-9a-f]{40}$", "a full commit id")
+                self.assertRegex(note, r"^# v\d+\.\d+\.\d+$", "its release, for people and Dependabot")
+        self.assertGreaterEqual(outside, 1, "lychee's")
+        self.assertGreater(seen, outside, "and GitHub's own")
+
+    def test_one_commit_per_action_and_release(self):
+        # the same action at the same release is the same commit in every workflow (a half-done update would differ)
+        pins: dict[str, set] = {}
+        for _name, action, note in self.uses():
+            if not action.startswith("./"):
+                repo = "/".join(action.split("@")[0].split("/")[:2])      # actions/cache/save → actions/cache
+                pins.setdefault(repo, set()).add((action.split("@")[1], note))
+        self.assertIn("actions/checkout", pins)
+        for repo, seen in pins.items():
+            with self.subTest(action=repo):
+                self.assertEqual(len(seen), 1, f"{repo} at more than one commit or release: {sorted(seen)}")
 
 
 # --------------------------------------------------------------------------- Dependabot

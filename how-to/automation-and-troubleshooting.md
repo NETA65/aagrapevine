@@ -588,10 +588,10 @@ Since October 2026 it is two jobs: **Check links** (it may only read the reposit
 official-links check and the root robots.txt check and keeps their reports as the download `link-check-report`, 7
 days) and **Report broken links (the issue)** (the only one allowed to write issues; it runs no outside code and
 only reads that download).
-lychee's action, the one action from outside GitHub in the workflows, is pinned to an exact commit:
-`lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0`. Dependabot's monthly
-`chore(actions)` pull request moves the commit and its `# v…` note together; a test checks that every outside
-action is pinned this way.
+Every action in the workflows is pinned to an exact commit — lychee's (the one from outside GitHub)
+`lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0`, and since November 2026 GitHub's own
+`actions/*` too. Dependabot's monthly `chore(actions)` pull request moves each commit and its `# v…` note together;
+a test checks that every action is pinned this way.
 
 ### 4.8 The tests before publishing
 

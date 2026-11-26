@@ -992,7 +992,7 @@ class Workflow(unittest.TestCase):
         # restored here, saved by a step of its own: the all-in-one actions/cache saves only when its key was not an
         # exact hit — the first run of each booth.json would be the only one ever saved
         restore = self.step(RESTORE)
-        self.assertEqual((restore["uses"], restore["id"]), ("actions/cache/restore@v6", "boothmedia"))
+        self.assertEqual((restore["uses"].split("@")[0], restore["id"]), ("actions/cache/restore", "boothmedia"))   # (pinned: test_automation Pinned)
         self.assertEqual(restore["with"], {
             "path": ".cache/booth-media",
             "key": f"booth-media-v1-{BOOTH_HASH}",
@@ -1006,8 +1006,8 @@ class Workflow(unittest.TestCase):
         key = self.step(KEY)
         self.assertEqual((key["id"], key["if"], key["env"]), ("boothkey", "${{ !cancelled() }}", {"BOOTH_KEY": BOOTH_HASH}))
         save = self.step(SAVE)
-        self.assertEqual((save["uses"], save["with"]),
-                         ("actions/cache/save@v6", {"path": ".cache/booth-media", "key": "${{ steps.boothkey.outputs.key }}"}))
+        self.assertEqual((save["uses"].split("@")[0], save["with"]),
+                         ("actions/cache/save", {"path": ".cache/booth-media", "key": "${{ steps.boothkey.outputs.key }}"}))
         self.assertEqual(save["if"], "${{ !cancelled() && steps.boothkey.outputs.key != '' && "
                                      "steps.boothkey.outputs.key != steps.boothmedia.outputs.cache-matched-key }}",
                          "only when this run changed the folder (and never an empty one)")

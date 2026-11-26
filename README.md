@@ -3423,8 +3423,8 @@ built entirely from open-source tools — thank you to their authors:
 
 **Automation:** [GitHub Actions](https://docs.github.com/actions) (`actions/checkout`, `setup-python`,
 `setup-node`, `cache`, `configure-pages`, `upload-pages-artifact`, `deploy-pages`, `upload-artifact`,
-`download-artifact` — MIT), [lychee](https://github.com/lycheeverse/lychee) link checker (MIT / Apache-2.0; its
-action pinned to a commit), Dependabot.
+`download-artifact` — MIT; each pinned to a commit), [lychee](https://github.com/lycheeverse/lychee) link checker
+(MIT / Apache-2.0; its action pinned to a commit), Dependabot.
 
 *AA Grapevine®, La Viña® and their content are the property of AA Grapevine, Inc. This committee
 website links to the official sources and is not affiliated with or endorsed by AA Grapevine, Inc.
