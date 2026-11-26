@@ -1,0 +1,183 @@
+---
+pagination: { data: languages, size: 1, alias: lang }
+permalink: "{{ '/' if lang == 'en' else '/es/' }}stay-updated/index.html"
+layout: layouts/base.njk
+pageKey: stay-updated
+titleKey: nav.stay_updated
+descKey: stay.meta_desc
+ldType: CollectionPage
+---
+{#- STAY UPDATED (/stay-updated/, /es/stay-updated/ — the same address in both languages, as every page of the site:
+    /es/ + the English one). One page that gathers every way to keep up with the committee, each with what it is and
+    the link that does it — the pages that hold the whole of each keep their own (and link here back from the
+    footer's "Stay updated" column, the phone menu's "More" and the home page's "More on this site"):
+      #email     the monthly digest: read this month's edition (/digest/), or get it by e-mail — the committee sends
+                 it to one group of DCMs, GVRs and RLVs (how-to/email-and-alerts.md): a member asks to be added with a
+                 ready-made e-mail to the committee's address (config/site.yml contact_email), never a form;
+      #calendar  the calendar files: the events (/events.ics — committee meetings, workshops, booths, assemblies),
+                 the story deadlines (/deadlines.ics), each to subscribe to once (Google Calendar's "add by URL" link,
+                 the webcal:// address Apple and Outlook open, the address to copy) with the full how-to on its own
+                 page (/events/#subscribe, /contribute/#deadlines-calendar); this month's dates (the Monthly toolkit's
+                 file for the month: mpMonths' icsUrl) and the two weekly open meetings (cmWeeklyCal: a file of one
+                 meeting that repeats every week), each a file to add once;
+      #feeds     the RSS feed of What's new (/feed.xml), Instagram (/instagram/), YouTube and the podcasts (/listen/);
+      #phone     the site as an app and saved pages (/offline/), the QR Post (/share/), and this site in a WhatsApp
+                 message (wa.me: the site's name and its address, nothing else).
+    Every address is the page language's (/es/events.ics on /es/ …). No script is needed: the copy buttons are
+    data-js-only (app.js GV.copy), the rest are plain links. -#}
+{% import "macros/ui.njk" as ui with context %}
+{%- set siteName = site | pick(lang, "title") -%}
+{%- set mail = site.contact_email -%}
+{%- set mailHref = "mailto:" + mail + "?subject=" + (("stay.email_subject" | t(lang)) | urlencode) + "&body=" + (("stay.email_body" | t(lang)) | urlencode) -%}
+{%- set months = db | mpMonths(carry, site, lang) -%}
+{%- set m = months[0] -%}
+{%- set wos = db.weekly_open.items | cmWeeklyAll(lang) -%}
+{%- set homeAbs = '/' | lurl(lang) | siteUrl(site) -%}
+{%- set waText = ("stay.wa_text" | t(lang, { name: siteName })) + " " + homeAbs -%}
+
+{#- A calendar to subscribe to: its name, one line, and the three ways (Google's link, Apple's webcal:// address, the
+    address to copy) + its page's how-to. -#}
+{% macro subRow(key, path, howto, lang, site) %}
+{%- set feed = path | lurl(lang) | siteUrl(site) -%}
+{%- set webcal = feed | cmWebcal -%}
+<li class="stay-row card card-pad">
+  <div class="flex items-start gap-3">
+    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-gv-soft text-gv" aria-hidden="true">{% icon "calendar-sync", "size-5" %}</span>
+    <div class="min-w-0 flex-1">
+      <h3 class="font-display text-lg font-semibold leading-snug text-ink">{{ ("stay.cal_" ~ key) | t(lang) }}</h3>
+      <p class="mt-1 text-sm leading-relaxed text-muted">{{ ("stay.cal_" ~ key ~ "_text") | t(lang) }}</p>
+    </div>
+  </div>
+  <div class="mt-4 flex flex-wrap gap-2">
+    <a class="btn-primary btn-sm" href="https://calendar.google.com/calendar/r?cid={{ webcal | urlencode }}" target="_blank" rel="noopener">{% icon "calendar-plus", "size-4" %} Google Calendar<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+    <a class="btn-secondary btn-sm" href="{{ webcal }}">{% icon "smartphone", "size-4" %} {{ "committee.sub.apple" | t(lang) }}</a>
+    <button type="button" class="btn-secondary btn-sm" data-js-only data-copy="{{ feed }}">{% icon "copy", "size-4" %} {{ "committee.sub.copy_aria" | t(lang) }}</button>
+  </div>
+  <p class="mt-3 text-sm"><a class="link tap-link" href="{{ howto | lurl(lang) }}">{{ "stay.cal_howto" | t(lang) }} <span aria-hidden="true">→</span></a></p>
+</li>
+{% endmacro %}
+
+{% call(slot) ui.pageHero(lang, "nav.stay_updated" | t(lang), "stay.subtitle" | t(lang), "bell-ring", "stay.eyebrow" | t(lang)) %}
+  <div class="hero-actions">
+    <a class="btn-light" href="#email">{% icon "mail", "size-4" %} {{ "stay.email_title" | t(lang) }}</a>
+    <a class="btn-on-dark" href="#calendar">{% icon "calendar-sync", "size-4" %} {{ "stay.cal_title" | t(lang) }}</a>
+  </div>
+{% endcall %}
+
+<div class="container-page page-overlap">{{ ui.pageNav([
+  { href: "#email", label: "stay.email_title" | t(lang), icon: "mail" },
+  { href: "#calendar", label: "stay.cal_title" | t(lang), icon: "calendar-sync" },
+  { href: "#feeds", label: "stay.feeds_title" | t(lang), icon: "rss" },
+  { href: "#phone", label: "stay.phone_title" | t(lang), icon: "smartphone" }
+], lang) }}</div>
+
+{#- ---------- By e-mail: the monthly digest ---------- -#}
+<section id="email" class="section container-page pt-10 sm:pt-12" aria-labelledby="email-title">
+  {{ ui.sectionHead("stay.email_title" | t(lang), "stay.email_sub" | t(lang), "", "", "mail", { eyebrow: "nav.digest" | t(lang), id: "email-title", lang: lang }) }}
+  <div class="grid gap-4 md:grid-cols-2">
+    <div class="card card-pad flex flex-col">
+      <h3 class="card-h"><span>{% icon "mail-plus", "size-5" %}</span>{{ "stay.email_join" | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.email_join_text" | t(lang) }}</p>
+      <p class="mt-auto pt-4"><a class="btn-primary" href="{{ mailHref }}">{% icon "send", "size-4" %} {{ "stay.email_ask" | t(lang) }}</a></p>
+      <p class="mt-2 text-xs text-muted">{{ "stay.email_leave" | t(lang) }}</p>
+    </div>
+    <div class="card card-pad flex flex-col">
+      <h3 class="card-h"><span>{% icon "newspaper", "size-5" %}</span>{{ "stay.email_read" | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "nav.digest_desc" | t(lang) }}.</p>
+      <p class="mt-auto pt-4"><a class="btn-secondary" href="{{ '/digest/' | lurl(lang) }}">{{ "stay.email_read_cta" | t(lang) }} {% icon "arrow-right", "size-4" %}</a></p>
+    </div>
+  </div>
+</section>
+
+{#- ---------- In your calendar ---------- -#}
+<section id="calendar" class="section section-band" aria-labelledby="calendar-title">
+  <div class="container-page">
+    {{ ui.sectionHead("stay.cal_title" | t(lang), "stay.cal_sub" | t(lang), "", "", "calendar-sync", { eyebrow: "stay.cal_eyebrow" | t(lang), id: "calendar-title", lang: lang }) }}
+    <ul class="grid gap-4 md:grid-cols-2" role="list">
+      {{ subRow("events", "/events.ics", "/events/#subscribe", lang, site) }}
+      {{ subRow("deadlines", "/deadlines.ics", "/contribute/#deadlines-calendar", lang, site) }}
+    </ul>
+    {#- one-time files: this month's dates, and each weekly open meeting (it repeats every week by itself) -#}
+    <h3 class="mt-8 font-display text-xl font-semibold text-ink">{{ "stay.cal_files" | t(lang) }}</h3>
+    <p class="mt-1 max-w-2xl text-sm leading-relaxed text-muted">{{ "stay.cal_files_text" | t(lang) }}</p>
+    <ul class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3" role="list">
+      {% if m and m.icsUrl %}
+      <li class="card flex h-full items-start gap-3 p-4">
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-grape-soft text-grape" aria-hidden="true">{% icon "calendar-heart", "size-5" %}</span>
+        <span class="min-w-0 flex-1">
+          <span class="block font-semibold text-ink">{{ "monthly.ics_link" | t(lang, { month: m.monthName }) }}</span>
+          <span class="mt-0.5 block text-sm text-muted">{{ "nav.monthly_desc" | t(lang) }}</span>
+          <span class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm"><a class="link tap-link" href="{{ m.icsUrl }}" type="text/calendar">{% icon "download", "size-4 shrink-0" %} {{ "committee.cal.ics_file" | t(lang) }}</a><a class="link tap-link" href="{{ '/monthly/' | lurl(lang) }}">{{ "nav.monthly" | t(lang) }}</a></span>
+        </span>
+      </li>
+      {% endif %}
+      {% for w in wos %}
+      {%- set wc = w | cmWeeklyCal(site, lang) %}
+      {% if wc %}
+      {%- set wTitle = w.title or ("committee.weekly.title" | t(lang)) %}
+      <li class="card flex h-full items-start gap-3 p-4">
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl {{ 'bg-lv-soft text-lv' if w.isLv else 'bg-gv-soft text-gv' }}" aria-hidden="true">{% icon "video", "size-5" %}</span>
+        <span class="min-w-0 flex-1">
+          <span class="block font-semibold text-ink"{% if w.isLv and lang != "es" %} lang="es"{% endif %}>{{ wTitle }}</span>
+          <span class="mt-0.5 block text-sm text-muted">{{ "stay.cal_weekly_text" | t(lang) }}</span>
+          <span class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm"><a class="link tap-link" href="{{ wc.gcal }}" target="_blank" rel="noopener">Google Calendar<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a><a class="link tap-link" href="{{ wc.ics }}" download="weekly-open-{{ wc.key }}.ics" type="text/calendar">{% icon "download", "size-4 shrink-0" %} {{ "committee.cal.ics_file" | t(lang) }}</a></span>
+        </span>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{#- ---------- Feeds and social media ---------- -#}
+{%- set feedAbs = '/feed.xml' | lurl(lang) | siteUrl(site) -%}
+<section id="feeds" class="section container-page" aria-labelledby="feeds-title">
+  {{ ui.sectionHead("stay.feeds_title" | t(lang), "stay.feeds_sub" | t(lang), "", "", "rss", { eyebrow: "stay.feeds_eyebrow" | t(lang), tone: "text-grape", id: "feeds-title", lang: lang }) }}
+  <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="list">
+    <li class="card card-pad flex h-full flex-col">
+      <h3 class="card-h"><span class="text-lv!">{% icon "rss", "size-5" %}</span>{{ "feeds.rss" | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.rss_text" | t(lang) }}</p>
+      <p class="mt-auto flex flex-wrap gap-2 pt-4"><a class="btn-secondary btn-sm" href="{{ '/feed.xml' | lurl(lang) }}" type="application/rss+xml">{% icon "rss", "size-4" %} feed.xml</a><button type="button" class="btn-ghost btn-sm" data-js-only data-copy="{{ feedAbs }}">{% icon "copy", "size-4" %} {{ "common.copy_link" | t(lang) }}</button></p>
+    </li>
+    <li class="card card-pad flex h-full flex-col">
+      <h3 class="card-h"><span class="text-grape!">{% icon "instagram", "size-5" %}</span>{{ "nav.instagram" | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.ig_text" | t(lang) }}</p>
+      <p class="mt-auto pt-4"><a class="btn-secondary btn-sm" href="{{ '/instagram/' | lurl(lang) }}">{{ "stay.ig_cta" | t(lang) }} {% icon "arrow-right", "size-4" %}</a></p>
+    </li>
+    <li class="card card-pad flex h-full flex-col">
+      <h3 class="card-h"><span class="text-grape!">{% icon "youtube", "size-5" %}</span>YouTube</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.yt_text" | t(lang) }}</p>
+      <p class="mt-auto flex flex-wrap gap-2 pt-4"><a class="btn-secondary btn-sm" href="{{ '/watch/' | lurl(lang) }}">{{ "nav.watch" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>{% if site.links.youtube_channel %}<a class="btn-ghost btn-sm" href="{{ site.links.youtube_channel }}" target="_blank" rel="noopener">{{ "home.youtube_subscribe" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}</p>
+    </li>
+    <li class="card card-pad flex h-full flex-col">
+      <h3 class="card-h"><span class="text-grape!">{% icon "headphones", "size-5" %}</span>{{ "stay.pod_title" | t(lang) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.pod_text" | t(lang) }}</p>
+      <p class="mt-auto pt-4"><a class="btn-secondary btn-sm" href="{{ '/listen/' | lurl(lang) }}">{{ "nav.listen" | t(lang) }} {% icon "arrow-right", "size-4" %}</a></p>
+    </li>
+  </ul>
+</section>
+
+{#- ---------- On your phone: the app, saved pages, passing the site on ---------- -#}
+<section id="phone" class="section container-page pt-0" aria-labelledby="phone-title">
+  {{ ui.sectionHead("stay.phone_title" | t(lang), "stay.phone_sub" | t(lang), "", "", "smartphone", { eyebrow: "stay.phone_eyebrow" | t(lang), tone: "text-vine", id: "phone-title", lang: lang }) }}
+  <ul class="grid gap-3 sm:grid-cols-3" role="list">
+    <li>
+      <a class="card card-link group flex h-full items-start gap-3 p-4 no-underline" href="{{ '/offline/' | lurl(lang) }}#steps">
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-vine-soft text-vine" aria-hidden="true">{% icon "hard-drive-download", "size-5" %}</span>
+        <span class="min-w-0 flex-1"><span class="block font-semibold text-ink group-hover:text-vine">{{ "stay.app_title" | t(lang) }}</span><span class="mt-0.5 block text-sm text-muted">{{ "stay.app_text" | t(lang) }}</span></span>
+      </a>
+    </li>
+    <li>
+      <a class="card card-link group flex h-full items-start gap-3 p-4 no-underline" href="https://wa.me/?text={{ waText | urlencode }}" target="_blank" rel="noopener">
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-vine-soft text-vine" aria-hidden="true">{% icon "message-circle", "size-5" %}</span>
+        <span class="min-w-0 flex-1"><span class="block font-semibold text-ink group-hover:text-vine">{{ "stay.wa_title" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></span><span class="mt-0.5 block text-sm text-muted">{{ "stay.wa_desc" | t(lang) }}</span></span>
+      </a>
+    </li>
+    <li>
+      <a class="card card-link group flex h-full items-start gap-3 p-4 no-underline" href="{{ '/share/' | lurl(lang) }}">
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-vine-soft text-vine" aria-hidden="true">{% icon "qr-code", "size-5" %}</span>
+        <span class="min-w-0 flex-1"><span class="block font-semibold text-ink group-hover:text-vine">{{ "nav.share" | t(lang) }}</span><span class="mt-0.5 block text-sm text-muted">{{ "stay.qr_text" | t(lang) }}</span></span>
+      </a>
+    </li>
+  </ul>
+</section>
