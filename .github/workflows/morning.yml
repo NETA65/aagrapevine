@@ -30,13 +30,22 @@
 #      later (job "tidy"), so the Actions tab shows the mornings that did
 #      something.
 #  What starts it (the first one does the work, the others find it done):
-#    · the MORNING ALARM (recommended): an outside alarm clock presses "Run
-#      workflow" at 4:30 AM Central — while GitHub runs late, the only
-#      sure way to 5:30 (README → "d) The morning alarm");
-#    · GitHub's schedule below — best effort, a backstop;
+#    · GitHub's schedule below — the MAIN way while no morning alarm is
+#      set up (November 2026). GitHub starts these runs hours late or
+#      drops them (in November 2026 it ran only 2 or 3 of the 15 a day),
+#      so a scheduled run that comes in the evening or the night WAITS
+#      (job "wait", up to 5 h 45 min) until 2:00 AM Central, when the
+#      magazines may be asked, and then does the morning's work: one late
+#      evening firing is enough for the next morning;
+#    · [the morning alarm, to add later] an outside alarm clock
+#      (cron-job.org) presses "Run workflow" at 4:30 AM Central — the
+#      sure way to 5:30 while GitHub runs late (docs/OPERATIONS.md → "Set
+#      up the cron-job.org alarm later"; then config/site.yml →
+#      site.morning_alarm: true turns on the issue "The daily quote
+#      missed the morning goal");
 #    · anyone: Actions → Morning check (new day by 5:30 AM) → Run
-#      workflow (it only does what is missing; tick "check_only" to just
-#      see what it would do).
+#      workflow (it only does what is missing, at once; tick "check_only"
+#      to just see what it would do).
 #  A red ✗ = today's update did NOT reach the site (GitHub e-mails whoever
 #  started the run — for the alarm, the owner of its key). Green with a
 #  yellow note = only a magazine's quote was late at the source (or the
@@ -57,18 +66,21 @@ run-name: >-
 
 on:
   schedule:
-    # Plain UTC (no `timezone:` key): 25 past every hour from 21:25 to 11:25 UTC = 4:25 PM to 6:25 AM
-    # CDT (3:25 PM to 5:25 AM CST); never on the hour, GitHub's busiest minute. It begins 4 hours
-    # before the early-morning window because GitHub starts this repository's schedules 4 to 6
-    # (sometimes 8) hours late: an evening firing that is delayed lands in the window, while one that
-    # runs on time finds today's build already live and is a 5-second no-op (deleted the next day). It
-    # still ends at 11:25 UTC, so a day on which GitHub is on time is covered too. Every hour from 2 AM
-    # (when the check starts asking the magazines for a late quote) to 5 AM Central gets firings both
-    # on time and 4 to 6 hours late, in summer (CDT) and in winter (CST) — tests/test_morning.py checks
-    # it. None of them is guaranteed — hence the alarm.
-    - cron: "25 0-11,21-23 * * *"
+    # Plain UTC (no `timezone:` key): 25 past every hour from 19:25 to 11:25 UTC = 2:25 PM to 6:25 AM
+    # CDT (1:25 PM to 5:25 AM CST); never on the hour, GitHub's busiest minute. GitHub starts this
+    # repository's schedules 4 to 8 hours late, and drops most of them, so the line starts in the early
+    # afternoon: a firing that comes late lands in the evening or the night, and one that comes from 5 h
+    # 45 min before 2:00 AM Central (WAIT_MAX below) waits in job "wait" until then — any ONE of the
+    # firings that GitHub delays into the evening is enough for the next morning. One that runs on time
+    # in the afternoon finds today's build live and is a 5-second no-op (deleted the next day). Every
+    # hour from 2 AM (when the check starts asking the magazines for a late quote) to 5 AM Central gets
+    # firings both on time and 4 to 8 hours late, in summer (CDT) and in winter (CST), and every evening
+    # hour from 8:15 PM CST (7:15 PM CDT) gets one 4 to 8 hours late — tests/test_morning.py checks it.
+    - cron: "25 0-11,19-23 * * *"
+  # The morning alarm (to add later, docs/OPERATIONS.md → "Set up the cron-job.org alarm later") presses Run
+  # workflow: POST https://api.github.com/repos/NETA65/aagrapevine/actions/workflows/morning.yml/dispatches
+  # with the body {"ref":"main"} — no input is needed. A run started this way never waits.
   workflow_dispatch:
-    # The alarm's request body is just {"ref":"main"}: no input is needed.
     inputs:
       check_only:
         description: "Only look: say what is on the site and what would be done — start nothing"
@@ -99,6 +111,7 @@ jobs:
       done: ${{ steps.live.outputs.done }}
       full: ${{ steps.live.outputs.full }}
       site: ${{ steps.site.outputs.url }}
+      wait: ${{ steps.live.outputs.wait }}
     steps:
       - name: Find the site's address
         id: site
@@ -115,6 +128,12 @@ jobs:
         id: live
         env:
           SITE: ${{ steps.site.outputs.url }}
+          EVENT: ${{ github.event_name }}
+          # When the magazines may first be asked about the new day's quote: goal − 3½ hours (scripts/ops/
+          # morning_check.py WINDOW_BEFORE; tests/test_morning.py checks the two agree), in Central time.
+          WINDOW_OPENS: "02:00"
+          # The longest a scheduled run waits for it (job "wait"): 5 h 45 min, inside GitHub's 6 hours for a job.
+          WAIT_MAX: "20700"
         run: |
           # done — the SAME test as is_done() in scripts/ops/morning_check.py (keep the two equal): the
           # build's Central day is today and both quotes are dated today. No answer → the next job looks
@@ -145,6 +164,32 @@ jobs:
             fi
           fi
           echo "full=${full}" >> "$GITHUB_OUTPUT"
+          # wait — the seconds until the window opens (WINDOW_OPENS, Central), for a run of GitHub's schedule that
+          # comes before it — at most WAIT_MAX before (the evening, or the night after midnight): job "wait" then
+          # sleeps until it, and the update job does the morning's work. Not for Run workflow (a person, the
+          # alarm: at once), not when the window's own day is already done (a quote out before 2 AM), never more
+          # than WAIT_MAX ahead (then a later firing waits).
+          wait=""
+          if [ "${EVENT:-}" = "schedule" ] && [ -n "${WINDOW_OPENS:-}" ]; then
+            now_w="$(date -u +%s)"
+            if open_w="$(TZ=America/Chicago date -d "${today} ${WINDOW_OPENS}" +%s 2>/dev/null)"; then
+              if [ "$open_w" -le "$now_w" ]; then
+                # today's window has opened: the next one is tomorrow's (Central)
+                tomorrow="$(TZ=America/Chicago date -d "${today} +1 day" +%F)"
+                open_w="$(TZ=America/Chicago date -d "${tomorrow} ${WINDOW_OPENS}" +%s)"
+              elif [ "$day" = "$today" ] && [ "$gv" = "$today" ] && [ "$lv" = "$today" ]; then
+                open_w=""                      # before today's window, but today's update is already there
+              fi
+              if [ -n "$open_w" ] && [ $((open_w - now_w)) -gt 0 ] && [ $((open_w - now_w)) -le "${WAIT_MAX:-0}" ]; then
+                wait="$((open_w - now_w))"
+              fi
+            fi
+          fi
+          echo "wait=${wait}" >> "$GITHUB_OUTPUT"
+          if [ -n "$wait" ]; then
+            at="$(TZ=America/Chicago date -d "@$((now_w + wait))" '+%-I:%M %p %Z')"
+            echo "A scheduled run before the morning: job \"wait\" waits $((wait / 60)) minutes, until ${at}, when the magazines may be asked — then the next job does the morning's work." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
           if [ "$day" = "$today" ] && [ "$gv" = "$today" ] && [ "$lv" = "$today" ]; then
             built="$(jq -r '.built // empty' <<<"$info" 2>/dev/null || true)"
             at="$(TZ=America/Chicago date -d "$built" '+%-I:%M %p %Z' 2>/dev/null || echo "$built")"
@@ -160,14 +205,38 @@ jobs:
           fi
 
   # -------------------------------------------------------------------
+  wait:
+    # A run of GitHub's schedule that came in the evening or the night: it waits here until the magazines may be
+    # asked (2:00 AM Central, job "look" → wait), so that the next job puts the new day and both quotes on the
+    # site — GitHub's late, dropped firings still make the morning as long as one comes in the evening. While it
+    # waits, the next firings wait behind it (concurrency below) and then find the work done. Free on a public
+    # repository (GitHub's runners cost nothing there).
+    name: Wait for the morning (a scheduled run that came early)
+    needs: look
+    if: ${{ needs.look.outputs.wait != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 355       # WAIT_MAX (345 min) and a few minutes; GitHub stops any job after 360
+    permissions: {}
+    steps:
+      - name: Wait until the magazines may be asked
+        env:
+          WAIT: ${{ needs.look.outputs.wait }}
+        run: |
+          set -euo pipefail
+          case "$WAIT" in ''|*[!0-9]*) echo "Not a number of seconds: ${WAIT}"; exit 1;; esac
+          echo "Waiting $((WAIT / 60)) minutes (until $(TZ=America/Chicago date -d "@$(( $(date -u +%s) + WAIT ))" '+%-I:%M %p %Z'))."
+          sleep "$WAIT"
+
+  # -------------------------------------------------------------------
   update:
     # scripts/ops/morning_check.py (UPDATE_JOB) and the "tidy" job below find this job by its NAME —
     # keep the three equal.
     name: Put today's update on the site
-    needs: look
+    needs: [look, wait]
     # when the site does not have today's update — also when the first job failed (it then said nothing):
-    # the script reads the live site itself — and when it has, but the full daily update is due
-    if: ${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '') }}
+    # the script reads the live site itself —, when it has, but the full daily update is due, and after job
+    # "wait" (the new day). Right after "look" when "wait" was skipped (not a scheduled run before the morning).
+    if: ${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '' || needs.wait.result == 'success') }}
     runs-on: ubuntu-latest
     timeout-minutes: 240       # nothing new after 170 min (GUARD_MAX); a refresh it starts then takes ≤ 45 + 5 min
     permissions:

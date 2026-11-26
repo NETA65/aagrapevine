@@ -286,6 +286,7 @@ the document search and translation use all their time; "Full update (started by
 | undo a change, or roll the website back | [Automation and troubleshooting §14.9](automation-and-troubleshooting.md#149-undo-a-change-or-roll-the-website-back) |
 | answer the issue "A content source has stopped updating" | [Automation and troubleshooting §8.1](automation-and-troubleshooting.md#81-a-content-source-has-stopped-updating) |
 | answer the issue "The website update keeps failing" | [Automation and troubleshooting §8.4](automation-and-troubleshooting.md#84-the-website-update-keeps-failing) |
+| answer the issue "The daily quote missed the morning goal" | [Automation and troubleshooting §8.5](automation-and-troubleshooting.md#85-the-daily-quote-missed-the-morning-goal) |
 | run the sync, the build and the tests on a PC | [Automation and troubleshooting §11](automation-and-troubleshooting.md#11-run-the-sync-the-build-and-the-tests-on-a-pc) |
 | move a schedule (and keep it 4 hours early) | [Automation and troubleshooting §13.1](automation-and-troubleshooting.md#131-move-a-schedule-and-keep-the-4-hour-early-rule) |
 

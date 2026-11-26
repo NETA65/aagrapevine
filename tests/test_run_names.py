@@ -333,7 +333,7 @@ class OtherTitles(unittest.TestCase):
         wf, _on, _text = load("morning.yml")
         name = wf["run-name"]
         self.assertNotIn("\n", name)
-        self.assertEqual(title(name, "schedule", schedule="25 0-11,21-23 * * *"), "Morning check (GitHub schedule)")
+        self.assertEqual(title(name, "schedule", schedule="25 0-11,19-23 * * *"), "Morning check (GitHub schedule)")
         self.assertEqual(title(name, "workflow_dispatch", {"check_only": True}), "Morning check (look only)")
         # the morning alarm presses Run workflow with the key of its owner; a person shows as themself
         self.assertEqual(title(name, "workflow_dispatch", {"check_only": False}, actor="NETA65"),

@@ -32,6 +32,11 @@ site:
   # name in the Actions list, "Morning check (new day by 5:30 AM)", says this time too: after a
   # change, also change that `name:` in morning.yml (and in tests/test_run_names.py, which pins it).
   morning_goal: "05:30"
+  # Is the outside morning alarm (cron-job.org, docs/OPERATIONS.md → "Set up the cron-job.org alarm
+  # later") set up? false: GitHub's own schedule puts the morning up (it can run late), and a missed
+  # morning opens no issue. true (once the alarm rings every morning): two mornings in a row that miss
+  # the goal open the issue "The daily quote missed the morning goal" (the alarm has stopped).
+  morning_alarm: false
   contact_email: "grapevine@neta65.org"
   area_website: "https://neta65.org"
   committee_page: "https://neta65.org/trusted-servants/grapevine-la-vina/"

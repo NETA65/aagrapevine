@@ -601,7 +601,7 @@ class FailingUpdates(unittest.TestCase):
     def test_the_step(self):
         self.assertEqual(self.job["needs"], ["sync", "tests", "build-deploy", "publish"])
         self.assertEqual(self.job["if"], "${{ !cancelled() && github.ref == 'refs/heads/main' }}")
-        self.assertEqual(self.job["permissions"], {"issues": "write", "actions": "read"})
+        self.assertEqual(self.job["permissions"], {"contents": "read", "issues": "write", "actions": "read"})
         self.assertTrue(self.step["continue-on-error"], "it never fails the run")
         for k, job in (("SYNC", "sync"), ("TESTS", "tests"), ("BUILD", "build-deploy"), ("PUBLISH", "publish")):
             self.assertEqual(self.step["env"][k], f"${{{{ needs.{job}.result }}}}")

@@ -1153,6 +1153,26 @@ Its text names the job that failed, with what to do:
 The live site stays as it was published last. The Morning check still reports a morning that did not reach the
 site (14.7).
 
+### 8.5 "The daily quote missed the morning goal"
+
+Since November 2026, kept by the same *report* job (its step *Open, update or close the issue about missed
+mornings*, `scripts/ops/report_issues.py`) — **only once the outside morning alarm is set up** and
+`config/site.yml` says `morning_alarm: true` (until then GitHub's own schedule puts the morning up, and it can run
+late: a late morning is no news then). After every *Website update* run it looks at the last mornings on the
+Status page (`status.json` `quote_days`: when each day's Grapevine and La Viña quotes came in, against the 5:30 AM
+goal, `site.morning_goal`), judged the way `/status/` judges them.
+
+- **Opens** when **two mornings in a row** missed the goal (a quote came in after it, or not at all). One late
+  morning alone opens nothing.
+- **Updates** its table silently when the next morning is missed too (no e-mail).
+- **Closes itself** after the first morning whose two quotes came in by the goal.
+
+The usual cause is the **morning alarm** at cron-job.org ([OPERATIONS → Set up the cron-job.org alarm
+later](../docs/OPERATIONS.md#set-up-the-cron-job-org-alarm-later)): its key expired (cron-job.org's history shows
+**401**), the address changed (**404**), or the alarm is switched off. A morning on which a magazine published its
+quote late at the source (the Morning check's run says *"A daily quote is late at the source"*) also counts as
+missed; nothing needs fixing then.
+
 ---
 
 ## 9. The data folder and what the robot commits

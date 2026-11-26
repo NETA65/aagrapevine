@@ -176,7 +176,7 @@ class MorningWorkflow(unittest.TestCase):
             firings |= {(h, m) for h in hours for m in mins}
         self.assertGreaterEqual(len(firings), 2)
         self.assertLessEqual(set(range(0, 12)) | {21, 22, 23}, {h for h, _m in firings}, "firings from 21 to 11 UTC")
-        self.assertEqual([s["cron"] for s in self.on["schedule"]], ["25 0-11,21-23 * * *"])
+        self.assertEqual([s["cron"] for s in self.on["schedule"]], ["25 0-11,19-23 * * *"])
         # the early morning in Central time, summer (UTC−5) and winter (UTC−6): every hour from 2 AM (when the check
         # starts asking the magazines for a late quote — WINDOW_BEFORE before the goal) to 5 AM is covered both by
         # firings that run on time and by the ones GitHub starts 4 to 6 hours late (it begins 4 hours early)
@@ -186,6 +186,57 @@ class MorningWorkflow(unittest.TestCase):
         for offset in (5, 6):
             for late in (0, 4, 5, 6):
                 self.assertLessEqual({2, 3, 4, 5}, {(h + late - offset) % 24 for h, _m in firings}, (offset, late))
+
+    def test_an_evening_firing_is_enough_for_the_next_morning(self):
+        # While no morning alarm is set up, GitHub's schedule is the main way: it starts runs 4 to 8 hours late and
+        # drops most of them, so a scheduled run that comes up to WAIT_MAX before the window (2:00 AM Central) waits
+        # for it (job "wait"). Every evening hour from WAIT_MAX before the window gets a firing 4 to 8 hours late, in
+        # summer (UTC−5) and in winter (UTC−6) — any one of them makes the morning.
+        look = step_of(self.jobs["look"], "Read the live site's build.json")
+        wait_max = timedelta(seconds=int(look["env"]["WAIT_MAX"]))
+        opens = datetime.strptime(look["env"]["WINDOW_OPENS"], "%H:%M")
+        firings = {(h, m) for s in self.on["schedule"] for h in expand(s["cron"].split()[1], 0, 23)
+                   for m in expand(s["cron"].split()[0], 0, 59)}
+        for offset in (5, 6):
+            day0 = datetime(2026, 11, 25, opens.hour, opens.minute) - wait_max      # the earliest moment that waits
+            first = day0.replace(minute=0) + timedelta(hours=1)
+            window = datetime(2026, 11, 25, opens.hour, opens.minute)
+            for k in range(int((window - first).total_seconds() // 3600)):         # each hour from then to the window
+                hour = (first + timedelta(hours=k)).hour                              # an evening hour, Central
+                late_ok = any((h + late - offset) % 24 == hour for h, _m in firings for late in (4, 5, 6, 7, 8))
+                self.assertTrue(late_ok, (offset, hour))
+
+    def test_the_wait_job(self):
+        wait = self.jobs["wait"]
+        self.assertEqual(wait["needs"], "look")
+        self.assertEqual(wait["if"], "${{ needs.look.outputs.wait != '' }}")
+        self.assertEqual(wait["permissions"], {}, "it only sleeps")
+        self.assertFalse(any("uses" in s for s in wait["steps"]), "no checkout")
+        st = step_of(wait, "Wait until the magazines may be asked")
+        self.assertEqual(st["env"]["WAIT"], "${{ needs.look.outputs.wait }}")
+        self.assertIn('sleep "$WAIT"', st["run"])
+        # the longest wait fits in the job, and the job in GitHub's 6 hours
+        look = step_of(self.jobs["look"], "Read the live site's build.json")
+        self.assertLess(int(look["env"]["WAIT_MAX"]) / 60 + 5, wait["timeout-minutes"])
+        self.assertLessEqual(wait["timeout-minutes"], 360)
+        # the window it waits for is the one the check asks the magazines in: goal − WINDOW_BEFORE
+        opens = datetime(2026, 11, 26, *MC.GOAL) - MC.WINDOW_BEFORE
+        self.assertEqual(look["env"]["WINDOW_OPENS"], f"{opens.hour:02d}:{opens.minute:02d}")
+        self.assertEqual(look["env"]["EVENT"], "${{ github.event_name }}")
+        # the update job runs after it (the new day, read from the live site again) — right after "look" when it
+        # was skipped; never a cancelled run
+        self.assertIn("needs.wait.result == 'success'", self.jobs["update"]["if"])
+        # while it waits, the next firings wait behind it (one check at a time) and then find the work done
+        self.assertEqual(self.wf["concurrency"]["cancel-in-progress"], False)
+
+    def test_a_place_for_the_morning_alarm(self):
+        # the alarm, to add later, presses Run workflow — the trigger stays, with no input needed, and the docs say
+        # how to set it up
+        self.assertIn("workflow_dispatch", self.on)
+        text = (WF / "morning.yml").read_text(encoding="utf-8")
+        self.assertIn("https://api.github.com/repos/NETA65/aagrapevine/actions/workflows/morning.yml/dispatches", text)
+        ops = (ROOT / "docs" / "OPERATIONS.md").read_text(encoding="utf-8")
+        self.assertIn("### Set up the cron-job.org alarm later", ops)
 
     def test_the_only_input_is_check_only(self):
         inputs = self.on["workflow_dispatch"]["inputs"]
@@ -218,9 +269,10 @@ class MorningWorkflow(unittest.TestCase):
     def test_update_job(self):
         job = self.jobs["update"]
         self.assertEqual(job["name"], MC.UPDATE_JOB)
-        self.assertEqual(job["needs"], "look")
-        # it runs when the site lacks today's update, and when it has it but the full update is due
-        self.assertEqual(job["if"], "${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '') }}")
+        self.assertEqual(job["needs"], ["look", "wait"])
+        # it runs when the site lacks today's update, when it has it but the full update is due, and after the wait
+        self.assertEqual(job["if"], "${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '' "
+                                    "|| needs.wait.result == 'success') }}")
         self.assertEqual(job["timeout-minutes"], 240)
         run = step_run(job, "Start the morning update, follow it, check the live site")
         self.assertIn('python -m scripts.ops.morning_check "${args[@]}"', run)
@@ -258,7 +310,7 @@ class MorningWorkflow(unittest.TestCase):
     def test_look_job(self):
         job = self.jobs["look"]
         self.assertEqual(job["outputs"], {"done": "${{ steps.live.outputs.done }}", "full": "${{ steps.live.outputs.full }}",
-                                          "site": "${{ steps.site.outputs.url }}"})
+                                          "site": "${{ steps.site.outputs.url }}", "wait": "${{ steps.live.outputs.wait }}"})
         self.assertFalse(any("uses" in s for s in job["steps"]), "no checkout: a few seconds")
         run = step_run(job, "Read the live site's build.json")
         self.assertIn('"${SITE}/build.json?check=$(date +%s)"', run)
@@ -458,6 +510,47 @@ class FastPathParity(unittest.TestCase):
                     self.assertIn(f"is on the site; the full daily update is due ({want}) — the next job starts it.", summary)
                 else:
                     self.assertIn("Nothing to do: today's update", summary)
+
+
+    def test_the_wait_for_the_morning_window(self):
+        # A scheduled run up to WAIT_MAX (5 h 45 min) before 2:00 AM Central waits until then; at fixed moments (the
+        # stand-in `date`), in winter (CST) and summer (CDT).
+        real = subprocess.run([self.bash, "-c", "command -v date"], capture_output=True, text=True).stdout.strip()
+        fake = self.tmp / "fake"
+        fake.mkdir(exist_ok=True)
+        (fake / "date").write_text('#!/usr/bin/env bash\n'
+                                   'for a in "$@"; do case "$a" in -d|--date|--date=*) exec "$REAL_DATE" "$@";; esac; done\n'
+                                   'exec "$REAL_DATE" -d "@${FAKE_NOW}" "$@"\n', encoding="utf-8", newline="\n")
+        (fake / "date").chmod(0o755)
+        u = lambda s: datetime.fromisoformat(s.replace("Z", "+00:00"))  # noqa: E731
+        cases = [
+            # (now, event, the live site's day/quotes are today's, the wait in seconds or "")
+            (u("2026-11-26T03:38:00Z"), "schedule", True, 4 * 3600 + 22 * 60),    # 9:38 PM CST → 2:00 AM CST
+            (u("2026-11-26T02:10:00Z"), "schedule", True, ""),                     # 8:10 PM CST: more than 5 h 45 min
+            (u("2026-11-26T02:15:00Z"), "schedule", True, 20700),                  # 8:15 PM CST: just 5 h 45 min
+            (u("2026-11-26T02:30:00Z"), "schedule", True, 5 * 3600 + 30 * 60),     # 8:30 PM CST
+            (u("2026-11-24T06:58:00Z"), "schedule", False, 62 * 60),               # 12:58 AM CST, new day not up yet
+            (u("2026-11-24T06:58:00Z"), "schedule", True, ""),                     # … but already done (quote out early)
+            (u("2026-11-26T08:00:00Z"), "schedule", False, ""),                    # 2:00 AM CST: the window is open
+            (u("2026-11-26T15:00:00Z"), "schedule", True, ""),                     # 9 AM CST: tomorrow's is 17 h away
+            (u("2026-11-26T03:38:00Z"), "workflow_dispatch", True, ""),            # Run workflow (a person, the alarm)
+            (u("2026-07-02T03:00:00Z"), "schedule", True, 4 * 3600),               # 10 PM CDT → 2:00 AM CDT
+        ]
+        for now, event, done, want in cases:
+            with self.subTest(now=iso(now), event=event, done=done):
+                t = now.astimezone(CHICAGO).date().isoformat()
+                q = t if done else (now.astimezone(CHICAGO).date() - timedelta(days=1)).isoformat()
+                self.server.body = json.dumps({"v": 1, "built": iso(now - timedelta(minutes=5)), "day": q,
+                                               "quotes": {"gv": q, "lv": q}, "full": iso(now - timedelta(hours=3))})
+                got, summary, _log = self.look_at(self.server.url, {"FAKE_NOW": str(int(now.timestamp())), "REAL_DATE": real,
+                                                                    "EVENT": event, "WINDOW_OPENS": "02:00",
+                                                                    "WAIT_MAX": "20700"}, [str(fake)])
+                self.assertEqual(got.get("wait"), str(want))
+                if want:
+                    self.assertIn('A scheduled run before the morning: job "wait" waits', summary)
+                    self.assertIn("until 2:00 AM C", summary)
+                else:
+                    self.assertNotIn('job "wait"', summary)
 
 
 # --------------------------------------------------------------------------- the tidy job (bash + a stand-in gh)

@@ -1029,14 +1029,21 @@ jobs:
           # For the "Report sources that stopped updating" job below (one line of JSON). Its "site" is config/site.yml's
           # site.url, only the report's stand-in: this job cannot ask GitHub Pages for the live address, so the report
           # links the address build-deploy works out (its `site` output) and uses this one only when that is empty.
+          # `quote_days` (status.json: when each morning's quotes came in, against the goal), `tz` (site.timezone) and
+          # `alarm` (site.morning_alarm: is the outside morning alarm set up?) are for the issue about missed mornings
+          # (scripts/ops/report_issues.py mornings) — it opens only while the alarm is set up.
           try:
               from scripts.sync.common import load_config
-              site = str((load_config().get("site") or {}).get("url") or "").rstrip("/")
+              site_cfg = load_config().get("site") or {}
+              site = str(site_cfg.get("url") or "").rstrip("/")
+              tz = str(site_cfg.get("timezone") or "America/Chicago")
+              alarm = site_cfg.get("morning_alarm") is True or str(site_cfg.get("morning_alarm")).lower() in ("true", "yes", "on")
           except Exception:
-              site = ""
+              site, tz, alarm = "", "America/Chicago", False
           if os.environ.get("GITHUB_OUTPUT"):
               with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
-                  f.write("health=" + json.dumps({"stale": stale, "site": site, "days": STALE_DAYS}) + "\n")
+                  f.write("health=" + json.dumps({"stale": stale, "site": site, "days": STALE_DAYS,
+                                                  "quote_days": s.get("quote_days"), "tz": tz, "alarm": alarm}) + "\n")
           PY
 
   # -------------------------------------------------------------------
@@ -1635,9 +1642,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      issues: write            # to open / update / close the two report issues
+      contents: read           # the report scripts (scripts/ops/report_issues.py)
+      issues: write            # to open / update / close the report issues
       actions: read            # how the previous Website update run ended
     steps:
+      # Only the scripts (standard library only: nothing is installed); never fails the report (each step is
+      # continue-on-error, and a step whose script is missing then says so in its log).
+      - name: Check out the report scripts
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+
       - name: Open, update or close the report issue
         if: ${{ needs.sync.outputs.health != '' }}
         continue-on-error: true      # e.g. Issues switched off in the repository settings
@@ -1852,3 +1869,19 @@ jobs:
           else:
               print("This run failed; it was started by a person, whom GitHub e-mails about it — no issue.")
           PY
+
+      # The daily-quote morning goal (config/site.yml site.morning_goal, 5:30 AM Central): status.json quote_days, judged
+      # like /status/ does. Two missed mornings in a row (the morning alarm at cron-job.org has usually stopped:
+      # README → 10 d) open the issue "The daily quote missed the morning goal"; a further missed morning updates it
+      # silently; the first morning on time closes it with a note.
+      - name: Open, update or close the issue about missed mornings
+        if: ${{ needs.sync.outputs.health != '' }}
+        continue-on-error: true      # e.g. Issues switched off in the repository settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          HEALTH: ${{ needs.sync.outputs.health }}
+          SITE_URL: ${{ needs.build-deploy.outputs.site }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: python3 -m scripts.ops.report_issues mornings
