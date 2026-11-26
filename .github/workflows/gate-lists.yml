@@ -1,5 +1,6 @@
 # =====================================================================
-#  Gate list check — every night, and on a change of the tests.
+#  Gate list check — on every pull request, on a push to main that
+#  changes the code or a workflow, and every night.
 #
 #  The tests Website update runs before it publishes (its job "Test the
 #  code before publishing": scripts/ops/gate_tests.py) must test the
@@ -9,11 +10,13 @@
 #  site from publishing until the file was fixed. This check runs every
 #  gated test once more in copies of the repository with committee-like
 #  edits made and the documentation deleted (tests/test_automation.py →
-#  GateLists, tests/committee_edits.py). It takes 4 to 10 minutes, so it
-#  is not part of every Code check (since November 2026): it runs here
-#  every night, on every pull request and push that changes the tests or
-#  the gate's lists, and by hand (Actions → Gate list check → Run
-#  workflow).
+#  GateLists, tests/committee_edits.py). It takes 4 to 10 minutes, so
+#  since November 2026 it runs here, beside the Code check rather than
+#  inside its offline tests: on EVERY pull request (a change of the code
+#  alone — scripts/, eleventy/, src/ — can make a gated test read the
+#  committee's files), on a push to main that changes what the Code check
+#  watches (the same paths as check.yml), every night, and by hand
+#  (Actions → Gate list check → Run workflow).
 #
 #  A red ✗ here never touches the live site. It names the gated tests
 #  that fail once the committee's files are edited: give such a test data
@@ -26,17 +29,27 @@ on:
   schedule:
     # 9:43 UTC = 3:43 AM CST / 4:43 AM CDT on time; GitHub starts it hours late, which does not matter here.
     - cron: "43 9 * * *"
+  # every pull request (no path filter: whatever it changes may make a gated test depend on the committee's files)
   pull_request:
-    paths:
-      - "tests/**"
-      - "scripts/ops/gate_tests.py"
-      - ".github/workflows/gate-lists.yml"
+  # a push to main: the paths check.yml's push watches (tests/test_automation.py GateListsWorkflow keeps them equal)
   push:
     branches: [main]
     paths:
+      - "scripts/**"
       - "tests/**"
-      - "scripts/ops/gate_tests.py"
-      - ".github/workflows/gate-lists.yml"
+      - "src/**"
+      - "!src/assets/cache/**"
+      - "eleventy/**"
+      - "eleventy.config.js"
+      - "config/**"
+      - "content/**"
+      - "data/geo/**"
+      - "data/translations/overrides.yml"
+      - "data/translations/glossary.yml"
+      - "package.json"
+      - "package-lock.json"
+      - "requirements.txt"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 permissions:

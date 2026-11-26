@@ -483,12 +483,14 @@ class GateLists(unittest.TestCase):
     with tests/committee_edits.py's edits made (events, posts, the booth and bingo files, the archive, settings, the
     glossary and the overrides edited the way the committee edits them, slips made, the documentation deleted): each
     one must still pass (one that fails in the repository itself too is broken anyway: the suite reports it on its
-    own). Minutes of work, several copies at once — the Code check runs it, not the gate (LIST_CHECKS)."""
+    own). Minutes of work, several copies at once — .github/workflows/gate-lists.yml runs it (GV_GATE_LISTS=1, on
+    every pull request and every night), never the gate (LIST_CHECKS) nor the Code check's offline tests."""
 
     def test_no_gated_test_judges_the_committees_files(self):
         # Minutes of work (every gated test again, in copies of the repository): since November 2026 it runs in its
-        # own workflow — every night, and on every change of the tests (.github/workflows/gate-lists.yml) — and here
-        # only when asked: GV_GATE_LISTS=1 python -m unittest discover -s tests -p test_automation.py -k GateLists
+        # own workflow — on every pull request, on a push the Code check runs for, and every night
+        # (.github/workflows/gate-lists.yml) — and here only when asked:
+        # GV_GATE_LISTS=1 python -m unittest discover -s tests -p test_automation.py -k GateLists
         if os.environ.get("GV_GATE_LISTS") != "1":
             self.skipTest("the gate list check runs in .github/workflows/gate-lists.yml (set GV_GATE_LISTS=1 to run it here)")
         if not shutil.which("git") or not (ROOT / ".git").exists():
@@ -569,9 +571,9 @@ class GateLists(unittest.TestCase):
 
 # --------------------------------------------------------------------------- the gate list check's own workflow
 class GateListsWorkflow(unittest.TestCase):
-    """GateLists (minutes of work) runs in .github/workflows/gate-lists.yml — every night, on every pull request or push
-    that changes the tests or the gate's lists, and by hand — and is skipped elsewhere (the Code check's offline
-    tests, a local run) unless GV_GATE_LISTS=1."""
+    """GateLists (minutes of work) runs in .github/workflows/gate-lists.yml — on every pull request, on a push to main
+    that the Code check watches, every night, and by hand — and is skipped elsewhere (the Code check's offline tests,
+    a local run) unless GV_GATE_LISTS=1."""
 
     def setUp(self):
         self.text = (WF / "gate-lists.yml").read_text(encoding="utf-8")
@@ -584,9 +586,13 @@ class GateListsWorkflow(unittest.TestCase):
         self.assertEqual(rest, ["*", "*", "*"])
         self.assertNotIn(minute, ("0", "*"))
         self.assertIn("workflow_dispatch", self.on)
-        for event in ("pull_request", "push"):
-            with self.subTest(event=event):
-                self.assertLessEqual({"tests/**", "scripts/ops/gate_tests.py"}, set(self.on[event]["paths"]))
+        # every pull request — a change of the code alone (scripts/, eleventy/, src/) can make a gated test read the
+        # committee's files — and a push to main that the Code check watches too
+        self.assertIn("pull_request", self.on)
+        self.assertFalse((self.on["pull_request"] or {}).get("paths"), "no path filter for a pull request")
+        check = yaml.safe_load((WF / "check.yml").read_text(encoding="utf-8"))
+        check_on = check.get("on", check.get(True))
+        self.assertEqual(self.on["push"]["paths"], check_on["push"]["paths"])
         self.assertEqual(self.on["push"]["branches"], ["main"])
         self.assertEqual(self.wf["permissions"], {"contents": "read"})
 
