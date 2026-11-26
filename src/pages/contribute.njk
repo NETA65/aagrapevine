@@ -9,8 +9,9 @@ descKey: read.contrib.meta_desc
 ldFaq: { prefix: "read.contrib.faq", count: 6 }
 pageScripts: ["/assets/js/read.js", "/assets/js/recorder-core.js", "/assets/js/recorder.js"]
 ---
-{#- SHARE YOUR STORY. Flow (docs: ui.njk): hero → page nav (in the order of the sections, #record
-    included) → why write (+ who from our Area got published) → what you can send → how to submit →
+{#- SHARE YOUR STORY. Flow (docs: ui.njk): hero (its aside: record your story) → page nav (in the order of the sections, #record
+    included) → the next story deadlines of both magazines, with "Add to my calendar" and "Subscribe to all
+    deadlines" (#next-deadlines) → why write (+ who from our Area got published) → what you can send → how to submit →
     record your story (the recorder — partials/story-recorder.njk — then the story lines by phone,
     db.audio_project) → upcoming themes & deadlines (db.editorial, band; each deadline's "Add to my
     calendar"; under the two cards, the committee's printable "Share your story" flyers from Drive and the
@@ -450,32 +451,15 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
 {#- Hero: send to each magazine (the page-language magazine first). The sections are in the page
     nav below, so the hero has no jump buttons. "read-hero" (read.css) keeps both buttons on one
     row on a 390px phone. -#}
-{#- The hero's right-hand card (the shared hero aside): the next story deadline (the date, the live "N days
-    left" — read.js — the theme and its issue) with "All deadlines" → #deadlines (far below; the page nav
-    right under the hero names the sections, never the date). No "Record by phone" row: that chip is in the
-    page nav right below. "below": on smaller screens and at larger text it is the first card under the
-    hero (time-sensitive). Without a dated deadline: the phone line alone. The page language's magazine:
-    Grapevine's next deadline in English; in Spanish La Viña's (its yearly themes), else Grapevine's with "La
-    Viña takes stories all year". -#}
-{%- set lvNextDl = (lvEd.upcoming | selectattr("isNext") | first) -%}
-{%- set asideLv = lang == "es" and lvNextDl -%}
-{%- set nextDl = lvNextDl if asideLv else (gvEd.upcoming | selectattr("isNext") | first) -%}
+{#- The hero's right-hand card (the shared hero aside): "Record your story" — telling it in your own voice, here or by
+    phone (#record). The next story deadlines have a card of their own right under the page nav (#next-deadlines:
+    both magazines, with their calendar buttons), so the hero does not repeat one of them. "below": on smaller
+    screens and at larger text it is the first card under the hero. -#}
 {% call(slot) ui.pageHero(lang, "read.contrib.title" | t(lang), "read.contrib.subtitle" | t(lang), "pen-line", "read.contrib.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
 {%- if slot == "side" %}
-  {% call ui.heroAside(("read.contrib.next_deadline" if nextDl else "read.contrib.nav_record") | t(lang), lang, { id: "ct-aside-title", icon: "calendar-clock" if nextDl else "mic", href: "#deadlines" if nextDl else "#record", linkLabel: ("read.contrib.aside_all" if nextDl else "community.rec.jump") | t(lang), class: "ct-aside" }) %}
-    {%- if nextDl %}
-    <div data-deadline-row {{ dlAttrs(nextDl, lang) }}>
-      <p class="hero-aside-stat">
-        <span class="hero-aside-value"><time datetime="{{ nextDl.deadline }}">{% if lang == "es" %}{{ nextDl.deadline | fmtDate(lang, "day") }} {{ nextDl.deadline | fmtDate(lang, "monthShort") }}{% else %}{{ nextDl.deadline | fmtDate(lang, "monthShort") }} {{ nextDl.deadline | fmtDate(lang, "day") }}{% endif %}</time></span>
-        <span class="hero-aside-label" data-days-label data-lastmod="skip">{{ dueText(nextDl, lang) }}</span>
-      </p>
-      <p class="hero-aside-title mt-2"><span lang="{{ nextDl.themeLang }}">{{ nextDl.theme }}</span>{% if nextDl.machine %} <span title="{{ 'common.auto_translated' | t(lang) }}">{% icon "languages", "inline size-3.5 align-[-0.1em] opacity-80" %}<span class="sr-only">({{ "common.auto_translated" | t(lang) }})</span></span>{% endif %}</p>
-      <p class="hero-aside-note">{% if nextDl.issueLabel %}{{ "read.contrib.for_issue" | t(lang, { issue: nextDl.issueLabel }) }} · {% endif %}{{ ("read.contrib.aside_lv_pub" if asideLv else "read.contrib.aside_gv") | t(lang) }}</p>
-      {% if lang == "es" and not asideLv %}<p class="hero-aside-note">{{ "read.contrib.aside_lv" | t(lang) }}</p>{% endif %}
-    </div>
-    {%- else %}
+  {#- (its own title: "Record your story" is the #record section's, and two regions of one name confuse a screen reader) -#}
+  {% call ui.heroAside("read.contrib.aside_record_title" | t(lang), lang, { id: "ct-aside-title", icon: "mic", href: "#record", linkLabel: "community.rec.jump" | t(lang), class: "ct-aside" }) %}
     <p class="hero-aside-text">{{ "read.contrib.aside_record_text" | t(lang) }}</p>
-    {%- endif %}
   {% endcall %}
 {%- else %}
   <div class="hero-actions">
@@ -496,6 +480,64 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
   { href: "#workshop", label: "read.contrib.nav_workshop" | t(lang), icon: "users" },
   { href: "#faq", label: "read.contrib.nav_faq" | t(lang), icon: "circle-help" }
 ], lang) }}</div>
+
+{#- ---------- The next story deadlines (#next-deadlines): one card right under the page nav, the first thing to read on
+    the page (the UX review of November 2026: the deadlines were nine screens down). Each magazine's next dated
+    deadline (the page language's magazine first): its date, the days left (read.js updates them every day: dlAttrs),
+    its theme and issue, and "Add to my calendar" (dlCalMenu: Google, Outlook.com, the .ics file with its reminder).
+    A magazine with no dated deadline says so (La Viña takes stories all year) and points to its topics below. Under
+    both, "Subscribe to all deadlines": the story deadlines calendar (/deadlines.ics) — its webcal:// address (Apple,
+    Outlook and most phones open it), Google Calendar's "add by URL" link, and the how-to for every app
+    (#deadlines-calendar). No backend: the calendars are files the site's build writes. Left out when neither
+    magazine has a theme. ---------- -#}
+{%- set ndRows = [] -%}
+{%- for p in pubOrder %}{% set ed = lvEd if p == "lv" else gvEd %}{% set _n = ndRows.push({ pub: p, r: (ed.upcoming | selectattr("isNext") | first) }) %}{% endfor -%}
+{%- set dlFeed = ("/deadlines.ics" | lurl(lang)) | siteUrl(site) -%}
+{% if gvEd.total or lvEd.total %}
+<section id="next-deadlines" class="container-page pt-8 sm:pt-10" aria-labelledby="nd-title">
+  <div class="ct-nd card overflow-hidden">
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-line px-5 py-4 sm:px-6">
+      <h2 id="nd-title" class="card-h"><span>{% icon "calendar-clock", "size-5" %}</span>{{ "read.contrib.nd_title" | t(lang) }}</h2>
+      <a class="link tap-link text-sm" href="#deadlines">{{ "read.contrib.aside_all" | t(lang) }} <span aria-hidden="true">↓</span></a>
+    </div>
+    <div class="grid divide-y divide-line md:grid-cols-2 md:divide-x md:divide-y-0">
+      {% for row in ndRows %}
+      {%- set isLv = row.pub == "lv" -%}
+      {%- set r = row.r -%}
+      <div class="p-5 sm:p-6{% if r %} read-deadline-row{% endif %}"{% if r %} data-deadline-row {{ dlAttrs(r, lang) }}{% endif %}>
+        <p class="eyebrow {{ 'text-lv' if isLv else 'text-gv' }}">{{ ("read.contrib.aside_lv_pub" if isLv else "read.contrib.aside_gv") | t(lang) }}</p>
+        {% if r %}
+        <div class="mt-3 flex items-start gap-4">
+          <div class="read-num grid min-w-[4.75rem] shrink-0 place-items-center rounded-2xl px-2 py-2.5 text-center {{ 'bg-lv text-white dark:text-paper' if isLv else 'bg-gv text-white dark:text-paper' }}">
+            <span class="font-display text-4xl font-semibold leading-none" data-days-num data-lastmod="skip">{{ r.days }}</span>
+            <span class="mt-1 text-[0.68rem] font-semibold uppercase tracking-wider opacity-90" data-days-unit data-lastmod="skip">{{ ("read.contrib.day" if r.days == 1 else "read.contrib.days") | t(lang) }}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold text-ink"><time datetime="{{ r.deadline }}">{{ r.deadline | fmtDate(lang, "medium") }}</time> · <span data-days-label data-lastmod="skip">{{ dueText(r, lang) }}</span></p>
+            <p class="mt-1 font-display text-lg font-semibold leading-snug text-ink" lang="{{ r.themeLang }}">{{ r.theme }}</p>
+            {% if r.issueLabel %}<p class="mt-0.5 text-sm text-muted">{{ "read.contrib.for_issue" | t(lang, {issue: r.issueLabel}) }}</p>{% endif %}
+          </div>
+        </div>
+        {%- set c = dlCal[r.item.id] if (dlCal and r.item) else none %}
+        {% if c %}{{ dlCalMenu(r, c, lang, isLv, true) }}{% endif %}
+        {% else %}
+        <p class="mt-3 text-sm leading-relaxed text-muted">{{ ("read.contrib.aside_lv" if isLv else "read.contrib.nd_none_gv") | t(lang) }}</p>
+        <p class="mt-2 text-sm"><a class="link tap-link" href="#deadlines">{{ "read.contrib.nd_topics" | t(lang) }} <span aria-hidden="true">↓</span></a></p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if dlCal | length %}
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-line bg-surface-2/60 px-5 py-4 sm:px-6">
+      <span class="min-w-0 flex-1 basis-56 text-sm text-muted">{{ "read.contrib.nd_sub_text" | t(lang) }}</span>
+      <a class="btn-primary btn-sm" href="{{ dlFeed | cmWebcal }}">{% icon "calendar-sync", "size-4" %} {{ "read.contrib.nd_subscribe" | t(lang) }}</a>
+      <a class="btn-secondary btn-sm" href="https://calendar.google.com/calendar/r?cid={{ (dlFeed | cmWebcal) | urlencode }}" target="_blank" rel="noopener">{% icon "calendar-plus", "size-4" %} Google Calendar<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+      <a class="link tap-link text-sm" href="#deadlines-calendar">{{ "stay.cal_howto" | t(lang) }}</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
 
 {#- ---------- Why write (+ who from our Area got published → /published/) ---------- -#}
 <section id="why" class="section container-page pt-10 sm:pt-12" aria-labelledby="why-title">

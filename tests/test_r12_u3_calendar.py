@@ -527,7 +527,8 @@ class Pages(unittest.TestCase):
         self.assertIn('{%- set dlCal = db | mpDeadlineCals(site, lang) -%}', page)
         self.assertIn('data-dl-ics="{{ c.ics | json }}" data-js-only', page)
         self.assertIn('{% cmSubscribe lang, site, "deadlines" %}', page)
-        self.assertEqual(page.count("{{ dlCalMenu(r, c, lang, isLv"), 2, "each row and the next deadline's card")
+        # each row, each card's next deadline, and each magazine's next one in "Next story deadlines" under the page nav
+        self.assertEqual(page.count("{{ dlCalMenu(r, c, lang, isLv"), 3, "each row, the next deadline's card and #next-deadlines")
         self.assertIn('"committee.cal.reminder_day" | t(lang)', page)
         read_js = self.read("src/assets/js/read.js")
         self.assertIn('document.querySelectorAll("[data-dl-ics]")', read_js)
