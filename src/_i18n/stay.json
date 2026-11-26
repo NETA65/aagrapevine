@@ -31,6 +31,10 @@
     "en": "Ask to be added",
     "es": "Pide que te agreguen"
   },
+  "stay.email_to": {
+    "en": "Or write to",
+    "es": "O escribe a"
+  },
   "stay.email_leave": {
     "en": "To stop it, reply to any digest with the word “unsubscribe”.",
     "es": "Para dejar de recibirlo, responde a cualquier resumen con la palabra “unsubscribe”."

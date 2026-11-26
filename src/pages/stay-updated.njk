@@ -79,6 +79,12 @@ ldType: CollectionPage
       <h3 class="card-h"><span>{% icon "mail-plus", "size-5" %}</span>{{ "stay.email_join" | t(lang) }}</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.email_join_text" | t(lang) }}</p>
       <p class="mt-auto pt-4"><a class="btn-primary" href="{{ mailHref }}">{% icon "send", "size-4" %} {{ "stay.email_ask" | t(lang) }}</a></p>
+      {#- the address as text too, to copy (a phone or a computer with no mail app set up opens nothing for mailto:) -#}
+      <p class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+        <span class="text-muted">{{ "stay.email_to" | t(lang) }}</span>
+        <span class="min-w-0 break-all font-semibold text-ink">{{ mail }}</span>
+        <button type="button" class="btn-ghost btn-sm" data-js-only data-copy="{{ mail }}" aria-label="{{ 'common.copy' | t(lang) }}: {{ mail }}">{% icon "copy", "size-4" %} {{ "common.copy" | t(lang) }}</button>
+      </p>
       <p class="mt-2 text-xs text-muted">{{ "stay.email_leave" | t(lang) }}</p>
     </div>
     <div class="card card-pad flex flex-col">

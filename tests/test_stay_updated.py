@@ -6,7 +6,8 @@ gathers every way to keep up with the committee.
               own description and search words); the home page's "More on this site" links it.
   * Page    — one build (English and Spanish): its four parts (#email, #calendar, #feeds, #phone) in the page nav and
               in that order; the monthly digest (this month's on /digest/, and a ready-made e-mail asking to be added,
-              to the committee's address — no form, nothing sent by the site); the calendars to subscribe to —
+              to the committee's address — no form, nothing sent by the site —, the address written out too, with a
+              button to copy it); the calendars to subscribe to —
               /events.ics and /deadlines.ics, each with Google Calendar's link, its webcal:// address and its address
               to copy, and the how-to on its own page —; the files to add once (this month's dates, the weekly open
               meetings); the RSS feed, Instagram, YouTube and the podcasts; the app and saved pages (/offline/), the QR
@@ -113,6 +114,10 @@ class Page(unittest.TestCase):
             self.assertEqual(q["subject"], [STAY["stay.email_subject"][lang]])
             self.assertEqual(q["body"], [STAY["stay.email_body"][lang]])
             self.assertNotIn("<form", sec)
+            # the address as text, and to copy (a device with no mail app opens nothing for mailto:)
+            shown = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.unescape(sec)))
+            self.assertIn(f'{STAY["stay.email_to"][lang]} {SITE["contact_email"]} ', shown)
+            self.assertIn(f'data-copy="{SITE["contact_email"]}"', sec)
 
     def test_the_calendars(self):
         base = SITE["url"].rstrip("/")
