@@ -318,6 +318,13 @@ function onlineOnly(ev) {
  * (from the magazines' own calendars), series (its series' key, or ""). site: for 1 and for a series' flyer_match
  * (the kind's "series" flyers); without it neither is read.
  */
+// A joint Grapevine and La Viña event (tagged both) whose titles don't say "(in Spanish)" / "en español": held in
+// English or in both languages, so it links the kind's English deck, never its Spanish one (deckEs).
+const SAYS_SPANISH = /\((?:in spanish|en español)\)|\ben español\b/i;
+function jointInEnglish(tags, titles) {
+  return tags.includes("grapevine") && tags.includes("la-vina") && !titles.some((t) => SAYS_SPANISH.test(String(t || "")));
+}
+
 export function eventKind(ev, site) {
   const e = ev && typeof ev === "object" ? ev : {};
   const rec = recordOf(e);
@@ -369,8 +376,9 @@ export function eventKind(ev, site) {
     kind, family: def.family, mag, spanish, outside, series, source,
     label: def.label, phrase: def.phrase, who: def.who,
     deck: def.deck && (!def.deckMag || def.deckMag === mag) ? def.deck : "",
-    // (La Viña's writing workshop, held in Spanish: taller-de-escritura in place of the English deck)
-    deckEs: spanish ? def.deckEs : "", deckClose: def.deckClose,
+    // (La Viña's writing workshop, held in Spanish: taller-de-escritura in place of the English deck — never for a
+    // joint Grapevine and La Viña event whose titles don't say it is held in Spanish: it keeps the English deck)
+    deckEs: spanish && !jointInEnglish(tags, titles) ? def.deckEs : "", deckClose: def.deckClose,
     where: def.where, flyers, resources: def.resources, resourceFallback: def.resourceFallback,
     resourceAnchors: def.resourceAnchors,
   };

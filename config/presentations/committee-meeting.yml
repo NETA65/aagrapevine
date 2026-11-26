@@ -627,10 +627,10 @@ slides:
   # ================================================================== 2027 PRICE FOLLOW-UP (a block of its own)
   # After AA Grapevine's price change of January 1, 2027 (config/site.yml price_changes: 2027-01). The heads-up
   # ("price-heads-up", after "Special offers") announces it, with the letter's own figures, and leaves the show
-  # after January 31, 2027; this slide says it in the past tense, with the prices of the day ({live:price_…}: the new
+  # after December 31, 2026; this slide says it in the past tense, with the prices of the day ({live:price_…}: the new
   # ones from January 1, 2027, by themselves), from January 1 through March 31, 2027 (show_from / show_until: the
-  # meetings of January, February and March, while treasurers set the year's budget). In January both are in the
-  # show: the chair keeps one (its notes say so). It is in both versions ("No guest speaker" lists it in `only`),
+  # meetings of January, February and March, while treasurers set the year's budget). The two are never in the
+  # show together. It is in both versions ("No guest speaker" lists it in `only`),
   # and optional: the first slide to go when the second half runs long. Information only: never a reason to buy.
   - id: "prices-since-january"
     layout: "table"
@@ -649,7 +649,7 @@ slides:
     takeaway: "For your groups' treasurers and their 2027 budget. Other plans: the official stores or our Shop page."
     minutes: 1
     notes: |
-      WHEN: in the show by itself from January 1 through March 31, 2027 (the meetings of January, February and March), and gone after it. IN JANUARY: the heads-up (slide {slide:price-heads-up}) is in the show too, until January 31, with the old and the new figures: keep one of the two, and switch the other off ({ui:customize} → {ui:slides}).
+      WHEN: in the show by itself from January 1 through March 31, 2027 (the meetings of January, February and March), and gone after it. (The heads-up with the old and the new figures left the show on December 31, 2026.)
       TIP (timekeeping): about a minute: it comes out of the few minutes the second half keeps spare. It's optional: the first slide to go when the sharing runs long.
       SAY: A reminder for your groups' treasurers: since January 1, AA Grapevine's prices are new. A year of Grapevine in print is now {live:price_gv_print}, and digital {live:price_gv_digital}; a year of La Viña in print is {live:price_lv_print}, and digital {live:price_lv_digital}. Every Grapevine and La Viña book costs $2 more than in 2026. For the two- and three-year plans, Complete and everything else, the official stores and our Shop page have the current prices. As always, each group decides what, if anything, to buy.
       DO: If reps ask, post the four prices and the Shop page's link in the chat ({live:site}/shop/).
@@ -683,16 +683,15 @@ slides:
       STAYS CURRENT: the stores' offers (with their days, as the committee's /shop/ page lists them) and both Books of the Month fill in by themselves, each until its offer ends; when there is none, the line points to the Shop page or to the magazine's own page instead.
 
   # AA Grapevine's letter of October 1, 2026. The slide is in the show only while the site's price notice is
-  # current (config/site.yml price_changes: from October 1, 2026 through January 31, 2027 — the deck's "the
-  # October to December 2026 meetings and January 2027 at the latest"), and never after January 31, 2027
-  # (show_until, the generator's PRICE_HEADS_UP_UNTIL): a notice of a later price change must not bring these
+  # current (config/site.yml price_changes: from October 1, 2026), and never after December 31, 2026 (show_until:
+  # the October to December 2026 meetings; from January 1, 2027 "prices-since-january" says it in the past tense): a notice of a later price change must not bring these
   # figures back. They are the letter's own (new price, up from the old one), so they stay as written rather
   # than {live:price_…}, which would show the price of the day. Information only: never "before prices go up".
   - id: "price-heads-up"
     layout: "table"
     title: "Heads-up: new prices from January 1, 2027"
     when: "price_notice"
-    show_until: "2027-01-31"
+    show_until: "2026-12-31"
     header: ["", "Grapevine", "La Viña"]
     rows:
       - ["Print, 1 year", "**$39.00** (up from $36.00)", "**$19.50** (up from $18.00)"]
@@ -704,13 +703,13 @@ slides:
     takeaway: "Pass it on to your groups, and to treasurers planning the 2027 budget."
     minutes: 1
     notes: |
-      WHEN: for the November and December 2026 meetings, and January 2027 at the latest: this slide is in the show by itself only until January 31, 2027. If the committee still wants a reminder after that, add a slide of your own that says the prices changed ('New prices as of January 1, 2027'), without the 'up from' figures ({ui:customize} → {ui:add}).
+      WHEN: for the November and December 2026 meetings: this slide is in the show by itself only until December 31, 2026. From January 1 through March 31, 2027 the slide 'New prices since January 1, 2027' takes its place, in the past tense and with the prices of the day.
       TIP (timekeeping): a minute, while this slide is in the show: it comes out of the few minutes the second half keeps spare, so keep the offers just before it short.
       SAY: Here's a heads-up from AA Grapevine to pass on. On October 1, AA Grapevine wrote to intergroups and central offices that its prices change on January 1, 2027. A year of Grapevine in print goes from $36 to $39, and a year of La Viña in print from $18 to $19.50. Digital goes from $29.99 to $34 for Grapevine, and from $14.99 to $17 for La Viña. And every Grapevine and La Viña book costs $2 more. AA Grapevine gives the reason as rising costs: printing, paper and materials, fulfillment, postage and shipping. Please tell your groups, and especially the group treasurers who are planning the 2027 budget. As always, each group decides what, if anything, to buy.
       DO: Post the prices in the chat so reps can copy them. The committee website announces the change on its Shop and Bulletin pages, and its Shop page switches to the new prices by itself on January 1, 2027.
       TIP: Share it as information, not as a reason to rush: never suggest subscribing or buying ahead of the new prices. The Conference asked for an informative attitude rather than a hard sell in Grapevine presentations (1960 Advisory Action). The letter covers only the yearly print and digital subscriptions and the books; it says nothing about 2- or 3-year, Complete or monthly plans or other regions, so don't guess at those: point people to the official stores or the committee's Shop page.
       SOURCE: AA Grapevine, Inc., letter to intergroups and central offices, October 1, 2026: 'Grapevine & La Viña Pricing Update, Effective January 1, 2027'. The 2026 prices: the official stores, October 2026.
-      UPDATE: nothing: the slide leaves the show by itself after January 31, 2027 (see WHEN).
+      UPDATE: nothing: the slide leaves the show by itself after December 31, 2026 (see WHEN).
 
   # This month's issues and the next ones, with their themes, come from the site's data ({live:…}); the stories to
   # mention are the chair's blanks. (Both Books of the Month are on "Special offers".)
@@ -993,7 +992,7 @@ slides:
     header: ["Slide", "What to update", "Where to look"]
     rows:
       - ["Special offers", "Nothing: the stores' offers and both Books of the Month fill in by themselves", "/shop/"]
-      - ["Price heads-up (until Jan. 2027)", "Nothing: it leaves the show by itself after January 31, 2027", "Its notes"]
+      - ["Price heads-up (until Dec. 2026)", "Nothing: it leaves the show by itself after December 31, 2026; the past-tense follow-up shows January through March 2027", "Its notes"]
       - ["Magazine topics", "One story per magazine (the issues fill in by themselves)", "/monthly/"]
       - ["Story deadlines", "Nothing: the next two of each magazine fill in by themselves", "/contribute/#deadlines; the deadline pages here"]
       - ["The AA Preamble (switched off)", "Nothing; switch it on only if the committee asks for it", "Its notes"]
@@ -1002,7 +1001,7 @@ slides:
     notes: |
       NOT PRESENTED: a reference for preparation. This continues the table on the previous page.
       SPECIAL OFFERS: the stores' current offers (config/site.yml on the website, as its /shop/ page lists them) and both Books of the Month fill in by themselves, each until its offer ends. Carry the Message is described there, never sold: a member or a group buys a gift certificate or a subscription from the official stores, and AA Grapevine or La Viña turns it into a subscription for an alcoholic in need.
-      PRICE HEADS-UP: the slide after 'Special offers' announces AA Grapevine's prices from January 1, 2027. It is for the November and December 2026 meetings and January 2027 at the latest, and it leaves the show by itself after January 31, 2027. To remind the room after that, add a slide of your own in the past tense ({ui:customize} → {ui:add}).
+      PRICE HEADS-UP: the slide after 'Special offers' announces AA Grapevine's prices from January 1, 2027. It is for the November and December 2026 meetings, and it leaves the show by itself after December 31, 2026. From January 1 through March 31, 2027 the slide 'New prices since January 1, 2027' says it in the past tense, with the prices of the day.
       TONIGHT'S TOPIC: the next page suggests one for each month, for a night without a guest speaker (the version 'No guest speaker', {ui:customize} → {ui:version}), or to suggest to a guest speaker.
       EVENTS: the 'Coming up' slide fills in by itself from the committee's /events/ page, with the next NETA 65 assembly above the list, and the Area's website (neta65.org) lists what's coming too. The volunteer lines on the workshop slide come from the events that need help.
       NOTES OF THE MEETING: there are no minutes to approve. {ui:customize} → {ui:paperwork} drafts short notes (service positions and counts only) from your details, and 'Start next month' clears the blanks that were for one night only.

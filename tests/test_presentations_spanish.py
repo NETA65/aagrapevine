@@ -381,6 +381,14 @@ class SpanishEvents(unittest.TestCase):
             event_item("2099-01-16-rlv-orientation-dallas", "GVR/RLV Orientation Workshop (in Spanish) — Dallas",
                        "2099-01-16T10:00:00-06:00", "2099-01-16T13:00:00-06:00", ["workshop", "la-vina"],
                        title_es="Orientación para RLV y GVR — Dallas", location="Grupo Tres, 3 Oak St, Dallas, TX 75201"),
+            # a joint Grapevine and La Viña workshop held in English: the English deck, never the Spanish one
+            event_item("2099-01-23-gv-lv-writing-workshop-irving", "Grapevine & La Viña Writing Workshop — Irving",
+                       "2099-01-23T10:00:00-06:00", "2099-01-23T13:00:00-06:00", ["workshop", "grapevine", "la-vina"],
+                       location="Grupo Cuatro, 4 Pine St, Irving, TX 75060"),
+            # the same, said to be held in Spanish: the Spanish deck
+            event_item("2099-01-30-gv-lv-writing-workshop-garland", "Grapevine & La Viña Writing Workshop (in Spanish) — Garland",
+                       "2099-01-30T10:00:00-06:00", "2099-01-30T13:00:00-06:00", ["workshop", "grapevine", "la-vina"],
+                       location="Grupo Cinco, 5 Ash St, Garland, TX 75040"),
         ]
         anchors = [it["extra"]["slug"] for it in items]
         r = run_js(self, EVENTS_JS, data={"items": items, "anchors": anchors, "now": "2026-11-26T18:00:00Z"},
@@ -390,6 +398,8 @@ class SpanishEvents(unittest.TestCase):
         self.assertEqual(k[DEC12], ["writing-workshop", True, "writing-workshop", "taller-de-escritura"])
         self.assertEqual(k["2099-01-09-gv-writing-workshop-plano"], ["writing-workshop", False, "writing-workshop", ""])
         self.assertEqual(k["2099-01-16-rlv-orientation-dallas"], ["gvr-orientation", True, "orientation-workshop", "orientacion-rlv"])
+        self.assertEqual(k["2099-01-23-gv-lv-writing-workshop-irving"][2:], ["writing-workshop", ""])
+        self.assertEqual(k["2099-01-30-gv-lv-writing-workshop-garland"][2:], ["writing-workshop", "taller-de-escritura"])
         w = r["withSpanish"]
         for lang, pre in (("en", ""), ("es", "/es")):
             with self.subTest(lang=lang):

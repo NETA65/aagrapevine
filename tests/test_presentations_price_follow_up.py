@@ -2,7 +2,7 @@
 a block of its own): "New prices since January 1, 2027", in the past tense, with the yearly prices of the day.
 
 The heads-up before it ("price-heads-up") announces AA Grapevine's change of January 1, 2027 with the letter's own
-figures, while the price notice is on, and never after January 31, 2027; its notes once asked the chair to write a
+figures, while the price notice is on, and never after December 31, 2026; its notes once asked the chair to write a
 past-tense slide of their own after that. The follow-up is that slide:
 
   * its window — in the show from January 1 through March 31, 2027 (Central time, both days included: the meetings of
@@ -99,7 +99,7 @@ class PriceFollowUp(unittest.TestCase):
         self.assertNotIn("when", s, "past tense: shown after the notice too, never only during it")
         self.assertIn("since January 1, 2027", s["title"])
         heads_up = self.slides["price-heads-up"]
-        self.assertEqual((heads_up["when"], heads_up["show_until"]), ("price_notice", "2027-01-31"))
+        self.assertEqual((heads_up["when"], heads_up["show_until"]), ("price_notice", "2026-12-31"))
         # the price change it follows (config/site.yml price_changes)
         site = yaml.safe_load((ROOT / "config" / "site.yml").read_text(encoding="utf-8"))
         change = next(c for c in site["price_changes"] if c["key"] == "2027-01")
@@ -138,7 +138,7 @@ class PriceFollowUp(unittest.TestCase):
             with self.subTest(at=at):
                 self.assertEqual(r["build"][at] is not None, want, "the build's default version")
                 self.assertEqual(r["player"][at], {"full": want, "no-speaker": want}, "the player, by the viewer's clock")
-        self.assertEqual(r["heads_up"], "2027-02-01T05:59:59.999Z")
+        self.assertEqual(r["heads_up"], "2027-01-01T05:59:59.999Z")
         self.assertIn("{live:price_gv_print}", r["tokens"])
 
 
