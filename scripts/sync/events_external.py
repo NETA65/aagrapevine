@@ -276,17 +276,54 @@ def _title(s: str) -> str:
     return re.sub(r"(^|[\s-])(\w)", lambda m: m[1] + m[2].upper(), s.lower())
 
 
-def _caps_city(part: str) -> str | None:
-    """The one to three words in capitals that end a venue's name written in lower case: "Maude Cobb . Convenció
-    center LONGVIEW" → "Longview"; None when there are none, or nothing in lower case before them."""
+# The first word of a place name in capitals that is no acronym ("LAS VEGAS", "EL PASO", "SAN JUAN"): a run of words
+# in capitals that starts with one is the city as a whole
+_PLACE_FIRST = {"el", "la", "las", "los", "san", "santa", "new", "fort", "ft", "mount", "mt", "port", "saint", "st",
+                "north", "south", "east", "west", "lake"}
+
+
+def _tx_city_at_end(part: str) -> str | None:
+    """The longest well-known Texas city that ends `part` ("2010 Main St Tyler", "First UMC GARLAND" → "Garland")."""
+    fc = _fold(part)
+    for c in sorted(TX_CITIES, key=len, reverse=True):
+        c0 = re.sub(r" tx$", "", c)
+        if fc.endswith(" " + c0) or fc == c0:
+            return c0.title()
+    return None
+
+
+def _inline_city(part: str, state: str | None) -> str | None:
+    """The city in the words right before a state written with no comma ("… center LONGVIEW TX 75604"): a venue's
+    name and the city run together, so only what can only be the city — never a venue's words ("GRUPO NUEVA VIDA
+    GARLAND", "Sheraton DALLAS HOTEL"):
+      · in Texas, the longest well-known Texas city at their end ("Garland", "Dallas", "Longview");
+      · words all in capitals: one or two of them as a whole ("TULSA", "LAS VEGAS"), never more;
+      · a venue's name in lower case and then words in capitals: the one word in capitals at its end, after any
+        acronym of two or three letters ("Club AA TOPEKA" → "Topeka"; "First UMC" is no city), or a place name that
+        starts with "Las", "El", "San" … ("Caesars Palace LAS VEGAS"); two other words ("DALLAS HOTEL"): none;
+      · else, in lower case, the part as a whole when it is short enough to be a place ("Las Vegas", "Hall B").
+    No street numbers: None."""
+    if state == "TX":
+        tx = _tx_city_at_end(part)
+        if tx:
+            return tx
+    if re.search(r"\d", part):
+        return None
     words = part.split()
+    if not any(ch.islower() for ch in part):
+        return _title(part) if 1 <= len(words) <= 2 and re.search(r"\w{2}", part) else None
     n = 0
     while n < min(3, len(words) - 1) and len(words[-1 - n]) >= 2 and re.fullmatch(r"[^\W\d_]+", words[-1 - n]) \
             and words[-1 - n].isupper():
         n += 1
-    if not n or not any(ch.islower() for ch in " ".join(words[:-n])):
-        return None
-    return _title(" ".join(words[-n:]))
+    if not n:
+        return part if len(words) <= 4 else None
+    run = words[-n:]
+    if len(run) >= 2 and _fold(run[0]) in _PLACE_FIRST:
+        return _title(" ".join(run))
+    while len(run) > 1 and len(run[0]) <= 3:
+        run = run[1:]
+    return _title(run[0]) if len(run) == 1 else None
 
 
 def parse_location(loc: str, title: str = "", website: str | None = None) -> dict:
@@ -344,23 +381,17 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
     if out["state"]:
         out["country"] = "USA"
     # City: the part just before the state, if it looks like a place (no street numbers); a city in capitals as a
-    # name ("DALLAS, TX" → "Dallas"). With no comma before the state, the words in capitals at the end of a
-    # venue's name are its city ("Maude Cobb . Convenció center LONGVIEW" → "Longview", as eventPlace in
-    # eleventy/filters/committee.js reads it). Else a well-known Texas city at its end ("2010 Main St, Tyler").
+    # name ("DALLAS, TX" → "Dallas"). With no comma before the state, a venue's name and the city run together: only
+    # what can only be the city (_inline_city: "Maude Cobb . Convenció center LONGVIEW" → "Longview", never "GRUPO
+    # NUEVA VIDA GARLAND" as a whole). Else a well-known Texas city at its end ("2010 Main St, Tyler").
     if state_idx is not None and state_idx > 0:
         cand = parts[state_idx - 1]
-        caps = _caps_city(cand) if inline and not re.search(r"\d", cand) else None
-        if caps:
-            out["city"] = caps
+        if inline:
+            out["city"] = _inline_city(cand, out["state"])
         elif not re.search(r"\d", cand) and len(cand.split()) <= 4:
             out["city"] = _title(cand) if cand.isupper() and re.search(r"\w{2}", cand) else cand
         else:
-            fc = _fold(cand)
-            for c in sorted(TX_CITIES, key=len, reverse=True):
-                c0 = re.sub(r" tx$", "", c)
-                if fc.endswith(" " + c0) or fc == c0:
-                    out["city"] = c0.title()
-                    break
+            out["city"] = _tx_city_at_end(cand)
     elif len(parts) == 1 and not re.search(r"\d", parts[0]) and len(parts[0].split()) <= 4 \
             and not out["country"] and not ONLINE_WORD_RE.search(parts[0]):
         out["city"] = parts[0]

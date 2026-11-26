@@ -130,6 +130,22 @@ class CityAndState(unittest.TestCase):
         self.assertEqual(self.place("Longview, TX, 75604"), ("Longview", "TX", "USA"))
         self.assertEqual(self.place("Tyler TX"), ("Tyler", "TX", "USA"))
 
+    def test_a_venues_name_is_never_the_city(self):
+        """With no comma before the state, a venue's name runs into the city: only what can only be the city is
+        read (the Texas city at its end, else one word in capitals after any acronym, or a "Las …" / "El …" place
+        name) — never the venue's words (they reached the events' JSON-LD addressLocality and their pages)."""
+        for loc, city in (("GRUPO NUEVA VIDA GARLAND TX", "Garland"), ("CENTRO HISPANO DALLAS TX", "Dallas"),
+                          ("Club AA DALLAS TX 75211", "Dallas"), ("First UMC GARLAND TX", "Garland"),
+                          ("Sheraton DALLAS HOTEL TX", None), ("Hotel Adolphus Dallas TX", "Dallas")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, "TX", "USA"))
+        for loc, city, state in (("LAS VEGAS NV 89109", "Las Vegas", "NV"), ("Las Vegas NV 89109", "Las Vegas", "NV"),
+                                 ("Caesars Palace LAS VEGAS NV 89109", "Las Vegas", "NV"),
+                                 ("Club AA TOPEKA KS 66603", "Topeka", "KS"),
+                                 ("CENTRO HISPANO DEL NORTE TULSA OK 74103", None, "OK")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, state, "USA"))
+
     def test_two_capitals_at_the_end_are_not_always_a_state(self):
         """After a word in capitals, two letters are a state only when they are a US state's code with a ZIP
         after them, or TX: a text in capitals may end in any short word."""
