@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from scripts.sync import common  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 
 def iso(dt: datetime) -> str:
@@ -1364,7 +1365,7 @@ class RunAllPausedCrawl(TempRaw):
         import yaml
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         code = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")["run"]
-        code = code.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(code)
         work = self.tmp / "work"
         (work / "data" / "site").mkdir(parents=True)
         (work / "data" / "raw").mkdir(parents=True)

@@ -264,7 +264,9 @@ class MorningWiring(unittest.TestCase):
 
     def test_the_health_it_reads(self):
         sync = self.wf["jobs"]["sync"]
-        run = next(s for s in sync["steps"] if s.get("name") == "Write run summary")["run"]
+        self.assertEqual(next(s for s in sync["steps"] if s.get("name") == "Write run summary")["run"].strip(),
+                         "python -m scripts.ops.run_summary")
+        run = (ROOT / "scripts" / "ops" / "run_summary.py").read_text(encoding="utf-8")
         self.assertIn('"quote_days": s.get("quote_days"), "tz": tz, "alarm": alarm}', run)
         self.assertIn('alarm = site_cfg.get("morning_alarm") is True', run)
         self.assertEqual(sync["outputs"]["health"], "${{ steps.summary.outputs.health }}")

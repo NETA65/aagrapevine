@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.sync import common  # noqa: E402
 from scripts.sync import youtube as Y  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 CHANNEL = "UCI9uFLJ__aXT3-At0PlPWUQ"
 # yt-dlp's texts after "ERROR: [youtube] <id>: " (the first one is what the Actions runner got in October 2026)
@@ -132,7 +133,7 @@ class BotCheckDays(unittest.TestCase):
         import yaml
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")
-        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(step["run"])
         tmp = Path(tempfile.mkdtemp(prefix="gv-yt-summary-"))
         self.addCleanup(shutil.rmtree, tmp, True)
         (tmp / "data" / "site").mkdir(parents=True)

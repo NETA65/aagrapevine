@@ -50,6 +50,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from test_morning import bash_path, run_bash  # noqa: E402
 from scripts.ops import gate_tests as G  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 WF = ROOT / ".github" / "workflows"
 BOT = "github-actions[bot]"
@@ -66,8 +67,9 @@ def step(job: dict, name: str) -> dict:
 
 
 def python_of(run: str) -> str:
-    """The Python of a step's `python3 - <<'PY'` … `PY`."""
-    return run.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+    """The Python of a step: its `python3 - <<'PY'` … `PY`, or code that runs its `python3 -m scripts.ops.…`
+    (tests/workflow_steps.py)."""
+    return step_code(run)
 
 
 # --------------------------------------------------------------------------- publishing

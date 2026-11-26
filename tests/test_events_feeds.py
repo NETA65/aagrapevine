@@ -58,6 +58,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.sync import announcements as A  # noqa: E402
 from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import meeting as M  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 CHI = ZoneInfo("America/Chicago")
 TODAY = datetime(2026, 9, 24, 15, 0, tzinfo=timezone.utc)          # Thu Sep 24, 2026, 10 AM CDT
@@ -1565,7 +1566,7 @@ class RunSummary(unittest.TestCase):
     def test_blocked_feed_is_informational(self):
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")
-        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(step["run"])
         tmp = Path(tempfile.mkdtemp(prefix="gv-summary-"))
         self.addCleanup(shutil.rmtree, tmp, True)
         (tmp / "data" / "site").mkdir(parents=True)
@@ -1611,7 +1612,7 @@ class RunSummary(unittest.TestCase):
         """The run summary step on a status.json with these feeds → (its summary, what it printed, its health)."""
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")
-        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(step["run"])
         tmp = Path(tempfile.mkdtemp(prefix="gv-summary-"))
         self.addCleanup(shutil.rmtree, tmp, True)
         (tmp / "data" / "site").mkdir(parents=True)

@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from nodejs import run_js  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 
 def read(*parts: str) -> str:
@@ -71,7 +72,7 @@ class StatusLink(unittest.TestCase):
     def body(self, health: dict, site_url: str | None) -> str:
         """The report step's script with a stand-in `gh` (no open issue yet) → the new issue's text."""
         code = step(self.wf["jobs"]["report"], "Open, update or close the report issue")["run"]
-        code = code.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(code)
         calls: list[list[str]] = []
 
         def gh(args, **_kw):

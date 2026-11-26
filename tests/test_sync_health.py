@@ -29,6 +29,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import yaml
+from workflow_steps import step_code  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 WF = ROOT / ".github" / "workflows"
@@ -54,7 +55,7 @@ class RunSummary(unittest.TestCase):
     def setUpClass(cls):
         wf = yaml.safe_load((WF / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")
-        cls.code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        cls.code = step_code(step["run"])
 
     def summary(self, status: dict, pdfs: dict | None = None, started: datetime | None = STARTED) -> tuple[str, str]:
         """Runs the step's script on this status.json (and data/raw/pdfs.json) → (the summary, what it printed)."""

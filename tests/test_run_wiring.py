@@ -37,6 +37,7 @@ from scripts.sync import audio_project as A  # noqa: E402
 from scripts.sync import common  # noqa: E402
 from scripts.sync import quote as Q  # noqa: E402
 from scripts.sync import run_all  # noqa: E402
+from workflow_steps import step_source  # noqa: E402
 
 FIX = Path(__file__).parent / "fixtures"
 GV_HOME = "https://www.aagrapevine.org/"
@@ -211,7 +212,7 @@ class Schedule(unittest.TestCase):
             st = next(s for s in self.steps if s.get("name") == name)
             with self.subTest(step=name):
                 self.assertEqual(st["env"]["STARTED"], "${{ steps.plan.outputs.started }}")
-                self.assertIn('moment(os.environ.get("STARTED"))', st["run"])
+                self.assertIn('moment(os.environ.get("STARTED"))', step_source(st["run"]))
 
 
 # --------------------------------------------------------------------------- quote.main

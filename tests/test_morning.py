@@ -61,6 +61,7 @@ from test_run_names import inside, title, update_cases  # noqa: E402
 from scripts.ops import morning_check as MC  # noqa: E402
 from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import run_all  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 WF = ROOT / ".github" / "workflows"
 CHICAGO = ZoneInfo("America/Chicago")
@@ -131,8 +132,10 @@ def tz_prefix(bash: str) -> str | None:
 
 def run_bash(bash: str, script: str, env: dict, cwd: Path | None = None) -> subprocess.CompletedProcess:
     full = {**os.environ, **env}
-    # python and the tools found next to it (the venv's) first
+    # python and the tools found next to it (the venv's) first; the repository's scripts importable from any folder
+    # (a step runs `python -m scripts.ops.…` from the checkout's root; a test may run it elsewhere)
     full["PATH"] = os.pathsep.join([str(Path(sys.executable).parent), full.get("PATH", "")])
+    full["PYTHONPATH"] = os.pathsep.join(p for p in (str(ROOT), full.get("PYTHONPATH", "")) if p)
     return subprocess.run([bash, "-c", script], cwd=cwd or ROOT, env=full, capture_output=True, text=True,
                           encoding="utf-8", timeout=120)
 
@@ -1032,7 +1035,7 @@ class UpdateWorkflow(unittest.TestCase):
         """Runs "Write run summary" on this status.json (and quote.json) → (the summary, what it printed); the
         `health` it hands the report job → self.health. `env`: the plan step's values (ALSO, …)."""
         step = next(s for s in self.sync["steps"] if s.get("name") == "Write run summary")
-        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(step["run"])
         tmp = Path(tempfile.mkdtemp(prefix="gv-summary-"))
         self.addCleanup(shutil.rmtree, tmp, True)
         (tmp / "data" / "site").mkdir(parents=True)
@@ -1220,7 +1223,7 @@ class UpdateWorkflow(unittest.TestCase):
     def report(self, health: dict) -> list[list[str]]:
         """The report job's script with a stand-in `gh` (no open issue yet) → every gh call it made."""
         code = step_run(self.wf["jobs"]["report"], "Open, update or close the report issue")
-        code = code.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(code)
         calls: list[list[str]] = []
 
         def gh(args, **_kw):
