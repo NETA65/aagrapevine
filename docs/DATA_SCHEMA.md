@@ -1101,8 +1101,14 @@ the sitemap or the search. Since November 2026:
     { "key": "neta-65-workshops", "url": "https://neta65.org/events/category/workshop/list/?ical=1",
       "label": "NETA 65 workshops", "label_es": "Talleres de NETA 65",
       "category": "neta65", "group": "neta",       // where its events show on /events/ (neta | calendar)
-      "state": "blocked",      // ok · blocked (the site's bot protection: HTTP 401/403/429, Cloudflare check) ·
-                               // error (no answer, 404/500, not a calendar file) · never (not asked yet)
+      "state": "paused",       // ok · blocked (the site's bot protection: HTTP 401/403/429, Cloudflare check) ·
+                               // error (no answer, 404/500, not a calendar file) · never (not asked yet) ·
+                               // paused (since November 2026: config marks the feed `paused:` and it did not
+                               // answer with a calendar — known, on purpose; asked once a week; /status/ shows
+                               // it with the blocked state's words, eleventy/filters/community.js)
+      "paused": "the site blocks automated readers (Cloudflare's bot check)",
+                               // config `paused:` (the reason; true = "the site blocks automated readers"),
+                               // null when not paused
       "http_status": 403,      // since October 2026 the message is plain ("asked for fewer requests (HTTP 429)",
                                // "refused the request (HTTP 401/403), as its bot protection does" are the others):
       "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; the last good copy is kept",

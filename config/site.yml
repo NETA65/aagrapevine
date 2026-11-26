@@ -807,6 +807,14 @@ sources:
   #  good copy (or simply shows the events from content/events), the
   #  Status page says why, and no "stopped updating" issue is opened.
   #  The robot asks each calendar at most once a day.
+  #  Optional:
+  #    paused:    a calendar we KNOW can't be read for now (its site
+  #               blocks automated readers): the reason, in a few
+  #               words, or just true. The Status page then shows it as
+  #               "Paused" — on purpose, not a problem, not counted —
+  #               and the robot asks it only once a week, to notice
+  #               when it works again (the run summary then says to
+  #               delete this line).
   # -------------------------------------------------------------------
   ics_feeds:
     # The NETA 65 workshop calendar (neta65.org/events/category/workshop/).
@@ -821,11 +829,14 @@ sources:
     # query string contains "ical=1", or for the User-Agent in
     # `crawler: user_agent` above. ("Allow verified bots" alone is not
     # enough: our small robot is not on Cloudflare's verified list.)
-    # The robot then reads it again by itself — nothing to change here.
+    # The robot then reads it again by itself (within a week, while it is
+    # paused) and the run summary says to delete the `paused:` line.
     - url: "https://neta65.org/events/category/workshop/list/?ical=1"
       label: "NETA 65 workshops"
       label_es: "Talleres de NETA 65"
       category: "neta65"
+      # Paused since November 2026: it has never answered our robot (HTTP 403).
+      paused: "the site blocks automated readers (Cloudflare's bot check)"
 
 # ---------------------------------------------------------------------
 #  The Grapevine Weekly Open (Wednesdays, English) — the two things

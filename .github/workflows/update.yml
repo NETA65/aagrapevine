@@ -873,6 +873,12 @@ jobs:
               if src.get("ok") and isinstance(warns, list) and warns:
                   label = src.get("label") or src.get("source")
                   notes += [f"- {label}: " + str(w).replace("\n", " ")[:200] for w in warns[:2]]
+                  # YouTube's bot check ("confirm you're not a bot") on a day the feeds still worked: a yellow warning
+                  # on the run's page, never a failure — the source stays ok, its videos keep their last known
+                  # details, and no issue opens (youtube.py bot_check_note; tests/test_youtube.py BotCheckDays).
+                  for w in warns:
+                      if src.get("source") == "youtube" and "YouTube answered with" in str(w):
+                          print(f"::warning title={label}::" + str(w).replace("\n", " ")[:200].replace("%", "%25"))
           if notes:
               lines += ["", "**Notes** (these sources still updated; only look into a note that repeats for a week):", *notes]
           # Optional outside calendars (config/site.yml sources.ics_feeds) — INFORMATIONAL only: they are
@@ -880,14 +886,20 @@ jobs:
           # (neta65.org's Cloudflare check) is a notice here, never a warning, and never opens the
           # "A content source has stopped updating" issue. Its `notes` (the feed gives another date or
           # time, or a venue a content/events file still calls "to be announced") are notices too.
+          # A feed config/site.yml marks `paused:` (known not to work: "paused", with the reason) is said so, with no
+          # notice at all; one that works again while still marked says to delete the line.
           feeds = [f for f in (s.get("feeds") or []) if isinstance(f, dict)]
           if feeds:
               words = {"ok": "working", "blocked": "blocked by the site's bot protection",
-                       "error": "not answering", "never": "not checked yet"}
+                       "error": "not answering", "never": "not checked yet", "paused": "paused on purpose"}
               lines += ["", "**Other calendars (optional, informational):**"]
               for f in feeds:
                   state = str(f.get("state") or "never")
-                  bits = [words.get(state, state)]
+                  bits = [words.get(state, state) + (f" ({f['paused']}; asked once a week)"
+                                                     if state == "paused" and f.get("paused") else "")]
+                  if state == "ok" and f.get("paused") and f.get("checked_this_run"):
+                      print(f"::notice title=Calendar feed works again ({f.get('label') or f.get('url')})::It is still "
+                            "marked paused in config/site.yml (sources.ics_feeds): delete its paused: line.")
                   if f.get("http_status"):
                       bits.append(f"HTTP {f['http_status']}")
                   bits.append(f"{f.get('events_count') or 0} event(s)"

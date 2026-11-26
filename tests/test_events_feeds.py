@@ -439,6 +439,65 @@ class FeedHealth(TempState):
         self.assertEqual(ctx.feeds[0]["state"], "never")
         self.assertFalse((self.tmp / B.ICS_STATE_FILE).exists())
 
+    def paused_cfg(self, paused=True) -> dict:
+        cfg = json.loads(json.dumps(CFG))
+        cfg["sources"]["ics_feeds"][0]["paused"] = paused
+        return cfg
+
+    def test_the_paused_setting(self):
+        for v, want in ((True, B.ICS_PAUSED_REASON), ("yes", B.ICS_PAUSED_REASON), ("the site's bot check", "the site's bot check"),
+                        (False, ""), ("no", ""), ("", ""), (None, ""), ("  ", "")):
+            with self.subTest(paused=v):
+                self.assertEqual(B.paused_reason(v), want)
+        self.assertEqual(B.feed_specs(ctx_with(self.paused_cfg("blocks robots")))[0]["paused"], "blocks robots")
+        self.assertEqual(B.feed_specs(ctx_with())[0]["paused"], "", "not paused unless config says so")
+
+    def test_a_paused_feed_is_paused_not_blocked_and_asked_once_a_week(self):
+        ctx = ctx_with(self.paused_cfg("the site blocks automated readers"))
+        evs, calls = self.run_feed(ctx, CLOUDFLARE_403)
+        self.assertEqual((evs, len(calls)), ([], 1))
+        h = ctx.feeds[0]
+        self.assertEqual((h["state"], h["paused"], h["http_status"], h["checked_this_run"]),
+                         ("paused", "the site blocks automated readers", 403, True))
+        self.assertIn("answered with a bot check (HTTP 403)", h["error"], "the raw answer is still kept")
+        self.assertEqual(self.state()[FEED_URL]["state"], "blocked", "the state file keeps what the site answered")
+        # not the next day (a blocked feed would be asked then) — a week later
+        for days in (1, 3, 6):
+            c = ctx_with(self.paused_cfg(), now=TODAY + timedelta(days=days))
+            _, calls2 = self.run_feed(c, AssertionError("must not be called"))
+            self.assertEqual(calls2, [])
+            self.assertEqual((c.feeds[0]["state"], c.feeds[0]["checked_this_run"]), ("paused", False))
+        c = ctx_with(self.paused_cfg(), now=TODAY + timedelta(days=7))
+        _, calls3 = self.run_feed(c, CLOUDFLARE_403)
+        self.assertEqual(len(calls3), 1)
+        # it works again: "ok" (the run summary then says to delete the paused line), and daily from then on
+        c = ctx_with(self.paused_cfg(), now=TODAY + timedelta(days=14))
+        evs4, _ = self.run_feed(c, FakeResp(200, FIXTURE, {"Content-Type": "text/calendar"}))
+        self.assertEqual((c.feeds[0]["state"], len(evs4)), ("ok", 11))
+        self.assertTrue(B._feed_due(self.state()[FEED_URL], TODAY + timedelta(days=15), paused=True))
+        # any other failure of a paused feed is "paused" too
+        (self.tmp / B.ICS_STATE_FILE).unlink()
+        c = ctx_with(self.paused_cfg())
+        self.run_feed(c, FakeResp(404, "not found"))
+        self.assertEqual(c.feeds[0]["state"], "paused")
+        # a feed that is not paused: as before
+        (self.tmp / B.ICS_STATE_FILE).unlink()
+        c = ctx_with()
+        self.run_feed(c, CLOUDFLARE_403)
+        self.assertEqual((c.feeds[0]["state"], c.feeds[0]["paused"]), ("blocked", None))
+
+    def test_the_status_page_shows_a_paused_feed_as_blocked_never_as_not_updated(self):
+        # (status.njk has no badge of its own for "paused" yet: eleventy/filters/community.js shows it with the
+        # blocked state's words — "can't be read right now, its events are added by hand" — and says why)
+        feeds = [{"key": "a", "url": FEED_URL, "state": "paused", "paused": "the site blocks automated readers"},
+                 {"key": "b", "url": "https://example.org/cal.ics", "state": "blocked"},
+                 {"key": "c", "url": "https://example.org/x.ics", "state": "odd"}]
+        from nodejs import run_js
+        out = run_js(self, "out(filters.cmStatus(input).feeds.map((f) => [f.key, f.state, f.pausedOnPurpose, f.paused]));",
+                     data={"feeds": feeds, "sources": []})
+        self.assertEqual(out, [["a", "blocked", True, "the site blocks automated readers"], ["b", "blocked", False, ""],
+                               ["c", "never", False, ""]])
+
     def test_status_json_keeps_feeds_apart_from_sources(self):
         ctx = ctx_with()
         self.run_feed(ctx, CLOUDFLARE_403)
@@ -1547,6 +1606,44 @@ class RunSummary(unittest.TestCase):
         self.assertIn("- content/events/2027-06-25-x.md: location_es says", summary)
         health = json.loads((tmp / "out.txt").read_text(encoding="utf-8").split("health=", 1)[1])
         self.assertEqual(health["stale"], [])                    # → no "stopped updating" issue
+
+    def summary_of(self, feeds: list[dict]) -> tuple[str, str, dict]:
+        """The run summary step on a status.json with these feeds → (its summary, what it printed, its health)."""
+        wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
+        step = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")
+        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        tmp = Path(tempfile.mkdtemp(prefix="gv-summary-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        (tmp / "data" / "site").mkdir(parents=True)
+        ok = (datetime.now(timezone.utc) - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        status = {"fixture": False, "feeds": feeds, "sources": [
+            {"source": "manual_events", "label": "Events (content/events)", "ok": True, "updated": ok, "attempted": ok,
+             "count": 9}]}
+        (tmp / "data" / "site" / "status.json").write_text(json.dumps(status), encoding="utf-8")
+        (tmp / "script.py").write_text(code, encoding="utf-8")
+        env = dict(os.environ, GITHUB_STEP_SUMMARY=str(tmp / "summary.md"), GITHUB_OUTPUT=str(tmp / "out.txt"),
+                   PYTHONIOENCODING="utf-8", PYTHONPATH=str(ROOT))
+        r = subprocess.run([sys.executable, str(tmp / "script.py")], cwd=tmp, env=env, capture_output=True,
+                           text=True, encoding="utf-8", timeout=60)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        health = json.loads((tmp / "out.txt").read_text(encoding="utf-8").split("health=", 1)[1])
+        return (tmp / "summary.md").read_text(encoding="utf-8"), r.stdout, health
+
+    def test_a_paused_feed_is_said_so_without_a_notice(self):
+        paused = {"key": "neta-65-workshops", "label": "NETA 65 workshops", "url": FEED_URL, "state": "paused",
+                  "paused": "the site blocks automated readers", "http_status": 403, "events_count": 0,
+                  "last_success": None, "checked_this_run": True, "notes": []}
+        summary, printed, health = self.summary_of([paused])
+        self.assertIn("- NETA 65 workshops: paused on purpose (the site blocks automated readers; asked once a week) · "
+                      "HTTP 403 · 0 event(s)", summary)
+        self.assertNotIn("::notice title=Calendar feed blocked", printed)
+        self.assertEqual([ln for ln in printed.splitlines() if ln.startswith("::warning")], [])
+        self.assertEqual(health["stale"], [])
+        # still marked paused, but it works again: a notice to delete the line
+        summary, printed, _health = self.summary_of([{**paused, "state": "ok", "http_status": 200, "events_count": 11}])
+        self.assertIn("- NETA 65 workshops: working · HTTP 200 · 11 event(s)", summary)
+        self.assertIn("::notice title=Calendar feed works again (NETA 65 workshops)::It is still marked paused in "
+                      "config/site.yml (sources.ics_feeds): delete its paused: line.", printed)
 
 
 if __name__ == "__main__":

@@ -1349,14 +1349,21 @@ export function statusView(status, now = Date.now()) {
   // Optional outside calendars (config/site.yml sources.ics_feeds) — build_data's status.json `feeds`.
   // Kept apart from the content sources: a feed blocked by a site's bot protection is an extra that
   // does not work, not a source that "failed" (it is not in the counts above).
+  // A feed config/site.yml marks `paused:` (known not to work, e.g. a site that blocks automated readers) has the
+  // state "paused" in status.json (build_data.ics_events); `paused` = the reason, `pausedOnPurpose` = true. The
+  // Status page has no badge of its own for it yet, so it is shown with the "blocked" state's words ("can't be read
+  // right now — its events are added by hand"), never as "Not updated yet".
   const FEED_STATES = new Set(["ok", "blocked", "error", "never"]);
   const feeds = (Array.isArray(status?.feeds) ? status.feeds : []).filter((f) => f && f.url).map((f) => {
     let host = "";
     try { host = new URL(f.url).hostname.replace(/^www\./, ""); } catch { /* not a URL */ }
-    const state = FEED_STATES.has(f.state) ? f.state : "never";
+    const paused = f.state === "paused";
+    const state = paused ? "blocked" : FEED_STATES.has(f.state) ? f.state : "never";
     return {
       ...f,
       state,
+      pausedOnPurpose: paused,
+      paused: paused ? String(f.paused || "") : "",
       host,
       events: Math.max(0, Number(f.events_count) || 0),
       dups: Math.max(0, Number(f.duplicates) || 0),

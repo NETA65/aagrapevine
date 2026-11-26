@@ -1000,6 +1000,10 @@ ICS_STATE_FILE = "ics_feeds.json"
 ICS_TIMEOUT = 25                        # seconds for the one request
 ICS_RETRY_HOURS_AFTER_FAILURE = 20      # blocked / failing feed: at most one request a day
 ICS_RETRY_HOURS_AFTER_SUCCESS = 20      # working feed: likewise (the saved copy is used in between)
+# A feed marked `paused:` in config (a site known to block automated readers, e.g. neta65.org's bot check): asked
+# only once a week — to notice when it works again — and shown as "paused" (on purpose), never as a problem.
+ICS_RETRY_HOURS_WHEN_PAUSED = 7 * 24
+ICS_PAUSED_REASON = "the site blocks automated readers"
 ICS_MAX_BYTES = 3_000_000
 # Feed categories the site knows (config `category:`) → the group each one is shown with on /events/.
 ICS_CATEGORIES = {"neta65": "neta", "ics": "neta", "gv-calendar": "calendar", "lv-calendar": "calendar"}
@@ -1016,10 +1020,22 @@ def location_is_tba(v: Any) -> bool:
     return bool(clean_text(v)) and bool(_LOCATION_TBA.match(clean_text(v)))
 
 
+def paused_reason(v: Any) -> str:
+    """A feed's config `paused:` → why it is paused ("" = not paused): a text is the reason, `true` (or "yes")
+    the usual one (ICS_PAUSED_REASON); false, "no", "" or nothing = not paused."""
+    if isinstance(v, bool):
+        return ICS_PAUSED_REASON if v else ""
+    s = clean_text(v)
+    if s.lower() in ("", "no", "false", "off", "0"):
+        return ""
+    return ICS_PAUSED_REASON if s.lower() in ("yes", "true", "on", "1") else s
+
+
 def feed_specs(ctx: Ctx) -> list[dict]:
-    """config/site.yml `sources.ics_feeds:` → [{key, url, label, label_es, category, group, host}]. A plain
+    """config/site.yml `sources.ics_feeds:` → [{key, url, label, label_es, category, group, host, paused}]. A plain
     address (`- "https://…"`) works too; webcal:// is read as https://. An entry that cannot be used is
-    skipped and named in status.json problems.ics_feeds (→ the Actions run summary)."""
+    skipped and named in status.json problems.ics_feeds (→ the Actions run summary). `paused` = why the
+    feed is known not to work (paused_reason; "" = not paused)."""
     sources = ctx.cfg.get("sources") if isinstance(ctx.cfg.get("sources"), dict) else {}
     raw = sources.get("ics_feeds")
     if raw in (None, "", []):
@@ -1050,7 +1066,8 @@ def feed_specs(ctx: Ctx) -> list[dict]:
                          f"{', '.join(sorted(ICS_CATEGORIES))} — “ics” used")
             category = "ics"
         out.append({"key": key, "url": url, "label": label, "label_es": clean_text(spec.get("label_es")) or label,
-                    "category": category, "group": ICS_CATEGORIES[category], "host": host})
+                    "category": category, "group": ICS_CATEGORIES[category], "host": host,
+                    "paused": paused_reason(spec.get("paused"))})
     if notes:
         for m in notes:
             log.warning("config/site.yml %s", m)
@@ -1122,20 +1139,24 @@ def fetch_feed(url: str, user_agent: str) -> dict:
             "error": "the answer is not a calendar file (.ics)" if text else "the calendar file is too large"}
 
 
-def _feed_due(st: dict, now: datetime) -> bool:
-    """May the feed be asked again? About once a day (ICS_RETRY_HOURS_*), whether it worked or not."""
+def _feed_due(st: dict, now: datetime, paused: bool = False) -> bool:
+    """May the feed be asked again? About once a day (ICS_RETRY_HOURS_*), whether it worked or not; a paused feed
+    that did not work the last time only once a week (ICS_RETRY_HOURS_WHEN_PAUSED)."""
     last = parse_iso(st.get("attempted")) if st.get("attempted") else None
     if last is None:
         return True
     if last.tzinfo is None:
         last = last.replace(tzinfo=timezone.utc)
-    wait = ICS_RETRY_HOURS_AFTER_SUCCESS if st.get("state") == "ok" else ICS_RETRY_HOURS_AFTER_FAILURE
+    wait = (ICS_RETRY_HOURS_AFTER_SUCCESS if st.get("state") == "ok"
+            else ICS_RETRY_HOURS_WHEN_PAUSED if paused else ICS_RETRY_HOURS_AFTER_FAILURE)
     return (now - last).total_seconds() >= wait * 3600 - 300      # (5 min slack: the daily run drifts)
 
 
 def ics_events(ctx: Ctx) -> list[dict]:
     """Events of the optional .ics feeds (config sources.ics_feeds) + each feed's health in ctx.feeds
-    (→ status.json `feeds`, the /status/ page and the Actions run summary)."""
+    (→ status.json `feeds`, the /status/ page and the Actions run summary). A feed marked `paused:` in config that
+    does not answer with a calendar has the state "paused" (with `paused`, the reason) instead of "blocked" /
+    "error": known, on purpose — /status/ says so and counts it as no problem; it is asked once a week."""
     specs = feed_specs(ctx)
     ctx.feeds = []
     if not specs:
@@ -1156,11 +1177,12 @@ def ics_events(ctx: Ctx) -> list[dict]:
                   "state": st.get("state") or ("ok" if st.get("ics") else "never"),
                   "http_status": st.get("http_status"), "error": st.get("error"),
                   "last_success": st.get("fetched"), "last_attempt": st.get("attempted"),
-                  "checked_this_run": False, "from_copy": False, "events_count": 0, "duplicates": 0, "notes": []}
+                  "checked_this_run": False, "from_copy": False, "events_count": 0, "duplicates": 0, "notes": [],
+                  "paused": spec.get("paused") or None}
         fresh = None
         if ctx.offline:
             log.info("ics feed %s: offline run — not asked (last copy used)", spec["key"])
-        elif not _feed_due(st, ctx.now):
+        elif not _feed_due(st, ctx.now, paused=bool(spec.get("paused"))):
             log.info("ics feed %s: asked at %s (%s) — not again yet", spec["key"], st.get("attempted"), st.get("state"))
         else:
             res = fetch_feed(url, ua)
@@ -1175,12 +1197,15 @@ def ics_events(ctx: Ctx) -> list[dict]:
                     st.update({"fetched": st["attempted"], "ics": res["text"]})
                 except Exception as e:
                     st.update({"state": "error", "error": f"the calendar file could not be read ({type(e).__name__})"})
-            level = log.info if st["state"] == "ok" else log.warning
-            level("ics feed %s -> %s%s", spec["key"], st["state"], f" ({st['error']})" if st.get("error") else "")
+            level = log.info if st["state"] == "ok" or spec.get("paused") else log.warning
+            level("ics feed %s -> %s%s%s", spec["key"], st["state"], f" ({st['error']})" if st.get("error") else "",
+                  f" — paused in config: {spec['paused']}" if spec.get("paused") else "")
             state[url] = st
             changed = True
             health.update({"state": st["state"], "http_status": st["http_status"], "error": st["error"],
                            "last_success": st.get("fetched"), "last_attempt": st["attempted"], "checked_this_run": True})
+        if spec.get("paused") and health["state"] != "ok":
+            health["state"] = "paused"          # known not to work (config `paused:`): no problem, said so
         evs = fresh
         if evs is None and st.get("ics"):
             try:
