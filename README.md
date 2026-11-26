@@ -469,7 +469,7 @@ What the newer pages do:
   `/orientation/?slides#slide-12` resumes, `#lesson-role` starts a lesson), a **printable handout** (printing
   the hub gives one Letter sheet per lesson) and a 45-minute plan for district trainers. The lessons live in
   `config/orientation.yml` (both languages, checked by the build and by `tests/test_orientation.py`); the GVR
-  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's five web slide decks
+  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's web slide decks
   ([how-to/presentations.md](how-to/presentations.md)); the monthly committee meeting's deck also makes the
   chair's paperwork — the agenda e-mail, a reminder, the draft notes and **Start next month** (Customize →
   **Agenda & notes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--notes)).
