@@ -155,15 +155,44 @@ class Keys(unittest.TestCase):
 
 
 class Redaction(unittest.TestCase):
+    # Each test starts with no known keys (a sync test before it may have resolved some: M._SECRETS lasts the
+    # run), so the address pattern alone is judged, in any order (unittest's or pytest's), and the set is put back
+    def setUp(self):
+        self._saved = set(M._SECRETS)
+        M._SECRETS.clear()
+
+    def tearDown(self):
+        M._SECRETS.clear()
+        M._SECRETS.update(self._saved)
+
     def test_redact_addresses_and_known_keys(self):
         self.assertEqual(M.redact(f"GET {DALLAS_FEED}&key={FAKE_KEY} failed"),
                          f"GET {DALLAS_FEED}&key=[redacted] failed")
-        self.assertIn("key%3D[redacted]", M.redact(f"url=x%26key%3D{FAKE_KEY}"))
+        self.assertEqual(M.redact(f"url=x%26key%3D{FAKE_KEY}"), "url=x%26key%3D[redacted]")
         M._SECRETS.add(FAKE_KEY_FW)
-        try:
-            self.assertEqual(M.redact(f"odd message {FAKE_KEY_FW}"), "odd message [redacted]")
-        finally:
-            M._SECRETS.discard(FAKE_KEY_FW)
+        self.assertEqual(M.redact(f"odd message {FAKE_KEY_FW}"), "odd message [redacted]")
+
+    def test_every_form_of_the_key_parameter(self):
+        """After "&" or "?", plain or percent-encoded (either case), at the very start, in a log line — never a
+        longer word that ends in "key"."""
+        k = FAKE_KEY
+        for raw, clean in (
+                (f"{DALLAS_FEED}&key={k}", f"{DALLAS_FEED}&key=[redacted]"),
+                (f"https://x.example/feed?key={k}&action=meetings", "https://x.example/feed?key=[redacted]&action=meetings"),
+                (f"https://x.example/feed?KEY={k}#top", "https://x.example/feed?KEY=[redacted]#top"),
+                (f"url=x%26key%3D{k}", "url=x%26key%3D[redacted]"),
+                (f"url=x%3Fkey%3D{k}", "url=x%3Fkey%3D[redacted]"),
+                (f"url=x%3fkey%3d{k}", "url=x%3fkey%3d[redacted]"),
+                (f"key={k}", "key=[redacted]"),
+                (f"key%3D{k} was sent", "key%3D[redacted] was sent"),
+                (f"retried with key={k}", "retried with key=[redacted]"),
+                (f"('{DALLAS_FEED}&key={k}')", f"('{DALLAS_FEED}&key=[redacted]')")):
+            with self.subTest(raw=raw):
+                self.assertEqual(M.redact(raw), clean)
+                self.assertNotIn(k, M.redact(raw))
+        for kept in ("monkey=banana", "turkey%3Dgravy", "api_key=public-id", "?donkey=1&hockey%3D2", "a key is fine"):
+            with self.subTest(kept=kept):
+                self.assertEqual(M.redact(kept), kept)
 
     def test_log_records_are_scrubbed(self):
         seen = []

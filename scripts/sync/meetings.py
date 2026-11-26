@@ -239,7 +239,10 @@ def challenge_answer(status: int | None, headers: Any, body: Any) -> bool:
 
 # =========================================================================== keys & redaction
 _SECRETS: set[str] = set()          # every key resolved this run: also scrubbed from any text
-_KEY_PARAM = re.compile(r"(?i)(\bkey(?:=|%3D))[^&#\s'\"<>)\]]+")
+# A `key` parameter: at the start of the text or after anything but a letter, digit or "_" ("?key=", "&key=", a
+# log line's "key=") — and after an encoded "&" or "?" ("x%26key%3Dabc", "%3Fkey%3Dabc": a \b fails there, after
+# the "6" of %26) — never the end of a longer word ("monkey=", "api_key=")
+_KEY_PARAM = re.compile(r"(?i)((?:(?<!\w)|(?<=%26)|(?<=%3F))key(?:=|%3D))[^&#\s'\"<>)\]]+")
 
 
 def redact(text: Any) -> str:
