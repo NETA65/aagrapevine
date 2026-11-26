@@ -595,6 +595,34 @@ class MachineTitles(unittest.TestCase):
         self.assertNotIn(s["report.mt_note"]["es"], plain["es"]["issues"])
         self.assertNotIn("(“Loneliness”)", plain["es"]["issues"])
 
+    def test_an_issue_already_out_closes_its_brackets(self):
+        """"Already out online" (report.i_out_gv / i_out_lv): the magazine's own words in brackets after a machine-
+        translated theme, the bracket closed before the period — it read «“Fiestas sobrias y comunidades remotas”
+        (“Sober Holidays and Remote Communities”.» on /es/monthly/. A Grapevine theme in Spanish, a La Viña one in
+        English."""
+        db = full_db()
+        db["articles"]["issues"] += [
+            {"id": "gv:2026-12", "publication": "gv", "key": "2026-12", "label": "December 2026",
+             "theme": "Sober Holidays and Remote Communities", "machine": ["es"],
+             "i18n": {"theme": {"en": "Sober Holidays and Remote Communities", "es": "Fiestas sobrias y comunidades remotas"},
+                      "label": {"en": "December 2026", "es": "Diciembre 2026"}}},
+            {"id": "lv:2026-11", "publication": "lv", "key": "2026-11", "label": "Noviembre / Diciembre 2026",
+             "theme": "Gratitud", "machine": ["en"],
+             "i18n": {"theme": {"en": "Gratitude", "es": "Gratitud"},
+                      "label": {"en": "November / December 2026", "es": "Noviembre / Diciembre 2026"}}}]
+        r = run_js(self, MT_JS, data={"db": db, "now": NOW})
+        es, en = r["es"]["issues"], r["en"]["issues"]
+        self.assertIn("de Grapevine: “Fiestas sobrias y comunidades remotas” (“Sober Holidays and Remote Communities”).", es)
+        self.assertIn("La Viña for November–December 2026, “Gratitude” (“Gratitud”).", en)
+        # in its own language: the theme alone, no brackets
+        self.assertIn("Grapevine, “Sober Holidays and Remote Communities”.", en)
+        self.assertIn("de 2026: “Gratitud”.", es)
+        for text in (es, en):
+            for line in text.splitlines():
+                with self.subTest(line=line):
+                    self.assertEqual(line.count("("), line.count(")"), line)
+                    self.assertEqual(line.count("“"), line.count("”"), line)
+
 
 # ------------------------------------------------------------------ the editor: Word file, last month's draft, timed texts
 # The editor in a vm context (as EDITOR above) with a model of five sections, a store that can be filled

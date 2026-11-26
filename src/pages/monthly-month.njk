@@ -224,7 +224,7 @@ eleventyComputed:
         {%- set mtIssues = (m.gv and m.gv.machine and m.gv.orig) or (m.lv and m.lv.machine and m.lv.orig) -%}
         {% if mtIssues %}{{ mtNote | safe }}{% endif %}
         {% if nx %}{% for o in nx.outNext %}
-        <p class="panel-muted mt-4 p-4! text-sm leading-relaxed">{{ ("report.i_out_lv" if o.pub == "lv" else "report.i_out_gv") | t(lang, { issue: o.issue, theme: o.theme }) }}{% if o.machine %} {{ mtMark | safe }}{% endif %}{% if o.monthUrl %} <a class="link tap-link gap-1 font-semibold" href="{{ o.monthUrl | lurl(lang) }}">{{ "monthly.open_month" | t(lang, { month: o.monthLabel }) }}<span aria-hidden="true"> →</span></a>{% endif %}</p>
+        <p class="panel-muted mt-4 p-4! text-sm leading-relaxed">{{ ("report.i_out_lv" if o.pub == "lv" else "report.i_out_gv") | t(lang, { issue: o.issue, theme: o.theme, orig: "" }) }}{% if o.machine %} {{ mtMark | safe }}{% endif %}{% if o.monthUrl %} <a class="link tap-link gap-1 font-semibold" href="{{ o.monthUrl | lurl(lang) }}">{{ "monthly.open_month" | t(lang, { month: o.monthLabel }) }}<span aria-hidden="true"> →</span></a>{% endif %}</p>
         {% endfor %}{% endif %}
       </section>
 

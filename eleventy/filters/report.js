@@ -319,26 +319,26 @@ function sectionsFor(L, ctx) {
     // A newer issue is already on the web (the October Grapevine appears in late September).
     const issues = (db.articles && db.articles.issues) || [];
     const newer = (pub, after) => issues.filter((i) => i && i.publication === pub && i.key && i.key > after).sort((a, b) => a.key.localeCompare(b.key))[0];
-    // its theme in the report's language; a machine translation with the magazine's own words in brackets (the
-    // string's “ ” sit around {theme}: “Soledad” (“Loneliness”))
+    // its theme in the report's language; a machine translation with the magazine's own words in brackets after
+    // it ({orig}: the string's “ ” sit around {theme}, then {orig} and the period: “Soledad” (“Loneliness”).)
     const newTheme = (i) => {
       const here = clean(H.pickLang(i, "theme", L) || i.theme);
       const own = clean(i.theme);
       const machine = !!here && here !== own && (i.machine || []).includes(L);
       if (machine) mt = true;
-      return machine && own ? `${here}” (“${own}` : here;
+      return { theme: here, orig: machine && own ? ` (“${own}”)` : "" };
     };
     const outLines = [];
     const gvNew = newer("gv", key);
     if (gvNew) {
-      const theme = newTheme(gvNew);
-      if (theme) outLines.push(T("i_out_gv", { issue: issueInSentence(clean((gvNew.i18n && gvNew.i18n.label && gvNew.i18n.label[L]) || monthLabel(gvNew.key, L)), L), theme }));
+      const { theme, orig } = newTheme(gvNew);
+      if (theme) outLines.push(T("i_out_gv", { issue: issueInSentence(clean((gvNew.i18n && gvNew.i18n.label && gvNew.i18n.label[L]) || monthLabel(gvNew.key, L)), L), theme, orig }));
     }
     const lvNew = m.lv ? newer("lv", m.lv.key) : null;
     if (lvNew) {
-      const theme = newTheme(lvNew);
+      const { theme, orig } = newTheme(lvNew);
       const label = clean((lvNew.i18n && lvNew.i18n.label && lvNew.i18n.label[L]) || lvNew.label || lvNew.key);
-      if (theme) outLines.push(T("i_out_lv", { issue: issueName(lvNew.key, "lv", L, true) || issueInSentence(label, L), theme }));
+      if (theme) outLines.push(T("i_out_lv", { issue: issueName(lvNew.key, "lv", L, true) || issueInSentence(label, L), theme, orig }));
     }
     if (L === "es") outLines.reverse();
     out.push(...outLines);
