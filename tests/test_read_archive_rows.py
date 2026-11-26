@@ -12,7 +12,10 @@ src/pages/read-archive.11ty.js `more`, src/assets/js/read.js:
   * Script  — read.js on a page of its own: "Show all" fetches the file once, adds each story as the page draws it
               (its title and original title with their languages, its writer, free / subscribers, its Share: the
               magazine's own title and "— Grapevine, June 2026"), every value as text; the button goes and focus moves
-              to the first new story; when the file can't be read, the button says so and works again.
+              to the first new story; when the file can't be read, the button says so and works again. A page and a
+              file from different builds (a page kept offline): an issue no longer in `more` is found in the file's
+              older issues, and only the stories after the ones on the page are added; in neither, the button says so
+              and the next tap asks for the file again.
 
     python -m unittest tests.test_read_archive_rows -v        (or: python -m unittest discover -s tests)
 """
@@ -108,10 +111,15 @@ class Built(unittest.TestCase):
 
 
 SCRIPT_JS = r"""
-const json = { more: { "gv:2026-06": { pub: "gv", count: 9, ls: "June 2026", items: [
+const rest = [
   { t: "Seven <b>", tl: "en", u: "https://www.aagrapevine.org/magazine/2026-06/s07", a: "Pat 7.", f: 1 },
   { t: "Ocho", tl: "es", o: "Eight", ol: "en", m: 1, u: "https://www.aagrapevine.org/magazine/2026-06/s08", f: 0 },
-  { t: "Nine", u: "javascript:alert(1)" } ] } } };
+  { t: "Nine", u: "javascript:alert(1)" } ];
+// input.moved: a file from a later build, where the issue is one of the older issues (all its stories);
+// input.gone: a file without it
+const json = input.moved ? { more: {}, issues: [{ id: "gv:2026-06", pub: "gv", ls: "June 2026", count: 4,
+                                                  items: [{ t: "One", u: "https://www.aagrapevine.org/magazine/2026-06/s01" }, ...rest] }] }
+  : input.gone ? { more: {}, issues: [] } : { more: { "gv:2026-06": { pub: "gv", count: 9, ls: "June 2026", items: rest } } };
 let calls = 0, fail = input.fail;
 const p = page({ html:
   '<details class="read-past" open><summary>June</summary><div x-ignore><ul data-read-rows><li class="read-article">One</li></ul>' +
@@ -127,7 +135,7 @@ await p.ready();
 const res = {};
 p.click(p.$("#more"));
 await p.tick(10);
-if (input.fail) {
+if (input.fail || input.gone) {
   res.failed = { text: p.$("#more").textContent, busy: p.$("#more").getAttribute("aria-busy"), rows: p.$$("[data-read-rows] > li").length };
   p.click(p.$("#more"));
   await p.tick(10);
@@ -167,6 +175,17 @@ class Script(unittest.TestCase):
         self.assertEqual(eight["share"][1], "Eight", "the magazine's own title")
         self.assertEqual(nine["href"], "#", "only a web address")
         self.assertFalse(nine["meta"], "no writer, no free / subscribers: no line")
+
+    def test_a_file_from_another_build(self):
+        r = run_js(self, PAGE_JS + SCRIPT_JS, data={"fail": 0, "moved": 1}, needs_modules=False)
+        self.assertEqual(r["errors"], [])
+        self.assertEqual((r["n"], r["calls"], r["button"]), (4, 1, False), "the stories after the one on the page")
+        self.assertEqual([x["title"] for x in r["rows"]], ["Seven <b>", "Ocho", "Nine"])
+        self.assertEqual(r["rows"][0]["share"][2], "— Grapevine, June 2026")
+        r = run_js(self, PAGE_JS + SCRIPT_JS, data={"fail": 0, "gone": 1}, needs_modules=False)
+        self.assertTrue(r["failed"]["text"].endswith("— try again"))
+        self.assertEqual((r["n"], r["calls"], r["button"]), (1, 2, True), "the next tap asks for the file again")
+        self.assertEqual(r["errors"], [])
 
     def test_when_the_file_cannot_be_read(self):
         r = run_js(self, PAGE_JS + SCRIPT_JS, data={"fail": 1}, needs_modules=False)

@@ -397,7 +397,9 @@
   /* ------------------------------------------------------------------
      /read/'s earlier issues hold their first few stories in the page (eleventy/filters/read.js SSR_ROWS); an
      issue's "Show all N stories" button (data-read-more = the issue's id, data-json = /read-archive.json) adds the
-     rest under them from the file's `more` (src/pages/read-archive.11ty.js), each row a copy of the page's
+     rest under them from the file's `more` (src/pages/read-archive.11ty.js) — or, when the page and the file come
+     from different builds, from the file's older issues (`issues`: the stories after the ones the page holds) —
+     each row a copy of the page's
      <template id="read-row-tpl"> filled in with plain DOM (the story lists are x-ignore: no Alpine in there). The
      file is fetched once for every issue (moreJson). While it loads the button says so; if it can't be read, the
      button says so and works again. Once the rows are in, the button goes and focus moves to the first new story
@@ -449,10 +451,18 @@
     b.setAttribute("aria-busy", "true");
     b.textContent = b.getAttribute("data-t-loading") || "…";
     readMoreData(b.getAttribute("data-json")).then(function (data) {
-      var is = data && data.more && data.more[b.getAttribute("data-read-more")];
-      if (!is || !Array.isArray(is.items)) throw new Error("no rows");
+      var id = b.getAttribute("data-read-more");
+      var is = data && data.more && data.more[id], items = is && is.items;
+      // (the page and the file from different builds — a page kept offline, a file saved at another time: the issue
+      //  may have moved on into the file's older issues, with all its stories — the ones after those the page holds)
+      if (!Array.isArray(items) && data && Array.isArray(data.issues)) {
+        is = data.issues.filter(function (x) { return x && x.id === id; })[0];
+        items = is && Array.isArray(is.items) ? is.items.slice(list.children.length) : null;
+      }
+      // (in neither: the next tap asks for the file again)
+      if (!Array.isArray(items)) { moreJson = null; throw new Error("no rows"); }
       var first = null;
-      is.items.forEach(function (a) {
+      items.forEach(function (a) {
         var li = storyRow(tpl, a, is);
         if (!first) first = li;
         list.appendChild(li);
