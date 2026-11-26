@@ -10,7 +10,9 @@ appear (eleventy/filters/glossary.js, src/_i18n/glossary.json, app.js GV.glossar
                (GVRs, RLVs, DCMs) use it; the corner lists every entry (#glossary, in its page nav).
   * Browser  — app.js turns each mark into a disclosure: a button named by the word (aria-expanded, aria-controls) and
                a note right after it, hidden until a tap or Enter; one open at a time; Escape closes it and puts the
-               focus back on the word; a tap elsewhere closes it; a mark inside a link stays a plain <abbr>.
+               focus back on the word; a tap elsewhere closes it, and so does a new window width (a new height alone
+               — a phone's address bar hiding as the page scrolls — leaves it open); a mark inside a link stays a
+               plain <abbr>.
 
     python -m unittest tests.test_glossary -v        (or: python -m unittest discover -s tests)
 """
@@ -157,6 +159,14 @@ p.click(btns[0]);
 p.click(p.$("#other"));
 res.outside = st();
 res.inLink = { plain: !p.$("#link .gl-btn"), title: p.$("#link abbr").getAttribute("title") };
+// a phone's address bar hiding as the page scrolls (a new height only), then the phone turned (a new width)
+p.click(btns[0]);
+p.win.innerHeight = 700;
+p.win.dispatchEvent(new p.win.Event("resize"));
+res.taller = st();
+p.win.innerWidth = 390;
+p.win.dispatchEvent(new p.win.Event("resize"));
+res.turned = st();
 res.errors = p.errors.map(String);
 out(res);
 """
@@ -180,6 +190,8 @@ class Browser(unittest.TestCase):
         self.assertTrue(r["focus"], "Escape puts the focus back on the word")
         self.assertEqual(r["outside"], [["false", True], ["false", True]], "a tap elsewhere closes it")
         self.assertEqual(r["inLink"], {"plain": True, "title": "In a link"})
+        self.assertEqual(r["taller"], [["true", False], ["false", True]], "a new height alone leaves it open")
+        self.assertEqual(r["turned"], [["false", True], ["false", True]], "a new width closes it")
         self.assertEqual(r["errors"], [])
 
 

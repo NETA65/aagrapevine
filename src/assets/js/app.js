@@ -1158,7 +1158,14 @@
     var r = b.getBoundingClientRect();
     if (r.bottom < 0 || r.top > window.innerHeight) glClose(null); else glPlace(b, p);
   }, { passive: true });
-  window.addEventListener("resize", function () { glClose(null); });
+  // a new width (a phone turned, a window resized) closes it; a new height alone does not — a phone's address bar
+  // showing or hiding as the page scrolls is one: the note is placed again by its word
+  var glWidth = window.innerWidth;
+  window.addEventListener("resize", function () {
+    if (window.innerWidth !== glWidth) { glWidth = window.innerWidth; glClose(null); return; }
+    var b = document.querySelector(".gl-btn[aria-expanded='true']"), p = b && document.getElementById(b.getAttribute("aria-controls"));
+    if (p) glPlace(b, p);
+  });
 
   /* ---------------- progressive enhancements ---------------- */
   function enhance() {
