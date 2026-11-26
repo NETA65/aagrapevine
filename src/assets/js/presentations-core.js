@@ -109,9 +109,9 @@
   var LIMITS = { fileBytes: 2000000, text: 4000, long: 20000, list: 80, cells: 8, added: 60, ids: 800, fill: 400,
     fillText: 600, checks: 200, versions: 20 };
 
-  /* The words the player writes ON the slides and in the notes. The presentations' content stays English (the
-     owner's decision: on /es/ the controls are Spanish and the slides are marked "(en inglés)"), so these are
-     English on both pages — like the decks themselves. The controls' own words are src/_i18n/presentations.json. */
+  /* The words the player writes ON the slides and in the notes, in the language of the deck (its `lang`), never the
+     page's: an English deck says them in English on /es/ too (marked "(en inglés)"), a Spanish deck in Spanish (ES,
+     below: words(lang)). The controls' own words are src/_i18n/presentations.json. */
   var EN = {
     left_out: "(not in this version)",
     current_as_of: "Current as of {date}",
@@ -173,6 +173,51 @@
     carry_who: "{what} ({who})",
     carry_when: "{what} (by {when})",
   };
+  /* The same words for a deck written in Spanish (lang: "es": La Viña's writing workshop, the RLV orientation), as
+     the Spanish pages say them ("Detalles por confirmar", "Código de acceso", "Traducción automática"). The chair's
+     paperwork and the controls' names ({ui:…}) are not here: they come from EN and the page. */
+  var ES = {
+    left_out: "(no está en esta versión)",
+    current_as_of: "Datos al {date}",
+    minute: "minuto",
+    minutes: "minutos",
+    you_need: "Necesitarás",
+    none: "Por ahora no hay nada en la lista. Consulta {url}",
+    see: "consulta {where}",
+    online: "En línea",
+    online_on: "En línea por {platform}",
+    tentative: "Detalles por confirmar",
+    zoom_id: "ID de Zoom",
+    passcode: "Código de acceso",
+    meeting_id: "ID de la reunión",
+    meeting_code: "Código de la reunión",
+    contact: "Contacto",
+    gv: "Grapevine",
+    lv: "La Viña",
+    magazine: "Revista",
+    issue: "Edición",
+    theme: "Tema",
+    due: "Fecha límite",
+    print: "Impresa",
+    digital: "Digital",
+    one_year: "1 año, EE. UU.",
+    from_date: "desde el {date}",
+    new_prices: "Precios nuevos desde el {date}",
+    books_more: "Libros: {amount} más cada uno",
+    botm_also: "También",
+    auto_translated: "traducción automática",
+    time: "TIEMPO: unos {about}{opt}. Al pasar a la siguiente deberías ir por {at}.",
+    time_optional: " (opcional: se puede quitar si vas con retraso)",
+    seconds: "{n} segundos",
+    about_minute: "1 minuto",
+    about_minutes: "{n} minutos",
+    disclaimer: [
+      "No es una presentación oficial de AA Grapevine, Inc.",
+      "Preparada por el Comité de Grapevine y La Viña de NETA 65 para el servicio local. No es literatura aprobada por la Conferencia de A.A. y no habla en nombre de A.A. en su conjunto ni de AA Grapevine, Inc.",
+    ],
+  };
+  /** The words the player writes on a deck's slides and in its notes: its language's (ES for "es"), else EN. */
+  function words(lang) { return lang === "es" ? ES : EN; }
   // A live block's rows when the slide names no `limit` (SPEC §1's live kinds)
   var LIMIT = { deadlines: 6, events: 5, meeting: 3, "lv-workshop": 3, monthly: 3, bulletin: 3 };
 
@@ -744,26 +789,30 @@
     var m = Math.max(0, Math.round(Number(min) || 0));
     return Math.floor(m / 60) + ":" + pad2(m % 60);
   }
-  /** "1½ minutes", "1 minute", "45 seconds" — the pptx notes' own way of saying it. */
-  function aboutText(min) {
+  /** "1½ minutes", "1 minute", "45 seconds" — the pptx notes' own way of saying it (in `lang`: "1½ minutos"). */
+  function aboutText(min, lang) {
+    var W = words(lang);
     var m = Number(min) || 0;
-    if (m < 1) return fmt(EN.seconds, { n: Math.max(5, Math.round((m * 60) / 5) * 5) });
+    if (m < 1) return fmt(W.seconds, { n: Math.max(5, Math.round((m * 60) / 5) * 5) });
     var whole = Math.floor(m);
     var q = Math.round((m - whole) * 4);
     if (q === 4) { whole += 1; q = 0; }
-    if (!q) return whole === 1 ? EN.about_minute : fmt(EN.about_minutes, { n: whole });
-    return fmt(EN.about_minutes, { n: whole + ["", "¼", "½", "¾"][q] });
+    if (!q) return whole === 1 ? W.about_minute : fmt(W.about_minutes, { n: whole });
+    return fmt(W.about_minutes, { n: whole + ["", "¼", "½", "¾"][q] });
   }
-  /** The notes' TIME line for a shown slide in the current version (English, like the notes). */
-  function timeLine(entry) {
+  /** The notes' TIME line for a shown slide in the current version, in the language of the notes (the deck's
+   *  `lang`: "TIEMPO: …" in a Spanish deck). */
+  function timeLine(entry, lang) {
     if (!entry || !entry.shown) return "";
-    return fmt(EN.time, { about: aboutText(entry.mins), opt: entry.slide.optional ? EN.time_optional : "", at: clock(entry.end) });
+    var W = words(lang);
+    return fmt(W.time, { about: aboutText(entry.mins, lang), opt: entry.slide.optional ? W.time_optional : "", at: clock(entry.end) });
   }
-  /** {slide:id} → its number in the current version, "(left out of this version)", or null for an unknown id. */
+  /** {slide:id} → its number in the current version, "(left out of this version)" (in the deck's language), or null
+   *  for an unknown id. */
   function slideRef(cur, id) {
     var e = cur && cur.byId[id];
     if (!e) return null;
-    return e.shown ? String(e.n) : EN.left_out;
+    return e.shown ? String(e.n) : words(cur.deck && cur.deck.lang).left_out;
   }
 
   /** An agenda slide's rows in the current version: [{ time, title, detail, from, auto }]. A row with `from` gets
@@ -914,18 +963,24 @@
       var r = ctx.cur ? slideRef(ctx.cur, key) : null;
       return r === null ? m : r;
     });
-    return out.indexOf(EN.left_out) >= 0 ? tidyLeftOut(out) : out;
+    var lo = ctx.cur ? words(ctx.cur.deck && ctx.cur.deck.lang).left_out : EN.left_out;
+    return out.indexOf(lo) >= 0 ? tidyLeftOut(out, lo) : out;
   }
   // A sentence that pointed at slides the version leaves out ("Part 2's history (slides {slide:a}–{slide:b}; …)",
-  // "the tours ({slide:c}–{slide:d}, skip both)") reads as one "(not in this version)", not as a run of them.
-  var LO = EN.left_out.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  var LO_RANGE = new RegExp("(" + LO + ")\\s*[–-]\\s*" + LO, "g");
-  var LO_WORD = new RegExp("\\bslides?\\s+(" + LO + ")", "g");
-  var LO_WRAPPED = new RegExp("\\((" + LO + ")\\)", "g");
-  var LO_OPEN = new RegExp("\\(" + LO.replace(/\\\)$/, "") + "\\)([,;])", "g");
-  function tidyLeftOut(s) {
-    var inner = EN.left_out.slice(0, -1);              // "(not in this version"
-    return s.replace(LO_RANGE, "$1").replace(LO_WORD, "$1").replace(LO_WRAPPED, "$1").replace(LO_OPEN, inner + "$1");
+  // "the tours ({slide:c}–{slide:d}, skip both)") reads as one "(not in this version)", not as a run of them (in a
+  // Spanish deck: "diapositivas (no está en esta versión)" the same way).
+  function leftOutTidy(left, word) {
+    var LO = left.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return { inner: left.slice(0, -1),                 // "(not in this version"
+      range: new RegExp("(" + LO + ")\\s*[–-]\\s*" + LO, "g"),
+      word: new RegExp("\\b" + word + "\\s+(" + LO + ")", "g"),
+      wrapped: new RegExp("\\((" + LO + ")\\)", "g"),
+      open: new RegExp("\\(" + LO.replace(/\\\)$/, "") + "\\)([,;])", "g") };
+  }
+  var TIDY = [leftOutTidy(EN.left_out, "slides?"), leftOutTidy(ES.left_out, "diapositivas?")];
+  function tidyLeftOut(s, left) {
+    var T = TIDY[left === ES.left_out ? 1 : 0];
+    return s.replace(T.range, "$1").replace(T.word, "$1").replace(T.wrapped, "$1").replace(T.open, T.inner + "$1");
   }
 
   var LANG_OPEN = /^\{lang:(es|en)\}/;
@@ -1876,7 +1931,7 @@
   /* ------------------------------------------------------------------ the module */
   root.GVP = {
     VERSION: VERSION, SCHEMA: SCHEMA, STORAGE_KEY: STORAGE_KEY, FILE_APP: FILE_APP, LAYOUTS: LAYOUTS, ADD_LAYOUTS: ADD_LAYOUTS,
-    ACCENTS: ACCENTS, PRINT_MODES: PRINT_MODES, LIMITS: LIMITS, EN: EN, LAYOUT_FIELDS: LAYOUT_FIELDS, ID: ID, MY_ID: MY_ID,
+    ACCENTS: ACCENTS, PRINT_MODES: PRINT_MODES, LIMITS: LIMITS, EN: EN, ES: ES, words: words, LAYOUT_FIELDS: LAYOUT_FIELDS, ID: ID, MY_ID: MY_ID,
     // facts of the day
     liveText: liveText, liveValues: liveValues, noticeOn: noticeOn, inWindow: inWindow, liveRows: liveRows, LIMIT: LIMIT,
     // the stored state

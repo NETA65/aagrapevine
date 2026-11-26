@@ -33,7 +33,10 @@
 // magazines' story lines: /contribute/#record), committee.js weeklyOpen (the weekly open meetings of /meetings/),
 // read.js issueLabel (an issue's name), community.js (QR codes), event-tone.js (an event's kind). Missing data
 // gives the key's fallback or empty rows: the player then points to the page.
-// The content of the decks stays English (the owner's decision), so every label here is English.
+// A deck is written in English or in Spanish (its `lang`: most are English; La Viña's are Spanish), and its facts
+// come in its language: dates, times, issue names, fallbacks ("see the Meetings page" / "consulta la página de
+// Reuniones") — the same words the site's pages in that language show. A Spanish deck's La Viña themes come without
+// their English gloss; Grapevine's themes and book titles stay as Grapevine writes them (English).
 // Dates and day boundaries are Central time (America/Chicago); instants are UTC ISO ("2027-01-01T06:00:00.000Z").
 // The build's "now" is monthly.js nowDate(): MONTHLY_NOW=2026-12-15 moves it for a preview build, as for /monthly/.
 
@@ -69,7 +72,7 @@ let H = {
     return new Intl.DateTimeFormat("en-US", { ...o, timeZone: TZ }).format(d);
   },
 };
-const t = (key, vars) => H.translateKey(key, "en", vars);
+const t = (key, vars, lang = "en") => H.translateKey(key, lang, vars);
 
 /* ------------------------------------------------------------------ */
 /*  The rules (tests/test_presentations.py — the same names and lists) */
@@ -80,6 +83,8 @@ const DAY = /^\d{4}-\d{2}-\d{2}$/;
 const TONES = ["gv", "lv", "vine", "grape"];
 const ACCENTS = ["gv", "lv", "vine", "grape", "navy"];
 const LANGS = ["en", "es"];
+// A part's word in its slides' eyebrow ("Part 3 · …" / "Parte 3 · …"), by the deck's language
+const PART_WORD = { en: "Part", es: "Parte" };
 export const LIVE_KEYS = [
   "site", "site_url", "email", "panel", "as_of", "month", "year",
   "meeting_next", "meeting_day", "meeting_after", "meeting_month", "meeting_rule", "meeting_time", "meeting_platform",
@@ -174,7 +179,10 @@ const PAPER_ROWS = { actions: ["what", "who", "when"], old_business: ["item", "s
 const PAPER_TAG = /\{paper:([^}]*)\}/g;
 // every token a paperwork text may hold: a blank, a fact of the day, a paperwork fact, a span in Spanish
 const PAPER_KNOWN = /^\{(?:fill|live|paper|lang):[^}]*\}$/;
-const TIME_LINE = /^\s*TIME:/m;
+const TIME_LINE = /^\s*(?:TIME|TIEMPO):/m;   // (a Spanish deck's "TIEMPO:" too)
+// The line every deck keeps (README: "Not an official AA Grapevine, Inc. presentation"), or in a Spanish deck its
+// Spanish words ("No es una presentación oficial de AA Grapevine, Inc.")
+const DISCLAIMER = /not an official aa grapevine|no es una presentaci[oó]n oficial de aa grapevine/i;
 const PPT_TALK = new RegExp(`(?<!${W})(?:right-click|hide slide|this file|powerpoint)(?!${W})|(?<=${W})\\.pptx(?!${W})`, "iu");
 
 // A deck file is read the way the Python checker reads it (PyYAML, YAML 1.1): `yes` / `no` / `on` / `off` (any of
@@ -553,7 +561,7 @@ export function checkDeck(d, stem) {
   for (const k of Object.keys(d)) if (!allowedTop.includes(k)) out.push(`unknown top-level field ${repr(k)}`);
   if (d.id !== stem) out.push(`id ${repr(d.id)} must be the file name ${repr(stem)}`);
   if (!Number.isInteger(d.order) || d.order < 1 || d.order > 9) out.push("order: a whole number 1–9");
-  if (d.lang !== "en") out.push('lang: "en" (the content stays English — the owner\'s decision)');
+  if (!LANGS.includes(d.lang)) out.push('lang: "en" or "es" (the language the presentation is written in)');
   for (const k of ["title", "short", "eyebrow", "footer", "icon"]) {
     if (!isStr(d[k]) || !d[k].trim()) out.push(`${k}: a non-empty string`);
   }
@@ -733,7 +741,8 @@ export function checkDeck(d, stem) {
     const usedAllow = new Set();
     const scanned = Object.fromEntries(Object.entries(s).filter(([k]) => !["id", "layout", "accent", "when", "lang", "print", "show_from", "show_until", "allow_words"].includes(k)));
     for (const [where, text] of strings(scanned)) {
-      if (/not an official aa grapevine/i.test(text)) hasDisclaimer = true;
+      // (a Spanish deck says it in Spanish: "No es una presentación oficial de AA Grapevine, Inc.")
+      if (DISCLAIMER.test(text)) hasDisclaimer = true;
       // (a version's own quote or sources are as verbatim as the slide's: "version_fields.short.quote" → "quote")
       const field = where.startsWith("version_fields.") ? where.split(".").slice(2).join(".") : where;
       const exempt = (layout === "quote" && field === "quote") || (layout === "credits" && field.startsWith("sources"));
@@ -949,10 +958,12 @@ function shapeDeck(d, id, now, notice) {
   const parts = [];
   const tokens = new Set();
   const kinds = new Set();
-  // A slide without an eyebrow of its own shows its part's ("Part 3 · …"), or the deck's before the first part —
-  // but a Q&A or credits slide shows none, as the decks drew them (a section slide never shows one either)
+  // A slide without an eyebrow of its own shows its part's ("Part 3 · …", in a Spanish deck "Parte 3 · …"), or the
+  // deck's before the first part — but a Q&A or credits slide shows none, as the decks drew them (a section slide
+  // never shows one either)
+  const lang = LANGS.includes(d.lang) ? d.lang : "en";
   const browOf = (s, part) => (isStr(s.eyebrow) && s.eyebrow.trim() ? s.eyebrow
-    : ["qa", "credits"].includes(s.layout) ? "" : part ? `Part ${part.n} · ${part.title}` : String(d.eyebrow || ""));
+    : ["qa", "credits"].includes(s.layout) ? "" : part ? `${PART_WORD[lang]} ${part.n} · ${part.title}` : String(d.eyebrow || ""));
   let part = null, accent = "gv", n = 0;
   const slides = raw.map((s) => {
     if (s.layout === "section") {
@@ -1003,8 +1014,9 @@ function shapeDeck(d, id, now, notice) {
       show_from: dayStartIso(s.show_from),
       show_until: dayEndIso(s.show_until),
       when: s.when === "price_notice" ? "price_notice" : null,
-      // the language the slide is written in: "es" for a Spanish handout or announcement (the player marks it)
-      lang: LANGS.includes(s.lang) ? s.lang : "en",
+      // the language the slide is written in: its own (a Spanish handout or announcement in an English deck), else
+      // the deck's (the player marks it)
+      lang: LANGS.includes(s.lang) ? s.lang : lang,
     });
   });
   for (const [, text] of strings(d.footer)) for (const mt of text.matchAll(TOKEN)) if (mt[1] === "live") tokens.add(mt[2]);
@@ -1027,8 +1039,9 @@ function shapeDeck(d, id, now, notice) {
     presets,
     fillins,
     url: `/orientation/presentations/${id}.json`,
-    // for the deck's JSON file (src/pages/presentations-json.11ty.js)
-    lang: "en",
+    // the language it is written in ("en" or "es"): the card's "(in Spanish)" / "(en inglés)", its event pages' badge,
+    // and its JSON file (src/pages/presentations-json.11ty.js: the facts in that language)
+    lang,
     eyebrow: String(d.eyebrow || ""),
     footer: String(d.footer || ""),
     version: hash(slides.map((s) => s.h).join("\n")),
@@ -1088,21 +1101,26 @@ export function loadDecks(dir, opts = {}) {
 /* ------------------------------------------------------------------ */
 /*  The facts (the {live:…} keys and the live slides' data)            */
 /* ------------------------------------------------------------------ */
-/** The build's context: the template's data (db, site, carry, meeting) and the clock. A context passed in again is
- *  used as it is, so what one deck reads more than once (the events, the deadlines, the month) is worked out once. */
+/** The build's context: the template's data (db, site, carry, meeting), the clock and the language of the facts
+ *  (`lang`: the deck's — "en", or "es" for a Spanish deck; the context's own `lang`, else English). A context passed
+ *  in again is used as it is (unless another language is asked for), so what one deck reads more than once (the
+ *  events, the deadlines, the month) is worked out once. */
 const CONTEXT = Symbol("presentations context");
-function context(c = {}) {
-  if (c[CONTEXT]) return c;
+function context(c = {}, lang) {
+  const L = LANGS.includes(lang) ? lang : LANGS.includes(c.lang) ? c.lang : "en";
+  if (c[CONTEXT] && c.lang === L) return c;
   const site = c.site || {};
   const base = String(site.url || "").replace(/\/+$/, "");
   const now = c.now instanceof Date ? c.now : nowDate();
   const memo = new Map();
   return {
     [CONTEXT]: true,
-    db: c.db || {}, site, carry: c.carry || {}, meeting: c.meeting || null, now,
+    db: c.db || {}, site, carry: c.carry || {}, meeting: c.meeting || null, now, lang: L,
     nowMs: now.getTime(), today: chicagoYmd(now), base,
-    // an address on the site → absolute, with the base path ("/events/" → "https://…/aagrapevine/events/")
-    abs: (p) => (/^https?:\/\//.test(String(p)) ? String(p) : base + (String(p).startsWith("/") ? p : "/" + p)),
+    // an address on the site → absolute, with the base path ("/events/" → "https://…/aagrapevine/events/"), on the
+    // pages of the facts' language ("/es/events/" for a Spanish deck)
+    abs: (p) => (/^https?:\/\//.test(String(p)) ? String(p)
+      : base + (L === "en" ? "" : `/${L}`) + (String(p).startsWith("/") ? p : "/" + p)),
     host: base.replace(/^https?:\/\//, ""),
     once: (key, fn) => {
       if (!memo.has(key)) memo.set(key, fn());
@@ -1110,7 +1128,7 @@ function context(c = {}) {
     },
   };
 }
-const lcFirst = (s) => (s ? s.charAt(0).toLocaleLowerCase("en") + s.slice(1) : s);
+const lcFirst = (s, lang = "en") => (s ? s.charAt(0).toLocaleLowerCase(lang) + s.slice(1) : s);
 const clean = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 const limitOf = (o, dflt) => (Number.isInteger(o && o.limit) && o.limit >= 1 && o.limit <= 24 ? o.limit : dflt);
 const eachOf = (o) => (Number.isInteger(o && o.limit_each) && o.limit_each >= 1 && o.limit_each <= 12 ? o.limit_each : null);
@@ -1124,6 +1142,10 @@ const oneLine = (s) => String(s ?? "")
   .replace(/(\d)[ \u00a0\u2009\u202f]*\u2013[ \u00a0\u2009\u202f]*(?=\d)/g, "$1\u202f\u2013\u2060\u202f")
   .replace(/(\d)[ \u00a0\u2009]+(?=[AP]M\b)/g, "$1\u202f")
   .replace(/\u2009/g, "\u202f");
+/** A clock time in Spanish as the site writes it ("3:00 p. m.", no-break spaces: eleventy.config.js esMeridiem), in
+ *  the zone `tz`. */
+const esClock = (d, tz) => new Intl.DateTimeFormat("es-US", { timeZone: tz, hour: "numeric", minute: "2-digit" }).format(d)
+  .replace(/\b([ap])\.\s?m\./g, "$1.\u00a0m.").replace(/(\d)[ \u00a0\u202f](?=[ap]\.\u00a0m\.)/g, "$1\u00a0");
 
 // How far ahead a deck's facts reach, so a copy opened later (saved for offline, a slow venue connection) stays
 // right: a live slide's rows within about a year, at most MAX_ROWS of them; a fact's value now and its next STEPS
@@ -1186,6 +1208,54 @@ export const FALLBACKS = {
   open_meeting_zoom: "see the Meetings page",
 };
 
+/** The same phrases for a Spanish deck, as the Spanish pages name the site's pages (Reuniones, Eventos, Tienda,
+ *  Accesibilidad, Comparte tu historia) — each reads in its sentence ("Próxima reunión: consulta la página de
+ *  Reuniones"). */
+export const FALLBACKS_ES = {
+  meeting_next: "consulta la página de Reuniones",
+  meeting_day: "consulta la página de Reuniones",
+  meeting_after: "consulta la página de Reuniones",
+  meeting_month: "Mensual",
+  meeting_link: "consulta la página de Reuniones",
+  meeting_url: "consulta la página de Reuniones",
+  meeting_phone: "consulta la página de Accesibilidad",
+  speaker_name: "por anunciar",
+  speaker_position: "por anunciar",
+  speaker_topic: "por anunciar",
+  speaker_line: "por anunciar",
+  speaker_note: "orador(a) invitado(a): por anunciar",
+  speaker_after: "por anunciar",
+  speaker_slides: "No se indica que la persona invitada de hoy traiga diapositivas; si trae, revisa también que pueda compartir su pantalla en la prueba de sonido.",
+  grapevine_meeting_next: "consulta la página de Eventos",
+  grapevine_meeting_day: "consulta la página de Eventos",
+  grapevine_meeting_after: "consulta la página de Eventos",
+  grapevine_meeting_link: "consulta la página de Eventos",
+  lv_workshop_next: "consulta el calendario de eventos de La Viña en aalavina.org",
+  price_gv_print: "consulta la página de la Tienda",
+  price_gv_digital: "consulta la página de la Tienda",
+  price_lv_print: "consulta la página de la Tienda",
+  price_lv_digital: "consulta la página de la Tienda",
+  gv_issue: "consulta aagrapevine.org",
+  gv_next_issue: "consulta aagrapevine.org",
+  gv_theme: "consulta aagrapevine.org",
+  lv_issue: "consulta aalavina.org",
+  lv_next_issue: "consulta aalavina.org",
+  lv_theme: "consulta aalavina.org",
+  next_deadline_gv: "consulta los temas de Grapevine en aagrapevine.org",
+  next_deadline_lv: "consulta los temas de La Viña en aalavina.org",
+  botm: "consulta el Book of the Month en aagrapevine.org",
+  botm_lv: "consulta el Libro del mes en aalavina.org",
+  store_offers: "consulta la página de la Tienda",
+  gv_audio_phone: "consulta la página Comparte tu historia",
+  lv_audio_phone: "consulta la página Comparte tu historia",
+  assembly_next: "consulta la página de Eventos",
+  gv_open_meeting: "consulta la página de Reuniones",
+  lv_open_meeting: "consulta la página de Reuniones",
+  open_meeting_zoom: "consulta la página de Reuniones",
+};
+/** A fact's fallback in the context's language. */
+const fallback = (c, key) => (c.lang === "es" ? FALLBACKS_ES : FALLBACKS)[key];
+
 /**
  * What the guest speaker facts say of a committee meeting with NO guest speaker — by the committee's list
  * (speakerCover: the meetings before January 20, 2027, when the guest speakers start, or a month the list leaves
@@ -1203,6 +1273,16 @@ export const NO_SPEAKER = {
   speaker_note: "no guest speaker this month",
   speaker_after: "none this time",
   speaker_slides: "No guest speaker is listed for tonight: choose the version 'No guest speaker', with a topic to share on until 7:30.",
+};
+/** The same for a Spanish deck. */
+const NO_SPEAKER_ES = {
+  speaker_name: "nadie esta noche",
+  speaker_position: "la página de Reuniones no indica orador(a) invitado(a) para esta reunión",
+  speaker_topic: "ninguno",
+  speaker_line: "nadie esta noche",
+  speaker_note: "sin orador(a) invitado(a) este mes",
+  speaker_after: "nadie esta vez",
+  speaker_slides: "No hay orador(a) invitado(a) para esta noche: elige la versión sin orador(a) invitado(a), con un tema para compartir hasta las 7:30.",
 };
 
 /**
@@ -1299,14 +1379,15 @@ const meetingInfo = (c) => c.once("meeting", () => {
   const none = speakerCover(m);
   const rows = list
     .filter((x) => x && DAY.test(String(x.ymd)) && !seen.has(x.ymd) && seen.add(x.ymd))
-    .map((x) => ({ ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, "en", "long"),
+    .map((x) => ({ ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, c.lang, "long"),
       over: iso(chicagoDayEndMs(x.ymd)), speaker: speakers.get(x.ymd) || null, none: !speakers.has(x.ymd) && none(x.ymd) }))
     .filter((x) => x.start && Date.parse(x.over) > c.nowMs && Date.parse(x.start) <= c.nowMs + HORIZON_MS)
     .sort((a, b) => a.start.localeCompare(b.start))
     .slice(0, MAX_ROWS);
-  const rt = ruleAndTime(recurrenceText(monthlyRule(m), "en"));
+  // ("Cada tercer miércoles del mes · 7:00–8:00 p. m., hora del Centro" for a Spanish deck, as /es/meetings/ says it)
+  const rt = ruleAndTime(recurrenceText(monthlyRule(m), c.lang));
   // (the link: config/site.yml meeting.online_url — an older zoom_url still counts, as site.js reads it)
-  const j = meetingJoin(m, "en");
+  const j = meetingJoin(m, c.lang);
   return { rows, rule: rt.rule, time: oneLine(rt.time), platform: j.platform, link: j.url.replace(/^https?:\/\//, "").replace(/\/$/, ""),
     code: j.id, zoom_id: nb(j.id), passcode: j.passcode, url: j.url };
 });
@@ -1348,10 +1429,10 @@ const paperMeetings = (c) => c.once("paper-meetings", () => {
   return { rows, time_es: oneLine(ruleAndTime(recurrenceText(monthlyRule(m), "es")).time) };
 });
 
-/** The events of /events/ (committee.js normalizeEvents, in English) that are not over, without committee meetings
- *  — every date of a monthly series (the CityWide booth's Saturdays …), soonest first. */
+/** The events of /events/ (committee.js normalizeEvents, in the facts' language) that are not over, without
+ *  committee meetings — every date of a monthly series (the CityWide booth's Saturdays …), soonest first. */
 const upcomingEvents = (c) => c.once("events", () =>
-  normalizeEvents((c.db.events && c.db.events.items) || [], c.site, "en", { monthsBack: 0, monthsAhead: 0, now: c.now })
+  normalizeEvents((c.db.events && c.db.events.items) || [], c.site, c.lang, { monthsBack: 0, monthsAhead: 0, now: c.now })
     .filter((e) => !e.past && !e.committee));
 const WORKSHOP = /(?<![\p{L}\p{N}_])(?:workshops?|talleres|taller)(?![\p{L}\p{N}_])/iu;
 const EVENT_FILTERS = {
@@ -1385,9 +1466,12 @@ const lvWorkshop = (c) => c.once("lv-workshop", () => {
   if (!s.first) return s;
   // "2:00 – 3:00 PM Central time (3:00 PM Eastern)": the series' time and its start in La Viña's own time zone, as
   // the decks say it
+  // ("2:00–3:00 p. m., hora del Centro (3:00 p. m., hora del Este)" for a Spanish deck: the Spanish pages' clock)
   let time = s.time;
-  const eastern = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }).format(new Date(s.first.startMs));
-  if (time && eastern) time = `${time} (${eastern} Eastern)`;
+  const at = new Date(s.first.startMs);
+  const eastern = c.lang === "es" ? esClock(at, "America/New_York")
+    : new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }).format(at);
+  if (time && eastern) time = c.lang === "es" ? `${time} (${eastern}, hora del Este)` : `${time} (${eastern} Eastern)`;
   return { ...s, time: oneLine(time) };
 });
 
@@ -1398,7 +1482,7 @@ const grapevineMeeting = (c) => c.once("grapevine-meeting", () => {
   const s = seriesInfo(c, GRAPEVINE_MEETING, (e) => e.series === GRAPEVINE_MEETING && !e.host);
   // `days`, for its own slides: tonight's too once it has ended (the site's list drops it; events.json keeps it,
   // past) — its day stays tonight's until midnight Central after it, as meetingInfo keeps the committee meeting's
-  const tonight = normalizeEvents((c.db.events && c.db.events.items) || [], c.site, "en", { monthsBack: 0, monthsAhead: 0, now: c.now })
+  const tonight = normalizeEvents((c.db.events && c.db.events.items) || [], c.site, c.lang, { monthsBack: 0, monthsAhead: 0, now: c.now })
     .filter((e) => e.past && !e.committee && ((e.recurring && e.series === GRAPEVINE_MEETING && !e.host) || e.seriesOf === GRAPEVINE_MEETING)
       && chicagoDayEndMs(e.startYmd) > c.nowMs);
   return { ...s, days: [...tonight, ...s.dates], time: oneLine(s.time) };
@@ -1406,7 +1490,7 @@ const grapevineMeeting = (c) => c.once("grapevine-meeting", () => {
 
 /** An issue's name on the slides, one style for both magazines (read.js issueLabel, as /contribute/ writes them):
  *  "October 2026"; La Viña's two months "September–October 2026". "" without a key. */
-const issueName = (pub, key) => (/^\d{4}-\d{2}$/.test(String(key || "")) ? issueLabel({ key, pub, label: pub === "lv" ? "a-b" : "" }, "en") : "");
+const issueName = (pub, key, lang = "en") => (/^\d{4}-\d{2}$/.test(String(key || "")) ? issueLabel({ key, pub, label: pub === "lv" ? "a-b" : "" }, lang) : "");
 
 /**
  * The English words data/translations/overrides.yml gives a text by hand ({ "original text": { en, es } } — scripts/
@@ -1453,15 +1537,17 @@ const deadlineRows = (c, pubs) => c.once(`deadlines:${pubs.join("+")}`, () => {
   for (const pub of pubs) {
     for (const v of editorialFor((c.db.editorial && c.db.editorial.items) || [], pub, H, "en").upcoming) {
       if (!v.deadline || v.deadline < c.today) continue;
-      const own = v.original && v.original !== v.theme;
+      const themeLang = v.original && v.original !== v.theme ? v.origLang || (pub === "lv" ? "es" : "en") : v.themeLang || "en";
+      // (a Spanish deck needs no English words beside a theme written in Spanish)
+      const own = !!(v.original && v.original !== v.theme) && !(c.lang === "es" && themeLang === "es");
       rows.push({
         pub,
         due: dayEndIso(v.deadline),
-        due_label: dayLabel(v.deadline, "en"),
-        issue: issueName(pub, v.issueKey) || v.issueLabel || "",
+        due_label: dayLabel(v.deadline, c.lang),
+        issue: issueName(pub, v.issueKey, c.lang) || v.issueLabel || "",
         issue_key: v.issueKey || "",
-        theme: own ? v.original : v.theme,
-        theme_lang: own ? v.origLang || (pub === "lv" ? "es" : "en") : v.themeLang || "en",
+        theme: v.original && v.original !== v.theme ? v.original : v.theme,
+        theme_lang: themeLang,
         gloss: own ? v.theme : "",
         // (themeView's `machine`: the item lists "en" in its `machine` and the English is its translation)
         gloss_machine: !!own && !!v.machine && machineGloss(v.item, v.original, v.theme),
@@ -1519,14 +1605,15 @@ function issueGlossMachine(c, key, es, en) {
 }
 
 /** An issue for the slides: Grapevine's theme in English; La Viña's in Spanish, its English words as a gloss
- *  (gloss_machine: a machine translation); its name in the slides' one style (issueName). */
+ *  (gloss_machine: a machine translation; none in a Spanish deck); its name in the slides' one style (issueName,
+ *  in the facts' language). */
 function issueOf(c, m, pub) {
   const x = m && m[pub];
   if (!x || !x.theme) return null;
-  const label = issueName(pub, x.key) || x.label;
+  const label = issueName(pub, x.key, c.lang) || x.label;
   if (pub === "gv") return { label, theme: x.theme, theme_lang: "en", gloss: "", gloss_machine: false };
   const es = clean(issueTheme(c.db, "lv", x.key, "es")) || x.theme;
-  const en = clean(issueTheme(c.db, "lv", x.key, "en"));
+  const en = c.lang === "es" ? "" : clean(issueTheme(c.db, "lv", x.key, "en"));
   const gloss = en && en !== es ? en : "";
   return { label, theme: es, theme_lang: "es", gloss, gloss_machine: issueGlossMachine(c, x.key, es, gloss) };
 }
@@ -1541,9 +1628,9 @@ function lvCalendarIssue(c, key) {
     .filter((i) => i && i.extra && i.extra.publication === "lv" && i.extra.issue_key === key && titleIn(i, "es"));
   if (!themed.length) return null;
   const theme = themed.map((i) => titleIn(i, "es")).join(" / ");
-  const en = themed.map((i) => titleIn(i, "en")).filter(Boolean).join(" / ");
+  const en = c.lang === "es" ? "" : themed.map((i) => titleIn(i, "en")).filter(Boolean).join(" / ");
   const gloss = en && en !== theme ? en : "";
-  return { label: issueName("lv", key) || issueLabelOf(themed[0], "en"), theme, theme_lang: "es", gloss,
+  return { label: issueName("lv", key, c.lang) || issueLabelOf(themed[0], c.lang), theme, theme_lang: "es", gloss,
     gloss_machine: !!gloss && themed.some((i) => machineGloss(i, titleIn(i, "es"), titleIn(i, "en"))) };
 }
 
@@ -1589,10 +1676,10 @@ function planPrice(c, pub, type) {
   const shop = c.db.shop || {};
   const p = yearPlan(shop, pub, type);
   if (!p) return { value: "", from: null, then: null };
-  const value = money(shopPlanPrice(p, shop, "now", c.now), "en");
+  const value = money(shopPlanPrice(p, shop, "now", c.now), c.lang);
   const next = shopNextChange(shop, c.now);
   if (next && p.change && p.change.key === next.key && Date.parse(next.at.announced) <= c.nowMs) {
-    const then = money(shopPlanPrice(p, shop, "after", c.now), "en");
+    const then = money(shopPlanPrice(p, shop, "after", c.now), c.lang);
     if (then && then !== value) return { value, from: instantIso(next.at.effective), then };
   }
   return { value, from: null, then: null };
@@ -1602,27 +1689,30 @@ function planPrice(c, pub, type) {
 const noticeOf = (c) => shopPriceChangeIn(c.db.shop || {}, c.today);
 
 /** The notice's words: "Prices change on January 1, 2027: Grapevine, 1 year: print $39.00, digital $34.00; …" before
- *  its day, "New prices as of January 1, 2027." from it (the Shop's and the district report's own strings). */
-function noticeText(ch, kind) {
-  const date = dayLabel(ch.effective, "en");
-  if (kind === "after") return `${t("shop.pc_title_after", { date })}.`;
+ *  its day, "New prices as of January 1, 2027." from it (the Shop's and the district report's own strings, in
+ *  `lang`: "Los precios cambian el 1 de enero de 2027: …" for a Spanish deck). */
+function noticeText(ch, kind, lang = "en") {
+  const date = dayLabel(ch.effective, lang);
+  if (kind === "after") return `${t("shop.pc_title_after", { date }, lang)}.`;
   const parts = [];
   for (const pub of ["gv", "lv"]) {
     const rows = (ch.yearly || []).filter((r) => r && r.pub === pub && Number(r.new) > 0);
-    if (rows.length) parts.push(t("report.pc_pub", { pub: pub === "lv" ? "La Viña" : "Grapevine", list: rows.map((r) => `${t(`report.t_${r.type}`)} ${money(r.new, "en")}`).join(", ") }));
+    if (rows.length) parts.push(t("report.pc_pub", { pub: pub === "lv" ? "La Viña" : "Grapevine", list: rows.map((r) => `${t(`report.t_${r.type}`, {}, lang)} ${money(r.new, lang)}`).join(", ") }, lang));
   }
-  if (Number(ch.books_more) > 0) parts.push(t("report.pc_books", { amount: money(ch.books_more, "en") }));
-  return `${t("shop.pc_title_before", { date })}${parts.length ? `: ${parts.join("; ")}` : ""}.`;
+  if (Number(ch.books_more) > 0) parts.push(t("report.pc_books", { amount: money(ch.books_more, lang) }, lang));
+  return `${t("shop.pc_title_before", { date }, lang)}${parts.length ? `: ${parts.join("; ")}` : ""}.`;
 }
 
-/** The Books of the Month on offer today (shop.js shopBotm: Grapevine's first), as the slides name them. */
+/** The Books of the Month on offer today (shop.js shopBotm: Grapevine's first — La Viña's in a Spanish deck), as
+ *  the slides name them. */
 const botmList = (c) => c.once("botm", () =>
-  shopBotm(c.db.shop || {}, "en", c.today, (k, l, v) => H.translateKey(k, l, v), c.now).map((b) => ({
+  shopBotm(c.db.shop || {}, c.lang, c.today, (k, l, v) => H.translateKey(k, l, v), c.now).map((b) => ({
     pub: b.pub,
     title: b.title,
     mag: b.mag,
     lang: b.itemLang,
-    note: b.pct && b.endsLabel ? t("monthly.botm_off", { pct: b.pct, date: b.endsLabel }) : b.endsLabel ? t("monthly.botm_until", { date: b.endsLabel }) : "",
+    note: b.pct && b.endsLabel ? t("monthly.botm_off", { pct: b.pct, date: b.endsLabel }, c.lang)
+      : b.endsLabel ? t("monthly.botm_until", { date: b.endsLabel }, c.lang) : "",
     url: c.abs("/shop/#botm"),
     until: b.ends ? iso(chicagoDayEndMs(b.ends)) : null,
   })));
@@ -1633,14 +1723,15 @@ const botmList = (c) => c.once("botm", () =>
  * gift offers at the Grapevine and La Viña stores (through December 31, 2026)" — joined with "; ". The value is
  * today's, and it steps at every offer's first day (00:00 Central; an offer the site shows from a later day) and
  * at the midnight after its last, so a copy opened later stays right; with none on, the fallback ("see the Shop
- * page"). In English, as the decks are.
+ * page"). In the deck's language ("Envío gratis en las tiendas de La Viña y Grapevine (del 1 de noviembre al 31 de
+ * diciembre de 2026)", as /es/shop/ lists them, in a Spanish deck).
  */
 function storeOffers(c) {
-  const offers = shopOffers(c.site, "en", [], (k, l, v) => H.translateKey(k, l, v), c.now)
+  const offers = shopOffers(c.site, c.lang, [], (k, l, v) => H.translateKey(k, l, v), c.now)
     .map((o) => ({ text: `${o.title} (${o.dateRange})`, from: o.win.from ? Date.parse(o.win.from) : -Infinity, until: Date.parse(o.win.until) }));
   const at = (ms) => offers.filter((o) => o.from <= ms && !(o.until <= ms)).map((o) => o.text).join("; ");
   const moments = [...new Set(offers.flatMap((o) => [o.from, o.until]).filter((ms) => Number.isFinite(ms) && ms > c.nowMs))].sort((a, b) => a - b);
-  return fact(at(c.nowMs), moments.map((ms) => ({ from: iso(ms), value: at(ms) })), null, FALLBACKS.store_offers);
+  return fact(at(c.nowMs), moments.map((ms) => ({ from: iso(ms), value: at(ms) })), null, fallback(c, "store_offers"));
 }
 
 /** A date as the decks write it in a sentence (AP style): "Nov. 5, 2026", "March 4, 2027". */
@@ -1650,16 +1741,17 @@ const apDate = (ymd) => {
   return `${AP_MONTHS[m - 1]} ${d}, ${y}`;
 };
 
-/** The weekly open meetings of /meetings/#weekly-open (committee.js weeklyOpenAll, in English: data/site/
- *  weekly_open.json — La Viña's from config/site.yml lavina_weekly_open), each with its data item. */
+/** The weekly open meetings of /meetings/#weekly-open (committee.js weeklyOpenAll, in the facts' language:
+ *  data/site/weekly_open.json — La Viña's from config/site.yml lavina_weekly_open), each with its data item. */
 const weeklyOpens = (c) => c.once("weekly", () => {
   const items = ((c.db.weekly_open && c.db.weekly_open.items) || []).filter(isMap);
-  return weeklyOpenAll(items, "en", c.now).map((w) => ({ w, it: items.find((it) => (it.id || "") === w.id) || {} }));
+  return weeklyOpenAll(items, c.lang, c.now).map((w) => ({ w, it: items.find((it) => (it.id || "") === w.id) || {} }));
 });
 
 /** The next NETA 65 assembly as one line: "NETA 65 Spring Assembly 2027 · Fri, Mar 19 – Sun, Mar 21, 2027" (its
- *  days as /events/ writes a range), "(details to be confirmed)" while the event file says it is tentative. */
-const assemblyText = (e) => `${e.title} · ${e.rangeLabel || e.dateLabel}${e.tentative ? ` (${lcFirst(t("committee.events.tentative"))})` : ""}`;
+ *  days as /events/ writes a range), "(details to be confirmed)" while the event file says it is tentative — in the
+ *  facts' language (the event's Spanish title and days, "(detalles por confirmar)", in a Spanish deck). */
+const assemblyText = (e, lang = "en") => `${e.title} · ${e.rangeLabel || e.dateLabel}${e.tentative ? ` (${lcFirst(t("committee.events.tentative", {}, lang), lang)})` : ""}`;
 
 /**
  * Every {live:…} value of the day → { key: "text" | { value, steps?, until?, fallback? } } (all of LIVE_KEYS, whether
@@ -1675,14 +1767,14 @@ export function liveFacts(ctx) {
   out.email = String(c.site.contact_email || "");
   const di = driveInfo((c.db && c.db.status) || {}, c.site);
   out.panel = (di.panel && di.panel.label) || "";
-  out.as_of = H.fmtDate(c.now, "en", "medium");
+  out.as_of = H.fmtDate(c.now, c.lang, "medium");
   // The month's facts switch together at midnight Central on the 1st — the month, the year, this month's issues and
   // the next ones (below) — so a slide that shows this issue beside the next one never skips a month, even on a
   // copy opened after the month changed. The month and the year for the next twelve months; `as_of` stays the day
   // the facts were read.
   const k0 = c.today.slice(0, 7);
   const months = Array.from({ length: 11 }, (_, i) => addMonths(k0, i + 1));
-  out.month = fact(monthLabel(k0, "en"), months.map((k) => ({ from: dayStartIso(`${k}-01`), value: monthLabel(k, "en") })));
+  out.month = fact(monthLabel(k0, c.lang), months.map((k) => ({ from: dayStartIso(`${k}-01`), value: monthLabel(k, c.lang) })));
   out.year = fact(k0.slice(0, 4), months.map((k) => ({ from: dayStartIso(`${k}-01`), value: k.slice(0, 4) })));
 
   // The committee meeting. meeting_next is the next meeting until it ENDS ("the next meeting" in a workshop: after
@@ -1691,19 +1783,21 @@ export function liveFacts(ctx) {
   // the one after it (the "Next meeting" slide shown at the end of tonight's meeting), meeting_month the month of
   // meeting_day ("October 2026 meeting"). Those three move on together, at midnight.
   const mt = meetingInfo(c);
+  // (a date inside a Spanish sentence starts in lower case: "el miércoles, 16 de diciembre de 2026")
+  const said = (v) => (c.lang === "es" ? lcFirst(v, "es") : v);
   const unended = mt.rows.filter((r) => !(Date.parse(r.end) <= c.nowMs));
-  out.meeting_next = run(unended.map((r) => ({ value: r.label, end: r.end || r.over })), FALLBACKS.meeting_next);
-  out.meeting_day = run(mt.rows.map((r) => ({ value: r.label, end: r.over })), FALLBACKS.meeting_day);
-  out.meeting_after = run(mt.rows.slice(1).map((r, i) => ({ value: r.label, end: mt.rows[i].over })), FALLBACKS.meeting_after);
-  out.meeting_month = run(mt.rows.map((r) => ({ value: monthLabel(r.ymd.slice(0, 7), "en"), end: r.over })), FALLBACKS.meeting_month);
-  out.meeting_rule = lcFirst(mt.rule);
+  out.meeting_next = run(unended.map((r) => ({ value: said(r.label), end: r.end || r.over })), fallback(c, "meeting_next"));
+  out.meeting_day = run(mt.rows.map((r) => ({ value: said(r.label), end: r.over })), fallback(c, "meeting_day"));
+  out.meeting_after = run(mt.rows.slice(1).map((r, i) => ({ value: said(r.label), end: mt.rows[i].over })), fallback(c, "meeting_after"));
+  out.meeting_month = run(mt.rows.map((r) => ({ value: monthLabel(r.ymd.slice(0, 7), c.lang), end: r.over })), fallback(c, "meeting_month"));
+  out.meeting_rule = lcFirst(mt.rule, c.lang);
   out.meeting_time = mt.time;
   // how to join it: "Google Meet", its link as a slide writes it ("meet.google.com/rva-tmst-vdb") and in full for an
   // e-mail, the meeting code a phone's Meet app asks for ("rva-tmst-vdb"; a Zoom meeting's ID, which never breaks
   // across two lines), and a passcode ("" on Google Meet). meeting_zoom_id is the older name of meeting_code.
   out.meeting_platform = mt.platform;
-  out.meeting_link = fact(mt.link, [], null, FALLBACKS.meeting_link);
-  out.meeting_url = fact(mt.url, [], null, FALLBACKS.meeting_url);
+  out.meeting_link = fact(mt.link, [], null, fallback(c, "meeting_link"));
+  out.meeting_url = fact(mt.url, [], null, fallback(c, "meeting_url"));
   out.meeting_code = mt.zoom_id;
   out.meeting_zoom_id = mt.zoom_id;
   out.meeting_passcode = mt.passcode;
@@ -1714,37 +1808,43 @@ export function liveFacts(ctx) {
   // and December 16, 2026) says so (NO_SPEAKER: "none tonight", "none this time"); only a speaker the list doesn't
   // name yet (a month after its last one, or an entry the site leaves out) says the fallback, "to be announced". The
   // chair's notes only: whether the speaker shares slides (check their screen sharing at the sound check).
-  const bySpeaker = (key, f) => run(mt.rows.map((r) => ({ value: r.speaker ? f(r.speaker) : r.none ? NO_SPEAKER[key] : "", end: r.over })),
-    FALLBACKS[key]);
+  // (a Spanish deck: the position and topic as /es/meetings/ gives them, and its own words for none)
+  const es = c.lang === "es";
+  const none = es ? NO_SPEAKER_ES : NO_SPEAKER;
+  const bySpeaker = (key, f) => run(mt.rows.map((r) => ({ value: r.speaker ? f(r.speaker) : r.none ? none[key] : "", end: r.over })),
+    fallback(c, key));
   out.speaker_name = bySpeaker("speaker_name", (s) => s.name);
-  out.speaker_position = bySpeaker("speaker_position", (s) => s.position);
-  out.speaker_topic = bySpeaker("speaker_topic", (s) => s.topic);
+  out.speaker_position = bySpeaker("speaker_position", (s) => (es ? s.position_es : s.position));
+  out.speaker_topic = bySpeaker("speaker_topic", (s) => (es ? s.topic_es : s.topic));
   // "Rick W. — Past delegate, Area 65 …" (as the calendars' text gives the speaker)
-  out.speaker_line = bySpeaker("speaker_line", (s) => [s.name, s.position].filter(Boolean).join(" — "));
+  out.speaker_line = bySpeaker("speaker_line", (s) => [s.name, es ? s.position_es : s.position].filter(Boolean).join(" — "));
   // "guest speaker: Rick W.", or "no guest speaker this month" for a meeting with none (December 16, 2026) — a
   // phrase for another meeting's slides (the Grapevine Meeting's announcements); its fallback for a speaker not
   // listed yet, and once the build's dates run out
-  out.speaker_note = bySpeaker("speaker_note", (s) => `guest speaker: ${s.name}`);
+  out.speaker_note = bySpeaker("speaker_note", (s) => (es ? `orador(a) invitado(a): ${s.name}` : `guest speaker: ${s.name}`));
   // "Jeannie M. — “Grapevine and La Viña as Public Information tools”" (as the meeting's summary gives them), or
   // "none this time" ("Guest speaker: none this time" on the "Next meeting" slide of November 18, 2026)
-  const nextOne = (r) => (r.speaker ? r.speaker.name + (r.speaker.topic ? ` — “${r.speaker.topic}”` : "") : r.none ? NO_SPEAKER.speaker_after : "");
-  out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r), end: mt.rows[i].over })), FALLBACKS.speaker_after);
+  const topicOf = (sp) => (es ? sp.topic_es : sp.topic);
+  const nextOne = (r) => (r.speaker ? r.speaker.name + (topicOf(r.speaker) ? ` — “${topicOf(r.speaker)}”` : "") : r.none ? none.speaker_after : "");
+  out.speaker_after = run(mt.rows.slice(1).map((r, i) => ({ value: nextOne(r), end: mt.rows[i].over })), fallback(c, "speaker_after"));
   // (a speaker without slides: "" — the fallback, "No slides are listed …"; a night without a speaker: which version)
-  out.speaker_slides = bySpeaker("speaker_slides", (s) => (s.slides ? "Tonight's guest speaker shares slides: at the sound check, make sure they can share their screen." : ""));
+  out.speaker_slides = bySpeaker("speaker_slides", (s) => (!s.slides ? "" : es
+    ? "La persona invitada de hoy comparte diapositivas: en la prueba de sonido, revisa que pueda compartir su pantalla."
+    : "Tonight's guest speaker shares slides: at the sound check, make sure they can share their screen."));
 
   // joining it by phone, as /accessibility/#phone gives it (access.js axPhone: config/site.yml phone_access + the
   // meeting's ID): Zoom's first dial-in number and its city — "+1 346 248 7799 (Houston)" — and what a caller types
   // as the passcode (the chair's numbers-only phone passcode, or a numbers-only meeting passcode; else ""). A Google
   // Meet room has no number to call: the page lists no committee meeting, and the decks name none for it.
-  const phone = axPhone(c.site, [], "en", (k) => k);
+  const phone = axPhone(c.site, [], c.lang, (k) => k);
   const byPhone = phone.meetings.find((x) => x.key === "committee");
   const dial = phone.numbers[0];
-  out.meeting_phone = fact(byPhone && dial ? (dial.city ? `${dial.display} (${dial.city})` : dial.display) : "", [], null, FALLBACKS.meeting_phone);
+  out.meeting_phone = fact(byPhone && dial ? (dial.city ? `${dial.display} (${dial.city})` : dial.display) : "", [], null, fallback(c, "meeting_phone"));
   out.meeting_phone_passcode = byPhone ? byPhone.pass : "";
 
   // La Viña's monthly workshop: each date until that workshop ends
   const lv = lvWorkshop(c);
-  out.lv_workshop_next = run(lv.dates.map((e) => ({ value: e.dateLabel, end: iso(e.endMs) })), FALLBACKS.lv_workshop_next);
+  out.lv_workshop_next = run(lv.dates.map((e) => ({ value: said(e.dateLabel), end: iso(e.endMs) })), fallback(c, "lv_workshop_next"));
   out.lv_workshop_time = lv.time;
   out.lv_workshop_zoom_id = lv.first ? nb(lv.first.meetingId) : "";
 
@@ -1754,76 +1854,81 @@ export function liveFacts(ctx) {
   // and the meeting after it do), and its time
   const gm = grapevineMeeting(c);
   const gmOver = (e) => iso(chicagoDayEndMs(e.startYmd));
-  out.grapevine_meeting_next = run(gm.dates.map((e) => ({ value: e.dateLabel, end: iso(e.endMs) })), FALLBACKS.grapevine_meeting_next);
-  out.grapevine_meeting_day = run(gm.days.map((e) => ({ value: e.dateLabel, end: gmOver(e) })), FALLBACKS.grapevine_meeting_day);
-  out.grapevine_meeting_after = run(gm.days.slice(1).map((e, i) => ({ value: e.dateLabel, end: gmOver(gm.days[i]) })), FALLBACKS.grapevine_meeting_after);
+  out.grapevine_meeting_next = run(gm.dates.map((e) => ({ value: said(e.dateLabel), end: iso(e.endMs) })), fallback(c, "grapevine_meeting_next"));
+  out.grapevine_meeting_day = run(gm.days.map((e) => ({ value: said(e.dateLabel), end: gmOver(e) })), fallback(c, "grapevine_meeting_day"));
+  out.grapevine_meeting_after = run(gm.days.slice(1).map((e, i) => ({ value: said(e.dateLabel), end: gmOver(gm.days[i]) })), fallback(c, "grapevine_meeting_after"));
   out.grapevine_meeting_time = gm.time;
   out.grapevine_meeting_link = fact(gm.first ? String(gm.first.online || "").replace(/^https?:\/\//, "").replace(/\/$/, "") : "", [], null,
-    FALLBACKS.grapevine_meeting_link);
+    fallback(c, "grapevine_meeting_link"));
 
   // the 1-year prices: today's, and the announced one from its day
   for (const pub of ["gv", "lv"]) {
     for (const type of ["print", "digital"]) {
       const p = planPrice(c, pub, type);
-      out[`price_${pub}_${type}`] = fact(p.value, p.from ? [{ from: p.from, value: p.then }] : [], null, FALLBACKS[`price_${pub}_${type}`]);
+      out[`price_${pub}_${type}`] = fact(p.value, p.from ? [{ from: p.from, value: p.then }] : [], null, fallback(c, `price_${pub}_${type}`));
     }
   }
   // the notice while it is on — before its day, then "New prices as of …" until it ends; empty otherwise
   const hit = noticeOf(c);
   const noticeEnd = hit ? instantIso(hit.c.at.notice_end) : null;
   if (hit && hit.kind === "before") {
-    out.price_change_note = fact(noticeText(hit.c, "before"), [{ from: instantIso(hit.c.at.effective), value: noticeText(hit.c, "after") }], noticeEnd);
-  } else if (hit) out.price_change_note = fact(noticeText(hit.c, "after"), [], noticeEnd);
+    out.price_change_note = fact(noticeText(hit.c, "before", c.lang), [{ from: instantIso(hit.c.at.effective), value: noticeText(hit.c, "after", c.lang) }], noticeEnd);
+  } else if (hit) out.price_change_note = fact(noticeText(hit.c, "after", c.lang), [], noticeEnd);
   else out.price_change_note = "";
-  out.price_change_date = hit ? fact(dayLabel(hit.c.effective, "en"), [], noticeEnd) : "";
+  out.price_change_date = hit ? fact(dayLabel(hit.c.effective, c.lang), [], noticeEnd) : "";
 
   // this month's issue, the next one and this month's theme alone ("Loneliness"): Grapevine's for the next three
   // months, La Viña's for this issue and the next one, each switching on the 1st of its first month
   for (const pub of ["gv", "lv"]) {
     const xs = issueSeries(c, pub);
     const n = pub === "gv" ? 3 : 2;
-    out[`${pub}_issue`] = run(xs.slice(0, n).map((s) => ({ value: issueText(s.x), end: s.end })), FALLBACKS[`${pub}_issue`]);
-    out[`${pub}_next_issue`] = run(xs.slice(1, n + 1).map((s, i) => ({ value: issueText(s.x), end: xs[i].end })), FALLBACKS[`${pub}_next_issue`]);
-    out[`${pub}_theme`] = run(xs.slice(0, n).map((s) => ({ value: s.x ? themeText(s.x) : "", end: s.end })), FALLBACKS[`${pub}_theme`]);
+    out[`${pub}_issue`] = run(xs.slice(0, n).map((s) => ({ value: issueText(s.x), end: s.end })), fallback(c, `${pub}_issue`));
+    out[`${pub}_next_issue`] = run(xs.slice(1, n + 1).map((s, i) => ({ value: issueText(s.x), end: xs[i].end })), fallback(c, `${pub}_next_issue`));
+    out[`${pub}_theme`] = run(xs.slice(0, n).map((s) => ({ value: s.x ? themeText(s.x) : "", end: s.end })), fallback(c, `${pub}_theme`));
   }
   // each magazine's next story deadlines, each until its day is over
   const rows = deadlineRows(c, ["gv", "lv"]);
-  out.next_deadline_gv = deadlineRun(rows.filter((r) => r.pub === "gv"), FALLBACKS.next_deadline_gv);
-  out.next_deadline_lv = deadlineRun(rows.filter((r) => r.pub === "lv"), FALLBACKS.next_deadline_lv);
+  out.next_deadline_gv = deadlineRun(rows.filter((r) => r.pub === "gv"), fallback(c, "next_deadline_gv"));
+  out.next_deadline_lv = deadlineRun(rows.filter((r) => r.pub === "lv"), fallback(c, "next_deadline_lv"));
   // Grapevine's Book of the Month (botm) and La Viña's Libro del mes (botm_lv), each until its offer ends
   const books = botmList(c);
   for (const [key, pub] of [["botm", "gv"], ["botm_lv", "lv"]]) {
     const b = books.find((x) => x.pub === pub);
-    out[key] = fact(b ? b.title : "", [], b ? b.until : null, FALLBACKS[key]);
+    out[key] = fact(b ? b.title : "", [], b ? b.until : null, fallback(c, key));
   }
   // the stores' offers (config/site.yml store_offers, as /shop/#offers lists them: shop.js shopOffers): each one
   // "Title (its days)", joined with "; " — switching at each offer's first day and at the midnight after its last
   out.store_offers = storeOffers(c);
   // the magazines' story lines — record your story by phone (/contribute/#record), as their official pages give them
   const ap = c.db.audio_project || {};
-  out.gv_audio_phone = fact(clean(ap.gv && ap.gv.phone), [], null, FALLBACKS.gv_audio_phone);
-  out.lv_audio_phone = fact(clean(ap.lv && ap.lv.phone), [], null, FALLBACKS.lv_audio_phone);
+  out.gv_audio_phone = fact(clean(ap.gv && ap.gv.phone), [], null, fallback(c, "gv_audio_phone"));
+  out.lv_audio_phone = fact(clean(ap.lv && ap.lv.phone), [], null, fallback(c, "lv_audio_phone"));
 
   // the next NETA 65 assembly, until it is over, then the one after it (the assemblies of /events/)
   const assemblies = upcomingEvents(c).filter((e) => EVENT_FILTERS.assemblies(e) && e.startMs <= c.nowMs + HORIZON_MS);
-  out.assembly_next = run(assemblies.map((e) => ({ value: assemblyText(e), end: iso(e.endMs) })), FALLBACKS.assembly_next);
+  out.assembly_next = run(assemblies.map((e) => ({ value: assemblyText(e, c.lang), end: iso(e.endMs) })), fallback(c, "assembly_next"));
 
   // the weekly open meetings (/meetings/#weekly-open): "Wednesdays, 11:00 AM Central (noon Eastern)" — La Viña's
   // with its first meeting, "starting Nov. 5, 2026", which says "since Nov. 5, 2026" from that day — and their Zoom
   // room, "Zoom 871 2036 8287, passcode 238047" (both meetings' when they share it, as they do today)
   const wos = weeklyOpens(c);
-  const when = (w) => [w.day, w.timeCentral].filter(Boolean).join(", ") + (w.hostTime ? ` (${lcFirst(w.hostTime)})` : "");
+  // (in Spanish: "Jueves, 11:00 a. m., hora del Centro (mediodía, hora del Este)" — the Spanish pages' "(hora del
+  // Centro)" after a comma, so the line has one pair of brackets; "a partir del 5 de noviembre de 2026", "desde el …")
+  const zone = (s) => (es ? String(s || "").replace(/\s*\((hora del [^)]+)\)/g, ", $1") : s);
+  const when = (w) => [w.day, zone(w.timeCentral)].filter(Boolean).join(", ") + (w.hostTime ? ` (${lcFirst(zone(w.hostTime), c.lang)})` : "");
   const gvo = wos.find((x) => !x.w.isLv), lvo = wos.find((x) => x.w.isLv);
-  out.gv_open_meeting = fact(gvo ? when(gvo.w) : "", [], null, FALLBACKS.gv_open_meeting);
+  out.gv_open_meeting = fact(gvo ? when(gvo.w) : "", [], null, fallback(c, "gv_open_meeting"));
   const starts = lvo ? [lvo.it.extra && lvo.it.extra.starts, c.site.lavina_weekly_open && c.site.lavina_weekly_open.starts].find((x) => DAY.test(String(x || ""))) : "";
+  const starting = (d) => (es ? `, a partir del ${dayLabel(d, "es")}` : `, starting ${apDate(d)}`);
+  const since = (d) => (es ? `, desde el ${dayLabel(d, "es")}` : `, since ${apDate(d)}`);
   if (lvo && starts && Date.parse(dayStartIso(starts)) > c.nowMs) {
-    out.lv_open_meeting = fact(`${when(lvo.w)}, starting ${apDate(starts)}`, [{ from: dayStartIso(starts), value: `${when(lvo.w)}, since ${apDate(starts)}` }], null, FALLBACKS.lv_open_meeting);
-  } else out.lv_open_meeting = fact(lvo ? when(lvo.w) + (starts ? `, since ${apDate(starts)}` : "") : "", [], null, FALLBACKS.lv_open_meeting);
-  const room = (w) => (w.zoomId ? `Zoom\u00a0${nb(w.zoomId)}${w.passcode ? `, passcode\u00a0${nb(w.passcode)}` : ""}` : "");
+    out.lv_open_meeting = fact(`${when(lvo.w)}${starting(starts)}`, [{ from: dayStartIso(starts), value: `${when(lvo.w)}${since(starts)}` }], null, fallback(c, "lv_open_meeting"));
+  } else out.lv_open_meeting = fact(lvo ? when(lvo.w) + (starts ? since(starts) : "") : "", [], null, fallback(c, "lv_open_meeting"));
+  const room = (w) => (w.zoomId ? `Zoom\u00a0${nb(w.zoomId)}${w.passcode ? `, ${es ? "código de acceso" : "passcode"}\u00a0${nb(w.passcode)}` : ""}` : "");
   const rooms = [gvo, lvo].filter((x) => x && room(x.w));
   const shared = rooms.length === 2 && room(rooms[0].w) === room(rooms[1].w);
   out.open_meeting_zoom = fact(rooms.length === 1 || shared ? room(rooms[0].w)
-    : rooms.map((x) => `${x.w.isLv ? "La Viña" : "Grapevine"}: ${room(x.w)}`).join(" · "), [], null, FALLBACKS.open_meeting_zoom);
+    : rooms.map((x) => `${x.w.isLv ? "La Viña" : "Grapevine"}: ${room(x.w)}`).join(" · "), [], null, fallback(c, "open_meeting_zoom"));
   return Object.fromEntries(LIVE_KEYS.map((k) => [k, out[k] ?? ""]));
 }
 
@@ -1893,8 +1998,8 @@ export function liveData(kind, options, ctx) {
       return {
         rows,
         change: ch ? {
-          at: instantIso(ch.at.effective), label: dayLabel(ch.effective, "en"), notice_from: instantIso(ch.at.announced),
-          notice_until: instantIso(ch.at.notice_end), books_more: Number(ch.books_more) > 0 ? money(ch.books_more, "en") : "",
+          at: instantIso(ch.at.effective), label: dayLabel(ch.effective, c.lang), notice_from: instantIso(ch.at.announced),
+          notice_until: instantIso(ch.at.notice_end), books_more: Number(ch.books_more) > 0 ? money(ch.books_more, c.lang) : "",
         } : null,
         url: c.abs(ch ? "/shop/#price-changes" : "/shop/#subscriptions"),
       };
@@ -1925,11 +2030,12 @@ export function liveData(kind, options, ctx) {
     }
     case "issues":
       // this month's issues, as {live:gv_issue} / {live:lv_issue} give them
-      return { month: monthLabel(c.today.slice(0, 7), "en"), gv: issueSeries(c, "gv")[0].x, lv: issueSeries(c, "lv")[0].x, url: c.abs("/read/") };
+      return { month: monthLabel(c.today.slice(0, 7), c.lang), gv: issueSeries(c, "gv")[0].x, lv: issueSeries(c, "lv")[0].x, url: c.abs("/read/") };
     case "monthly": {
-      const mm = thisMonth(c);
+      // (the toolkit's ideas in the deck's language: /es/monthly/'s for a Spanish deck)
+      const mm = c.lang === "en" ? thisMonth(c) : monthModel(c.today.slice(0, 7), c.db, c.carry, c.site, c.lang, c.now);
       return {
-        month: monthLabel(mm.key, "en"),
+        month: monthLabel(mm.key, c.lang),
         url: c.abs(`/monthly/${mm.key}/`),
         tips: (mm.tips || []).slice(0, limitOf(o, 3)).map((x) => ({ title: x.title, text: x.text })),
         limit: limitOf(o, 3),
@@ -1953,7 +2059,7 @@ export function liveData(kind, options, ctx) {
         .sort((a, b) => b.d.localeCompare(a.d) || a.i - b.i)
         .slice(0, limitOf(o, 3));
       return {
-        rows: posts.map(({ p, d }) => ({ title: clean(H.pickLang(p, "title", "en")) || clean(p.title), date_label: d ? dayLabel(d, "en") : "", url: c.abs(`/bulletin/#${p._anchor}`) })),
+        rows: posts.map(({ p, d }) => ({ title: clean(H.pickLang(p, "title", c.lang)) || clean(p.title), date_label: d ? dayLabel(d, c.lang) : "", url: c.abs(`/bulletin/#${p._anchor}`) })),
         limit: limitOf(o, 3),
         url: c.abs("/bulletin/"),
       };
@@ -1979,7 +2085,8 @@ function driveCopy(c, title) {
 
 /** /orientation/presentations/<id>.json for one deck of the global (`presentations.decks`). */
 export function deckJson(deck, ctx) {
-  const c = context(ctx);
+  // the facts in the deck's language (a Spanish deck's dates, times, issues and fallbacks are Spanish)
+  const c = context(ctx, deck.lang);
   const slides = (deck.slides || []).map((s) => {
     let data = null;
     if (s.layout === "live") data = liveData(s.kind, s.options, c);
@@ -1998,7 +2105,7 @@ export function deckJson(deck, ctx) {
     footer: deck.footer,
     minutes: deck.minutes,
     built: instantIso(c.site.built) || new Date().toISOString(),
-    as_of: H.fmtDate(c.now, "en", "medium"),
+    as_of: H.fmtDate(c.now, c.lang, "medium"),
     version: deck.version,
     site: { url: c.base ? c.base + "/" : "", host: c.host },
     drive: driveCopy(c, deck.drive_title),

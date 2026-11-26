@@ -401,13 +401,18 @@ function context(full, plan) {
     months: new Map(), meetings: new Map(), decks: Array.isArray(full.presentations?.decks) ? full.presentations.decks : [] };
 }
 
+// The kind's presentation (event-pages.js eventKind): for an event held in Spanish, its Spanish deck (deckEs: La
+// Viña's writing workshop → taller-de-escritura) while the site has it, else the kind's own; `lang`, the language the
+// deck is written in (the card's "Presentation in English / in Spanish" badge where it isn't the page's).
 function deckOf(c, kind, lang) {
-  const d = kind.deck ? c.decks.find((x) => x && x.id === kind.deck) : null;
+  const byId = (id) => (id ? c.decks.find((x) => x && x.id === id) : null);
+  const d = byId(kind.deckEs) || byId(kind.deck);
   if (!d) return null;
   const pick = (o) => (o && typeof o === "object" ? o[lang] || o.en || "" : String(o || ""));
   return { id: d.id, href: lurl(`/orientation/?present=${encodeURIComponent(d.id)}`, lang),
     card: lurl(`/orientation/#pres-${d.id}`, lang), title: line(pick(d.card?.title) || pick(d.title)),
-    summary: line(pick(d.card?.summary)), minutes: Number(d.minutes) || 0, close: !!kind.deckClose };
+    summary: line(pick(d.card?.summary)), minutes: Number(d.minutes) || 0, close: !!kind.deckClose,
+    lang: d.lang === "es" ? "es" : "en" };
 }
 
 function crumbs(lang, hub) {

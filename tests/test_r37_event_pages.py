@@ -371,6 +371,8 @@ class EventPages(unittest.TestCase):
 
     def test_a_writing_workshop(self):
         s = settings(self)
+        # La Viña's workshop is held in Spanish: it links the Spanish deck while the site has it, else the English one
+        deck_id = "taller-de-escritura" if "taller-de-escritura" in s["decks"] else "writing-workshop"
         for lang, pre in (("en", ""), ("es", "/es")):
             p = main_of(self.page(f"{pre}/events/{WS}/"))
             with self.subTest(lang=lang):
@@ -381,16 +383,19 @@ class EventPages(unittest.TestCase):
                              f"{pre}/events/#{WS}",
                              # (what the settings have: its presentation, GVR / RLV 101's lesson, the committee's
                              # next meeting)
-                             *((f"{pre}/orientation/?present=writing-workshop", f"{pre}/orientation/#pres-writing-workshop")
-                               if "writing-workshop" in s["decks"] else ()),
+                             *((f"{pre}/orientation/?present={deck_id}", f"{pre}/orientation/#pres-{deck_id}")
+                               if deck_id in s["decks"] else ()),
                              *((f"{pre}/orientation/stories/",) if "stories" in s["lessons"] else ()),
                              *((f"{pre}/meetings/#committee-meeting",) if s["meeting"] else ())):
                     self.assertIn(want, hrefs)
                 self.assertFalse([h for h in hrefs if "bs=" in h], "never a booth link that replaces its settings")
-                # (round 37's fixer) the slides are in English: a page in another language says so on the deck's card
-                if "writing-workshop" in s["decks"]:
+                # (round 37's fixer) the deck's card says its language on a page in another one: the Spanish deck
+                # "Presentation in Spanish" on the English page, the English one "Presentación en inglés" on /es/
+                if deck_id in s["decks"]:
                     deck = re.search(r'<article class="card card-pad evp-deck".*?</article>', p, re.S).group(0)
-                    self.assertEqual("Presentación en inglés" in text_of(deck), lang == "es")
+                    spanish = deck_id == "taller-de-escritura"
+                    self.assertEqual("Presentación en inglés" in text_of(deck), lang == "es" and not spanish)
+                    self.assertEqual("Presentation in Spanish" in text_of(deck), lang == "en" and spanish)
                     self.assertNotIn("Presentation in English", text_of(deck))
                 # the bingo card made for it: in Spanish (held in Spanish), La Viña, a workshop, its title and day
                 bingo = re.search(r'href="([^"]+)"[^>]*data-evp-bingo', p).group(1)

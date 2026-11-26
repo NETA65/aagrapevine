@@ -89,7 +89,7 @@ def slide(i: str, layout: str = "bullets", **kw) -> dict:
 
 def broken_deck() -> dict:
     return {
-        "id": "not-the-file-name", "order": 12, "lang": "es", "title": "", "short": "S", "eyebrow": "E", "footer": "F",
+        "id": "not-the-file-name", "order": 12, "lang": "fr", "title": "", "short": "S", "eyebrow": "E", "footer": "F",
         "minutes": 3, "icon": "no-such-icon-anywhere", "tone": "blue", "drive_title": 5, "colour": "red",
         "card": {"title": {"en": "a", "es": "b"}, "summary": {"en": "a"}, "audience": "both"},
         "presets": [
@@ -262,7 +262,7 @@ slides:
         problems = "\n".join(self.js_load(self.tmp)["problems"])
         for expect in (
             "broken.yml: id 'not-the-file-name' must be the file name 'broken'", "unknown top-level field 'colour'",
-            "order: a whole number 1–9", 'lang: "en"', "tone: one of", "icon 'no-such-icon-anywhere': no such lucide icon",
+            "order: a whole number 1–9", 'lang: "en" or "es"', "tone: one of", "icon 'no-such-icon-anywhere': no such lucide icon",
             "card.summary: needs an English AND a Spanish text", "slide 2: duplicate id 'ok'",
             "slide 3: id 'Bad_Id' must be lowercase", "slide 4: a mapping", "layout 'poster' is not one of",
             "'quote' needs 'credit'", "unknown field 'colour' for layout 'quote'", "optional must be true or false",

@@ -21,7 +21,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / "config" / "presentations"
-DECKS = ("orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting", "grapevine-meeting")
+DECKS = ("orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting", "grapevine-meeting",
+         # La Viña's, in Spanish (lang: "es")
+         "taller-de-escritura", "orientacion-rlv")
 # The phone numbers the site itself publishes (published_phones): a deck may show them
 SITE_YML = ROOT / "config" / "site.yml"
 AUDIO_PROJECT = ROOT / "data" / "site" / "audio_project.json"
@@ -82,6 +84,9 @@ LAYOUTS = {   # layout → (required fields, optional fields)
     "flow": ({"steps"}, set()),
     "live": ({"kind"}, {"intro", "options"}),
 }
+# The line every deck keeps ("Not an official AA Grapevine, Inc. presentation"), or in a Spanish deck its Spanish
+# words ("No es una presentación oficial de AA Grapevine, Inc.")
+DISCLAIMER = re.compile(r"not an official aa grapevine|no es una presentaci[oó]n oficial de aa grapevine", re.I)
 # Visitor-facing wording rules (slides AND notes — anyone can open the notes). AA shares experience rather than
 # teaching; GVR / RLV service is a "position"; the site never talks about how its data is gathered.
 BANNED = re.compile(
@@ -516,8 +521,8 @@ def check_deck(path: Path) -> list[str]:
         out.append(f"id {d.get('id')!r} must be the file name {path.stem!r}")
     if not is_int(d.get("order")) or not 1 <= d["order"] <= 9:
         out.append("order: a whole number 1–9")
-    if d.get("lang") != "en":
-        out.append('lang: "en" (the content stays English — the owner\'s decision)')
+    if d.get("lang") not in LANGS:
+        out.append('lang: "en" or "es" (the language the presentation is written in)')
     for k in ("title", "short", "eyebrow", "footer", "icon"):
         if not isinstance(d.get(k), str) or not d[k].strip():
             out.append(f"{k}: a non-empty string")
@@ -651,7 +656,7 @@ def check_deck(path: Path) -> list[str]:
         else:
             if not fac and len(notes.split()) < 25:
                 out.append(f"{w}: notes look thin (< 25 words): say what to SAY, DO and ASK")
-            if re.search(r"(?m)^\s*TIME:", notes):
+            if re.search(r"(?m)^\s*(?:TIME|TIEMPO):", notes):  # (a Spanish deck's "TIEMPO:" too)
                 out.append(f"{w}: no TIME: line in the notes — give `minutes:` (the player writes the TIME line)")
             if re.search(r"(?i)\b(right-click|hide slide|this file|powerpoint|\.pptx)\b", notes) and not fac:
                 out.append(f"{w}: notes still talk about PowerPoint (hidden slides, this file …) — say what to do "
@@ -739,7 +744,7 @@ def check_deck(path: Path) -> list[str]:
         used_allow: set[str] = set()
         for where, text in strings({k: v for k, v in s.items() if k not in ("id", "layout", "accent", "when", "lang", "print",
                                                                            "show_from", "show_until", "allow_words")}):
-            if re.search(r"not an official aa grapevine", text, re.I):
+            if DISCLAIMER.search(text):
                 has_disclaimer = True
             # (a version's own quote or sources are as verbatim as the slide's: "version_fields.short.quote" → "quote")
             field = ".".join(where.split(".")[2:]) if where.startswith("version_fields.") else where

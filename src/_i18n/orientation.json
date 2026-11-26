@@ -94,13 +94,14 @@
   "orientation.pres_title": { "en": "Presentations", "es": "Presentaciones" },
   "orientation.pres_sub": {
     "en": "The committee's workshops and its two monthly meetings, for a projector or a video call, with speaker notes. Meeting dates, guest speakers, story deadlines and prices stay current by themselves.",
-    "es": "Los talleres del comité y sus dos reuniones mensuales, para un proyector o una videollamada, con notas para quien presenta. Las diapositivas están en inglés; las fechas de las reuniones, los oradores invitados, las fechas límite y los precios se mantienen al día solos."
+    "es": "Los talleres del comité y sus dos reuniones mensuales, para un proyector o una videollamada, con notas para quien presenta. La mayoría están en inglés y cada tarjeta lo indica; las de La Viña están en español. Las fechas de las reuniones, los oradores invitados, las fechas límite y los precios se mantienen al día solos."
   },
   "orientation.pres_minutes": { "en": "About {n} minutes", "es": "Unos {n} minutos" },
   "orientation.pres_hours": { "en": "About {n} hours", "es": "Unas {n} horas" },
   "orientation.pres_slides": { "en": "{n} slides", "es": "{n} diapositivas" },
   "orientation.pres_also": { "en": "Also: {list}", "es": "También: {list}" },
   "orientation.pres_english": { "en": "Presentation in English", "es": "Presentación en inglés" },
+  "orientation.pres_spanish": { "en": "Presentation in Spanish", "es": "Presentación en español" },
   "orientation.pres_for": { "en": "Who it's for", "es": "Para quién es" },
   "orientation.pres_current": { "en": "Stays current", "es": "Se mantiene al día" },
   "orientation.pres_kind_meeting": { "en": "Committee meeting dates", "es": "Fechas de la reunión del comité" },

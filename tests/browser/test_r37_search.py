@@ -42,7 +42,10 @@ class NewKinds(unittest.TestCase):
     def test_presentations(self):
         rows, _, errors = self.run_query("search/?q=presentation")
         decks = [r for r in rows if r["kind"] == "Presentation"]
-        self.assertEqual(len(decks), 5, rows[:8])
+        # every presentation of the built site (the English ones and La Viña's Spanish ones)
+        built = len(list((S["site"] / "orientation" / "presentations").glob("*.json")))
+        self.assertGreaterEqual(built, 7)
+        self.assertEqual(len(decks), built, rows[:10])
         prefix = S["server"].prefix
         for r in decks:
             self.assertTrue(r["href"].startswith(prefix + "orientation/#pres-"), r["href"])
