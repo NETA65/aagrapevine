@@ -32,7 +32,8 @@ sitemap: false
 {%- set sv = db.status | cmStatus -%}
 {%- set qm = db.status | fsQuoteMornings -%}
 {%- set total = sv.sources | length -%}
-{%- set feedsDown = sv.feeds | whereNot("state", "ok") | length -%}
+{#- a calendar config/site.yml marks `paused:` (known not to work, on purpose) is not counted as unavailable -#}
+{%- set feedsDown = sv.feeds | whereNot("state", "ok") | whereNot("pausedOnPurpose", true) | length -%}
 {%- set actionsUrl = site.repository + "/actions" -%}
 {#- how the committee adds an event by hand (content/events/README.md) — linked from a calendar we can't read -#}
 {%- set eventsHowtoUrl = site.repository + "/blob/main/content/events/README.md" -%}
@@ -293,12 +294,14 @@ sitemap: false
               <p class="mt-0.5 break-all font-mono text-xs text-muted">{{ f.url | cmShortUrl }}</p>
             </div>
             {% if f.state == "ok" %}<span class="badge-vine">{% icon "circle-check", "size-3.5" %} {{ "community.status.feed_state.ok" | t(lang) }}</span>
+            {% elif f.pausedOnPurpose %}<span class="badge-muted">{% icon "circle-pause", "size-3.5" %} {{ "community.status.feed_state.paused" | t(lang) }}</span>
             {% elif f.state == "blocked" %}<span class="badge-lv">{% icon "circle-slash", "size-3.5" %} {{ "community.status.feed_state.blocked" | t(lang) }}</span>
             {% elif f.state == "error" %}<span class="badge-muted">{% icon "circle-x", "size-3.5" %} {{ "community.status.feed_state.error" | t(lang) }}</span>
             {% else %}<span class="badge-muted">{% icon "circle-dashed", "size-3.5" %} {{ "community.status.feed_state.never" | t(lang) }}</span>{% endif %}
           </div>
           <p class="mt-3 flex max-w-3xl gap-2 text-sm leading-relaxed text-ink">{% icon "info", "size-4 mt-0.5 shrink-0 text-muted" %}<span>
             {%- if f.state == "ok" %}{{ ("community.status.feed_ok_one" if f.events == 1 else "community.status.feed_ok") | t(lang, { n: f.events | cmNum(lang) }) }}{% if f.dups %} {{ "community.status.feed_dups" | t(lang, { n: f.dups | cmNum(lang) }) }}{% endif %}
+            {%- elif f.pausedOnPurpose %}{{ "community.status.feed_paused" | t(lang, { host: f.host }) }} <a class="link" href="{{ eventsHowtoUrl }}" target="_blank" rel="noopener">{{ "community.status.feed_howto" | t(lang) }}</a>
             {%- elif f.state == "blocked" %}{{ "community.status.feed_blocked" | t(lang, { host: f.host }) }} <a class="link" href="{{ eventsHowtoUrl }}" target="_blank" rel="noopener">{{ "community.status.feed_howto" | t(lang) }}</a>
             {%- elif f.state == "error" %}{{ "community.status.feed_error" | t(lang) }}
             {%- else %}{{ "community.status.feed_never" | t(lang) }}{% endif -%}

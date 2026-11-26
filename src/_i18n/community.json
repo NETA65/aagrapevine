@@ -372,6 +372,8 @@
   "community.status.feed_state.blocked": { "en": "Can't be read right now", "es": "No se puede leer por ahora" },
   "community.status.feed_state.error": { "en": "Not answering", "es": "No responde" },
   "community.status.feed_state.never": { "en": "Not updated yet", "es": "Todavía no se ha actualizado" },
+  "community.status.feed_state.paused": { "en": "Paused", "es": "En pausa" },
+  "community.status.feed_paused": { "en": "Paused: {host} blocks automated readers, so its events are added by hand. Our robot checks once a week whether it works again.", "es": "En pausa: {host} bloquea los lectores automáticos, así que sus eventos se agregan a mano. Nuestro robot revisa una vez por semana si vuelve a funcionar." },
   "community.status.feed_ok": { "en": "Working: {n} events.", "es": "Funciona: {n} eventos." },
   "community.status.feed_ok_one": { "en": "Working: 1 event.", "es": "Funciona: 1 evento." },
   "community.status.feed_dups": { "en": "{n} of them were already on our Events page, so each one is shown only once.", "es": "{n} de ellos ya estaban en nuestra página de Eventos, así que cada uno se muestra una sola vez." },
