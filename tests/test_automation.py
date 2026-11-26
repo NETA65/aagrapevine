@@ -486,6 +486,11 @@ class GateLists(unittest.TestCase):
     own). Minutes of work, several copies at once — the Code check runs it, not the gate (LIST_CHECKS)."""
 
     def test_no_gated_test_judges_the_committees_files(self):
+        # Minutes of work (every gated test again, in copies of the repository): since November 2026 it runs in its
+        # own workflow — every night, and on every change of the tests (.github/workflows/gate-lists.yml) — and here
+        # only when asked: GV_GATE_LISTS=1 python -m unittest discover -s tests -p test_automation.py -k GateLists
+        if os.environ.get("GV_GATE_LISTS") != "1":
+            self.skipTest("the gate list check runs in .github/workflows/gate-lists.yml (set GV_GATE_LISTS=1 to run it here)")
         if not shutil.which("git") or not (ROOT / ".git").exists():
             self.skipTest("needs git and a git checkout (the copy is made of the files git knows)")
         import concurrent.futures
@@ -560,6 +565,48 @@ class GateLists(unittest.TestCase):
                          f"(scripts/ops/gate_tests.py):\n{why}\nThe edits (tests/committee_edits.py):\n- "
                          + "\n- ".join(done))
         self.assertGreater(sum(res["run"] for res in results), 1000, "the gate's tests ran")
+
+
+# --------------------------------------------------------------------------- the gate list check's own workflow
+class GateListsWorkflow(unittest.TestCase):
+    """GateLists (minutes of work) runs in .github/workflows/gate-lists.yml — every night, on every pull request or push
+    that changes the tests or the gate's lists, and by hand — and is skipped elsewhere (the Code check's offline
+    tests, a local run) unless GV_GATE_LISTS=1."""
+
+    def setUp(self):
+        self.text = (WF / "gate-lists.yml").read_text(encoding="utf-8")
+        self.wf = yaml.safe_load(self.text)
+        self.on = self.wf.get("on", self.wf.get(True))
+
+    def test_when_it_runs(self):
+        self.assertEqual(len(self.on["schedule"]), 1, "every night")
+        minute, hour, *rest = self.on["schedule"][0]["cron"].split()
+        self.assertEqual(rest, ["*", "*", "*"])
+        self.assertNotIn(minute, ("0", "*"))
+        self.assertIn("workflow_dispatch", self.on)
+        for event in ("pull_request", "push"):
+            with self.subTest(event=event):
+                self.assertLessEqual({"tests/**", "scripts/ops/gate_tests.py"}, set(self.on[event]["paths"]))
+        self.assertEqual(self.on["push"]["branches"], ["main"])
+        self.assertEqual(self.wf["permissions"], {"contents": "read"})
+
+    def test_what_it_runs(self):
+        job = self.wf["jobs"]["gate-lists"]
+        run = step(job, "Run the gate list check")
+        self.assertEqual(run["env"], {"GV_GATE_LISTS": "1"})
+        self.assertEqual(run["run"].strip(), "python -m unittest discover -s tests -p test_automation.py -k GateLists -v")
+        uses = [s.get("uses", "").split("@")[0] for s in job["steps"] if s.get("uses")]
+        self.assertEqual(uses, ["actions/checkout", "actions/setup-python", "actions/setup-node"])
+        self.assertIn("npm ci", step(job, "Install site tools")["run"])
+        self.assertIn("pip install -r requirements.txt", step(job, "Install Python packages")["run"])
+
+    def test_elsewhere_it_is_skipped(self):
+        check = (WF / "check.yml").read_text(encoding="utf-8")
+        self.assertNotIn("GV_GATE_LISTS", check, "the Code check's offline tests skip it")
+        with mock.patch.dict(os.environ, {"GV_GATE_LISTS": ""}):
+            r = unittest.TextTestRunner(stream=io.StringIO(), verbosity=0).run(
+                unittest.defaultTestLoader.loadTestsFromName("test_no_gated_test_judges_the_committees_files", GateLists))
+        self.assertEqual((r.testsRun, len(r.skipped), r.failures, r.errors), (1, 1, [], []))
 
 
 # --------------------------------------------------------------------------- failing updates

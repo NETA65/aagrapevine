@@ -338,14 +338,11 @@ class BuiltSite(unittest.TestCase):
     def setUpClass(cls):
         if not has_modules():
             return
-        cls.tmp = Path(tempfile.mkdtemp(prefix="page-weight-"))
-        cls.site = cls.tmp / "site"
-        env = {**os.environ, "PATH_PREFIX": BASE, "I18N_STRICT": "1", "NODE_NO_WARNINGS": "1"}
-        env.pop("ONLY", None)
+        # (the whole site, built once and kept while nothing it is built from changes: tests/site_build.py)
+        from site_build import cached_build
         cls.stamps = css_stamps()
-        cls.built = subprocess.run([node_path(), str(ROOT / "node_modules" / "@11ty" / "eleventy" / "cmd.cjs"), "--quiet",
-                                  "--output", str(cls.site)], cwd=ROOT, env=env, capture_output=True, text=True,
-                                 encoding="utf-8", timeout=900)
+        cls.built = cached_build({"PATH_PREFIX": BASE, "I18N_STRICT": "1", "ONLY": None})
+        cls.site = cls.built.site
         cls.pages = {}
         if cls.built.returncode == 0:
             for f in sorted(cls.site.rglob("*.html")):

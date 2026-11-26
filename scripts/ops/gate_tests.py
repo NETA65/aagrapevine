@@ -261,7 +261,8 @@ CONTENT_TESTS: dict[str, str] = {
         "docs/user-site (documentation): the robots.txt and index.html for NETA65/neta65.github.io, against site.url",
 }
 
-# test id prefix → what it checks (these lists; slow: the Code check runs them)
+# test id prefix → what it checks (these lists; slow: .github/workflows/gate-lists.yml runs them — every night and on
+# every change of the tests — with GV_GATE_LISTS=1; every other run of the tests skips them)
 LIST_CHECKS: dict[str, str] = {
     "test_automation.GateLists.":
         "these lists are complete: the gate's tests once more, on a copy whose committee files were edited",

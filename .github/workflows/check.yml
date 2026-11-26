@@ -151,8 +151,9 @@ jobs:
   tests:
     name: Python tests (offline)
     runs-on: ubuntu-latest
-    # about 10 minutes with the gate's list check (tests/test_automation.py GateLists: every gated test again in
-    # copies of the repository with committee-like edits); room for a slow runner
+    # about 6 minutes; the gate's list check (tests/test_automation.py GateLists: every gated test again in copies of
+    # the repository with committee-like edits, 4 more) runs in gate-lists.yml since November 2026 — every night and
+    # on every change of the tests — and is skipped here; room for a slow runner
     timeout-minutes: 25
     steps:
       - name: Check out the code

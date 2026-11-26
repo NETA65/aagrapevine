@@ -151,6 +151,7 @@ All five live in [`.github/workflows/`](../.github/workflows/). Their names in t
 | **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | an hourly backstop through the night, the morning alarm, *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do | a run summary; its no-op runs are deleted a day later |
 | **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the browser checks + every Python test + an e-mail dry run. Publishes nothing | about 10 minutes | a ✓ or ✗ on the commit or pull request |
 | **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest, once. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; the month's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM` or `digest-unsent-YYYY-MM`; a `digest-preview` download |
+| **Gate list check** (since November 2026) | [`gate-lists.yml`](../.github/workflows/gate-lists.yml) | every night; a pull request or push that changes `tests/` or `scripts/ops/gate_tests.py`; *Run workflow* | runs the tests the publish gate runs again, in copies of the repository with committee-like edits (4.8): a gated test that judges the committee's files fails here first | 5 to 10 min | a ✓ or ✗ (never touches the site) |
 | **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | finds the address GitHub Pages serves (job *Find the site's address*), then checks every link on the site built for it, the official links in the settings and the root robots.txt (skipped with the custom domain: the site's own is that file) (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
 
 Plus **Dependabot** ([`.github/dependabot.yml`](../.github/dependabot.yml)): once a month it may open a pull
@@ -629,8 +630,10 @@ the code, and keep every run from publishing until that file was fixed. The guar
 at once), makes committee-like edits and slips in each (events, bulletin posts, booth rows added, deleted or
 switched off, an archive export, many `config/site.yml` settings such as the meeting's day, time and link, the
 decks, orientation, expenses, monthly tips, history, the glossary and the overrides) and deletes the
-documentation, then runs every gated test again: each must still pass. It is a `LIST_CHECKS` entry, so only the
-Code check runs it (it takes a few minutes of the Code check's ten). When it fails, it names the test: give that
+documentation, then runs every gated test again: each must still pass. It is a `LIST_CHECKS` entry, so the gate
+never runs it; since November 2026 its own workflow does, **Gate list check** (`gate-lists.yml`: every night, on
+every pull request or push that changes the tests or the gate's lists, and by *Run workflow*), with
+`GV_GATE_LISTS=1` — the Code check and a run of the tests on a PC skip it (it takes 4 to 10 minutes). When it fails, it names the test: give that
 test data of its own, or move the part that judges the committee's files into a test of its own listed in
 `CONTENT_TESTS`. A new kind of committee edit goes into `tests/committee_edits.py`.
 

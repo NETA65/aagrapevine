@@ -377,12 +377,19 @@ class OtherTitles(unittest.TestCase):
         # not "Build the website" — that is Website update's build step
         self.assertEqual(wf["jobs"]["build"]["name"], "Test build of the website")
 
+    def test_gate_list_check(self):
+        wf, on, _text = load("gate-lists.yml")
+        self.assertEqual(title(wf["run-name"], "schedule", schedule=on["schedule"][0]["cron"]),
+                         "Gate list check (GitHub schedule)")
+        self.assertEqual(title(wf["run-name"], "workflow_dispatch", {}), "", "Run workflow, a push, a pull request: GitHub's own title")
+
     def test_the_names_stay(self):
         # the workflows' own names (the sidebar, the Run workflow menu, GitHub's "Run failed: …" e-mails; the docs,
         # the morning alarm and morning_check.py use the files). The Morning check's "5:30 AM" is config/site.yml →
         # site.morning_goal (the next test).
         names = {f.name: yaml.safe_load(f.read_text(encoding="utf-8"))["name"] for f in sorted(WF.glob("*.yml"))}
-        self.assertEqual(names, {"check.yml": "Code check (tests and test build)", "link-check.yml": "Weekly link check",
+        self.assertEqual(names, {"check.yml": "Code check (tests and test build)", "gate-lists.yml": "Gate list check",
+                                 "link-check.yml": "Weekly link check",
                                  "monthly-digest.yml": "Monthly e-mail digest",
                                  "morning.yml": "Morning check (new day by 5:30 AM)", "update.yml": "Website update"})
 
