@@ -513,6 +513,23 @@
 @utility link { @apply font-medium text-gv underline decoration-gv/30 underline-offset-2 hover:decoration-gv; }
 @utility icon { display: inline-block; flex-shrink: 0; }
 
+/* ---------- Service words: the glossary's dotted terms (eleventy/filters/glossary.js, app.js GV.glossary) ----------
+   abbr.gl-term: a dotted underline in the text's own colour (on the dark hero too) — the browser's tooltip without
+   JavaScript; with it, .gl-btn (the word as a button: no box, the same font, a 3px focus ring) opens .gl-pop, a small
+   card fixed to the window under the word (app.js places it, at most 320px wide, inside the screen). */
+@layer components {
+  abbr.gl-term { text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 0.2em; cursor: help; }
+  .gl-btn { display: inline; padding: 0; margin: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; border-radius: 0.25rem; }
+  .gl-btn abbr.gl-term { cursor: pointer; }
+  .gl-btn[aria-expanded="true"] abbr.gl-term { text-decoration-style: solid; }
+  .gl-pop {
+    position: fixed; z-index: 70; display: block; padding: 0.625rem 0.875rem; border: 1px solid var(--c-line);
+    border-radius: 0.875rem; background: var(--c-surface); color: var(--c-ink); box-shadow: var(--shadow-lift);
+    font: 400 0.875rem/1.45 var(--font-sans); letter-spacing: normal; text-align: left; text-transform: none; white-space: normal;
+  }
+  .gl-pop[hidden] { display: none; }
+}
+
 /* ---------- Card grids: more columns on wider screens, cards never narrower than --cards-min ----------
    Two limits decide the column count:
    · the screen width caps it (the site-wide steps below), and

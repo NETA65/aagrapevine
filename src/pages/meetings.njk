@@ -504,7 +504,7 @@ pageScripts: ["/assets/js/committee.js"]
       <h3 class="card-h"><span class="text-vine!">{% icon "hand-heart", "size-5" %}</span>{{ "committee.meeting.who_title" | t(lang) }}</h3>
       {#- config/site.yml meeting.note (note_es on /es/): who may come, then who will find a place here -#}
       {%- set mNote = m | pick(lang, "note") -%}
-      <p class="mt-2 max-w-[65ch] leading-relaxed text-muted">{% if mNote %}{{ mNote }} {% endif %}{{ "committee.meeting.who_text" | t(lang) }}</p>
+      <p class="mt-2 max-w-[65ch] leading-relaxed text-muted">{% if mNote %}{{ mNote }} {% endif %}{{ "committee.meeting.who_text" | t(lang) | gloss(lang) | safe }}</p>
       <ul class="mt-4 flex flex-wrap gap-2">
         {% for k in ["gvr", "rlv", "dcm", "members"] %}<li class="badge-muted text-xs">{{ ("committee.meeting.who_" + k) | t(lang) }}</li>{% endfor %}
       </ul>
