@@ -1,7 +1,7 @@
 {
  "source": "announcements",
- "updated": "2026-11-25T21:37:54Z",
- "attempted": "2026-11-25T21:37:54Z",
+ "updated": "2026-11-26T02:46:32Z",
+ "attempted": "2026-11-26T02:46:32Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -67,7 +67,7 @@
    "lang": "en",
    "date": "2026-11-11",
    "first_seen": "2026-11-11T22:59:13Z",
-   "last_seen": "2026-11-19T01:52:12Z",
+   "last_seen": "2026-11-26T02:46:32Z",
    "image": null,
    "tags": [
     "shop",
