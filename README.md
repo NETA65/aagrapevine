@@ -197,8 +197,11 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
 - **Eventos sin volante** (talleres, asambleas): un archivo en `content/events`. Si todavía faltan
   detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`. Si se
   cancela, se deja el archivo y se agrega `cancelled: true` (desde la ronda 37, noviembre de 2026): el evento sale de
-  todas las listas, su dirección muestra "Cancelado" hasta su día y los calendarios suscritos lo marcan cancelado
-  (así se canceló el taller de La Viña en Garland del 28 de noviembre de 2026).
+  las demás listas, en la página de Eventos queda tachado como "Cancelado" hasta su día, su dirección muestra el aviso
+  y los calendarios suscritos lo marcan cancelado (así se canceló el taller de La Viña en Garland del 28 de noviembre
+  de 2026). `district: 87` (opcional) indica el distrito que lo organiza y `language: es` el idioma en que se
+  realiza: son filtros de la página de Eventos. ¿No usas GitHub? El formulario "New event / Evento nuevo" (Issues →
+  New issue) pide los datos en palabras sencillas.
 - **La página de cada evento** (desde la ronda 37): cada evento tiene su propia página, `/es/events/<evento>/`, que
   se arma sola al agregarlo — sus datos, un resumen de una frase, la presentación que le corresponde, un cartón de
   Bingo de RLV/GVR ya preparado para ese evento, los enlaces de su tipo (taller de escritura: Comparte tu historia,
@@ -370,7 +373,20 @@ What the newer pages do:
   already filled in for it, the next event like it, similar events' flyers and the month's Grapevine and La Viña
   issues. Each monthly series has one more, `/events/series/<key>/`, with its next dates. Every link to an event
   goes there; search engines get the pages of the events to come (section [12b](#12b-search-engines-google-bing)).
-  What each kind shows, `type:` and `cancelled: true`: [content/events/README.md](content/events/README.md).
+  What each kind shows, `type:` and `cancelled: true`: [content/events/README.md](content/events/README.md). Its
+  hero has **Join online**, **Add to calendar** and **Directions** above the fold on a phone. An event made from a
+  dated flyer or an outside calendar has a readable address too — `/events/2026-10-31-grapevine-committee-crash/`,
+  its day and title, kept when the title changes later (`scripts/sync/build_data.py` `pin_event_slugs`); its old
+  `/events/ev-flyer-…/` address sends people on.
+- **The Events list** (`/events/`, redesigned November 2026: `eleventy/filters/event-list.js`): the one-off events
+  first, month by month — a cancelled one stays as a struck-through "Cancelled" card until its day, linked to its
+  notice —, then **one card per monthly series** ("Every second Saturday of the month · Next: Sat, Dec 12 … · See all
+  dates", and what changed: "Nov 26 moved to Nov 18", "Not held on Dec 24"), then the weekly open meetings. Filters
+  (with JavaScript; without it every card shows): the kind, the language it is held in, in person or online, the
+  city and a content/events file's `district:` — kept in the address, `/events/?kind=workshop&lang=es`, to share a
+  filtered view. On a phone: **Next up** (the next three events) and the "Next 5 weeks" calendar near the top; from
+  1024px the calendar is the sidebar. About 350 KB of HTML per language (it was about 1.2 MB). The Status page's
+  **Events to check** lists what the event files still need (section [6](#6-bulletin-posts-and-events-without-drive-optional)).
 - **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer —
   free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026; the holiday gift
   offers, a second 1-year print subscription as a gift for $16 at Grapevine and $8 at La Viña, through December 31
@@ -1418,8 +1434,21 @@ a mistake shows as a red ✗ on the Code check of your save. *Website update* st
 and, for the place, `location: "Venue to be announced"` with `location_es: "Lugar por anunciarse"`.
 The event shows a **"Details to be confirmed"** badge everywhere and calendar apps mark it tentative.
 
+**Not on GitHub?** The **New event / Evento nuevo** form (the repository's Issues → New issue,
+`.github/ISSUE_TEMPLATE/new-event.yml`) asks for the same facts in plain English and Spanish; a committee member
+turns the answers into a file. The quick start is at the top of
+[how-to/flyers-and-events.md](how-to/flyers-and-events.md#add-an-event-in-5-minutes).
+
+**The district and the language** (optional, since November 2026): `district: 87` and `language: es` (`en`, `es` or
+`both`) — filters of the Events page; `district:` also shows on the event's card and page. Never guess a district.
+
+**What still needs doing:** the Status page's **Events to check** (`/status/#event-checks`) lists an event still
+"to be confirmed" 60 days before its day, a venue still to be announced 45 days before, a file of an event to come
+with no `url:`, a dated-flyer event with no summary, and the files of events over more than 90 days ago (to delete).
+
 **Called off** (since round 37): keep the file and add `cancelled: true` (optional: `cancelled_note:`, a sentence
-to people). At the next update the event leaves every list, its page shows **"This event has been cancelled. It will
+to people). At the next update the event leaves the other lists — the Events page keeps it as a struck-through
+**"Cancelled"** card until its day —, its page shows **"This event has been cancelled. It will
 not take place."** until its day is over (then its address sends people to the Events page), search engines are
 told it is cancelled, and subscribed calendars show "Cancelled: …" for 90 days. Don't delete the file: that would
 remove it from people's calendars without a word. The La Viña writing workshop in Garland on November 28, 2026 was

@@ -1,0 +1,105 @@
+# "New event / Evento nuevo": a form any member can fill in to ask the committee to add an event to the website —
+# the fields of a content/events file (content/events/README.md), in plain words, in English and Spanish. A committee
+# member with write access turns the answers into content/events/<day>-<a-few-words>.md (how-to/flyers-and-events.md,
+# "Add an event in 5 minutes"). The issue is public: the form asks for no person's name, phone or private e-mail.
+name: "New event / Evento nuevo"
+description: "Ask the committee to add an event to the website · Pídele al comité que agregue un evento al sitio"
+title: "New event / Evento nuevo: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you!** A committee member adds the event to the Events page, usually within a few days.
+        Fill in what you know — anything you leave empty can be added later. **This issue is public:** please don't
+        write anyone's full name, phone number or private e-mail (AA's tradition of anonymity).
+
+        **¡Gracias!** Un miembro del comité agrega el evento a la página de Eventos, por lo general en unos días.
+        Completa lo que sepas; lo que dejes vacío se puede agregar después. **Esta solicitud es pública:** no
+        escribas el nombre completo, el teléfono ni el correo personal de nadie (la tradición de anonimato de AA).
+  - type: input
+    id: title
+    attributes:
+      label: "Event name / Nombre del evento"
+      description: "As the flyer says it · Como lo dice el volante (e.g. / p. ej.: Grapevine Writing Workshop — Tyler)"
+    validations:
+      required: true
+  - type: input
+    id: title_other
+    attributes:
+      label: "The name in the other language (optional) / El nombre en el otro idioma (opcional)"
+      description: "Your own translation — otherwise the site translates it · Tu propia traducción; si no, el sitio la traduce"
+  - type: input
+    id: date
+    attributes:
+      label: "Day / Día"
+      description: "Year-month-day, e.g. 2027-03-14 — several days: 2027-03-19 to 2027-03-21 · Año-mes-día; varios días: 2027-03-19 al 2027-03-21"
+    validations:
+      required: true
+  - type: input
+    id: time
+    attributes:
+      label: "Start and end time, Central time / Hora de inicio y de fin, hora del Centro"
+      description: "e.g. / p. ej.: 10:00 AM – 12:00 PM (all day: leave empty · todo el día: déjalo vacío)"
+  - type: dropdown
+    id: where
+    attributes:
+      label: "Where is it held? / ¿Dónde se realiza?"
+      options:
+        - "In person / En persona"
+        - "Online / En línea"
+        - "Both: in person and online / Las dos: en persona y en línea"
+        - "Not decided yet / Todavía no se sabe"
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: "Place and address / Lugar y dirección"
+      description: "The group or venue, street, city, ZIP · El grupo o local, la calle, la ciudad y el código postal (e.g. / p. ej.: Grupo Libro Grande, 623 West Bow, Tyler, TX 75702)"
+  - type: input
+    id: online_url
+    attributes:
+      label: "Online link (Zoom, Google Meet) / Enlace para conectarse (Zoom, Google Meet)"
+      description: "Only for an online meeting, and only if it may be public · Solo si es en línea y se puede publicar"
+  - type: input
+    id: district
+    attributes:
+      label: "District (optional) / Distrito (opcional)"
+      description: "The number of the district that holds it, e.g. 87 · El número del distrito que lo organiza, p. ej. 87"
+  - type: dropdown
+    id: language
+    attributes:
+      label: "Language it is held in / Idioma en que se realiza"
+      options:
+        - "English / Inglés"
+        - "Spanish / Español"
+        - "Both / Bilingüe"
+        - "Not sure / No sé"
+  - type: input
+    id: organizer
+    attributes:
+      label: "Who organizes it (a committee or group, never a person) / Quién lo organiza (un comité o grupo, nunca una persona)"
+      description: "e.g. / p. ej.: District 87 La Viña Committee"
+  - type: input
+    id: url
+    attributes:
+      label: "Its web page or sign-up form (optional) / Su página web o formulario de inscripción (opcional)"
+      description: "Only a link that already exists · Solo un enlace que ya exista"
+  - type: textarea
+    id: summary
+    attributes:
+      label: "What is it about? / ¿De qué se trata?"
+      description: "Two or three sentences for the event's card and page · Dos o tres oraciones para la tarjeta y la página del evento"
+    validations:
+      required: true
+  - type: textarea
+    id: flyer
+    attributes:
+      label: "Flyer (optional) / Volante (opcional)"
+      description: "Drag the flyer here (PDF, JPG or PNG) or paste a link to it · Arrastra aquí el volante (PDF, JPG o PNG) o pega un enlace"
+  - type: checkboxes
+    id: final
+    attributes:
+      label: "Is everything final? / ¿Ya está todo confirmado?"
+      options:
+        - label: "The date, time or place may still change (it will show as “Details to be confirmed”) / La fecha, la hora o el lugar todavía pueden cambiar (se mostrará como “Detalles por confirmar”)"
