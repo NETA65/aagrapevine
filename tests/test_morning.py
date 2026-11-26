@@ -136,7 +136,9 @@ def run_bash(bash: str, script: str, env: dict, cwd: Path | None = None) -> subp
     # (a step runs `python -m scripts.ops.…` from the checkout's root; a test may run it elsewhere)
     full["PATH"] = os.pathsep.join([str(Path(sys.executable).parent), full.get("PATH", "")])
     full["PYTHONPATH"] = os.pathsep.join(p for p in (str(ROOT), full.get("PYTHONPATH", "")) if p)
-    return subprocess.run([bash, "-c", script], cwd=cwd or ROOT, env=full, capture_output=True, text=True,
+    # as GitHub runs a step's script (`bash --noprofile --norc -eo pipefail {0}`): a command that fails stops it
+    return subprocess.run([bash, "--noprofile", "--norc", "-eo", "pipefail", "-c", script], cwd=cwd or ROOT, env=full,
+                          capture_output=True, text=True,
                           encoding="utf-8", timeout=120)
 
 
@@ -217,7 +219,7 @@ class MorningWorkflow(unittest.TestCase):
         self.assertFalse(any("uses" in s for s in wait["steps"]), "no checkout")
         st = step_of(wait, "Wait until the magazines may be asked")
         self.assertEqual(st["env"]["WAIT"], "${{ needs.look.outputs.wait }}")
-        self.assertIn('sleep "$WAIT"', st["run"])
+        self.assertIn('sleep "$left"', st["run"])
         # the longest wait fits in the job, and the job in GitHub's 6 hours
         look = step_of(self.jobs["look"], "Read the live site's build.json")
         self.assertLess(int(look["env"]["WAIT_MAX"]) / 60 + 5, wait["timeout-minutes"])
@@ -229,8 +231,12 @@ class MorningWorkflow(unittest.TestCase):
         # the update job runs after it (the new day, read from the live site again) — right after "look" when it
         # was skipped; never a cancelled run
         self.assertIn("needs.wait.result == 'success'", self.jobs["update"]["if"])
-        # while it waits, the next firings wait behind it (one check at a time) and then find the work done
-        self.assertEqual(self.wf["concurrency"]["cancel-in-progress"], False)
+        self.assertIn("needs.wait.result == 'failure'", self.jobs["update"]["if"], "a lost runner: the check decides")
+        # it sleeps until the moment itself (a job GitHub started late sleeps less), and holds nobody up: only the
+        # update jobs take turns
+        self.assertEqual(st["env"]["UNTIL"], "${{ needs.look.outputs.until }}")
+        self.assertIn('left=$((UNTIL - $(date -u +%s)))', st["run"])
+        self.assertNotIn("concurrency", wait)
 
     def test_a_place_for_the_morning_alarm(self):
         # the alarm, to add later, presses Run workflow — the trigger stays, with no input needed, and the docs say
@@ -247,12 +253,22 @@ class MorningWorkflow(unittest.TestCase):
         self.assertNotIn("push", self.on)
 
     def test_one_check_at_a_time(self):
-        self.assertEqual(self.wf["concurrency"], {"group": "morning-check", "cancel-in-progress": False})
-        self.assertNotIn("queue", self.wf["concurrency"])
+        # only the update jobs take turns — a run sleeping in job "wait" for hours must hold up neither a person's
+        # Run workflow nor the morning alarm (with a workflow-wide group they waited behind it, and GitHub cancelled
+        # them when a later firing queued)
+        self.assertNotIn("concurrency", self.wf)
+        self.assertEqual(self.jobs["update"]["concurrency"], {"group": "morning-check", "cancel-in-progress": False})
+        for name in ("look", "wait", "tidy"):
+            self.assertNotIn("concurrency", self.jobs[name], name)
+        # a check whose turn comes late re-reads the live site first and does only what is still missing
+        src = (ROOT / "scripts" / "ops" / "morning_check.py").read_text(encoding="utf-8")
+        main = src[src.index("def main("):]
+        self.assertLess(main.index("live = read_live(site, get, clock)"), main.index("start_and_follow("))
+        self.assertIn("if is_done(live, today):\n        return success(live, \"It was already there", main)
 
     def test_least_privilege(self):
         self.assertEqual(self.wf["permissions"], {"contents": "read"})
-        self.assertEqual(self.jobs["look"]["permissions"], {"pages": "read"})
+        self.assertEqual(self.jobs["look"]["permissions"], {"pages": "read", "actions": "read"})
         self.assertEqual(self.jobs["update"]["permissions"], {"actions": "write", "contents": "read"})
         self.assertEqual(self.jobs["tidy"]["permissions"], {"actions": "write"})
         text = (WF / "morning.yml").read_text(encoding="utf-8")
@@ -274,7 +290,7 @@ class MorningWorkflow(unittest.TestCase):
         self.assertEqual(job["needs"], ["look", "wait"])
         # it runs when the site lacks today's update, when it has it but the full update is due, and after the wait
         self.assertEqual(job["if"], "${{ !cancelled() && (needs.look.outputs.done != 'true' || needs.look.outputs.full != '' "
-                                    "|| needs.wait.result == 'success') }}")
+                                    "|| needs.wait.result == 'success' || needs.wait.result == 'failure') }}")
         self.assertEqual(job["timeout-minutes"], 240)
         run = step_run(job, "Start the morning update, follow it, check the live site")
         self.assertIn('python -m scripts.ops.morning_check "${args[@]}"', run)
@@ -312,7 +328,8 @@ class MorningWorkflow(unittest.TestCase):
     def test_look_job(self):
         job = self.jobs["look"]
         self.assertEqual(job["outputs"], {"done": "${{ steps.live.outputs.done }}", "full": "${{ steps.live.outputs.full }}",
-                                          "site": "${{ steps.site.outputs.url }}", "wait": "${{ steps.live.outputs.wait }}"})
+                                          "site": "${{ steps.site.outputs.url }}", "wait": "${{ steps.live.outputs.wait }}",
+                                          "until": "${{ steps.live.outputs.until }}"})
         self.assertFalse(any("uses" in s for s in job["steps"]), "no checkout: a few seconds")
         run = step_run(job, "Read the live site's build.json")
         self.assertIn('"${SITE}/build.json?check=$(date +%s)"', run)
@@ -537,6 +554,15 @@ class FastPathParity(unittest.TestCase):
             (u("2026-11-26T15:00:00Z"), "schedule", True, ""),                     # 9 AM CST: tomorrow's is 17 h away
             (u("2026-11-26T03:38:00Z"), "workflow_dispatch", True, ""),            # Run workflow (a person, the alarm)
             (u("2026-07-02T03:00:00Z"), "schedule", True, 4 * 3600),               # 10 PM CDT → 2:00 AM CDT
+            # the day clocks spring forward (2027-03-14) has no 2:00 AM in Central time: its window opens at 08:00
+            # UTC (3:00 AM CDT), as morning_check.py's does — and the step never fails (it runs under bash -e)
+            (u("2027-03-13T09:00:00Z"), "schedule", False, ""),                    # 3 AM CST on the 13th: 23 h ahead
+            (u("2027-03-14T03:00:00Z"), "schedule", True, 5 * 3600),               # 9 PM CST on the 13th → 08:00 UTC
+            (u("2027-03-14T07:00:00Z"), "schedule", False, 3600),                  # 1 AM CST on the 14th → 08:00 UTC
+            (u("2027-03-14T09:00:00Z"), "schedule", False, ""),                    # 4 AM CDT: open
+            (u("2027-03-13T03:00:00Z"), "schedule", True, 5 * 3600),               # the night before: 08:00 UTC too
+            # the day clocks fall back (2026-11-01): 2:00 AM CST comes once, after 1 AM has come twice
+            (u("2026-11-01T03:00:00Z"), "schedule", True, 5 * 3600),               # 10 PM CDT on Oct 31 → 08:00 UTC
         ]
         for now, event, done, want in cases:
             with self.subTest(now=iso(now), event=event, done=done):
@@ -546,13 +572,83 @@ class FastPathParity(unittest.TestCase):
                                                "quotes": {"gv": q, "lv": q}, "full": iso(now - timedelta(hours=3))})
                 got, summary, _log = self.look_at(self.server.url, {"FAKE_NOW": str(int(now.timestamp())), "REAL_DATE": real,
                                                                     "EVENT": event, "WINDOW_OPENS": "02:00",
-                                                                    "WAIT_MAX": "20700"}, [str(fake)])
+                                                                    "WAIT_MAX": "20700", "GH_TOKEN": ""}, [str(fake)])
                 self.assertEqual(got.get("wait"), str(want))
                 if want:
+                    until = datetime.fromtimestamp(int(got["until"]), timezone.utc)
+                    self.assertEqual(until, now + timedelta(seconds=want))
+                    # the very moment the Morning check starts asking the magazines (its window, WINDOW_BEFORE)
+                    day = until.astimezone(CHICAGO).date()
+                    goal_at = datetime(day.year, day.month, day.day, *MC.GOAL, tzinfo=CHICAGO)
+                    self.assertEqual(until, (goal_at - MC.WINDOW_BEFORE).astimezone(timezone.utc))
                     self.assertIn('A scheduled run before the morning: job "wait" waits', summary)
-                    self.assertIn("until 2:00 AM C", summary)
+                    self.assertRegex(summary, r"until [23]:00 AM C[DS]T")
                 else:
+                    self.assertEqual(got.get("until"), "")
                     self.assertNotIn('job "wait"', summary)
+
+    def test_no_wait_when_the_full_update_is_due(self):
+        # the next job starts the full daily update now (on the 1st before midnight, or after 30 hours without one):
+        # never a wait into the next day, where the rule would no longer say "the 1st of the month"
+        real = subprocess.run([self.bash, "-c", "command -v date"], capture_output=True, text=True).stdout.strip()
+        fake = self.tmp / "fake"
+        fake.mkdir(exist_ok=True)
+        (fake / "date").write_text('#!/usr/bin/env bash\n'
+                                   'for a in "$@"; do case "$a" in -d|--date|--date=*) exec "$REAL_DATE" "$@";; esac; done\n'
+                                   'exec "$REAL_DATE" -d "@${FAKE_NOW}" "$@"\n', encoding="utf-8", newline="\n")
+        (fake / "date").chmod(0o755)
+        for now, full in ((datetime(2026, 12, 2, 3, 30, tzinfo=timezone.utc), "2026-11-30T20:00:00Z"),   # 9:30 PM CST Dec 1
+                          (datetime(2026, 11, 26, 3, 38, tzinfo=timezone.utc), "2026-11-24T12:00:00Z")):  # 40 hours ago
+            with self.subTest(now=iso(now)):
+                d = now.astimezone(CHICAGO).date().isoformat()
+                self.server.body = json.dumps({"v": 1, "built": iso(now - timedelta(minutes=5)), "day": d,
+                                               "quotes": {"gv": d, "lv": d}, "full": full})
+                got, _summary, _log = self.look_at(self.server.url, {"FAKE_NOW": str(int(now.timestamp())), "REAL_DATE": real,
+                                                                     "EVENT": "schedule", "WINDOW_OPENS": "02:00",
+                                                                     "WAIT_MAX": "20700", "GH_TOKEN": ""}, [str(fake)])
+                self.assertNotEqual(got.get("full"), "")
+                self.assertEqual((got.get("wait"), got.get("until")), ("", ""))
+
+    def test_one_run_waits_for_the_morning(self):
+        # another run of this workflow already sleeping in job "wait" brings the morning: this one does not wait too
+        # (the runs listed with a stand-in `gh`); when they cannot be listed, it waits as before
+        real = subprocess.run([self.bash, "-c", "command -v date"], capture_output=True, text=True).stdout.strip()
+        fake = self.tmp / "fake"
+        fake.mkdir(exist_ok=True)
+        (fake / "date").write_text('#!/usr/bin/env bash\n'
+                                   'for a in "$@"; do case "$a" in -d|--date|--date=*) exec "$REAL_DATE" "$@";; esac; done\n'
+                                   'exec "$REAL_DATE" -d "@${FAKE_NOW}" "$@"\n', encoding="utf-8", newline="\n")
+        (fake / "date").chmod(0o755)
+        wf, _on = load_wf("morning.yml")
+        wait_job = step_of(wf["jobs"]["look"], "Read the live site's build.json")["env"]["WAIT_JOB"]
+        self.assertEqual(wait_job, wf["jobs"]["wait"]["name"])
+        (fake / "gh.py").write_text(
+            "import json, os, sys\n"
+            "path = sys.argv[2]\n"
+            "if os.environ.get('FAKE_GH_FAIL'):\n    sys.exit(1)\n"
+            "if 'workflows/morning.yml/runs' in path:\n"
+            "    print(json.dumps({'workflow_runs': [{'id': 7}, {'id': 99}]}))\n"
+            "elif 'runs/7/jobs' in path:\n"
+            "    print(json.dumps({'jobs': [{'name': 'Is today', 'status': 'completed'},\n"
+            "                               {'name': os.environ['WAIT_JOB'], 'status': os.environ['FAKE_STATUS']}]}))\n"
+            "else:\n    sys.exit(3)\n", encoding="utf-8")
+        (fake / "gh").write_text(f'#!/usr/bin/env bash\nexec "{Path(sys.executable).as_posix()}" "{(fake / "gh.py").as_posix()}" "$@"\n',
+                                 encoding="utf-8", newline="\n")
+        (fake / "gh").chmod(0o755)
+        now = datetime(2026, 11, 26, 3, 38, tzinfo=timezone.utc)
+        d = now.astimezone(CHICAGO).date().isoformat()
+        self.server.body = json.dumps({"v": 1, "built": iso(now - timedelta(minutes=5)), "day": d,
+                                       "quotes": {"gv": d, "lv": d}, "full": iso(now - timedelta(hours=3))})
+        base = {"FAKE_NOW": str(int(now.timestamp())), "REAL_DATE": real, "EVENT": "schedule", "WINDOW_OPENS": "02:00",
+                "WAIT_MAX": "20700", "GH_TOKEN": "x", "GITHUB_REPOSITORY": "o/r", "GITHUB_RUN_ID": "99",
+                "GITHUB_SERVER_URL": "https://github.com", "WAIT_JOB": wait_job}
+        got, summary, _log = self.look_at(self.server.url, {**base, "FAKE_STATUS": "in_progress"}, [str(fake)])
+        self.assertEqual((got.get("wait"), got.get("until")), ("", ""))
+        self.assertIn("Another scheduled run (https://github.com/o/r/actions/runs/7) is already waiting for the morning", summary)
+        for extra in ({"FAKE_STATUS": "completed"}, {"FAKE_STATUS": "in_progress", "FAKE_GH_FAIL": "1"}):
+            with self.subTest(**extra):
+                got, _summary, _log = self.look_at(self.server.url, {**base, **extra}, [str(fake)])
+                self.assertEqual(got.get("wait"), str(4 * 3600 + 22 * 60))
 
 
 # --------------------------------------------------------------------------- the tidy job (bash + a stand-in gh)
@@ -615,7 +711,8 @@ class Tidy(unittest.TestCase):
         env.update(GH_TOKEN="x", GITHUB_REPOSITORY="o/r", RUNNER_TEMP=str(self.tmp),
                    FAKE_GH_WORLD=str(self.tmp / "world.json"), FAKE_GH_LOG=str(self.tmp / "log.txt"),
                    PATH=os.pathsep.join([str(self.tmp / "bin"), str(shim_bin(self.tmp)), os.environ.get("PATH", "")]))
-        r = subprocess.run([self.bash, "-c", self.step["run"]], cwd=self.tmp, env={**os.environ, **env},
+        r = subprocess.run([self.bash, "--noprofile", "--norc", "-eo", "pipefail", "-c", self.step["run"]], cwd=self.tmp,
+                           env={**os.environ, **env},
                            capture_output=True, text=True, encoding="utf-8", timeout=120)
         self.assertEqual(r.returncode, 0, r.stderr + r.stdout)
         calls = [json.loads(ln) for ln in (self.tmp / "log.txt").read_text(encoding="utf-8").splitlines() if ln.strip()]
