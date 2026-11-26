@@ -654,14 +654,14 @@ calendarFeed: "/events.ics"
   {%- set ev = s.next -%}
   {%- set kind = s.tone -%}
   <li id="ev-series-{{ s.key }}" data-group="{{ ev.group }}" data-cm-expire="{{ s.expireIso }}"{{ ev | evFacets(site) | safe }} x-show="show($el)">
-    <article class="card cm-event ev-accent ev-tone-{{ kind }} ev-series" x-ignore aria-labelledby="ev-series-{{ s.key }}-t">
+    <article class="card cm-event ev-accent ev-tone-{{ kind }} ev-series" x-ignore>
       <div class="min-w-0 flex-1">
         <div class="flex flex-wrap items-center gap-1.5">
           {{ evm.kindBadge(ev, kind) }}
           <span class="badge-muted">{% icon "repeat", "size-3" %} {{ "committee.events.badge_recurring" | t(lang) }}</span>
           {% if not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
         </div>
-        <h3 class="h-card mt-2 text-lg sm:text-xl" id="ev-series-{{ s.key }}-t">{% if s.href %}<a href="{{ s.href }}" class="-my-3 inline-block py-3 hover:text-gv">{{ s.title }}</a>{% else %}{{ s.title }}{% endif %}</h3>
+        <h3 class="h-card mt-2 text-lg sm:text-xl">{% if s.href %}<a href="{{ s.href }}" class="-my-3 inline-block py-3 hover:text-gv">{{ s.title }}</a>{% else %}{{ s.title }}{% endif %}</h3>
         <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
           {% if s.every %}<li class="inline-flex items-start gap-1.5">{% icon "repeat", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{{ s.every }}{% if s.time %} <span aria-hidden="true">·</span> {{ s.time }}{% endif %}</span></li>{% endif %}
           {% if ev.location and ev.locationTba %}<li class="inline-flex items-center gap-1.5 italic">{% icon "hourglass", "size-4 text-faint" %} {{ ev.location }}</li>

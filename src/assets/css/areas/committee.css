@@ -299,7 +299,7 @@
     .cm-pinned-grid { grid-template-columns: auto minmax(0, 1fr) auto; }
     .cm-pinned-actions { grid-column: auto; justify-content: flex-end; }
   }
-  /* "Our monthly meetings" (#ev-pinned, round 30): the pin sits close to its words, the rule line follows */
+  /* "Every month" (#ev-pinned — "Our monthly meetings" in round 30): the icon sits close to its words, the rule line follows */
   #ev-pinned > .cm-month-title { gap: 0.55rem; }
   /* "Show 2028 dates (87)" (.cm-ev-more — never .cm-more, the photo albums' "Show all" —, after the last open
      month: events.njk, committee.js cmEvents showMore) — the gap of a month above and below it, so the months it

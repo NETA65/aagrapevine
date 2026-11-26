@@ -237,7 +237,7 @@ class XIgnoreTemplates(unittest.TestCase):
         # (since the list's redesign) three kinds of card: a one-off event, a cancelled one, a monthly series'
         self.assertEqual(len(re.findall(r"<article [^>]*\bx-ignore\b", ev)), 3)
         self.assertIn('<article class="card cm-event ev-accent ev-tone-{{ kind }} ev-cancelled" x-ignore>', ev)
-        self.assertRegex(ev, r'<article class="card cm-event ev-accent ev-tone-\{\{ kind \}\} ev-series" x-ignore ')
+        self.assertIn('<article class="card cm-event ev-accent ev-tone-{{ kind }} ev-series" x-ignore>', ev)
         ph = read("src", "pages", "photos.njk")
         self.assertIn('<ul class="cm-cover-grid" x-ignore>', ph)
         self.assertEqual(ph.count("x-ignore>"), 1)
