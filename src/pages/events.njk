@@ -15,64 +15,68 @@ calendarFeed: "/events.ics"
     online only: "Online on Zoom", Join online, its meeting ID; our own Grapevine Meeting is a NETA 65 one — its
     badge says so, never Grapevine's —, online only: "Online on Google Meet", its meeting code), Drive flyers with
     dated names, manual events, Texas GV/LV calendar events (a date we already show is left out by build_data).
-    Since round 30 EVERY date to come is a card of its own — a monthly series' every date, every committee meeting
-    (no "Show every monthly date" switch, no "Then …" line). Grouped by month, filterable, with a row of month chips
-    and per-event calendar buttons. On top, whatever the filter, "Our monthly meetings" (#ev-pinned): the next
-    committee meeting and the next Grapevine Meeting, then the weekly open meetings (#ev-weekly), then the months,
-    by whole years: the rest of the build's year open and, from November on, all of the next year too (built in
-    November 2026: through December 2027, all of 2027); the later years (all of 2028) folded behind "Show 2028 dates
-    (n)" (committee.js eventsFold, cmEvents).
-    Below the shared page hero: the agenda (then "how events get here", the three kinds of events in
-    visitors' words) and, from 1024px, a sidebar: the .ics subscription card (#subscribe), then the "Next 5 weeks"
-    calendar (#ev-cal), which stays in view under the header while the list scrolls (its sticky-aside wrapper);
-    below 1024px both follow the agenda. Last, collapsed, "For committee members · Add an event"
-    (ui.memberHelp, #how-events): the two kinds of flyers (a dated name makes an event; the flyer of an
-    event written in content/events has an undated name and is linked with `flyer:`), the Drive folder,
-    the flyer naming rule + examples, and the Portfolio's two Drive actions. With no NETA 65 events, the
-    agenda's empty slot (#ev-empty-neta) points there.
-    The hero's right-hand card (the shared hero aside, "Save the date"): the next Area assembly (event-tone.js
-    isAssembly: never an ACM, a town hall or a GSR/DCM orientation) — else the next event from Grapevine's or La
-    Viña's own calendars — never the first one-off event of the list below; its link goes to that event's own page
-    (since round 37: evHref, eleventy/filters/event-links.js).
-    Hidden on smaller screens and at larger text (the committee sub-nav stays right under the hero, and the event
-    is in the list). -#}
+    Since the list's redesign (November 2026: eleventy/filters/event-list.js evList, where every rule is explained)
+    the page leads with what is NEW, phone first (a 390px phone used to scroll ~2,900px, past "Our monthly
+    meetings" and the weekly meetings, to reach the first one-off event, and ~33,000px in all):
+      · the shared hero, its "Save the date" card (the next Area assembly) beside it from 1024px and as the first card
+        under it on narrower screens (side: "below");
+      · below 1024px, "Next up" (#ev-nextup): the next three events, one line each, a link to its card;
+      · the "Next 5 weeks" calendar (#ev-cal): from 1024px the sidebar, beside the list, in view while it scrolls;
+        below 1024px folded under its heading near the top ("Show the calendar", with JavaScript — without it, it
+        shows whole);
+      · the filters (#ev-filters, with JavaScript only — without it every card shows): the kind (chips), the language
+        it is held in, in person / online, the city and (when an event names one) the district — kept in the
+        address (?kind=workshop&lang=es&mode=inperson&city=fort-worth&district=87), so a filtered view can be shared;
+        the month chips jump to the months that show something under them;
+      · the ONE-OFF events, month by month (a cancelled one until its day is over: a struck-through "Cancelled" card,
+        its title to its notice page — eleventy/cancelled-pages.js); the years after the open ones folded behind
+        "Show 2028 dates (n)" (committee.js eventsFold, cmEvents);
+      · "Every month" (#ev-pinned): ONE card per monthly series — the next committee meeting (the dark card), the
+        Grapevine Meeting (#ev-next-gvm), the CityWide booth, La Viña's workshop … —: how often, its next dates, what
+        changed ("Nov 26 moved to Nov 18", "Dec 12: cancelled", "Not held on Dec 24") and "See all dates" (its series'
+        page, /events/series/<key>/; the committee meeting's /meetings/#committee-meeting). Each date keeps its anchor
+        there (#ev-recurring-citywide-dallas-2026-12-12: a link to it — the calendar's days, an event page's "See all
+        events" — lands on its series' card), its own page, its entry in "Next 5 weeks" and in the .ics feeds;
+      · "Every week" (#ev-weekly): the weekly open meetings; then past events, "How events get here", the calendar
+        subscription (#subscribe) and, collapsed, "For committee members · Add an event" (ui.memberHelp,
+        #how-events: the two kinds of flyers, the Drive folder, the naming rule + examples, the Portfolio's two Drive
+        actions). With no NETA 65 events, the agenda's empty slot (#ev-empty-neta) points there.
+    The hero's right-hand card ("Save the date"): the next Area assembly (event-tone.js isAssembly: never an ACM, a
+    town hall or a GSR/DCM orientation) — else the next event from Grapevine's or La Viña's own calendars — never the
+    first one-off event of the list below; its link goes to that event's own page (evHref,
+    eleventy/filters/event-links.js). -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set all = db.events.items | cmEvents(site, lang) | cmCollapseRecurring -%}
 {%- set upcoming = all | where("past", false) -%}
-{#- Past list: real one-off events only (a monthly meeting / booth date that has passed is not news — it has no
-    card here any more; since round 37 its calendar entry links to its own date page, /events/<its anchor>/, while
-    events.json keeps it: committee.js detailsUrl) -#}
+{#- Past list: real one-off events only (a monthly meeting / booth date that has passed is not news — its calendar
+    entry links to its own date page, /events/<its anchor>/, while events.json keeps it: committee.js detailsUrl) -#}
 {%- set past = all | where("past", true) | whereNot("committee", true) | whereNot("recurring", true) | reverse -%}
 {%- set meetings = upcoming | where("committee", true) -%}
 {%- set next = meetings[0] -%}
-{#- Counts = what each filter chip shows: every card — a monthly series' every date, the folded months' too (they are
-    a click away); committee.js recounts after hiding events that have passed. The committee meetings; the NETA 65
-    events — ours AND the committee meetings, which are NETA 65 events too (their cards' data-group="committee
-    neta"); the GV & LV calendars. nNetaOwn — our NETA 65 events without the committee meetings — keeps its own
-    meaning: no flyer or event of ours yet (the empty state #ev-empty-neta, cmDriveChecked). -#}
+{#- nNetaOwn — our NETA 65 events without the committee meetings: no flyer or event of ours yet (the empty state
+    #ev-empty-neta, cmDriveChecked) -#}
 {%- set nNetaOwn = upcoming | where("group", "neta") | length -%}
-{%- set nNeta = nNetaOwn + meetings.length -%}
 {%- set nCal = upcoming | where("group", "calendar") | length -%}
 {%- set pageAbs = page.url | siteUrl(site) -%}
 {%- set m = site.meeting -%}
 {#- where the committee meeting is held, in the page's words ("Join on Zoom"): config/site.yml meeting.platform -#}
 {%- set pf = { platform: m.platform or "Zoom" } -%}
 {%- set di = db.status | cmDriveInfo(site) -%}
+{%- set wos = db.weekly_open.items | cmWeeklyAll(lang) -%}
+{%- set gm = site | cmSeriesNext("grapevine-meeting", lang, db.events.items) -%}
+{#- the list: the one-off events by month, one card per series, "Next up", the filters' choices (evList) -#}
+{%- set L = upcoming | evList(db, site, lang, wos) -%}
 
 {#- evm.kindBadge(ev, kind): the kind of an event, in words and in its colour — macros/events.njk (an event's own page,
     event-share-leaf.njk, shows it too) -#}
 {% import "macros/events.njk" as evm with context %}
 
 {#- "Add to calendar" dropdown (Google / Outlook links work without JS; .ics download needs JS).
-    Since round 35 the page carries BRIEF Google / Outlook links — the event's title, times and place, no description
-    (committee.js calendarLinks brief: ev.gcalBrief / ev.outlookBrief) — and committee.js puts the full ones in when
-    the menu opens (CM.calLinks from the card's own .ics data, data-cm-ics: the same addresses the build makes). With
-    every description twice in its links, ~110 cards were about three quarters of what a reader that runs no script
-    (an AI tool's fetch) took from this page: one (November 2026) stopped among June 2027's events and never read
-    the Fall Assembly. Without
-    JavaScript the brief links still add the event. The menu's note (JS-only, like the .ics file) is ONE copy of its
-    words on the agenda's <section> (data-cm-note-timed / data-cm-note-day), written into a menu as it opens
-    (data-cm-note: which of the two) — not 110 copies of one sentence. -#}
+    The page carries BRIEF Google / Outlook links — the event's title, times and place, no description (committee.js
+    calendarLinks brief: ev.gcalBrief / ev.outlookBrief) — and committee.js puts the full ones in when the menu opens
+    (CM.calLinks from the card's own .ics data, data-cm-ics: the same addresses the build makes). Without JavaScript
+    the brief links still add the event. The menu's note (JS-only, like the .ics file) is ONE copy of its words on the
+    agenda's <section> (data-cm-note-timed / data-cm-note-day), written into a menu as it opens (data-cm-note). -#}
 {% macro calMenu(ev, dark=false) %}
 <details class="cm-menu">
   {#- phones: the short visible label ("Calendar"), the full one for screen readers -#}
@@ -86,6 +90,34 @@ calendarFeed: "/events.ics"
 </details>
 {% endmacro %}
 
+{#- An event's outside page (its organizers' — never its flyer): "Organizer's page ↗", so it is never taken for the
+    title's link, which goes to the event's own page here (since the list's redesign; it said "Event details") -#}
+{% macro organizerButton(ev, cls="btn-secondary btn-sm") %}
+<a class="{{ cls }}" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evlist.organizer_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.organizer" | t(lang) }}</span> <span aria-hidden="true">↗</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+{% endmacro %}
+
+{#- The anchors of a series' dates that its card does not list (the committee meeting's and the Grapevine Meeting's
+    cards show one date, which rolls on in the browser): a link to any of them lands on the card -#}
+{% macro dateAnchors(s) %}
+{%- if s %}<span class="sr-only" aria-hidden="true">{% for d in s.dates %}<span id="{{ d.anchor }}"></span>{% endfor %}</span>{% endif -%}
+{% endmacro %}
+
+{#- What changed about a series' dates (evList notes): a date the host moved, a cancelled one, a month the rule skips -#}
+{% macro seriesNotes(s, dark=false) %}
+{%- if s and s.notes | length %}
+<ul class="ev-series-notes{{ ' is-dark' if dark }}" role="list">
+  {%- for n in s.notes %}
+  {%- set nIcon = { cancelled: "calendar-x", moved: "calendar-sync", skipped: "calendar-minus" }[n.type] %}
+  <li>{% icon nIcon, "mt-0.5 size-4 shrink-0" %}<span>
+    {%- if n.type == "moved" %}<a class="link" href="#{{ n.anchor }}">{{ "evlist.note_moved" | t(lang, { from: n.from, to: n.to }) }}</a>
+    {%- elif n.type == "cancelled" %}<a class="link" href="{{ n.href }}">{{ "evlist.note_cancelled" | t(lang, { day: n.day }) }}</a>
+    {%- else %}{{ "evlist.note_skipped" | t(lang, { day: n.day }) }}{% endif -%}
+  </span></li>
+  {%- endfor %}
+</ul>
+{%- endif %}
+{% endmacro %}
+
 {#- "Save the date": from the events with a date of their own (no committee meetings, a monthly series by its next
     date: cmCollapseRecurring's `later`), skipping the first of them — that one is near the top of the list anyway;
     the next Area ASSEMBLY (isAssembly: an ACM, the Area's town hall or a GSR/DCM orientation shares its colour but
@@ -96,26 +128,15 @@ calendarFeed: "/events.ics"
 {%- for ev in ahead %}{% if loop.index0 > 0 and not sdPick.length and (ev.category == "gv-calendar" or ev.category == "lv-calendar") and sdPick.push(ev) %}{% endif %}{% endfor -%}
 {%- set sd = sdPick[0] -%}
 {#- Structured data (schema.org): the upcoming events held at a place, for search engines' event listings —
-    built by cmEventLd (eleventy/filters/committee.js eventLd, where every rule is explained). Google lists only
-    events at a physical place with a postal address that the public may attend, so an online-only event (the
-    committee meeting, La Viña's Zoom workshop) gets no Event here — this page, the .ics files and the events' own
-    pages still show it; a place not known yet is left out too. A hybrid event (a place AND an `online_url`) is "Mixed",
-    with its Place. Each Place has a PostalAddress (street, city, state, ZIP code) read from the event's place;
-    the description is its summary, the picture its flyer (else the committee's card), sameAs its own page on
-    another site; its times are the Central times the cards show, with their offset ("…T13:00:00-06:00"). Only
-    facts we know, no personal names: the organizer is La Viña / Grapevine for their own events we share (ev.host),
-    nobody for an event from their calendars, the committee or group a content/events file names (`organizer:`),
-    the Area for the Area's own events, else the committee (the site's Organization, "#committee"). Its url: the
-    event's own page when that page carries its Event too (a leaf, since round 35: committee.js eventLeaf,
-    /events/<anchor>/, src/pages/event-share-leaf.njk — Google lists only events with a page of their own and
-    markup on it), else its card here (since round 37 every event has a page, but only a leaf's has its Event).
-    Since round 35 at the START of the page content, before the hero: Googlebot reads only the first 2 MB of a page's
-    HTML (Google, 2026-03) and this page is over 1.3 MB — at its end the block was the first thing to be cut. It is
-    the first ld+json block in the page's <body> (tests read that one; since round 35 the site's own graph comes
-    before it, at the end of the <head>: base.njk). -#}
+    built by cmEventLd (eleventy/filters/committee.js eventLd, where every rule is explained): only events at a
+    physical place with a postal address the public may attend (an online-only event gets none: this page, the .ics
+    files and the events' own pages still show it), a monthly series by its next date. At the START of the page
+    content, before the hero: Googlebot reads only the first 2 MB of a page's HTML. It is the first ld+json block in
+    the page's <body> (tests read that one; the site's own graph comes before it, at the end of the <head>:
+    base.njk). -#}
 {%- set ldEvents = upcoming | cmEventLd(site, lang, pageAbs) -%}
 {% if ldEvents | length %}<script type="application/ld+json">{{ { "@context": "https://schema.org", "@graph": ldEvents } | rpJson | safe }}</script>{% endif %}
-{% call(slot) ui.pageHero(lang, "nav.events" | t(lang), "committee.events.hero_sub" | t(lang), "calendar-days", "committee.events.eyebrow" | t(lang), { side: "hide" }) %}
+{% call(slot) ui.pageHero(lang, "nav.events" | t(lang), "committee.events.hero_sub" | t(lang), "calendar-days", "committee.events.eyebrow" | t(lang), { side: "below" }) %}
 {%- if slot == "side" %}
   {%- if sd %}
   {%- set sdKind = sd | eventTone %}
@@ -136,53 +157,185 @@ calendarFeed: "/events.ics"
     <a class="btn-on-dark" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{% icon "video", "size-4" %} {{ "nav.meeting" | t(lang) }}</a>
   </div>
   {#- No hero stat: the committee sub-nav's Events tab counts the upcoming events, each once (a monthly series
-      once, no committee meetings: upcomingEventEnds); the filter chips count the cards — every date -#}
+      once, no committee meetings: upcomingEventEnds); the filter chips count the cards -#}
 {%- endif %}
 {% endcall %}
 
 {% committeeNav lang, "events", db %}
 
-<div class="container-page section pt-10 pb-0 sm:pt-12">
-<div class="layout-aside">
+<div class="container-page section pt-8 pb-0 sm:pt-12">
+{#- ---------- Next up (below 1024px; the sidebar's calendar says it from there): the next events, one line each —
+     a one-off event, or a series' next date — each a link to its card. Two spare lines wait hidden: as an event is
+     over, the browser drops its line and shows the next (committee.js expire(): data-cm-expire, data-cm-max). ---------- -#}
+{%- if L.nextUp | length %}
+<section id="ev-nextup" class="ev-nextup lg:hidden" aria-labelledby="ev-nextup-title">
+  <h2 id="ev-nextup-title" class="ev-nextup-h">{% icon "clock-3", "size-4" %}{{ "committee.events.cal_next_up" | t(lang) }}</h2>
+  <ol class="ev-nextup-list" role="list" data-cm-max="{{ L.nextShown }}">
+    {%- for ev in L.nextUp %}
+    <li class="ev-tone-{{ ev | eventTone }}{{ ' hidden' if loop.index0 >= L.nextShown }}" data-cm-expire="{{ ev.expireIso }}"><a class="ev-nextup-item" href="#{{ ev.anchor }}"><span class="ev-nextup-day" aria-hidden="true"><span>{{ ev.tile.mon }}</span><span class="ev-nextup-n">{{ ev.tile.day }}</span></span><span class="min-w-0"><span class="ev-nextup-t">{{ ev.title }}</span><span class="ev-nextup-when">{{ ev.rangeLabel if ev.multiDay else ([ev.tile.wd, ev.timeLabel] | select | join(" · ")) }}</span></span></a></li>
+    {%- endfor %}
+  </ol>
+</section>
+{%- endif %}
+<div class="ev-layout">
+{#- ---------- "Next 5 weeks" (cmCalWeeks → committee.js calendarWeeks, where every rule is explained) ----------
+     From 1024px the sidebar's top, beside the list (its sticky-aside wrapper keeps it in view under the header while
+     the list scrolls: main.css; .ev-layout puts it in the right-hand column — committee.css); below 1024px, before the
+     list (DOM order = phone order = Tab order: one copy, never moved), folded under its heading with JavaScript
+     ("Show the calendar": [data-ev-cal-toggle], committee.js calendar()), whole without it.
+     A month-style grid, Sunday first, of the five weeks from this one (Central time) — EVERY upcoming event of the
+     page on each of its days (committee meetings, each date of a monthly series, an assembly on all its days) and the
+     two weekly open meetings — plus three spare weeks, hidden: as each week ends, the browser drops its row and shows
+     the next (committee.js expire(): the row's data-cm-expire is the moment its Saturday ends; the tbody's
+     data-cm-max="5"), so five weeks always show between builds. A plain table (not role="grid"): Tab goes through the
+     days that have something on, row by row, and a screen reader names each column's weekday. Each such day is a
+     link to its first event's card (a series' date: its anchor on its series' card) holding the day's number, the
+     whole day in words for screen readers and up to 3 dots in the events' colours (a weekly meeting's: a ring; more:
+     "+n"); the 1st of a month (and the grid's first day) names its month. The build's today: .is-today +
+     aria-current="date"; the days before it: .is-past, no link. Under the grid, the day's list (aria-live) — today's
+     when something is on today, else the next day with something on ("Next up") —, each entry a link to its card.
+     With JavaScript, picking a day shows that day's list instead of jumping; a link to a card the list hides
+     (another filter, a month folded behind "Show more") is revealed by the list itself (cmEvents: on hashchange, and
+     on "cm:reveal"). Every minute committee.js calToday() moves today and the past days on. Then the colour key of
+     the dots and one line of help. data-lastmod="skip": the card changes with the day, not with the content
+     (eleventy/lastmod.js). No card when nothing is on in these weeks (calendarWeeks: null). -#}
+{%- set cal = upcoming | cmCalWeeks(wos, lang, { weeks: 5, spare: 3 }) %}
+{% if cal %}
+<aside class="ev-side-cal min-w-0" aria-label="{{ 'committee.events.cal_title' | t(lang, { n: cal.n }) }}">
+  <div class="sticky-aside">
+    <section id="ev-cal" class="cm-cal-card card card-pad" data-cm-cal data-lastmod="skip" aria-labelledby="ev-cal-title">
+      <div class="ev-cal-head">
+        <div class="min-w-0">
+          <p class="eyebrow text-gv">{{ "committee.events.cal_eyebrow" | t(lang) }}</p>
+          <h2 id="ev-cal-title" class="card-h mt-2"><span>{% icon "calendar-days", "size-5" %}</span>{{ "committee.events.cal_title" | t(lang, { n: cal.n }) }}</h2>
+        </div>
+        <button type="button" class="btn-secondary btn-sm ev-cal-toggle" data-js-only data-ev-cal-toggle aria-expanded="false" aria-controls="ev-cal-body" data-show="{{ 'evlist.cal_show' | t(lang) }}" data-hide="{{ 'evlist.cal_hide' | t(lang) }}">{% icon "chevron-down", "size-4" %}<span data-ev-cal-label>{{ "evlist.cal_show" | t(lang) }}</span></button>
+      </div>
+      <div id="ev-cal-body" class="ev-cal-body">
+      <p class="cm-cal-cap" data-cm-cal-cap="{{ cal.captionFrom }}">{{ cal.caption }}</p>
+      <table class="cm-cal" aria-labelledby="ev-cal-title">
+        <thead>
+          <tr>{% for wd in cal.weekdays %}<th scope="col"><span class="cm-cal-wd" aria-hidden="true">{{ wd.short }}</span><span class="cm-cal-wd2" aria-hidden="true">{{ wd.tiny }}</span><span class="sr-only">{{ wd.long }}</span></th>{% endfor %}</tr>
+        </thead>
+        {#- (whitespace control throughout: 56 cells and a list per day add up) -#}
+        <tbody data-cm-max="{{ cal.n }}">
+          {%- for wk in cal.weeks -%}
+          <tr data-cm-expire="{{ wk.endIso }}"{% if wk.hidden %} class="hidden"{% endif %}>
+            {%- for d in wk.days -%}
+            <td class="cm-cal-d{{ ' is-today' if d.today }}{{ ' is-past' if d.past }}{{ ' is-selected' if d.ymd == cal.panel }}" data-cm-day="{{ d.ymd }}"{% if d.today %} aria-current="date"{% endif %}>
+              {%- if d.events | length -%}
+              <a class="cm-cal-link"{% if not d.past %} href="#{{ d.first }}"{% endif %} data-cm-cal-day="{{ d.ymd }}">{% if d.mon %}<span class="cm-cal-mon" aria-hidden="true">{{ d.mon }}</span>{% endif %}<span class="cm-cal-n" aria-hidden="true">{{ d.day }}</span><span class="sr-only">{{ d.sr }}</span><span class="cm-cal-dots" aria-hidden="true">{% for e in d.dots %}<span class="cm-cal-dot ev-tone-{{ e.tone }}{{ ' is-weekly' if e.weekly }}"></span>{% endfor %}{% if d.more %}<span class="cm-cal-more">+{{ d.more }}</span>{% endif %}</span></a>
+              {%- else -%}
+              <span class="cm-cal-day">{% if d.mon %}<span class="cm-cal-mon">{{ d.mon }}</span>{% endif %}{{ d.day }}</span>
+              {%- endif -%}
+            </td>
+            {%- endfor -%}
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+      <div class="cm-cal-panels" aria-live="polite" data-cm-cal-panels data-today="{{ 'common.today' | t(lang) }}" data-next="{{ 'committee.events.cal_next_up' | t(lang) }}">
+        {%- for wk in cal.weeks %}{% for d in wk.days %}{% if d.events | length -%}
+        <div class="cm-cal-panel" data-cm-cal-panel="{{ d.ymd }}"{% if d.ymd != cal.panel %} hidden{% endif %}>
+          <h3 class="cm-cal-ph"><span class="cm-cal-tag" data-cm-cal-tag>{% if d.ymd == cal.panel %}{{ ("common.today" if cal.panelToday else "committee.events.cal_next_up") | t(lang) }}{% endif %}</span> {{ d.label }}</h3>
+          <ul class="cm-cal-list" role="list">
+            {%- for e in d.events -%}
+            <li data-cm-cal-end="{{ e.endIso }}"><span class="cm-cal-dot ev-tone-{{ e.tone }}{{ ' is-weekly' if e.weekly }}"></span><span>{% if e.time %}<span class="cm-cal-time">{{ e.time }}</span> {% endif %}<a class="cm-cal-ev" href="#{{ e.anchor }}">{{ e.title }}</a>{% if e.weekly %} <span class="cm-cal-wk">· {{ "committee.events.badge_weekly" | t(lang) }}</span>{% endif %}</span></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        {%- endif %}{% endfor %}{% endfor %}
+      </div>
+      <ul class="cm-cal-key" role="list" aria-label="{{ 'committee.events.legend' | t(lang) }}">
+        {%- for k in cal.kinds %}
+        <li><span class="cm-cal-dot ev-tone-{{ k.tone }}"></span>{{ k.label }}</li>
+        {%- endfor %}
+        {%- if cal.weekly %}
+        <li><span class="cm-cal-dot is-weekly"></span>{{ "committee.events.badge_weekly" | t(lang) }}</li>
+        {%- endif %}
+      </ul>
+      <p class="cm-cal-help">{{ "committee.events.cal_help" | t(lang) }}</p>
+      </div>
+    </section>
+  </div>
+</aside>
+{% endif %}
+
 {#- (data-cm-note-timed / -day: the words of the cards' "Add to calendar" note, once — calMenu above) -#}
-<section class="min-w-0" x-data="cmEvents()" data-count-label="{{ 'committee.events.showing' | t(lang) }}" data-count-label-one="{{ 'committee.events.showing_one' | t(lang) }}" data-cm-note-timed="{{ 'committee.cal.reminder_timed' | t(lang) }}" data-cm-note-day="{{ 'committee.cal.reminder_day' | t(lang) }}" aria-labelledby="ev-upcoming-title">
+<section class="ev-main min-w-0" x-data="cmEvents()" data-count-label="{{ 'committee.events.showing' | t(lang) }}" data-count-label-one="{{ 'committee.events.showing_one' | t(lang) }}" data-cm-note-timed="{{ 'committee.cal.reminder_timed' | t(lang) }}" data-cm-note-day="{{ 'committee.cal.reminder_day' | t(lang) }}" aria-labelledby="ev-upcoming-title">
   {{ ui.sectionHead("committee.events.upcoming" | t(lang), "committee.events.list_sub" | t(lang), "", "", "calendar-days", { eyebrow: "committee.events.list_eyebrow" | t(lang), tone: "text-vine", id: "ev-upcoming-title", lang: lang }) }}
 
-  {#- ---------- Filter bar: one line of chips (it scrolls sideways on a phone); under it the months as
-       jump chips (only the months with something showing) ---------- -#}
-  {%- set months = upcoming | groupBy("monthKey") %}
-  {#- The folded months (eventsFold: the years after the build's — after the next one from November on; all of
-      2028 when built in November 2026 or in 2027 before November): their sections and jump chips carry data-cm-more and data-dflt-hidden — committee.css hides
-      them from the first paint (with JavaScript), so nothing jumps when cmEvents starts; "Show {range} dates (n)"
-      after the last open month shows them. fold = null: nothing folded, no button. -#}
-  {%- set fold = upcoming | cmEventsFold -%}
+  {#- ---------- The filters (JavaScript only: without it every card shows) — cmEvents (src/assets/js/committee.js):
+       the kind as chips (each with its count under the other filters picked), then the language, in person / online,
+       the city and the district (only when an event names one) as menus, and "Clear filters". Every card of the page
+       carries its facets (evFacets: data-kind, data-lang, data-mode, data-city, data-district) — the one-off events,
+       the cancelled ones, the series' cards and the weekly meetings alike. The filters picked are kept in the
+       address (?kind=…&lang=…), so a filtered view can be shared; ?filter=committee / ?filter=calendar (the page's
+       old chips) still work. Then the months as jump chips (only those with something showing), "Every month" and
+       "Every week", and the colour key. ---------- -#}
+  {%- set fold = L.oneOff | cmEventsFold -%}
   <div class="mb-8 grid grid-cols-1 gap-3">
-    <div class="chip-row" role="group" aria-label="{{ 'committee.events.filter_aria' | t(lang) }}" data-js-only>
-      {%- for f in [["all", "common.all", "", "layout-grid"], ["committee", "committee.events.f_committee", meetings.length, "users"], ["neta", "committee.events.f_neta", nNeta, "map-pin"], ["calendar", "committee.events.f_calendar", nCal, "grapes"]] %}
-      {%- if f[0] == "all" or f[2] %}
-      <button type="button" class="chip" data-cm-filter="{{ f[0] }}" @click="set('{{ f[0] }}')" :aria-pressed="(filter === '{{ f[0] }}').toString()" aria-pressed="{{ 'true' if f[0] == 'all' else 'false' }}">
-        {% icon f[3], "size-4" %} {{ f[1] | t(lang) }}{% if f[2] !== "" %} <span class="cm-chip-count">{{ f[2] }}</span>{% endif %}
-      </button>
-      {%- endif %}
-      {%- endfor %}
+    <div id="ev-filters" class="ev-filters" data-js-only role="group" aria-label="{{ 'committee.events.filter_aria' | t(lang) }}">
+      <div class="chip-row" role="group" aria-label="{{ 'evlist.kind_aria' | t(lang) }}">
+        <button type="button" class="chip" data-ev-kind="" @click="setKind('')" :aria-pressed="(!f.kind).toString()" aria-pressed="true">{% icon "layout-grid", "size-4" %} {{ "common.all" | t(lang) }}</button>
+        {%- for k in L.facets.kinds %}
+        <button type="button" class="chip" data-ev-kind="{{ k.key }}" @click="setKind('{{ k.key }}')" :aria-pressed="(f.kind === '{{ k.key }}').toString()" aria-pressed="false">{{ ("evlist.kind." + k.key) | t(lang) }} <span class="cm-chip-count" x-text="kindCount('{{ k.key }}')">{{ k.n }}</span></button>
+        {%- endfor %}
+      </div>
+      {#- (below 640px the menus fold behind "More filters" — open by themselves when the address picks one of them;
+          "Clear filters" beside it, from 640px after the menus) -#}
+      <div class="ev-filter-tools">
+        <button type="button" class="btn-ghost btn-sm ev-more-filters" @click="moreOpen = !moreOpen" :aria-expanded="moreOpen.toString()" aria-expanded="false" aria-controls="ev-filter-row">{% icon "sliders-horizontal", "size-4" %} {{ "evlist.more_filters" | t(lang) }}</button>
+        <button type="button" class="btn-ghost btn-sm ev-clear" x-show="active" x-cloak @click="clear()">{% icon "x", "size-4" %} {{ "evlist.clear" | t(lang) }}</button>
+      </div>
+      <div id="ev-filter-row" class="ev-filter-row" :class="moreOpen && 'is-open'">
+        {%- if L.facets.langs | length > 1 %}
+        <label class="ev-select"><span class="ev-select-l">{{ "evlist.lang_label" | t(lang) }}</span>
+          <select class="input" data-ev-facet="lang" x-model="f.lang" @change="changed()">
+            <option value="">{{ "evlist.lang.any" | t(lang) }}</option>
+            {%- for v in L.facets.langs %}<option value="{{ v }}">{{ ("evlist.lang." + v) | t(lang) }}</option>{% endfor %}
+          </select></label>
+        {%- endif %}
+        {%- if L.facets.modes | length > 1 %}
+        <label class="ev-select"><span class="ev-select-l">{{ "evlist.mode_label" | t(lang) }}</span>
+          <select class="input" data-ev-facet="mode" x-model="f.mode" @change="changed()">
+            <option value="">{{ "evlist.mode.any" | t(lang) }}</option>
+            {%- for v in L.facets.modes %}<option value="{{ v }}">{{ ("evlist.mode." + v) | t(lang) }}</option>{% endfor %}
+          </select></label>
+        {%- endif %}
+        {%- if L.facets.cities | length > 1 %}
+        <label class="ev-select"><span class="ev-select-l">{{ "evlist.city_label" | t(lang) }}</span>
+          <select class="input" data-ev-facet="city" x-model="f.city" @change="changed()">
+            <option value="">{{ "evlist.city_any" | t(lang) }}</option>
+            {%- for c in L.facets.cities %}<option value="{{ c.slug }}">{{ c.name }}</option>{% endfor %}
+          </select></label>
+        {%- endif %}
+        {%- if L.facets.districts | length %}
+        <label class="ev-select"><span class="ev-select-l">{{ "evlist.district_label" | t(lang) }}</span>
+          <select class="input" data-ev-facet="district" x-model="f.district" @change="changed()">
+            <option value="">{{ "evlist.district_any" | t(lang) }}</option>
+            {%- for d in L.facets.districts %}<option value="{{ d.d }}">{{ "evlist.district" | t(lang, { n: d.d }) }}</option>{% endfor %}
+          </select></label>
+        {%- endif %}
+      </div>
     </div>
-    {% if months | length > 1 %}
+    {%- set months = L.oneOff | groupBy("monthKey") %}
+    {% if months | length or L.series | length or gm or wos | length %}
     <nav class="flex min-w-0 max-w-full items-center gap-2.5" aria-label="{{ 'committee.events.months_aria' | t(lang) }}">
       <span class="shrink-0 text-faint" aria-hidden="true">{% icon "calendar-range", "size-4" %}</span>
       <ul class="chip-row min-w-0" role="list">
         {%- for grp in months %}
         <li x-show="monthVisible($refs['m{{ grp.key }}']) && (more || !$el.hasAttribute('data-cm-more'))"{% if fold and grp.key >= fold.from %} data-cm-more data-dflt-hidden{% endif %}><a class="chip" href="#month-{{ grp.key }}">{{ grp.items[0].monthShort }}</a></li>
         {%- endfor %}
+        {%- if L.series | length or gm %}<li x-show="monthVisible($refs.series)"><a class="chip" href="#ev-pinned-title">{% icon "repeat", "size-4" %} {{ "evlist.series_title" | t(lang) }}</a></li>{% endif %}
+        {%- if wos | length %}<li x-show="monthVisible($refs.weekly)"><a class="chip" href="#ev-weekly-title">{% icon "repeat", "size-4" %} {{ "committee.events.badge_weekly" | t(lang) }}</a></li>{% endif %}
       </ul>
     </nav>
     {% endif %}
     {#- the colour key: only the kinds on this page (committee meeting · Grapevine · La Viña · booth · Area event ·
-        the grey one), each card's badge says its kind in words too — the pinned Grapevine Meeting and the "every
-        week" cards below (#ev-weekly: Grapevine's and La Viña's colours) count as well. The grey kind is "NETA 65"
-        when every grey card is one of ours (its badge says so: kindBadge — today the Grapevine Meeting), else
-        "Other events". -#}
-    {%- set wos = db.weekly_open.items | cmWeeklyAll(lang) -%}
-    {%- set gm = site | cmSeriesNext("grapevine-meeting", lang, db.events.items) -%}
+        the grey one), each card's badge says its kind in words too — the series' cards and the "every week" cards
+        below (#ev-weekly: Grapevine's and La Viña's colours) count as well. The grey kind is "NETA 65" when every grey
+        card is one of ours (its badge says so: kindBadge — today the Grapevine Meeting), else "Other events". -#}
     {%- set toneSrc = upcoming.concat([gm.next] if gm else []) -%}
     {%- for w in wos %}{% set _n = toneSrc.push({ host: "lv" if w.isLv else "gv" }) %}{% endfor -%}
     {%- set kinds = toneSrc | eventToneSet %}
@@ -201,24 +354,180 @@ calendarFeed: "/events.ics"
   </div>
   <p class="sr-only" aria-live="polite" x-text="countText()"></p>
 
-  {#- ---------- Pinned: our monthly meetings (round 30) ----------
-      The owner's "sticky": PINNED — always shown, first, whatever the chip (no x-show), never counted (no
-      data-group: not a card of the list; the same meetings' dates are cards in the months too — the duplicate is
-      meant). Not CSS position: sticky. Its heading "Our monthly meetings" and, with both cards, one line that says
-      so; then (1) the next committee meeting — the dark card, the page's FIRST .cm-pinned (tests read its
-      settings) — and (2) the next Grapevine Meeting (#ev-next-gvm), built like a weekly open meeting's card. Each
-      rolls on in the browser (cmMeeting: the next date once one is over, "Live now" during it, the visitor's own
-      time). -#}
-  {% if next or gm %}
-  <section id="ev-pinned" class="mb-10" aria-labelledby="ev-pinned-title">
-    <h2 id="ev-pinned-title" class="cm-month-title">{% icon "pin", "size-5 shrink-0 text-grape" %}{{ "committee.events.pinned_title" | t(lang) }}</h2>
-    {% if next and gm %}<p class="measure -mt-1.5 mb-4 text-sm leading-relaxed text-muted">{{ "committee.events.pinned_text" | t(lang) }}</p>{% endif %}
-    <div class="grid gap-4">
-  {% if next %}
-  {#- (the guest speakers to come, each with that meeting's calendar text: the card shows the speaker of the date it
-      shows — none on a date without one —, also once it rolls on in the browser: committee.js cmSpeakers) -#}
+  {#- ---------- The one-off events, grouped by month ----------
+      Every event to come that is not a date of a monthly series nor a committee meeting, a card each (evList oneOff),
+      and the cancelled ones until their day is over. A folded month (fold: a year after the open ones) carries
+      data-cm-more + data-dflt-hidden and shows once "Show {range} dates (n)" is pressed (cmEvents `more`); its heading
+      takes the keyboard then (tabindex="-1"). That button comes right after the last open month: data-js-only, shown
+      while a folded card the filters pick is hidden, with their count (moreCount; the build writes the "All" count). -#}
+  {% for grp in months %}
+  {%- set folded = fold and grp.key >= fold.from %}
+  {% if folded and grp.key == fold.keys[0] %}
+  <div class="cm-ev-more" data-js-only x-show="!more && moreCount">
+    <button type="button" class="btn-secondary" @click="showMore()">{% icon "chevron-down", "size-4" %} <span data-label="{{ 'committee.events.show_more' | t(lang, { range: fold.range }) }}" x-text="moreText($el)">{{ "committee.events.show_more" | t(lang, { range: fold.range, n: fold.n }) }}</span></button>
+  </div>
+  {% endif %}
+  <section class="cm-month" data-cm-month x-ref="m{{ grp.key }}" x-show="monthVisible($el) && (more || !$el.hasAttribute('data-cm-more'))"{% if folded %} data-cm-more data-dflt-hidden{% endif %} aria-labelledby="month-{{ grp.key }}">
+    <h2 id="month-{{ grp.key }}" class="cm-month-title"{% if folded %} tabindex="-1"{% endif %}>{{ grp.items[0].monthLabel }}</h2>
+    <ol class="grid gap-4">
+      {% for ev in grp.items %}
+      {%- set kind = ev | eventTone %}
+      {%- if ev.cancelled %}
+      {#- A cancelled event, until its day is over (db.events.cancelled — content/events `cancelled: true`; the site
+          search lists it the same way): its card struck through, "Cancelled", the day and place it had, its title and
+          "See the notice" to its notice page (/events/<anchor>/: src/pages/event-share-cancelled.njk) — no calendar
+          menu, no flyer, no way to join: nothing invites anyone to come. Never counted ("Showing N events") -#}
+      <li id="{{ ev.anchor }}" data-group="{{ ev.group }}" data-ev-cancelled data-cm-expire="{{ ev.expireIso }}"{{ ev | evFacets(site) | safe }} x-show="show($el)">
+        <article class="card cm-event ev-accent ev-tone-{{ kind }} ev-cancelled" x-ignore>
+          <div class="cm-date-tile{{ ' cm-tile-range' if ev.tile.range }} max-sm:hidden" aria-hidden="true">
+            <span class="cm-tile-mon">{{ ev.tile.mon }}</span>
+            <span class="cm-tile-day">{{ ev.tile.day }}</span>
+            <span class="cm-tile-wd">{{ ev.tile.wd }}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="cm-date-strip mb-2.5 sm:hidden" aria-hidden="true">{% icon "calendar", "size-3.5" %}<span>{{ ev.tile.wd }} · {{ ev.tile.mon }} {{ ev.tile.day }}</span></p>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="badge ev-badge-cancelled">{% icon "calendar-x", "size-3" %} {{ "evcancel.ics_prefix" | t(lang) }}</span>
+              {{ evm.kindBadge(ev, kind) }}
+            </div>
+            <h3 class="h-card mt-2 text-lg sm:text-xl"><a href="{{ ev.noticePath }}" class="-my-3 inline-block py-3 hover:text-gv"><s>{{ ev.title }}</s><span class="sr-only"> — {{ "evcancel.ics_prefix" | t(lang) }}</span></a></h3>
+            <p class="sr-only">{{ ev.dateLabel }}</p>
+            <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
+              {% if ev.multiDay %}<li class="inline-flex items-center gap-1.5">{% icon "calendar-range", "size-4 text-faint" %} <s>{{ ev.rangeLabel }}</s></li>{% endif %}
+              {% if ev.timeLabel %}<li class="inline-flex items-center gap-1.5">{% icon "clock-3", "size-4 text-faint" %} <s>{{ ev.timeLabel }}</s></li>{% endif %}
+              {% if ev.location %}<li class="inline-flex items-center gap-1.5">{% icon "map-pin", "size-4 text-faint" %} <s>{{ ev.location }}</s></li>{% endif %}
+            </ul>
+            <p class="mt-2.5 text-sm font-medium text-ink">{{ ev.cancelledNote or ("evcancel.banner" | t(lang)) }}</p>
+            <div class="cm-ev-actions"><div class="cm-ev-btns"><a class="btn-secondary btn-sm" href="{{ ev.noticePath }}">{% icon "info", "size-4" %} {{ "evlist.notice" | t(lang) }}</a></div></div>
+          </div>
+        </article>
+      </li>
+      {%- else %}
+      {#- Share: the event's own page, /events/<anchor>/ (eleventy/event-pages.js eventPagePlan — src/pages/
+          event-share-leaf.njk while it is to come, event-share-date.njk for an outside calendar's event), whose link
+          preview shows its title, day and flyer (the card's title links to it below) -#}
+      {%- set shareUrl = ("/events/" + ev.anchor + "/") | lurl(lang) | siteUrl(site) %}
+      {#- data-group: who it is from (committee · neta · calendar); evFacets: its filters (see the filter bar above).
+          x-ignore: Alpine never walks into a card. A card holds NO Alpine directive (x-…, @…, :…) — its x-show is on
+          the <li> — and must not: one put inside would silently do nothing (tests/test_r33_committee.py checks the
+          built page). Its menus, Share and flyer buttons are plain HTML and committee.js / app.js. Its old anchors
+          ("ev-flyer-…", before it had a readable address: evOldAnchors) are empty spans on it, so an old link lands on
+          it too. -#}
+      <li id="{{ ev.anchor }}" data-group="{{ ev.group }}" data-cm-expire="{{ ev.expireIso }}"{{ ev | evFacets(site) | safe }} x-show="show($el)">
+        <article class="card cm-event ev-accent ev-tone-{{ kind }}" x-ignore>
+          {%- for a in ev.item | evOldAnchors %}<span id="{{ a }}" class="sr-only"></span>{% endfor %}
+          {#- the date: a tile column from 640px; on a phone a strip above the title (+ Share as an icon) -#}
+          <div class="cm-date-tile{{ ' cm-tile-range' if ev.tile.range }} max-sm:hidden" aria-hidden="true">
+            <span class="cm-tile-mon">{{ ev.tile.mon }}</span>
+            <span class="cm-tile-day">{{ ev.tile.day }}</span>
+            <span class="cm-tile-wd">{{ ev.tile.wd }}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="mb-2.5 flex items-center justify-between gap-3 sm:hidden">
+              <p class="cm-date-strip" aria-hidden="true">{% icon "calendar", "size-3.5" %}<span>{{ ev.tile.wd }} · {{ ev.tile.mon }} {{ ev.tile.day }}</span></p>
+              <button type="button" class="btn-ghost -my-1 -mr-2 size-11 shrink-0 p-0" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}" aria-label="{{ 'common.share' | t(lang) }}: {{ ev.title }}">{% icon "share-2", "size-4" %}</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              {{ evm.kindBadge(ev, kind) }}
+              {% if ev.tentative %}{{ ui.tentativeBadge(lang) }}{% endif %}
+              {% if ev.isNew %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
+              {% if not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
+            </div>
+            {#- the title: a link to the event's own page (eleventy/filters/event-links.js evHref), else — an event the
+                build writes no page for — to its link (an outside page) when that is not its flyer -#}
+            {%- set ownPage = ev | evHref(lang, db, site, "page") -%}
+            <h3 class="h-card mt-2 text-lg sm:text-xl">
+              {%- if ev.link and ev.link != (ev.flyer.view if ev.flyer else "") and not ownPage -%}
+              <a href="{{ ev.link }}" class="-my-3 inline-block py-3 hover:text-gv"{% if ev.linkExternal %} target="_blank" rel="noopener"{% endif %}>{{ ev.title }}</a>
+              {%- elif ownPage -%}
+              <a href="{{ ownPage }}" class="-my-3 inline-block py-3 hover:text-gv">{{ ev.title }}</a>
+              {%- else -%}{{ ev.title }}{%- endif -%}
+            </h3>
+            {#- the tile is hidden from screen readers: the date is read here (a range is in the list below) -#}
+            {% if not ev.multiDay %}<p class="sr-only">{{ ev.dateLabel }}</p>{% endif %}
+            <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
+              {#- Several days (an Area assembly): the date range; the tile shows it too -#}
+              {% if ev.multiDay %}<li class="inline-flex items-center gap-1.5 font-medium text-ink">{% icon "calendar-range", "size-4 text-faint" %} {{ ev.rangeLabel }}</li>{% endif %}
+              {% if ev.timeLabel %}<li class="inline-flex items-center gap-1.5">{% icon "clock-3", "size-4 text-faint" %} {{ ev.timeLabel }}</li>{% endif %}
+              {#- A place not known yet ("Venue to be announced"): plain italic text, no map pin -#}
+              {% if ev.location and ev.locationTba %}<li class="inline-flex items-center gap-1.5 italic">{% icon "hourglass", "size-4 text-faint" %} {{ ev.location }}</li>
+              {% elif ev.location %}<li class="inline-flex items-center gap-1.5">{% icon "map-pin", "size-4 text-faint" %} {{ ev.location }}</li>{% endif %}
+              {% if ev.isOnline %}<li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ ("committee.events.online_on" | t(lang, { platform: ev.platform })) if ev.platform else ("committee.events.online" | t(lang)) }}</li>{% endif %}
+              {#- the meeting ID or code to type into the meeting app — inline-block: with larger text the number moves to
+                  the next line in one piece; data-nosnippet: never quoted by search engines -#}
+              {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ ev.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no" data-nosnippet>{{ ev.meetingId }}</span></span></li>{% endif %}
+              {% if ev.contact %}<li class="inline-flex min-w-0 items-center gap-1.5">{% icon "mail", "size-4 shrink-0 text-faint" %} <a class="link tap-link min-w-0 break-words" href="mailto:{{ ev.contact }}" translate="no"><span class="sr-only">{{ "committee.events.contact" | t(lang) }}: </span>{{ ev.contact | replace("@", "@<wbr>") | safe }}</a></li>{% endif %}
+              {#- a content/events file's `district:` -#}
+              {% if ev.facets.district %}<li class="inline-flex items-center gap-1.5">{% icon "map", "size-4 text-faint" %} {{ "evlist.district" | t(lang, { n: ev.facets.district }) }}</li>{% endif %}
+            </ul>
+            {%- set foreign = not ev.ownWords and ev.item.lang and ev.item.lang != lang and ev.item.lang != "und" and not (ev.item | machineFor(lang)) -%}
+            {#- the summary, three lines of it (its whole description is on its own page): a meeting ID, Meet code,
+                passcode or meeting address in it is never quoted by search engines (cmNoSnippet) -#}
+            {% if ev.summary %}
+            <p class="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.summary | excerpt(280) | escape | cmNoSnippet | safe }}</p>
+            {% endif %}
+            {% if ev.item | machineFor(lang) %}<p class="mt-1.5">{{ ui.autoNote(ev.item, lang) }}</p>{% endif %}
+            {#- phones: a two-column grid of equal buttons (an odd last one spans both); from 640px one row, with Share
+                at its end (committee.css .cm-ev-actions). Its outside page, when it is not its flyer: "Organizer's
+                page ↗" (organizerButton) — the title goes to its own page here. -#}
+            <div class="cm-ev-actions">
+              <div class="cm-ev-btns">
+              {% if ev.online %}
+              <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+              {% endif %}
+              {{ calMenu(ev) }}
+              {{ ui.flyerButton(ev.flyer, ev.title, lang) }}
+              {% if ev.link and ev.linkExternal and (not ev.flyer or (ownPage and ev.link != ev.flyer.view)) %}{{ organizerButton(ev) }}{% endif %}
+              </div>
+              <button type="button" class="btn-ghost btn-sm max-xl:px-2.5 max-sm:hidden" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}">{% icon "share-2", "size-4" %}<span class="max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>
+            </div>
+          </div>
+          {#- The flyer on the side (from 640px; on a phone the "View flyer" button above is the way to it) -#}
+          {{ ui.flyerThumb(ev.flyer, ev.title, lang) }}
+        </article>
+      </li>
+      {%- endif %}
+      {% endfor %}
+    </ol>
+  </section>
+  {% endfor %}
+
+  {#- nothing the filters picked (cmEvents: no card shows) — "Clear filters" brings every card back -#}
+  <div class="mt-2" data-js-only x-show="active && !visibleCount" x-cloak>
+    <div class="empty-state">
+      <span class="mx-auto mb-3 grid size-12 place-items-center rounded-full bg-surface-2 text-faint">{% icon "search-x", "size-6" %}</span>
+      <p class="font-semibold text-ink">{{ "evlist.none_title" | t(lang) }}</p>
+      <p class="mx-auto mt-1 max-w-md text-sm">{{ "evlist.none_text" | t(lang) }}</p>
+      <button type="button" class="btn-secondary btn-sm mt-4" @click="clear()">{{ "evlist.clear" | t(lang) }}</button>
+    </div>
+  </div>
+
+  {#- ---------- Every month: ONE card per monthly series (evList series) ----------
+      The committee meeting first — the dark card, the page's FIRST .cm-pinned (tests read its settings) —, then the
+      monthly series in the order of their next date: the Grapevine Meeting (#ev-next-gvm, built like a weekly open
+      meeting's card) and the others (#ev-series-<key>). Each a card of the list ([data-group], its facets, x-show),
+      shown or hidden by the filters like any other, counted once. The committee meeting's and the Grapevine Meeting's
+      cards roll on in the browser (cmMeeting: the next date once one is over, "Live now" during it, the visitor's own
+      time); a series' card lists its next three dates — the rest wait hidden and take their place as each is over
+      (expire(): data-cm-max) — each a link to its date's own page, then what changed about its dates and "See all
+      dates". Every date's anchor is on its series' card. The Grapevine Meeting's card is worked out from the settings
+      (gm), so it shows before the data sync lists its dates too — then after the others, with no dates of its own. -#}
+  {%- set seriesCards = L.series.slice() -%}
+  {%- if gm and not (L.series | where("key", "grapevine-meeting") | length) %}{% set _gm = seriesCards.push({ key: "grapevine-meeting", committee: false, next: gm.next, dates: [], notes: [], href: "", expireIso: gm.next.expireIso }) %}{% endif -%}
+  {% if seriesCards | length %}
+  <section id="ev-pinned" class="ev-series-sec" x-ref="series" x-show="monthVisible($el)" aria-labelledby="ev-pinned-title">
+    <h2 id="ev-pinned-title" class="cm-month-title">{% icon "repeat", "size-5 shrink-0 text-grape" %}{{ "evlist.series_title" | t(lang) }}</h2>
+    <p class="measure -mt-1.5 mb-4 text-sm leading-relaxed text-muted">{{ "evlist.series_text" | t(lang) }}</p>
+    <ul class="grid gap-4" role="list">
+  {%- for s in seriesCards %}
+  {%- if s.committee and next %}
+  {#- (1) the next committee meeting: the dark card. The guest speakers to come, each with that meeting's calendar
+      text: the card shows the speaker of the date it shows — none on a date without one —, also once it rolls on in
+      the browser (committee.js cmSpeakers) -#}
   {%- set spk = site | cmSpeakers(lang) -%}
   {%- set cfg = { rule: m | cmRuleObj, start: next.startIso, end: next.endIso, title: next.title, description: next.calDescription, location: next.calLocation, url: ('/meetings/#committee-meeting' | lurl(lang) | siteUrl(site)), speakers: spk.list, plain: spk.plain, i18n: { join: "committee.meeting.join" | t(lang, pf), soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang), speaker: "committee.meeting.speaker" | t(lang) } } -%}
+  <li data-group="committee neta" data-cm-expire="{{ s.expireIso }}"{{ s.next | evFacets(site) | safe }} x-show="show($el)">
+  {{ dateAnchors(s) }}
   <article class="cm-pinned @container" x-data="cmMeeting({{ cfg | json }})" aria-labelledby="ev-next-title">
     <div class="cm-pinned-grid">
       <div class="cm-date-tile cm-tone-light" aria-hidden="true">
@@ -228,10 +537,9 @@ calendarFeed: "/events.ics"
       </div>
       <div class="min-w-0 flex-1">
         <p class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/75">
-          {% icon "pin", "size-3.5" %}
+          {% icon "repeat", "size-3.5" %}
           <span x-show="phase === 'upcoming'">{{ "committee.events.pinned_next" | t(lang) }}</span>
-          {#- ("Live now": no text in the page until it is true — its words in data-label, Alpine writes them; see the
-              Grapevine Meeting's card below) -#}
+          {#- ("Live now": no text in the page until it is true — its words in data-label, Alpine writes them) -#}
           <span x-show="phase !== 'upcoming'" x-cloak class="inline-flex items-center gap-2"><span class="cm-live-dot"></span><span data-label="{{ 'committee.meeting.live_now' | t(lang) }}" x-text="$el.dataset.label"></span></span>
         </p>
         <h3 id="ev-next-title" class="mt-1.5 font-display text-2xl font-semibold leading-tight text-white">{{ next.title }}</h3>
@@ -240,6 +548,7 @@ calendarFeed: "/events.ics"
           <span class="inline-flex items-center gap-1.5">{% icon "clock-3", "size-4" %} <span x-text="timeLabel">{{ next.timeLabel }}</span></span>
           <span class="inline-flex items-center gap-1.5">{% icon "video", "size-4" %} {{ pf.platform }}</span>
         </p>
+        <p class="mt-1 flex items-center gap-1.5 text-sm text-white/80">{% icon "repeat", "size-4" %} {{ m | cmRule(lang) }}</p>
         <p class="mt-1 text-xs text-white/65" x-show="localLabel" x-text="localLabel" x-cloak></p>
         {% if spk.list | length %}
         <p class="mt-2 flex items-start gap-1.5 text-sm text-white/85" x-show="speaker"{% if not next.speaker %} x-cloak{% endif %}>
@@ -247,6 +556,7 @@ calendarFeed: "/events.ics"
           <span class="min-w-0"><span class="font-semibold text-white" x-text="speakerLine">{{ ("committee.meeting.speaker" | t(lang, { name: next.speaker.name })) if next.speaker }}</span><span x-show="speaker && speaker.topic"> — “<span x-text="speaker ? speaker.topic : ''">{{ next.speaker.topic if next.speaker }}</span>”</span></span>
         </p>
         {% endif %}
+        {{ seriesNotes(s, true) }}
       </div>
       <div class="cm-pinned-actions">
         <a href="{{ next.online or m.online_url }}" target="_blank" rel="noopener" class="btn-light btn-sm" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ "committee.meeting.join" | t(lang, pf) }}</span></a>
@@ -261,25 +571,20 @@ calendarFeed: "/events.ics"
             <p class="cm-menu-note" data-cm-js>{{ "committee.cal.reminder_timed" | t(lang) }}</p>
           </div>
         </details>
-        <a href="{{ '/meetings/' | lurl(lang) }}#committee-meeting" class="btn-on-dark btn-sm">{% icon "info", "size-4" %} {{ "committee.events.meeting_details" | t(lang) }}</a>
+        <a href="{{ s.href }}" class="btn-on-dark btn-sm">{% icon "info", "size-4" %} {{ "committee.events.meeting_details" | t(lang) }}</a>
       </div>
     </div>
   </article>
-  {% endif %}
-
-  {#- (2) The next Grapevine Meeting: site | cmSeriesNext("grapevine-meeting") (set with the colour key above — worked
-      out from the settings, so it is right before the data sync lists it; null: no such series or no date to come,
-      no card). Built like a weekly open meeting's card (#ev-weekly below) in its own grey (ev-tone-other: ours, never
-      Grapevine's colour — its badge says NETA 65, with the camera: online only): "Every month", "In English" unless
-      its title says so ("Reunión de Grapevine (en inglés)"), the title, the rule and time, "Online on Google Meet",
-      then the next date — cmMeeting (the /meetings/#grapevine-meeting countdown's settings, gmCfg: the UID
-      /events.ics gives each date, so adding it twice keeps one entry; `first`: "First meeting:" on the series'
-      first date) rolls it on, says "Live now" during the meeting and adds the visitor's own time. Join on Google
-      Meet (its full link; a screen reader hears which meeting), Meeting details (/meetings/#grapevine-meeting: the
-      meeting code, what happens), Add to calendar (Google / Outlook links of the date shown, the .ics file) and its
-      flyer (the date's, from events.json: View flyer and the tile from 640px; none without one). Phones: Join on its
-      own row, Details and Calendar side by side with their short words, View flyer on a row of its own. -#}
-  {% if gm %}
+  </li>
+  {%- elif s.key == "grapevine-meeting" and gm %}
+  {#- (2) the Grapevine Meeting: site | cmSeriesNext("grapevine-meeting") (worked out from the settings, so it is
+      right before the data sync lists it). Built like a weekly open meeting's card (#ev-weekly below) in its own grey
+      (ev-tone-other: ours, never Grapevine's colour — its badge says NETA 65, with the camera: online only): "Every
+      month", "In English" unless its title says so, the title (its series' page), the rule and time, "Online on
+      Google Meet", then the next date — cmMeeting (the /meetings/#grapevine-meeting countdown's settings, gmCfg: the
+      UID /events.ics gives each date, so adding it twice keeps one entry; `first`: "First meeting:" on the series'
+      first date) rolls it on, says "Live now" during the meeting and adds the visitor's own time. Join on Google Meet,
+      See all dates (its series' page), Add to calendar and its flyer. -#}
   {%- set gmPf = { platform: gm.join.platform } -%}
   {%- set gmJoin = ("committee.meeting.join" | t(lang, gmPf)) if gm.join.platform else ("committee.events.join_online" | t(lang)) -%}
   {%- set gmCfg = {
@@ -288,6 +593,8 @@ calendarFeed: "/events.ics"
     i18n: { join: gmJoin, soon: "committee.meeting.join_soon" | t(lang), live: "committee.meeting.join_live" | t(lang), yourTime: "committee.meeting.your_time" | t(lang) }
   } -%}
   {%- set gmFirst = gm.next.startYmd == gm.starts -%}
+  <li data-group="{{ s.next.group }}" data-cm-expire="{{ s.expireIso }}"{{ s.next | evFacets(site) | safe }} x-show="show($el)">
+  {{ dateAnchors(s) }}
   <article id="ev-next-gvm" class="card ev-accent ev-tone-other cm-event" x-data="cmMeeting({{ gmCfg | json }})" aria-labelledby="ev-next-gvm-title">
     <div class="min-w-0 flex-1">
       <div class="flex flex-wrap items-center gap-1.5">
@@ -295,16 +602,18 @@ calendarFeed: "/events.ics"
         <span class="badge-muted">{% icon "repeat", "size-3" %} {{ "committee.events.badge_recurring" | t(lang) }}</span>
         {% if not gm.saysLang %}<span class="badge-muted">{% icon "languages", "size-3" %} {{ "committee.weekly.lang_en" | t(lang) }}</span>{% endif %}
       </div>
-      <h3 id="ev-next-gvm-title" class="h-card mt-2 text-lg sm:text-xl">{{ gm.title }}</h3>
+      <h3 id="ev-next-gvm-title" class="h-card mt-2 text-lg sm:text-xl">{% if s.href %}<a href="{{ s.href }}" class="-my-3 inline-block py-3 hover:text-gv">{{ gm.title }}</a>{% else %}{{ gm.title }}{% endif %}</h3>
       <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
         <li class="inline-flex items-start gap-1.5">{% icon "repeat", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{{ gm.recurrenceDay }} <span aria-hidden="true">·</span> {{ gm.time }}</span></li>
         <li class="inline-flex items-start gap-1.5">{% icon "video", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{{ ("committee.events.online_on" | t(lang, gmPf)) if gm.join.platform else ("committee.events.online" | t(lang)) }}</span></li>
+        {#- (its meeting code, to type into Google Meet — never quoted by search engines: before the list's redesign the
+            card of each of its dates showed it) -#}
+        {% if gm.next.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ gm.next.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no" data-nosnippet>{{ gm.next.meetingId }}</span></span></li>{% endif %}
       </ul>
-      {#- Its label: "Live now" during the meeting, else "First meeting:" on the series' first date, else "Next meeting:".
-          Since round 35 a label that is not true when the page is built is no text in it — its words wait in
-          data-label and Alpine writes them (x-text; x-show says which one shows): a reader that runs no script and
-          no CSS (an AI tool's fetch) took the hidden "Live now" for the page's news. The one true at the build is
-          written out too, so the page reads right without JavaScript. -#}
+      {#- Its label: "Live now" during the meeting, else "First meeting:" on the series' first date, else "Next
+          meeting:". A label that is not true when the page is built is no text in it — its words wait in data-label
+          and Alpine writes them; the one true at the build is written out too, so the page reads right without
+          JavaScript. -#}
       {%- set gmLabels = { live: "committee.meeting.live_now" | t(lang), first: "committee.events.first_meeting" | t(lang), next: "committee.weekly.next" | t(lang) } -%}
       <p class="mt-2.5 flex items-start gap-1.5 text-sm text-muted">
         {% icon "calendar", "mt-0.5 size-4 shrink-0 text-faint" %}
@@ -316,9 +625,10 @@ calendarFeed: "/events.ics"
           <span class="block text-xs" x-show="localLabel" x-text="localLabel" x-cloak></span>
         </span>
       </p>
+      {{ seriesNotes(s) }}
       <div class="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9.5rem),1fr))] gap-2 sm:flex sm:flex-wrap">
         {% if gm.join.url %}<a class="btn-primary btn-sm col-span-full" href="{{ gm.join.url }}" target="_blank" rel="noopener" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ gmJoin }}</span><span class="sr-only"> — {{ gm.title }} ({{ "common.external" | t(lang) }})</span></a>{% endif %}
-        <a class="btn-secondary btn-sm" href="{{ '/meetings/#grapevine-meeting' | lurl(lang) }}">{% icon "info", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.meeting_details" | t(lang) }}</span><span class="sr-only"> — {{ gm.title }}</span></a>
+        {% if s.href %}<a class="btn-secondary btn-sm" href="{{ s.href }}">{% icon "calendar-range", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evpage.sec.all_dates" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.series_all" | t(lang) }}</span><span class="sr-only"> — {{ gm.title }}</span></a>{% endif %}
         {#- (the brief links in the page, Alpine's full ones once it runs: as the committee meeting's card above) -#}
         <details class="cm-menu">
           <summary class="btn-secondary btn-sm w-full sm:w-auto">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "common.add_to_calendar" | t(lang) }}</span> {% icon "chevron-down", "size-4 opacity-70" %}</summary>
@@ -329,40 +639,84 @@ calendarFeed: "/events.ics"
             <p class="cm-menu-note" data-cm-js>{{ "committee.cal.reminder_timed" | t(lang) }}</p>
           </div>
         </details>
+        <a class="btn-secondary btn-sm" href="{{ '/meetings/#grapevine-meeting' | lurl(lang) }}">{% icon "info", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.meeting_details" | t(lang) }}</span><span class="sr-only"> — {{ gm.title }}</span></a>
         {{ ui.flyerButton(gm.next.flyer, gm.title, lang, "btn-secondary btn-sm col-span-full") }}
       </div>
     </div>
     {{ ui.flyerThumb(gm.next.flyer, gm.title, lang) }}
   </article>
-  {% endif %}
-    </div>
+  </li>
+  {%- elif not s.committee %}
+  {#- (3) any other monthly series (the CityWide booth, La Viña's workshop …): its kind, "Every month", the title (its
+      series' page), how often and its time, where (or online, its meeting ID), its next three dates — each to its
+      date's page, the anchor of every date on it —, what changed, then Join online, See all dates, Add to calendar
+      (its next date) and the flyer of its next date -#}
+  {%- set ev = s.next -%}
+  {%- set kind = s.tone -%}
+  <li id="ev-series-{{ s.key }}" data-group="{{ ev.group }}" data-cm-expire="{{ s.expireIso }}"{{ ev | evFacets(site) | safe }} x-show="show($el)">
+    <article class="card cm-event ev-accent ev-tone-{{ kind }} ev-series" x-ignore aria-labelledby="ev-series-{{ s.key }}-t">
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-1.5">
+          {{ evm.kindBadge(ev, kind) }}
+          <span class="badge-muted">{% icon "repeat", "size-3" %} {{ "committee.events.badge_recurring" | t(lang) }}</span>
+          {% if not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
+        </div>
+        <h3 class="h-card mt-2 text-lg sm:text-xl" id="ev-series-{{ s.key }}-t">{% if s.href %}<a href="{{ s.href }}" class="-my-3 inline-block py-3 hover:text-gv">{{ s.title }}</a>{% else %}{{ s.title }}{% endif %}</h3>
+        <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
+          {% if s.every %}<li class="inline-flex items-start gap-1.5">{% icon "repeat", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{{ s.every }}{% if s.time %} <span aria-hidden="true">·</span> {{ s.time }}{% endif %}</span></li>{% endif %}
+          {% if ev.location and ev.locationTba %}<li class="inline-flex items-center gap-1.5 italic">{% icon "hourglass", "size-4 text-faint" %} {{ ev.location }}</li>
+          {% elif ev.location %}<li class="inline-flex items-start gap-1.5">{% icon "map-pin", "mt-0.5 size-4 shrink-0 text-faint" %} <span class="min-w-0">{{ ev.location }}</span></li>{% endif %}
+          {% if ev.isOnline %}<li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ ("committee.events.online_on" | t(lang, { platform: ev.platform })) if ev.platform else ("committee.events.online" | t(lang)) }}</li>{% endif %}
+          {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ ev.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no" data-nosnippet>{{ ev.meetingId }}</span></span></li>{% endif %}
+          {% if ev.contact %}<li class="inline-flex min-w-0 items-center gap-1.5">{% icon "mail", "size-4 shrink-0 text-faint" %} <a class="link tap-link min-w-0 break-words" href="mailto:{{ ev.contact }}" translate="no"><span class="sr-only">{{ "committee.events.contact" | t(lang) }}: </span>{{ ev.contact | replace("@", "@<wbr>") | safe }}</a></li>{% endif %}
+        </ul>
+        {#- (its summary, two lines of it: the whole of it is on its series' page; a meeting ID or code in it never
+            quoted by search engines) -#}
+        {%- set foreign = not ev.ownWords and ev.item.lang and ev.item.lang != lang and ev.item.lang != "und" and not (ev.item | machineFor(lang)) %}
+        {% if ev.summary %}<p class="mt-2.5 line-clamp-2 text-sm leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.summary | excerpt(200) | escape | cmNoSnippet | safe }}</p>{% endif %}
+        <div class="ev-series-next">
+          <span class="ev-series-next-l">{{ "evlist.series_next" | t(lang) }}</span>
+          <ol class="ev-series-dates" role="list" data-cm-max="{{ s.shown }}">
+            {%- for d in s.dates %}
+            <li id="{{ d.anchor }}" data-cm-expire="{{ d.expireIso }}"{% if loop.index0 >= s.shown or loop.first %} class="{{ 'hidden' if loop.index0 >= s.shown }}{{ 'is-next' if loop.first }}"{% endif %}>{% if d.href %}<a class="ev-series-date" href="{{ d.href }}">{% else %}<span class="ev-series-date">{% endif %}{{ d.tile.wd }}, {{ d.shortLabel }}{% if d.seriesOf %} <span class="ev-series-moved">{{ "evlist.moved" | t(lang) }}</span>{% endif %}{% if d.href %}</a>{% else %}</span>{% endif %}</li>
+            {%- endfor %}
+          </ol>
+        </div>
+        {{ seriesNotes(s) }}
+        <div class="cm-ev-actions">
+          <div class="cm-ev-btns">
+          {% if ev.online %}
+          <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+          {% endif %}
+          {% if s.href %}<a class="btn-secondary btn-sm" href="{{ s.href }}">{% icon "calendar-range", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evpage.sec.all_dates" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.series_all" | t(lang) }}</span> <span aria-hidden="true">→</span><span class="sr-only"> — {{ s.title }}</span></a>{% endif %}
+          {{ calMenu(ev) }}
+          {{ ui.flyerButton(ev.flyer, s.title, lang) }}
+          {% if ev.link and ev.linkExternal and ev.link != (ev.flyer.view if ev.flyer else "") %}{{ organizerButton(ev) }}{% endif %}
+          </div>
+        </div>
+      </div>
+      {{ ui.flyerThumb(ev.flyer, s.title, lang) }}
+    </article>
+  </li>
+  {%- endif %}
+  {%- endfor %}
+    </ul>
   </section>
   {% endif %}
 
-  {#- ---------- Every week: the weekly open meetings, under our pinned monthly meetings (#ev-pinned) ----------
+  {#- ---------- Every week: the weekly open meetings ----------
       AA Grapevine's Weekly Open (Wednesdays, in English) and La Viña's Reunión Abierta (Thursdays, in Spanish):
       db.weekly_open.items | cmWeeklyAll, the page language's first — the meetings, dates and calendar files of
-      /meetings/#weekly-open, their one home. Not entries of events.json: a date every week would fill the months
-      below, Home's "Upcoming events" and the monthly e-mail (the /events.ics feeds hold each one since round 36 as
-      ONE entry that repeats every week: committee.js weeklyFeed). Shown with "All" and the GV & LV
-      calendars; not an li[data-group], so the chips, "Showing N" and the month list never count it (without
-      JavaScript it shows). Each card, in its magazine's colour (ev-tone-gv / -lv, kindBadge's "Grapevine" /
-      "La Viña"): "Every week", its language, the title, the day and time (Central · the host's), the next date —
-      the /meetings/ cards' data-cm-weekly markup, so committee.js weekly() rolls it on, says "Live now" and adds the
-      visitor's own time; before La Viña's first meeting it says "Starts Thursday, November 5, 2026" —, then Join on
-      Zoom, Meeting details, Add to calendar and View flyer. Join on Zoom is the meeting's full Zoom link (w.zoomUrl:
-      with its "?pwd=…", nobody types the passcode), the /meetings/ cards' button and label (committee.weekly.join_gv
-      / _lv name the meeting). Meeting details leads to /meetings/#weekly-open: the Zoom ID, passcode, joining by
-      phone and the recordings are there. Add to calendar: every week, Google's link and the .ics file of /meetings/
-      (plain links, no JavaScript needed; both carry the full link). The meeting's official flyer (cmWeeklyFlyer:
-      the /meetings/ card's, from its settings' flyer_match) as on every event card: View flyer, and the tile beside
-      the text from 640px (ui.flyerButton / ui.flyerThumb; none without a flyer). Phones: Join on its own row, then
-      the other two side by side when both fit, with their short words ("Details", "Calendar"; a screen reader hears
-      the whole label) — the calendar menu then opens to the left, so it stays on screen — View flyer on a row of its
-      own when it is the odd one; else one under the other; from 640px one row. -#}
-  {#- (wos: set above, with the colour key) -#}
+      /meetings/#weekly-open, their one home. Not entries of events.json (the /events.ics feeds hold each one as ONE
+      entry that repeats every week: committee.js weeklyFeed). Cards of the list like the others: online meetings, in
+      their language, online — the filters show or hide them. Each card, in its magazine's colour (ev-tone-gv / -lv,
+      kindBadge's "Grapevine" / "La Viña"): "Every week", its language, the title, the day and time (Central · the
+      host's), the next date — the /meetings/ cards' data-cm-weekly markup, so committee.js weekly() rolls it on, says
+      "Live now" and adds the visitor's own time —, then Join on Zoom (its full Zoom link, with its "?pwd=…"), Meeting
+      details (/meetings/#weekly-open: the Zoom ID, passcode, joining by phone, the recordings), Add to calendar (every
+      week: Google's link and the .ics file of /meetings/) and View flyer (cmWeeklyFlyer). -#}
   {% if wos | length %}
-  <section id="ev-weekly" class="mb-10" x-show="filter === 'all' || filter === 'calendar'" aria-labelledby="ev-weekly-title">
+  <section id="ev-weekly" class="mt-10" x-ref="weekly" x-show="monthVisible($el)" aria-labelledby="ev-weekly-title">
     <h2 id="ev-weekly-title" class="cm-month-title">{{ "committee.weekly.section_title" | t(lang) }}</h2>
     <p class="measure -mt-1.5 mb-4 text-sm leading-relaxed text-muted">{{ "committee.events.weekly_text" | t(lang) }}</p>
     <ul class="grid gap-4" role="list">
@@ -370,7 +724,7 @@ calendarFeed: "/events.ics"
       {%- set key = "lv" if w.isLv else "gv" -%}
       {%- set wTitle = w.title or ("committee.weekly.title" | t(lang)) -%}
       {%- set wf = w | cmWeeklyFlyer(site, db.drive.items) -%}
-      <li>
+      <li data-group="calendar" data-kind="online" data-lang="{{ 'es' if w.lang == 'es' else 'en' }}" data-mode="online" x-show="show($el)">
         <article class="card ev-accent ev-tone-{{ key }} cm-event" aria-labelledby="ev-weekly-{{ key }}">
           <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-1.5">
@@ -426,157 +780,17 @@ calendarFeed: "/events.ics"
   </section>
   {% endif %}
 
-  {#- ---------- Upcoming, grouped by month ----------
-      Every date to come, a card each (a monthly series' every date, every committee meeting). A folded month (fold,
-      above: a year after the open ones) carries data-cm-more + data-dflt-hidden and shows once
-      "Show {range} dates (n)" is pressed (cmEvents `more`); its heading takes the keyboard then (tabindex="-1").
-      That button comes right after the last open month: data-js-only (without JavaScript every month shows), shown
-      while a folded card the chip picked is hidden, with that chip's count (moreCount; the build writes the "All"
-      count, n of fold). -#}
-  {% for grp in months %}
-  {%- set folded = fold and grp.key >= fold.from %}
-  {% if folded and grp.key == fold.keys[0] %}
-  <div class="cm-ev-more" data-js-only x-show="!more && moreCount">
-    <button type="button" class="btn-secondary" @click="showMore()">{% icon "chevron-down", "size-4" %} <span data-label="{{ 'committee.events.show_more' | t(lang, { range: fold.range }) }}" x-text="moreText($el)">{{ "committee.events.show_more" | t(lang, { range: fold.range, n: fold.n }) }}</span></button>
-  </div>
-  {% endif %}
-  <section class="cm-month" data-cm-month x-ref="m{{ grp.key }}" x-show="monthVisible($el) && (more || !$el.hasAttribute('data-cm-more'))"{% if folded %} data-cm-more data-dflt-hidden{% endif %} aria-labelledby="month-{{ grp.key }}">
-    <h2 id="month-{{ grp.key }}" class="cm-month-title"{% if folded %} tabindex="-1"{% endif %}>{{ grp.items[0].monthLabel }}</h2>
-    <ol class="grid gap-4">
-      {% for ev in grp.items %}
-      {%- set kind = ev | eventTone %}
-      {#- Share: the event's own page, /events/<anchor>/ (since round 37 every event but a committee meeting has a
-          full one: eleventy/event-pages.js eventPagePlan — src/pages/event-share-leaf.njk while it is to come,
-          event-share-date.njk for a series' date, an outside calendar's event or one that is over), whose link
-          preview shows its title, day and flyer (the card's title links to it below — a series' date to its
-          series' page, /events/series/<key>/). Until round 37 most events had only a small page there that sent
-          people on to this card (src/pages/event-share.11ty.js, gone). A committee meeting's card is shared as it
-          is (its page is /meetings/) -#}
-      {%- set shareUrl = (pageAbs + "#" + ev.anchor) if ev.committee else (("/events/" + ev.anchor + "/") | lurl(lang) | siteUrl(site)) %}
-      {#- data-group: the filter chips it shows under — one group, or "committee neta" for a committee meeting (a
-          NETA 65 event too: cmEvents reads the list; ev.group itself stays "committee" for every other page) -#}
-      {#- x-ignore: Alpine never walks into a card (~110 cards, ~7,800 elements: the biggest part of its start-up on
-          this page). A card holds NO Alpine directive (x-…, @…, :…) — its x-show is on the <li> — and must not: one
-          put inside would silently do nothing (tests/test_r33_committee.py checks the built page). Its menus, Share
-          and flyer buttons are plain HTML and committee.js / app.js. -#}
-      <li id="{{ ev.anchor }}" data-group="{{ ev.group }}{{ ' neta' if ev.committee }}" data-cm-expire="{{ ev.expireIso }}" x-show="show($el)">
-        <article class="card cm-event ev-accent ev-tone-{{ kind }}" x-ignore>
-          {#- the date: a tile column from 640px; on a phone a strip above the title (+ Share as an icon) -#}
-          <div class="cm-date-tile{{ ' cm-tile-range' if ev.tile.range }} max-sm:hidden" aria-hidden="true">
-            <span class="cm-tile-mon">{{ ev.tile.mon }}</span>
-            <span class="cm-tile-day">{{ ev.tile.day }}</span>
-            <span class="cm-tile-wd">{{ ev.tile.wd }}</span>
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="mb-2.5 flex items-center justify-between gap-3 sm:hidden">
-              <p class="cm-date-strip" aria-hidden="true">{% icon "calendar", "size-3.5" %}<span>{{ ev.tile.wd }} · {{ ev.tile.mon }} {{ ev.tile.day }}</span></p>
-              <button type="button" class="btn-ghost -my-1 -mr-2 size-11 shrink-0 p-0" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}" aria-label="{{ 'common.share' | t(lang) }}: {{ ev.title }}">{% icon "share-2", "size-4" %}</button>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              {{ evm.kindBadge(ev, kind) }}
-              {% if ev.tentative %}{{ ui.tentativeBadge(lang) }}{% endif %}
-              {% if ev.recurring %}<span class="badge-muted">{% icon "repeat", "size-3" %} {{ "committee.events.badge_recurring" | t(lang) }}</span>{% endif %}
-              {% if ev.isNew %}<span class="badge-new">{{ "common.new" | t(lang) }}</span>{% endif %}
-              {% if not ev.committee and not ev.ownWords %}{{ ui.langPill(ev.item, lang) }}{% endif %}
-            </div>
-            {#- the title: a link to the event's own page (since round 37 every event has one — eleventy/filters/
-                event-links.js evHref: its page, "/events/<anchor>/"; a date of a monthly series its series' page,
-                "/events/series/<key>/"; a committee meeting its section of /meetings/; a plain link, so search engines
-                find the page), else — an event the build writes no page for — to its link (an outside page) when
-                that is not its flyer -#}
-            {%- set ownPage = ev | evHref(lang, db, site, "page") -%}
-            <h3 class="h-card mt-2 text-lg sm:text-xl">
-              {%- if ev.link and ev.link != (ev.flyer.view if ev.flyer else "") and not ownPage -%}
-              <a href="{{ ev.link }}" class="-my-3 inline-block py-3 hover:text-gv"{% if ev.linkExternal %} target="_blank" rel="noopener"{% endif %}>{{ ev.title }}</a>
-              {%- elif ownPage -%}
-              <a href="{{ ownPage }}" class="-my-3 inline-block py-3 hover:text-gv">{{ ev.title }}</a>
-              {%- else -%}{{ ev.title }}{%- endif -%}
-            </h3>
-            {#- the tile is hidden from screen readers: the date is read here (a range is in the list below) -#}
-            {% if not ev.multiDay %}<p class="sr-only">{{ ev.dateLabel }}</p>{% endif %}
-            <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
-              {#- Several days (an Area assembly): the date range; the tile shows it too -#}
-              {% if ev.multiDay %}<li class="inline-flex items-center gap-1.5 font-medium text-ink">{% icon "calendar-range", "size-4 text-faint" %} {{ ev.rangeLabel }}</li>{% endif %}
-              {% if ev.timeLabel %}<li class="inline-flex items-center gap-1.5">{% icon "clock-3", "size-4 text-faint" %} {{ ev.timeLabel }}</li>{% endif %}
-              {#- A place not known yet ("Venue to be announced"): plain italic text, no map pin -#}
-              {% if ev.location and ev.locationTba %}<li class="inline-flex items-center gap-1.5 italic">{% icon "hourglass", "size-4 text-faint" %} {{ ev.location }}</li>
-              {% elif ev.location %}<li class="inline-flex items-center gap-1.5">{% set locIcon = "video" if ev.committee else "map-pin" %}{% icon locIcon, "size-4 text-faint" %} {{ ev.location }}</li>{% endif %}
-              {% if ev.isOnline %}<li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ ("committee.events.online_on" | t(lang, { platform: ev.platform })) if ev.platform else ("committee.events.online" | t(lang)) }}</li>{% endif %}
-              {#- the meeting ID or code to type into the meeting app (recurring_events `meeting_id:` — "Meeting code" for
-                  a Google Meet code: ev.meetingIdKey); "Join online" opens the link.
-                  inline-block: with larger text on a phone (where no-wrap is lifted) the number moves to the next
-                  line in one piece instead of breaking after "815".
-                  data-nosnippet (since round 35): the number or code is never quoted by Google or Bing — a result's
-                  snippet, an AI Overview or Copilot answer; people see it as before (committee.js noSnippetJoin does
-                  the same for the values in a description) -#}
-              {% if ev.meetingId %}<li class="inline-flex items-center gap-1.5">{% icon "hash", "size-4 text-faint" %} <span>{{ ev.meetingIdKey | t(lang) }} <span class="inline-block whitespace-nowrap font-mono font-medium text-ink" translate="no" data-nosnippet>{{ ev.meetingId }}</span></span></li>{% endif %}
-              {#- who to write to (recurring_events `contact:`): a line of its own, so the address never hides in the
-                  3 lines the card shows of the summary; tap-link: 44px tall on phones; @<wbr> lets a long address
-                  wrap after the "@" with larger text (it is checked to be a plain e-mail address: committee.js) -#}
-              {% if ev.contact %}<li class="inline-flex min-w-0 items-center gap-1.5">{% icon "mail", "size-4 shrink-0 text-faint" %} <a class="link tap-link min-w-0 break-words" href="mailto:{{ ev.contact }}" translate="no"><span class="sr-only">{{ "committee.events.contact" | t(lang) }}: </span>{{ ev.contact | replace("@", "@<wbr>") | safe }}</a></li>{% endif %}
-              {% if ev.recurrenceDay %}<li class="inline-flex items-center gap-1.5">{% icon "repeat", "size-4 text-faint" %} {{ ev.recurrenceDay }}</li>{% endif %}
-              {#- a committee meeting's guest speaker and topic (committee.js normalizeEvents: ev.speaker — on the page,
-                  as the owner approved, never in the structured data) -#}
-              {% if ev.speaker %}<li class="flex min-w-0 basis-full items-start gap-1.5">{% icon "mic", "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0"><span class="font-medium text-ink">{{ "committee.meeting.speaker" | t(lang, { name: ev.speaker.name }) }}</span>{% if ev.speaker.topic %} — “{{ ev.speaker.topic }}”{% endif %}</span></li>{% endif %}
-            </ul>
-            {% if not ev.committee %}
-            {%- set foreign = not ev.ownWords and ev.item.lang and ev.item.lang != lang and ev.item.lang != "und" and not (ev.item | machineFor(lang)) -%}
-            {% if ev.body %}
-            {#- the card's title is an h3: the description's own headings start at h4, its links to our pages go to
-                this language's page, each table is named after the event (md: eleventy.config.js); cm-md
-                (committee.css) styles its headings, tables, lists and quotes, as on the bulletin; a meeting ID, Meet
-                code, passcode or meeting address in it is never quoted by search engines (cmNoSnippet: data-nosnippet,
-                since round 35) -#}
-            <div class="prose-site cm-md mt-3 max-w-none text-[0.95rem]"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.body | md({ h: 4, lang: lang, name: ev.title }) | cmNoSnippet | safe }}</div>
-            {% elif ev.summary %}
-            <p class="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.summary | excerpt(280) | escape | cmNoSnippet | safe }}</p>
-            {% endif %}
-            {% if ev.item | machineFor(lang) %}<p class="mt-1.5">{{ ui.autoNote(ev.item, lang) }}</p>{% endif %}
-            {% endif %}
-            {#- phones: a two-column grid of equal buttons (an odd last one spans both); from 640px one row,
-                with Share at its end (on a narrow card it wraps with the last button, never alone on a row:
-                committee.css .cm-ev-actions). "Event details" (an outside link) is a button when there is no
-                flyer; for an event with a page of its own (ownPage: its title goes there — since round 37 every
-                event's), its outside link, when it is not its flyer, is the button, as on that page; only a card
-                with no page (and a flyer) still has its outside link as its title. -#}
-            <div class="cm-ev-actions">
-              <div class="cm-ev-btns">
-              {% if ev.committee %}
-              <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "committee.meeting.join" | t(lang, pf) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
-              {% elif ev.online %}
-              <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
-              {% endif %}
-              {{ calMenu(ev) }}
-              {{ ui.flyerButton(ev.flyer, ev.title, lang) }}
-              {% if ev.link and ev.linkExternal and (not ev.flyer or (ownPage and ev.link != ev.flyer.view)) %}
-              <a class="btn-secondary btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.details" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
-              {% endif %}
-              </div>
-              <button type="button" class="btn-ghost btn-sm max-xl:px-2.5 max-sm:hidden" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}">{% icon "share-2", "size-4" %}<span class="max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>
-            </div>
-          </div>
-          {#- The flyer on the side (from 640px; on a phone the "View flyer" button above is the way to it):
-              EVERY event with a flyer has this tile — the same link and preview as "View flyer" (ui.flyerThumb:
-              its picture, else the tile's own flyer icon and the word "Flyer", never an empty space) -#}
-          {{ ui.flyerThumb(ev.flyer, ev.title, lang) }}
-        </article>
-      </li>
-      {% endfor %}
-    </ol>
-  </section>
-  {% endfor %}
-
   {#- ---------- Empty states ---------- -#}
   {#- (no event of OUR OWN: the committee meetings, NETA 65 events too, are not what this is about) -#}
   {% if nNetaOwn == 0 %}
   {#- No flyers / manual events yet: one line for visitors + a pointer to the committee how-to
       (the naming rule and the Drive folder are in "For committee members · Add an event", #how-events) -#}
-  <div id="ev-empty-neta" class="mt-2" x-show="filter === 'all' || filter === 'neta'">
+  <div id="ev-empty-neta" class="mt-2" x-show="!active">
     {{ ui.emptyState("calendar-days", "committee.events.empty_neta_title" | t(lang), "committee.events.empty_neta_text" | t(lang), "#how-events", "committee.events.how_link" | t(lang)) }}
   </div>
   {% endif %}
   {% if nCal == 0 %}
-  <div class="mt-2" x-show="filter === 'calendar'" x-cloak>
+  <div class="mt-2" x-show="f.kind === 'calendar'" x-cloak>
     {{ ui.emptyState("grapes", "committee.events.empty_cal_title" | t(lang), "committee.events.empty_cal_text" | t(lang), "https://www.aagrapevine.org/get-involved/calendar", "committee.events.empty_cal_cta" | t(lang)) }}
   </div>
   {% endif %}
@@ -595,7 +809,7 @@ calendarFeed: "/events.ics"
         <time class="inline-flex w-32 shrink-0 items-center gap-2.5 text-sm font-semibold text-muted" datetime="{{ ev.startIso }}"><span class="ev-dot ev-tone-{{ ev | eventTone }}" aria-hidden="true"></span>{{ ev.startIso | fmtDate(lang, "short") }}</time>
         <span class="min-w-[11rem] flex-1 break-words font-medium text-ink">{{ ev.title }}{% if ev.location and not ev.locationTba %} <span class="text-sm font-normal text-muted">· {{ ev.location }}</span>{% endif %}</span>
         {% if ev.flyer %}{{ ui.flyerButton(ev.flyer, ev.title, lang, "btn-ghost btn-sm") }}
-        {% elif ev.link and ev.linkExternal %}<a class="btn-ghost btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} {{ "committee.events.details" | t(lang) }}</a>{% endif %}
+        {% elif ev.link and ev.linkExternal %}{{ organizerButton(ev, "btn-ghost btn-sm") }}{% endif %}
       </li>
       {% endfor %}
     </ol>
@@ -621,94 +835,12 @@ calendarFeed: "/events.ics"
   </section>
 </section>
 
-{#- ---------- Sidebar: the calendar subscription, then "Next 5 weeks" ----------
-     From 1024px a column beside the agenda; below 1024px it follows the agenda (DOM order = phone order = Tab
-     order: one copy, never moved). First the .ics subscription card (#subscribe: the hero's "Subscribe" button,
-     Home and /meetings/ link to it; cmSubscribe, as it was), then the calendar card (#ev-cal). The aside itself is
-     NOT sticky — as a grid item it stretches over the whole row —: its inner wrapper is (sticky-aside: from 1024px
-     when the window is at least 640px tall, never taller than the window, static at larger text — main.css), and a
-     sticky box can't leave its parent (digest.njk's rule): the feed card scrolls away with the page, then the
-     calendar stays in view under the header while the list scrolls by, to the end of the agenda. (A sticky aside
-     holding both was taller than most windows: the calendar sat in its faded inner scroll.)
-     "Next 5 weeks" (cmCalWeeks → committee.js calendarWeeks, where every rule is explained): a month-style grid,
-     Sunday first, of the five weeks from this one (Central time) — EVERY upcoming event of the list on each of its
-     days (committee meetings, each date of a monthly series, an assembly on all its days) and the two weekly open
-     meetings — plus three spare weeks, hidden: as each week ends, the browser drops its row and shows the next
-     (committee.js expire(): the row's data-cm-expire is the moment its Saturday ends; the tbody's data-cm-max="5"
-     shows the first five rows left, as the meeting dates on /meetings/), so five weeks always show between builds.
-     A plain table (not role="grid"): Tab goes through the days that have something on, row by row, and a screen
-     reader names each column's weekday. Each such day is a link to its first event's card in the list (without
-     JavaScript that is where it goes) holding the day's number, the whole day in words for screen readers ("Wednesday,
-     November 18: Committee meeting, 7:00 PM; …") and up to 3 dots in the events' colours (a weekly meeting's: a ring;
-     more: "+n"); a day with nothing on is its number; the 1st of a month (and the grid's first day) names its month.
-     The build's today: .is-today + aria-current="date"; the days before it: .is-past, no link.
-     Under the grid, the day's list (aria-live: read out when it changes): each day with something on has its own,
-     hidden but one — today's when something is on today, else the next day with something on ("Next up"). Its
-     heading is the date, each entry its colour's dot, its time (Central) and its title, a link to its card
-     (#ev-weekly-gv / -lv for the weekly meetings: "Every week"). With JavaScript, picking a day shows that day's list
-     (.is-selected on the day) instead of jumping; a link to a card the list hides (another chip, a month folded
-     behind "Show more") is revealed by the list itself (cmEvents: on hashchange, and on "cm:reveal" when the link
-     goes to the hash already in the address). Every minute committee.js calToday() moves today and the past
-     days on (a page left open, or an offline copy), dims what is over and keeps the month caption right.
-     Then the colour key of the dots (only the colours used; "Every week": the ring) and one line of help.
-     data-lastmod="skip": the card changes with the day, not with the content (eleventy/lastmod.js). No card when
-     nothing is on in these weeks (calendarWeeks: null). -#}
-<aside class="min-w-0" aria-label="{{ 'committee.events.aside_aria' | t(lang) }}">
+{#- ---------- The calendar subscription (#subscribe: the hero's "Subscribe" button, Home and /meetings/ link to it;
+     cmSubscribe) — from 1024px under the calendar in the sidebar, below 1024px after the list ---------- -#}
+<aside class="ev-side-sub min-w-0" aria-label="{{ 'committee.events.aside_aria' | t(lang) }}">
   <div id="subscribe">
     {% cmSubscribe lang, site %}
   </div>
-  {%- set cal = upcoming | cmCalWeeks(db.weekly_open.items | cmWeeklyAll(lang), lang, { weeks: 5, spare: 3 }) %}
-  {% if cal %}
-  <div class="sticky-aside mt-6">
-    <section id="ev-cal" class="cm-cal-card card card-pad" data-cm-cal data-lastmod="skip" aria-labelledby="ev-cal-title">
-      <p class="eyebrow text-gv">{{ "committee.events.cal_eyebrow" | t(lang) }}</p>
-      <h2 id="ev-cal-title" class="card-h mt-2"><span>{% icon "calendar-days", "size-5" %}</span>{{ "committee.events.cal_title" | t(lang, { n: cal.n }) }}</h2>
-      <p class="cm-cal-cap" data-cm-cal-cap="{{ cal.captionFrom }}">{{ cal.caption }}</p>
-      <table class="cm-cal" aria-labelledby="ev-cal-title">
-        <thead>
-          <tr>{% for wd in cal.weekdays %}<th scope="col"><span class="cm-cal-wd" aria-hidden="true">{{ wd.short }}</span><span class="cm-cal-wd2" aria-hidden="true">{{ wd.tiny }}</span><span class="sr-only">{{ wd.long }}</span></th>{% endfor %}</tr>
-        </thead>
-        {#- (whitespace control throughout: 56 cells and a list per day add up) -#}
-        <tbody data-cm-max="{{ cal.n }}">
-          {%- for wk in cal.weeks -%}
-          <tr data-cm-expire="{{ wk.endIso }}"{% if wk.hidden %} class="hidden"{% endif %}>
-            {%- for d in wk.days -%}
-            <td class="cm-cal-d{{ ' is-today' if d.today }}{{ ' is-past' if d.past }}{{ ' is-selected' if d.ymd == cal.panel }}" data-cm-day="{{ d.ymd }}"{% if d.today %} aria-current="date"{% endif %}>
-              {%- if d.events | length -%}
-              <a class="cm-cal-link"{% if not d.past %} href="#{{ d.first }}"{% endif %} data-cm-cal-day="{{ d.ymd }}">{% if d.mon %}<span class="cm-cal-mon" aria-hidden="true">{{ d.mon }}</span>{% endif %}<span class="cm-cal-n" aria-hidden="true">{{ d.day }}</span><span class="sr-only">{{ d.sr }}</span><span class="cm-cal-dots" aria-hidden="true">{% for e in d.dots %}<span class="cm-cal-dot ev-tone-{{ e.tone }}{{ ' is-weekly' if e.weekly }}"></span>{% endfor %}{% if d.more %}<span class="cm-cal-more">+{{ d.more }}</span>{% endif %}</span></a>
-              {%- else -%}
-              <span class="cm-cal-day">{% if d.mon %}<span class="cm-cal-mon">{{ d.mon }}</span>{% endif %}{{ d.day }}</span>
-              {%- endif -%}
-            </td>
-            {%- endfor -%}
-          </tr>
-          {%- endfor -%}
-        </tbody>
-      </table>
-      <div class="cm-cal-panels" aria-live="polite" data-cm-cal-panels data-today="{{ 'common.today' | t(lang) }}" data-next="{{ 'committee.events.cal_next_up' | t(lang) }}">
-        {%- for wk in cal.weeks %}{% for d in wk.days %}{% if d.events | length -%}
-        <div class="cm-cal-panel" data-cm-cal-panel="{{ d.ymd }}"{% if d.ymd != cal.panel %} hidden{% endif %}>
-          <h3 class="cm-cal-ph"><span class="cm-cal-tag" data-cm-cal-tag>{% if d.ymd == cal.panel %}{{ ("common.today" if cal.panelToday else "committee.events.cal_next_up") | t(lang) }}{% endif %}</span> {{ d.label }}</h3>
-          <ul class="cm-cal-list" role="list">
-            {%- for e in d.events -%}
-            <li data-cm-cal-end="{{ e.endIso }}"><span class="cm-cal-dot ev-tone-{{ e.tone }}{{ ' is-weekly' if e.weekly }}"></span><span>{% if e.time %}<span class="cm-cal-time">{{ e.time }}</span> {% endif %}<a class="cm-cal-ev" href="#{{ e.anchor }}">{{ e.title }}</a>{% if e.weekly %} <span class="cm-cal-wk">· {{ "committee.events.badge_weekly" | t(lang) }}</span>{% endif %}</span></li>
-            {%- endfor -%}
-          </ul>
-        </div>
-        {%- endif %}{% endfor %}{% endfor %}
-      </div>
-      <ul class="cm-cal-key" role="list" aria-label="{{ 'committee.events.legend' | t(lang) }}">
-        {%- for k in cal.kinds %}
-        <li><span class="cm-cal-dot ev-tone-{{ k.tone }}"></span>{{ k.label }}</li>
-        {%- endfor %}
-        {%- if cal.weekly %}
-        <li><span class="cm-cal-dot is-weekly"></span>{{ "committee.events.badge_weekly" | t(lang) }}</li>
-        {%- endif %}
-      </ul>
-      <p class="cm-cal-help">{{ "committee.events.cal_help" | t(lang) }}</p>
-    </section>
-  </div>
-  {% endif %}
 </aside>
 </div>
 </div>
@@ -731,6 +863,7 @@ calendarFeed: "/events.ics"
       <div class="mt-6 flex flex-wrap gap-2.5">
         {% if di.url %}<a class="btn-primary" href="{{ di.url }}" target="_blank" rel="noopener">{% icon "folder-open", "size-4" %} {{ "committee.drive.open_folder" | t(lang) }}</a>{% endif %}
         <a class="btn-secondary" href="mailto:{{ site.contact_email }}?subject={{ 'committee.docs.mail_subject' | t(lang) | urlencode }}">{% icon "mail", "size-4" %} {{ "committee.docs.ask_access" | t(lang) }}</a>
+        {% if site.repository %}<a class="btn-secondary" href="{{ site.repository }}/issues/new?template=new-event.yml" target="_blank" rel="noopener">{% icon "calendar-plus", "size-4" %} {{ "evlist.request" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}
       </div>
     </div>
     <div class="cm-naming-box min-w-0">

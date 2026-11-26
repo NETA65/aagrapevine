@@ -1,0 +1,52 @@
+---js
+// (JavaScript front matter: the pagination's `before` is a function. The imports are read from the project's top
+// folder, where every build runs — not from this file's folder. The list is eleventy/event-redirects.js.)
+import { eventRedirects } from "./eleventy/event-redirects.js";
+
+// every old address of an event's page that now has a readable one (eventRedirects), in each language
+const pagination = {
+  data: "db.events.items", size: 1, alias: "move",
+  before: (items, full) => eventRedirects(full.db?.events?.items, full.db?.events?.cancelled, full.site, full.languages),
+};
+const permalink = (data) => data.move.path + "index.html";
+const layout = false;
+const sitemap = false;
+const eleventyExcludeFromCollections = true;
+const eleventyComputed = { lang: (data) => data.move.lang };
+---
+{#- An event's OLD address (since the events list's redesign, November 2026): /events/ev-flyer-<its Drive id>/,
+    /events/ev-lvcal-<a hash>/ — or a readable one its event had before its day changed (extra.slug_aliases) — sends
+    the visitor on to the event's page now, /events/<its day>-<its title>/ (scripts/sync/build_data.py
+    pin_event_slugs; eleventy/event-redirects.js). A tiny stand-alone page like subscribe-redirect.njk: JavaScript keeps
+    any ?query and #anchor; without JavaScript the meta refresh goes there. noindex + canonical point search engines at
+    the new address, and the stub is kept out of the sitemap, the search index and page lists. -#}
+<!doctype html>
+<html lang="{{ move.lang }}">
+<head>
+<meta charset="utf-8">
+{#- the base plugin does not rewrite script text, so the url filter adds the path prefix -#}
+<script>location.replace({{ (move.target | url) | dump | safe }} + location.search + location.hash);</script>
+<meta http-equiv="refresh" content="0; url={{ move.target }}">{#- the HTML base plugin adds the path prefix here -#}
+<meta name="robots" content="noindex">
+<link rel="canonical" href="{{ move.target | siteUrl(site) }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% include "partials/icon-links.njk" %}
+<title>{{ move.title }} · {{ site | pick(move.lang, "title") }}</title>
+<style>
+  :root { color-scheme: light; --paper: #fbf8f2; --ink: #1d1a26; --muted: #57526a; --link: #0a5fa8; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; box-sizing: border-box;
+         font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--paper); color: var(--ink); }
+  main { max-width: 34rem; text-align: center; overflow-wrap: anywhere; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.6rem; margin: 0 0 .5rem; }
+  p { margin: .5rem 0; color: var(--muted); }
+  a { color: var(--link); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{ "evlist.moved_title" | t(move.lang) }}</h1>
+  <p>{{ "evlist.moved_text" | t(move.lang) }}</p>
+  <p><a href="{{ move.target }}">{{ move.title }} →</a></p>
+</main>
+</body>
+</html>

@@ -1289,3 +1289,92 @@ html:not(.cm-js) [data-cm-js] { display: none !important; }
 @media (width < 40rem) {
   .evp-card.cm-event > .flex-1 { flex-basis: 100%; }
 }
+
+/* ---------- /events/ since the list's redesign (src/pages/events.njk; the list: eleventy/filters/event-list.js) ----------
+   · .ev-layout — the agenda and its two sidebar cards in ONE grid, so the DOM order is the phone's: the "Next 5
+     weeks" calendar (.ev-side-cal), the list (.ev-main), the calendar subscription (.ev-side-sub). From 1024px the
+     list is the left column over both rows, the calendar the right column's first row — 1fr: it takes the list's
+     height, so its sticky-aside wrapper keeps it in view all the way down — and the subscription its second (20rem,
+     24rem from 1536px, as layout-aside; one column at 150 % text).
+   · Below 1024px (with JavaScript) the calendar is folded under its heading ("Show the calendar": committee.js
+     calendar() sets .is-open); from 1024px it is always open and the button goes.
+   · "Next up" (#ev-nextup, below 1024px): one line per event — its day in its kind's colours, its title, when —, each
+     a 44px link to its card.
+   · The filters: a row of kind chips, then the menus (language, in person / online, city, district) side by side,
+     wrapping on a phone.
+   · A series' card (.ev-series): its next dates as small pills (the first one, .is-next, in its kind's colours), what
+     changed about its dates (.ev-series-notes).
+   · A cancelled event (.ev-cancelled): its card faded, its words struck through (<s>), the "Cancelled" badge in the
+     danger colour — the badge says it in words. */
+.ev-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+@media (width >= 64rem) {
+  .ev-layout { grid-template-columns: minmax(0, 1fr) 20rem; grid-template-rows: 1fr auto; column-gap: 2.5rem; row-gap: 1.5rem; }
+  .ev-main { grid-column: 1; grid-row: 1 / span 2; }
+  .ev-side-cal { grid-column: 2; grid-row: 1; }
+  .ev-side-sub { grid-column: 2; grid-row: 2; }
+  .ev-cal-toggle { display: none !important; }
+}
+@media (width >= 96rem) { .ev-layout { grid-template-columns: minmax(0, 1fr) 24rem; } }
+:root:where(.gv-prefs)[data-text="150"] .ev-layout { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none !important; }
+:root:where(.gv-prefs)[data-text="150"] .ev-layout > * { grid-column: auto !important; grid-row: auto !important; }
+.ev-cal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+.ev-cal-toggle { flex-shrink: 0; }
+.ev-cal-toggle > svg { transition: transform 0.2s; }
+.cm-cal-card.is-open .ev-cal-toggle > svg { transform: rotate(180deg); }
+@media (width < 64rem) {
+  :root.js .cm-cal-card:not(.is-open) .ev-cal-body { display: none; }
+  :root.js .cm-cal-card:not(.is-open) .ev-cal-head .eyebrow { display: none; }
+  :root.js .cm-cal-card:not(.is-open) .ev-cal-head .card-h { margin-top: 0; }
+}
+.ev-nextup { margin-bottom: 1.5rem; }
+.ev-nextup-h { display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.6rem; font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-muted); }
+.ev-nextup-list { display: grid; gap: 0.5rem; }
+@media (width >= 40rem) { .ev-nextup-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.ev-nextup-item { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; height: 100%; padding: 0.55rem 0.75rem;
+  border: 1px solid var(--c-line); border-radius: 0.9rem; background: var(--c-surface); color: var(--c-ink); text-decoration: none;
+  box-shadow: inset 3px 0 0 var(--ev, var(--c-line)); }
+.ev-nextup-item:hover { border-color: var(--ev, var(--c-gv)); }
+.ev-nextup-day { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; width: 2.9rem;
+  padding: 0.3rem 0; border-radius: 0.6rem; background: var(--ev-soft, var(--c-surface-2)); color: var(--ev-ink, var(--c-muted));
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; line-height: 1.2; text-transform: uppercase; }
+.ev-nextup-n { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; letter-spacing: 0; line-height: 1.1; color: var(--c-ink); }
+.ev-nextup-t { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 0.92rem;
+  font-weight: 600; line-height: 1.3; }
+.ev-nextup-when { display: block; margin-top: 0.1rem; font-size: 0.78rem; line-height: 1.35; color: var(--c-muted); }
+.ev-filters { display: grid; gap: 0.75rem; }
+.ev-filter-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.6rem 0.75rem; }
+.ev-select { display: grid; gap: 0.25rem; flex: 1 1 9.5rem; min-width: 0; max-width: 16rem; }
+.ev-select-l { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
+.ev-select > select { width: 100%; min-height: 2.75rem; }
+.ev-series-sec { margin-top: 2.75rem; }
+.ev-series-next { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; margin-top: 0.8rem; font-size: 0.875rem; }
+.ev-series-next-l { font-weight: 600; color: var(--c-ink); }
+.ev-series-dates { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ev-series-date { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2rem; padding: 0.2rem 0.65rem; border-radius: 9999px;
+  border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-ink); font-weight: 500; white-space: nowrap; text-decoration: none; }
+a.ev-series-date:hover { border-color: var(--ev, var(--c-gv)); color: var(--c-gv); }
+.ev-series-dates > .is-next > .ev-series-date { border-color: transparent; background: var(--ev-soft, var(--c-surface-2)); color: var(--ev-ink, var(--c-ink)); font-weight: 700; }
+.ev-series-moved { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.ev-series-notes { display: grid; gap: 0.3rem; margin-top: 0.7rem; font-size: 0.85rem; line-height: 1.45; color: var(--c-ink); }
+.ev-series-notes > li { display: flex; align-items: flex-start; gap: 0.4rem; }
+.ev-series-notes > li > svg { color: var(--c-danger); }
+.ev-series-notes.is-dark { color: #fff; }
+.ev-series-notes.is-dark > li > svg, .ev-series-notes.is-dark .link { color: #fff; }
+.ev-cancelled { background: var(--c-surface-2); }
+.ev-cancelled .cm-date-tile { opacity: 0.6; }
+.ev-cancelled s { text-decoration-thickness: 1.5px; }
+.ev-badge-cancelled { background: color-mix(in srgb, var(--c-danger) 12%, var(--c-surface)); color: var(--c-danger); font-weight: 700; }
+/* An event's own page (src/_includes/partials/event-page.njk): its "Add to calendar" menu in the hero — the hero clips
+   what leaves its box (overflow: hidden, for its art), so while the menu is open the hero lets it hang over the page
+   below, above what follows it */
+.gv-hero:has(.evp-hero-actions .cm-menu[open]) { overflow: visible; z-index: 30; }
+.evp-hero-actions .cm-menu-panel { z-index: 45; }
+/* /events/' filter menus on a phone: folded behind "More filters" (cmEvents moreOpen → .is-open); from 640px always
+   shown, the button gone. (The filters need JavaScript: without it the whole bar is hidden, every card shows.) */
+.ev-more-filters { justify-self: start; }
+.ev-more-filters[aria-expanded="true"] { background: var(--c-surface-2); }
+@media (width < 40rem) { .ev-filter-row:not(.is-open) { display: none; } }
+@media (width >= 40rem) { .ev-more-filters { display: none !important; } }
+.ev-filter-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+@media (width >= 40rem) { .ev-filter-tools { order: 3; } }

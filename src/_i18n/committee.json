@@ -615,18 +615,6 @@
     "en": "Jump to a month",
     "es": "Ir a un mes"
   },
-  "committee.events.f_committee": {
-    "en": "Committee meetings",
-    "es": "Reuniones del comité"
-  },
-  "committee.events.f_neta": {
-    "en": "NETA 65 events",
-    "es": "Eventos de NETA 65"
-  },
-  "committee.events.f_calendar": {
-    "en": "GV & LV calendars",
-    "es": "Calendarios de GV y LV"
-  },
   "committee.events.show_more": {
     "en": "Show {range} dates ({n})",
     "es": "Mostrar las fechas de {range} ({n})"
@@ -642,14 +630,6 @@
   "committee.events.pinned_next": {
     "en": "Next committee meeting",
     "es": "Próxima reunión del comité"
-  },
-  "committee.events.pinned_title": {
-    "en": "Our monthly meetings",
-    "es": "Nuestras reuniones mensuales"
-  },
-  "committee.events.pinned_text": {
-    "en": "Always first on this page, whatever the filter: the next date of our committee meeting and of our Grapevine Meeting — both online.",
-    "es": "Siempre primero en esta página, sea cual sea el filtro: la próxima fecha de nuestra reunión del comité y de nuestra Reunión de Grapevine, ambas en línea."
   },
   "committee.events.first_meeting": {
     "en": "First meeting:",
@@ -682,10 +662,6 @@
   "committee.events.details_short": {
     "en": "Details",
     "es": "Detalles"
-  },
-  "committee.events.details": {
-    "en": "Event details",
-    "es": "Detalles del evento"
   },
   "committee.events.all_day": {
     "en": "All day",

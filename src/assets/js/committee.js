@@ -181,51 +181,63 @@
       };
     });
 
-    /* /events/: the filter chips (All · Committee meetings · NETA 65 events · GV & LV calendars), the months folded
-       behind "Show 2028 dates (n)" and the way to any card. x-data="cmEvents()" on the agenda's <section>.
-       Every date to come is a card of its own (li[data-group], events.njk) — a monthly series' every date, the
-       committee meetings too. data-group is a space-separated list: a committee meeting is "committee neta" (it is
-       a NETA 65 event as well), every other card one group. "All" shows every card; a chip shows the cards whose
-       list holds it (show). The pinned section on top (#ev-pinned: the next committee meeting and the next
-       Grapevine Meeting) is no card of the list: always shown, never counted.
+    /* /events/: the filters, the months folded behind "Show 2028 dates (n)" and the way to any card. x-data="cmEvents()"
+       on the agenda's <section>. Every card of the list is an li[data-group] (events.njk): a one-off event (a cancelled
+       one too: data-ev-cancelled), a monthly series' card (#ev-pinned) and a weekly open meeting (#ev-weekly), each
+       with its facets (eleventy/filters/event-list.js evFacets): data-kind (one word), data-lang (en · es · both),
+       data-mode ("inperson", "online", or both words), data-city (a slug), data-district (a number).
+       The filters (f): the kind (a chip: setKind), the language, in person / online, the city and the district (the
+       menus: x-model, changed()) — a card shows when it matches every one picked ("" = any: picked). Each kind chip
+       counts the cards it would show with the other filters as they are (kindCount); "Clear filters" (clear) sets
+       them all back. The filters picked are kept in the address (?kind=workshop&lang=es&mode=inperson&city=…&
+       district=…, history.replaceState: no new history entry), so a filtered view can be shared and comes back on
+       reload; a value the page has no card for is left out. The page's old chips are still understood:
+       ?filter=committee (the committee meetings) and ?filter=calendar (the GV & LV calendars) set the kind.
        The months: those of the years after the build's — after the next one from November on (eventsFold,
-       eleventy/filters/committee.js) — are folded — the month section and its jump chip carry data-cm-more —, shown once `more` is true: "Show 2028 dates
-       (n)" (showMore; n = the folded cards the chip picked would show: moreCount) moves the keyboard to the first
-       month it shows (its heading, tabindex="-1"), and the button goes. A link to a folded card, or to its month,
-       opens them too. Without JavaScript every month shows and the button is hidden ([data-js-only]).
+       eleventy/filters/committee.js) — are folded — the month section and its jump chip carry data-cm-more —, shown
+       once `more` is true: "Show 2028 dates (n)" (showMore; n = the folded cards the filters would show: moreCount)
+       moves the keyboard to the first month it shows (its heading, tabindex="-1"), and the button goes. A link to a
+       folded card, or to its month, opens them too. Without JavaScript every month and every card shows, and the
+       filters and the button are hidden ([data-js-only]).
        A link to a card — on load, on every hashchange, from the "Next 5 weeks" calendar's day panel, which
        dispatches window "cm:reveal" { detail: { id } } when its link points at the address's own #hash (no
-       hashchange then), and any other link to the address's own #hash (a click, e.g. "Save the date" again) —
-       shows it (go): a card the chip hides sets the chip back to All, a folded one opens the
-       fold, a weekly open meeting (#ev-weekly-gv / -lv: shown with All and GV & LV calendars) sets All too; then
+       hashchange then), "Next up", and any other link to the address's own #hash (a click, e.g. "Save the date"
+       again) — shows it (go): a card the filters hide clears them, a folded one opens the fold; a date of a series
+       (its anchor on its series' card, hidden there — a date after the three the card lists) brings its card; then
        reveal() brings it into view, marks it a moment (.cm-flash) and gives it the keyboard focus (tabindex="-1",
        without scrolling again). A card whose time has passed (expire(): data-cm-expired) is left alone — it is gone.
        On load a link to a past event opens the "Past events" list (as before).
-       An event whose time passes while the page is open is hidden by expire() (below), which then says so
-       ("cm:expired"): the chips are counted again and `tick` moves on, so every list, month heading and month chip
-       (show / monthVisible), the "Show more" count and the "Showing N events" line are worked out again — they read
-       only Alpine's own state, which no hidden card changes. */
+       "Showing N events" counts the cards that show, never a cancelled one. An event whose time passes while the page
+       is open is hidden by expire() (below), which then says so ("cm:expired"): `tick` moves on, so every list,
+       month heading and month chip (show / monthVisible), the counts and the "Show more" count are worked out
+       again — they read only Alpine's own state, which no hidden card changes. */
     Alpine.data("cmEvents", function () {
-      var FILTERS = ["all", "committee", "neta", "calendar"];
+      var FACETS = ["kind", "lang", "mode", "city", "district"];
+      var LEGACY = { committee: "committee", calendar: "calendar" };       // ?filter= (the page's old chips)
       function hashId() {
         try { return location.hash ? decodeURIComponent(location.hash.slice(1)) : ""; } catch (e) { return ""; }
       }
-      // a card's groups: data-group="committee neta" → ["committee", "neta"]
-      function groups(li) { return String(li.getAttribute("data-group") || "").split(/\s+/).filter(Boolean); }
+      function words(el, k) { return String(el.getAttribute("data-" + k) || "").split(/\s+/).filter(Boolean); }
+      function cards(root) { return root.querySelectorAll("li[data-group]"); }
+      function live(li) { return !li.hasAttribute("data-cm-expired"); }
       return {
-        filter: "all", more: false, labels: { many: "{n}", one: "{n}" }, tick: 0,
+        f: { kind: "", lang: "", mode: "", city: "", district: "" }, moreOpen: false,
+        more: false, labels: { many: "{n}", one: "{n}" }, tick: 0,
         init: function () {
           var self = this;
           this.labels = countLabels(this.$root);
-          this.recount();
-          window.addEventListener("cm:expired", function () { self.tick++; self.recount(); });
+          // an event over while the page is open (expire()): counted again; a kind with no card left lets go
+          window.addEventListener("cm:expired", function () {
+            self.tick++;
+            var k = self.f.kind;
+            if (k && !Array.prototype.some.call(cards(self.$root), function (li) { return live(li) && words(li, "kind").indexOf(k) !== -1; })) self.setKind(k);
+          });
           // x-show now owns what is hidden: drop the first-paint rule (committee.css [data-dflt-hidden])
           this.$nextTick(function () { document.documentElement.classList.add("cm-ev-ready"); });
-          try {
-            var p = new URLSearchParams(location.search).get("filter");
-            if (p && FILTERS.indexOf(p) !== -1) this.filter = p;
-          } catch (e) {}
-          // A link to a card (a folded month's, one the ?filter= hides …) → show it; to a past event → open the
+          this.fromAddress();
+          // (phones: the menus fold behind "More filters" — open when the address picked one of them)
+          this.moreOpen = !!(this.f.lang || this.f.mode || this.f.city || this.f.district);
+          // A link to a card (a folded month's, one the filters hide …) → show it; to a past event → open the
           // "Past events" list.
           var id = hashId(), el = this.go(id), past = !el && id && document.getElementById(id);
           if (el) this.reveal(el);
@@ -244,7 +256,7 @@
             if (t) self.reveal(t);
           });
           // any other link of the page to the address's own #hash — "Save the date" clicked a second time after a
-          // chip hid its card — gets the same: no hashchange comes then either (the calendar says "cm:reveal" itself)
+          // filter hid its card — gets the same: no hashchange comes then either (the calendar says "cm:reveal" itself)
           document.addEventListener("click", function (e) {
             var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
             if (!a || a.closest("[data-cm-cal]")) return;
@@ -255,51 +267,86 @@
             if (t) self.reveal(t);
           });
         },
-        set: function (f) { this.filter = f; },
-        /* The chip counts are what each filter shows (with the folded months: they are only a click away):
-           events whose time has passed (hidden by expire() between builds) don't count; a chip that reaches 0
-           hides (and "All" takes over if it was the one picked). NETA 65 events count the committee meetings too. */
-        recount: function () {
-          var root = this.$root, self = this;
-          root.querySelectorAll("[data-cm-filter]").forEach(function (chip) {
-            var f = chip.getAttribute("data-cm-filter");
-            if (f === "all") return;
-            var n = Array.prototype.filter.call(root.querySelectorAll('li[data-group~="' + f + '"]'), function (li) {
-              return !li.hasAttribute("data-cm-expired");
-            }).length;
-            var c = chip.querySelector(".cm-chip-count");
-            if (c) c.textContent = n;
-            chip.hidden = !n;
-            if (!n && self.filter === f) self.filter = "all";
-          });
+        /* the values the page offers for a filter: its chips' (data-ev-kind) or its menu's options */
+        offered: function (k) {
+          var root = this.$root;
+          if (k === "kind") return Array.prototype.map.call(root.querySelectorAll("[data-ev-kind]"), function (b) { return b.getAttribute("data-ev-kind"); });
+          var sel = root.querySelector('select[data-ev-facet="' + k + '"]');
+          return sel ? Array.prototype.map.call(sel.querySelectorAll("option"), function (o) { return o.getAttribute("value") || ""; }) : [];
         },
-        /* the chip picked shows this card (whatever the fold) */
-        picked: function (el) {
-          return this.filter === "all" || groups(el).indexOf(this.filter) !== -1;
+        /* the filters from the address (?kind=…&lang=… — ?filter=committee / calendar too), each only when the page
+           offers it */
+        fromAddress: function () {
+          var q;
+          try { q = new URLSearchParams(location.search); } catch (e) { return; }
+          var old = LEGACY[q.get("filter") || ""];
+          for (var i = 0; i < FACETS.length; i++) {
+            var k = FACETS[i], v = q.get(k) || (k === "kind" ? old || "" : "");
+            if (v && this.offered(k).indexOf(v) !== -1) this.f[k] = v;
+          }
+        },
+        /* the filters into the address: ?kind=…&lang=… (the other parameters and the #hash stay; the old ?filter= goes) */
+        toAddress: function () {
+          try {
+            var u = new URL(location.href);
+            u.searchParams.delete("filter");
+            for (var i = 0; i < FACETS.length; i++) {
+              var k = FACETS[i];
+              if (this.f[k]) u.searchParams.set(k, this.f[k]); else u.searchParams.delete(k);
+            }
+            if (u.href !== location.href) history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+          } catch (e) { /* an old browser: the filters still work, the address stays */ }
+        },
+        setKind: function (k) { this.f.kind = this.f.kind === k ? "" : k; this.toAddress(); },
+        changed: function () { this.toAddress(); },
+        clear: function () {
+          for (var i = 0; i < FACETS.length; i++) this.f[FACETS[i]] = "";
+          this.toAddress();
+        },
+        get active() {
+          for (var i = 0; i < FACETS.length; i++) if (this.f[FACETS[i]]) return true;
+          return false;
+        },
+        /* the filters picked show this card (whatever the fold) — `skip`: one filter left out (a chip's count) */
+        picked: function (el, skip) {
+          for (var i = 0; i < FACETS.length; i++) {
+            var k = FACETS[i], v = this.f[k];
+            if (v && k !== skip && words(el, k).indexOf(v) === -1) return false;
+          }
+          return true;
         },
         show: function (el) {
           void this.tick; // (read: worked out again after expire())
-          if (el.hasAttribute("data-cm-expired")) return false;
+          if (!live(el)) return false;
           // (`more` read first, so Alpine works it out again once the fold opens)
           if (!this.more && el.closest("[data-cm-more]")) return false;
           return this.picked(el);
         },
         monthVisible: function (el) {
           var self = this;
-          return Array.prototype.some.call(el.querySelectorAll("li[data-group]"), function (li) { return self.show(li); });
+          return !!el && Array.prototype.some.call(el.querySelectorAll("li[data-group]"), function (li) { return self.show(li); });
+        },
+        /* a kind chip's count: the cards of that kind the other filters show (the folded months' too — a click away),
+           never a cancelled one */
+        kindCount: function (k) {
+          void this.tick;
+          var self = this;
+          return Array.prototype.filter.call(cards(this.$root), function (li) {
+            return live(li) && !li.hasAttribute("data-ev-cancelled") && words(li, "kind").indexOf(k) !== -1 && self.picked(li, "kind");
+          }).length;
         },
         get visibleCount() {
           var self = this;
-          return Array.prototype.filter.call(this.$root.querySelectorAll("li[data-group]"), function (li) { return self.show(li); }).length;
+          return Array.prototype.filter.call(cards(this.$root), function (li) { return !li.hasAttribute("data-ev-cancelled") && self.show(li); }).length;
         },
         countText: function () { return countText(this.labels, this.visibleCount); },
-        /* the folded cards the chip picked would show: "Show 2028 dates (n)"; 0 → the button hides */
+        /* the folded cards the filters would show: "Show 2028 dates (n)"; 0 → the button hides */
         get moreCount() {
           void this.tick;
           var self = this, n = 0;
           this.$root.querySelectorAll("section[data-cm-more]").forEach(function (m) {
             Array.prototype.forEach.call(m.querySelectorAll("li[data-group]"), function (li) {
-              if (!li.hasAttribute("data-cm-expired") && self.picked(li)) n++;
+              if (live(li) && !li.hasAttribute("data-ev-cancelled") && self.picked(li)) n++;
             });
           });
           return n;
@@ -308,7 +355,7 @@
           return String(el.getAttribute("data-label") || "{n}").replace("{n}", this.moreCount);
         },
         /* "Show 2028 dates": the folded months show, and the keyboard goes on to the first of them that shows
-           something for the chip picked (its heading) — the pressed button disappears */
+           something for the filters picked (its heading) — the pressed button disappears */
         showMore: function () {
           var self = this;
           this.more = true;
@@ -324,24 +371,20 @@
             });
           });
         },
-        /* A link's target in the list — a card (or anything in it), a month (its heading), a weekly open meeting or a
-           pinned card — → what to bring into view, after setting the chip and the fold so it shows; null for
-           anything else (the browser's own jump is enough) and for a card whose time has passed. */
+        /* A link's target in the list — a card (or anything in it), a month (its heading), a section of cards (the
+           monthly series, the weekly meetings) — → what to bring into view, after clearing the filters and opening the
+           fold so it shows; null for anything else (the browser's own jump is enough) and for a card whose time has
+           passed. A target the card does not show (a series' date after the three it lists, the anchors of the
+           committee meeting's and the Grapevine Meeting's dates) brings the card itself. */
         go: function (id) {
           var el = id && document.getElementById(id);
           if (!el || !this.$root.contains(el)) return null;
-          var card = el.closest("li[data-group]"), month = el.closest("[data-cm-month]");
-          if (card && card.hasAttribute("data-cm-expired")) return null;
-          if (card || month) {
-            if (el.closest("[data-cm-more]")) this.more = true;
-            if (card ? !this.picked(card) : !this.monthVisible(month)) this.filter = "all";
-            return el;
-          }
-          if (el.closest("#ev-weekly")) {
-            if (this.filter !== "all" && this.filter !== "calendar") this.filter = "all";
-            return el;
-          }
-          return el.closest("#ev-pinned") ? el : null;
+          var card = el.closest("li[data-group]"), month = el.closest("[data-cm-month]") || el.closest("#ev-pinned") || el.closest("#ev-weekly");
+          if (card && !live(card)) return null;
+          if (!card && !month) return null;
+          if (el.closest("[data-cm-more]")) this.more = true;
+          if (card ? !this.picked(card) : !this.monthVisible(month)) this.clear();
+          return card || el;
         },
         /* Bring it into view once it shows (Alpine's x-show shows an element on the next animation frame: after
            its update, $nextTick, one more frame), mark its card a moment (.cm-flash: committee.css; a month heading
@@ -1153,6 +1196,18 @@
   function calendar() {
     var cal = calRoot();
     if (!cal) return;
+    // below 1024px the calendar is folded under its heading (committee.css: .is-open shows it): its button opens and
+    // closes it, saying which it does; from 1024px the button is hidden and the calendar always shows
+    var fold = cal.querySelector("[data-ev-cal-toggle]");
+    if (fold) {
+      fold.addEventListener("click", function () {
+        var open = !cal.classList.contains("is-open");
+        cal.classList.toggle("is-open", open);
+        fold.setAttribute("aria-expanded", String(open));
+        var label = fold.querySelector("[data-ev-cal-label]");
+        if (label) label.textContent = fold.getAttribute(open ? "data-hide" : "data-show") || label.textContent;
+      });
+    }
     cal.querySelectorAll("[data-cm-cal-panel]").forEach(function (p) {
       if (!p.hidden && !calSel) calSel = { ymd: p.getAttribute("data-cm-cal-panel"), auto: true };
     });

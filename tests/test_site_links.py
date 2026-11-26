@@ -620,10 +620,11 @@ class BuiltPages(unittest.TestCase):
             html = p[f"{prefix}/events/"]
             shares = set(re.findall(r'data-share="([^"]+)"', html))
             self.assertIn(f"{SITE_URL}{prefix}/events/2099-03-19-spring-assembly/", shares)
-            self.assertIn(f"{SITE_URL}{prefix}/events/ev-recurring-citywide-dallas-2099-04-11/", shares)
             self.assertFalse([s for s in shares if "#2099-03-19" in s])
-            # a committee meeting's card is shared as it is
-            self.assertTrue([s for s in shares if re.search(r"/events/#ev-committee-\d{4}-\d{2}-\d{2}$", s)], lang)
+            # (since the list's redesign) a monthly series is one card: each of its dates a link to its own page, no card
+            # per date to share; the committee meeting's one card has no Share of its own (its page is /meetings/)
+            self.assertIn(f'<a class="ev-series-date" href="{prefix}/events/ev-recurring-citywide-dallas-2099-04-11/">', html)
+            self.assertFalse([s for s in shares if "ev-recurring-" in s or "#ev-committee-" in s], lang)
             # every card shares a page of its own (round 37: eleventy/event-pages.js eventPagePlan — the same events)
             pages = {SITE_URL + s["path"] for s in self.shares()["list"]}
             self.assertEqual({s for s in shares if "#" not in s} - pages, set())
@@ -631,10 +632,13 @@ class BuiltPages(unittest.TestCase):
             # — round 35 linked only a leaf's, the assembly's); a date of the monthly booth to the series' page
             self.assertIn(f'<a href="{prefix}/events/2099-03-19-spring-assembly/" class="-my-3 inline-block py-3 hover:text-gv">'
                           "Spring Assembly</a>", html)
-            self.assertEqual(re.findall(r'<a href="' + prefix + r'/events/[a-z0-9-]+/" class="-my-3', html),
+            # (a cancelled event's struck-through card — since the list's redesign — links its notice: not one of these)
+            live = re.sub(r'<li id="[^"]+" data-group="[^"]*" data-ev-cancelled.*?</li>', "", html, flags=re.S)
+            self.assertEqual(re.findall(r'<a href="' + prefix + r'/events/[a-z0-9-]+/" class="-my-3', live),
                              [f'<a href="{prefix}/events/{a}/" class="-my-3'
                               for a in ("2099-03-19-spring-assembly", "ev-lvcal-svgflyer", "ev-gvcal-jpgflyer")])
-            self.assertEqual(len(re.findall(r'<a href="' + prefix + r'/events/series/citywide-dallas/" class="-my-3', html)), 2)
+            # the booth's one card: its title its series' page
+            self.assertEqual(len(re.findall(r'<a href="' + prefix + r'/events/series/citywide-dallas/" class="-my-3', html)), 1)
 
     def shares(self) -> dict:
         if BuiltPages.share_pages is None:

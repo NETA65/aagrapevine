@@ -365,9 +365,11 @@ class WordsAndLinks(unittest.TestCase):
     def test_the_link_leads_to_a_section_meetings_has(self):
         page = (ROOT / "src" / "pages" / "meetings.njk").read_text(encoding="utf-8")
         self.assertEqual(len(re.findall(r'\bid="weekly-open"', page)), 1)
-        # …and /events/ keeps its "every week" cards, under the GV & LV calendars chip (the feed's CATEGORIES)
+        # …and /events/ keeps its "every week" cards (since the list's redesign: online meetings in their language, which
+        # the filters show or hide; in the GV & LV calendars' group, the feed's CATEGORIES)
         events = (ROOT / "src" / "pages" / "events.njk").read_text(encoding="utf-8")
-        self.assertIn('<section id="ev-weekly" class="mb-10" x-show="filter === \'all\' || filter === \'calendar\'"', events)
+        self.assertIn('<section id="ev-weekly" class="mt-10" x-ref="weekly" x-show="monthVisible($el)"', events)
+        self.assertIn('<li data-group="calendar" data-kind="online"', events)
         self.assertIn('<h3 id="ev-weekly-{{ key }}"', events)
 
     def test_the_feed_and_the_subscribe_card_say_so(self):

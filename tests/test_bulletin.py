@@ -304,15 +304,18 @@ class Rendering(unittest.TestCase):
         self.assertNotIn('href="javascript:', out["html"])
 
     def test_an_events_description_like_a_post(self):
-        """An event's description on /events/ (a content/events file's text) is committee Markdown too: under
-        the card's h3 title its headings start at h4, links to our pages lead to the page language's page, its
-        tables are named after the event, and .cm-md (committee.css) styles it as on the bulletin."""
-        page = (ROOT / "src/pages/events.njk").read_text(encoding="utf-8")
+        """An event's description (a content/events file's text) is committee Markdown too — on the event's own page
+        since the list's redesign (/events/' card shows its summary, three lines): under the page's h1 title its
+        headings start at h2, links to our pages lead to the page language's page, its tables are named after the
+        event, and .cm-md (committee.css) styles it as on the bulletin."""
+        page = (ROOT / "src/_includes/partials/event-page.njk").read_text(encoding="utf-8")
         m = re.search(r'<div class="([^"]*)"[^>]*>\{\{ ev\.body \| md(\([^)]*\))? (?:\| cmNoSnippet )?\| safe \}\}</div>', page)
         self.assertIsNotNone(m)
         self.assertIn("cm-md", m.group(1).split())
-        self.assertEqual(re.sub(r"\s+", "", m.group(2) or ""), "({h:4,lang:lang,name:ev.title})")
-        self.assertRegex(page, r'<h3 class="h-card[^"]*">\s*\{%-? if ev\.link')        # the card's title
+        self.assertEqual(re.sub(r"\s+", "", m.group(2) or ""), "({h:2,lang:lang,name:ev.title})")
+        self.assertNotIn("ev.body | md", (ROOT / "src/pages/events.njk").read_text(encoding="utf-8"))
+        self.assertRegex((ROOT / "src/pages/events.njk").read_text(encoding="utf-8"),
+                         r'<h3 class="h-card[^"]*">\s*\{%-? if ev\.link')        # the card's title
         out = run_js(self, """
           out(filters.md("Aprende.\\n\\n## Estacionamiento\\n\\nVer [reuniones](/meetings/).\\n\\n| Hora | Qué |\\n|---|---|\\n| 2:00 | Bienvenida |",
                          { h: 4, lang: "es", name: "Taller de Escritura" }));

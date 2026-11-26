@@ -1155,13 +1155,16 @@ class OurCalendarFiles(TempState):
     NOW = datetime(2026, 9, 24, 21, 0, tzinfo=timezone.utc)      # Thu Sep 24, 4 PM CDT: that day's workshop is over
 
     def test_the_cards_events_njk_has(self):
-        # FEED_JS's list of the cards /events/ has is this selection: every date still to come (a card each, with
-        # its anchor), and the newest 40 one-off events that took place
+        # FEED_JS's list of the anchors /events/ has is this selection: every date still to come (since the list's
+        # redesign a one-off event's card, a series' date's entry on its series' card, a committee meeting's anchor
+        # on its card — each with its anchor), and the newest 40 one-off events that took place
         page = (ROOT / "src" / "pages" / "events.njk").read_text(encoding="utf-8")
         for bit in ('{%- set all = db.events.items | cmEvents(site, lang) | cmCollapseRecurring -%}',
                     '{%- set upcoming = all | where("past", false) -%}',
                     '{%- set past = all | where("past", true) | whereNot("committee", true) | whereNot("recurring", true) | reverse -%}',
-                    '{% for ev in past | limit(40) %}', '<li id="{{ ev.anchor }}" data-group="{{ ev.group }}{{ \' neta\' if ev.committee }}"',
+                    '{%- set L = upcoming | evList(db, site, lang, wos) -%}',
+                    '{% for ev in past | limit(40) %}', '<li id="{{ ev.anchor }}" data-group="{{ ev.group }}" data-cm-expire="{{ ev.expireIso }}"',
+                    '<li id="{{ d.anchor }}" data-cm-expire="{{ d.expireIso }}"', '<span id="{{ d.anchor }}"></span>',
                     '<li id="{{ ev.anchor }}" class="flex flex-wrap'):
             self.assertIn(bit, page)
 
@@ -1470,7 +1473,8 @@ class OnlineAndHybridEvents(TempState):
                 for anchor in ("zz-online", "zz-other-link"):
                     self.assertIn(anchor, cards)
                     self.assertNotIn(anchor, by)
-                self.assertTrue([a for a in cards if a.startswith("ev-committee-")])
+                # (since the list's redesign the committee meeting is one card — its dates' anchors on it)
+                self.assertRegex(pages[lang], r'<span id="ev-committee-\d{4}-\d{2}-\d{2}"></span>')
                 self.assertEqual([a for a in by if a.startswith("ev-committee-")], [])
                 self.assertEqual({e["eventAttendanceMode"] for e in ld["@graph"]} - {mode("Offline"), mode("Mixed")}, set())
 

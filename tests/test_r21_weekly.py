@@ -7,21 +7,22 @@
                     hero's jump links, with the committee meeting's last in both languages (it is no longer right
                     under the hero); the weekly section's eyebrow ("On Zoom", no "Also" — nothing comes before it);
                     on /es/ the Grapevine meetings' "no Spanish-speaking group" line points UP to La Viña's meeting;
-  * Events        — #ev-weekly under the pinned committee meeting and before the months: both meetings, the page
+  * Events        — #ev-weekly after the one-off events and the monthly series ("Every month"): both meetings, the page
                     language's first, each in its magazine's colour, "Every week", its day and time, its next date
                     with the /meetings/ cards' data-cm-weekly markup (committee.js rolls it on in the browser) —
                     La Viña's "Starts Thursday, November 5, 2026" before that day, its next Thursday after it —, Join
                     on Zoom (since round 26c: the meeting's own Zoom link, the /meetings/ cards' label), Meeting
                     details (/meetings/#weekly-open: the one home of the Zoom ID and passcode, never shown here) and
-                    Add to calendar (the weekly .ics files of /meetings/, Google's weekly link); shown with "All" and
-                    "GV & LV calendars", never counted as an event of the month list;
+                    Add to calendar (the weekly .ics files of /meetings/, Google's weekly link); cards of the list
+                    (since the list's redesign: online meetings in their language — the filters show or hide them);
                     The colour key counts the two cards' colours; a card with no day or time has no clock line;
   * the links     — a link to the committee meeting goes to #committee-meeting (Home's meeting card, the pinned card
                     on /events/, /contribute/'s workshop band, /gvr/'s companion card and its "Pass it on" welcome
                     message — the printed handover sheet keeps the short address), no longer the top of the page;
                     so do its calendar entries — Add to calendar on Home's card, on the countdowns of /events/ and
-                    /meetings/ and on every committee card of /events/: the entry's link (the .ics URL) and the
-                    "Details:" line of its text — and the countdown's Share link; the Grapevine Meeting's go to
+                    /meetings/: the entry's link (the .ics URL) and the "Details:" line of its text — and the
+                    countdown's Share link (since the list's redesign /events/ has ONE card for it, its dates' anchors
+                    on it, its "Meeting details" its section); the Grapevine Meeting's go to
                     #grapevine-meeting; the old /meeting/ address (the committee meeting's page) opens
                     #committee-meeting too.
 
@@ -219,16 +220,19 @@ class EventsPage(unittest.TestCase):
                 page = p[page_url(lang, "events/")]
                 self.assertEqual(page.count('id="ev-weekly"'), 1)
                 block = weekly_block(page)
-                self.assertTrue(block.startswith('<section id="ev-weekly" class="mb-10" x-show="filter === \'all\' || '
-                                                 'filter === \'calendar\'" aria-labelledby="ev-weekly-title">'), block[:200])
+                self.assertTrue(block.startswith('<section id="ev-weekly" class="mt-10" x-ref="weekly" '
+                                                 'x-show="monthVisible($el)" aria-labelledby="ev-weekly-title">'), block[:200])
                 self.assertIn(f'<h2 id="ev-weekly-title" class="cm-month-title">{T["committee.weekly.section_title"][lang]}</h2>', block)
                 self.assertIn(T["committee.events.weekly_text"][lang].replace("'", "&#39;"), block)
                 start = page.index('<section id="ev-weekly"')
-                self.assertGreater(start, page.index('id="ev-next-title"'), "under the pinned committee meeting")
+                self.assertGreater(start, page.index('id="ev-next-title"'), "after the monthly series (the committee meeting's card)")
                 if 'class="cm-month"' in page:
-                    self.assertLess(start, page.index('class="cm-month"'), "before the months")
-                # not an event of the list: the chips, "Showing N" and the months never count it
-                self.assertNotIn("data-group", block)
+                    self.assertGreater(start, page.rindex('class="cm-month"'), "after the months of the one-off events")
+                # (since the list's redesign) each meeting a card of the list: an online meeting in its language, which the
+                # filters show or hide; never folded, never gone with a date
+                cards = re.findall(r'<li data-group="calendar" data-kind="online" data-lang="(en|es)" data-mode="online" '
+                                   r'x-show="show\(\$el\)">', block)
+                self.assertEqual(sorted(cards), ["en", "es"])
                 self.assertNotIn("data-dflt-hidden", block)
                 self.assertNotIn("data-cm-expire", block)
 
@@ -421,15 +425,13 @@ class CommitteeMeetingLinks(unittest.TestCase):
                     art = re.search(rf'<article id="{card}" class="cm-count".*?</article>', meetings, re.S).group(0)
                     self.assertEqual(re.findall(r'data-share="([^"]*)"', art), [url])
             with self.subTest(lang=lang, cards="/events/"):
-                cards = re.findall(r'<li id="ev-committee-\d{4}-\d{2}-\d{2}".*?</article>', events, re.S)
-                self.assertGreaterEqual(len(cards), 12)
-                for card in cards:
-                    self.assertRegex(card, r'<a href="' + re.escape(pre + "/meetings/#committee-meeting")
-                                     + r'" class="-my-3 inline-block py-3 hover:text-gv">')
-                    m = re.search(r"""data-cm-ics=(?:"([^"]*)"|'([^']*)')""", card)
-                    ics = json.loads(html.unescape(m.group(1) or m.group(2)))
-                    self.assertEqual(ics["url"], full)
-                    self.assertEqual([ln for ln in ics["description"].splitlines() if ln.startswith(label)], [label + full])
+                # (since the list's redesign) ONE card for the committee meeting — its countdown, checked above —, its
+                # dates' anchors on it, its details its section of /meetings/; no card per date
+                self.assertEqual(re.findall(r'<li id="ev-committee-\d{4}-\d{2}-\d{2}"', events), [])
+                card = events[events.index('<li data-group="committee neta"'):]
+                card = card[:card.index("</article>")]
+                self.assertGreaterEqual(len(re.findall(r'<span id="ev-committee-\d{4}-\d{2}-\d{2}"></span>', card)), 12)
+                self.assertIn(f'<a href="{pre}/meetings/#committee-meeting" class="btn-on-dark btn-sm">', card)
             with self.subTest(lang=lang, bare="none left"):
                 bare = re.compile(re.escape(site + pre) + r"/meetings/(?![#\w])|" + re.escape(
                     (site + pre).replace(":", "%3A").replace("/", "%2F")) + r"%2Fmeetings%2F(?!%23|\w)")

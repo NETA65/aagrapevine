@@ -1,5 +1,8 @@
-"""Round 30, Unit B — the /events/ agenda: every date a card of its own, the filters that really filter, our two
-monthly meetings pinned on top, all of the next year shown and the year after it behind "Show more".
+"""Round 30, Unit B — the /events/ agenda: the filters that really filter, all of the next year shown and the year
+after it behind "Show more". (Round 30 made every date a card of its own and pinned our two monthly meetings on top;
+since the list's redesign, November 2026, a monthly series is ONE card, after the one-off events, and the filters are
+the kind, the language, in person / online, the city and the district — tests/test_events_series_cards.py and
+tests/test_events_filters.py. The checks below say what of round 30 still holds.)
 
   * The fold (eleventy/filters/committee.js EVENTS_NEXT_YEAR_FROM = 11, eventsFoldFrom, eventsFold — the
     cmEventsFold filter), by whole years: the rest of the build's year in Central time is open and, from November on,
@@ -10,29 +13,29 @@ monthly meetings pinned on top, all of the next year shown and the year after it
   * The page (src/pages/events.njk, built with Eleventy, English and Spanish, ONLY that page, on November 13, 2026,
     with events of the test's own through December 2028 — real data lists dates only to November 2027 — and the
     settings of round 20's tests: the committee meeting and the Grapevine Meeting on Google Meet):
-      - no "Show every monthly date" switch, no "Then …" line, no data-later: every date of a monthly series is a
-        card; no card is hidden from the first paint (no data-dflt-hidden on an li);
-      - a committee meeting's card is in two groups, data-group="committee neta"; the chips count every card of
-        theirs (the folded months' too): Committee meetings = the committee cards, NETA 65 events = ours + the
-        committee meetings, GV & LV calendars = theirs;
-      - the months: through December 2027 open; every 2028 month's section and jump chip carry data-cm-more and
-        data-dflt-hidden, its heading tabindex="-1"; one "Show 2028 dates (n)" button (data-js-only, n = the folded
-        cards), right after the last open month, its words for the browser in data-label ("{n}");
-      - "Our monthly meetings" (#ev-pinned) right after the filter bar and before the weekly open meetings: no
-        x-show, no data-group; the committee meeting's dark card first, then the Grapevine Meeting's (#ev-next-gvm);
+      - no "Show every monthly date" switch, no "Then …" line, no data-later: a monthly series is ONE card, each of
+        its dates an entry of it (three shown, the others waiting); no card is hidden from the first paint (no
+        data-dflt-hidden on an li);
+      - the committee meeting is one card, in two groups (data-group="committee neta"), its dates' anchors on it;
+        the kind chips count the cards (no "All" count);
+      - the months of the one-off events: through December 2027 open; every 2028 month's section and jump chip carry
+        data-cm-more and data-dflt-hidden, its heading tabindex="-1"; one "Show 2028 dates (n)" button (data-js-only,
+        n = the folded cards), right after the last open month, its words for the browser in data-label ("{n}");
+      - "Every month" (#ev-pinned) after the months and before the weekly open meetings, each series a card of the
+        list; the committee meeting's dark card first, the Grapevine Meeting's (#ev-next-gvm) among them;
       - the Area's events (an assembly, an ACM) in one colour, "Area event" in the colour key and on an ACM's badge,
         "Area assembly" on an assembly's; the grey kind is "NETA 65" while every grey card is ours, "Other events"
         when an outside calendar's event is grey too; "Save the date" picks the next ASSEMBLY, never the ACM before it;
       - no id twice on the page.
   * The list in the browser (src/assets/js/committee.js cmEvents, on the page stand-in of tests/test_central_time.py):
-    the chips count the committee meetings under NETA 65 events; "All" shows every open card, committee meetings
-    included; "Showing N events" leaves the folded months out until they show; "Show 2028 dates" counts the folded
-    cards of the chip picked, shows them and moves the keyboard to the first folded month that shows something for
-    that chip; a link to a card — a hashchange, or the "Next 5 weeks" calendar's window "cm:reveal" { id } — under a
-    chip that hides it sets the chip back to All, into a folded month opens the fold, to a weekly open meeting under
-    "Committee meetings" sets All, to the pinned Grapevine Meeting changes nothing; then the target is scrolled to,
+    the kind chips count the cards of their kind; no filter shows every open card; "Showing N events" leaves the
+    folded months out until they show; "Show 2028 dates" counts the folded cards the filters pick, shows them and
+    moves the keyboard to the first folded month that shows something for them; a link to a card — a hashchange, or
+    the "Next 5 weeks" calendar's window "cm:reveal" { id } — that the filters hide clears them, into a folded month
+    opens the fold, to a weekly open meeting or a series' card brings that card; then the target is scrolled to,
     focused (tabindex="-1", no second scroll) and its card marked a moment (.cm-flash); a card that has passed is left
-    alone; on load a link into a folded month opens it.
+    alone; on load a link into a folded month opens it, and ?filter=committee / ?filter=calendar (the old chips) pick
+    that kind.
 
 Skipped without Node.js or the site's npm packages (tests/nodejs.py).
 
@@ -247,36 +250,47 @@ class Fold(unittest.TestCase):
 
 # --------------------------------------------------------------------------- the page
 class EventsPage(unittest.TestCase):
-    def test_every_date_is_a_card_and_no_switch(self):
+    """(Since the list's redesign, November 2026, a monthly series is ONE card — tests/test_events_series_cards.py has
+    the rest of it; round 30's "every date a card" is gone.)"""
+
+    def test_one_card_per_series_and_no_switch(self):
         for url in ("/events/", "/es/events/"):
             page = pages(self)["main"][url]
             with self.subTest(url=url):
                 for gone in ("cm-switch", "showAll", "data-later", "data-committee", "moreDates"):
                     self.assertNotIn(gone, page)
                 anchors = [a for a, _ in cards(page)]
-                # every booth date to come, a card each (25: December 2026 … December 2028)
-                self.assertEqual(len([a for a in anchors if a.startswith("ev-recurring-zz-booth-")]), 25)
+                # the booth: one card; every date to come an entry of it (25: December 2026 … December 2028), three of
+                # them shown, the others waiting (expire(): data-cm-max)
+                self.assertIn("ev-series-zz-booth", anchors)
+                self.assertEqual([a for a in anchors if a.startswith("ev-recurring-zz-booth-")], [])
+                series = section_of(page, '<section id="ev-pinned"')
+                dates = re.findall(r'<li id="(ev-recurring-zz-booth-[0-9-]+)" data-cm-expire="[^"]+"( class="[^"]*")?>', series)
+                self.assertEqual(len(dates), 25)
+                self.assertEqual([c for _, c in dates[:3]], [' class="is-next"', "", ""])
+                self.assertTrue(all(c == ' class="hidden"' for _, c in dates[3:]))
                 self.assertNotRegex(page, r'<li id="[^"]+" data-group="[^"]+"[^>]*data-dflt-hidden')
                 # (the past workshop is in "Past events", not a card of the months)
                 self.assertNotIn("zz-held", anchors)
                 self.assertIn('<li id="zz-held" class="flex', page)
 
-    def test_the_committee_meetings_are_neta_65_events_too(self):
+    def test_the_committee_meeting_is_one_card_and_a_neta_65_event_too(self):
         for url in ("/events/", "/es/events/"):
             page = pages(self)["main"][url]
             with self.subTest(url=url):
-                groups = dict(cards(page))
-                committee = [a for a in groups if a.startswith("ev-committee-")]
-                self.assertGreaterEqual(len(committee), 12)
-                self.assertEqual({groups[a] for a in committee}, {"committee neta"})
-                self.assertEqual({g for a, g in groups.items() if a not in committee}, {"neta", "calendar"})
-                count = Counter(g for g in " ".join(groups.values()).split())
-                chips = dict(re.findall(r'data-cm-filter="(\w+)"[^>]*>.*?(?:<span class="cm-chip-count">(\d+)</span>)?\s*</button>',
+                groups = Counter(g for _, g in re.findall(r'<li( id="[^"]+")? data-group="([^"]+)"', page))
+                self.assertEqual(groups["committee neta"], 1, "one card for every committee meeting")
+                card = page[page.index('<li data-group="committee neta"'):]
+                card = card[:card.index("</article>")]
+                self.assertIn('data-kind="committee"', card)
+                self.assertGreaterEqual(len(re.findall(r'<span id="ev-committee-[0-9-]+"></span>', card)), 12)
+                self.assertNotRegex(page, r'<li id="ev-committee-')
+                # the kind chips count the cards (no "All" count)
+                chips = dict(re.findall(r'data-ev-kind="(\w*)"[^>]*>.*?(?:<span class="cm-chip-count"[^>]*>(\d+)</span>)?\s*</button>',
                                         page, re.S))
-                self.assertEqual(chips["committee"], str(len(committee)))
-                self.assertEqual(chips["neta"], str(count["neta"]), "ours + the committee meetings, 2028 included")
-                self.assertEqual(chips["calendar"], str(count["calendar"]))
-                self.assertEqual(chips["all"], "")
+                self.assertEqual(chips["committee"], "1")
+                self.assertEqual(chips["booth"], "1")
+                self.assertEqual(chips[""], "")
 
     def test_all_of_2027_open_2028_folded_behind_one_button(self):
         for url, words in (("/events/", "Show 2028 dates ({n})"), ("/es/events/", "Mostrar las fechas de 2028 ({n})")):
@@ -284,9 +298,8 @@ class EventsPage(unittest.TestCase):
             with self.subTest(url=url):
                 ms = months(page)
                 keys = [k for k, _ in ms]
-                self.assertEqual(keys[0], "2026-11")
-                self.assertIn("2027-12", keys)
-                self.assertEqual(keys[-1], "2028-12")
+                # (the months of the one-off events: a series' dates are on its card)
+                self.assertEqual(keys, ["2026-11", "2027-02", "2027-03", "2027-06", "2028-02", "2028-03", "2028-05"])
                 for key, tag in ms:
                     folded = key >= "2028-01"
                     self.assertEqual("data-cm-more data-dflt-hidden" in tag, folded, key)
@@ -297,11 +310,12 @@ class EventsPage(unittest.TestCase):
                 self.assertEqual([k for k, _ in chips], keys)
                 for key, rest in chips:
                     self.assertEqual("data-cm-more data-dflt-hidden" in rest, key >= "2028-01", key)
-                # one button, right after December 2027 and before January 2028; it says how many dates it shows
+                # one button, right after the last open month and before the first folded one; it says how many dates
+                # it shows
                 self.assertEqual(page.count('class="cm-ev-more"'), 1)
                 at = page.index('class="cm-ev-more"')
-                self.assertLess(page.index('x-ref="m2027-12"'), at)
-                self.assertLess(at, page.index('x-ref="m2028-01"'))
+                self.assertLess(page.index('x-ref="m2027-06"'), at)
+                self.assertLess(at, page.index('x-ref="m2028-02"'))
                 button = page[at:page.index("</div>", at)]
                 self.assertIn('data-js-only x-show="!more && moreCount"', button)
                 self.assertIn('@click="showMore()"', button)
@@ -311,28 +325,28 @@ class EventsPage(unittest.TestCase):
                     if key >= "2028-01":
                         sec = section_of(page, f'<section class="cm-month" data-cm-month x-ref="m{key}"')
                         folded += len(re.findall(r'<li id="[^"]+" data-group=', sec))
-                # 12 booth dates, the ACM, the assembly, the roundup (and the 2028 committee meetings once the settings
-                # list dates that far: config/site.yml events_until)
-                self.assertGreaterEqual(folded, 15)
+                # the ACM, the assembly, the roundup (a series' 2028 dates are on its card)
+                self.assertEqual(folded, 3)
                 self.assertIn(f'data-label="{html.escape(words, quote=True)}"', button)
                 self.assertIn(">" + words.replace("{n}", str(folded)) + "</span>", button)
 
-    def test_our_monthly_meetings_are_pinned_on_top(self):
+    def test_the_monthly_series_come_after_the_one_off_events(self):
         for url, lang in (("/events/", "en"), ("/es/events/", "es")):
             page = pages(self)["main"][url]
             with self.subTest(url=url):
                 self.assertEqual(page.count('id="ev-pinned"'), 1)
                 pinned = section_of(page, '<section id="ev-pinned"')
-                self.assertTrue(pinned.startswith('<section id="ev-pinned" class="mb-10" aria-labelledby="ev-pinned-title">'))
-                self.assertIn(T["committee.events.pinned_title"][lang], text(pinned))
-                self.assertIn(T["committee.events.pinned_text"][lang], text(pinned))
-                self.assertIn("#i-pin", pinned)
-                for never in ("x-show=\"filter", "data-group", "data-cm-expire", "data-dflt-hidden"):
-                    self.assertNotIn(never, pinned)
-                # after the filter bar and the colour key, before the weekly open meetings and the months
-                self.assertLess(page.index('class="ev-legend"'), page.index('id="ev-pinned"'))
+                self.assertTrue(pinned.startswith('<section id="ev-pinned" class="ev-series-sec" x-ref="series" '
+                                                  'x-show="monthVisible($el)" aria-labelledby="ev-pinned-title">'))
+                self.assertIn(T["evlist.series_title"][lang], text(pinned))
+                self.assertIn(T["evlist.series_text"][lang], text(pinned))
+                self.assertNotIn("data-dflt-hidden", pinned)
+                # each series a card of the list (the filters show or hide it like any other)
+                self.assertGreaterEqual(pinned.count('x-show="show($el)"'), 3)
+                # the one-off events first (the months), then every month, then every week
+                self.assertLess(page.index('class="ev-legend"'), page.index('class="cm-month"'))
+                self.assertLess(page.rindex('class="cm-month"'), page.index('id="ev-pinned"'))
                 self.assertLess(page.index('id="ev-pinned"'), page.index('<section id="ev-weekly"'))
-                self.assertLess(page.index('<section id="ev-weekly"'), page.index('class="cm-month"'))
                 # the committee meeting's dark card, the page's first .cm-pinned, then the Grapevine Meeting's
                 self.assertEqual(page.count('<article class="cm-pinned'), 1)
                 self.assertLess(pinned.index('<article class="cm-pinned @container" x-data="cmMeeting('), pinned.index('id="ev-next-gvm"'))
@@ -378,30 +392,46 @@ class EventsPage(unittest.TestCase):
 
 
 # --------------------------------------------------------------------------- the list in the browser
-# The agenda in miniature: the chips, the pinned section (the Grapevine Meeting), the weekly open meetings, two open
-# months and two folded ones — the card ids name their groups and month.
+# The agenda in miniature: the kind chips and two menus (the language, the city), two open months of one-off events (a
+# cancelled one among them) and two folded ones, the monthly series (the committee meeting's card with its dates'
+# anchors, the booth's card with a date it lists and one it does not), the weekly open meetings — the card ids name
+# what they are.
 DOM_JS = r"""
 const scrolled = [], focused = [];
-El.prototype.scrollIntoView = function () { scrolled.push(this.attrs.id || this.tagName); };
-El.prototype.focus = function (o) { focused.push([this.attrs.id || this.tagName, !!(o && o.preventScroll)]); };
-const chip = (f) => el("button", { "data-cm-filter": f }, f === "all" ? [] : [el("span", { class: "cm-chip-count" }, [], "0")]);
-const card = (id, g, end) => el("li", { id, "data-group": g, "data-cm-expire": end || "2030-01-01T00:00:00Z" },
-                                [el("article", { class: "card cm-event" })]);
+const name = (e) => e.attrs.id || e.attrs["data-kind"] || e.tagName;
+El.prototype.scrollIntoView = function () { scrolled.push(name(this)); };
+El.prototype.focus = function (o) { focused.push([name(this), !!(o && o.preventScroll)]); };
+const chip = (k) => el("button", { "data-ev-kind": k }, k ? [el("span", { class: "cm-chip-count" }, [], "0")] : []);
+const menu = (k, values) => el("select", { "data-ev-facet": k }, ["", ...values].map((v) => el("option", { value: v })));
+const card = (id, g, f, end) => el("li", Object.assign(id ? { id } : {}, { "data-group": g, "data-cm-expire": end || "2030-01-01T00:00:00Z" }, f),
+                                   [el("article", { class: "card cm-event" })]);
+const facets = (kind, lang, mode, city) => Object.assign({ "data-kind": kind, "data-lang": lang, "data-mode": mode }, city ? { "data-city": city } : {});
 const month = (key, more, kids) => el("section", Object.assign({ class: "cm-month", "data-cm-month": "" }, more ? { "data-cm-more": "" } : {}),
                                       [el("h2", Object.assign({ id: "month-" + key }, more ? { tabindex: "-1" } : {})), el("ol", {}, kids)]);
 function setup(opts) {
   opts = opts || {};
-  const chips = ["all", "committee", "neta", "calendar"].map(chip);
-  const pinned = el("section", { id: "ev-pinned" }, [el("article", { id: "ev-next-gvm", class: "card" }, [el("h3", { id: "ev-next-gvm-title" })])]);
-  const weekly = el("section", { id: "ev-weekly" }, [el("article", { class: "card" }, [el("h3", { id: "ev-weekly-gv" })])]);
+  const chips = ["", "workshop", "area", "booth", "online", "committee", "calendar"].map(chip);
+  const menus = [menu("lang", ["en", "es"]), menu("mode", ["inperson", "online"]), menu("city", ["austin", "dallas", "houston", "tyler"])];
   const months = [
-    month("2026-11", false, [card("ev-committee-2026-11-18", "committee neta", "2026-11-19T02:00:00Z"), card("zz-workshop", "neta")]),
-    month("2027-03", false, [card("ev-lv-calendar-zz-taller", "calendar")]),
-    month("2028-01", true, [card("ev-committee-2028-01-19", "committee neta"), card("ev-recurring-zz-booth-2028-01-08", "neta")]),
-    month("2028-05", true, [card("ev-gv-calendar-zz-roundup", "calendar")]),
+    month("2026-11", false, [card("zz-workshop", "neta", facets("workshop", "en", "inperson", "tyler"), "2026-11-29T00:00:00Z"),
+                             Object.assign(card("zz-off", "neta", facets("workshop", "es", "inperson", "dallas")), {})]),
+    month("2027-03", false, [card("ev-lv-calendar-zz-taller", "calendar", facets("calendar", "es", "inperson", "houston"))]),
+    month("2028-02", true, [card("zz-acm-2028", "neta", facets("area", "en", "inperson", "dallas"))]),
+    month("2028-05", true, [card("ev-gv-calendar-zz-roundup", "calendar", facets("calendar", "en", "inperson", "austin"))]),
   ];
+  months[0].children[1].children[1].attrs["data-ev-cancelled"] = "";
+  const li = (id, g, f, kids) => el("li", Object.assign(id ? { id } : {}, { "data-group": g, "data-cm-expire": "2030-01-01T00:00:00Z" }, f), kids);
+  const committee = li("", "committee neta", facets("committee", "en", "online"), [
+    el("span", {}, [el("span", { id: "ev-committee-2026-11-18" }), el("span", { id: "ev-committee-2026-12-16" })]),
+    el("article", { class: "cm-pinned" })]);
+  const booth = li("ev-series-zz-booth", "neta", facets("booth", "en", "inperson", "dallas"), [
+    el("article", { class: "card cm-event" }, [el("ol", { "data-cm-max": "3" }, [
+      el("li", { id: "ev-recurring-zz-booth-2026-12-12", class: "is-next" }), el("li", { id: "ev-recurring-zz-booth-2027-03-13", class: "hidden" })])])]);
+  const series = el("section", { id: "ev-pinned" }, [el("h2", { id: "ev-pinned-title" }), el("ul", {}, [committee, booth])]);
+  const weekly = el("section", { id: "ev-weekly" }, [el("ul", {}, [
+    li("", "calendar", facets("online", "es", "online"), [el("article", { class: "card cm-event" }, [el("h3", { id: "ev-weekly-lv" })])])])]);
   const root = el("section", { "data-count-label": "Showing {n} events", "data-count-label-one": "Showing 1 event" },
-                  [el("div", {}, chips), pinned, weekly].concat(months));
+                  [el("div", {}, chips.concat(menus))].concat(months, [series, weekly]));
   const p = page([root], { files: ["time", "src/assets/js/app.js", "src/assets/js/committee.js"], alpine: true, at: opts.at || "2026-11-13T18:00:00Z" });
   if (opts.hash) p.win.location.hash = opts.hash;
   if (opts.search) p.win.location.search = opts.search;
@@ -413,10 +443,10 @@ function setup(opts) {
   c.$root = root; c.$nextTick = (fn) => fn(); c.$refs = {};
   c.init();
   const byId = (id) => p.doc.getElementById(id);
-  const state = () => ({ filter: c.filter, more: c.more, text: c.countText(), moreCount: c.moreCount,
-    counts: chips.slice(1).map((b) => b.querySelector(".cm-chip-count").textContent),
-    shown: [...root.querySelectorAll("li[data-group]")].filter((li) => c.show(li)).map((li) => li.attrs.id) });
-  const flashed = () => [...root.querySelectorAll(".cm-flash")].map((a) => a.parent.attrs.id || a.parent.tagName);
+  const state = () => ({ f: Object.assign({}, c.f), active: c.active, more: c.more, text: c.countText(), moreCount: c.moreCount,
+    counts: Object.fromEntries(chips.slice(1).map((b) => [b.attrs["data-ev-kind"], c.kindCount(b.attrs["data-ev-kind"])])),
+    shown: [...root.querySelectorAll("li[data-group]")].filter((li) => c.show(li)).map(name) });
+  const flashed = () => [...root.querySelectorAll(".cm-flash")].map((a) => name(a.parent));
   const hash = (h) => { p.win.location.hash = h; p.fireWin("hashchange"); };
   const reveal = (id) => p.win.dispatchEvent(new p.win.CustomEvent("cm:reveal", { detail: { id } }));
   return { p, c, root, months, byId, state, flashed, hash, reveal, timers };
@@ -425,18 +455,25 @@ function setup(opts) {
 
 LIST_JS = DOM_JS + r"""
 const res = {};
-{ // the chips, "All", the fold and "Show 2028 dates"
+{ // the kind chips, the menus, "Clear filters", the fold and "Show 2028 dates"
   const t = setup();
   res.start = t.state();
-  t.c.set("committee");
-  res.committee = t.state();
-  t.c.set("calendar");
+  t.c.setKind("calendar");
   res.calendar = t.state();
+  t.c.setKind("calendar");
+  res.calendarAgain = t.state();
+  t.c.f.lang = "es"; t.c.changed();
+  res.spanish = t.state();
+  t.c.setKind("committee");
+  res.nothing = t.state();
+  t.c.clear();
+  res.cleared = t.state();
   // what Alpine re-reads: show() looks at `more` (so the fold opens on the page)
   const seen = new Set();
   const watched = new Proxy(t.c, { get(o, k, r) { seen.add(k); return Reflect.get(o, k, r); } });
   watched.show(t.byId("ev-gv-calendar-zz-roundup"));
   res.readsMore = seen.has("more");
+  t.c.setKind("calendar");
   const label = el("span", { "data-label": "Show 2028 dates ({n})" });
   res.label = t.c.moreText(label);
   scrolled.length = 0; focused.length = 0;
@@ -444,52 +481,60 @@ const res = {};
   res.shown = t.state();
   res.showFocus = focused.slice();
 }
-{ // a link to a card the chip hides, into the fold, to the weekly meetings and the pinned card
+{ // a link to a card the filters hide, into the fold, to a series' date, the committee meeting, a weekly meeting
   const t = setup();
-  t.c.set("calendar");
+  t.c.setKind("calendar");
   scrolled.length = 0; focused.length = 0;
-  t.hash("#ev-committee-2026-11-18");
-  res.toCommittee = { state: t.state(), scrolled: scrolled.slice(), focused: focused.slice(), flashed: t.flashed(),
-                      tabindex: t.byId("ev-committee-2026-11-18").getAttribute("tabindex") };
+  t.hash("#zz-workshop");
+  res.toWorkshop = { state: t.state(), scrolled: scrolled.slice(), focused: focused.slice(), flashed: t.flashed(),
+                     tabindex: t.byId("zz-workshop").getAttribute("tabindex") };
   t.timers.splice(0).forEach((fn) => fn());
   res.markGoes = t.flashed();
-  t.c.set("neta");
-  t.hash("#ev-gv-calendar-zz-roundup");
+  t.c.setKind("area");
+  t.hash("#zz-acm-2028");
   res.intoFold = t.state();
   t.timers.splice(0).forEach((fn) => fn());
-  t.c.set("committee");
-  scrolled.length = 0; focused.length = 0;
-  t.reveal("ev-weekly-gv");
-  res.toWeekly = { filter: t.c.filter, scrolled: scrolled.slice(), flashed: t.flashed(), tabindex: t.byId("ev-weekly-gv").getAttribute("tabindex") };
-  t.c.set("calendar");
-  t.reveal("ev-weekly-gv");
-  res.weeklyUnderCalendar = t.c.filter;
-  t.timers.splice(0).forEach((fn) => fn());
-  t.c.set("neta");
+  t.c.setKind("committee");
   scrolled.length = 0;
-  t.reveal("ev-next-gvm");
-  res.toPinned = { filter: t.c.filter, scrolled: scrolled.slice(), flashed: t.flashed().length > 0 };
+  t.hash("#ev-recurring-zz-booth-2027-03-13");
+  res.toSeriesDate = { f: t.state().f, scrolled: scrolled.slice(), flashed: t.flashed() };
+  t.timers.splice(0).forEach((fn) => fn());
+  t.c.setKind("booth");
+  scrolled.length = 0;
+  t.reveal("ev-committee-2026-12-16");
+  res.toCommittee = { f: t.state().f, scrolled: scrolled.slice() };
+  t.timers.splice(0).forEach((fn) => fn());
+  t.c.f.lang = "en";
+  scrolled.length = 0;
+  t.reveal("ev-weekly-lv");
+  res.toWeekly = { f: t.state().f, scrolled: scrolled.slice() };
+  t.c.clear(); t.c.f.lang = "es";
+  t.reveal("ev-weekly-lv");
+  res.weeklyUnderSpanish = t.state().f;
   scrolled.length = 0;
   t.reveal("nowhere");
   t.reveal("");
-  res.nothing = { filter: t.c.filter, scrolled: scrolled.slice() };
+  res.nowhere = { f: t.state().f, scrolled: scrolled.slice() };
 }
 { // a card that has passed: left alone
   const t = setup();
-  t.p.clock.now = Date.parse("2026-11-19T03:00:00Z");      // the committee meeting of Nov 18 is over
+  t.p.clock.now = Date.parse("2026-11-29T01:00:00Z");      // the workshop of Nov 28 is over
   t.p.minute();
-  t.c.set("calendar");
+  t.c.setKind("calendar");
   scrolled.length = 0;
-  t.hash("#ev-committee-2026-11-18");
-  res.passed = { filter: t.c.filter, scrolled: scrolled.slice(), state: t.state() };
+  t.hash("#zz-workshop");
+  res.passed = { f: t.state().f, scrolled: scrolled.slice(), state: t.state() };
 }
-{ // on load: a link into a folded month opens it; ?filter= and a card it hides: All
-  const t = setup({ hash: "#ev-recurring-zz-booth-2028-01-08" });
+{ // on load: a link into a folded month opens it; the filters from the address (only what the page offers); the old
+  // ?filter= chips
+  const t = setup({ hash: "#zz-acm-2028" });
   res.load = { state: t.state(), scrolled: scrolled.slice(-1) };
-  const u = setup({ hash: "#ev-committee-2026-11-18", search: "?filter=calendar" });
-  res.loadFilter = u.c.filter;
-  const v = setup({ search: "?filter=committee" });
-  res.loadOnlyFilter = { filter: v.c.filter, more: v.c.more };
+  res.fromAddress = setup({ search: "?kind=workshop&lang=es&city=tyler&district=99&mode=boat" }).c.f;
+  res.oldCalendar = setup({ search: "?filter=calendar" }).c.f.kind;
+  res.oldCommittee = setup({ search: "?filter=committee&kind=booth" }).c.f.kind;
+  res.oldNeta = setup({ search: "?filter=neta" }).c.active;
+  const u = setup({ hash: "#zz-workshop", search: "?kind=calendar" });
+  res.loadHidden = u.c.active;
 }
 out(res);
 """
@@ -505,65 +550,73 @@ class InTheBrowser(unittest.TestCase):
             InTheBrowser.r = TCT.js(self, LIST_JS)
         return InTheBrowser.r
 
-    def test_chips_all_and_the_fold(self):
+    def test_chips_menus_and_the_fold(self):
         r = self.result()
         s = r["start"]
-        # the committee meetings count under NETA 65 events too; the folded months' cards are counted
-        self.assertEqual(s["counts"], ["2", "4", "2"])
-        self.assertEqual((s["filter"], s["more"]), ("all", False))
-        # "All": every open card, the committee meeting's too; the folded months wait for the button
-        self.assertEqual(s["shown"], ["ev-committee-2026-11-18", "zz-workshop", "ev-lv-calendar-zz-taller"])
-        self.assertEqual(s["text"], "Showing 3 events")
-        self.assertEqual(s["moreCount"], 3)
-        self.assertEqual((r["committee"]["shown"], r["committee"]["moreCount"]), (["ev-committee-2026-11-18"], 1))
-        self.assertEqual(r["committee"]["text"], "Showing 1 event")
+        # each kind chip counts the cards of its kind — the folded months' too, never a cancelled one
+        self.assertEqual(s["counts"], {"workshop": 1, "area": 1, "booth": 1, "online": 1, "committee": 1, "calendar": 2})
+        self.assertEqual((s["active"], s["more"]), (False, False))
+        # no filter: every open card (the cancelled one too, struck through — never counted); the folded months wait
+        self.assertEqual(s["shown"], ["zz-workshop", "zz-off", "ev-lv-calendar-zz-taller", "committee", "ev-series-zz-booth",
+                                      "online"])
+        self.assertEqual(s["text"], "Showing 5 events")
+        self.assertEqual(s["moreCount"], 2)
         self.assertEqual((r["calendar"]["shown"], r["calendar"]["moreCount"]), (["ev-lv-calendar-zz-taller"], 1))
+        self.assertEqual(r["calendar"]["text"], "Showing 1 event")
+        self.assertEqual(r["calendarAgain"]["f"]["kind"], "", "the chip picked again lets go")
+        # Spanish: the Spanish cards; each chip counts its kind in Spanish
+        self.assertEqual(r["spanish"]["shown"], ["zz-off", "ev-lv-calendar-zz-taller", "online"])
+        self.assertEqual(r["spanish"]["counts"], {"workshop": 0, "area": 0, "booth": 0, "online": 1, "committee": 0, "calendar": 1})
+        self.assertEqual((r["nothing"]["shown"], r["nothing"]["text"], r["nothing"]["active"]), ([], "Showing 0 events", True))
+        self.assertEqual((r["cleared"]["f"], r["cleared"]["active"]), ({"kind": "", "lang": "", "mode": "", "city": "", "district": ""}, False))
         self.assertTrue(r["readsMore"])
-        self.assertEqual(r["label"], "Show 2028 dates (1)", "the chip picked's count")
+        self.assertEqual(r["label"], "Show 2028 dates (1)", "the cards the filters pick")
         # "Show 2028 dates" under GV & LV calendars: the folded cards show; the keyboard goes to May 2028's heading
-        # (January has nothing of the calendars)
+        # (February has nothing of the calendars)
         self.assertEqual(r["shown"]["more"], True)
         self.assertEqual(r["shown"]["shown"], ["ev-lv-calendar-zz-taller", "ev-gv-calendar-zz-roundup"])
-        self.assertEqual(r["shown"]["text"], "Showing 2 events")
         self.assertEqual(r["showFocus"], [["month-2028-05", False]])
 
     def test_a_link_shows_its_card(self):
         r = self.result()
-        t = r["toCommittee"]
-        self.assertEqual(t["state"]["filter"], "all", "the chip that hid it lets go")
+        t = r["toWorkshop"]
+        self.assertEqual((t["state"]["f"]["kind"], t["state"]["active"]), ("", False), "the filters that hid it let go")
         self.assertEqual(t["state"]["more"], False)
-        self.assertEqual(t["scrolled"], ["ev-committee-2026-11-18"])
-        self.assertEqual(t["focused"], [["ev-committee-2026-11-18", True]], "focused, without a second scroll")
+        self.assertEqual(t["scrolled"], ["zz-workshop"])
+        self.assertEqual(t["focused"], [["zz-workshop", True]], "focused, without a second scroll")
         self.assertEqual(t["tabindex"], "-1")
-        self.assertEqual(t["flashed"], ["ev-committee-2026-11-18"], "its card is marked a moment")
+        self.assertEqual(t["flashed"], ["zz-workshop"], "its card is marked a moment")
         self.assertEqual(r["markGoes"], [])
-        # into a folded month: the fold opens; the chip that shows it stays
-        self.assertEqual((r["intoFold"]["filter"], r["intoFold"]["more"]), ("all", True))
-        # the "Next 5 weeks" calendar's cm:reveal: a weekly open meeting under "Committee meetings" → All
-        self.assertEqual(r["toWeekly"]["filter"], "all")
-        self.assertEqual(r["toWeekly"]["scrolled"], ["ev-weekly-gv"])
-        self.assertEqual(r["toWeekly"]["tabindex"], "-1")
-        self.assertEqual(r["toWeekly"]["flashed"], ["ev-weekly"], "its card (the article around the heading)")
-        self.assertEqual(r["weeklyUnderCalendar"], "calendar", "shown there already")
-        # the pinned Grapevine Meeting: always shown, the chip stays
-        self.assertEqual(r["toPinned"], {"filter": "neta", "scrolled": ["ev-next-gvm"], "flashed": True})
-        # an id that is not in the list: nothing
-        self.assertEqual(r["nothing"], {"filter": "neta", "scrolled": []})
+        # into a folded month: the fold opens; the filter that shows it stays
+        self.assertEqual((r["intoFold"]["f"]["kind"], r["intoFold"]["more"]), ("area", True))
+        # a series' date its card does not list (or the committee meeting's): its card, the filters cleared
+        self.assertEqual((r["toSeriesDate"]["f"]["kind"], r["toSeriesDate"]["scrolled"]), ("", ["ev-series-zz-booth"]))
+        self.assertEqual(r["toSeriesDate"]["flashed"], ["ev-series-zz-booth"])
+        self.assertEqual((r["toCommittee"]["f"]["kind"], r["toCommittee"]["scrolled"]), ("", ["committee"]))
+        # the "Next 5 weeks" calendar's cm:reveal: La Viña's weekly meeting under "English" → cleared; under
+        # "Spanish" it shows already
+        self.assertEqual((r["toWeekly"]["f"]["lang"], r["toWeekly"]["scrolled"]), ("", ["online"]))
+        self.assertEqual(r["weeklyUnderSpanish"]["lang"], "es")
+        self.assertEqual((r["nowhere"]["f"]["lang"], r["nowhere"]["scrolled"]), ("es", []))
 
     def test_a_card_that_has_passed_is_left_alone(self):
         p = self.result()["passed"]
-        self.assertEqual(p["filter"], "calendar")
+        self.assertEqual(p["f"]["kind"], "calendar")
         self.assertEqual(p["scrolled"], [])
-        self.assertNotIn("ev-committee-2026-11-18", p["state"]["shown"])
-        self.assertEqual(p["state"]["counts"], ["1", "3", "2"])
+        self.assertNotIn("zz-workshop", p["state"]["shown"])
+        self.assertEqual(p["state"]["counts"]["workshop"], 0)
 
     def test_on_load(self):
         r = self.result()
-        self.assertEqual((r["load"]["state"]["more"], r["load"]["state"]["filter"]), (True, "all"))
-        self.assertEqual(r["load"]["scrolled"], ["ev-recurring-zz-booth-2028-01-08"])
-        self.assertIn("ev-recurring-zz-booth-2028-01-08", r["load"]["state"]["shown"])
-        self.assertEqual(r["loadFilter"], "all", "a link to a card the ?filter= hides")
-        self.assertEqual(r["loadOnlyFilter"], {"filter": "committee", "more": False})
+        self.assertEqual((r["load"]["state"]["more"], r["load"]["state"]["active"]), (True, False))
+        self.assertEqual(r["load"]["scrolled"], ["zz-acm-2028"])
+        self.assertIn("zz-acm-2028", r["load"]["state"]["shown"])
+        # the filters of the address, each only when the page offers it (no district menu here, no "boat")
+        self.assertEqual(r["fromAddress"], {"kind": "workshop", "lang": "es", "mode": "", "city": "tyler", "district": ""})
+        self.assertEqual(r["oldCalendar"], "calendar")
+        self.assertEqual(r["oldCommittee"], "booth", "?kind= wins over the old ?filter=")
+        self.assertFalse(r["oldNeta"], "?filter=neta: every card")
+        self.assertFalse(r["loadHidden"], "a link to a card the address's filter hides clears it")
 
 
 if __name__ == "__main__":

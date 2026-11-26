@@ -377,6 +377,39 @@ sitemap: false
   </div>
 </section>
 
+{#- ============ Events to check (eleventy/filters/event-list.js dataChecks: evDataChecks) ============
+    What the events' data still needs, for the committee: an event still "to be confirmed" 60 days or less before
+    its day, a venue still to be announced 45 days or less before it, a content/events file of an event to come with
+    no `url:` (never made up: added when there is one), an event made from a dated flyer with no summary, and the
+    content/events files of events over more than 90 days ago (to delete). Each: its day, its title (its page on the
+    site, when it has one) and its file (on GitHub). Nothing to check: no section. -#}
+{%- set evc = db | evDataChecks(site) -%}
+{% if evc.n %}
+<section id="event-checks" class="section container-page pt-0" aria-labelledby="evcheck-title">
+  {{ ui.sectionHead("evlist.check.title" | t(lang), "evlist.check.sub" | t(lang), "", "", "calendar-search", { eyebrow: "evlist.check.eyebrow" | t(lang), id: "evcheck-title", lang: lang }) }}
+  <div class="grid gap-5 lg:grid-cols-2">
+    {%- for c in evc.checks %}
+    <article class="card card-pad" aria-labelledby="evcheck-{{ c.key }}">
+      {%- set cIcon = "calendar-x" if c.key == "stale" else "calendar-clock" %}
+      <h3 id="evcheck-{{ c.key }}" class="card-h"><span class="text-grape!">{% icon cIcon, "size-5" %}</span>{{ ("evlist.check." + c.key) | t(lang, { n: c.items.length }) }}</h3>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{{ ("evlist.check." + c.key + "_text") | t(lang, { days: c.days }) }}</p>
+      <ul class="mt-4 divide-y divide-line border-t border-line text-sm" role="list">
+        {%- for it in c.items %}
+        <li class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-2.5">
+          <time class="w-28 shrink-0 font-semibold tabular-nums text-muted" datetime="{{ it.ymd }}">{{ it.ymd | fmtDate(lang, "medium") }}</time>
+          <span class="min-w-0 flex-1 break-words font-medium text-ink">{% if it.href %}<a class="link" href="{{ it.href | lurl(lang) }}">{{ it.title }}</a>{% else %}{{ it.title }}{% endif %}</span>
+          {%- if it.file and site.repository %}
+          <a class="link basis-full break-all font-mono text-xs text-muted" href="{{ site.repository }}/blob/main/{{ it.file }}" target="_blank" rel="noopener" translate="no">{{ it.file }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+          {%- endif %}
+        </li>
+        {%- endfor %}
+      </ul>
+    </article>
+    {%- endfor %}
+  </div>
+</section>
+{% endif %}
+
 {#- ============ How an update works + behind the scenes ============ -#}
 <section class="section container-page pt-0" aria-labelledby="sched-title">
   {{ ui.sectionHead("community.status.sched_title" | t(lang), "community.status.sched_sub" | t(lang), "", "", "calendar-clock", { eyebrow: "community.status.sched_eyebrow" | t(lang), id: "sched-title", lang: lang }) }}
