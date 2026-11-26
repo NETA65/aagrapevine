@@ -1347,18 +1347,38 @@
   }
 
   /* ---------------- committee sub-nav: show "you are here" ----------------
-     On phones the pill bar (Meeting · Events · Documents · Photos · Bulletin)
+     On phones the pill bar (Meetings · Events · Portfolio · Photos · Bulletin · Tracker)
      scrolls sideways and the current tab can start off-screen. Center it inside the
-     bar. Only the bar's own scrollLeft changes (scrollIntoView would also move the page). */
+     bar, so a neighbour shows on each side (the first and last tabs: the bar's own start /
+     end). Only the bar's own scroll position changes (scrollIntoView would also move the page),
+     at once ("instant": never the page's smooth scrolling) and with the bar's snapping off
+     while it moves (a snap could carry it to the edge again). The tabs' widths change when the
+     web font arrives and when the window turns, so it is done again then — and when the page
+     comes back from the browser's back/forward cache — until the visitor scrolls the bar
+     themselves. */
   function centerSubnav() {
     var nav = document.querySelector(".cm-subnav-scroll");
     var cur = nav && nav.querySelector(".is-current");
-    if (cur && nav.scrollWidth > nav.clientWidth + 1) {
+    if (!nav) return;
+    var touched = false;
+    function center() {
+      if (touched || !cur || nav.scrollWidth <= nav.clientWidth + 1) return;
       var n = nav.getBoundingClientRect(), c = cur.getBoundingClientRect();
       var x = nav.scrollLeft + (c.left - n.left - nav.clientLeft) - (nav.clientWidth - c.width) / 2;
-      nav.scrollLeft = Math.max(0, Math.min(x, nav.scrollWidth - nav.clientWidth));
+      x = Math.round(Math.max(0, Math.min(x, nav.scrollWidth - nav.clientWidth)));
+      var snap = nav.style.scrollSnapType;
+      nav.style.scrollSnapType = "none";
+      if (nav.scrollTo) nav.scrollTo({ left: x, behavior: "instant" }); else nav.scrollLeft = x;
+      nav.style.scrollSnapType = snap;
     }
-    if (nav) subnavEdges(nav);
+    ["pointerdown", "wheel", "keydown"].forEach(function (ev) {
+      nav.addEventListener(ev, function () { touched = true; }, { passive: true });
+    });
+    center();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(center);
+    window.addEventListener("resize", center);
+    window.addEventListener("pageshow", center);
+    subnavEdges(nav);
   }
   /* The bar fades out on the side(s) that still have tabs to scroll to (committee.css .cm-subnav-scroll) */
   function subnavEdges(nav) {

@@ -742,8 +742,9 @@ class Page(unittest.TestCase):
         # one album, one photo: the words for one
         self.assertEqual(stats(self.r["one-en"]), [("album", "1"), ("photo", "1"), ("magazine cover", "1")])
         self.assertEqual(stats(self.r["one-es"]), [("álbum", "1"), ("foto", "1"), ("portada de las revistas", "1")])
-        # the sub-nav counts everything the page shows
-        self.assertRegex(self.r["covers-en"], r'cm-subnav-link is-current"[^>]*>.*?<span class="cm-subnav-count">14</span>')
+        # the sub-nav's current tab, without a count (since November 2026: the counts were noise)
+        self.assertRegex(self.r["covers-en"], r'cm-subnav-link is-current" aria-current="page">.*?<span>Photos</span></a>')
+        self.assertNotIn("cm-subnav-count", self.r["covers-en"])
 
     def test_the_covers_section(self):
         for lang in ("en", "es"):

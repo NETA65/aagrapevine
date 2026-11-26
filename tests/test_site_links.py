@@ -451,7 +451,8 @@ class Counts(unittest.TestCase):
         search, committee = read("src", "pages", "search.njk"), read("eleventy", "filters", "committee.js")
         self.assertIn("db | cmEventEnds(lang)", search)
         self.assertNotIn('where("extra.past", false)', search)
-        self.assertIn("const eventEnds = upcomingEventEnds(db, L);", committee)
+        # (the committee sub-nav's Events tab counted the same until November 2026: its tabs have no counts now)
+        self.assertNotIn("upcomingEventEnds(db, L)", committee[committee.index('addShortcode("committeeNav"'):])
 
     def test_subscriptions_from_the_us_store(self):
         shop = {"subscriptions": [
@@ -675,12 +676,13 @@ class BuiltPages(unittest.TestCase):
         # an anchor met twice keeps one page (never two pages at one address)
         self.assertEqual(r["twice"], ["/events/2099-03-19-spring-assembly/", "/es/events/2099-03-19-spring-assembly/"])
 
-    def test_search_events_tile_counts_like_the_events_tab(self):
+    def test_search_events_tile_counts_the_upcoming_events(self):
+        # (the committee sub-nav's Events tab counted them too until November 2026: its tabs have no counts now)
         p = self.built()
         for prefix, word in (("", "items"), ("/es", "elementos")):
-            tab = re.search(r'href="' + prefix + r'/events/" class="cm-subnav-link[^"]*"[^>]*>.*?<span class="cm-subnav-count"[^>]*>(\d+)<', p[f"{prefix}/events/"], re.S)
-            n = int(tab.group(1))
-            self.assertEqual(n, 4)            # the assembly, the monthly booth once and the two calendar events
+            tab = re.search(r'href="' + prefix + r'/events/" class="cm-subnav-link[^"]*"[^>]*>.*?</a>', p[f"{prefix}/events/"], re.S)
+            self.assertNotIn("cm-subnav-count", tab.group(0))
+            n = 4                             # the assembly, the monthly booth once and the two calendar events
             tile = re.search(r'<a href="' + prefix + r'/events/" data-tone="vine">.*?<span class="ss-b-n"([^>]*)>([^<]*)<', p[f"{prefix}/search/"], re.S)
             self.assertEqual(tile.group(2).strip(), f"{n} {word}")
             ends = re.search(r'data-gv-expire-count="([^"]+)"', tile.group(1)).group(1).split()
@@ -699,6 +701,10 @@ class BuiltPages(unittest.TestCase):
                                                        + re.escape(f["name"].replace("&", "&amp;")) + "</a>", re.S))
             self.assertNotIn("{platform}", html)
         en, es = p["/meetings/"], p["/es/meetings/"]
+        # (the service words carry the glossary's marks since November 2026: <abbr …>GVRs</abbr> — the words are compared
+        # without them)
+        unmark = lambda s: re.sub(r'<abbr class="gl-term" data-gl title="[^"]*">([^<]*)</abbr>', r"\1", s)
+        en, es = unmark(en), unmark(es)
         for s in ("Join on Google Meet", "The committee · Monthly on Google Meet", "Central time, on Google Meet.",
                   "Copy Google Meet link", "on a phone or tablet, use the Google Meet app", "Open to every AA member. GVRs, RLVs, DCMs"):
             self.assertIn(s, en)

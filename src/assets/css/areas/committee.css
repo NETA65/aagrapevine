@@ -42,13 +42,6 @@
   }
   .cm-subnav-link:hover { background: var(--c-surface-2); color: var(--c-ink); }
   .cm-subnav-link.is-current { background: var(--c-gv); color: #fff; }
-  .cm-subnav-count {
-    display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.375rem;
-    border-radius: 9999px; font-size: 0.7rem; font-weight: 700; background: var(--c-surface-2); color: var(--c-muted);
-  }
-  /* Solid pill on the current (blue) tab, like the pressed filter chips below: a see-through
-     white pill with white text was 4.1:1 at 11px, below WCAG AA. */
-  .cm-subnav-link.is-current .cm-subnav-count { background: var(--c-surface); color: var(--c-gv); }
 
   /* ---------- /meetings/ board (the committee meeting) (one grid, so the cards line up) ----------
      Markup (= phone) order: countdown · how to join (.cm-join) · next dates (.cm-dates-card) ·
