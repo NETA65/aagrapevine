@@ -880,7 +880,7 @@ function spotlightFile(v) {
 }
 
 /* The day a spotlight story counts as published (YYYY-MM-DD): extra.pub_date, else its date —
-   the same rule as the home page (home.js spotPubDate) and /published/ (published.js). */
+   the same rule as /published/ (published.js) and the spotlight's own list (community.js). */
 function spotDate(i) {
   const p = String((i && i.extra && i.extra.pub_date) || "").slice(0, 10);
   return /^\d{4}-\d{2}-\d{2}$/.test(p) ? p : (String((i && i.date) || "").match(/^\d{4}-\d{2}-\d{2}/) || [""])[0];

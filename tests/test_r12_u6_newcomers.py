@@ -1,5 +1,5 @@
-"""Round 12, "New to AA? / ¿Eres nuevo en AA?" — the first-steps card (src/_includes/macros/ui.njk newcomerCard and
-newcomerLine, eleventy/filters/newcomer.js, config/site.yml links: aa_find / aa_is_aa_for_you / aa_meeting_guide):
+"""Round 12, "New to AA? / ¿Eres nuevo en AA?" — the first-steps card (src/_includes/macros/ui.njk newcomerCard,
+Home's "I'm new to AA" button, eleventy/filters/newcomer.js, config/site.yml links: aa_find / aa_is_aa_for_you / aa_meeting_guide):
 
   * the offices    — ncOffices lists the offices of meetings.feeds that are in our Area, by their own sites (never a
                      feed address), each once, in the settings' order; on a Spanish page the Spanish-speaking office

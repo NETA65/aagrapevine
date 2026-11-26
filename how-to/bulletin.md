@@ -888,7 +888,7 @@ Where everything lives (search for the name in the right-hand column; line numbe
 | What's New and RSS | `src/pages/whats-new.njk`, `src/pages/feed.11ty.js`, `eleventy/filters/community.js` | `hrefOf` |
 | Search | `eleventy/filters/library.js` | `the bulletin's posts` |
 | Digest page and e-mail | `eleventy/filters/community.js`, `src/pages/digest.njk`, `scripts/notify/send_digest.py` | `monthNews`; `month_news`, `post_when`, `md_excerpt` |
-| Words on the pages | `src/_i18n/committee.json`, `src/_i18n/home.json`, `src/_i18n/common.json` | `committee.ann.`, `home.ann_`, `home.pinned`, `nav.bulletin` |
+| Words on the pages | `src/_i18n/committee.json`, `src/_i18n/common.json` | `committee.ann.`, `nav.bulletin` |
 | Run summary lists | `.github/workflows/update.yml` | `Bulletin files to fix`, `Scheduled bulletin posts` |
 
 What the site stores for a post (real data, shortened) — `data/site/announcements.json`:
@@ -1084,7 +1084,6 @@ Each entry has an `"en"` and an `"es"` value; change both and keep placeholders 
 | More information · Open the document | `committee.ann.more_info` · `committee.ann.open_doc` |
 | Nothing on the bulletin right now (and its text) | `committee.ann.empty_title`, `committee.ann.empty_text` |
 | The four steps in *Post to the bulletin*, and the example name | `committee.ann.how_1` … `committee.ann.how_4`, `committee.ann.example_name` |
-| Home: "From the committee", its subtitle, "Read the bulletin", "Pinned" | `home.ann_title`, `home.ann_sub`, `home.ann_all`, `home.pinned` |
 | The menu's "Bulletin" / "Boletín" | `nav.bulletin` |
 | The e-mail's "Bulletin" and "Details" | the `T` table in `scripts/notify/send_digest.py` (keys `"announcement"`, `"details"`) — separate from the site's words |
 

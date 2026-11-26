@@ -387,7 +387,7 @@ pageStyles: ["/assets/css/home.css", "/assets/vendor/lite-yt-embed.css"]
 <section class="section section-band mt-10 sm:mt-12" aria-labelledby="mag-title">
   <div class="container-page">
     {{ ui.sectionHead("home.mag_title" | t(L), "home.mag_sub" | t(L), "/read/" | lurl(L), "home.mag_all" | t(L), "book-open", { eyebrow: "home.mag_eyebrow" | t(L), tone: "text-gv", id: "mag-title", lang: L }) }}
-    <div class="home-mags grid grid-cols-1 gap-6 md:grid-cols-2">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       {% for pub in magOrder %}{{ magColumn(pub, lvIssue if pub == "lv" else gvIssue, L, site) }}{% endfor %}
     </div>
     <div class="home-mag-more mt-6 grid grid-cols-1 gap-4{{ ' lg:grid-cols-2' if hBotm.length }}">
