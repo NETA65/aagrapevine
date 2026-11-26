@@ -7,8 +7,8 @@ true (app.js GV.say, data-gv-say; Alpine x-text). The built pages on their own: 
                   Meeting's during its own), /meetings/' countdown "Live now", five minutes before "Starting soon";
                   otherwise the pill is hidden and wordless. "Meets today" on the groups that meet today.
   * EmptyStates — what a list says once it is empty: /bulletin/ when its last post has expired, /meetings/ and
-                  /published/ (its cards and its archive) when nothing matches, Home's Published writers once its
-                  stories have left the 60 days; the daily quote's "Today" / "Yesterday".
+                  /published/ (its cards and its archive) when nothing matches; the daily quote's "Today" /
+                  "Yesterday". (Home's Published writers, with their "no story" notes, went in November 2026.)
   * Menu        — the phone menu: focus on Close at once, the page behind locked (no scroll, inert) a moment after,
                   never left locked by a close that comes first, and unlocked before focus goes back to Menu; the
                   drawer's reading-settings button still opens the panel.
@@ -179,35 +179,6 @@ class EmptyStates(unittest.TestCase):
                     self.assertEqual(st["text"], T["published.empty.text"][lang])
                     if st["arc"]:
                         self.assertEqual(st["arc"], {"shown": True, "title": T["published.archive.empty_title"][lang]})
-                    self.assertEqual(errors, [])
-                finally:
-                    ctx.close()
-
-    def test_home_published_writers_once_the_stories_have_gone(self):
-        src = built(".")
-        days = int(re.search(r'data-home-spot(?:="")? data-days="(\d+)"', src).group(1))      # ("=''": a /aagrapevine/ build)
-        a65 = sorted(re.findall(r'data-pub="(\d{4}-\d{2}-\d{2})" data-scope="neta65"', src))
-        tx = sorted(re.findall(r'data-pub="(\d{4}-\d{2}-\d{2})" data-scope="texas"', src))
-        if not (a65 or tx):
-            self.skipTest("no story in the window today: the empty note is there from the build")
-        cases = [(central_noon(max(a65 + tx), days + 1), "empty")]
-        if a65 and tx and max(tx) > max(a65):
-            cases.append((central_noon(max(a65), days + 1), "none"))
-        for moment, which in cases:
-            with self.subTest(at=moment, note=which):
-                ctx = new_context(1280, 900)
-                ctx.clock.set_fixed_time(moment)
-                errors: list[str] = []
-                try:
-                    page = open_page(ctx, "", errors)
-                    st = page.evaluate("""() => Object.fromEntries(['data-spot-empty', 'data-spot-none-a65'].map((a) => { const e = document.querySelector('[' + a + ']');
-                        return [a, { shown: !e.hidden, h: e.querySelector('h3').textContent }]; }))""")
-                    title = re.compile(re.escape(T["home.spot_empty_title" if which == "empty" else "home.spot_none_a65_title"]["en"]).replace(r"\{days\}", r"\d+"))
-                    on = st["data-spot-empty" if which == "empty" else "data-spot-none-a65"]
-                    off = st["data-spot-none-a65" if which == "empty" else "data-spot-empty"]
-                    self.assertTrue(on["shown"])
-                    self.assertRegex(on["h"], title)
-                    self.assertEqual(off, {"shown": False, "h": ""}, "the other note stays hidden and wordless")
                     self.assertEqual(errors, [])
                 finally:
                     ctx.close()

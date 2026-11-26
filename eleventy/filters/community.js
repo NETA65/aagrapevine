@@ -714,8 +714,7 @@ export const COUNT_ORDER = ["article", "episode", "video", "post", "pdf", "drive
 
 /** A magazine's front cover from the committee's Drive (drive.py extra.cover { pub "gv" | "lv", year, month, issue,
  *  months, key }) — build_data.is_cover and send_digest.py is_cover are the same test. The digest lists the covers
- *  of a month as ONE row per magazine, never per cover album (monthNews); Home's "Committee uploads" leaves them out
- *  (home.js homeDrive). */
+ *  of a month as ONE row per magazine, never per cover album (monthNews). */
 export const isCover = (it) => it?.source === "drive" && ["gv", "lv"].includes(it?.extra?.cover?.pub);
 /** A cover's news date: the day the site first had it (first_seen) — the day it was added, whatever issue it is of
  *  (a cover's `date` is its issue's first day: the back catalogue would land in 2015). send_digest.py cover_when. */

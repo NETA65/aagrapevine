@@ -544,16 +544,10 @@ function pwArchive(db, lang, h) {
   return arcCache.get(key);
 }
 
-/** db → { total, area, since } — the archive's headline numbers without building the rows (the home page). */
-export function pwArchiveTotals(db) {
-  const data = archiveOf(db);
-  const items = pwArchiveItems(db);
-  return { total: items.length, area: items.filter((it) => it.scope === "neta65").length, since: arcSince(data, items).all };
-}
-
 /** db → the archive's stories the page can list, once each (a story page of either magazine, with a title; by its
- *  key) — the home page's numbers (pwArchiveTotals) and, since round 37's fixer, the site search's entries
- *  (library.js searchIndex: each story at its page on the magazine's site). */
+ *  key) — since round 37's fixer, the site search's entries (library.js searchIndex: each story at its page on the
+ *  magazine's site). (The home page's line with the archive's numbers went with its Published writers section, in
+ *  November 2026: the page's own hero says them.) */
 export function pwArchiveItems(db) {
   const seen = new Set();
   const items = [];

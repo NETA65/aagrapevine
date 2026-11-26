@@ -1,9 +1,9 @@
 /* =====================================================================
-   Area styles: HOME page (owned by the home page).
+   Area styles: HOME page (owned by the home page) — a stylesheet of its own since November 2026
+   (/assets/css/home.css, src/assets/css/home.css: linked by the home page only, so the other pages skip it).
    Only what Tailwind utilities can't express nicely lives here. Colors come
    from the theme tokens (var(--c-*)) so dark mode works; the meeting card in
-   the hero and the service band are always dark, so they use fixed
-   white-on-navy values.
+   the hero is always dark, so it uses fixed white-on-navy values.
    The hero itself is the shared ui.pageHero (main.css → "PAGE HERO"): same art,
    gradient and height as every other page. Only home-specific parts are here.
    ===================================================================== */
@@ -160,38 +160,40 @@
   100% { box-shadow: 0 0 0 0 rgb(74 222 128 / 0); }
 }
 
-/* ---------- 1b. Under the hero: the two meeting cards (below 1024px) + site counters ---------- */
+/* ---------- 1b. Under the hero: the two meeting cards (below 1024px) ---------- */
 .home-under-card { padding: 1.25rem; }
 @media (width >= 40rem) { .home-under-card { padding: 1.25rem 1.5rem; } }
 @media (width < 64rem) {
-  :is(.home-under-meet, .home-under-gvm) + :is(.home-under-gvm, .home-under-stats) { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
+  .home-under-meet + .home-under-gvm { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--c-line); }
 }
-.home-under-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 2rem; }
-/* Phones: no counters (the same sections are in the menu and further down the page) */
-@media (width < 40rem) { .home-under-stats { display: none; } }
-.home-under-label {
-  display: inline-flex; flex-basis: 100%; align-items: center; gap: 0.5rem;
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-muted);
+/* ---------- 1d. "Where would you like to start?" (index.njk .home-choose): four big buttons ----------
+   One under the other on a phone, two columns from 640px, four in a row from 1280px. Each button is a whole
+   link (at least 4.5rem tall — far past the 44px touch size): its icon on a soft tile in its tone, its words
+   (the label, one line under it, and — on "I want to write my story" — the next story deadline), an arrow. */
+.home-choose { padding: 1.25rem; }
+@media (width >= 40rem) { .home-choose { padding: 1.5rem; } }
+.home-choose-title { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); }
+.home-choose-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin-top: 1rem; }
+@media (width >= 40rem) { .home-choose-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (width >= 80rem) { .home-choose-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+:root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-choose-grid { grid-template-columns: minmax(0, 1fr); }
+.home-choose-btn {
+  display: flex; align-items: flex-start; gap: 0.875rem; height: 100%; min-height: 4.5rem; padding: 1rem;
+  border: 1px solid var(--c-line); border-radius: 1rem; background: var(--c-surface);
+  color: var(--c-ink); text-decoration: none; transition: border-color 0.15s, background-color 0.15s, transform 0.15s;
 }
-.home-under-label .icon { color: var(--c-vine); }
-@media (width >= 64rem) { .home-under-label { flex-basis: auto; } }
-.home-stats { flex: 1 1 0%; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 1.5rem; }
-@media (width >= 48rem) { .home-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.home-stat {
-  display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem;
-  margin: -0.25rem; padding: 0.25rem; border-radius: 0.875rem;
-  text-decoration: none; transition: background-color 0.2s ease;
-}
-.home-stat:hover { background: var(--c-surface-2); }
-.home-stat-icon {
-  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: 0.75rem;
-  color: var(--tone); background: var(--tone-soft);
-}
-.home-stat-n { display: block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; line-height: 1.1; color: var(--c-ink); font-variant-numeric: tabular-nums; }
-.home-stat-l { display: block; font-size: 0.85rem; line-height: 1.3; color: var(--c-muted); }
-.home-stat:hover .home-stat-l { color: var(--c-ink); text-decoration: underline; }
+.home-choose-btn:hover { border-color: var(--tone); background: color-mix(in srgb, var(--tone-soft) 45%, var(--c-surface)); }
+.home-choose-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: 0.875rem; color: var(--tone); background: var(--tone-soft); }
+.home-choose-body { display: flex; flex: 1 1 0%; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.home-choose-label { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.25; }
+.home-choose-text { font-size: 0.875rem; line-height: 1.4; color: var(--c-muted); }
+.home-choose-due { display: inline-flex; align-items: center; gap: 0.375rem; margin-top: 0.125rem; font-size: 0.8125rem; font-weight: 600; color: var(--c-ink); }
+.home-choose-go { align-self: center; flex-shrink: 0; color: var(--c-faint); transition: transform 0.15s, color 0.15s; }
+.home-choose-btn:hover .home-choose-go { transform: translateX(2px); color: var(--tone); }
+/* the tone's own colour for the icon is too light on its soft tile in high contrast: ink instead */
+:root[data-contrast="high"] .home-choose-icon { color: var(--c-ink); }
 
-/* ---------- 1c. Daily quote: the second card of the page-overlap block (index.njk → .home-quote) ----------
+/* ---------- 1c. Daily quote: the last card of the page-overlap block (index.njk → .home-quote) ----------
    The card's heading is an eyebrow in the Read tone (above the magazine names in the hierarchy).
    Grapevine's and La Viña's quotes side by side from 1024px (a hairline between them), stacked with a
    divider below that (on tablets two ~40-character columns of italic text read poorly). On phones
@@ -244,266 +246,16 @@
 .home-q-links a { display: inline-flex; align-items: center; gap: 0.375rem; }
 .home-quote-rights { margin-top: 1rem; font-size: 0.75rem; line-height: 1.5; color: var(--c-faint); text-wrap: pretty; }
 
-/* ---------- 2. Published writers spotlight ---------- */
-/* A soft vine / amber glow behind the section that fades out INSIDE it (the mask), so there is
-   no hard seam where the section meets its neighbours. */
-.home-spot { position: relative; isolation: isolate; }
-.home-spot::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background:
-    radial-gradient(55% 60% at 100% 20%, color-mix(in srgb, var(--c-vine) 8%, transparent), transparent 65%),
-    radial-gradient(45% 55% at 0% 80%, color-mix(in srgb, var(--c-lv) 6%, transparent), transparent 65%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
-          mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
-}
-/* Phones: Area 65 cards stacked, then the Texas cards in a swipe row (the `rail` utility).
-   From 640px ONE grid holds both lists (display: contents): Area 65 cards span two columns,
-   and the Texas cards fill in around them (dense). Columns: 2 → 3 (1024px) → 4 (1360px) →
-   5 (1800px) — a step earlier than grid-cards' 4 at 1536px, so 1440px screens get 4 columns
-   (cards stay ≥ 300px wide: 301px at 1360, 320 at 1440, 341 at 1920). */
-.home-spot-grid { display: grid; gap: 1rem; }
-.home-spot-list--a65 { display: grid; gap: 1rem; }
-@media (width >= 40rem) {
-  .home-spot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 1.25rem; }
-  .home-spot-list { display: contents; }
-  .home-spot-item.is-featured, .home-spot-none { grid-column: span 2; }
-}
-@media (width >= 64rem) { .home-spot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (width >= 85rem) { .home-spot-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (width >= 112.5rem) { .home-spot-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-.home-spot-item { min-width: 0; }
-
-/* "See the full list" link card: closes the grid's last row, so no row ends in empty columns,
-   whatever the number of stories. Its width at 2 / 3 / 4 / 5 columns is data-f2…data-f5
-   (eleventy/filters/home.js homeSpotFill → index.njk; home.js redoes it in the browser);
-   0 = that row is already full, so no tile. data-full on the grid = the column counts at which
-   each Area 65 card takes a whole row (only when too few Texas cards are left to sit beside
-   them, which would leave gaps higher up). The ranges below MUST match the column counts above.
-   Phones: no card (the same link is in the section header). */
-.home-spot-fill { display: none; }
-@media (width >= 40rem) { .home-spot-fill { display: flex; min-width: 0; container-type: inline-size; } }
-@media (40rem <= width < 64rem) {
-  .home-spot-fill[data-f2="0"] { display: none; }
-}
-@media (64rem <= width < 85rem) {
-  .home-spot-fill[data-f3="0"] { display: none; }
-  .home-spot-fill[data-f3="2"] { grid-column: span 2; }
-  .home-spot-grid[data-full~="3"] .home-spot-item.is-featured { grid-column: 1 / -1; }
-  .home-spot-grid[data-full~="3"] .home-spot-card.is-featured .home-spot-media { width: min(38%, 30rem); }
-}
-@media (85rem <= width < 112.5rem) {
-  .home-spot-fill[data-f4="0"] { display: none; }
-  .home-spot-fill[data-f4="2"] { grid-column: span 2; }
-  .home-spot-fill[data-f4="3"] { grid-column: span 3; }
-  .home-spot-grid[data-full~="4"] .home-spot-item.is-featured { grid-column: 1 / -1; }
-  .home-spot-grid[data-full~="4"] .home-spot-card.is-featured .home-spot-media { width: min(38%, 30rem); }
-}
-@media (width >= 112.5rem) {
-  .home-spot-fill[data-f5="0"] { display: none; }
-  .home-spot-fill[data-f5="2"] { grid-column: span 2; }
-  .home-spot-fill[data-f5="3"] { grid-column: span 3; }
-  .home-spot-fill[data-f5="4"] { grid-column: span 4; }
-  .home-spot-grid[data-full~="5"] .home-spot-item.is-featured { grid-column: 1 / -1; }
-  .home-spot-grid[data-full~="5"] .home-spot-card.is-featured .home-spot-media { width: min(38%, 30rem); }
-}
-/* A compact link card (icon · text · arrow), centred in the row's height; the whole card is the link. */
-.home-spot-fill {
-  background:
-    radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--c-vine) 10%, transparent), transparent 70%),
-    color-mix(in srgb, var(--c-vine-soft) 45%, var(--c-surface));
-}
-.home-spot-fill-in { position: relative; display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1.25rem 1.5rem; }
-/* a large, faint grape cluster fills the tile's corner (decoration: the card is often a whole row tall) */
-.home-spot-fill-art { position: absolute; right: -1.5rem; bottom: -2rem; width: min(55%, 14rem); height: auto; color: var(--c-vine); opacity: 0.1; transform: rotate(-12deg); pointer-events: none; }
-.home-spot-fill-icon {
-  display: grid; place-items: center; flex-shrink: 0;
-  width: 3rem; height: 3rem; border-radius: 1rem;
-  color: var(--c-vine); background: var(--c-vine-soft);
-}
-.home-spot-fill-text { flex: 1 1 0%; min-width: 0; max-width: 40rem; }
-.home-spot-fill-arrow { flex-shrink: 0; margin-left: auto; color: var(--c-vine); transition: transform 0.2s ease; }
-.home-spot-fill:hover .home-spot-fill-arrow { transform: translateX(2px); }
-
-.home-spot-card { flex-direction: column; }
-.home-spot-media { position: relative; flex-shrink: 0; aspect-ratio: 5 / 2; overflow: hidden; background: var(--tone-soft); }
-.is-featured .home-spot-media { aspect-ratio: 16 / 9; }
-@media (width < 40rem) { .is-featured .home-spot-media { aspect-ratio: 5 / 2; } } /* phones: a shorter picture */
-.home-spot-body { display: flex; flex: 1 1 auto; flex-direction: column; min-width: 0; padding: 1rem 1.125rem 1.125rem; }
-@media (width >= 40rem) {
-  /* Area 65: picture on the left, the story on the right */
-  .home-spot-card.is-featured { flex-direction: row; }
-  .home-spot-card.is-featured .home-spot-media { width: 38%; aspect-ratio: auto; min-height: 15rem; }
-  .home-spot-card.is-featured .home-spot-body { padding: 1.375rem 1.5rem 1.25rem; }
-}
-/* Area 65 writers: vine-green accent, a soft green wash and a ribbon on the picture */
-.home-spot-card.is-featured {
-  border-color: color-mix(in srgb, var(--c-vine) 45%, var(--c-line));
-  background: linear-gradient(135deg, color-mix(in srgb, var(--c-vine-soft) 75%, var(--c-surface)) 0%, var(--c-surface) 60%);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-vine) 22%, transparent), var(--shadow-card);
-}
-.home-spot-card.is-featured:hover, .home-spot-card.is-featured:focus-within {
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-vine) 35%, transparent), var(--shadow-lift);
-}
-.home-spot-ribbon {
-  position: absolute; left: 0.75rem; top: 0.75rem; z-index: 1;
-  display: inline-flex; align-items: center; gap: 0.35rem;
-  border-radius: 9999px; padding: 0.3rem 0.75rem;
-  font-size: 0.72rem; font-weight: 700; line-height: 1.3;
-  color: #fff; background: var(--c-vine);
-  box-shadow: 0 4px 14px -4px rgb(0 0 0 / 0.45);
-}
-[data-theme="dark"] .home-spot-ribbon { color: var(--c-paper); }
-/* Writer monogram (initials as printed: "Victor R." → VR) */
-.home-spot-avatar {
-  display: grid; place-items: center; flex-shrink: 0;
-  width: 2.75rem; height: 2.75rem; border-radius: 9999px;
-  font-family: var(--font-display); font-size: 1rem; font-weight: 600; letter-spacing: 0.02em;
-  color: var(--tone); background: var(--tone-soft);
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--tone) 30%, transparent);
-}
-.is-featured .home-spot-avatar { width: 3.25rem; height: 3.25rem; font-size: 1.15rem; }
-.home-spot-writer { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); overflow-wrap: anywhere; }
-.is-featured .home-spot-writer { font-size: 1.375rem; }
-.home-spot-place { margin-top: 0.15rem; display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; line-height: 1.35; color: var(--c-muted); }
-.home-spot-title { margin-top: 0.75rem; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); text-wrap: pretty; }
-.is-featured .home-spot-title { font-size: 1.35rem; }
-.home-spot-meta { margin-top: 0.4rem; display: flex; flex-wrap: wrap; gap: 0.2rem 0.4rem; font-size: 0.78rem; line-height: 1.4; color: var(--c-faint); }
-/* Footer line: place badge (Area 65 / Texas) · magazine · subscriber hint · auto-translated */
-.home-spot-foot { margin-top: auto; padding-top: 0.875rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem 0.625rem; font-size: 0.75rem; line-height: 1.4; color: var(--c-faint); }
-.home-spot-foot > .badge, .home-spot-foot > [class^="badge-"] { margin-right: -0.25rem; }
-/* "Texas" badge: neutral, with an amber lone star (Area 65 = vine green, GV = blue, LV = amber) */
-.home-badge-tx { background: var(--c-surface-2); color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--c-line); }
-.home-badge-tx .icon { color: var(--c-lv); }
-.home-spot-count { font-size: 0.78rem; padding: 0.25rem 0.75rem; }
-/* No Area 65 story in the window (but Texas ones): a friendly note where the featured cards go */
-.home-spot-none {
-  display: flex; align-items: flex-start; gap: 1rem;
-  border: 1.5px dashed color-mix(in srgb, var(--c-vine) 45%, var(--c-line));
-  border-radius: var(--radius-card);
-  padding: 1.25rem 1.5rem;
-  background: color-mix(in srgb, var(--c-vine-soft) 55%, var(--c-surface));
-}
-/* No Texas story at all in the window */
-.home-spot-empty {
-  display: grid; align-items: center; gap: 1.25rem;
-  border: 1.5px dashed color-mix(in srgb, var(--c-vine) 45%, var(--c-line));
-  border-radius: var(--radius-card);
-  padding: 1.5rem;
-  background:
-    radial-gradient(60% 90% at 100% 0%, color-mix(in srgb, var(--c-vine) 10%, transparent), transparent 70%),
-    var(--c-surface);
-}
-@media (width >= 48rem) {
-  .home-spot-empty { grid-template-columns: auto minmax(0, 1fr); gap: 1.25rem 2rem; padding: 2rem 2.5rem; }
-  .home-spot-empty > :last-child { grid-column: 2; }
-}
-@media (width >= 64rem) {
-  /* message in the middle, the two buttons stacked on the right */
-  .home-spot-empty { grid-template-columns: auto minmax(0, 1fr) auto; }
-  .home-spot-empty > :last-child { grid-column: auto; flex-direction: column; align-items: stretch; }
-}
-
-/* ---------- Card rail (6. "New on YouTube") ---------- */
-/* Mobile: horizontal scroll-snap row that bleeds to the screen edges (all items).
-   ≥ 40rem: a grid that always shows FULL rows —
-   videos (.home-rail--videos, 5 cards): 2 × 2 · 4 × 1 from 1024px · 5 × 1 from 1800px. */
-.home-rail {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(15.5rem, 78%);
-  gap: 1rem;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--gutter);
-  margin-inline: calc(-1 * var(--gutter));
-  padding: 0.25rem var(--gutter) 1rem;
-}
-.home-rail-item { scroll-snap-align: start; min-width: 0; }
-@media (width >= 40rem) {
-  .home-rail {
-    grid-auto-flow: row;
-    grid-auto-columns: auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
-    overflow: visible;
-    margin-inline: 0;
-    padding: 0;
-  }
-}
-@media (width >= 64rem) { .home-rail--videos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (width >= 112.5rem) { .home-rail--videos { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-@media (40rem <= width < 112.5rem) { .home-rail--videos > .home-rail-item:nth-child(n+5) { display: none; } }
-
-/* Tone families used by tiles, date tiles, magazine heads, IG placeholders */
+/* Tone families used by the start buttons, date tiles and magazine heads */
 .home-tone-gv { --tone: var(--c-gv); --tone-soft: var(--c-gv-soft); }
 .home-tone-lv { --tone: var(--c-lv); --tone-soft: var(--c-lv-soft); }
 .home-tone-grape { --tone: var(--c-grape); --tone-soft: var(--c-grape-soft); }
 .home-tone-vine { --tone: var(--c-vine); --tone-soft: var(--c-vine-soft); }
 
-/* Decorative tile for items without a picture (soft tone + dotted texture) */
-.home-tile {
-  color: var(--tone);
-  background-color: var(--tone-soft);
-  background-image:
-    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--tone) 16%, transparent) 1px, transparent 1.4px),
-    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--tone) 14%, transparent), transparent 60%);
-  background-size: 14px 14px, 100% 100%;
-}
-/* A little "paper sheet" for PDFs without a thumbnail */
-.home-sheet {
-  position: relative;
-  width: 3.4rem; height: 4.4rem;
-  border-radius: 0.35rem;
-  background:
-    linear-gradient(var(--tone), var(--tone)) 0.55rem 0.8rem / 55% 0.22rem no-repeat,
-    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 1.4rem / 70% 0.16rem no-repeat,
-    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 1.8rem / 62% 0.16rem no-repeat,
-    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 2.2rem / 68% 0.16rem no-repeat,
-    linear-gradient(color-mix(in srgb, var(--c-ink) 14%, transparent), color-mix(in srgb, var(--c-ink) 14%, transparent)) 0.55rem 2.6rem / 48% 0.16rem no-repeat,
-    var(--c-surface);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 22px -10px rgb(0 0 0 / 0.35);
-  transform: rotate(-4deg);
-  transition: transform 0.3s ease;
-}
-.group:hover .home-sheet { transform: rotate(0deg) translateY(-2px); }
-.home-sheet-tag {
-  position: absolute; right: -0.55rem; bottom: 0.55rem;
-  padding: 0.05rem 0.4rem;
-  border-radius: 0.3rem;
-  font: 700 0.62rem/1.4 var(--font-sans);
-  letter-spacing: 0.06em;
-  color: #fff;
-  background: var(--tone);
-}
-[data-theme="dark"] .home-sheet-tag { color: var(--c-paper); }
-
-/* ---------- 4. The bulletin (its latest posts) ---------- */
-.home-ann::before {
-  content: ""; position: absolute; inset: 0 auto 0 0; width: 4px;
-  background: linear-gradient(to bottom, var(--c-vine), var(--c-gv));
-}
-/* Two posts are two cards a row from 1024px (index.njk: lg:grid-cols-2 when the build found two). Once one
-   has ended between builds (GV.expire hides it: app.js), the other takes the whole row, as a post alone
-   does after the next build. This file is not in a layer, so the rule wins over the utility; a browser
-   without :has() keeps the two columns. */
-@media (width >= 64rem) {
-  .home-ann-grid:not(:has(> article:not([hidden]) ~ article:not([hidden]))) { grid-template-columns: minmax(0, 1fr); }
-}
-
 /* ---------- 5. Magazines ---------- */
-/* On screens at least 1536px wide AND 896px tall (the tall-2xl variant in main.css) the "Write for
-   the magazines" panel is a third column next to the two magazines, as tall as its own themes, and it
-   stays in view (below the fixed header) while the magazine columns scroll past. On shorter windows
-   it can't stick, so it stays the full-width row under both magazines — never a short column beside
-   an empty space. */
-@media (width >= 96rem) and (height >= 56rem) {
-  .home-mags.has-write { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(22rem, 0.72fr); }
-  .home-mags.has-write > .home-write { align-self: start; position: sticky; top: var(--sticky-top); }
-}
-/* This month in the Shop (the closing row of the magazines section): compact covers */
-.home-shop .shop-teaser-covers { padding: 0.25rem 0.375rem 0.25rem 0.125rem; }
-.home-shop .shop-teaser-covers img { width: 2.75rem; }
+/* This month's Book of the Month (under the magazines, while the stores' offer is on): compact covers */
+.home-mag-more .shop-teaser-covers { padding: 0.25rem 0.375rem 0.25rem 0.125rem; }
+.home-mag-more .shop-teaser-covers img { width: 2.75rem; }
 /* (a size container: at larger text the magazine's name is sized by the column's width — access.css) */
 .home-mag-head {
   container-type: inline-size;
@@ -552,9 +304,9 @@
 @media (width >= 80rem) { .home-mag-cover { width: 8rem; } }
 
 /* ---------- 6. Listen & watch ---------- */
-/* The episode card + "More episodes" (index.njk .home-lw): side by side from 1024px, the same height
+/* The episode card + the newest video (index.njk .home-lw): side by side from 1024px, the same height
    (the grid stretches both). At 150% text below 1280px they stack, as the site's other main + side
-   pairs do there (main.css .layout-aside): side by side "More episodes" was about 16rem wide. */
+   pairs do there (main.css .layout-aside). */
 @media (64rem <= width < 80rem) { :root:where(.gv-prefs)[data-text="150"] .home-lw { grid-template-columns: minmax(0, 1fr); } }
 .home-episode::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -562,10 +314,8 @@
 }
 .home-audio { height: 3rem; border-radius: 9999px; }
 [data-theme="dark"] .home-audio { color-scheme: dark; }
-.home-play:hover, .home-play.is-playing { background: var(--c-grape); color: #fff; }
-[data-theme="dark"] .home-play:hover, [data-theme="dark"] .home-play.is-playing { color: var(--c-paper); }
 
-/* New on YouTube: the video is the card's picture (plays inline, privacy-enhanced) */
+/* The newest video: the video is the card's picture (plays inline, privacy-enhanced) */
 lite-youtube.home-yt {
   max-width: none;
   width: 100%;
@@ -602,77 +352,6 @@ lite-youtube.home-yt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; out
   .home-datetile.is-range .home-datetile-day { font-size: 1.4rem; }
 }
 
-/* ---------- 8. Library band ---------- */
-/* Newest documents: 6 — 2 on phones, 3 × 2 from 640px, one row of 6 from 1280px (index.njk). */
-.home-lib {
-  background:
-    radial-gradient(60% 80% at 0% 0%, color-mix(in srgb, var(--c-gv) 7%, transparent), transparent 70%),
-    radial-gradient(50% 70% at 100% 100%, color-mix(in srgb, var(--c-lv) 6%, transparent), transparent 70%),
-    var(--c-surface-2);
-}
-/* Larger text (130%+) or relaxed spacing, 1024–1535px: the 26rem search column grows with the text
-   and would leave the quick links a narrow strip (one chip per line beside an empty corner) — the
-   search and the links stack instead, as on tablets. */
-@media (width >= 64rem) and (width < 96rem) {
-  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-lib-grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
-}
-
-/* ---------- 9. Instagram ---------- */
-/* Phones: one row of square posts that swipes sideways (bleeds to the screen edges);
-   3 columns from 640px, 6 from 1024px. */
-.home-ig-grid {
-  display: grid; grid-auto-flow: column; grid-auto-columns: 44%; gap: 0.75rem;
-  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
-  margin-inline: calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.75rem;
-}
-.home-ig-grid > li { scroll-snap-align: start; min-width: 0; }
-@media (width >= 40rem) {
-  .home-ig-grid { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; overflow: visible; margin-inline: 0; padding: 0; }
-}
-@media (width >= 64rem) { .home-ig-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
-.home-ig-ph {
-  color: var(--tone);
-  background:
-    radial-gradient(110% 80% at 100% 0%, color-mix(in srgb, var(--tone) 22%, transparent), transparent 65%),
-    radial-gradient(90% 70% at 0% 100%, color-mix(in srgb, var(--c-grape) 14%, transparent), transparent 70%),
-    var(--tone-soft);
-}
-.home-ig-meta { color: var(--tone); }
-/* The account and the date (small white words) over the post's picture: a scrim dark enough at the words' line
-   (≈ 0.6 – 0.7) that they stay ≥ 4.5 : 1 even over a white picture — it was ≈ 0.53 (0.72 → 0.35), 4.2 : 1 there */
-.home-ig-meta.has-pic { color: #fff; background: linear-gradient(to top, rgb(10 8 20 / 0.8), rgb(10 8 20 / 0.55) 60%, transparent); }
-/* A cached picture that fails to load removes itself (onerror): then the tile shows the
-   text placeholder, so the bar follows the live page, not the build data. (The post picture
-   is the <img> right before the bar, index.njk; once it is gone the bar follows the
-   placeholder instead — a sibling test, not a :has(), which would restyle the whole page on
-   every change a script makes, round 30.) */
-.home-ig-meta.has-pic:not(img + *) { color: var(--tone); background: none; }
-.home-ig-meta.has-pic:not(img + *) > :first-child { visibility: hidden; } /* the placeholder already names the account */
-.home-ig:focus-visible { outline-offset: 3px; }
-/* Account avatar in the follow buttons (the Instagram icon shows if the image fails) */
-.home-ig-avatar { position: relative; display: grid; place-items: center; width: 1.5rem; height: 1.5rem; flex-shrink: 0; margin-left: -0.35rem; }
-.home-ig-avatar img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 1px var(--c-line); }
-
-/* ---------- 10. Service band ---------- */
-.home-band { background: linear-gradient(135deg, #0f172a 0%, #0b2f55 50%, #025a94 100%); }
-.home-band::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background:
-    radial-gradient(40% 60% at 90% 10%, rgb(142 108 201 / 0.28), transparent 70%),
-    radial-gradient(35% 55% at 5% 100%, rgb(245 154 91 / 0.18), transparent 70%);
-}
-.home-band-link {
-  background: rgb(255 255 255 / 0.06);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-.home-band-link:hover { background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.28); transform: translateY(-1px); }
-.home-band-link:focus-visible { outline-color: #fff; }
-.home-band :focus-visible { outline-color: #fff; }
-/* Amber La Viña button that reads well on the dark band in both themes */
-.home-btn-amber { background: #f59a5b; color: #2a1606; }
-.home-btn-amber:hover { background: #f8b88a; }
-
 /* ---------- 7b. "Calendar on your phone" filler card ---------- */
 .home-cal-cta {
   background:
@@ -681,7 +360,11 @@ lite-youtube.home-yt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; out
   border-style: dashed;
 }
 
+/* ---------- 8. "More on this site": one link card per page (index.njk .home-more) ---------- */
+.home-more-link { min-height: 3.5rem; }
+@media (width >= 40rem) { .home-more-link { min-height: 4.5rem; } }
+
 @media (prefers-reduced-motion: reduce) {
   .home-live-pill::before { animation: none; }
-  .home-sheet, .home-mag-cover, .home-stat, .home-spot-fill-arrow { transition: none; }
+  .home-mag-cover, .home-choose-btn, .home-choose-go { transition: none; }
 }

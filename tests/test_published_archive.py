@@ -16,12 +16,13 @@
               landmarks, the Area 65 rows (one link each, "(opens on …)"), decade headings and lists, the decade radios
               in a fieldset, the live result line, the no-JavaScript note, lang attributes, autoescaped text, a machine
               translation said in the title's link and its original always "Original title:", the note over the list,
-              the script's settings, the hero / empty-state / "How" links, the two JSON files, the home page's line,
+              the script's settings, the hero / empty-state / "How" links, the two JSON files, the home page's link,
               the service worker's lists; without the file: no section, no errors.
   * Search  — eleventy/filters/library.js: the /published/ page entry carries the writers' hometowns (the towns geo
               knows, in its spelling; once each, as MiniSearch splits them) and the archive's keywords — no names, no
               initials, no bylines as printed.
-  * Home    — eleventy/filters/home.js homeArchive: the same headline numbers as the page.
+  * Home    — since November 2026 the home page has no Published writers section of its own (the UX review: one
+              link in its "More on this site" row, to this page).
   * Styles  — published.css: the archive panel's one column never widens the page; the chosen chip in forced colours;
               44px buttons on phones.
   * Copy    — the new strings: no "PDF", no talk of how the site updates itself; button and chip budgets.
@@ -72,9 +73,6 @@ for (const lang of ["en", "es"]) {
 }
 out_.empty = filters.pwArchive({}, "en");
 out_.emptyFile = filters.pwArchive({ writers_archive: { updated: null, items: [] } }, "es");
-out_.totals = (await imp("eleventy/filters/published.js")).pwArchiveTotals({ writers_archive: input.wa });
-out_.home = filters.homeArchive({ writers_archive: input.wa });
-out_.homeEmpty = filters.homeArchive({});
 out_.strings = filters.pwArcStrings("es");
 out(out_);
 """
@@ -210,11 +208,6 @@ class View(unittest.TestCase):
     def test_no_archive_file(self):
         for e in (self.r["empty"], self.r["emptyFile"]):
             self.assertEqual((e["total"], e["area"], e["areaRows"], e["restRows"], e["json"], e["top"], e["decades"]), (0, 0, [], [], [], [], []))
-        self.assertEqual(self.r["homeEmpty"]["total"], 0)
-
-    def test_home_and_page_agree(self):
-        self.assertEqual(self.r["home"], {"total": 21, "area": 13, "since": 1944})
-        self.assertEqual(self.r["totals"], self.r["home"])
 
     def test_script_strings(self):
         s = self.r["strings"]
@@ -681,16 +674,15 @@ class PageBuild(unittest.TestCase):
         none = json.loads((self.tmp / "none" / "published" / "texas-archive.json").read_text(encoding="utf-8"))
         self.assertEqual(none["count"], 0)
 
-    def test_the_home_page_line(self):
-        for lang, text, link in (("en", "21 stories by Texas writers since 1944 — 13 from our Area", "/aagrapevine/published/#archive"),
-                                 ("es", "21 historias de escritores de Texas desde 1944; 13 de nuestra Área", "/aagrapevine/es/published/#archive")):
-            with self.subTest(lang=lang):
-                home = self.page(lang, page="home")
-                sec = home.select_one("#published-writers")
-                self.assertIn(text, sec.get_text(" ", strip=True))
-                self.assertTrue(sec.select_one(f'a[href="{link}"]'))
-        none = self.page("en", "none", "home").select_one("#published-writers")
-        self.assertIsNone(none.select_one('a[href$="#archive"]'))
+    def test_the_home_page_link(self):
+        # the home page's "More on this site" row links the page (its Published writers section, with the archive's
+        # line, is gone since November 2026), with or without the archive
+        for kind in ("sample", "none"):
+            for lang, link in (("en", "/aagrapevine/published/"), ("es", "/aagrapevine/es/published/")):
+                with self.subTest(kind=kind, lang=lang):
+                    home = self.page(lang, kind, "home")
+                    self.assertIsNone(home.select_one("#published-writers"))
+                    self.assertTrue(home.select_one(f'.home-more a[href="{link}"]'))
 
     def test_the_worker_keeps_published_writers(self):
         sw = (self.tmp / "sample" / "sw.js").read_text(encoding="utf-8")
@@ -808,7 +800,7 @@ def strings() -> dict:
 
 
 NEW_KEYS = ("published.meta_desc", "published.cta_archive", "published.btn.archive", "published.how.window", "published.how.archive",
-            "home.spot_archive", "home.spot_archive_link", "pwa.offline.how2_t", "community.status.src.writers_archive")
+            "pwa.offline.how2_t", "community.status.src.writers_archive")
 
 
 class Copy(unittest.TestCase):
@@ -836,7 +828,7 @@ class Copy(unittest.TestCase):
     def test_length_budgets(self):
         # design spec 1.18: buttons 24 / 28, chips 16 / 20 characters (the hero button with its year in it)
         btn = {k: self.s[k] for k in ("published.cta_archive", "published.btn.archive", "published.archive.btn_all_dec",
-                                       "published.archive.btn_all_pub", "home.spot_archive_link")}
+                                       "published.archive.btn_all_pub")}
         for k, v in btn.items():
             with self.subTest(key=k):
                 self.assertLessEqual(len(v["en"].replace("{since}", "1944")), 24)

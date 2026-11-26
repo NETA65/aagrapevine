@@ -1,12 +1,12 @@
 """The home page's filters (eleventy/filters/home.js), run with Node.js like the pages run them.
 
-  * Write  — "Write for the magazines" (homeThemes): half Grapevine, half La Viña, so both magazines are always
-             invited. La Viña's dated themes (its yearly themes document) count as La Viña's half — they never
-             take Grapevine's places; a magazine with too few fills from the other; the dated themes soonest first.
+  * Write  — the themes behind "I want to write my story" (homeThemes: its first dated one is the button's "Next
+             deadline"): half Grapevine, half La Viña, so both magazines are always invited. La Viña's dated themes
+             (its yearly themes document) count as La Viña's half — they never take Grapevine's places; a magazine
+             with too few fills from the other; the dated themes soonest first.
 
-  * Archive — the line under Published writers (homeArchive): the Texas writers archive's stories, its Area 65
-             ones and its first year, counted as /published/#archive counts them (a story listed twice once, only the
-             magazines' own pages); no archive file → no line.
+  (The line under Published writers — homeArchive — went with that section in November 2026: the archive's numbers
+  are on /published/, tests/test_published_archive.py.)
 
   * Cover   — From the magazines (homeLatestIssue): a column's cover is the issue's portrait front cover only, never
              its wide hero banner (`image`).
@@ -100,31 +100,6 @@ class Write(unittest.TestCase):
         self.assertEqual(self.r["no_lv"], ["ed:gv:2027-06", "ed:gv:2027-07", "ed:gv:2027-08"])
         # no open topics: La Viña's half is its next two deadlines
         self.assertEqual(self.r["lv_dated_only"], ["ed:lv:2027-05:recaidas", "ed:gv:2027-06", "ed:gv:2027-07", "ed:lv:2027-07:prisiones"])
-
-
-ARCHIVE_JS = r"""
-out({ full: filters.homeArchive({ writers_archive: input.wa }), none: filters.homeArchive({}),
-      blank: filters.homeArchive({ writers_archive: { updated: null, items: [] } }) });
-"""
-
-
-def story(url: str, scope: str, year: int | None, pub: str = "gv") -> dict:
-    """A story of data/site/writers_archive.json (the fields the line needs)."""
-    return {"id": "wa:" + url[-12:], "key": url.lower(), "url": url, "pub": pub, "title": "A Story " + url[-3:], "year": year,
-            "scope": scope, "writers": []}
-
-
-class Archive(unittest.TestCase):
-    def test_the_archive_line_numbers(self):
-        gv, lv = "https://www.aagrapevine.org/magazine/", "https://www.aalavina.org/revista/"
-        wa = {"updated": "2026-10-04T12:00:00Z", "since": {"gv": 1944, "lv": 1996},
-              "items": [story(gv + "1950/jan/a01", "neta65", 1950), story(gv + "1999/jan/a02", "texas", 1999),
-                        story(lv + "enero-febrero-2001/a03", "neta65", 2001, "lv"), story(gv + "1950/jan/a01", "neta65", 1950),
-                        story("https://elsewhere.example/a04", "neta65", 2020)]}
-        r = run_js(self, ARCHIVE_JS, data={"wa": wa})
-        self.assertEqual(r["full"], {"total": 3, "area": 2, "since": 1944})     # the repeat and the other site are left out
-        self.assertEqual(r["none"]["total"], 0)
-        self.assertEqual(r["blank"]["total"], 0)
 
 
 COVER_JS = r"""

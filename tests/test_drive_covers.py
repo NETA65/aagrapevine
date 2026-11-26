@@ -18,7 +18,8 @@ the Drive listing to the site's data (no network: the Drive tree is faked, data/
                   on a row kept unread), the stats count the covers and two files of one issue (never naming one).
   * SiteData    — build_data: the covers' i18n written by rule (title + album, EN + ES, `machine` []) and nothing
                   about a cover asked of the translator; "New" only for a recent issue.
-  * HomeUploads — Home's "Committee uploads" (eleventy/filters/home.js homeDrive) never shows a cover.
+  (Home's "Committee uploads", which left the covers out — homeDrive —, went in the UX review of November 2026: the
+  committee's files are on /portfolio/, the covers on /photos/#covers.)
 
     python -m unittest tests.test_drive_covers -v        (or: python -m unittest discover -s tests)
 """
@@ -467,17 +468,6 @@ class SiteData(unittest.TestCase):
         # the first harvest is never news
         ctx.births["drive"] = ctx.now_ts - 86400
         self.assertFalse(new(GV_DIR[:2] + [key[:4]], f"GV_{key}_x.jpg"))
-
-
-# =========================================================================== Home's "Committee uploads"
-class HomeUploads(unittest.TestCase):
-    def test_home_never_shows_a_cover(self):
-        now = "2026-11-13T12:00:00Z"
-        items = [site_item(GV_DIR, "GV_2026-11_November.jpg", now), site_item(GV_DIR, "GV_2026-12_December.jpg", now),
-                 site_item(["reports"], "2026-11-10 District report.pdf", now, "application/pdf"),
-                 site_item(["photos"], "2026 Dallas Gathering Of Eagles.jpg", now, modified="2026-11-12")]
-        got = run_js(self, "out(filters.homeDrive(input, 6).map((i) => i.id))", data=items, now=now)
-        self.assertEqual(got, ["drive:f-2026 Dallas Gathering Of Eagles.jpg", "drive:f-2026-11-10 District report.pdf"])
 
 
 if __name__ == "__main__":

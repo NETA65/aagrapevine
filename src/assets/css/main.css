@@ -296,17 +296,16 @@
   }
   /* 130%+ on a laptop screen, like the browser's own zoom (which would show the tablet layout there): a
      card grid of four to six columns (lg:grid-cols-4/5/6) has two columns below 1440px at 150% (below
-     1280px at 130%), a three-column one (lg:grid-cols-3) below 1280px at 150% (the home page's Drive
-     thumbnails: three, areas/access.css) */
+     1280px at 130%), a three-column one (lg:grid-cols-3) below 1280px at 150% */
   /* (a card that spans three or more of the columns, lg:col-span-3…6, spans the two instead: a span
      wider than the grid would add an implicit column that takes the width from the others) */
   @media (64rem <= width < 90rem) {
-    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
+    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
   }
   @media (64rem <= width < 80rem) {
-    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
+    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
     :root:where(.gv-prefs)[data-text="150"] main .lg\:grid-cols-3:not(:is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     :root:where(.gv-prefs)[data-text="150"] main .lg\:grid-cols-3:not(:is(.mp-poster, .cm-frame) *) > [class*="lg:col-span-3"] { grid-column: 1 / -1 !important; }
   }

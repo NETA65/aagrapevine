@@ -507,20 +507,13 @@ class Layout(unittest.TestCase):
         # …and at 130 %+ text or relaxed spacing it stops sticking, like the other side columns
         self.assertRegex(self.main, r'\[data-spacing="relaxed"\]\) :is\([^)]*\.cm-ann-side\) \{\s*position: static !important;')
 
-    def test_the_post_left_takes_the_row_on_the_home_page(self):
-        # The home page's cards are teasers (a short post in full, a long one as its summary and "Read more" — not
-        # the bulletin's layout): the two newest posts, two a row from 1024px (lg:grid-cols-2, set by the build
-        # when there are two); once one has ended between builds (GV.expire hid it), the other takes the whole
-        # row, as a post alone does after the next build. lg:grid-cols-2 is a utility (Tailwind's last layer):
-        # the rule wins only because home.css is imported outside any layer.
+    def test_home_links_the_bulletin(self):
+        # Home's two bulletin cards went in the UX review of November 2026: the posts have one home, /bulletin/, which
+        # Home's "More on this site" row links (and the Committee menu, the footer, the phone menu)
         home = (ROOT / "src/pages/index.njk").read_text(encoding="utf-8")
-        self.assertIn("""<div class="home-ann-grid grid items-start gap-5 {{ 'lg:grid-cols-2' if anns.length > 1 }}">""", home)
-        self.assertRegex(home, r'<article class="home-ann[^"]*"[^>]*data-gv-expire-item')
-        hcss = (ROOT / "src/assets/css/areas/home.css").read_text(encoding="utf-8")
-        self.assertRegex(hcss, r"@media \(width >= 64rem\) \{\s*\.home-ann-grid:not\(:has\(> article:not\(\[hidden\]\) ~ "
-                               r"article:not\(\[hidden\]\)\)\) \{ grid-template-columns: minmax\(0, 1fr\); \}\s*\}")
-        self.assertNotIn("@layer", hcss)
-        self.assertIn('@import "./areas/home.css";\n', self.main)
+        self.assertNotIn("home-ann", home)
+        self.assertIn('{ url: "/bulletin/", icon: "megaphone", key: "nav.bulletin", desc: "nav.bulletin_desc" }', home)
+        self.assertNotIn("home-ann", (ROOT / "src/assets/css/areas/home.css").read_text(encoding="utf-8"))
 
     def test_in_this_post_follows_the_reading(self):
         js = self.js

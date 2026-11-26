@@ -55,13 +55,13 @@ updating when one feed fails:
                    by side), each meeting's own day, language and "How to join" name, "1 episode", the language
                    note; the "Latest episode" on a Monday
                    when two shows came out at once (AA Grapevine's on /listen/, La Viña's on /es/listen/); La Viña's
-                   card on /meetings/ links its episodes; Home's rows name La Viña's meeting and say an episode's
+                   card on /meetings/ links its episodes; Home features one episode (no list of more since November
+                   2026) and says the featured episode's
                    language where it is not the page's, and its weekly-meetings line says «abiertas» for two; the feed
                    and the search call La Viña's episode by its meeting and date; the search's /listen/ entry names the
                    three shows; What's New marks a show's name in the show's language; the "tell your group" text says
                    the language of each show in another language than the page's.
-  * HomeDates    — Home built with a La Viña episode whose date was not found (featured) and the Grapevine Weekly Open's
-                   "Introducing …" (a row): both keep their own date.
+  * HomeDates    — Home built with a La Viña episode whose date was not found (featured): it keeps its own date.
   * EmailTitle   — the e-mail's title of a dateless meeting episode.
 
     python -m unittest tests.test_r25_lavina_podcast -v        (or: python -m unittest discover -s tests)
@@ -920,15 +920,15 @@ class Pages(unittest.TestCase):
                 i = page.index(f'href="{LV_MEETING_PAGE}"')
                 self.assertIn(words, visible(page[i:page.index("</a>", i)]))
 
-    def test_home_names_la_vinas_meeting(self):
-        for lang, label, title in (("en", "La Viña Open Meeting", "Meeting of November 5, 2026"),
-                                   ("es", "Reunión Abierta de La Viña", "Reunión del 5 de noviembre de 2026")):
+    def test_home_features_one_episode(self):
+        # since the UX review of November 2026 Home's media row is the featured episode and one video — no list of more
+        # episodes (where La Viña's meeting had its row): every episode, La Viña's meeting named, is on /listen/
+        for lang in ("en", "es"):
             with self.subTest(lang=lang):
                 page = self.built["/es/" if lang == "es" else "/"]
-                i = page.index('data-id="pod:lvo:667729784075"')
-                li = page[page.rindex("<li", 0, i):i]
-                self.assertIn(label, visible(li))
-                self.assertIn(title, visible(li))
+                self.assertNotIn('data-id="pod:lvo:667729784075"', page)
+                self.assertNotIn("home-play", page)
+                self.assertEqual(page.count('x-ref="audio"'), 1)
 
     def test_the_latest_episode_on_a_monday(self):
         # AA Grapevine's Podcast and La Viña's meeting came out at the same moment: each page features its own language's
@@ -944,24 +944,13 @@ class Pages(unittest.TestCase):
                 self.assertEqual(re.search(r'data-ep="(pod:[^"]+)"', rows).group(1), want_id, "and the episode list starts with it")
 
     def test_home_says_an_episodes_language(self):
-        def row(lang: str, iid: str) -> str:
-            page = self.built["/es/" if lang == "es" else "/"]
-            i = page.index(f'data-id="{iid}"')
-            return page[page.rindex("<li", 0, i):i]
         pill = r'<span class="badge-muted uppercase"[^>]*>{}</span>'
-        self.assertRegex(row("en", "pod:lvo:667729784075"), pill.format("es"), "La Viña's Spanish meeting on English Home")
-        self.assertRegex(row("es", "pod:wo:aaaaaaaaaaaa"), pill.format("en"), "the English meeting on Spanish Home")
-        self.assertIn('lang="en">Grapevine Weekly Open</p>', row("es", "pod:wo:aaaaaaaaaaaa"), "its English name, marked")
-        self.assertNotIn("badge-muted", row("en", "pod:gv:000000000002"), "an English episode on English Home: none")
-        self.assertNotIn("badge-muted", row("es", "pod:lvo:667729784075"))
+        # (the rows of "More episodes", which said theirs too, went from Home in November 2026)
         # the featured episode (AA Grapevine's Podcast, English): its language on Spanish Home only
         for lang, has in (("en", False), ("es", True)):
             page = self.built["/es/" if lang == "es" else "/"]
             head = page[page.index('class="home-episode'):page.index('id="ep-title"')]
             self.assertEqual(bool(re.search(pill.format("en"), head)), has, lang)
-        # a row whose title names the meeting's date has no date of its own; the others keep theirs (HomeDates)
-        self.assertNotIn("Nov", visible(row("en", "pod:lvo:667729784075")).replace("November 5, 2026", ""))
-        self.assertIn("Nov ", visible(row("en", "pod:gv:000000000002")))
 
     def test_home_says_both_meetings_are_open(self):
         self.assertIn("por Zoom, abiertas a todos", self.built["/es/"], "two meetings: «abiertas»")
@@ -1006,9 +995,10 @@ class Pages(unittest.TestCase):
 
 
 class HomeDates(unittest.TestCase):
-    """Home's Listen & Watch built with two meeting episodes whose titles do not name the meeting's date: La Viña's with
-    no date found ("…, episode 1") — the featured one, AA Grapevine's Podcast's newest being over a month older — and
-    the Grapevine Weekly Open's first ("Introducing …") in "More episodes". Both keep their date."""
+    """Home's Listen & Watch built with a meeting episode whose title does not name the meeting's date: La Viña's with
+    no date found ("…, episode 1") — the featured one, AA Grapevine's Podcast's newest being over a month older. It keeps
+    its date. (The Grapevine Weekly Open's first, "Introducing …", was a row of "More episodes", which went from Home in
+    November 2026.)"""
     built: dict | None = None
     LV_NO_DATE = {**LV_EP, "extra": {k: v for k, v in LV_EP["extra"].items() if k != "meeting_date"}}
     WO_INTRO = episode("pod:wo:bbbbbbbbbbbb", "wo", "Introducing The Grapevine Open AA Meeting [Season 1, Episode 1]",
@@ -1022,11 +1012,6 @@ class HomeDates(unittest.TestCase):
             eps = {**EPISODES, "items": [self.LV_NO_DATE, *self.GV_OLD, self.WO_INTRO]}
             HomeDates.built = run_js(self, PAGES_JS, data={"only": "index.njk", "urls": ["/", "/es/"], "episodes": eps,
                                                            "weekly": WEEKLY, "cfg": CFG_SHOWS}, timeout=600, now=NOW_JS)
-
-    def row(self, lang: str, iid: str) -> str:
-        page = self.built["/es/" if lang == "es" else "/"]
-        i = page.index(f'data-id="{iid}"')
-        return visible(page[page.rindex("<li", 0, i):i])
 
     def featured(self, lang: str) -> tuple[str, str]:
         page = self.built["/es/" if lang == "es" else "/"]
@@ -1042,9 +1027,7 @@ class HomeDates(unittest.TestCase):
                 title, meta = self.featured(lang)
                 self.assertEqual(title, lv_title, "the newest episode is featured")
                 self.assertIn(lv_day, meta, "no date in its title: the featured episode's own")
-                wo = self.row(lang, "pod:wo:bbbbbbbbbbbb")
-                self.assertIn("Introducing", wo)
-                self.assertIn(wo_day, wo, "and a row's")
+                self.assertNotIn('data-id="pod:wo:bbbbbbbbbbbb"', self.built["/es/" if lang == "es" else "/"])
 
 
 class StatusPage(unittest.TestCase):

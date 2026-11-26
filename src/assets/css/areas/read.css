@@ -52,8 +52,8 @@
     radial-gradient(120% 80% at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%),
     linear-gradient(155deg, #33130a 0%, #7a2a05 50%, #b0410b 100%);
 }
-/* White focus ring on these dark panels (white words), as on the hero and the home bands (main.css,
-   home.css .home-band): the site's blue ring (#0a5fa8, main.css :focus-visible) is drawn on the navy or
+/* White focus ring on these dark panels (white words), as on the hero (main.css):
+   the site's blue ring (#0a5fa8, main.css :focus-visible) is drawn on the navy or
    amber gradient and measured 1.1–2.3 : 1 there (1.1–1.5 in high contrast) — /read/'s "Read on …"
    buttons, /contribute/'s "Submit online" and its workshop band (the writer's-guide links, the two
    buttons, the workshop cards), the Shop and About cover panels. White is ≥ 3 : 1 on all of them, in

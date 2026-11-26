@@ -271,11 +271,6 @@ html:root.tts-bar-on {
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.home-count-n, .cm-tile-num) { white-space: nowrap; overflow-wrap: normal !important; }
 @media (width < 40rem) {
   :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.home-meet-count, .cm-tiles) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* Home "On this site" numbers: one per row */
-  :root:where(.gv-prefs):is([data-text="150"], [data-spacing="relaxed"]) .home-stats { grid-template-columns: minmax(0, 1fr); }
-}
-@media (width >= 40rem) and (width < 96rem) {
-  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 /* Events: the date strip, and the "Add to calendar" button and its menu, wrap inside their card */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-date-strip { flex-wrap: wrap; white-space: normal; max-width: 100%; }
@@ -382,11 +377,6 @@ html:root.tts-bar-on {
    card's link may break a long word */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-keys > div { flex-wrap: wrap; }
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-live-link { overflow-wrap: anywhere; }
-/* Home "From the Drive": three cards to a row (not six) at 130%+ from 1024 to 1439px — six left
-   "DOCUMENT" and the titles a sliver */
-@media (64rem <= width < 90rem) {
-  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-drive-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 /* Buttons at 130%+ (or relaxed spacing): a label on two or three lines makes a rounded box, not a
    blob (a one-line button still looks like a pill: 1.5rem is at least half its height), and on phones a
    long word in a label is hyphenated in the page language instead of running out of the button */
@@ -440,18 +430,6 @@ html:root.tts-bar-on {
 /* Committee pages' tabs (Meetings · Events · … · Bulletin) below 360px at 150%: the tab icons go, so
    the current tab's name fits in its pill inside the row that scrolls sideways */
 @media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"] .cm-subnav-link > svg { display: none; } }
-/* Home Instagram tiles: the date on the picture may wrap onto two lines; from 1024 to 1279px, six tiles to
-   a row, the account's name ("Grapevine", "La Viña") is left to screen readers — the Instagram icon stays
-   (beside the date it ran past the tile's edge). In the base layer with !important: main.css un-truncates
-   .truncate at larger text the same way, and its one-line, overflow-hidden box must win here. */
-:root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-ig-meta time { flex-shrink: 1; min-width: 0; text-align: right; }
-@layer base {
-  @media (64rem <= width < 80rem) {
-    :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-ig-meta > span > .truncate {
-      position: absolute !important; width: 1px !important; height: 1px !important; margin: -1px !important; overflow: hidden !important;
-      clip-path: inset(50%) !important; white-space: nowrap !important; }
-  }
-}
 /* Home magazine columns: the name ("Grapevine", "La Viña") and the kicker never break inside a word next
    to the floated cover — a word that doesn't fit beside it moves below it — and the name is at most
    10% of the column's width (.home-mag-head is a size container: home.css) */

@@ -68,14 +68,13 @@ class Source(unittest.TestCase):
         # the magazine cover (84–128 px) and the Book of the Month covers (44 px)
         self.assertRegex(t, r'class="home-mag-cover[^"]*">\s*<img src="\{\{ issue\.cover \| cmListThumb \}\}"')
         self.assertIn('<span class="shop-teaser-covers" aria-hidden="true">{% for b in hBotm %}{% if b.image %}<img src="{{ b.image | cmListThumb }}"', t)
-        # "More episodes": the copy, except the featured episode's own picture; data-img keeps the 480 px file
-        self.assertIn('{%- set eTile = eArt if eArt == (ep.extra.thumb or ep.image) else (eArt | cmListThumb) -%}', t)
-        self.assertIn('{% if eArt %}{{ img(eTile, "absolute inset-0 size-full object-cover") }}{% endif %}', t)
-        self.assertIn('data-img="{{ (eArt | url) if eArt else \'\' }}"', t)
+        # (Home's "More episodes", whose tiles took the small copy, went in November 2026: one media row now)
+        self.assertNotIn("eTile", t)
+        self.assertIn('data-img="{{ (epArt | url) if epArt else \'\' }}"', t)
         # the featured episode's square is 160 px from 640 px up: the 480 px file
         self.assertIn('<img x-ref="art" src="{{ ep.extra.thumb or ep.image }}"', t)
-        # exactly those three places on the home page
-        self.assertEqual(t.count("| cmListThumb"), 3)
+        # exactly those two places on the home page
+        self.assertEqual(t.count("| cmListThumb"), 2)
 
     def test_read(self):
         t = read("src", "pages", "read.njk")

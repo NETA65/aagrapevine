@@ -9,7 +9,8 @@ test_r33_pages.py measures the same things in a real browser (focus-ring contras
                    rule, with !important — anywhere else it would silently lose).
   * SmallText    — the small words that were just under 4.5 : 1: the writer's-guide EN / ES badges on /contribute/,
                    the La Viña line above the magazine's name on the home page, the Shop's "On sale this month"
-                   eyebrow, the date and account over an Instagram picture.
+                   eyebrow. (The date and account over an Instagram picture went with Home's Instagram section in
+                   November 2026: /instagram/ has its own tiles.)
   * Inputs       — a placeholder wider than its box ends in "…" (the input utility).
   * OfflineCard  — /offline/'s "Saved on this device" card keeps the empty state's height while it says "Loading…".
   * Built        — no unfilled {placeholder} in the pages' words or attributes (the recorder's La Viña "at least {min}
@@ -98,14 +99,6 @@ class SmallText(unittest.TestCase):
     def test_the_shop_eyebrow_is_the_strong_orange(self):
         page = read("src", "pages", "shop.njk")
         self.assertIn('"shop.nav_bulk") | t(lang), tone: "text-lv-strong", id: "botm-title"', page)
-
-    def test_the_instagram_scrim_is_dark_enough_at_the_words(self):
-        css = read("src", "assets", "css", "areas", "home.css")
-        rule = re.search(r"\.home-ig-meta\.has-pic \{ color: #fff; background: linear-gradient\(to top, rgb\(10 8 20 / ([\d.]+)\), "
-                         r"rgb\(10 8 20 / ([\d.]+)\) 60%, transparent\); \}", css)
-        self.assertIsNotNone(rule)
-        self.assertGreaterEqual(float(rule.group(1)), 0.8)
-        self.assertGreaterEqual(float(rule.group(2)), 0.55)
 
 
 class Inputs(unittest.TestCase):

@@ -1,0 +1,5 @@
+/* /assets/css/home.css — the home page (areas/home.css), only on its page: / and /es/ (pageStyles in
+   src/pages/index.njk). One of the page-area stylesheets: see "Page-area styles" at the end of main.css. @reference
+   reads main.css (theme, variants, utilities for @apply) without writing any of it here. */
+@reference "./main.css";
+@import "./areas/home.css";
