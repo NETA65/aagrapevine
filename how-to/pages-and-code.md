@@ -100,7 +100,7 @@ The words are not in `src/_i18n`? Then they come from somewhere else:
 
 ## 3. Run the site on your own computer
 
-You need **Node.js 20 or newer** (22 LTS is what GitHub uses) and **Git**. Python is only needed for
+You need **Node.js 22 or newer** (22 LTS is what GitHub uses) and **Git**. Python is only needed for
 the tests (section 16). You do not need the content sync: the build reads the content that is already
 committed in `data/site/`.
 

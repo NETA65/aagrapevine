@@ -967,7 +967,7 @@ no push-triggered workflow by itself.
 
 ## Running locally
 
-Requirements: **Python 3.12+**, **Node 20+ (22 recommended)**, Git.
+Requirements: **Python 3.12+**, **Node 22+**, Git.
 
 **Windows (PowerShell):**
 
