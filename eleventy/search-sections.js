@@ -22,7 +22,7 @@
 // (config/history.yml: its items; null when it cannot be read — the section then counts as shown).
 //
 // Add a section: a line here, its search.sec.<id>.x key in both languages, and — if its icon is new — the icon in
-// src/pages/search.njk's ss-icons. tests/test_r37_search.py checks every line against the built pages: the anchor
+// src/pages/search.njk's ss-icons. tests/test_site_search.py checks every line against the built pages: the anchor
 // exists and the entry's title is that heading's words, in both languages (a line whose shown(ctx) says the page
 // leaves it out: not looked for).
 

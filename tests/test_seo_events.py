@@ -334,7 +334,7 @@ class EventsOnly(unittest.TestCase):
                     self.assertTrue(all(v not in ("", None, [], {}) for v in e.values()), anchor)
                     self.assertEqual(e["@type"], "Event")
                     # (a cancelled event is never among /events/' events — db.events.cancelled: below, and
-                    # tests/test_r37_cancelled.py)
+                    # tests/test_cancelled_events.py)
                     self.assertEqual(e["eventStatus"], "https://schema.org/EventScheduled")
                     # its own page (round 35: eventLeaf), else its card on this page
                     page = SITE["url"] + ("/es" if lang == "es" else "") + "/events/"

@@ -4,7 +4,7 @@
                     carry_the_message) is shown in Spanish on /es/ pages: the `langLink` helper, on /accessibility/
                     and /shop/ (the help phones), and in the newcomer card (macros/ui.njk) (Carry the Message and
                     Lleva el Mensaje are both shown on every page that has one — /shop/#carry, About, the 404 page:
-                    macros/ctm.njk, tests/test_r14_ctm.py);
+                    macros/ctm.njk, tests/test_carry_the_message.py);
   * settings      — what templates read from `site.*` reaches them (meetings, spotlight): /meetings/ without
                     data/site/meetings.json still names the offices to look at and "Our Area"; every `links:`
                     entry is used and every link a template reads exists; settings that did nothing are gone
@@ -754,7 +754,7 @@ class GoneEventSharePage(unittest.TestCase):
     def test_a_gone_share_page_leads_on_to_the_events_page(self):
         r = run_js(self, NOT_FOUND_JS, needs_modules=False)
         self.assertEqual(r["en"]["replaced"], ["/aagrapevine/events/?utm_source=x#2026-10-07-lv-writing-workshop-mansfield"])
-        # a date of a monthly series, long over: on to its series' page (since round 37; tests/test_r37_links.py)
+        # a date of a monthly series, long over: on to its series' page (since round 37; tests/test_event_links.py)
         self.assertEqual(r["es"]["replaced"], ["/aagrapevine/es/events/series/citywide-dallas/"])
         self.assertEqual(r["noSlash"]["replaced"], ["/aagrapevine/events/#2026-10-07-lv-writing-workshop-mansfield"])
         # any other missing address keeps the 404 page and its search box

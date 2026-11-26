@@ -139,7 +139,7 @@ class Pages(unittest.TestCase):
         # light / dark media pair); the theme script sets the dark one before the first paint for a saved "dark"
         self.assertEqual(re.findall(r'<meta name="theme-color"[^>]*>', base), ['<meta name="theme-color" content="#07457c">'])
         self.assertNotIn("prefers-color-scheme", base)
-        # the iPhone icon, with the favicons: partials/icon-links.njk (tests/test_r37_icons.py checks them all)
+        # the iPhone icon, with the favicons: partials/icon-links.njk (tests/test_grape_icon.py checks them all)
         self.assertIn('{% include "partials/icon-links.njk" %}', base)
         self.assertIn('rel="apple-touch-icon" href="/assets/img/apple-touch-icon-180.png"',
                       read("src", "_includes", "partials", "icon-links.njk"))

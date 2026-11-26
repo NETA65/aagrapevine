@@ -1392,7 +1392,7 @@ English AND Spanish, and `src/assets/js/report.js` `areaSections` keeps the ones
   the past*, §5). `hz` is the oldest of those 12 when 12 were kept — or, for a series of ours whose oldest kept date
   is within a month of the 90 days' start, 27 days before that date —, and the page says "check for any before
   {date}" when the period starts earlier. The report keeps its own copies of the two numbers (`KEEP_PAST_EVENTS`,
-  `KEEP_RECURRING_DAYS`); `tests/test_r12_u10_areareport.py` `KeptAsTheSync` holds them equal to build_data's.
+  `KEEP_RECURRING_DAYS`); `tests/test_area_report.py` `KeptAsTheSync` holds them equal to build_data's.
 * `mt` — the committee meetings by the `meeting:` rule (`committee.js meetingDates`: `skip_dates` honoured), from
   `min` to 12 months ahead, with the district report's "next meeting" words (`report.c_next`).
 * `wr` — Area 65 writers, by the first day of the story's issue (an issue counts in the period its first day is in):
@@ -1506,7 +1506,7 @@ display's questions: `eleventy/filters/booth.js` `dailyQuestions` (filter `booth
   offline use) goes round its week again, leaving out the rows whose `until` has passed or whose `from` has not
   come. Nothing is stored on the device (no score), the card needs JavaScript, is not printed and is
   `data-lastmod="skip"`.
-* `tests/test_r12_u5_gvr.py` `DailyQuestionsRealCsv` judges the real CSV (a `CONTENT_TESTS` entry: the Code check
+* `tests/test_gvr_pass_it_on.py` `DailyQuestionsRealCsv` judges the real CSV (a `CONTENT_TESTS` entry: the Code check
   only).
 
 ### GVR / RLV Bingo (`/gvr/bingo/`, `/gvr/#bingo`) — `content/bingo/bingo.csv`, no data file of its own
@@ -1514,7 +1514,7 @@ Since November 2026 (round 34) the bingo cards' squares are the committee's CSV 
 per square, both languages; its columns, types and placeholders: [content/bingo/README.md](../content/bingo/README.md)).
 It is read only at build — never by the sync — by `eleventy/filters/bingo.js` `loadBingo` (checked by `checkBingoCsv`,
 placeholders filled by `fillItems` from `bingoInfo`), exposed as the global `bingo` (`src/_data/bingo.js`; `BINGO_CSV`
-and `BINGO_WEEKLY` read other files, for tests and previews — `tests/test_r34_bingo.py` builds its pages from the
+and `BINGO_WEEKLY` read other files, for tests and previews — `tests/test_bingo_cards.py` builds its pages from the
 fixture pool `tests/fixtures/bingo_csv/pool.csv`, all but its `RealContent` class):
 ```json
 { "file": "content/bingo/bingo.csv", "found": true, "rows": 295,

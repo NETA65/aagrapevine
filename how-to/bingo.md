@@ -371,9 +371,9 @@ content/bingo/bingo.csv ── eleventy/filters/bingo.js (loadBingo: read, check
 
 ```text
 python tests/test_bingo_csv.py content/bingo/bingo.csv        # the CSV alone: its problem lines, if any
-python -m unittest tests.test_bingo_csv tests.test_r34_bingo -v
+python -m unittest tests.test_bingo_csv tests.test_bingo_cards -v
 # in a real browser, on a build as GitHub Pages gets it (tests/browser/__init__.py says how; about a minute):
-GV_BROWSER_SITE=_site GV_BROWSER_CHANNEL=msedge python -m unittest discover -s tests/browser -t tests -p "test_r34_bingo.py" -v
+GV_BROWSER_SITE=_site GV_BROWSER_CHANNEL=msedge python -m unittest discover -s tests/browser -t tests -p "test_bingo_cards.py" -v
 ```
 
 - `tests/test_bingo_csv.py` (25 tests): the real file (no problem, enough squares, the meeting lines in the words
@@ -382,13 +382,13 @@ GV_BROWSER_SITE=_site GV_BROWSER_CHANNEL=msedge python -m unittest discover -s t
   settings, each hour on one line with its AM / PM). Its `Real` tests judge the committee's file, so only the Code
   check runs them (`CONTENT_TESTS`,
   [Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)).
-- `tests/test_r34_bingo.py` (51 tests): the built pages in both languages and the cards' logic run in Node. Its
+- `tests/test_bingo_cards.py` (51 tests): the built pages in both languages and the cards' logic run in Node. Its
   builds use the fixture pool `tests/fixtures/bingo_csv/pool.csv` (48 squares copied from the real file and three
   whose words are markup, which must print as words), so the tests before publishing never judge the committee's
   file. Only its `RealContent` tests build from `content/bingo/bingo.csv` (enough squares, the e-mail, both
   meetings' lines, the three pinned squares, the sample card at 6 points or more), and they too are left to the Code
   check (`CONTENT_TESTS`).
-- `tests/browser/test_r34_bingo.py` (16 tests): the builder in a real browser: every grid, the PDFs (portrait and
+- `tests/browser/test_bingo_browser.py` (16 tests): the builder in a real browser: every grid, the PDFs (portrait and
   landscape, 1, 2 and 4 on a sheet: their page counts, nothing under 6 points, nothing running over, no meeting time
   on two lines), a long typed event or title on four small cards a sheet (a pasted link too), a card of hand-picked
   squares from its link, the link, the card's language, the meetings strip (long, mid or short lines; the meeting

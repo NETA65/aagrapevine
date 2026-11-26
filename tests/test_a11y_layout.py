@@ -152,7 +152,7 @@ class Switch(unittest.TestCase):
 
     def test_the_meetings_page_uses_it(self):
         # /meetings/' "Nearby areas"; /events/ has none since round 30 (every date is a card: no "Show every monthly
-        # date" switch — tests/test_r30_events_list.py)
+        # date" switch — tests/test_events_agenda.py)
         self.assertRegex(read("src", "pages", "meetings.njk"), r'<input type="checkbox" class="cm-switch" x-model="\w+">')
         self.assertNotIn("cm-switch", read("src", "pages", "events.njk"))
 

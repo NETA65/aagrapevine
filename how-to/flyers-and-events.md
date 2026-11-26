@@ -1194,7 +1194,7 @@ months ahead: set the next panel's last day (events_until: "2030-12-31").*
 The sync (`scripts/sync/meeting.py` `window_months`, `window_dates`) and the pages (`eleventy/filters/committee.js`
 `meetingMonthsAhead`, normalizeEvents' window and `/events.ics`) work out the same months, so every committee
 meeting the pages list has its flyer, and no record of the sync makes a card of its own
-(`tests/test_r24_meeting_window.py`, `tests/test_r30_horizon.py`).
+(`tests/test_meeting_window.py`, `tests/test_events_horizon.py`).
 
 ---
 
@@ -1947,15 +1947,15 @@ python -m unittest tests.test_content_events -v      # every real content/events
 python -m unittest tests.test_source_dates -v        # dates read from names and headers (day first, ranges, notes)
 python -m unittest tests.test_events_external -v     # the GV/LV calendars, from saved pages
 python -m unittest tests.test_seo_events -v          # what search engines are told about the events (structured data)
-python -m unittest tests.test_r35_ev_pages -v        # an event's own page with its Event (since round 35)
-python -m unittest tests.test_r37_event_pages -v     # every event's page and series' page: tiers, sections by kind, privacy (round 37)
-python -m unittest tests.test_r37_spine -v           # the kinds, the page plan, the addresses, the bingo link (round 37)
-python -m unittest tests.test_r37_cancelled -v       # cancelled: true — the lists, the notice page, the calendars (round 37)
-python -m unittest tests.test_r37_links -v           # every link to an event, the 404 forwarder, /llms.txt's events (round 37)
-python -m unittest tests.test_r37_search -v          # the site search: events, series, flyers, sections (round 37)
-python -m unittest tests.test_r35_ev_organizer -v    # organizer: and organizer_url: (since round 35)
-python -m unittest tests.test_r35_ev_weight -v       # /events/ for readers without a browser: brief calendar links, data-nosnippet
-python -m unittest tests.test_r36_first_date -v      # a series' first date (starts:) moved later: its old dates gone before the sync
+python -m unittest tests.test_event_leaf_pages -v        # an event's own page with its Event (since round 35)
+python -m unittest tests.test_event_pages -v     # every event's page and series' page: tiers, sections by kind, privacy (round 37)
+python -m unittest tests.test_event_page_spine -v           # the kinds, the page plan, the addresses, the bingo link (round 37)
+python -m unittest tests.test_cancelled_events -v       # cancelled: true — the lists, the notice page, the calendars (round 37)
+python -m unittest tests.test_event_links -v           # every link to an event, the 404 forwarder, /llms.txt's events (round 37)
+python -m unittest tests.test_site_search -v          # the site search: events, series, flyers, sections (round 37)
+python -m unittest tests.test_event_organizer -v    # organizer: and organizer_url: (since round 35)
+python -m unittest tests.test_events_without_script -v       # /events/ for readers without a browser: brief calendar links, data-nosnippet
+python -m unittest tests.test_series_first_date -v      # a series' first date (starts:) moved later: its old dates gone before the sync
 python -m unittest tests.test_i18n_keys -v           # every label has English and Spanish
 python -m scripts.sync.announcements --dry-run       # prints how each content/events file is read (no files written)
 ```

@@ -604,15 +604,15 @@ breaks while you decide.
   `eleventy/central-time.js` gives every all-day event the same reminder, assemblies included, so a deadline-only
   time needs a new argument from its callers — `committee.js` `buildIcs` and `app.js` `GV.icsText`; the words
   "9 AM the day before" are in `read.dlcal.text`, `read.dlcal.desc` and `committee.cal.reminder_day`, English and
-  Spanish; and `tests/test_r12_u3_calendar.py` expects `TRIGGER:-PT15H` — *Website update*'s tests stop the
+  Spanish; and `tests/test_deadlines_calendar.py` expects `TRIGGER:-PT15H` — *Website update*'s tests stop the
   publish until it is changed too — as does the Code check's browser check
-  `tests/browser/test_r12_u3_calendar_browser.py`.) Keep `/events.ics` without reminders? On a phone set to
+  `tests/browser/test_deadlines_calendar_browser.py`.) Keep `/events.ics` without reminders? On a phone set to
   Spanish, check that iPhone's switch is called "Eliminar alertas".
 - **Aa panel:** the words for *Video captions* and *Reading speed* (Slower / Normal / Faster = 0.8 / 1 / 1.2 ×
   the voice's own speed; if "Slower" is not slow enough, 0.7 means changing `RATES` in `src/assets/js/app.js` and
-  the tests that expect 0.8: `tests/test_r12_u4_aa.py` checks that line word for word — *Website update*'s tests
+  the tests that expect 0.8: `tests/test_aa_panel.py` checks that line word for word — *Website update*'s tests
   stop the publish until it is changed too — and the Code check's browser check
-  `tests/browser/test_r12_u4_aa_browser.py` checks the rate), and how the Accessibility page's settings cards look
+  `tests/browser/test_aa_panel_browser.py` checks the rate), and how the Accessibility page's settings cards look
   now.
 - **Pass it on (GVR / RLV corner):** La Viña's address for rep-list changes — the draft is
   `preguntas@aagrapevine.org`; if La Viña names its own, put it in `config/site.yml` → `links:` →
@@ -3061,7 +3061,7 @@ Lockdown Mode or Safari's "Block All Cookies" is on.
 | `eleventy.config.js` (vendor copies), `package.json` | `wasm-media-encoders` (MIT; LAME 3.100 inside, LGPL) copied to `/assets/vendor/wasm-media-encoder.min.js` and `/assets/vendor/lame-mp3.wasm`; the page fetches them the first time the microphone is turned on |
 | `src/_includes/pwa/sw-core.js` | `.wasm` is in the static route (stale-while-revalidate, like the scripts), so the MP3 encoder works offline once it has been fetched (per code version) |
 | `db.audio_project`, `config/site.yml` → `links:` | the lengths (`minutes_min` / `minutes_max`), Grapevine's address (`gv.email`), La Viña's permission sentence (`lv.permission_text`); La Viña's address `lv_email_editorial`, the upload forms `gv_share_story` / `lv_share_story` |
-| `tests/test_recorder_core.py`, `test_recorder_page.py`, `test_recorder_store.py`, `test_r12_u2_contribute.py` (the topic list, days left, file names, the device report); the browser checks `StoryRecorder`, `RecorderKeepsTakes`, `RecorderHoldsUpdate`, `RecorderTopicAndCheck`, `WallsLinks` | the logic in Node.js; the page, its script and its strings; the storage, page load after page load, over a pretend IndexedDB that fails the way phones fail (`tests/fakeidb.js`: Blobs refused, a write failing once or for good, a full device, an unreadable take, an open that never answers, a version-1 database, two tabs, a link click while a take isn't saved); in a real browser (`tests/browser`, Chromium's fake microphone), a take recorded in English and Spanish, its MP3 and WAV, the address, a reload, "Delete all"; a take still there after a link away and back and in Spanish, also where the browser refuses Blobs; a full device that asks before a link and saves once there is room; the update notice held while a take is being recorded |
+| `tests/test_recorder_core.py`, `test_recorder_page.py`, `test_recorder_store.py`, `test_share_your_story.py` (the topic list, days left, file names, the device report); the browser checks `StoryRecorder`, `RecorderKeepsTakes`, `RecorderHoldsUpdate`, `RecorderTopicAndCheck`, `WallsLinks` | the logic in Node.js; the page, its script and its strings; the storage, page load after page load, over a pretend IndexedDB that fails the way phones fail (`tests/fakeidb.js`: Blobs refused, a write failing once or for good, a full device, an unreadable take, an open that never answers, a version-1 database, two tabs, a link click while a take isn't saved); in a real browser (`tests/browser`, Chromium's fake microphone), a take recorded in English and Spanish, its MP3 and WAV, the address, a reload, "Delete all"; a take still there after a link away and back and in Spanish, also where the browser refuses Blobs; a full device that asks before a link and saves once there is room; the update notice held while a take is being recorded |
 
 ### Listen and Watch
 
@@ -3122,7 +3122,7 @@ Nothing to set up: everything here builds itself from the podcast and YouTube sy
 | `src/assets/js/media.js` | the player (`RATES`), `?ep=` (`openLinked`, the `held` flag: nothing saved until the visitor plays, skips or seeks), Watch's `readUrl` / `syncUrl` (`?type=`, `?pl=`, `?lang=`), the share links |
 | `src/assets/js/home.js` | Home's player on Listen's saved places (`gv:audio:pos`, `gv:audio:last`), "Continue listening" |
 | `eleventy/filters/library.js`, `src/assets/js/search.js` | the search index: an episode's `u` is `/listen/?ep=<id>`, its host page the optional `u2` (since round 37 `u2` is also a presentation's player address; everything else the index holds: [how-to/pages-and-code.md → 5.4](how-to/pages-and-code.md#54-files-that-are-not-pages)) |
-| `tests/test_r12_u1_listen.py`, `tests/browser/test_r12_u1_listen_browser.py` | the card, the addresses, the shared episode, the share texts, Home's places |
+| `tests/test_listen_watch.py`, `tests/browser/test_listen_browser.py` | the card, the addresses, the shared episode, the share texts, Home's places |
 
 ### What's New: new since your last visit
 
@@ -3143,8 +3143,8 @@ page is left or put in the background), `base` the visit before, `{ upto, at }`,
 starts a new visit. The line is filled in by a small script right after it in `src/pages/whats-new.njk`, before the
 feed is drawn, so nothing moves. Each entry carries `data-seen` (`eleventy/filters/community.js` `wnSeenOf`: its
 `first_seen`, not its news date); the buttons and the visit's time
-are `src/assets/js/community.js` (`sinceDone`, `watchVisit`). Tests: `tests/test_r12_u8_whatsnew.py`, browser check
-`WhatsNewSince` (`tests/browser/test_r12_u8_whatsnew_browser.py`).
+are `src/assets/js/community.js` (`sinceDone`, `watchVisit`). Tests: `tests/test_whatsnew_since_last_visit.py`, browser check
+`WhatsNewSince` (`tests/browser/test_whatsnew_browser.py`).
 
 ### Calendar files: story deadlines and reminders
 
@@ -3218,7 +3218,7 @@ red); the offices are the `meetings:` → `feeds` entries with `in_area: true` a
 how-to/settings.md [§3.11 `links:`](how-to/settings.md#311-links--official-links-used-across-the-site) (the three
 aa.org links) and [§3.9 `meetings:`](how-to/settings.md#39-meetings--grapevine-meetings-near-us) (the offices). For
 maintainers: `src/_includes/macros/ui.njk` (`newcomerCard`, `newcomerLine`), `eleventy/filters/newcomer.js`
-(`ncOffices`), `src/_i18n/common.json` (`newcomer.*`), `tests/test_r12_u6_newcomers.py`.
+(`ncOffices`), `src/_i18n/common.json` (`newcomer.*`), `tests/test_newcomers.py`.
 
 ### The GVR / RLV corner: Pass it on and the question of the day
 
@@ -3281,7 +3281,7 @@ card, About's and the corner's compact one; `src/assets/css/areas/read.css` `.re
 `eleventy/filters/booth.js` (`dailyQuestions`, `DAILY_DAYS`, `DAILY_PER`, `boothOnly`, `BOOTH_VOICE`, `csvColumn`,
 `SOURCE_HOSTS`, `csvSources`), the words `src/_i18n/read.json` (`read.gvr.pass_*`, `read.gvr.hs_*`, `read.gvr.vid_*`)
 and `booth.json` (`booth.dyk.*`); browser checks `PassItOn`
-(`tests/browser/test_r12_u5_gvr.py`) and `StartCards`, `VideosBesideQuestion` (`tests/browser/test_r13_u2_gvr.py`).
+(`tests/browser/test_gvr_pass_it_on_browser.py`) and `StartCards`, `VideosBesideQuestion` (`tests/browser/test_gvr_layout_browser.py`).
 
 ### GVR / RLV Bingo (printable bingo cards)
 
@@ -3321,9 +3321,9 @@ How to make and print cards, step by step, tips for running a game the AA way, a
 (`window.GVBingo`: the pool, the seeded draw, the link, the sheet plan), `src/assets/js/bingo.js` (the builder),
 `eleventy/filters/bingo.js` (`loadBingo`: the CSV read, checked and filled in) and `bingo-sample.js` (the sample
 cards), `src/assets/css/areas/bingo.css` (`bgo-`), `src/_i18n/bingo.json`; tests `tests/test_bingo_csv.py`,
-`tests/test_r34_bingo.py` (its pages built from the fixture pool `tests/fixtures/bingo_csv/pool.csv`, so the tests
+`tests/test_bingo_cards.py` (its pages built from the fixture pool `tests/fixtures/bingo_csv/pool.csv`, so the tests
 before publishing never judge the committee's file; its `RealContent` class reads the real one) and
-`tests/browser/test_r34_bingo.py`.
+`tests/browser/test_bingo_browser.py`.
 
 ### The committee meeting's paperwork (Agenda & notes)
 
@@ -3383,7 +3383,7 @@ explained in the comment just above `paperwork:` in that file; the decks in gene
 `config/site.yml` → `meeting:`, the paperwork follows by itself. For maintainers: `eleventy/filters/presentations.js`
 (the deck JSON's `paperwork`), `src/assets/js/presentations-core.js` (`paperText`, `paperMeetings`,
 `nextMonthPlan` / `startNextMonth` / `undoNextMonth`; the stored state's per-deck `prev`, what the Undo puts back,
-never in a saved "my version" file), `src/assets/js/presentations.js`, `tests/test_r12_u9_meeting.py`.
+never in a saved "my version" file), `src/assets/js/presentations.js`, `tests/test_meeting_paperwork.py`.
 
 ---
 

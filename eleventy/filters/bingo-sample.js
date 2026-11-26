@@ -31,7 +31,7 @@
 //       PM", "7–8 p. m.") in <span class="bgo-nb"> (kept on one line: areas/bingo.css)
 //
 // Pure apart from the build's clock: the same CSV, settings and day give the same card in every build, on both
-// pages and in the browser (tests/test_r34_bingo.py checks the sample against the core run in Node). Nothing here
+// pages and in the browser (tests/test_bingo_cards.py checks the sample against the core run in Node). Nothing here
 // makes HTML but bingoBreaks, which only adds those tags to words already escaped: the templates put every word in
 // with autoescape on, or escape first.
 

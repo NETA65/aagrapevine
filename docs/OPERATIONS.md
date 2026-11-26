@@ -456,41 +456,41 @@ and said once). Each page must answer 200 ("/<page> answered 404, not 200 — is
 the site?").
 
 Since October 2026 each new feature brings its own browser-check file next to `test_site_in_browser.py`, and the same
-`discover` command runs them (any `test*.py` in `tests/browser`, alphabetical): `test_r12_u1_listen_browser.py`
+`discover` command runs them (any `test*.py` in `tests/browser`, alphabetical): `test_listen_browser.py`
 (`ListenSharedLink`: a shared `/listen/?ep=` episode beyond the newest 24 while the full list is slow or offline;
-`HomeResumeFocus`), `test_r12_u3_calendar_browser.py` (`DeadlineCalendarMenu`: "Add to my calendar" under a story
+`HomeResumeFocus`), `test_deadlines_calendar_browser.py` (`DeadlineCalendarMenu`: "Add to my calendar" under a story
 deadline on a 360 px phone, its `.ics` with the 9 AM reminder and Escape, and one menu open at a time — these two
 checks are skipped when no deadline is open, the second also with only one; `/deadlines.ics` and `/es/deadlines.ics`
-served as a calendar (200, `text/calendar`, `BEGIN:VCALENDAR`) is checked every time), `test_r12_u4_aa_browser.py`
+served as a calendar (200, `text/calendar`, `BEGIN:VCALENDAR`) is checked every time), `test_aa_panel_browser.py`
 (`ReadAloudControls` with a stand-in voice: start on the screen, side columns, Previous / Next, speed;
-`VideoCaptions`), `test_r12_u5_gvr.py` (`QuestionOfTheDay`, `PassItOn`
-— the two printed sheets and the "Tell the office" e-mails —, `GvrPhone`), `test_r12_u7_shop.py`
+`VideoCaptions`), `test_gvr_pass_it_on.py` (`QuestionOfTheDay`, `PassItOn`
+— the two printed sheets and the "Tell the office" e-mails —, `GvrPhone`), `test_shop_group_cost.py`
 (`ShopCostCalculator`, `ShopCostSheet`; the browser's clock stopped; `OfferBannerGone`: a store banner that fails
 while a link to a section below it — `/shop/#offers-holiday-gifts-2026`, `#subscriptions` — still scrolls there
 smoothly leaves that section where the link puts it, a reader who scrolled away is not pulled back; skipped when the
-Shop shows no banner), `test_r12_u8_whatsnew_browser.py`
+Shop shows no banner), `test_whatsnew_browser.py`
 (`WhatsNewSince`: a seeded `gv-wn-seen` record, the marks, no layout shift, "Mark all as read"),
-`test_r12_u9_meeting_browser.py` (`MeetingPaperwork`: Customize → Agenda & notes, Start next month and its Undo,
-the clock stopped at the built deck's meeting dates) and `test_r12_u10_areareport.py` (`AreaReportInBrowser`: For:
+`test_meeting_paperwork_browser.py` (`MeetingPaperwork`: Customize → Agenda & notes, Start next month and its Undo,
+the clock stopped at the built deck's meeting dates) and `test_area_report.py` (`AreaReportInBrowser`: For:
 Area, the Word file's dated name, dates typed one at a time, a 360 px phone seen as Safari on an iPhone, with the
 line on Safari's 7-day rule under *Earlier reports* and in the note; `AreaDraftsInBrowser`, the clock stopped at the
 build's own dates: the working report following today, a *To* picked by hand, *Next report* and the "Start from your
 … report?" offer, no Safari line in Chrome and `navigator.storage.persist()` asked once after the first save, never
 on opening the page; an earlier report's Word file, print and Delete; *Start this part over*),
-`test_r13_u1_deadline_cards.py` (`TheCardsEndTogether`: Share your story's two deadline cards side by side at 1024 /
+`test_deadline_cards_browser.py` (`TheCardsEndTogether`: Share your story's two deadline cards side by side at 1024 /
 1280 / 1440 / 1920 px, English and Spanish, light and dark, 150 % text — one height, no blank band under the shorter
 one's content, no topic tile stretched beyond 1.45 × its words (skipped on a build day without suggested topics in
 both cards); one under the other on a 390 px phone; `EachItemOnce`: every deadline row and topic shown exactly once,
 in the card's list or under its "Show all", at ten widths; `NoRowAlone`: where a card's deadline rows run in two
 columns — 768 px, and side by side from about 1475 px — an even number of them, or all it has),
-`test_r13_u2_gvr.py` (the GVR / RLV corner — `StartCards`: "Start with GVR / RLV 101" and the Tracker in one row,
+`test_gvr_layout.py` (the GVR / RLV corner — `StartCards`: "Start with GVR / RLV 101" and the Tracker in one row,
 the same top and height, each half of their list, at 1280 / 1440 / 1920 px and at 1440 px with 115 % text, so the
 left column ends within 80 px of the six duty cards beside it, English and Spanish; one under the other at 1024 px,
 on a phone and at 150 % text; `VideosBesideQuestion`: the About page's two videos beside "Did you know?" from about
 1180 px — one row, one height, the question in the middle of its card, still one height once answered —, under it
 at 1100 px and narrower with nothing scrolling sideways; with no question card they take the whole row; one video
 fills the list; neither card is printed; Play loads YouTube's privacy-enhanced player in place),
-`test_r13_u3_layout.py` (no box alone beside blank space: `DigestColumns` — /digest/'s two newspaper columns end
+`test_column_balance_browser.py` (no box alone beside blank space: `DigestColumns` — /digest/'s two newspaper columns end
 within one unbreakable piece of each other at 1280 / 1440 / 1920 px, 115 % text and "Both languages", English and
 Spanish, no heading at the foot of a column — also with break-after / break-before ignored as in Firefox (Safari
 ignores "avoid"), where the empty unbreakable box community.js `digestColumns` puts before each heading keeps it
@@ -500,10 +500,10 @@ Safari (Playwright's WebKit) and Firefox were checked by hand on October 16, 202
 guide alone on the last row of /offline/#steps, its steps side by side (1.5rem apart) in the wide card;
 `FeaturedWriters` — Area 65's featured cards 2 per row on /published/, an odd number shown (after "Show all", a
 magazine, the longer period, all of Texas) → the last one takes the row; `FourCards` — 4-card `grid-cards-4`
-lists never 3 + 1, every 12 px from 600 to 2000 px at 100–150 % text), `test_r14_v1_read_cards.py`
+lists never 3 + 1, every 12 px from 600 to 2000 px at 100–150 % text), `test_read_cards_browser.py`
 (`IssueCards`: /read/'s Grapevine and La Viña cards side by side at 1440 / 1920 px, English and Spanish, 130 % text —
 they end on one line and their "Show all N stories" rows sit level; with one list opened the other card's "Show
-all" stays under its own list; one column at 1280 px and with one magazine chosen, each card its own length), `test_r14_v2_credits_browser.py` (the publishers' permission credits: `QuoteCredit` — Home's daily-quote card ends with one line of small print under both quotes, A.A.W.S.'s and AA Grapevine's credits in the page language, also on a phone where one quote waits behind its button, at least 12 px and 4.5:1 in light and dark; `FooterNotice` — the footer's notice in two runs, the whole width of the bar from 768 px; `OnPaper` — printed, Home keeps both and /digest/ prints its own copy of the notice), `test_r14_ctm_browser.py` (Carry the
+all" stays under its own list; one column at 1280 px and with one magazine chosen, each card its own length), `test_permission_credits_browser.py` (the publishers' permission credits: `QuoteCredit` — Home's daily-quote card ends with one line of small print under both quotes, A.A.W.S.'s and AA Grapevine's credits in the page language, also on a phone where one quote waits behind its button, at least 12 px and 4.5:1 in light and dark; `FooterNotice` — the footer's notice in two runs, the whole width of the bar from 768 px; `OnPaper` — printed, Home keeps both and /digest/ prints its own copy of the notice), `test_carry_the_message_browser.py` (Carry the
 Message: `NotFoundGrid` — the 404 page's 9 popular pages three even rows of 3 from 1024 px, also at 115 / 130 %
 text, with the *Want to help financially?* card a row of its own under them, as wide as the grid, never a 10th card
 in it; every 56 px from 360 to 2000 px at 100–150 % text, each row full or its one card the whole row (the 9th spans
@@ -511,16 +511,16 @@ both columns where only two fit), nothing scrolling sideways; `ProgramButtons` �
 404 page, About and Shop at 390–1920 px and 150 % text: at least 44 px tall, one width, side by side or one under
 the other, the page language's first; `MissingSpanishAddress` — a missing address answered with the root 404 page
 (status 404, as on GitHub Pages): La Viña's button first under `/es/…`, Grapevine's elsewhere, and the card's words
-in Spanish too, under the English ones at 390 / 1440 px and beside them at 1920 px), `test_r26_chat_message.py`
+in Spanish too, under the English ones at 390 / 1440 px and beside them at 1920 px), `test_meet_chat_message_browser.py`
 (`ChatMessageCopy`: Customize → Prepare of the Grapevine Meeting, the Copy button of "Chat message for Google Meet",
 the only Copy in that tab, beside View and Print; the clipboard holds 7 plain lines with every address written out
 in full, the day's facts filled in, and no `{live:`, `[ ]` or `**` marks; on `/es/` the button says "Copiar" and
-copies the same English text), `test_r26b_posters.py` (`EveryDateFits`: every month's poster, English and Spanish,
+copies the same English text), `test_monthly_posters_browser.py` (`EveryDateFits`: every month's poster, English and Spanish,
 once fitted (`data-mp-fit`) holds the page's dates and the offers and price change in the message's words, with
 nothing overflowing and type of at least 15 px; `PrintOnePage`: the busiest month prints on one Letter page;
 `MastheadClear`: the month's name never touches the year or tagline; `UnfittedClipped`: before the fit, or with
 monthly.js blocked, no text sits on another block and every date is whole) and, since November 2026,
-`test_r32_booth.py` (the booth display on `/about/#booth`: `OwnWindow` — with a mouse, English and Spanish, **Start
+`test_booth_window_browser.py` (the booth display on `/about/#booth`: `OwnWindow` — with a mouse, English and Spanish, **Start
 the booth** opens a window of its own named `gvlv-booth` at the page language's `…/about/?booth=start`, showing the
 show with "Move this window where you want it, then tap for full screen & sound"; the About page plays nothing
 itself and says the show is playing in its own window; Start again brings that window forward (never a second
@@ -545,29 +545,29 @@ Windows PC with Microsoft Edge (`GV_BROWSER_CHANNEL=msedge`, November 12, 2026, 
 file alone about 1 minute; 96 checks took about 8 minutes on October 16, 2026); on GitHub's runner, 84 checks
 (before the 105 above) took 6¾ minutes, and 165 checks (with Round 34's bingo cards) 15 minutes on a slow runner on
 November 19, 2026 (900 s, all passing); the step's limit is 25 minutes and the job's 30 (`check.yml`; the step's was
-10 until October 16, 2026 and 15 until November 19, 2026). Since November 17, 2026 `test_r32_booth.py` adds 12
+10 until October 16, 2026 and 15 until November 19, 2026). Since November 17, 2026 `test_booth_window_browser.py` adds 12
 checks: 18 files.
 
 Round 33 (November 17, 2026) adds 8 files, 30 checks — 149 checks in 26 files:
-`test_r33_first_visit_light.py` (`FirstVisitLight`: a device set to dark still opens Home, Events and `/es/` light,
+`test_first_visit_light_browser.py` (`FirstVisitLight`: a device set to dark still opens Home, Events and `/es/` light,
 address bar too, from the first paint; a saved "dark" opens dark and the header's button switches back and saves),
-`test_r33_search.py` (`SearchFirstPaint`: a search link with `?q=` is drawn in its results state from the first paint,
+`test_search_library.py` (`SearchFirstPaint`: a search link with `?q=` is drawn in its results state from the first paint,
 layout shift under 0.05 at 390 and 1280 px, Clear and Escape back to the start; `SearchTargets`: 44 px type chips on
 a phone, nothing covering the "Episode page" and language links; `StalledIndex`: an index that never answers ends in
-Retry after 20 s, a slow one still loads), `test_r33_committee.py` (`PhotoSlideshow`: focus into the photo lightbox
+Retry after 20 s, a slow one still loads), `test_committee_pages.py` (`PhotoSlideshow`: focus into the photo lightbox
 and back to the photo, Previous / Next on screen on a phone, swipe-close with reduced motion; `EventCards`: the Add
 to calendar menu whole on every event card, `#ev-…` links land; `Rings` and `Calendar`: focus rings and past days'
-contrast), `test_r33_pages.py` (focus rings on the dark panels and YouTube's play button, `/es/read/` at 320 px, the
-offline card), `test_r33_misc.py` (the theme follows other open tabs and Back; the footer's grape icon (a 44 px square that never shrinks) and the Accessibility
-page's meeting links), `test_r33_prefs.py` (the Aa panel's text size and spacing apply at once and after a reload —
-the `gv-prefs` class), `test_r33c_slideshow.py` (`CoversSlideshow`: with any mix of the magazine covers' filters —
+contrast), `test_audit_page_fixes.py` (focus rings on the dark panels and YouTube's play button, `/es/read/` at 320 px, the
+offline card), `test_audit_small_fixes.py` (the theme follows other open tabs and Back; the footer's grape icon (a 44 px square that never shrinks) and the Accessibility
+page's meeting links), `test_text_size_prefs.py` (the Aa panel's text size and spacing apply at once and after a reload —
+the `gv-prefs` class), `test_cover_slideshow.py` (`CoversSlideshow`: with any mix of the magazine covers' filters —
 year and month, decade, magazine — the slideshow holds exactly the covers on screen, in order) and
-`test_r33c_posterplaces.py` (`EstimateMatchesTheBrowser`: the build's estimate of each poster block's height, from
+`test_poster_places.py` (`EstimateMatchesTheBrowser`: the build's estimate of each poster block's height, from
 which it places the split layout's blocks before the fit, stays within 30 px of what the browser draws). The browser
 check of the offline worker's update (`OfflineAreaStyles`) skips itself, saying why, on a computer whose network
 filter rewrites service workers (AdGuard for Windows); GitHub's runner has none and runs it.
 
-Round 34 (November 2026) adds 1 file, 16 checks — 165 checks in 27 files: `test_r34_bingo.py` (the GVR / RLV
+Round 34 (November 2026) adds 1 file, 16 checks — 165 checks in 27 files: `test_bingo_cards.py` (the GVR / RLV
 corner's bingo cards on `/gvr/bingo/` and `/es/gvr/bingo/`: `Starts` — the builder draws card 1 of 10 with a game
 code, card 2 differs, *Choose squares yourself* opens kind by kind and searches, no script or console error; with
 `bingo.js` blocked the notice outside the builder says it could not start; `Grids` — every preset 3×3 … 10×10 and
@@ -591,10 +591,10 @@ white, the help lines, the remembered settings, *Start over* asking first, 60 ca
 `NoScript` — the build's 5×5 sample card prints as one page; `Teaser` — `/gvr/#bingo` leads to the bingo page of
 the same language). About a minute on a Windows PC with Edge (November 18, 2026).
 
-Round 37 (November 2026) adds `test_r37_event_page.py` (the events' own pages on the built site at 390 px: an
+Round 37 (November 2026) adds `test_event_page_browser.py` (the events' own pages on the built site at 390 px: an
 indexable event's page with its Event, a series' date, a series' page and — when the build has one — a cancelled
 event's notice: no sideways scroll, no script error, buttons at least 44 px tall, the card before the quick facts,
-the bingo link opening the builder filled in) and `test_r37_search.py` (`NewKinds`: the presentations, flyers and
+the bingo link opening the builder filled in) and `test_site_search.py` (`NewKinds`: the presentations, flyers and
 FAQ sections in the results, their labels and icons, "Start the presentation" beside its result, nothing sideways
 on a 360 px phone at 150 % text).
 
@@ -625,36 +625,36 @@ template reads) are `CONTENT_TESTS`: only this check runs them.
 
 The mid-October 2026 features added these to the lists in `scripts/ops/gate_tests.py` (each judges what the committee
 or the daily sync changes, so it must never stop a publish: this check runs it, and goes red instead):
-`DATA_TESTS` `test_r12_u2_contribute.RealData.test_la_vinas_topics_and_their_links` (La Viña's suggested topics in the
+`DATA_TESTS` `test_share_your_story.RealData.test_la_vinas_topics_and_their_links` (La Viña's suggested topics in the
 day's `editorial.json`: the recorder's list and their "Record a story on this topic" links); `CONTENT_TESTS`
-`test_r12_u5_gvr.DailyQuestionsRealCsv.` (`content/booth/booth.csv`: the question of the day on About and `/gvr/`),
-`test_r12_u5_gvr.OfficeAddresses.` (`links.gvr_office_email` / `rlv_office_email`: each only a valid e-mail address,
-any domain), `test_r12_u6_newcomers.RealSettings.` (the "New to AA?" card's `links.aa_find` / `aa_is_aa_for_you` /
+`test_gvr_pass_it_on.DailyQuestionsRealCsv.` (`content/booth/booth.csv`: the question of the day on About and `/gvr/`),
+`test_gvr_pass_it_on.OfficeAddresses.` (`links.gvr_office_email` / `rlv_office_email`: each only a valid e-mail address,
+any domain), `test_newcomers.RealSettings.` (the "New to AA?" card's `links.aa_find` / `aa_is_aa_for_you` /
 `aa_meeting_guide`, each with its `_es` page, and our Area's `meetings.feeds` offices) and
-`test_r12_u9_meeting.RealDeck.`, `.Texts.`, `.NextMonth.` (`config/presentations/committee-meeting.yml`: its
+`test_meeting_paperwork.RealDeck.`, `.Texts.`, `.NextMonth.` (`config/presentations/committee-meeting.yml`: its
 `paperwork:` passes the checker, its texts word for word, what "Start next month" clears and keeps — the gate tests
 the code on `tests/fixtures/presentations` instead).
 
 Round 34 (November 2026, the GVR / RLV corner's bingo cards) added `CONTENT_TESTS` `test_bingo_csv.Real.`
 (`content/bingo/bingo.csv`: no problem line, enough squares in both languages for a 10×10 card with each magazine
 choice and occasion, the three information squares pinned, the meeting lines in the words `config/site.yml` gives —
-the gate tests the checker on `tests/fixtures/bingo_csv/` instead) and `test_r34_bingo.RealContent.` (a build of the
+the gate tests the checker on `tests/fixtures/bingo_csv/` instead) and `test_bingo_cards.RealContent.` (a build of the
 bingo pages of its own from that file and `config/site.yml`: at least 200 squares, the e-mail, both meetings' lines,
 the three pinned squares on the default card in both languages, its words at 6 pt or more), and `DATA_TESTS`
 `test_bingo_csv.Real.test_the_build_fills_every_square` (the meeting squares filled in from the day's
-`weekly_open.json` and `config/site.yml`). The rest of `test_r34_bingo.py` — the classes the gate runs — builds the
+`weekly_open.json` and `config/site.yml`). The rest of `test_bingo_cards.py` — the classes the gate runs — builds the
 pages from the fixture pool `tests/fixtures/bingo_csv/pool.csv` (`BINGO_CSV`: 48 squares copied from the real file
 and three whose words are markup), never from the committee's file.
 
 Round 37 (November 2026, every event's own page and the site search) added `DATA_TESTS`
-`test_r37_search.RealIndex.test_the_size_budget` (each language's search index of the day's data at most 1,600,000
+`test_site_search.RealIndex.test_the_size_budget` (each language's search index of the day's data at most 1,600,000
 bytes — 1,400,000 until the writers archive's stories joined it), `.test_the_query_table_on_the_days_data`,
 `.test_every_new_kind_is_there` and `.test_nothing_says_how_to_join` (the search on the day's flyers, events, issues,
 Book of the Month and weekly open meetings: no Zoom ID or meeting link in it), and, with the round's last fixes,
-`test_r35_ev_weight.Budget.test_what_a_reader_without_a_browser_takes_from_the_page` (`/events/` built from the day's
+`test_events_without_script.Budget.test_what_a_reader_without_a_browser_takes_from_the_page` (`/events/` built from the day's
 `events.json`: under 170,000 characters of text and link addresses in each language — one more monthly series dated
 through `events_until` adds about 27,000, so an event file or a series the committee adds could otherwise stop every
-publish). The rest of `test_r37_search.py` and of `test_r35_ev_weight.py` (`ThePage`: the cards' own weight, on
+publish). The rest of `test_site_search.py` and of `test_events_without_script.py` (`ThePage`: the cards' own weight, on
 events of its own) is code, and the gate runs it.
 
 ### `dependabot.yml`
@@ -697,7 +697,7 @@ All modules follow the same conventions (see [DATA_SCHEMA.md](DATA_SCHEMA.md)): 
 | `translate.py` | all raw titles/summaries/bodies → `data/translations/cache.json` | CTranslate2 + Argos 1.0 models (auto-downloaded to `GV_MODELS_DIR`), sentence splitting with per-sentence ¿…? / ¡…! pairing, protected spans (URLs, handles, times, codes, sizes like 8.5 x 11, "Firstname X." names, a Google Meet code that a "code" / "código" / "Google Meet" just before it names as one — "one-year-old" has the same shape), glossary (+ built-in Step/Tradition ordinals, "[Season N, Episode M]" → "[Temporada N, Episodio M]"), sentence case for Spanish titles / Title Case for English titles, an output guard (rejects repeated-word loops, changed numbers, entity leaks → keeps the original) and a vocabulary guard (never outputs "coger" — vulgar in Latin-American Spanish) | Cache hits never re-translate; `overrides.yml` always wins; glossary edits re-translate only affected texts; bump `ENGINE_VERSION` to re-translate all. An unreadable `cache.json` is moved aside as `cache.json.bad-<UTC time>` and reported (`Translator.problems` → `status.json` `translations.problems` and `problems.translations`); if it cannot be moved it is never overwritten (nothing is translated that run). A downloaded model whose SHA-256 is not `MODEL_SHA256` is not installed (`ModelMismatch`): that direction stays untranslated, with the reason | `"text" --to es`, `--download`, `--stats` |
 | `build_data.py` | `data/raw/*` + content/ + config → `data/site/*.json` | Adds `i18n`, `machine`, `is_new`; builds events (the committee meetings of this month and the months after it through config/site.yml `events_until`'s month — at least the 12 after it, at most 60: `meeting.window_months`, worked out the same way as `committee.js` `meetingMonthsAhead`; on Nov 13, 2026 with `"2028-12-31"` 26 dates, Nov 18, 2026 … Dec 20, 2028 — every date the pages list, so each has its flyer — + `recurring_events:` from the config (every date of the same months, at least each one's `months_ahead`) + flyers + manual + external + the optional `sources.ics_feeds` calendars, each real event once — see [Events](#events-several-days-to-be-confirmed-places-outside-calendars)), `whatsnew.json` (newest 150), `status.json` (+ `feeds`: the health of each outside calendar; `scheduled`: the bulletin posts whose `publish` day is still to come — left out of every site file until that day, Central time — soonest first, at most 20; `quote_days`: when each of the last 7 mornings' quotes came in against `site.morning_goal`, for `/status/` — a day whose quote came in at a time not recorded is left out; `full_update`: when the last full update ran, for `/build.json` — kept from the last build with `--keep-full-update`, which run_all passes in quick and morning runs; `writers_archive`: the archive files in use and how the list was made; `reminders`: dated settings that run out soon), `writers_archive.json` (the Texas writers archive: the archive files' rows + every captured Texas story of any age, `plan_writers_archive` / `build_writers_archive`; where each writer is from worked out again on every run; its titles and summaries translated last, tiers 5 and 6). A published scheduled post is news from the start of its day (`Ctx.effective_ts`: What's New, the feed, the "New" badge, the digest) | Only writer of `data/site/`; templates read nothing else. A raw file that exists but cannot be read (`Ctx.unreadable`) keeps what the last build made of it (`carry_unreadable`: the whole site file, or that source's items in `announcements.json` / `events.json` / `whatsnew.json`), its `status.json` row keeps the last values with `ok: false` and "data/raw/<source>.json cannot be read (<reason>) — restore it from git; the site keeps the last build's items" (`common.unreadable_message`), and the translation cache is not pruned meanwhile (`prune_blockers`: an unreadable or missing raw file, or glossary / overrides — never a settings note). Since October 2026 the same holds for a raw file that is **missing** although the last build's `status.json` (`Ctx.load_raw(previous)`; a fixture one is ignored) had items from that source (`Ctx.raw_missing`): "data/raw/<x>.json is missing — the site keeps the last build's items until an update of this source works (or restore the file from git)"; and for one that its next update, which failed, wrote again with `ok: false` and nothing in it (`Ctx.missing_failed`): "data/raw/<x>.json went missing and this source's update since did not work (<error>) — the site keeps the last build's items until one works (or restore the file from git)". The first update that works, even one that finds nothing, ends it; a source with nothing before starts empty, "not run yet". Files whose own time would be "now" keep the last build's `updated` when nothing else in them changed (`stamped`). A bad `meeting:` / `recurring_events:` / `ics_feeds:` / `price_changes:` entry (or a `skip_dates` value that is not one of the rule's days) is skipped and listed in `status.json` → `problems` (and as a **Settings problem** in the run summary). Its only network request: each `.ics` feed, at most once a day (`--offline`: none) | `--offline`, `--no-translate` |
 | `run_all.py` | orchestrator | Runs every module in turn, isolating failures, then translation + `build_data` (`--keep-full-update` in quick and morning runs); the run table is titled "Full update", "Quick refresh" or "Morning refresh" | A crashing module is recorded as `ok=false` (see `run_module`) and the rest continue. A module whose own raw file cannot be read (`common.raw_unreadable`) is not run at all (since October 2026: it would only rebuild the source from scratch, and Instagram's clean-up would delete the pictures of every older post): its row is "failed" with `common.unreadable_message`, no failure mark is written over the file (`run_module` catches `UnreadableRaw` first; `save_raw` raises it too), and build_data keeps the last build's items until a person restores the file (`RAW_ALSO`: `announcements` also writes `manual_events.json`, so the bulletin still updates while an unreadable `manual_events.json` stays untouched and the row is failed). A full run with `--crawl-minutes 0` while `sources.crawler.minutes_per_run` is 0 (`crawl_paused`) refreshes `attempted` of `data/raw/pdfs.json` with this run's own `changes` (`{added: 0, removed: 0, held: …}`) and `hub_problems: []` (`_note_paused_crawl`; not for `ok: false`, a quick or morning run, or a 0-minute run by hand while the search is on) and names the crawl row "paused (sources.crawler.minutes_per_run: 0)", so the paused search is never "not checked", also after it is switched back on | `--crawl-minutes N`, `--quick`, `--also a,b` (with `--quick` only: also these modules, never the crawl), `--morning` |
-| `meeting.py` | config `meeting:` (+ the rule engine for `recurring_events:`) | `upcoming_rule_dates(MonthlyRule, count, tz)`: the Nth weekday (1–5, or −1 = last) of every month, start–end on the local clock → UTC instants (right across DST changes and month/year ends), `skip_dates`, `starts` (a first date: `check_starts` notes one that is not a date or not a rule day). Used for the committee meeting (3rd Wednesday 7–8 PM Central by default) and every recurring event (the Grapevine Meeting, 1st Wednesday, is one of them). `window_meetings`: the committee meetings the pages list — every date from this month (the site's time zone) through `window_months` months after it, not a count of dates (one more before this month's meeting than after it); `window_months` (since round 30): through the month of config/site.yml `events_until` (`events_until()` reads it — an unquoted YAML date too; one that is not a date is ignored), never fewer than `MEETING_MONTHS_AHEAD` = 12, never more than `WINDOW_MONTHS_MAX` = 60 (on Nov 13, 2026 with `"2028-12-31"`: 25 months, 26 dates, Nov 18, 2026 … Dec 20, 2028; without the setting: 12 months, 13 dates before this month's meeting); `window_dates` is the same window for any rule (`build_data.recurring_events`); `window_notes`: a value that is not a date, or more than 60 months away, for `problems.recurring_events`. `build_data.committee_meetings` writes a record for each date (its flyer, its guest speaker), so no date the pages list goes without its flyer. The twin of `eleventy/filters/committee.js` `meetingMonthsAhead` (normalizeEvents' window, `/events.ics`; the month pages, 13, are inside it), kept in step by `tests/test_r24_meeting_window.py` and `tests/test_r30_horizon.py`. Also `meeting_speakers` (the committee meeting's guest speakers: a date that is a rule day and no skip date, a "First L." name — `SPEAKER_NAME` —, one a date; notes for `problems.meeting`), `speaker_until`, `SPEAKER_CONFIRM_DAYS` = 45 (build_data's reminder for a speaker not `confirmed` yet) | An end earlier than the start, at most 12 hours later (`overnight`, `OVERNIGHT_MAX_HOURS`), is the next morning (since October 2026; `22:00`–`01:00`); otherwise an end not after the start is one hour, capped at 23:59. Every copy of the rule follows the same overnight rule: `eleventy/central-time.js` `overnight()` / `ruleDate` (the build and, as `GVTime`, the browser's countdowns: `app.js` `GV.nextMeeting`, `committee.js`), `eleventy.config.js` `monthlyRule`, `committee.js` `meetingEnd` / `meetingTimeRange` ("10:00 PM – 1:00 AM"), `monthly.js` `meetingByRule`, `src/_data/meeting.js` and `send_digest.py` `meeting_by_rule` (its own copy of `overnight`). Since October 2026 the meeting dates of the chair's Area report (`eleventy/filters/report.js areaModel` → `#rp-area` `mt`) and of the committee meeting deck's paperwork (`eleventy/filters/presentations.js paperMeetings` → the deck JSON's `paperwork.meetings`, with `src/_data/meeting.js`'s upcoming ones) come from `committee.js` `meetingDates` too (`skip_dates` honoured): a change of `meeting:` reaches them with the next build, nothing else to do. `check_skip_dates()`, shared by the meeting and every recurring event: a skip date that is not a date, or not the rule's day of its month, is ignored and noted ("skip date “2026-12-17” is not the 3rd Wednesday of its month — ignored (that month's is 2026-12-16)") → `problems.meeting` / `problems.recurring_events` | — |
+| `meeting.py` | config `meeting:` (+ the rule engine for `recurring_events:`) | `upcoming_rule_dates(MonthlyRule, count, tz)`: the Nth weekday (1–5, or −1 = last) of every month, start–end on the local clock → UTC instants (right across DST changes and month/year ends), `skip_dates`, `starts` (a first date: `check_starts` notes one that is not a date or not a rule day). Used for the committee meeting (3rd Wednesday 7–8 PM Central by default) and every recurring event (the Grapevine Meeting, 1st Wednesday, is one of them). `window_meetings`: the committee meetings the pages list — every date from this month (the site's time zone) through `window_months` months after it, not a count of dates (one more before this month's meeting than after it); `window_months` (since round 30): through the month of config/site.yml `events_until` (`events_until()` reads it — an unquoted YAML date too; one that is not a date is ignored), never fewer than `MEETING_MONTHS_AHEAD` = 12, never more than `WINDOW_MONTHS_MAX` = 60 (on Nov 13, 2026 with `"2028-12-31"`: 25 months, 26 dates, Nov 18, 2026 … Dec 20, 2028; without the setting: 12 months, 13 dates before this month's meeting); `window_dates` is the same window for any rule (`build_data.recurring_events`); `window_notes`: a value that is not a date, or more than 60 months away, for `problems.recurring_events`. `build_data.committee_meetings` writes a record for each date (its flyer, its guest speaker), so no date the pages list goes without its flyer. The twin of `eleventy/filters/committee.js` `meetingMonthsAhead` (normalizeEvents' window, `/events.ics`; the month pages, 13, are inside it), kept in step by `tests/test_meeting_window.py` and `tests/test_events_horizon.py`. Also `meeting_speakers` (the committee meeting's guest speakers: a date that is a rule day and no skip date, a "First L." name — `SPEAKER_NAME` —, one a date; notes for `problems.meeting`), `speaker_until`, `SPEAKER_CONFIRM_DAYS` = 45 (build_data's reminder for a speaker not `confirmed` yet) | An end earlier than the start, at most 12 hours later (`overnight`, `OVERNIGHT_MAX_HOURS`), is the next morning (since October 2026; `22:00`–`01:00`); otherwise an end not after the start is one hour, capped at 23:59. Every copy of the rule follows the same overnight rule: `eleventy/central-time.js` `overnight()` / `ruleDate` (the build and, as `GVTime`, the browser's countdowns: `app.js` `GV.nextMeeting`, `committee.js`), `eleventy.config.js` `monthlyRule`, `committee.js` `meetingEnd` / `meetingTimeRange` ("10:00 PM – 1:00 AM"), `monthly.js` `meetingByRule`, `src/_data/meeting.js` and `send_digest.py` `meeting_by_rule` (its own copy of `overnight`). Since October 2026 the meeting dates of the chair's Area report (`eleventy/filters/report.js areaModel` → `#rp-area` `mt`) and of the committee meeting deck's paperwork (`eleventy/filters/presentations.js paperMeetings` → the deck JSON's `paperwork.meetings`, with `src/_data/meeting.js`'s upcoming ones) come from `committee.js` `meetingDates` too (`skip_dates` honoured): a change of `meeting:` reaches them with the next build, nothing else to do. `check_skip_dates()`, shared by the meeting and every recurring event: a skip date that is not a date, or not the rule's day of its month, is ignored and noted ("skip date “2026-12-17” is not the 3rd Wednesday of its month — ignored (that month's is 2026-12-16)") → `problems.meeting` / `problems.recurring_events` | — |
 
 ## Recurring events
 
@@ -789,7 +789,7 @@ month file saved with its month page.
 * Where people find the deadlines calendar: the card "Get the deadlines in your calendar" under the deadline cards
   on `/contribute/` (`#deadlines-calendar`, `{% cmSubscribe lang, site, "deadlines" %}`: Google, Apple, Outlook and
   the address with a copy button; shown while a deadline is open), a line on Home ("Write for the magazines") and on
-  What's New ("Stay in the loop", `webcal://`). `tests/test_r12_u3_calendar.py`; in a browser
+  What's New ("Stay in the loop", `webcal://`). `tests/test_deadlines_calendar.py`; in a browser
   `DeadlineCalendarMenu`.
 
 ## When Grapevine announces new prices
@@ -1194,7 +1194,7 @@ Please keep local test runs short (`--crawl-minutes 5`, `--dry-run`): the magazi
 | `POSTER_SHARE` | build | `1` / `true`: each `/monthly/YYYY-MM/` page names its own `share.png` as its preview picture (`update.yml` only; the pictures come from `scripts/ops/poster_share.py`) |
 | `LASTMOD`, `LASTMOD_STORE`, `LASTMOD_CHANGED` | build (`update.yml` only) | `LASTMOD=1`: the sitemap's `<lastmod>` per page against the last publish's `lastmod.json`, and `_site/lastmod.json` (`eleventy/lastmod.js`; never in the Code check, the tests, `npm start` or an `ONLY=` build); `LASTMOD_STORE=<file>`: that last publish's `lastmod.json` (`update.yml`: `.cache/lastmod/lastmod.json`, restored from the Actions cache) — no such file, or not a readable one, → a network fetch of the live `/lastmod.json`; `LASTMOD_CHANGED=<file>`: the list of changed pages for IndexNow and *Check the build* |
 | `MONTHLY_NOW` | build | A day or an instant the monthly toolkit, the digest, the shop's windows, the report, the booth and the decks take as "now"; also the committee meeting dates of the month calendar files (`committee.js` `meetingDates`). Previews and tests only |
-| `SITE_DATA`, `CONTENT_EVENTS`, `TRANSLATION_OVERRIDES`, `WRITERS_ARCHIVE`, `BOOTH_DRIVE`, `BINGO_CSV`, `BINGO_WEEKLY` | build | Tests and previews: read `data/site` from another folder (`src/_data/db.js`), the `content/events` files whose `cancelled:` the build reads itself from another folder (since round 37, `eleventy/cancelled-events.js`), the overrides the decks print beside La Viña's theme from another file (`eleventy/filters/presentations.js`), the writers archive from another file, the booth's Drive data from another file, the bingo squares and the weekly open meetings the bingo cards print from other files (`src/_data/bingo.js`; `tests/test_r34_bingo.py` builds from `tests/fixtures/bingo_csv/pool.csv`) |
+| `SITE_DATA`, `CONTENT_EVENTS`, `TRANSLATION_OVERRIDES`, `WRITERS_ARCHIVE`, `BOOTH_DRIVE`, `BINGO_CSV`, `BINGO_WEEKLY` | build | Tests and previews: read `data/site` from another folder (`src/_data/db.js`), the `content/events` files whose `cancelled:` the build reads itself from another folder (since round 37, `eleventy/cancelled-events.js`), the overrides the decks print beside La Viña's theme from another file (`eleventy/filters/presentations.js`), the writers archive from another file, the booth's Drive data from another file, the bingo squares and the weekly open meetings the bingo cards print from other files (`src/_data/bingo.js`; `tests/test_bingo_cards.py` builds from `tests/fixtures/bingo_csv/pool.csv`) |
 | `GV_BROWSER_SITE`, `GV_BROWSER_CHANNEL`, `GV_BROWSER_REQUIRED`, `GV_BROWSER_VERBOSE` | `tests/browser` (`poster_share.py` and `site_browser.py` read `GV_BROWSER_CHANNEL` too) | The built site to check (without it the browser checks skip); `chrome`, `msedge` or `chromium`; `1` = a missing browser fails; `1` = print the focus rings' contrasts |
 | `ONLY` | build (local) | Build only some `src/pages/*` files |
 | `WRITERS_ARCHIVE` | build (local, tests) | Read the Texas writers archive from another file than `data/site/writers_archive.json` (`src/_data/db.js`; the sample `tests/fixtures/writers_archive/site_sample.json`) |

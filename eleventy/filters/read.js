@@ -681,7 +681,7 @@ export function recorderTopics(eds, maxDated = 8, maxTopics = 30) {
    in two columns — four of them). The heights are estimates in rem (dlCardHeight) from the cards' own layout —
    paddings, line heights, columns (@2xl rows, @md / @4xl tiles) — and each text wrapped word by word with Inter's
    character widths (textLines) — within about 1rem of each block as a browser draws it (October 2026, 1024–1920px,
-   both languages). tests/test_r13_u1_gvtopics.py tests the numbers; tests/browser/test_r13_u1_deadline_cards.py that
+   both languages). tests/test_gv_topics.py tests the numbers; tests/browser/test_deadline_cards_browser.py that
    the two cards end together in a real browser. A change to the cards' layout (paddings, line heights, columns, the
    words under a tile) needs the same change here. */
 // The section's width (rem) where each band starts — ending where the next starts, the last at the site's widest

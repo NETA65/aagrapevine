@@ -77,7 +77,7 @@ API = ["VERSION", "SCHEMA", "DB_NAME", "KEEP_KEY", "LIMITS", "FILE",
        "mailBody", "mailto", "gmail", "outlook",
        "support", "errorKind", "helpFor", "accept",
        "storeError", "leaves",
-       "REPORT", "report"]   # (round 12: the device check — tests/test_r12_u2_contribute.py)
+       "REPORT", "report"]   # (round 12: the device check — tests/test_share_your_story.py)
 MIB = 1048576
 
 

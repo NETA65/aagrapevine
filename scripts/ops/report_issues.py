@@ -13,7 +13,7 @@ GH_TOKEN, repository GH_REPO) does the issue work.
 "sources" and "updates" are the job's two first steps, moved out of the workflow in November 2026 line for line
 (report_sources / report_updates are the steps' former scripts; env as the steps give it: HEALTH, SITE_URL, RUN_URL,
 REPO_URL — and EVENT, ACTOR, RUN_ID, SYNC, TESTS, BUILD, PUBLISH for "updates"). tests/test_automation.py
-(FailingUpdates), tests/test_morning.py, tests/test_r33_misc.py, tests/test_r25_lavina_podcast.py and
+(FailingUpdates), tests/test_morning.py, tests/test_audit_small_fixes.py, tests/test_lavina_podcast.py and
 tests/test_sync_pipeline.py run them through the steps.
 
 "mornings" — the daily-quote morning goal (config/site.yml site.morning_goal, 5:30 AM Central: the Morning check,

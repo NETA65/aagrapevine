@@ -51,9 +51,9 @@ DATA_TESTS: dict[str, str] = {
         "the sections of the day's bulletin posts, Google Drive's included",
     "test_presentations_build.Json.test_a_value_for_every_live_key":
         "the day's weekly open meetings, Book of the Month and story lines in the presentations' live slides",
-    "test_r12_u2_contribute.RealData.test_la_vinas_topics_and_their_links":
+    "test_share_your_story.RealData.test_la_vinas_topics_and_their_links":
         "La Viña's suggested topics in the day's editorial calendar: the recorder's list and their \"Record a story\" links",
-    "test_r12_u1_listen.SharePages.test_spanish_credit_lines_write_the_month_in_lower_case":
+    "test_listen_watch.SharePages.test_spanish_credit_lines_write_the_month_in_lower_case":
         "the day's magazine issues as the Spanish Read and Published pages name them in a story's Share (a name of its "
         "own with a year, \"Edición especial 2027\", fails it): SpanishCredits tests the same code on data of its own",
     "test_booth_build.Gallery.test_todays_albums":
@@ -63,20 +63,20 @@ DATA_TESTS: dict[str, str] = {
     "test_bingo_csv.Real.test_the_build_fills_every_square":
         "the bingo cards' meeting squares, filled in from the day's weekly open meetings (data/site/weekly_open.json) "
         "and config/site.yml: a meeting the day's data no longer has leaves its square out",
-    "test_r37_search.RealIndex.test_the_size_budget":
+    "test_site_search.RealIndex.test_the_size_budget":
         "the site search's index of the day's data (data/site): each language's at most 1,600,000 bytes",
-    "test_r37_search.RealIndex.test_the_query_table_on_the_days_data":
+    "test_site_search.RealIndex.test_the_query_table_on_the_days_data":
         "the site search on the day's data: the flyers, an assembly, the current issues and Book of the Month the day's "
         "data has (data/site/drive.json, events.json, articles.json, shop.json) found by the round-37 query table, the "
         "next workshop before a flyer of one that is over, the next committee meeting near the top",
-    "test_r37_search.RealIndex.test_every_new_kind_is_there":
+    "test_site_search.RealIndex.test_every_new_kind_is_there":
         "the site search on the day's data: the day's flyers and current issues (data/site/drive.json, articles.json) "
         "among its entries",
-    "test_r35_ev_weight.Budget.test_what_a_reader_without_a_browser_takes_from_the_page":
+    "test_events_without_script.Budget.test_what_a_reader_without_a_browser_takes_from_the_page":
         "/events/ built from the day's events (data/site/events.json): its text and link addresses under 170,000 "
         "characters in each language — one more monthly series (config/site.yml recurring_events, dated through "
         "events_until) or many more events can pass it; ThePage tests the cards' own weight on events of its own",
-    "test_r37_search.RealIndex.test_nothing_says_how_to_join":
+    "test_site_search.RealIndex.test_nothing_says_how_to_join":
         "the site search's index of the day's data: no Zoom ID or meeting link in it, whatever the day's Instagram "
         "captions, events and weekly open meetings say (data/site/instagram.json, events.json, weekly_open.json)",
 }
@@ -96,16 +96,16 @@ CONTENT_TESTS: dict[str, str] = {
         "content/booth/booth.csv, the booth display's list the committee edits",
     "test_booth_page.Strings.test_every_topic_of_the_booth_file_has_its_words":
         "content/booth/booth.csv: each tag has its words in src/_i18n/booth.json",
-    "test_r12_u5_gvr.DailyQuestionsRealCsv.":
+    "test_gvr_pass_it_on.DailyQuestionsRealCsv.":
         "content/booth/booth.csv: the question of the day About and the GVR / RLV corner carry, from its real rows",
-    "test_r20_secondary.Booth.test_the_csv_rows":
+    "test_google_meet_outputs.Booth.test_the_csv_rows":
         "content/booth/booth.csv: the committee meeting's rows (online, not Zoom; the guest speakers from Dec 17, "
         "2026, in words that say it is not a business meeting) and the Grapevine Meeting's row, and their QR codes",
     "test_bingo_csv.Real.":
         "content/bingo/bingo.csv, the GVR / RLV corner's bingo squares the committee edits: no problem, enough "
         "squares in both languages for a 10×10 card, the meetings and the contact pinned, the meeting lines in the "
         "words config/site.yml's meetings give",
-    "test_r34_bingo.RealContent.":
+    "test_bingo_cards.RealContent.":
         "content/bingo/bingo.csv and config/site.yml, in a build of the bingo pages of their own (the module's other "
         "classes build from tests/fixtures/bingo_csv/pool.csv): at least 200 squares on the bingo page, the e-mail "
         "grapevine@neta65.org, our Grapevine Meeting's and committee meeting's lines on the page and — the three "
@@ -114,14 +114,14 @@ CONTENT_TESTS: dict[str, str] = {
         "the owner's archive exports in content/archive",
     "test_price_changes.Bulletin.":
         "content/bulletin: the post of January 1, 2027 about the new prices, word for word",
-    "test_r25_holiday_offers.Bulletin.":
+    "test_holiday_offers.Bulletin.":
         "content/bulletin: the pinned post of November 11, 2026 — the holiday gift offers, free shipping and the prices "
         "of January 1, 2027 —, its facts, links and words",
     "test_bulletin.Place.test_the_folder_its_help_and_the_example":
         "content/bulletin: its README and _example.md, the committee's template, as they are",
     "test_bulletin_publish.Header.test_the_template_parses":
         "content/bulletin/_example.md, the committee's template: a valid post that shows publish:",
-    "test_r24_retired_room.TheRetiredRoom.":
+    "test_retired_zoom_room.TheRetiredRoom.":
         "content/, config/, the documentation (and the code): the committee's retired Zoom room (its meeting ID and "
         "passcode before Google Meet) written in no text — the October 3, 2026 workshop's file names only its place; "
         "nor in a build of the event pages",
@@ -150,17 +150,17 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml and config/presentations: La Viña's monthly workshop under the one name La Viña uses",
     "test_price_changes.Settings.test_the_settings_file_has_no_mistakes":
         "config/site.yml price_changes, as written",
-    "test_r21_offers.RealSettings.":
+    "test_store_offers.RealSettings.":
         "config/site.yml store_offers, as written: the free shipping of 2026 and the patterns that find its banners",
-    "test_r25_holiday_offers.RealSettings.":
+    "test_holiday_offers.RealSettings.":
         "config/site.yml store_offers, as written: the holiday gift offers of 2026, their words and offer pages",
-    "test_r25_lavina_podcast.RealSettings.":
+    "test_lavina_podcast.RealSettings.":
         "config/site.yml sources.podcasts and lavina_weekly_open, as written: the three shows (La Viña's open-meeting "
         "show lvo) and La Viña's meeting page",
-    "test_r26c_weekly_link.RealSettings.":
+    "test_weekly_open_links.RealSettings.":
         "config/site.yml grapevine_weekly_open and lavina_weekly_open, as written: the full Zoom links of their room, "
         "the two flyer patterns, La Viña's summaries; the flyers' titles in data/translations/overrides.yml",
-    "test_r25_holiday_offers.ShopPages.":
+    "test_holiday_offers.ShopPages.":
         "config/site.yml store_offers (and the bulletin post's /shop/ links): a build of the Shop and November's "
         "toolkit with the committee's two offers",
     "test_run_names.OtherTitles.test_the_morning_check_names_its_goal":
@@ -173,14 +173,14 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml site.watch.hero_video (deleting it hides the card)",
     "test_accessibility.Phone.":
         "config/site.yml phone_access, the meeting ids and the accessibility links, as written",
-    "test_r20_meeting.RealSettings.":
+    "test_google_meet_meetings.RealSettings.":
         "config/site.yml: the committee meeting on Google Meet, our Grapevine Meeting (1st Wednesday from Jan 6, 2027), "
         "the CityWide booth's hours and venue, the 12 guest speakers of 2027 and the Drive flyer names they find",
-    "test_r30_horizon.RealSettings.":
+    "test_events_horizon.RealSettings.":
         "config/site.yml events_until, as written: every date through December 2028 (the end of Panel 77) — 26 committee "
         "meetings, 26 CityWide booths, 24 Grapevine Meetings (from Jan 6, 2027), 20 La Viña workshops on Nov 13, 2026 —, and every "
         "Thanksgiving through that year in La Viña's skip_dates",
-    "test_r30_portfolio.RealSettings.":
+    "test_portfolio_pinned.RealSettings.":
         "config/site.yml drive.pinned_flyers: the Portfolio's four pinned flyers, each pattern finding exactly its "
         "Drive file name (never a month's guest-speaker flyer)",
     "test_pwa_install.Page.test_the_help_links_in_the_settings":
@@ -193,9 +193,9 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml meetings.feeds: the two keyed offices, their keys obfuscated",
     "test_meetings.Settings.test_the_real_config":
         "config/site.yml meetings: the meeting type, the offices' methods and region names",
-    "test_r12_u6_newcomers.RealSettings.":
+    "test_newcomers.RealSettings.":
         "config/site.yml: the New to AA card's aa.org links (each with its Spanish page) and our Area's offices",
-    "test_r12_u5_gvr.OfficeAddresses.":
+    "test_gvr_pass_it_on.OfficeAddresses.":
         "config/site.yml links: the Grapevine and La Viña offices' e-mail addresses (the GVR corner's Tell the office)",
     "test_editorial.LinkFinder.test_the_settings_name_la_vinas_resources_page":
         "config/site.yml sources.lavina: La Viña's resources page, where its themes document is linked",
@@ -224,24 +224,24 @@ CONTENT_TESTS: dict[str, str] = {
         "'Grapevine meetings'",
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
-    "test_r12_u9_meeting.RealDeck.":
+    "test_meeting_paperwork.RealDeck.":
         "config/presentations/committee-meeting.yml: its paperwork passes the checker; the notes' and the reminder's "
         "wording; what its Start next month clears and keeps",
-    "test_r12_u9_meeting.Texts.":
+    "test_meeting_paperwork.Texts.":
         "config/presentations/committee-meeting.yml: the agenda e-mail, the reminder and the draft notes, word for word",
-    "test_r12_u9_meeting.NextMonth.":
+    "test_meeting_paperwork.NextMonth.":
         "config/presentations/committee-meeting.yml: Start next month on the committee's own blanks",
     "test_orientation.HubBuild.test_no_fact_twice_on_a_card":
         "config/presentations: a deck's card says its length and versions in its head only, not in its texts",
     "test_orientation.HubBuild.test_la_vina_first_in_spanish":
         "config/presentations: a deck card's Spanish names La Viña first",
-    "test_r24_no_speaker.Deck.":
+    "test_meeting_no_speaker.Deck.":
         "config/site.yml meeting.speakers and config/presentations/committee-meeting.yml: the slides of November 18, "
         "2026 (no guest speaker) and January 20, 2027 (Rick W.), and the versions' notes",
-    "test_r24_no_speaker.Paperwork.":
+    "test_meeting_no_speaker.Paperwork.":
         "config/site.yml meeting.speakers and config/presentations/committee-meeting.yml: the paperwork of November 18, "
         "2026 and the version Start next month picks",
-    "test_r24_no_speaker.Wording.":
+    "test_meeting_no_speaker.Wording.":
         "config/orientation.yml and config/presentations: a guest speaker each month only \"from January 2027\"",
     "test_presentations_build.Facts.test_the_readme_lists_every_fallback":
         "config/presentations/README.md (the deck writers' guide): every {live:…} key with its fallback",
@@ -254,7 +254,7 @@ CONTENT_TESTS: dict[str, str] = {
         "data/translations/overrides.yml: the English the decks print beside La Viña's theme",
     "test_editorial.EnglishWords.":
         "data/translations/overrides.yml: English words for every theme of La Viña's themes document",
-    "test_r13_u1_gvtopics.Spanish.":
+    "test_gv_topics.Spanish.":
         "data/translations/overrides.yml: Spanish words for every suggested topic Grapevine's /contribute page names",
     # ---- docs/
     "test_morning.AlarmDocs.":

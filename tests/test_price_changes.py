@@ -18,7 +18,7 @@
     swapTexts), the monthly toolkit's message, the monthly digest's pointer row and its e-mail twin
     (send_digest.py) in the months before and in January;
   * Announcements — the bulletin post of January 1, 2027 (dates, publish, expires, its own Spanish over several
-    lines; the heads-up is the price section of the pinned post of November 11, 2026: test_r25_holiday_offers.py),
+    lines; the heads-up is the price section of the pinned post of November 11, 2026: test_holiday_offers.py),
     the letter on Drive (its date and title), the hand translations in data/translations/overrides.yml.
 
     python -m unittest tests.test_price_changes -v        (or: python -m unittest discover -s tests)
@@ -843,7 +843,7 @@ class Digest(SD.DigestCase):
 
 # =========================================================================== the announcements
 # The heads-up of October 1, 2026 is now the price section of the pinned post of November 11 (with the holiday gift
-# offers and free shipping): tests/test_r25_holiday_offers.py Bulletin checks it.
+# offers and free shipping): tests/test_holiday_offers.py Bulletin checks it.
 POST = ROOT / "content" / "bulletin" / "2027-01-01-new-prices-in-effect.md"
 
 

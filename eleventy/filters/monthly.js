@@ -87,7 +87,7 @@ const LOC = { en: "en-US", es: "es-US" };
 // The month pages: this month and the 12 after it. Each one's committee meeting takes its flyer (its calendar file's
 // ATTACH: monthIcs → normalizeEvents) from its events.json record, which the sync writes for this month and at least
 // the committee.js MEETING_MONTHS_AHEAD (12) after it (through config/site.yml events_until's month: meetingMonthsAhead)
-// — so no month page lies beyond them (tests/test_r24_meeting_window.py).
+// — so no month page lies beyond them (tests/test_meeting_window.py).
 const WINDOW = 13;
 // A printed poster stays on a corkboard for months: its QR code (the month's page) keeps working for a year.
 const PAST_MONTHS = 12;
@@ -941,7 +941,7 @@ export function posterExtras(m, t) {
    about a second after the fonts arrive) and what a page opened without JavaScript keeps: its blocks where the template
    puts them (macros/monthly.njk poster(): data-mp-move, the build's place first) at the stylesheet's type (the month's
    density; a Spanish poster smaller until its fit — areas/monthly.css). A busy month's column may lose its last lines
-   there, but every date must be whole (tests/browser/test_r26b_posters.py UnfittedClipped). The density alone could not
+   there, but every date must be whole (tests/browser/test_monthly_posters_browser.py UnfittedClipped). The density alone could not
    see to that: it counts the dates, not their words, and November 2026 — ten rows in its Dates block once La Viña's
    monthly workshop moved to the 18th, the longest of them Spanish ("Ofertas de regalo para las fiestas en las tiendas de
    La Viña y Grapevine", two lines where the English one takes one) — was already "dense", the densest there is, when

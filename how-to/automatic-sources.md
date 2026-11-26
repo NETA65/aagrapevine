@@ -623,7 +623,7 @@ episode and its `extra`), `meeting_date`, `is_generic_title` / `shared_titles`, 
 `failed_show` (one show's health), `discover`; display [`eleventy/filters/media.js`](../eleventy/filters/media.js) → `showList`, `showMeeting`,
 `titleOf`, `epCompact`, and `src/pages/listen.njk` → macro `epRow`; home `eleventy/filters/home.js` →
 `homeEpisodes`; the e-mail `scripts/notify/send_digest.py` → `item_label`, `media_title`. Tests:
-`tests/test_sync_pipeline.py`, `tests/test_r25_lavina_podcast.py` (on a saved copy of La Viña's real feed,
+`tests/test_sync_pipeline.py`, `tests/test_lavina_podcast.py` (on a saved copy of La Viña's real feed,
 `tests/fixtures/podcasts/`).
 
 ---
@@ -1269,7 +1269,7 @@ experience, strength and hope") never puts part of itself on the site. Its previ
 earlier topic(s) stay". If Grapevine drops one of those sentences, its topics leave the site with it (the page is
 the authority); with both gone, its card simply shows no suggested topics: not a failure — `/status/` shows a note,
 "gv: no suggested topics — …"; the themes still come in. Either way, update
-`gv_suggested_topics` / `_gv_list` in `scripts/sync/editorial.py` (and a case in `tests/test_r13_u1_gvtopics.py`)
+`gv_suggested_topics` / `_gv_list` in `scripts/sync/editorial.py` (and a case in `tests/test_gv_topics.py`)
 if the new wording should be read. Their Spanish words are written by hand in `data/translations/overrides.yml` (a
 new topic needs its line there, or it is machine-translated and marked so).
 
@@ -1447,7 +1447,7 @@ meeting ID). Never "new".
 links); `build_data.py` →
 `weekly_open_items` (Grapevine always first); display `eleventy/filters/committee.js` → `cmWeeklyAll`,
 and `src/pages/meetings.njk`. Tests: `tests/test_sync_pipeline.py`, `tests/test_weekly_open.py`,
-`tests/test_r26c_weekly_link.py` (the full links and the two flyers).
+`tests/test_weekly_open_links.py` (the full links and the two flyers).
 
 ---
 
@@ -1738,8 +1738,8 @@ worked out the same way as `committee.js` `meetingMonthsAhead`, so the last date
 `speaker`); `eleventy/filters/committee.js` → `meetingDates`, `meetingJoin` (the filter `cmJoin`: platform, link,
 the code or ID with its label, a passcode, dial-in), `meetingSpeakers`, `meetingSpeaker`, `meetingSpeakerUntil`,
 `meetingSpeakerNotes`, `meetingMonthsAhead`. Tests: `tests/test_build_times.py`, `tests/test_recurring_events.py`,
-`tests/test_events_feeds.py`, `tests/test_r20_meeting.py`, `tests/test_r24_meeting_window.py`,
-`tests/test_r30_horizon.py`.
+`tests/test_events_feeds.py`, `tests/test_google_meet_meetings.py`, `tests/test_meeting_window.py`,
+`tests/test_events_horizon.py`.
 
 ---
 

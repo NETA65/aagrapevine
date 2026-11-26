@@ -677,7 +677,7 @@ export const reportText = (model, lang) => composeText(((model && model.langs &&
 // Counts only — never an attendance list —, writers only as the magazines printed them (first name + initial, city).
 // "Ours" (areaOurs): a content/events file, a dated Drive flyer, a monthly series we hold (config/site.yml
 // recurring_events, host neta) — not La Viña's or Grapevine's own series and not the other sites' calendars.
-// What the site keeps of the past (scripts/sync/build_data.py; tests/test_r12_u10_areareport.py checks these agree):
+// What the site keeps of the past (scripts/sync/build_data.py; tests/test_area_report.py checks these agree):
 // a monthly series' dates of the last 90 days (RECURRING_KEEP_PAST_DAYS) and the newest 12 past one-off events
 // (PAST_EVENTS_KEEP). The committee meetings are worked out from the rule (committee.js meetingDates: skip_dates
 // honoured), the writers come from the archive (any age). `hz` is the first day our events are complete from: the

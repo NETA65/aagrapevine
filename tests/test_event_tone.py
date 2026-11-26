@@ -148,7 +148,7 @@ CASES: list[tuple[dict, str]] = [
     ({"title": "Taller de Grapevine y La Viña"}, "gv"),
     ({"title": "La Viña & Grapevine night"}, "lv"),
     # every title is read: the record's (item / src) original and translations first, the display title last
-    # (round 33c: the same order on the English and the Spanish page — tests/test_r33c_monthly.py)
+    # (round 33c: the same order on the English and the Spanish page — tests/test_monthly_dates.py)
     ({"title": "Taller mensual", "item": {"title": "Monthly La Viña workshop"}}, "lv"),
     ({"title": "Monthly workshop", "i18n": {"title": {"es": "Taller de Grapevine"}}}, "gv"),
     # 7. an event from Grapevine's / La Viña's own calendar

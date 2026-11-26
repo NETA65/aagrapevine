@@ -312,10 +312,10 @@ A few tests check exact wording. After you change a word, watch the **Code check
 - [`tests/test_events_feeds.py`](../tests/test_events_feeds.py) looks for "View flyer" / "Ver volante" on the built
   Events page, and (with [`tests/test_recurring_events.py`](../tests/test_recurring_events.py)) for "Online on Zoom" /
   "En línea por Zoom".
-- [`tests/test_r21_offers.py`](../tests/test_r21_offers.py) looks for the stores' buttons ("Grapevine store" /
+- [`tests/test_store_offers.py`](../tests/test_store_offers.py) looks for the stores' buttons ("Grapevine store" /
   "Tienda de La Viña") and "The store shows the final price at checkout." on the built Shop page's offer, and checks
   the free shipping words in `config/site.yml` (`store_offers:`).
-- [`tests/test_r25_holiday_offers.py`](../tests/test_r25_holiday_offers.py) checks the holiday gift offers' words in
+- [`tests/test_holiday_offers.py`](../tests/test_holiday_offers.py) checks the holiday gift offers' words in
   `config/site.yml` (and "Grapevine's offer page" / "Página de la oferta de La Viña", "Through December 31, 2026" /
   "Hasta el 31 de diciembre de 2026" on the built Shop page), and the pinned bulletin post of November 11, 2026 —
   the gift offers, free shipping and the new prices — sentence by sentence in both languages.

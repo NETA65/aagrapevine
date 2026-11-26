@@ -1430,7 +1430,7 @@ committee-meeting.yml: paperwork.next_month.clear: 'presenter' is shared by ever
 
 A paperwork problem is a deck problem: it stops the build like any other ([4](#4-what-happens-after-you-save)). The
 dates follow `meeting:` in `config/site.yml` (the rule and the skip dates) by themselves, like the slides. Rewording
-a text is fine, but `tests/test_r12_u9_meeting.py` (classes `Texts`, `RealDeck`, `NextMonth`) checks the committee's
+a text is fine, but `tests/test_meeting_paperwork.py` (classes `Texts`, `RealDeck`, `NextMonth`) checks the committee's
 own block word for word: the Code check goes red until its expected words are changed too, and *Website update*
 still publishes your words (those tests are in `CONTENT_TESTS`).
 
@@ -1691,8 +1691,8 @@ See [Pages and code](pages-and-code.md) for the i18n files in general.
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations -v` | the five decks (exactly these files, each with its own `order`), and the checker itself |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_build -v` | the build side: the JavaScript checker gives the same lines as the Python one; the sample decks use everything; the JSON's shape; the facts at fixed dates; the README lists every fallback (builds the sample decks in a temporary folder) |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the five real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
-| `.venv\Scripts\python.exe -m unittest tests.test_r12_u9_meeting -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_r12_u9_meeting_browser.py`) |
-| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core.Text -v` | `test_plain_lines_to_copy`: what Prepare's **Copy** puts on the clipboard (a page's text, line by line). In a real browser (a built site: `tests/browser/__init__.py`): `ChatMessageCopy` (`tests/browser/test_r26_chat_message.py`), the Grapevine Meeting's chat message copied with its addresses in full and its facts filled in, English and Spanish pages |
+| `.venv\Scripts\python.exe -m unittest tests.test_meeting_paperwork -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_meeting_paperwork_browser.py`) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core.Text -v` | `test_plain_lines_to_copy`: what Prepare's **Copy** puts on the clipboard (a page's text, line by line). In a real browser (a built site: `tests/browser/__init__.py`): `ChatMessageCopy` (`tests/browser/test_meet_chat_message_browser.py`), the Grapevine Meeting's chat message copied with its addresses in full and its facts filled in, English and Spanish pages |
 | `python -m unittest discover -s tests` | everything (what Code check runs) |
 
 The `_core` tests need Node.js; the `_build` tests and the real-decks test of `_core` also need the site's tools

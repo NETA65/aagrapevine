@@ -384,7 +384,7 @@ def upcoming_meetings(count: int = 12, include_recent_days: int = 0, now: dateti
 # the Drive has for it; each monthly event of `recurring_events:` lists every date of the same months too
 # (build_data.recurring_events — at least its `months_ahead` dates). The pages work out the same number themselves
 # (committee.js meetingMonthsAhead, the twin of window_months: the same floor, cap and month arithmetic), and a
-# unit test keeps the two in step (tests/test_r24_meeting_window.py, tests/test_r30_horizon.py).
+# unit test keeps the two in step (tests/test_meeting_window.py, tests/test_events_horizon.py).
 # (The month pages, /monthly/, stay this month and the 12 after it: monthly.js WINDOW, inside the window always.)
 MEETING_MONTHS_AHEAD = 12
 WINDOW_MONTHS_MAX = 60
@@ -424,7 +424,7 @@ def window_months(cfg: dict | None, now: datetime | None = None, floor: int = ME
     meeting and each monthly event: through `events_until`'s month — never fewer than `floor` (MEETING_MONTHS_AHEAD,
     12), never more than WINDOW_MONTHS_MAX (60). `floor` when the setting is left out or is not a date. On Nov 13,
     2026 with "2028-12-31": 25; on Mar 1, 2028: 12 (December 2028 is only 9 months away); with "2208-12-31": 60.
-    The twin of committee.js meetingMonthsAhead (tests/test_r24_meeting_window.py runs both on the same clocks)."""
+    The twin of committee.js meetingMonthsAhead (tests/test_meeting_window.py runs both on the same clocks)."""
     cfg = cfg if isinstance(cfg, dict) else {}
     ymd, _notes = events_until(cfg)
     if not ymd:

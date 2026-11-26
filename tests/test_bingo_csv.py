@@ -38,7 +38,7 @@ label: {en, es} } — a language the row is not offered in is "" in all three; s
     filled in by the build — in the words config/site.yml's meetings give (day, time range, zone, platform). A
     CONTENT test (scripts/ops/gate_tests.py): the Code check runs it, Website update leaves it out;
   * Fixtures — tests/fixtures/bingo_csv/*.csv, one kind of mistake each, named line by line (good.csv and pool.csv
-    have none: pool.csv is the pool tests/test_r34_bingo.py builds its pages from);
+    have none: pool.csv is the pool tests/test_bingo_cards.py builds its pages from);
   * Rules — a few rules best shown with a few lines of CSV (and the shape of an item);
   * Twin — the build's JavaScript checker gives the same lines, items, rows and row numbers for every fixture, the
     inline cases and the real file, a Spanish line for every problem, and the same constants, lengths, refused words
@@ -627,7 +627,7 @@ EXPECTED: dict[str, tuple[list[str], list[str]]] = {   # fixture → (the ids it
         f"placeholders.csv row 13 (ph-dash): text_en: {{gv-meeting}} {NOT_PLACEHOLDER}",
         f"placeholders.csv row 13 (ph-dash): text_es: {{gv-meeting}} {NOT_PLACEHOLDER}",
     ]),
-    # the pool tests/test_r34_bingo.py builds its pages from (BINGO_CSV): 48 rows copied from the real file in
+    # the pool tests/test_bingo_cards.py builds its pages from (BINGO_CSV): 48 rows copied from the real file in
     # November 2026 and three pinned squares whose words are markup — a good file, every row on the cards
     "pool.csv": (["people-gvr-today", "people-rlv-today", "people-phone-newcomer", "people-phone-other-district",
                   "people-drove-100-miles", "people-sign-committee", "read-this-month", "read-this-issue-lv",

@@ -1291,7 +1291,7 @@ class PosterEveryDate(unittest.TestCase):
         its height); the rule between a layout's two columns may move a step or two toward the column that needs the
         room — the steps in the poster (data-mp-widths, the build's first: the stylesheet's own; data-mp-sizes: the
         column a larger value widens, then the other), the stylesheet reading --mp-split. The fit (assets/js/monthly.js)
-        picks; tests/browser/test_r26b_posters.py checks what it picks."""
+        picks; tests/browser/test_monthly_posters_browser.py checks what it picks."""
         css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
         for rule in re.findall(r"\.mp-l-\w+ \.mp-(?:col|content|page|side|main|stub|feature|rail) \{[^}]*\}", css):
             self.assertNotRegex(rule, r"justify-content: space-(?:between|around|evenly)", rule[:60])
@@ -1338,7 +1338,7 @@ class PosterEveryDate(unittest.TestCase):
         """Before its fit (or without JavaScript) a busy poster's columns are clipped (overflow: clip, no box moves),
         never the copy the fit measures (it has no data-mp-poster) nor the fitted poster; a month's name with a
         descender gets room under it (the cover's tagline, in the masthead's corner, keeps its place). The browser
-        checks (tests/browser/test_r26b_posters.py MastheadClear, UnfittedClipped) look at what is drawn."""
+        checks (tests/browser/test_monthly_posters_browser.py MastheadClear, UnfittedClipped) look at what is drawn."""
         css = (ROOT / "src" / "assets" / "css" / "areas" / "monthly.css").read_text(encoding="utf-8")
         js = (ROOT / "src" / "assets" / "js" / "monthly.js").read_text(encoding="utf-8")
         macro = (ROOT / "src" / "_includes" / "macros" / "monthly.njk").read_text(encoding="utf-8")

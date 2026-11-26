@@ -822,7 +822,7 @@ export default function (eleventyConfig) {
          Safari — a booth's tablet, an older phone with the story recorder (booth-core.js, recorder-core.js,
          eleventy/central-time.js say so at their top) — stops at the first one with a SyntaxError and runs none of
          the file.
-         Never raise the target or drop these: tests/test_page_weight.py and tests/test_r33_minify.py check the
+         Never raise the target or drop these: tests/test_page_weight.py and tests/test_js_minify.py check the
          built files for them. (What es2017 lets it write besides — a text with a line break in it as a `…` template,
          the break itself in place of "\n" — is ES2015, which every browser that runs the site's Alpine reads);
        - object spread ({ ...a }, ES2018) is left as it is written, not rewritten for es2017: only minisearch.js has
