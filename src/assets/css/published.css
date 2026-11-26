@@ -1,0 +1,5 @@
+/* /assets/css/published.css — Published writers (areas/published.css), only on its page: /published/ (pageStyles in
+   src/pages/published.njk). One of the page-area stylesheets: see "Page-area styles" at the end of main.css.
+   @reference reads main.css (theme, variants, utilities for @apply) without writing any of it here. */
+@reference "./main.css";
+@import "./areas/published.css";

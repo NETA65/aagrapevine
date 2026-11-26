@@ -1205,18 +1205,18 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 /* ---------- Page-area styles (one owner per file) ----------
    Imported here: the areas of many pages. The areas only one or two pages use — the booth display, the
    presentations' player, the Tracker, GVR / RLV 101, the Monthly toolkit's posters, the report editor, the bingo
-   cards — are stylesheets of their own instead (src/assets/css/<name>.css next to this file: booth, presentations,
-   expenses, orientation, monthly, report, bingo → /assets/css/<name>.css), each linked only by its pages
-   (pageStyles; base.njk links them after main.css), so every other page skips ~40 KB (compressed) of
-   rules it never uses. eleventy.config.js compiles every .css file at the top of src/assets/css.
-   A page that uses an area's classes lists its stylesheet (tests/test_page_weight.py checks every page). */
-@import "./areas/home.css";
-@import "./areas/library.css";
+   cards, and since November 2026 the home page, the Library with the site search, and Published writers — are
+   stylesheets of their own instead (src/assets/css/<name>.css next to this file: booth, presentations, expenses,
+   orientation, monthly, report, bingo, home, library, published → /assets/css/<name>.css), each linked only by its
+   pages (pageStyles; base.njk links them after main.css), so every other page skips the rules it never uses (the
+   last three: ~70 KB of main.css, 416 → ~345 KB). eleventy.config.js compiles every .css file at the top of
+   src/assets/css. A page that uses an area's classes lists its stylesheet (tests/test_page_weight.py checks every
+   page). A rule elsewhere in main.css for one of those areas' classes (access.css at larger text) starts with
+   :root:where(.gv-prefs)[data-…], so it still wins over the area's own, which now comes after it. */
 @import "./areas/media.css";
 @import "./areas/committee.css";
 @import "./areas/read.css";
 @import "./areas/community.css";
-@import "./areas/published.css";
 @import "./areas/shop.css";
 @import "./areas/access.css";
 @import "./areas/pwa.css";

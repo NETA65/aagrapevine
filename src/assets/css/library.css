@@ -1,0 +1,7 @@
+/* /assets/css/library.css — the Library and the site search (areas/library.css: the find bar, the document cards, the
+   facets, the collections, the search results and its browse tiles), only on their pages: /library/ and /search/
+   (pageStyles in src/pages/library.njk and search.njk). One of the page-area stylesheets: see "Page-area styles" at
+   the end of main.css. @reference reads main.css (theme, variants, utilities for @apply) without writing any of it
+   here. */
+@reference "./main.css";
+@import "./areas/library.css";

@@ -1,7 +1,8 @@
 /* =====================================================================
-   Area styles: PUBLISHED WRITERS — the /published/ page and the home-page
-   spotlight of Grapevine / La Viña stories by writers from Area 65 (NETA)
-   and the rest of Texas (owned by the published-writers page).
+   Area styles: PUBLISHED WRITERS — the /published/ page: Grapevine / La Viña
+   stories by writers from Area 65 (NETA), the rest of Texas and everywhere
+   else (owned by the published-writers page). A stylesheet of its own
+   (/assets/css/published.css), linked by that page only.
    Only what Tailwind utilities can't express lives here. Use the theme
    tokens (var(--c-*)) so dark mode works. Every class starts with "pw-".
    Markup: src/pages/published.njk · behaviour: src/assets/js/published.js
