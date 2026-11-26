@@ -672,8 +672,28 @@ const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gv
   R.carry.page = marker(await c.request(B + "monthly/2026-11/", { navigate: true }));
   R.carry.css = await c.request(AREA);
   R.carry.main = (await c.request(B + "assets/css/main.css?v=t1")).body;
+  R.carry.home = (await c.request(B + "assets/css/home.css?v=t1")).body;
   R.carry.caches = [...a.store.keys()].filter((n) => /^gvlv-(shell|static)-/.test(n)).sort();
-  R.carry.static = ((await c.keys("gvlv-static-t3")) || []).map((u) => u.slice(ORIGIN.length));
+  R.carry.static = ((await c.keys("gvlv-static-t3")) || []).map((u) => u.slice(ORIGIN.length)).sort();
+}
+
+/* ---------------- at most three copies of one stylesheet go on, the newest ---------------- */
+{
+  const a = world();
+  shellOnline(a);
+  await a.lifecycle("install");
+  await a.lifecycle("activate");
+  let c = a;
+  for (const v of ["t2", "t3", "t4", "t5", "t6"]) {                                    // five new versions
+    c = world({ v, store: a.store });
+    shellOnline(c);
+    await c.lifecycle("install");
+    await c.lifecycle("activate");
+  }
+  for (const u of [...c.net.keys()]) c.net.delete(u);
+  const kept = ((await c.keys("gvlv-static-t6")) || []).map((u) => u.slice(ORIGIN.length));
+  R.copies = { main: kept.filter((u) => /main\.css/.test(u)), home: kept.filter((u) => /home\.css/.test(u)),
+               t3: (await c.request(B + "assets/css/main.css?v=t3")).body };
 }
 out(R);
 """
@@ -1514,14 +1534,27 @@ class Updates(unittest.TestCase):
     def test_a_kept_pages_own_stylesheet_works_offline_after_new_versions(self):
         # Round-7 review (P5-2): a page area's own stylesheet (monthly.css …) came with a page opened online into the
         # static cache, which each new version replaced — offline, the page kept from before (not saved) lost its look.
-        # Its stylesheets now go on into each new version's static cache (scripts do not); main.css comes from the shell
+        # Its stylesheets now go on into each new version's static cache (scripts do not). Since November 2026 the
+        # old app shell's stylesheets go on too: main.css of a newer version is no stand-in (Home, the Library and
+        # Published writers have their rules in sheets of their own — the old Home came out unstyled offline)
         r = self.r["carry"]
         self.assertEqual((r["t2"], r["t3"]), (["fulfilled"], ["fulfilled"]))
         self.assertTrue(r["page"].endswith("NOV"), r["page"])                             # the copy kept from t1
         self.assertEqual((r["css"]["status"], r["css"]["body"]), (200, "/* monthly t1 */"))
-        self.assertEqual(r["main"], "/* " + B + "assets/css/main.css?v=t3 */")
+        self.assertEqual(r["main"], "/* " + B + "assets/css/main.css?v=t1 */")            # the page's own version
+        self.assertEqual(r["home"], "/* " + B + "assets/css/home.css?v=t1 */")
         self.assertEqual(r["caches"], ["gvlv-shell-t3", "gvlv-static-t3"])                 # the old versions' caches: gone
-        self.assertEqual(r["static"], [B + "assets/css/monthly.css?v=t1"])
+        css = B + "assets/css/"
+        self.assertEqual(r["static"], sorted([css + "home.css?v=t1", css + "home.css?v=t2", css + "main.css?v=t1",
+                                              css + "main.css?v=t2", css + "monthly.css?v=t1"]))
+
+    def test_old_stylesheets_never_pile_up(self):
+        # after five new versions: the copies of the last three older ones (t6's own are in its shell), oldest first —
+        # the first to go at the static cache's cap
+        r = self.r["copies"]
+        self.assertEqual(r["main"], [B + f"assets/css/main.css?v={v}" for v in ("t3", "t4", "t5")])
+        self.assertEqual(r["home"], [B + f"assets/css/home.css?v={v}" for v in ("t3", "t4", "t5")])
+        self.assertEqual(r["t3"], "/* " + B + "assets/css/main.css?v=t3 */")
 
 
 # A month page's calendar file (class MonthCalendar): its own world, same harness.

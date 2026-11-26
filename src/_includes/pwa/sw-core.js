@@ -45,7 +45,7 @@
      FIRST, kept like the JSON indexes, and the booth's copy replaced too when there is one; offline,
      on a server error or after 6 s, the booth's copy (else the data cache's).
    Caches: gvlv-shell-<version> (app shell) and gvlv-static-<version> are replaced by each new
-   version (the old static cache's stylesheets go on into the new one: carryStyles); gvlv-pages-v1,
+   version (the old shell's and static cache's stylesheets go on into the new static cache: carryStyles); gvlv-pages-v1,
    gvlv-saved-v1, gvlv-saved-assets-v1, gvlv-img-v1 and gvlv-data-v1 are kept across versions, so a site
    update never deletes what a visitor saved — including the styles and scripts a saved page asks for (its old
    ?v= address): gvlv-saved-assets-v1 holds exactly the files the saved pages use (pruneSavedAssets).
@@ -129,29 +129,50 @@ self.addEventListener("activate", (event) => {
 });
 
 /* A page kept from an older version (gvlv-pages-v1: the last 80 opened, not saved) still asks for that version's
-   stylesheets, by their old ?v= address — and main.css is not all of them: a page area's own sheet (monthly.css,
-   booth.css, bingo.css, orientation.css, presentations.css, report.css, expenses.css: the page's pageStyles) came
-   with the page into the static cache, which goes with its version. (main.css?v=<old> is answered offline by this
-   version's main.css from the app shell: staleWhileRevalidate's last resort, any version of the same file.) So
-   before an old static cache goes, its stylesheets — only the site's own .css, a copy from cache to cache, nothing
-   downloaded — go into this version's, and on into the next version's after that: such a page opened offline after
-   an update keeps its look. They are the static cache's oldest entries, the first to go at its cap (LIMIT.static).
-   The story recorder's MP3 encoder (CARRY_TOO: /contribute/ fetches it on first use, named in no page's HTML) goes
-   along the same way: a take still becomes an MP3 offline after an update. */
+   stylesheets, by their old ?v= address: main.css and Home's home.css came with that version's app shell
+   (gvlv-shell-<v>), a page area's own sheet (monthly.css, booth.css, bingo.css, orientation.css, presentations.css,
+   report.css, expenses.css, library.css, published.css: the page's pageStyles) with the page into its static cache
+   — and both caches go with their version. This version's main.css is no stand-in for an older one: since November
+   2026 Home, the Library / Search and Published writers have their rules in sheets of their own, so an old Home given
+   the new main.css (staleWhileRevalidate's last resort offline: any version of the same file) came out unstyled. So
+   before an old version's shell and static caches go, their stylesheets — only the site's own .css, a copy from cache
+   to cache, nothing downloaded — go into this version's static cache, and on into the next version's after that: such
+   a page opened offline after an update keeps its look. At most CARRY_COPIES copies of one file go on (the newest:
+   main.css of the last three versions), so old copies never pile up; they are the static cache's oldest entries, the
+   first to go at its cap (LIMIT.static). The story recorder's MP3 encoder (CARRY_TOO: /contribute/ fetches it on first
+   use, named in no page's HTML) goes along the same way: a take still becomes an MP3 offline after an update. */
 const CARRY_TOO = /\/assets\/vendor\/(wasm-media-encoder\.min\.js|lame-mp3\.wasm)$/;
+const CARRY_COPIES = 3;
 async function carryStyles(keep) {
-  const olds = (await caches.keys()).filter((n) => n.startsWith(PREFIX + "static-") && !keep.has(n));
+  const old = (kind) => (n) => n.startsWith(PREFIX + kind + "-") && !keep.has(n);
+  const names = await caches.keys();
+  // newest first: an old app shell holds its own version's files; an old static cache what it carried on (oldest
+  // first) and then what its pages asked for — read from its end
+  const olds = [...names.filter(old("shell")), ...names.filter(old("static"))];
   if (!olds.length) return;
   const into = await caches.open(CACHE.static);
+  const copies = new Map();                     // a file's path → its copies in this version's static cache
+  const seen = new Set();
+  for (const req of await into.keys()) {
+    const path = new URL(req.url).pathname;
+    copies.set(path, (copies.get(path) || 0) + 1);
+    seen.add(req.url);
+  }
+  const carry = [];
   for (const name of olds) {
-    const old = await caches.open(name);
-    for (const req of await old.keys()) {
+    const from = await caches.open(name);
+    for (const req of (await from.keys()).reverse()) {
       const path = new URL(req.url).pathname;
-      if (!(/\.css$/.test(path) || CARRY_TOO.test(path)) || (await into.match(req))) continue;
-      const res = await old.match(req);
-      if (res) await into.put(req, res);
+      if (!(/\.css$/.test(path) || CARRY_TOO.test(path)) || seen.has(req.url) || (copies.get(path) || 0) >= CARRY_COPIES) continue;
+      const res = await from.match(req);
+      if (!res) continue;
+      carry.push([req, res]);
+      seen.add(req.url);
+      copies.set(path, (copies.get(path) || 0) + 1);
     }
   }
+  // (oldest first: the static cache's cap lets the oldest go first)
+  for (const [req, res] of carry.reverse()) await into.put(req, res);
   await trim("static");
 }
 

@@ -575,6 +575,52 @@ class OfflineAreaStyles(unittest.TestCase):
         finally:
             ctx.close()
 
+    def test_home_opened_before_an_update_keeps_main_css_offline(self):
+        # Since November 2026 Home's rules are in home.css, not main.css (the Library's and Published writers' too): a
+        # Home kept from before an update asks for ITS version's main.css, which only that version's app shell held.
+        # The next version's main.css is no stand-in (here a much shorter one; in the review an offline Home grew from
+        # 9,583 to 20,646 px) — the worker carries the old shell's stylesheets on into the new static cache.
+        prefix = S["server"].prefix
+        sw = (S["site"] / "sw.js").read_text(encoding="utf-8")
+        m = re.search(r'"version": "([^"]+)"', sw)
+        self.assertIsNotNone(m, "sw.js names its version")
+        # (the next version's own ?v= addresses too: its app shell's main.css is the next one, the old one is not in it)
+        newer = S["tmp"] / "sw-shell-next.js"
+        newer.write_text(sw.replace(m.group(1), m.group(1) + "-shell"), encoding="utf-8")
+        lean = S["tmp"] / "main-next.css"
+        lean.write_text("/* the next version's main.css */\nbody { margin: 0; }\n", encoding="utf-8")
+        why = worker_rewritten()
+        if why:
+            self.skipTest(why)
+        tall = "document.documentElement.scrollHeight"
+        ctx = new_context(390, 844, service_workers="allow")
+        try:
+            page = open_page(ctx, "")
+            page.wait_for_function(WORKER_READY, timeout=30_000)
+            page.wait_for_timeout(1500)                # (the first visit's own keeping of the open tab)
+            page.wait_for_function(IN_CACHE, arg=url(""), timeout=10_000)
+            online = {n: page.evaluate(AREA_SHEET, n) for n in ("main", "home")}
+            self.assertGreater(online["main"]["rules"], 100, online)
+            self.assertGreater(online["home"]["rules"], 10, online)
+            height = page.evaluate(tall)
+            S["overrides"].write_text(json.dumps({"files": {prefix + "sw.js": str(newer),
+                                                            prefix + "assets/css/main.css": str(lean)}}), encoding="utf-8")
+            self.assertEqual(page.evaluate(NEW_VERSION_WAITING), "installed", "the new version installed and waits")
+            took = page.evaluate(TAKE_OVER)
+            self.assertEqual(took["state"], "activated", took)
+            ctx.set_offline(True)
+            again = ctx.new_page()
+            answered(again.goto(url(""), wait_until="load", timeout=60_000), "")
+            again.wait_for_timeout(500)
+            for n in ("main", "home"):
+                with self.subTest(sheet=n):
+                    got = again.evaluate(AREA_SHEET, n)
+                    self.assertEqual(got["href"], online[n]["href"], "the copy kept before the update (its old ?v=)")
+                    self.assertEqual(got["rules"], online[n]["rules"], "that version's stylesheet, not the next one's")
+            self.assertLess(abs(again.evaluate(tall) - height), height * 0.05, "Home keeps its length offline")
+        finally:
+            ctx.close()
+
 
 # ----------------------------------------------------------------------------------------------- script errors
 MAIN_PAGES = ("", "about/", "read/", "listen/", "watch/", "published/", "library/", "events/", "meetings/", "monthly/",

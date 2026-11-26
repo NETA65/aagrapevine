@@ -5,8 +5,9 @@
 //   base      the site's base path ("/aagrapevine/" on GitHub Pages, "/" on a custom domain)
 //   tz        the site's time zone (config/site.yml site.timezone, as src/_data/site.js checked it): the worker
 //             has no window.SITE, and "this month's page" ({month} below) is the month there
-//   shell     what is saved on install: styles, scripts, the two main fonts and their italics, the header's logo,
-//             the favicons and the app icon,
+//   shell     what is saved on install: styles (main.css, and Home's own home.css — the app's start page), scripts,
+//             the two main fonts (upright only: italic text is these faces slanted), the header's logo, the favicons
+//             and the app icon,
 //             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
 //             stand-in for a page not saved; the worker keeps them up to date with the daily content,
 //             which doesn't change the version: sw-core.js refreshOffline); `required` is the part
@@ -95,6 +96,9 @@ export function render(data) {
     // the time-zone math (window.GVTime): a saved page rolls the next meeting on with it — optional (without it the
     // pages keep the dates they were built with)
     a(`assets/js/central-time.js?v=${v}`),
+    // Home's own stylesheet (since November 2026 its rules are not in main.css): Home is the app's start page — optional
+    // (Home opened online keeps it in the static cache as well)
+    a(`assets/css/home.css?v=${v}`),
     a(`assets/js/install-core.js?v=${v}`),
     a(`assets/js/hero-canvas.js?v=${v}`),
     a(`assets/vendor/alpine.min.js?v=${v}`),

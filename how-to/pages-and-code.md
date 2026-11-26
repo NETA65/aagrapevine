@@ -1428,10 +1428,13 @@ The site can be installed on a phone like an app, and it keeps working with a we
   offline use (`keepCalendars`; network first, that copy offline: `calendarFile`), so "Add <month>'s dates to my
   calendar" works offline; a month not saved, the weekly files, `/events.ics` and (since October 2026) the story
   deadlines calendar `/deadlines.ics` stay network only. The worker's
-  "this month" is the month in `site.timezone` (`CONFIG.tz`). On activation a new version copies the old static
-  cache's stylesheets into its own (`carryStyles`, nothing downloaded, within the 120-file static limit), so a page
-  opened online but not saved keeps its own area stylesheet (`monthly.css`, `booth.css` …) offline after an update;
-  its page scripts are not carried over — except the story recorder's MP3 encoder (`CARRY_TOO`: its two vendor
+  "this month" is the month in `site.timezone` (`CONFIG.tz`). On activation a new version copies the old app shell's
+  and static cache's stylesheets into its own static cache (`carryStyles`, nothing downloaded, within the 120-file
+  static limit, at most 3 copies of one file: `CARRY_COPIES`), so a page opened online but not saved keeps its own
+  version's `main.css` and area stylesheet (`home.css`, `monthly.css`, `booth.css` …) offline after an update —
+  since November 2026 a newer `main.css` is no stand-in, as Home, the Library and Published writers have sheets of
+  their own (`home.css` is in the app shell too, optional: Home is the app's start page); its page scripts are not
+  carried over — except the story recorder's MP3 encoder (`CARRY_TOO`: its two vendor
   files, which no page names in its HTML), so takes still become MP3s offline after an update.
 - **Saved pages stay fresh and kept** (since October 2026). "Save key pages" asks the browser to keep the site's
   storage (`navigator.storage.persist()`); the result line then adds "This browser will keep them until you remove

@@ -507,9 +507,10 @@ light, dark, high contrast and high-contrast dark, at the top and scrolled); tha
 never hides the focused element (also after relaxed spacing is switched off); that no page scrolls sideways at
 360 px wide with 150 % text (Home, About, Published, Events, Meetings and Photos, English and Spanish); that a new
 version of the offline worker takes over in under 6 seconds while a tab's page is slow, and that a page opened
-before an update keeps its own stylesheet offline; that 26 main pages run without a script error in both
-languages; that two Tracker tabs keep a receipt photo when one deletes an entry the other is editing, and that
-closing a tab whose entries the browser would not store asks first; that a poster's share picture can be made; and
+before an update keeps its own stylesheet offline (Home: its own version's `main.css` and `home.css`); that 26 main
+pages run without a script error in both languages; that two Tracker tabs keep a receipt photo when one deletes an
+entry the other is editing, and that closing a tab whose entries the browser would not store asks first; that a
+poster's share picture can be made; and
 that Share your story's recorder works, in English and Spanish, with Chromium's fake microphone (a browser of its
 own, its profile kept): the microphone test moves the meter, a take of about 3 seconds after the 3-2-1 countdown
 plays as an MP3 and is on the device as bytes (one final record, no draft left, every PCM byte once), closing the
