@@ -142,8 +142,8 @@ class HubPages(RunSummary):
             {"url": "https://www.aalavina.org/recursos", "status": "no-response", "since": iso(NOW - timedelta(minutes=9))}]
     NOTE = "2 main page(s) of the magazine sites did not load: aagrapevine.org/gvr-resources (404 since …) — checked again every day"
 
-    def status(self, ok: bool = True) -> dict:
-        return {"sources": [src("pdfs", "Documents", ok=ok, warnings=[
+    def status(self, ok: bool = True, ran: bool = True) -> dict:
+        return {"sources": [src("pdfs", "Documents", ok=ok, ran=ran, warnings=[
             self.NOTE, "robots.txt of www.aalavina.org did not answer properly (no answer): its pages were left for the next run"])]}
 
     def pdfs(self, attempted: datetime, ok: bool = True) -> dict:
@@ -162,11 +162,19 @@ class HubPages(RunSummary):
         self.assertNotIn("main page(s) of the magazine sites did not load: aagrapevine.org", summary)
         self.assertIn("- Documents: robots.txt of www.aalavina.org did not answer properly", summary)
 
+    def test_a_search_that_found_the_same_pages_again(self):
+        # this run's search found the same pages failing as the last one: data/raw/pdfs.json was not written again
+        # (common.save_raw: only its times would change), so its `attempted` is the last search's — status.json's
+        # pdfs row has this run's (build_data, common.RUN_STAMPS), and the list is shown
+        summary, log = self.summary(self.status(), self.pdfs(NOW - timedelta(hours=20)))
+        self.assertIn("**Main pages of the magazine sites that did not load**", summary)
+        self.assertIn("title=Document search::2 main page(s)", log)
+
     def test_never_an_older_list(self):
-        # a search an earlier run made (this one did not search), a crashed search (it keeps the last run's list), no
-        # start time: no list — the search's own note stays in the notes
+        # a search an earlier run made (this one did not search: status.json's pdfs row says so too), a crashed search
+        # (it keeps the last run's list), no start time: no list — the search's own note stays in the notes
         for what, status, pdfs, started in (
-                ("an earlier run's", self.status(), self.pdfs(NOW - timedelta(hours=20)), STARTED),
+                ("an earlier run's", self.status(ran=False), self.pdfs(NOW - timedelta(hours=20)), STARTED),
                 ("a crashed search", self.status(ok=True), self.pdfs(NOW - timedelta(minutes=3), ok=False), STARTED),
                 ("no start time", self.status(), self.pdfs(NOW - timedelta(minutes=3)), None),
                 ("no file", self.status(), None, STARTED)):

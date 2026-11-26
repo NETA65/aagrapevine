@@ -225,6 +225,33 @@ class WholeRun(TempRaw):
         row = next(r for r in three["status"]["sources"] if r["source"] == "youtube")
         self.assertEqual(row["attempted"], T1)
 
+    def test_the_run_summary_still_names_the_hub_pages_that_did_not_load(self):
+        # the document search finds the same magazine pages failing as the last time: data/raw/pdfs.json is not
+        # written again (only its times would change), but this run's summary must still say so — the run summary
+        # (scripts/ops/run_summary.py) takes the search's time from status.json's pdfs row when it is later
+        import io
+        import os
+        from contextlib import redirect_stdout
+        from scripts.ops import run_summary
+        hub = [{"url": "https://www.aagrapevine.org/sites/default/files", "status": "HTTP 503", "since": T0}]
+        for at in (T0, T1):          # (no items: the second save would change nothing but its times)
+            with mock.patch.object(common, "now_iso", return_value=at):
+                common.save_raw("pdfs", [], extra={"hub_problems": hub})
+        self.assertEqual(json.loads((self.raw / "pdfs.json").read_text(encoding="utf-8"))["attempted"], T0, "not rewritten")
+        self.build(T1)
+        status = json.loads((self.out / "status.json").read_text(encoding="utf-8"))
+        self.assertEqual(next(r for r in status["sources"] if r["source"] == "pdfs")["attempted"], T1)
+        here = os.getcwd()
+        os.chdir(self.tmp)
+        self.addCleanup(os.chdir, here)
+        out = io.StringIO()
+        env = {"GITHUB_STEP_SUMMARY": str(self.tmp / "summary.md"), "GITHUB_OUTPUT": str(self.tmp / "out.txt"),
+               "STARTED": "2026-11-25T17:59:00Z", "ALSO": "", "ALSO_WHY": "", "DAILY_MINUTES": "40"}
+        with mock.patch.dict(os.environ, env), redirect_stdout(out):
+            run_summary.main()
+        self.assertIn("::warning title=Document search::1 main page(s) of the magazine sites did not load", out.getvalue())
+        self.assertIn("aagrapevine.org/sites/default/files — HTTP 503", (self.tmp / "summary.md").read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

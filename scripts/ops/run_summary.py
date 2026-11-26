@@ -37,9 +37,10 @@ def main() -> None:
     UNCHECKED_DAYS = 3
     # Never "not checked" while left alone on purpose: the PDF search while sources.crawler.minutes_per_run
     # is 0 (run_all skips the crawl; DAILY_MINUTES is that setting, from the plan step). Every other source
-    # writes its data/raw file — so its `attempted` time — whenever it runs, also with nothing set up for
-    # it (drive, youtube and podcasts then fail with an error of their own; meetings.enabled: false is a
-    # normal, empty run); one that never ran yet has no `attempted` and is not counted either.
+    # gets a fresh `attempted` in status.json whenever it runs (its data/raw file, or — when nothing but the run's
+    # times would change there — common.RUN_STAMPS, which build_data writes to status.json), also with nothing
+    # set up for it (drive, youtube and podcasts then fail with an error of their own; meetings.enabled: false is
+    # a normal, empty run); one that never ran yet has no `attempted` and is not counted either.
     paused = {"pdfs"} if os.environ.get("DAILY_MINUTES", "").strip() == "0" else set()
     now = datetime.now(timezone.utc)
 
@@ -171,7 +172,12 @@ def main() -> None:
     except Exception:
         penv = {}
     penv = penv if isinstance(penv, dict) else {}
-    pat = moment(penv.get("attempted")) if penv.get("attempted") else None
+    # When the search last ran: since November 2026 data/raw/pdfs.json is not written again when nothing but its run
+    # times would change (common.save_raw: the same hub problems as the last search), so its `attempted` can be an
+    # older run's — status.json's pdfs row has this run's (build_data takes them from common.RUN_STAMPS): the later.
+    prow = next((r for r in s.get("sources", []) if isinstance(r, dict) and r.get("source") == "pdfs"), {})
+    ptimes = [t for t in (moment(v) for v in (penv.get("attempted"), prow.get("attempted")) if v) if t is not None]
+    pat = max(ptimes) if ptimes else None
     hub_lines = []
     if started and pat and pat >= started and penv.get("ok") is True:
         for h in penv.get("hub_problems") or []:
