@@ -6,8 +6,8 @@
 //   tz        the site's time zone (config/site.yml site.timezone, as src/_data/site.js checked it): the worker
 //             has no window.SITE, and "this month's page" ({month} below) is the month there
 //   shell     what is saved on install: styles (main.css, and Home's own home.css — the app's start page), scripts,
-//             the two main fonts (upright only: italic text is these faces slanted), the header's logo, the favicons
-//             and the app icon,
+//             the two main fonts and Fraunces' italic (Home's hero and quotes: Inter's italic is its upright face
+//             slanted), the header's logo, the favicons and the app icon,
 //             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
 //             stand-in for a page not saved; the worker keeps them up to date with the daily content,
 //             which doesn't change the version: sw-core.js refreshOffline); `required` is the part
@@ -104,7 +104,9 @@ export function render(data) {
     a(`assets/vendor/alpine.min.js?v=${v}`),
     a("assets/fonts/inter-latin-wght-normal.woff2"),
     a("assets/fonts/fraunces-latin-opsz-normal.woff2"),
-    // (no italic files: main.css "Fonts" — italic text is these faces slanted, offline too)
+    // Fraunces' italic (the hero's "meeting in print", the daily quotes on Home, the app's start page); no Inter italic
+    // file (main.css "Fonts": its italic is the upright face slanted, offline too)
+    a("assets/fonts/fraunces-latin-opsz-italic.woff2"),
     // the header's NETA 65 wordmark; the grape icon the pages name in their <head> (partials/icon-links.njk): a tab's
     // favicon (the ICO, the SVG) and the 48 px one; the 192 px app icon (the footer, the install notice, the share
     // posters)

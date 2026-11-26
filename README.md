@@ -2566,11 +2566,13 @@ under "Committee", committee shorthand in the menus and about 250 KB of fonts on
   column starts with it, and the phone menu's *More* lists it.
 - **The Tracker** reminds, once a month, to keep a copy — a CSV or the full backup — since everything in it lives in
   the browser (see *The Tracker* below).
-- **Lighter pages:** no italic font files (italic text is the upright face slanted: 134 KB less on every page); the
-  home page, the Library with the site search, and Published writers have stylesheets of their own (main.css 416 →
-  about 345 KB); `/read/` holds the first six stories of each earlier issue, and **Show all N stories** adds the
-  rest from `/read-archive.json` (the page went from 670 to about 330 KB; without JavaScript the issue's *Read on …*
-  link opens its whole table of contents on the magazine's site). The committee pages' tabs no longer count photos
+- **Lighter pages:** no Inter italic file (52 KB): Inter's italic is the upright face slanted by the browser, very
+  nearly what its own italic is — Fraunces' italic, the display italic of the hero and the quotes, stays, and like
+  every face it downloads only on a page whose text uses it; the home page, the Library with the site search, and
+  Published writers have stylesheets of their own (main.css 416 → about 345 KB); `/read/` holds the first six stories
+  of each earlier issue, and **Show all N stories** adds the rest from `/read-archive.json` (the page went from 670
+  to about 330 KB; without JavaScript the issue's link says **All N stories on aagrapevine.org** and opens its whole
+  table of contents on the magazine's site). The committee pages' tabs no longer count photos
   and files on every build (2.5 s less per build).
 
 ### Reading & display settings and the Accessibility page
