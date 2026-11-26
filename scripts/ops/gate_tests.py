@@ -224,6 +224,9 @@ CONTENT_TESTS: dict[str, str] = {
         "'Grapevine meetings'",
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
+    "test_presentations_price_follow_up.PriceFollowUp.":
+        "config/presentations/committee-meeting.yml: the 2027 price follow-up shown from January 1 through March 31, "
+        "2027, in both versions, with the prices of the day",
     "test_r12_u9_meeting.RealDeck.":
         "config/presentations/committee-meeting.yml: its paperwork passes the checker; the notes' and the reminder's "
         "wording; what its Start next month clears and keeps",

@@ -87,7 +87,7 @@ presets:
       es: "Sin orador(a) invitado(a) (unos 60 minutos)"
     minutes: 60
     only: ["title", "welcome", "serenity-prayer", "topic-of-the-month", "topic-sharing", "part-1", "agenda", "coming-up",
-           "open-meetings", "workshops-volunteers", "special-offers", "price-heads-up", "this-month", "deadlines",
+           "open-meetings", "workshops-volunteers", "prices-since-january", "special-offers", "price-heads-up", "this-month", "deadlines",
            "new-reps", "sharing", "part-3", "next-meeting", "responsibility", "parking-lot", "thank-you"]
     note:
       en: "No guest speaker at this meeting: we share on a topic until 7:30, then the same second half. For every meeting before January 20, 2027 (the guest speakers start then), or a month whose guest speaker can't come. The agenda shows this version's own times."
@@ -623,6 +623,40 @@ slides:
       DO: Write down each request with a contact by service position, and follow up by e-mail (BCC when you write to several people): it goes in the follow-ups of your notes. For events, the Grapevine office can send free printed materials: write to gvrc@aagrapevine.org four to six weeks ahead with your name, Area, service position and contact details, and the event's name, date and expected attendance. The office may reserve printed materials for larger events (about 100+, as reported on the May 2026 Area Chair call), so ask early.
       TIP: Say plainly at every workshop that our Area committee presents it, not AA Grapevine, Inc. If you invite Grapevine office staff to speak, the committee that invites them pays their expenses. And never promise anyone that their story will be published.
       UPDATE ({ui:customize} → {ui:your_details}): the volunteer lines, every month, from the events on the 'Coming up' slide that need help.
+
+  # ================================================================== 2027 PRICE FOLLOW-UP (a block of its own)
+  # After AA Grapevine's price change of January 1, 2027 (config/site.yml price_changes: 2027-01). The heads-up
+  # ("price-heads-up", after "Special offers") announces it, with the letter's own figures, and leaves the show
+  # after January 31, 2027; this slide says it in the past tense, with the prices of the day ({live:price_…}: the new
+  # ones from January 1, 2027, by themselves), from January 1 through March 31, 2027 (show_from / show_until: the
+  # meetings of January, February and March, while treasurers set the year's budget). In January both are in the
+  # show: the chair keeps one (its notes say so). It is in both versions ("No guest speaker" lists it in `only`),
+  # and optional: the first slide to go when the second half runs long. Information only: never a reason to buy.
+  - id: "prices-since-january"
+    layout: "table"
+    title: "New prices since January 1, 2027"
+    optional: true
+    show_from: "2027-01-01"
+    show_until: "2027-03-31"
+    header: ["1 year", "Grapevine", "La Viña"]
+    rows:
+      - ["Print", "**{live:price_gv_print}**", "**{live:price_lv_print}**"]
+      - ["Digital", "**{live:price_gv_digital}**", "**{live:price_lv_digital}**"]
+      - ["Every book", "$2.00 more than in 2026", "$2.00 more than in 2026"]
+    widths: [3.0, 4.4, 4.4]
+    first_col_bold: true
+    source: "Source: AA Grapevine's letter to intergroups and central offices, October 1, 2026. Today's prices: the official stores, as [{live:site}/shop/](/shop/) reads them"
+    takeaway: "For your groups' treasurers and their 2027 budget. Other plans: the official stores or our Shop page."
+    minutes: 1
+    notes: |
+      WHEN: in the show by itself from January 1 through March 31, 2027 (the meetings of January, February and March), and gone after it. IN JANUARY: the heads-up (slide {slide:price-heads-up}) is in the show too, until January 31, with the old and the new figures: keep one of the two, and switch the other off ({ui:customize} → {ui:slides}).
+      TIP (timekeeping): about a minute: it comes out of the few minutes the second half keeps spare. It's optional: the first slide to go when the sharing runs long.
+      SAY: A reminder for your groups' treasurers: since January 1, AA Grapevine's prices are new. A year of Grapevine in print is now {live:price_gv_print}, and digital {live:price_gv_digital}; a year of La Viña in print is {live:price_lv_print}, and digital {live:price_lv_digital}. Every Grapevine and La Viña book costs $2 more than in 2026. For the two- and three-year plans, Complete and everything else, the official stores and our Shop page have the current prices. As always, each group decides what, if anything, to buy.
+      DO: If reps ask, post the four prices and the Shop page's link in the chat ({live:site}/shop/).
+      TIP: Information only: never a reason to rush, never a price as a bargain, and never a guess at a plan the letter doesn't name (2- or 3-year, Complete, monthly, other regions): point people to the official stores or the Shop page.
+      STAYS CURRENT: the four prices are the ones in effect on the day shown, from the committee's Shop page (the stores' own prices once they show the new ones).
+      SOURCE: AA Grapevine, Inc., letter to intergroups and central offices, October 1, 2026: 'Grapevine & La Viña Pricing Update, Effective January 1, 2027'.
+  # ================================================================== (end of the 2027 price follow-up)
 
   # The stores' offers of the day ({live:store_offers}: config/site.yml store_offers, as /shop/#offers lists
   # them, each with its days; the line switches when an offer starts or ends, so a copy opened later stays right)
