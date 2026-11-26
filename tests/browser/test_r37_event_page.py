@@ -125,7 +125,7 @@ class FarAnchor(unittest.TestCase):
         ctx = new_context(1280, 900)
         try:
             page = open_page(ctx, path)
-            link = page.locator(".hero-actions a").first
+            link = page.locator(".hero-actions a.evp-hero-all")      # ("See all events": the hero's last action)
             href = link.get_attribute("href")
             anchor = href.split("#", 1)[1] if "#" in href else ""
             if not anchor:

@@ -450,7 +450,7 @@ class EventPages(unittest.TestCase):
                 self.assertIn(lede, text_of(main_of(self.page(f"{pre}/events/{ASM}/"))))
         cal = hrefs(f"/events/{CAL}/")
         self.assertIn("https://www.aalavina.org/get-involved/events/2099-02-28/prueba", cal)
-        self.assertIn("/events/?filter=calendar", cal)
+        self.assertIn("/events/?kind=calendar", cal)          # (the list's "GV & LV calendars" filter)
         # a series' page: its next dates, each to its own page (its list is its own content: not skipped)
         cws = self.series("citywide-dallas")
         if cws:

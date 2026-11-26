@@ -136,7 +136,9 @@ class TheCard(unittest.TestCase):
             page.wait_for_url(re.compile(re.escape(f"/events/{anchor}/") + "$"), timeout=30_000)
             share = page.locator("main [data-share]").first.get_attribute("data-share")
             self.assertTrue(share.endswith(f"/events/{anchor}/"), share)
-            page.locator("main .hero-actions a").first.click()
+            # ("See all events": since the list's redesign the hero's last, quieter action — after Join online, Add to
+            # calendar and Directions)
+            page.locator("main .hero-actions a.evp-hero-all").click()
             page.wait_for_url(re.compile(re.escape(f"/events/#{anchor}") + "$"), timeout=30_000)
             self.assertTrue(page.locator(f'li[id="{anchor}"]').is_visible())
         finally:

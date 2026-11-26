@@ -30,7 +30,8 @@
 //               committee: "evpage.lede.org_ours", "…_past" — "It is organized by the …") } — one plain sentence for
 //               people, search engines and AI answers alike; never a meeting link, ID or code (only the platform's
 //               name), never a person's name
-//   facts       [{ k ("what" | "when" | "where" | "language" | "organizer" | "cost" | "who" | "repeats" | "contact"),
+//   facts       [{ k ("what" | "when" | "where" | "district" | "language" | "organizer" | "cost" | "who" | "repeats" |
+//               "contact"),
 //               v (a value) | vKey (a key to translate) | vOnline (a platform: "Online on …"), href, ext (outside),
 //               mail, map (a map link: an upcoming event held at a real address) }]
 //   banners     { past, tentative, partOf ({ title, href }: its series' page) }
@@ -179,7 +180,7 @@ function resource(id, c) {
     case "weekly": return r(lurl("/meetings/#weekly-open", lang));
     case "read": return r(lurl("/read/", lang));
     case "lvshare": return site.links?.lv_share_story ? r(site.links.lv_share_story) : null;
-    case "calfilter": return r(lurl("/events/?filter=calendar", lang));
+    case "calfilter": return r(lurl("/events/?kind=calendar", lang));
     case "bulletin": return c.bulletin ? r(lurl(`/bulletin/#${c.bulletin}`, lang)) : null;
     default: {
       if (LESSON[id]) {
@@ -308,6 +309,9 @@ function facts(ev, kind, site, lang, opt = {}) {
     out.push({ k: "where", v: where, vOnline: ev.isOnline ? platform || "-" : "",
       map: addr ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}` : "" });
   }
+  // (a content/events file's `district:` — the district that holds it, "87": shown only when the file names one)
+  const district = String(ev.item?.extra?.district ?? "").trim();
+  if (/^\d{1,3}$/.test(district)) out.push({ k: "district", v: district });
   out.push({ k: "language", vKey: kind.spanish ? "evpage.lang_es" : "evpage.lang_en" });
   const org = outside ? null : eventOrganizer(ev, site, lang);
   // (the committee itself: its About page on this site — its Organization's url is the site's own home; anyone else:

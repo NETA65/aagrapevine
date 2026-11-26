@@ -12,15 +12,18 @@
     page — no script needed to read it:
       · the Event's structured data FIRST in the body (cmEventPageLd: the same Event as /events/ gives it — never a
         meeting link, ID or code, never a person's name), only for a leaf;
-      · the hero: the title (h1), its day and time (a series: how often), "See all events" (its card on /events/; a
-        series' page: /events/) and, on a series' date, "All dates" (its series' page);
+      · the hero: the title (h1), its day and time (a series: how often) and its actions, above the fold on a phone —
+        while it is to come, Join online (online), Add to calendar and Directions (a real address: a map) —, then, on
+        a series' date, "All dates" (its series' page) and, quieter, "See all events" (its card on /events/; a
+        series' page: /events/);
       · the breadcrumb (Home › Events › [its series ›] the page), "This event is over", "Details to be confirmed",
         "One date of <its series>";
       · the lede — one plain sentence: what it is, when, where (the platform's name only, online), that it is held in
         Spanish (when the data says so), who organizes it (our committee by its name in the page's language);
-      · the event's card, as on /events/ (its kind, its place, how to join, the whole description, Join online, Add to
-        calendar, View flyer, its outside page, Share) — once it is over, none of how to join: no Join, no meeting ID,
-        no calendar menu, its summary without the sentences that give one (withoutJoinDetails) and never its body;
+      · the event's card, as on /events/ (its kind, its place, how to join, the whole description, View flyer, its
+        outside page — "Organizer's page ↗" —, Share; Join online and Add to calendar are the hero's) — once it is
+        over, none of how to join: no meeting ID, its summary without the sentences that give one
+        (withoutJoinDetails) and never its body;
         a series' page: how to join its next date and its summary, its flyer under it, then its next 6 dates (each
         to its date's page);
       · the quick facts (a map link for an event still to come at a real address) — after the card in the page (on a
@@ -47,12 +50,36 @@
 {%- set title = share.series.title if series else ev.title -%}
 {%- set kindName = share.kind.label | t(lang) -%}
 {%- if share.ld %}{%- set ld = ev | cmEventPageLd(site, lang, selfAbs) -%}{% if ld %}<script type="application/ld+json">{{ ld | rpJson | safe }}</script>{% endif %}{% endif %}
+{#- the hero's actions, above the fold on a phone: while it is to come, Join online (an online event: its link), Add
+    to calendar (the FULL Google / Outlook links, the .ics file — one event: no weight to save) and Directions (a map
+    of its real address: the quick facts' map link); then "All dates" (a series' date: its series' page) and, quieter,
+    "See all events" (its card on /events/). Once it is over: those two only. The menu's panel hangs below the hero
+    (committee.css: the hero lets it show while it is open). -#}
+{%- set maps = [] -%}{%- for f in m.facts %}{% if f.map and maps.push(f.map) %}{% endif %}{% endfor -%}
+{%- set mapHref = maps[0] if not ev.past else "" -%}
 {% call ui.pageHero(lang, title, when | escape, "repeat" if series else "calendar-days", kindName) %}
-  <div class="hero-actions">
-    <a class="btn-light" href="{{ share.target }}">{% icon "calendar-days", "size-4" %} {{ "committee.events.page_all" | t(lang) }}</a>
-    {%- if m.banners.partOf %}
-    <a class="btn-light" href="{{ m.banners.partOf.href }}">{% icon "repeat", "size-4" %} {{ "evpage.sec.all_dates" | t(lang) }}</a>
+  <div class="hero-actions evp-hero-actions">
+    {%- if not ev.past %}
+    {%- if ev.online %}
+    <a class="btn-light" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "committee.events.join_online" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
     {%- endif %}
+    <details class="cm-menu">
+      <summary class="{{ 'btn-on-dark' if ev.online else 'btn-light' }}">{% icon "calendar-plus", "size-4" %} {{ "common.add_to_calendar" | t(lang) }}</summary>
+      <div class="cm-menu-panel">
+        <a href="{{ ev.gcal }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Google Calendar</a>
+        <a href="{{ ev.outlook }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Outlook.com</a>
+        <button type="button" data-cm-ics="{{ ev.icsData | json }}" data-cm-js>{% icon "download", "size-4" %} {{ "committee.cal.ics_file" | t(lang) }}</button>
+        <p class="cm-menu-note" data-cm-js>{{ ("committee.cal.reminder_day" if ev.allDay else "committee.cal.reminder_timed") | t(lang) }}</p>
+      </div>
+    </details>
+    {%- if mapHref %}
+    <a class="btn-on-dark" href="{{ mapHref }}" target="_blank" rel="noopener">{% icon "map", "size-4" %} {{ "evpage.directions" | t(lang) }}<span class="sr-only"> — {{ "evpage.map_aria" | t(lang, { place: ev.location }) }} ({{ "common.external" | t(lang) }})</span></a>
+    {%- endif %}
+    {%- endif %}
+    {%- if m.banners.partOf %}
+    <a class="btn-on-dark btn-sm" href="{{ m.banners.partOf.href }}">{% icon "repeat", "size-4" %} {{ "evpage.sec.all_dates" | t(lang) }}</a>
+    {%- endif %}
+    <a class="btn-on-dark btn-sm evp-hero-all" href="{{ share.target }}">{% icon "calendar-days", "size-4" %} {{ "committee.events.page_all" | t(lang) }}</a>
   </div>
 {% endcall %}
 
@@ -84,7 +111,6 @@
         </ul>
         {%- endif %}
         <div class="evp-btns">
-          {% if ev.online %}<a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} {{ "committee.events.join_online" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}
           {{ ui.flyerButton(m.flyer, title, lang) }}
           <button type="button" class="btn-ghost btn-sm" data-js-only data-share="{{ selfAbs }}" data-share-title="{{ title }}" data-share-text="{{ when }}">{% icon "share-2", "size-4" %}<span>{{ "common.share" | t(lang) }}</span></button>
         </div>
@@ -129,27 +155,13 @@
           <p class="mt-4 text-[0.95rem] leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.summary | excerpt(2000) | escape | cmNoSnippet | safe }}</p>
           {% endif %}
           {% if ev.item | machineFor(lang) %}<p class="mt-1.5">{{ ui.autoNote(ev.item, lang) }}</p>{% endif %}
-          {#- the card's buttons (committee.css .cm-ev-actions); the "Add to calendar" menu with the FULL Google /
-              Outlook links and its note (one card: no weight to save) — while it is still to come -#}
+          {#- the card's buttons (committee.css .cm-ev-actions): its flyer, its outside page and Share — Join online and
+              Add to calendar are in the hero -#}
           <div class="cm-ev-actions">
             <div class="cm-ev-btns">
-            {% if ev.online and not ev.past %}
-            <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
-            {% endif %}
-            {% if not ev.past %}
-            <details class="cm-menu">
-              <summary class="btn-secondary btn-sm">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "common.add_to_calendar" | t(lang) }}</span></summary>
-              <div class="cm-menu-panel">
-                <a href="{{ ev.gcal }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Google Calendar</a>
-                <a href="{{ ev.outlook }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Outlook.com</a>
-                <button type="button" data-cm-ics="{{ ev.icsData | json }}" data-cm-js>{% icon "download", "size-4" %} {{ "committee.cal.ics_file" | t(lang) }}</button>
-                <p class="cm-menu-note" data-cm-js>{{ ("committee.cal.reminder_day" if ev.allDay else "committee.cal.reminder_timed") | t(lang) }}</p>
-              </div>
-            </details>
-            {% endif %}
             {{ ui.flyerButton(ev.flyer, ev.title, lang) }}
             {% if ev.link and ev.linkExternal and ev.link != (ev.flyer.view if ev.flyer else "") %}
-            <a class="btn-secondary btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.details_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.details" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+            <a class="btn-secondary btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evlist.organizer_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.organizer" | t(lang) }}</span> <span aria-hidden="true">↗</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
             {% endif %}
             </div>
             <button type="button" class="btn-ghost btn-sm max-sm:mt-2 sm:max-xl:px-2.5" data-js-only data-share="{{ selfAbs }}" data-share-title="{{ ev.title }}" data-share-text="{{ when }}">{% icon "share-2", "size-4" %}<span class="sm:max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>

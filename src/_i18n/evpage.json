@@ -135,6 +135,10 @@
     "en": "Questions",
     "es": "Preguntas"
   },
+  "evpage.facts.district": {
+    "en": "District",
+    "es": "Distrito"
+  },
   "evpage.where_tba": {
     "en": "To be announced",
     "es": "Por anunciarse"
@@ -154,6 +158,10 @@
   "evpage.map": {
     "en": "Map",
     "es": "Mapa"
+  },
+  "evpage.directions": {
+    "en": "Directions",
+    "es": "Cómo llegar"
   },
   "evpage.map_aria": {
     "en": "Map of {place}",
