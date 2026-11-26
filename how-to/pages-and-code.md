@@ -1313,7 +1313,7 @@ width and a wide screen after the change: the grids are designed for these count
 - **"Save key pages for offline"** (the button on `/offline/` and in the "Aa" panel) keeps the pages
   listed in `const save = [` in `src/pages/sw.11ty.js`: today the home page, `meetings/`, `monthly/`, this month's page,
   `contribute/`, `shop/`, `published/`, then `accessibility/`, `orientation/` (with every session) and `tracker/`.
-  The data files in `files` are kept too: the five presentations and, with `published/`, both
+  The data files in `files` are kept too: every presentation and, with `published/`, both
   `published/texas-archive.json` files.
   To add `/faq/`, add `"faq/"` to that list. Write the English path only: the worker adds `es/` for
   Spanish visitors. Keep the existing entries (`tests/test_pwa.py` checks some of them).

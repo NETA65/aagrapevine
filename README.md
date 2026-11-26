@@ -469,8 +469,13 @@ What the newer pages do:
   `/orientation/?slides#slide-12` resumes, `#lesson-role` starts a lesson), a **printable handout** (printing
   the hub gives one Letter sheet per lesson) and a 45-minute plan for district trainers. The lessons live in
   `config/orientation.yml` (both languages, checked by the build and by `tests/test_orientation.py`); the GVR
-  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's five web slide decks
-  ([how-to/presentations.md](how-to/presentations.md)); the monthly committee meeting's deck also makes the
+  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's web slide decks
+  ([how-to/presentations.md](how-to/presentations.md)): the orientation, information, writing and recording
+  workshops, our two monthly meetings (the committee meeting and the Grapevine Meeting) and, since November 2026,
+  the welcome for Panel 77's new GVRs and RLVs, a booth or group visit built around QR codes, and getting ready for
+  the General Service Conference (and, in the committee meeting's deck, the 2027 price follow-up, "New prices since
+  January 1, 2027", from January 1 to March 31, 2027). An event's own page links the deck of its kind (a recording
+  workshop's: the Recording Workshop). The monthly committee meeting's deck also makes the
   chair's paperwork — the agenda e-mail, a reminder, the draft notes and **Start next month** (Customize →
   **Agenda & notes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--notes)).
 - **Meetings** (`/meetings/`, renamed from *Committee meeting*; the old `/meeting/` address forwards there,

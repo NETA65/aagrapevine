@@ -1,10 +1,10 @@
 # Presentations
 
-The presentations on the GVR / RLV 101 page (`/orientation/`, "Presentations": three workshops and our two monthly
-meetings, the committee meeting and the Grapevine Meeting) are made from the files in this folder: **one file per
-presentation**, written in plain text
-(YAML). The site turns each file into a presentation that opens in a pop-up player, with speaker notes, a presenter
-view, versions, printing, and the presenter's own changes kept on their own device.
+The presentations on the GVR / RLV 101 page (`/orientation/`, "Presentations": our workshops, our two monthly
+meetings — the committee meeting and the Grapevine Meeting —, the welcome for new reps, a booth or group visit and
+getting ready for the Conference) are made from the files in this folder: **one file per presentation**, written in
+plain text (YAML). The site turns each file into a presentation that opens in a pop-up player, with speaker notes, a
+presenter view, versions, printing, and the presenter's own changes kept on their own device.
 
 | File | Presentation |
 |---|---|
@@ -13,15 +13,27 @@ view, versions, printing, and the presenter's own changes kept on their own devi
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting |
 | `grapevine-meeting.yml` | Grapevine Meeting (our online AA meeting on the first Wednesday; its PowerPoint copy, `Grapevine Meeting.pptx`, is being added to the Drive) |
+| `welcome-panel-77.yml` | Welcome to Panel 77: New GVRs and RLVs (January 2027: 30 minutes, or 15) |
+| `booth-visit.yml` | Grapevine and La Viña: Scan, Read, Give, Write (a booth or group visit built around QR codes: 10 minutes, or 5) |
+| `conference-prep.yml` | Getting Ready for the Conference: Grapevine and La Viña (February–March: 45 minutes, or 30) |
+| `recording-workshop.yml` | Grapevine and La Viña Recording Workshop (60 minutes) |
+
+The last four were added in November 2026 and have no PowerPoint copy (no `drive_title`). The committee meeting's
+deck also has a **2027 price follow-up**, "New prices since January 1, 2027" (`prices-since-january`, a block of its
+own just before "Special offers"): the past tense of the heads-up, with the prices of the day, in the show from
+January 1 through March 31, 2027 (`show_from` / `show_until`), in both versions. In January the heads-up is in the
+show too, until January 31: the chair keeps one of the two.
 
 The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
 Spanish, and each presentation is marked "(en inglés)".
 
 **Each event's own page links its presentation** (since round 37, November 2026): in its *Get ready* part, "Start
 the presentation" (`/orientation/?present=<id>`, the player opens at once) and "About this presentation" (its card,
-`/orientation/#pres-<id>`). A writing workshop's page links `writing-workshop`; a recording workshop's the same one,
-as "The closest presentation"; an information workshop's `information-workshop`; a GVR/RLV orientation's
-`orientation-workshop`; the Grapevine Meeting's pages `grapevine-meeting`. The kind of event decides
+`/orientation/#pres-<id>`). A writing workshop's page links `writing-workshop`; a recording workshop's
+`recording-workshop` (since November 2026; before it, the writing workshop's, as "The closest presentation"); an
+information workshop's `information-workshop`; a GVR/RLV orientation's `orientation-workshop`; the Grapevine
+Meeting's pages `grapevine-meeting`. (The welcome, the booth visit and the Conference session are no kind's own: they
+are opened from their cards.) The kind of event decides
 (`eleventy/event-pages.js` `EVENT_KINDS`; a `content/events` file can set it with `type:`). A presentation is linked
 only while its file is here: renaming or removing a file takes its link off those pages by itself. (The rows of
 events inside the presentations are not changed: they still link the event's own page elsewhere, else its card on
@@ -204,7 +216,7 @@ new slide for them.
 | `source` | the small "Sources: …" line at the bottom |
 | `takeaway` | the highlighted box at the bottom |
 | `version_notes` | notes shown (highlighted) only in one version: `{ late: "RUNNING LATE: …" }`. For a line of the notes that only some versions need, or that some leave out, see `{only:…}` below |
-| `show_from` / `show_until` | `"YYYY-MM-DD"`: the slide is only in the presentation on those days (Central time, both days included) |
+| `show_from` / `show_until` | `"YYYY-MM-DD"`: the slide is only in the presentation on those days (Central time, both days included). In a deck whose agenda works out its times (`from`), put such a slide after the agenda's last row's slide, or leave the agenda out (the welcome for Panel 77 does): a slide that comes and goes would move the times |
 | `when` | `"price_notice"`: only while a price-change notice is current (from `announced` through `notice_until` in `config/site.yml`) |
 | `allow_words` | rare: a word of the wording rules a slide may use because it quotes a source word for word (`["teach"]`); say why in a comment |
 
