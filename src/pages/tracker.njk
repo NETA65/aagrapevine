@@ -111,6 +111,22 @@ pageStyles: ["/assets/css/expenses.css"]
         </div>
       </div>
 
+      {#- once a month, a gentle nudge to keep a copy (everything here is only in this browser): a CSV, or the full
+          backup with the receipt photos; "Not now" puts it off until next month (expenses.js nudgeDue / nudgeLater —
+          remembered in localStorage). Not a role="alert": nothing went wrong. -#}
+      <div class="xp-nudge" x-show="nudgeDue()" x-cloak>
+        <span class="xp-nudge-icon" aria-hidden="true">{% icon "hard-drive-download", "size-5" %}</span>
+        <div class="min-w-0 flex-1">
+          <p class="font-semibold text-ink">{{ "expenses.nudge.title" | t(lang) }}</p>
+          <p class="mt-0.5 text-sm leading-relaxed text-muted">{{ "expenses.nudge.text" | t(lang) }} <span x-text="t('sum.backup_last', { when: lastBackupText() })"></span></p>
+          <div class="xp-actions mt-3">
+            <button type="button" class="btn-primary btn-sm" @click="exportAll()">{% icon "file-spreadsheet", "size-4" %} {{ "expenses.data.export_csv" | t(lang) }}</button>
+            <button type="button" class="btn-secondary btn-sm" @click="exportBackup()">{% icon "hard-drive-download", "size-4" %} {{ "expenses.data.export_backup" | t(lang) }}</button>
+            <button type="button" class="btn-ghost btn-sm" @click="nudgeLater()">{{ "expenses.nudge.later" | t(lang) }}</button>
+          </div>
+        </div>
+      </div>
+
       {#- the tab bar: one row of chips that scrolls sideways on phones, never wraps -#}
       <div class="xp-bar">
         <div class="chip-row-nowrap xp-tabs" role="tablist" aria-label="{{ 'expenses.tabs_label' | t(lang) }}" @keydown="tabKey($event)">

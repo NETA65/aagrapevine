@@ -43,6 +43,7 @@
   var UI_KEY = KEY + ":ui";
   var UNDO_KEY = KEY + ":undo";
   var ASIDE = KEY + ":unreadable-";
+  var NUDGE_KEY = KEY + ":backup-nudge";  // the month the monthly backup nudge was put off ("2026-11"): nudgeLater
   var ID_RX = /^[A-Za-z0-9_-]{1,64}$/;   // an entry's id (GVX): a photo's file name in a .zip ("<id>.jpg")
   var DB_NAME = "gv-expenses";
   var DB_STORE = "receipts";
@@ -1825,6 +1826,28 @@
           if (!S.state || !S.state.entries.length) return false;
           var d = daysSince(m.lastBackup);
           return d === null || d > days;
+        },
+        /* The gentle monthly nudge above the tabs (tracker.njk .xp-nudge, since November 2026): everything here lives
+           only in this browser, so once a month — no copy kept for longer than the backup reminder's days (Settings →
+           Reminders, 30 by default), counting a CSV export as well as a full backup — the page offers both, in one
+           line. "Not now" hides it until next month: the month is remembered in localStorage (NUDGE_KEY; a browser
+           that refuses storage hides it for this visit only). Never on an empty ledger, never while saving fails
+           (the storage alert says more then). */
+        nudgeOff: false,
+        nudgeDue: function () {
+          this.rev;
+          if (this.nudgeOff || !this.storageOk || !S.state || !S.state.entries.length) return false;
+          var m = S.state.meta || {}, days = this.st().backup_reminder_days || 30;
+          var a = daysSince(m.lastBackup), b = daysSince(m.lastExport);
+          var last = a === null ? b : b === null ? a : Math.min(a, b);
+          if (last !== null && last <= days) return false;
+          var seen = null;
+          try { seen = window.localStorage.getItem(NUDGE_KEY); } catch (e) { seen = null; }
+          return seen !== today().slice(0, 7);
+        },
+        nudgeLater: function () {
+          this.nudgeOff = true;
+          try { window.localStorage.setItem(NUDGE_KEY, today().slice(0, 7)); } catch (e) { /* storage blocked: hidden for this visit */ }
         },
         // what the Reminders card lists (and the Summary tab's badge counts): requests waiting too long and
         // the backup — renewals have their own card (Subscriptions)
