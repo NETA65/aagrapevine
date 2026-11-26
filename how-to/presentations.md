@@ -133,8 +133,8 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
 | `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 40 / 23 | `full` (60: with a guest speaker), `no-speaker` (60) |
 | `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 19 / 15 | `full` (60) |
-| `taller-de-escritura.yml` (**Spanish**) | La Viña Writing Workshop / Taller de escritura de La Viña | 8 | 115 | `lv` (orange) | `pen-line` | 55 / 47 | `full` (115), `short` (84) |
-| `orientacion-rlv.yml` (**Spanish**) | Orientation for New RLVs / Orientación para nuevos RLV | 9 | 90 | `lv` (orange) | `compass` | 61 / 59 | `full` (90), `short` (60) |
+| `taller-de-escritura.yml` (**Spanish**) | La Viña Writing Workshop / Taller de escritura de La Viña | 10 | 115 | `lv` (orange) | `pen-line` | 55 / 47 | `full` (115), `short` (84) |
+| `orientacion-rlv.yml` (**Spanish**) | Orientation for New RLVs / Orientación para nuevos RLV | 11 | 90 | `lv` (orange) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
@@ -238,7 +238,7 @@ card:
 | Field | Rule (the checker) | What it does and where it shows |
 |---|---|---|
 | `id` | the file name without `.yml` | The card's anchor `#pres-<id>`, the address `?present=<id>`, the JSON file name, and the key under which presenters' own versions are kept. **Never rename a deck that is on the site**: presenters would lose their versions of it. |
-| `order` | a whole number 1–9, different in each deck | The order of the cards (then by id). |
+| `order` | a whole number 1–99, different in each deck | The order of the cards (then by id). La Viña's Spanish decks come last (10, 11). |
 | `lang` | `"en"`, or `"es"` for a presentation written in Spanish | The language of its slides, notes, the player's words on them and its facts; the card's and the player's "(in Spanish)" / "(en inglés)"; its event pages' badge ([3.23](#323-a-presentation-in-spanish)). Anything else stops the build: `lang: "en" or "es" (the language the presentation is written in)`. |
 | `title` | text | The player's title, the print headings and the speaker script's heading. |
 | `short` | text | The player's header; the name in the "Print or save a copy" list on the English page; the start of the name of a saved printout ("Information Workshop – Handout for participants – 2026-10-02"). |
@@ -254,8 +254,8 @@ card:
 | `paperwork` | optional (today only in `committee-meeting.yml`, between `fillins:` and `slides:`) | The chair's agenda e-mail, reminder and draft notes, and what "Start next month" does: [3.22](#322-the-chairs-paperwork-agenda--notes). A deck without it has no **Agenda & notes** tab. |
 | `slides` | at least 5 | [3.6](#36-slides-the-fields-every-slide-can-have). |
 
-> **Note:** `README.md` says `order` is 1–4. The checker accepts 1–9; the test `tests/test_presentations.py` only
-> asks that each deck has its own number.
+> **Note:** The checker accepts 1–99; the test `tests/test_presentations.py` only asks that each deck has its own
+> number.
 
 **Example: change the card's summary.** Change both languages, in the same commit:
 

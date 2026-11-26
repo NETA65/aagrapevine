@@ -519,8 +519,8 @@ def check_deck(path: Path) -> list[str]:
             out.append(f"unknown top-level field {k!r}")
     if d.get("id") != path.stem:
         out.append(f"id {d.get('id')!r} must be the file name {path.stem!r}")
-    if not is_int(d.get("order")) or not 1 <= d["order"] <= 9:
-        out.append("order: a whole number 1–9")
+    if not is_int(d.get("order")) or not 1 <= d["order"] <= 99:
+        out.append("order: a whole number 1–99")
     if d.get("lang") not in LANGS:
         out.append('lang: "en" or "es" (the language the presentation is written in)')
     for k in ("title", "short", "eyebrow", "footer", "icon"):

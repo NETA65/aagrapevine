@@ -25,7 +25,7 @@
 # Check it: .venv\Scripts\python.exe tests\test_presentations.py config\presentations\orientacion-rlv.yml
 
 id: "orientacion-rlv"
-order: 9
+order: 11
 lang: "es"
 title: "Orientación para nuevos RLV"
 short: "Orientación para RLV"

@@ -560,7 +560,8 @@ export function checkDeck(d, stem) {
     "drive_title", "card", "presets", "fillins", "slides", "paperwork"];
   for (const k of Object.keys(d)) if (!allowedTop.includes(k)) out.push(`unknown top-level field ${repr(k)}`);
   if (d.id !== stem) out.push(`id ${repr(d.id)} must be the file name ${repr(stem)}`);
-  if (!Number.isInteger(d.order) || d.order < 1 || d.order > 9) out.push("order: a whole number 1–9");
+  // (1–99: room for every deck, the English ones and La Viña's Spanish ones; each its own, tests/test_presentations.py)
+  if (!Number.isInteger(d.order) || d.order < 1 || d.order > 99) out.push("order: a whole number 1–99");
   if (!LANGS.includes(d.lang)) out.push('lang: "en" or "es" (the language the presentation is written in)');
   for (const k of ["title", "short", "eyebrow", "footer", "icon"]) {
     if (!isStr(d[k]) || !d[k].trim()) out.push(`${k}: a non-empty string`);

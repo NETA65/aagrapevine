@@ -38,7 +38,7 @@
 # =====================================================================
 
 id: "taller-de-escritura"
-order: 8
+order: 10              # after the English decks (their cards first): its own number, as every deck
 lang: "es"
 title: "Taller de escritura de La Viña"
 short: "Taller de escritura"
