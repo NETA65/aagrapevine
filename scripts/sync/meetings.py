@@ -240,9 +240,12 @@ def challenge_answer(status: int | None, headers: Any, body: Any) -> bool:
 # =========================================================================== keys & redaction
 _SECRETS: set[str] = set()          # every key resolved this run: also scrubbed from any text
 # A `key` parameter: at the start of the text or after anything but a letter, digit or "_" ("?key=", "&key=", a
-# log line's "key=") — and after an encoded "&" or "?" ("x%26key%3Dabc", "%3Fkey%3Dabc": a \b fails there, after
-# the "6" of %26) — never the end of a longer word ("monkey=", "api_key=")
-_KEY_PARAM = re.compile(r"(?i)((?:(?<!\w)|(?<=%26)|(?<=%3F))key(?:=|%3D))[^&#\s'\"<>)\]]+")
+# log line's "key=") — and after an encoded "&" or "?", once or twice encoded or JSON-escaped ("x%26key%3Dabc",
+# "%3Fkey%3Dabc", "%2526key%253Dabc", "&key=abc": a \b fails there, after the "6" of %26) — never the end of
+# a longer word ("monkey=", "api_key="). Its value ends where the next parameter starts, encoded too ("…%26a%3D1"
+# stays as it is).
+_KEY_PARAM = re.compile(r"(?i)((?:(?<!\w)|(?<=%26)|(?<=%3F)|(?<=%2526)|(?<=%253F)|(?<=\\u0026))"
+                        r"key(?:=|%3D|%253D|\\u003d))(?:(?!%26|%2526|\\u0026)[^&#\s'\"<>)\]])+")
 
 
 def redact(text: Any) -> str:

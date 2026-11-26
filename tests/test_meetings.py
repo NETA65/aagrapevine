@@ -186,11 +186,22 @@ class Redaction(unittest.TestCase):
                 (f"key={k}", "key=[redacted]"),
                 (f"key%3D{k} was sent", "key%3D[redacted] was sent"),
                 (f"retried with key={k}", "retried with key=[redacted]"),
-                (f"('{DALLAS_FEED}&key={k}')", f"('{DALLAS_FEED}&key=[redacted]')")):
+                (f"('{DALLAS_FEED}&key={k}')", f"('{DALLAS_FEED}&key=[redacted]')"),
+                # its value ends where the next parameter starts, encoded too
+                (f"url=x%3Fkey%3D{k}%26a%3D1", "url=x%3Fkey%3D[redacted]%26a%3D1"),
+                (f"url=x%26key%3D{k}%26action%3Dmeetings", "url=x%26key%3D[redacted]%26action%3Dmeetings"),
+                # encoded twice (an address inside an encoded address)
+                (f"next=x%2526key%253D{k}%2526a%253D1", "next=x%2526key%253D[redacted]%2526a%253D1"),
+                (f"next=x%253Fkey%253D{k}", "next=x%253Fkey%253D[redacted]"),
+                # JSON-escaped ("&" as &, "=" too)
+                ('{"url": "' + DALLAS_FEED + '\\u0026key=' + k + '\\u0026a=1"}',
+                 '{"url": "' + DALLAS_FEED + '\\u0026key=[redacted]\\u0026a=1"}'),
+                ('{"url": "x?a=1\\u0026key\\u003d' + k + '"}', '{"url": "x?a=1\\u0026key\\u003d[redacted]"}')):
             with self.subTest(raw=raw):
                 self.assertEqual(M.redact(raw), clean)
                 self.assertNotIn(k, M.redact(raw))
-        for kept in ("monkey=banana", "turkey%3Dgravy", "api_key=public-id", "?donkey=1&hockey%3D2", "a key is fine"):
+        for kept in ("monkey=banana", "turkey%3Dgravy", "api_key=public-id", "?donkey=1&hockey%3D2", "a key is fine",
+                     "x%2526monkey%253D1", "turkey\\u003dgravy"):
             with self.subTest(kept=kept):
                 self.assertEqual(M.redact(kept), kept)
 
