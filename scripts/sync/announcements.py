@@ -450,15 +450,28 @@ def as_bool(v) -> bool:
     return str(v or "").strip().lower() in ("1", "true", "yes", "y", "si", "sí", "on")
 
 
-def pick_lang(meta: dict, text: str) -> str:
-    lang = str(meta.get("lang") or meta.get("language") or "").strip().lower()[:2]
+# The header lines that say which language a file is WRITTEN in: `lang:` (a bulletin post's `language:` too). An event
+# file's `language:` is the language the event is HELD in (event_language) — never its words' or its dates' language:
+# parse_event reads only `lang:` (EVENT_LANG_KEYS).
+FILE_LANG_KEYS = ("lang", "language")
+EVENT_LANG_KEYS = ("lang",)
+
+
+def written_lang(meta: dict, keys: tuple[str, ...] = FILE_LANG_KEYS) -> str:
+    """The language a file's header says it is written in ("en" / "es"), else "": the first of `keys` it has."""
+    raw = next((meta.get(k) for k in keys if meta.get(k)), "")
+    return str(raw or "").strip().lower()[:2]
+
+
+def pick_lang(meta: dict, text: str, keys: tuple[str, ...] = FILE_LANG_KEYS) -> str:
+    lang = written_lang(meta, keys)
     return lang if lang in ("en", "es") else detect_language(text, "en")
 
 
-def date_lang(meta: dict, text: str) -> str | None:
+def date_lang(meta: dict, text: str, keys: tuple[str, ...] = FILE_LANG_KEYS) -> str | None:
     """The language a file's numbers-only dates are read in (common.date_from_text: "05/10/2026" is 5 October in
     Spanish): its `lang:`, else its words' when they tell (None: the words around each date decide)."""
-    lang = str(meta.get("lang") or meta.get("language") or "").strip().lower()[:2]
+    lang = written_lang(meta, keys)
     if lang in ("en", "es"):
         return lang
     found = detect_language(text)
@@ -941,7 +954,7 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
     stem = path.stem
     text = markdown_to_text(body)
     notes: list[str] = []
-    dlang = date_lang(meta, f"{clean_text(meta.get('title'))}. {text}")
+    dlang = date_lang(meta, f"{clean_text(meta.get('title'))}. {text}", EVENT_LANG_KEYS)
     name_notes: list[str] = []           # (said only when the name's date is the one used)
     file_date, file_end, rest = date_range_from_text(stem, dlang, name_notes)
     title = clean_text(meta.get("title")) or clean_text(re.sub(r"[-_]+", " ", rest or stem)).capitalize()
@@ -974,7 +987,7 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
         extra["tentative"] = True        # details not final yet: "Details to be confirmed", STATUS:TENTATIVE
     if as_bool(meta.get("confirmed")):
         extra["confirmed"] = True        # the committee checked date, time and place: no calendar feed changes them
-    file_lang = pick_lang(meta, f"{title}. {text}")
+    file_lang = pick_lang(meta, f"{title}. {text}", EVENT_LANG_KEYS)        # (never `language:`: where it is held)
     if event_cancelled(meta):
         # it will not take place (since round 37): events.json `cancelled`, a "Cancelled" notice at its address,
         # STATUS:CANCELLED in the calendar feeds — never listed as an event (event_cancelled)

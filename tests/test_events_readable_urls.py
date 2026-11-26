@@ -5,14 +5,17 @@ content/events file (since the events list's redesign, November 2026).
     a word; PINNED from the last events.json by the event's id — a title that changes later keeps the address; a new
     day makes a new one and keeps the old in extra.slug_aliases (the last 5); two events of one day and title: "-2";
     a content/events file, a monthly date and a committee meeting keep their own; an event of the last file that is
-    cancelled now still finds its slug (the file's `cancelled` list is read too).
+    cancelled now still finds its slug (the file's `cancelled` list is read too). Every slug kept — and every old one
+    still sent on — is reserved before a new one is made: a newcomer of the same day and title, or an event moving
+    onto a day where another holds the plain slug, gets the "-2", whatever the list's order.
   * OldAnchors (eleventy/event-redirects.js oldAnchors, eventRedirects): the "ev-<its id>" address and the aliases,
     never the address it has now; one redirect page per old address and language, to its page now — none for a
     cancelled event that is over, none for an event that keeps its address.
   * Lines (scripts/sync/announcements.py event_district, event_language — through parse_event and collect): `district:`
     a district's number ("District 87", "Distrito 91", 87) → extra.district; `language:` en / es / both (English,
     español, bilingual …) → extra.language; anything else is left out and listed (the event still shows); no line, no
-    value — a district is never guessed.
+    value — a district is never guessed. An event's `language:` (where it is held) never decides the language its
+    file is written in, nor how its numbers-only dates are read: only `lang:` does.
 
     python -m unittest tests.test_events_readable_urls -v
 """
@@ -91,6 +94,31 @@ class Slugs(unittest.TestCase):
         self.assertEqual(kept[0]["extra"]["slug"], "2026-12-20-old-name")
         self.assertEqual(len(kept[0]["extra"]["slug_aliases"]), B.READABLE_ALIASES_KEEP)
 
+    def test_a_kept_slug_is_never_taken_by_a_newcomer(self):
+        ctx = self.ctx()
+        last = {"items": [ev("ev:lvcal:x", "lv-calendar", "Taller", "2027-01-23", slug="2027-01-23-taller"),
+                          ev("ev:gvcal:z", "gv-calendar", "Taller", "2027-02-06", slug="2027-02-06-taller"),
+                          ev("ev:flyer:m", "flyer", "Taller", "2027-01-30", slug="2027-01-30-taller")], "cancelled": []}
+        # a NEW event of the same day and title, first in the list: it is the one that ends in "-2"
+        now = [ev("ev:gvcal:new", "gv-calendar", "Taller", "2027-01-23"),
+               ev("ev:lvcal:x", "lv-calendar", "Taller", "2027-01-23")]
+        B.pin_event_slugs(ctx, now, last)
+        self.assertEqual([e["extra"]["slug"] for e in now], ["2027-01-23-taller-2", "2027-01-23-taller"])
+        self.assertNotIn("slug_aliases", now[1]["extra"], "the old event keeps its address: nothing to send on")
+        # an event that moves onto a day where another event holds the plain slug, before it in the list
+        moved = [ev("ev:flyer:m", "flyer", "Taller", "2027-02-06"), ev("ev:gvcal:z", "gv-calendar", "Taller", "2027-02-06")]
+        B.pin_event_slugs(ctx, moved, last)
+        self.assertEqual([e["extra"]["slug"] for e in moved], ["2027-02-06-taller-2", "2027-02-06-taller"])
+        self.assertEqual(moved[0]["extra"]["slug_aliases"], ["2027-01-30-taller"])
+        self.assertNotIn("slug_aliases", moved[1]["extra"])
+        # an old address another event still sends people on from is not given to a new one
+        last2 = {"items": [ev("ev:flyer:m", "flyer", "Taller", "2027-02-06", slug="2027-02-06-taller-2",
+                              slug_aliases=["2027-01-30-taller"])], "cancelled": []}
+        fresh = [ev("ev:gvcal:other", "gv-calendar", "Taller", "2027-01-30"), ev("ev:flyer:m", "flyer", "Taller", "2027-02-06")]
+        B.pin_event_slugs(ctx, fresh, last2)
+        self.assertEqual(fresh[0]["extra"]["slug"], "2027-01-30-taller-2")
+        self.assertEqual(fresh[1]["extra"]["slug_aliases"], ["2027-01-30-taller"])
+
     def test_main_pins_them_from_the_last_file(self):
         src = (ROOT / "scripts" / "sync" / "build_data.py").read_text(encoding="utf-8")
         self.assertIn('"events": pin_event_slugs(ctx, build_events(ctx), read_json(out_dir / "events.json")),', src)
@@ -151,6 +179,22 @@ class Lines(unittest.TestCase):
         self.assertIsNone(got)
         self.assertIn("is not a language the site knows", problem)
         self.assertEqual(A.event_language({}), (None, None))
+
+    def test_language_is_where_it_is_held_never_what_the_file_is_written_in(self):
+        """An event file's `language:` says the language the event is HELD in. It never changes the language the file
+        is written in, nor how its numbers-only dates are read: an English file without `lang:`, `language: es` and
+        `start: "05/10/2027"` is an English item on May 10 (a bulletin post's `language:` still means `lang:`)."""
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "zz-held-in-spanish.md"
+            f.write_text('---\ntitle: "Writing Workshop for the Spanish-speaking groups"\nstart: "05/10/2027"\n'
+                         'language: es\n---\nA workshop on writing your story for the magazine, with questions and '
+                         'answers about how to send it.\n', encoding="utf-8")
+            it = A.parse_event(f, B.Ctx(offline=True).tz)
+        self.assertEqual(it["lang"], "en")
+        self.assertTrue(it["extra"]["start"].startswith("2027-05-10"), it["extra"]["start"])
+        self.assertEqual(it["extra"]["language"], "es")
+        self.assertEqual(A.date_lang({"language": "es"}, "x"), "es", "elsewhere (a bulletin post) it still means lang:")
+        self.assertEqual(A.date_lang({"language": "es"}, "x", A.EVENT_LANG_KEYS), A.date_lang({}, "x"))
 
     def test_a_file_with_them_and_one_with_slips(self):
         with tempfile.TemporaryDirectory() as d:

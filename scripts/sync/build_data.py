@@ -2286,33 +2286,52 @@ def readable_slug(day: str, title: str) -> str:
 def pin_event_slugs(ctx: Ctx, events: list[dict], previous: Any) -> list[dict]:
     """Give each event made from a flyer or an outside calendar its readable slug (see above), the last events.json's
     one when it has one for that id and day (`previous`: that file, items and cancelled). → `events`, changed in
-    place."""
+    place. Every slug an event keeps is reserved BEFORE any new one is made — and so is every old one it sends people
+    on from (its aliases) —, so a new event of the same day and title never takes an address another event already
+    has, whatever the list's order: the new one is the one that ends in "-2" (and so is an event that moves onto a day
+    where another one holds the plain slug)."""
     prev_doc = previous if isinstance(previous, dict) else {}
     before: dict[str, dict] = {}
     for it in [*(prev_doc.get("items") or []), *(prev_doc.get("cancelled") or [])]:
         if isinstance(it, dict) and it.get("id") and isinstance(it.get("extra"), dict):
             before.setdefault(str(it["id"]), it["extra"])
-    taken = {str((ev.get("extra") or {}).get("slug")) for ev in events
-             if ev.get("category") in _OWN_ADDRESS and (ev.get("extra") or {}).get("slug")}
+    # who holds each address: "" for a content/events file, a monthly date, a committee meeting (their own names)
+    owner: dict[str, str] = {str((ev.get("extra") or {}).get("slug")): "" for ev in events
+                             if ev.get("category") in _OWN_ADDRESS and (ev.get("extra") or {}).get("slug")}
+    plans: list[list] = []                  # [event, its id, its day, the slug it keeps ("" none), its aliases]
     for ev in events:
-        ex = ev.setdefault("extra", {})
+        ev.setdefault("extra", {})
         if ev.get("category") in _OWN_ADDRESS:
             continue
         day = _event_day(ctx, ev)
         if not day:
             continue
-        old = before.get(str(ev.get("id")), {})
+        eid = str(ev.get("id"))
+        old = before.get(eid, {})
         slug = str(old.get("slug") or "")
         aliases = [a for a in (old.get("slug_aliases") or []) if isinstance(a, str) and a]
         if slug and not slug.startswith(day + "-"):     # its day changed: a new address, the old one sends people on
             aliases.append(slug)
             slug = ""
-        if not slug or slug in taken:
+        plans.append([ev, eid, day, slug, aliases])
+    # 1) the slugs kept, first (a slug two events claim — a hand-edited file — stays with the first)
+    for plan in plans:
+        if plan[3] and plan[3] not in owner:
+            owner[plan[3]] = plan[1]
+        else:
+            plan[3] = ""
+    # …and the old addresses, each for the event that had it (it may come back to it)
+    alias_of = {a: plan[1] for plan in plans for a in plan[4] if a not in owner}
+    # 2) the new ones
+    for plan in plans:
+        ev, eid, day, slug, aliases = plan
+        if not slug:
             base = readable_slug(day, ev.get("title") or "")
             slug, n = base, 2
-            while slug in taken:
+            while slug in owner or alias_of.get(slug, eid) != eid:
                 slug, n = f"{base}-{n}", n + 1
-        taken.add(slug)
+            owner[slug] = eid
+        ex = ev["extra"]
         ex["slug"] = slug
         aliases = [a for a in dict.fromkeys(aliases) if a != slug][-READABLE_ALIASES_KEEP:]
         if aliases:

@@ -381,7 +381,10 @@ district: 87            # the number of the district that holds it (also "Distri
 language: es            # the language it is held in: en, es or both (also English, Spanish, bilingual, español …)
 ```
 
-`district:` shows on the event's card ("District 87" / "Distrito 87") and in its page's quick facts. Write it only
+`language:` is not `lang:`: `lang:` says the language the file is **written** in (and how a date in numbers only
+is read), `language:` the language the event is **held** in — an English file about a Spanish-language workshop
+has `lang: en` and `language: es`. `district:` shows on the event's card ("District 87" / "Distrito 87") and in its
+page's quick facts. Write it only
 when you know it — never guess a district for an event. `language:` is needed only when the site's own guess is
 wrong: without it an event is "Spanish" when La Viña holds it, it comes from La Viña's calendar, its file is tagged
 `la-vina` or its title or summary says "(in Spanish)"; "Bilingual" when its title or summary says so ("bilingual",
