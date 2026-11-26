@@ -2542,12 +2542,13 @@ under "Committee", committee shorthand in the menus and about 250 KB of fonts on
   page that holds the whole of it: the hero (with **Find an AA meeting near you**, AA's own finder, and our two
   monthly meetings), **Where would you like to start?** — four big buttons: *I'm new to AA* (the "New to AA?" card on
   Meetings), *I'm a group rep (GVR / RLV)* (the GVR / RLV corner), *I want to write my story* (Share your story, with
-  the next story deadline) and *I want to subscribe* (the Shop's subscriptions) —, the daily quote, the latest
-  magazines (three stories each, and the Book of the Month while it is on), one media row (the newest podcast episode
-  and the newest video), the next three events, and **More on this site** (Bulletin, Library, Published writers,
-  Instagram, Portfolio, Photos, Stay updated). The bulletin's posts, the published writers, the library, Instagram, the
-  committee's uploads and the service band are on their own pages. On a phone the page went from 14,240 to about
-  8,300 pixels.
+  the next story deadline) and *I want to subscribe* (the Shop's subscriptions) —, **Pinned on the Bulletin** while a
+  pinned post is on (two at most: its title, one line of it and **Read**; no pinned post, no card), the daily quote,
+  the latest magazines (three stories each, and the Book of the Month while it is on), one media row (the newest
+  podcast episode and the newest video), the next three events, and **More on this site** (Bulletin, Library,
+  Published writers, Instagram, Portfolio, Photos, Stay updated). The bulletin's other posts, the published writers,
+  the library, Instagram, the committee's uploads and the service band are on their own pages. On a phone the page
+  went from 14,240 to about 8,500 pixels (with this month's pinned post).
 - **The menus** (`src/_data/nav.js`): **Meetings** is a top link; the GVR pages say what they are (**Group reps
   (GVR/RLV)**, **New rep orientation** — the pages keep their own names); **Share your story** leads *Get involved*. The
   phone menu shows Home and the top links, then *Get involved*, *Committee* and *More* as three folded groups (the

@@ -193,6 +193,29 @@
 /* the tone's own colour for the icon is too light on its soft tile in high contrast: ink instead */
 :root[data-contrast="high"] .home-choose-icon { color: var(--c-ink); }
 
+/* ---------- 1e. Pinned on the Bulletin (index.njk .home-pins): only while a pinned post is on ----------
+   One quiet card between the four buttons and the daily quote: its eyebrow in the Bulletin's tone, then each
+   pinned post (two at most) as a row — its title, one line of it (two on a phone) and "Read", to the post. */
+.home-pins { padding: 1rem 1.25rem; }
+@media (width >= 40rem) { .home-pins { padding: 1.125rem 1.5rem; } }
+.home-pins-title {
+  display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans);
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-vine);
+}
+.home-pins-list { margin-top: 0.625rem; }
+.home-pin { display: flex; flex-wrap: wrap; align-items: center; column-gap: 1.25rem; row-gap: 0.375rem; }
+.home-pin + .home-pin { margin-top: 0.875rem; padding-top: 0.875rem; border-top: 1px solid var(--c-line); }
+.home-pin-body { flex: 1 1 18rem; min-width: 0; }
+.home-pin-title { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.3; color: var(--c-ink); text-wrap: balance; }
+.home-pin-text {
+  margin-top: 0.25rem; font-size: 0.875rem; line-height: 1.45; color: var(--c-muted);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+}
+@media (width >= 48rem) { .home-pin-text { -webkit-line-clamp: 1; line-clamp: 1; } }
+:root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-pin-text { -webkit-line-clamp: 3; line-clamp: 3; }
+.home-pin-read { display: inline-flex; align-items: center; gap: 0.375rem; flex-shrink: 0; font-weight: 600; }
+:root[data-contrast="high"] .home-pins-title { color: var(--c-ink); }
+
 /* ---------- 1c. Daily quote: the last card of the page-overlap block (index.njk → .home-quote) ----------
    The card's heading is an eyebrow in the Read tone (above the magazine names in the hierarchy).
    Grapevine's and La Viña's quotes side by side from 1024px (a hairline between them), stacked with a

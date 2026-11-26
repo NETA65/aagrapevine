@@ -346,6 +346,14 @@
     "en": "Find an AA meeting near you",
     "es": "Encuentra una reunión de AA cerca de ti"
   },
+  "home.pins_title": {
+    "en": "Pinned on the Bulletin",
+    "es": "Destacado en el Boletín"
+  },
+  "home.pins_read": {
+    "en": "Read",
+    "es": "Leer"
+  },
   "home.choose_title": {
     "en": "Where would you like to start?",
     "es": "¿Por dónde quieres empezar?"

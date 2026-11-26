@@ -202,7 +202,7 @@ Everything else stays in the headline exactly as you typed it — including othe
 
 | Switch | Write in the name | What it does | If the date has no year (or is not a date) |
 |---|---|---|---|
-| Pin | `(pinned)` `(fijado)` `(fijo)` `(pin)` `[pinned]` `📌` | first on the bulletin and in the digest, with a "Pinned" / "Destacado" badge | — (no date needed) |
+| Pin | `(pinned)` `(fijado)` `(fijo)` `(pin)` `[pinned]` `📌` | first on the bulletin and in the digest, with a "Pinned" / "Destacado" badge; on the home page under "Pinned on the Bulletin" | — (no date needed) |
 | Until | `(until 2027-03-01)` `(expires 2027-03-01)` `(hasta 2027-03-01)` `(vence 2027-03-01)` | shown **through** that day (Central time), gone after it | the words stay in the headline and the post never comes down |
 | From | `(from 2027-02-01)` `(publish 2027-02-01)` `(desde 2027-02-01)` `(publicar 2027-02-01)` | not on the site before that day; appears with that day's first update | the words stay in the headline and the post shows at once |
 
@@ -341,7 +341,7 @@ it is a note for you; the site ignores it.
 | `date:` | a date (forms below) | a date in the file name, else the `publish:` day, else the day the post first appears (its Central-time day: a post first seen at 9:30 PM CDT keeps that evening's date) | the date printed on the post; the order of the lists (newest first); the "New" badge and What's New |
 | `publish:` | a date | on the site as soon as it is saved | keeps the post out of every page until that day (Central time); meanwhile the run summary lists it under "Scheduled bulletin posts" |
 | `expires:` | a date | never comes down | shown through that day, gone after it; "until …" shows under the date |
-| `pinned:` | `true` `yes` `y` `on` `1` `sí` `si` (any capitals) = pinned; anything else = not | not pinned | first on the bulletin and in the digest; "Pinned" / "Destacado" badge |
+| `pinned:` | `true` `yes` `y` `on` `1` `sí` `si` (any capitals) = pinned; anything else = not | not pinned | first on the bulletin and in the digest; "Pinned" / "Destacado" badge; on the home page (two at most) |
 | `lang:` (or `language:`) | `en` or `es` — only the first two letters count, so `English`, `Español` and `es-MX` work, but `Spanish` does **not** | guessed from the title and text | the language you wrote in; the other page gets the translation |
 | `url:` (or `link:`) | a web address (`www.…` without `https://` is repaired by itself), a page of the site like `/events/`, or a file saved next to the post | none | a **More information** button; also where What's New, the RSS feed and the digest link to ([5.2](#52-which-link-goes-where)) |
 | `image:` | a picture saved next to the post (`flyer.jpg`) or a web address | none | **only the RSS feed** shows it (see the note below) |
@@ -888,7 +888,7 @@ Where everything lives (search for the name in the right-hand column; line numbe
 | What's New and RSS | `src/pages/whats-new.njk`, `src/pages/feed.11ty.js`, `eleventy/filters/community.js` | `hrefOf` |
 | Search | `eleventy/filters/library.js` | `the bulletin's posts` |
 | Digest page and e-mail | `eleventy/filters/community.js`, `src/pages/digest.njk`, `scripts/notify/send_digest.py` | `monthNews`; `month_news`, `post_when`, `md_excerpt` |
-| Words on the pages | `src/_i18n/committee.json`, `src/_i18n/common.json` | `committee.ann.`, `nav.bulletin` |
+| Words on the pages | `src/_i18n/committee.json`, `src/_i18n/common.json`, `src/_i18n/home.json` | `committee.ann.`, `nav.bulletin`, `home.pins_` |
 | Run summary lists | `.github/workflows/update.yml` | `Bulletin files to fix`, `Scheduled bulletin posts` |
 
 What the site stores for a post (real data, shortened) — `data/site/announcements.json`:
@@ -1188,7 +1188,8 @@ and the copy rule in `eleventy.config.js` (search `bulletin/files`). Keep both l
 - **Date every post.** Start each Drive name with `YYYY-MM-DD`. An undated doc takes a new date whenever it is edited.
 - **Let time-bound notices expire** — but if a notice should go out in the monthly e-mail, let it run at least until
   the 3rd of the next month.
-- **Pin sparingly.** One or two pinned posts is plenty: they come first on the Bulletin and in the digest.
+- **Pin sparingly.** One or two pinned posts is plenty: they come first on the Bulletin and in the digest, and the
+  home page shows them near the top (two at most: the title, one line and **Read**) until their `until` day.
 - **One language per post**, and add the other by hand when the wording matters (`title_es` + `summary_es`, or
   `overrides.yml` for a Drive post).
 - **Keep files small:** a flyer photo under 1 MB.

@@ -509,10 +509,13 @@ class Layout(unittest.TestCase):
 
     def test_home_links_the_bulletin(self):
         # Home's two bulletin cards went in the UX review of November 2026: the posts have one home, /bulletin/, which
-        # Home's "More on this site" row links (and the Committee menu, the footer, the phone menu)
+        # Home's "More on this site" row links (and the Committee menu, the footer, the phone menu). Only the pinned
+        # posts still on are on Home, as one short card (title, one line, "Read": tests/test_home_start.py
+        # PinnedBulletin) — the same list as the Bulletin's (cmAnnouncements), its pinned ones
         home = (ROOT / "src/pages/index.njk").read_text(encoding="utf-8")
         self.assertNotIn("home-ann", home)
         self.assertIn('{ url: "/bulletin/", icon: "megaphone", key: "nav.bulletin", desc: "nav.bulletin_desc" }', home)
+        self.assertIn('(D.announcements.items | cmAnnouncements) | selectattr("_pinned") | limit(2)', home)
         self.assertNotIn("home-ann", (ROOT / "src/assets/css/areas/home.css").read_text(encoding="utf-8"))
 
     def test_in_this_post_follows_the_reading(self):

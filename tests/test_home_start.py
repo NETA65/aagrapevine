@@ -2,10 +2,16 @@
 short — it was 14,240px tall on a phone, with 14 sections and 207 links — and a way in to each page that holds the
 whole of something. One build of Home (English and Spanish) on the day's data:
 
-  * Blocks    — the hero, then (under it) the meeting cards below 1024px, "Where would you like to start?" and the
-                daily quote, then four sections: the magazines, listen & watch, the events and "More on this site" —
-                never the sections that moved to their own pages (the bulletin, published writers, the library,
-                Instagram, the committee's uploads, the service band, the site counters).
+  * Blocks    — the hero, then (under it) the meeting cards below 1024px, "Where would you like to start?", the
+                pinned bulletin posts while there are any, and the daily quote, then four sections: the magazines,
+                listen & watch, the events and "More on this site" — never the sections that moved to their own pages
+                (the bulletin's latest posts, published writers, the library, Instagram, the committee's uploads, the
+                service band, the site counters).
+  * Pinned    — a build of Home on data of the test's own (SITE_DATA): "Pinned on the Bulletin" lists the pinned
+                posts still on (two at most, newest first; never a post that is not pinned, is over or is gone), each
+                with its title, one line of it and "Read" (named by the post) to the post on /bulletin/, in the page
+                language, and ends with the last day of the one that has one (data-gv-expire); no pinned post: no
+                card.
   * Start     — four big buttons, each a link to the page that does it best: I'm new to AA → the "New to AA?" card
                 on /meetings/, a group rep → /gvr/, writing → /contribute/, subscribing → /shop/#subscriptions —
                 in that order, in the page language.
@@ -26,6 +32,7 @@ import html
 import json
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -83,7 +90,7 @@ class Home(unittest.TestCase):
             main = main_of(page)
             ids = re.findall(r'<section[^>]*aria-labelledby="([^"]+)"', main)
             self.assertEqual(ids[0], "home-title", "the hero first")
-            want = ["choose-title", "mag-title", "lw-title", "events-title", "more-title"]
+            want = ["choose-title", "pins-title", "quote-title", "mag-title", "lw-title", "events-title", "more-title"]
             self.assertEqual([i for i in ids if i in want], [i for i in want if i in ids], "in this order")
             for must in ("choose-title", "mag-title", "more-title"):
                 self.assertIn(must, ids)
@@ -156,6 +163,84 @@ class Home(unittest.TestCase):
             self.assertEqual(sheets[:2], ["/assets/css/main.css", "/assets/css/home.css"])
         self.assertNotIn('@import "./areas/home.css";', (ROOT / "src" / "assets" / "css" / "main.css").read_text(encoding="utf-8"))
         self.assertIn('@import "./areas/home.css";', (ROOT / "src" / "assets" / "css" / "home.css").read_text(encoding="utf-8"))
+
+
+
+def post(slug: str, title: str, date: str, pinned: bool = False, expires: str | None = None, status: str = "ok") -> dict:
+    extra = {"slug": slug, "pinned": pinned, "body_md": "Words."}
+    if expires:
+        extra["expires"] = expires
+    return {"id": "ann:" + slug, "source": "committee", "kind": "announcement", "url": "/bulletin/#" + slug, "title": title,
+            "summary": title + " — " + "a long line of what the post says, " * 8, "lang": "en", "date": date,
+            "first_seen": date + "T12:00:00Z", "category": "manual", "status": status, "extra": extra}
+
+
+PINNED_DATA = {"announcements": {"updated": "2026-11-26T06:00:00Z", "items": [
+    post("2026-11-20-newest-not-pinned", "Newest, not pinned", "2026-11-20"),
+    post("2026-11-11-holiday-offers", "Holiday offers", "2026-11-11", pinned=True, expires="2026-12-31"),
+    post("2026-10-01-over", "Pinned but over", "2026-10-01", pinned=True, expires="2026-11-01"),
+    post("2026-09-15-gone", "Pinned but gone", "2026-09-15", pinned=True, status="gone"),
+    post("2026-09-01-standing", "A standing notice", "2026-09-01", pinned=True),
+    post("2026-08-01-third", "A third pinned post", "2026-08-01", pinned=True),
+]}}
+NONE_PINNED = {"announcements": {"updated": "2026-11-26T06:00:00Z", "items": [
+    post("2026-11-20-newest-not-pinned", "Newest, not pinned", "2026-11-20"),
+    post("2026-10-01-over", "Pinned but over", "2026-10-01", pinned=True, expires="2026-11-01"),
+]}}
+
+
+def build_with(case, data: dict) -> dict:
+    with tempfile.TemporaryDirectory(prefix="gv-home-pins-") as folder:
+        for name, body in data.items():
+            Path(folder, name + ".json").write_text(json.dumps(body), encoding="utf-8")
+        return run_js(case, PAGES_JS, now="2026-11-26T15:00:00Z", timeout=600, env={"SITE_DATA": folder, "WRITERS_ARCHIVE": ""})
+
+
+class PinnedBulletin(unittest.TestCase):
+    built: dict | None = None
+
+    def setUp(self):
+        if PinnedBulletin.built is None:
+            PinnedBulletin.built = {"pinned": build_with(self, PINNED_DATA), "none": build_with(self, NONE_PINNED)}
+
+    def test_the_pinned_posts_near_the_top(self):
+        for url, lang in (("/", "en"), ("/es/", "es")):
+            with self.subTest(url=url):
+                page = main_of(PinnedBulletin.built["pinned"][url])
+                pre = "/es" if lang == "es" else ""
+                at = page.index('<section class="card home-pins"')
+                self.assertLess(page.index('<section class="card home-choose"'), at, "after the four buttons")
+                self.assertLess(at, page.index('aria-labelledby="mag-title"'), "before the magazines")
+                sec = page[at:page.index("</section>", at)]
+                self.assertIn("data-gv-expire-list", sec)
+                self.assertEqual(text(re.search(r'<h2 id="pins-title"[^>]*>(.*?)</h2>', sec, re.S).group(1)), t("home.pins_title", lang))
+                rows = re.findall(r'<li class="home-pin"([^>]*)>(.*?)</li>', sec, re.S)
+                self.assertEqual([text(re.search(r"<h3[^>]*>(.*?)</h3>", r).group(1)) for _, r in rows], ["Holiday offers", "A standing notice"],
+                                 "the pinned posts still on, two at most, newest first")
+                self.assertIn('data-gv-expire="2027-01-01T06:00:00.000Z"', rows[0][0], "gone after December 31, Central time")
+                self.assertNotIn("data-gv-expire=", rows[1][0])
+                for slug, (_, r) in zip(("2026-11-11-holiday-offers", "2026-09-01-standing"), rows):
+                    one = text(re.search(r'<p class="home-pin-text">(.*?)</p>', r, re.S).group(1))
+                    self.assertLessEqual(len(one), 161, one)
+                    link = re.search(r'<a class="home-pin-read[^"]*" href="([^"]+)">(.*?)</a>', r, re.S)
+                    self.assertEqual(link.group(1), f"{pre}/bulletin/#{slug}")
+                    title = text(re.search(r"<h3[^>]*>(.*?)</h3>", r).group(1))
+                    name = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", link.group(2)))).strip()
+                    self.assertEqual(name, f'{t("home.pins_read", lang)}: {title}', "named by its post")
+                for gone in ("Newest, not pinned", "Pinned but over", "Pinned but gone", "A third pinned post"):
+                    self.assertNotIn(gone, sec)
+
+    def test_no_pinned_post_no_card(self):
+        for url in ("/", "/es/"):
+            with self.subTest(url=url):
+                page = PinnedBulletin.built["none"][url]
+                self.assertNotIn("home-pins", page)
+                self.assertNotIn("pins-title", page)
+
+    def test_its_look(self):
+        css = (ROOT / "src" / "assets" / "css" / "areas" / "home.css").read_text(encoding="utf-8")
+        for rule in (".home-pins {", ".home-pin + .home-pin {", ".home-pin-text {", "line-clamp: 1;"):
+            self.assertIn(rule, css)
 
 
 if __name__ == "__main__":

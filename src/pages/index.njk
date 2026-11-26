@@ -320,6 +320,31 @@ pageStyles: ["/assets/css/home.css", "/assets/vendor/lite-yt-embed.css"]
     </ul>
   </section>
 
+  {#- Pinned on the Bulletin: the committee's pinned posts (two at most), only while one is on — its title, one line of
+      it and "Read" to the post on /bulletin/; each goes at the end of its last day (data-gv-expire: app.js), and the
+      card with the last one (data-gv-expire-list). No pinned post: no card, and the page stays as short. -#}
+  {%- set pins = (D.announcements.items | cmAnnouncements) | selectattr("_pinned") | limit(2) -%}
+  {% if pins.length %}
+  <section class="card home-pins" aria-labelledby="pins-title" data-gv-expire-list>
+    <h2 id="pins-title" class="home-pins-title">{% icon "pin", "size-4 shrink-0" %} {{ "home.pins_title" | t(L) }}</h2>
+    <ul class="home-pins-list" role="list">
+      {% for a in pins %}
+      {%- set pinTitle = a | tx("title", L) -%}
+      {%- set pinText = (a | tx("summary", L)) | excerpt(160) -%}
+      {%- set pinEnd = (a.extra.expires | fsDayEnd) if (a.extra and a.extra.expires) else "" -%}
+      <li class="home-pin" data-gv-expire-item{% if pinEnd %} data-gv-expire="{{ pinEnd }}"{% endif %}>
+        <div class="home-pin-body">
+          {#- a title the translation left as it was is in the post's own language (as on /bulletin/) -#}
+          <h3 class="home-pin-title"{% if a.lang and a.lang != L and pinTitle == a.title %} lang="{{ a.lang }}"{% endif %}>{{ pinTitle }}</h3>
+          {% if pinText %}<p class="home-pin-text">{{ ui.autoNote(a, L) }}{{ " " if (a | machineFor(L)) }}{{ pinText }}</p>{% endif %}
+        </div>
+        <a class="home-pin-read link tap-link" href="{{ (a.url if (a.url and a.url.startsWith('/bulletin/')) else '/bulletin/#' + a._anchor) | lurl(L) }}">{{ "home.pins_read" | t(L) }}<span class="sr-only">: {{ pinTitle }}</span> {% icon "arrow-right", "size-4 shrink-0" %}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
   {% if quotes.length %}
   <section class="card home-quote" aria-labelledby="quote-title">
     <h2 id="quote-title" class="home-quote-title">{% icon "quote", "size-4 shrink-0" %} {{ "home.quote_title" | t(L) }}</h2>
