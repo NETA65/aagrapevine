@@ -148,9 +148,11 @@ gives no speaker (November 18 and December 16, 2026: the guest speakers start on
 tonight" on the speaker's slides, "Guest speaker: none this time" on "Next meeting"; "to be announced" is only for a
 speaker the list doesn't name yet (a month after its last one, or an entry the site leaves out). "No guest speaker"
 is the version for those nights (on a device where no version was ever chosen, the deck opens on it by itself for
-a meeting the list gives no speaker, never for one "to be announced", and Customize → Version says it was chosen
-for you; a version picked there, the first one too, stays the presenter's): the chair introduces a topic and the
-members share on it until 7:30 (the slides
+a meeting the list gives no speaker, never for one "to be announced" — until midnight Central after the meeting's
+day, as the speaker's facts, so a reload after the meeting shows the same slides — and Customize → Version says it
+was chosen for you; another version picked there, the first one too, stays the presenter's, and picking the one the
+deck opened on by itself is "none chosen" again): the chair introduces a topic and the members share on it until
+7:30 (the slides
 `topic-of-the-month` and `topic-sharing`, which start off and are in its `only` list), then the same second half;
 its welcome and prayer get a minute each (`version_minutes`), its welcome and agenda their own words
 (`version_fields`). The AA Preamble's slide stays, switched off and in no version (`starts_off`, `optional`), for a

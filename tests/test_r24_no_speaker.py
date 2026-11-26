@@ -291,29 +291,47 @@ class Deck(unittest.TestCase):
             self.assertNotIn("16 de diciembre", notes[pid]["es"], pid)
 
     def test_december_16_opens_without_the_guest_speaker(self):
-        """No version chosen (a device that never picked one): the deck of December 16 — a week before, and during
-        the meeting — is "No guest speaker", with no guest speaker's slide (never "Welcome to our guest speaker ·
-        none tonight"); January 20's is the first version, with the speaker's; the first version chosen keeps the
-        speaker's part on December 16 (the rule itself: tests/test_presentations_default_version.py)."""
+        """No version chosen (a device that never picked one): the deck of December 16 — a week before, during the
+        meeting, and reloaded after it (8:02 PM, the speaker facts still tonight's until midnight) — is "No guest
+        speaker", the same slides, with no guest speaker's slide (never "Welcome to our guest speaker · none
+        tonight"); so is "Start next month" pressed at 7:55 PM on an empty profile; January 20's is the first
+        version, with the speaker's; the first version chosen keeps the speaker's part on December 16; and a state
+        an older "Start next month" stored after November 18 ("No guest speaker" by itself, "" kept for its Undo)
+        opens on January 20 with Rick W. (the rule itself: tests/test_presentations_default_version.py)."""
         r = self.run_deck("""
             const st = G.emptyState(), full = G.emptyState();
             G.deckState(full, D.id).preset = "full";
-            const at = (s, when) => { const cur = G.current(D, s, "", ms(when)); return { preset: cur.preset.id, ids: cur.shown.map((e) => e.id) }; };
-            out({ dec9: at(st, input.dec9), during: at(st, input.during), jan: at(st, input.jan), full: at(full, input.dec9),
-                  sp: D.paperwork.speaker_slide, stored: G.deckState(st, D.id).preset });""",
-            NOV19, dec9="2026-12-09T18:00:00Z", during="2026-12-17T01:45:00Z", jan=JAN10)
+            const at = (s, when) => { const cur = G.current(D, s, "", ms(when)); return { preset: cur.preset.id, ids: cur.shown.map((e) => e.id),
+              name: cur.live.speaker_name }; };
+            const started = G.emptyState();
+            const before = at(started, input.at755);
+            const res = plain(G.startNextMonth(D, started, [], ms(input.at755)));
+            const old = G.normState({ v: 1, shared: { fill: {} }, decks: { [D.id]: { preset: "no-speaker",
+              prev: { at: "2026-11-19T02:30:00.000Z", held: "2026-11-18", fill: {}, checks: {}, preset: "" } } } });
+            out({ dec9: at(st, input.dec9), during: at(st, input.during), at758: at(st, input.at758), at802: at(st, input.at802),
+                  jan: at(st, input.jan), full: at(full, input.dec9), sp: D.paperwork.speaker_slide,
+                  stored: G.deckState(st, D.id).preset, before, res, after: at(started, input.at755), oldJan: at(old, input.jan20),
+                  oldPreset: old.decks[D.id].preset });""",
+            NOV19, dec9="2026-12-09T18:00:00Z", during="2026-12-17T01:45:00Z", at758="2026-12-17T01:58:00Z",
+            at802="2026-12-17T02:02:00Z", at755="2026-12-17T01:55:00Z", jan=JAN10, jan20="2027-01-21T00:55:00Z")
         sp = r["sp"]
-        for when in ("dec9", "during"):
+        for when in ("dec9", "during", "at758", "at802", "before", "after"):
             with self.subTest(when=when):
                 self.assertEqual(r[when]["preset"], "no-speaker")
                 self.assertNotIn(sp, r[when]["ids"])
                 self.assertNotIn("speaker-talk", r[when]["ids"])
                 self.assertIn("topic-of-the-month", r[when]["ids"])
+        self.assertEqual(r["at802"]["name"], "none tonight", "the speaker facts are still tonight's")
+        self.assertEqual(r["at802"]["ids"], r["at758"]["ids"], "a reload after the meeting: the same slides")
+        self.assertEqual((r["res"]["version"], r["after"]["ids"]), ("", r["before"]["ids"]), "Start next month: no change")
         self.assertEqual(r["stored"], "", "worked out, never stored as a choice")
         self.assertEqual(r["jan"]["preset"], "full")
         self.assertIn(sp, r["jan"]["ids"])
         self.assertEqual(r["full"]["preset"], "full")
         self.assertIn(sp, r["full"]["ids"])
+        rick = real_speaker("2027-01-20")
+        self.assertEqual((r["oldPreset"], r["oldJan"]["preset"], r["oldJan"]["name"]), ("", "full", rick["name"]))
+        self.assertIn(sp, r["oldJan"]["ids"])
 
     def test_january_names_its_speaker(self):
         r = self.run_deck("""
@@ -435,8 +453,9 @@ class Paperwork(unittest.TestCase):
             const kept = plain(G.startNextMonth(D, st3, [], ms(input.nov)));
             out({ nov, afterNov, novShows, janShows, stored, undone, none, noneKept: st0.decks[D.id].preset, nonePrev,
                   noneShows: shows(st0, input.nov), dec, decPreset: st2.decks[D.id].preset, decShows: shows(st2, input.dec),
+                  decLater: shows(st2, input.decOver),
                   kept, keptPreset: st3.decks[D.id].preset });""",
-            now=NOV11, nov=NOV18_AFTER, dec=DEC16_AFTER, jan=JAN10)
+            now=NOV11, nov=NOV18_AFTER, dec=DEC16_AFTER, decOver=DEC16_OVER, jan=JAN10)
         # a version chosen with the speaker's part goes back to none chosen: the default, "No guest speaker" for
         # December 16, then the first version again for January 20 (by itself: no other "Start next month" needed)
         self.assertEqual((r["nov"]["version"], r["afterNov"]), ("without", ""))
@@ -445,7 +464,10 @@ class Paperwork(unittest.TestCase):
         self.assertEqual(r["undone"], "full")
         self.assertEqual((r["none"]["version"], r["noneKept"], r["noneShows"]), ("", "", "no-speaker"))
         self.assertNotIn("preset", r["nonePrev"], "no version to put back")
-        self.assertEqual((r["dec"]["version"], r["decPreset"], r["decShows"]), ("reset", "", "full"))
+        # after December 16 (8:30 PM): none chosen again — still tonight's "No guest speaker" until midnight, as the
+        # speaker facts are tonight's ("none tonight"), then January's first version with Rick W.
+        self.assertEqual((r["dec"]["version"], r["decPreset"], r["decShows"], r["decLater"]),
+                         ("reset", "", "no-speaker", "full"))
         self.assertEqual((r["kept"]["version"], r["keptPreset"]), ("", "no-speaker"))
 
 

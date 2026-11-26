@@ -1316,7 +1316,9 @@ const meetingInfo = (c) => c.once("meeting", () => {
  *  MAX_ROWS, by the site's rule (config/site.yml `meeting:` and its skipped dates —
  *  committee.js meetingDates, as /meetings/ lists them) — so the player finds, by the viewer's clock, the meeting
  *  an agenda is for (the next one) and the one minutes are for (the last one held), also in a copy opened weeks
- *  later. Each row: ymd, start, end, its date in English ("Wednesday, October 21, 2026") and in Spanish, inside a
+ *  later. Each row: ymd, start, end, `over` (midnight Central after its day: until then the speaker facts,
+ *  {live:speaker_…}, are that meeting's — meetingInfo — and so is the version the deck opens on, the player's
+ *  defaultPreset), its date in English ("Wednesday, October 21, 2026") and in Spanish, inside a
  *  sentence ("miércoles, 21 de octubre de 2026"), its month ("October 2026") and, when it has one, its guest
  *  speaker (`speaker`: name, service position and topic, in English, and the position and topic in Spanish for a
  *  Spanish paragraph: position_es, topic_es) — or `no_speaker: true` for a meeting the committee's list gives none
@@ -1335,7 +1337,8 @@ const paperMeetings = (c) => c.once("paper-meetings", () => {
     .map((x) => {
       const es = H.fmtDate(x.start, "es", "long");
       const sp = speakers.get(x.ymd);
-      return { ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), label: H.fmtDate(x.start, "en", "long"),
+      return { ymd: x.ymd, start: instantIso(x.start), end: instantIso(x.end), over: iso(chicagoDayEndMs(x.ymd)),
+        label: H.fmtDate(x.start, "en", "long"),
         label_es: es ? es.charAt(0).toLocaleLowerCase("es") + es.slice(1) : "", month: monthLabel(x.ymd.slice(0, 7), "en"),
         // that meeting's guest speaker, for {paper:speaker…} (never `confirmed` or `slides`: the paperwork goes out),
         // or `no_speaker` when the committee's list gives it none (speakerCover; neither: not known yet)

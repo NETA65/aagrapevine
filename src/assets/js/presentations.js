@@ -2165,10 +2165,11 @@
     heading(p, T("pres.tab_version"));
     para(p, T("pres.version_intro"));
     // none chosen, and the deck's default is not its first version: "No guest speaker" for a meeting the Meetings
-    // page lists no guest speaker for (the core's defaultPreset) — said, with that a version picked here stays
+    // page lists no guest speaker for (the core's defaultPreset, by the meeting the speaker facts are for:
+    // speakerMeeting) — said, with that a version picked here stays
     var first = P.deck.presets[0] ? P.deck.presets[0].id : "";
     if (!ds().preset && P.cur.preset.id && P.cur.preset.id !== first) {
-      var mn = meetingName(G.paperMeetings(P.deck, ds(), P.cur.nowMs).next);
+      var mn = meetingName(G.speakerMeeting(P.deck, P.cur.nowMs));
       var auto = attrs(p.appendChild(el("p", "gvp-pp")), { "data-gvp-version-auto": "" });
       tInto(auto, "pres.version_auto", { date: mn[0], version: P.cur.preset.label[LANG] || P.cur.preset.label.en }, mn[1]);
     }
@@ -2184,8 +2185,10 @@
       input.checked = P.cur.preset.id === pr.id;
       input.setAttribute("data-gvp-key", "preset:" + pr.id);
       input.addEventListener("change", function () {
-        // (the first one by its id too: a version picked is kept, never the deck's default for the next meeting)
-        ds().preset = pr.id;
+        // a version picked is kept by its id (the first one's too: the clock never changes it); the one the deck
+        // opens on by itself just now (the core's defaultPreset) is none chosen again — it follows the website's
+        // list of guest speakers from then on, and a pick never pins a version by accident
+        ds().preset = pr.id === G.defaultPreset(P.deck, ds(), Date.now()).id ? "" : pr.id;
         changed();
         var live = q("[data-gvp-live]");
         if (live) live.textContent = T("pres.version_set", { label: pr.label[LANG] || pr.label.en });
@@ -3091,8 +3094,8 @@
       var firstPr = (P.deck.presets || [])[0];
       var msg = TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] });
       if (res.version === "reset" && firstPr) msg += " " + T("pres.paper_next_version", { version: firstPr.label[LANG] || firstPr.label.en });
-      // (the version is now the deck's default for the next meeting: "No guest speaker")
-      var nowPr = res.version === "without" ? G.presetFor(P.deck, ds(), Date.now()) : null;
+      // (none chosen now: the deck's default, "No guest speaker" for the next meeting — tonight's own until midnight)
+      var nowPr = res.version === "without" ? G.noSpeakerPreset(P.deck) : null;
       if (nowPr) msg += " " + T("pres.paper_next_version_none", { version: nowPr.label[LANG] || nowPr.label.en });
       var b = toast(msg, undoAction(snap));
       if (b) b.focus();

@@ -316,8 +316,12 @@
     if (isMap(raw.prev) && isStr(raw.prev.at) && raw.prev.at.length <= 40 && isFinite(ms(raw.prev.at))) {
       d.prev = { at: raw.prev.at, held: isStr(raw.prev.held) && YMD.test(raw.prev.held) ? raw.prev.held : "",
         fill: cleanFill(raw.prev.fill), checks: cleanChecks(raw.prev.checks) };
-      // ("" is the first version: "Start next month" may have left it for "No guest speaker")
-      if (isStr(raw.prev.preset) && (raw.prev.preset === "" || ID.test(raw.prev.preset))) d.prev.preset = raw.prev.preset;
+      if (isStr(raw.prev.preset) && ID.test(raw.prev.preset)) d.prev.preset = raw.prev.preset;
+      // "" there: a "Start next month" from before December 2026 chose "No guest speaker" by itself and kept the
+      // first version ("" then) for its Undo — the deck's default does that now (defaultPreset), so the version
+      // goes back to none chosen, and the Undo leaves it so. ("Start next month" never keeps "" there now: only
+      // that old automatic write leaves this pair.)
+      else if (raw.prev.preset === "") d.preset = "";
     }
     if (isNum(raw.last) && raw.last >= 1) d.last = Math.floor(raw.last);
     if (isNum(raw.last_of) && raw.last_of >= 1) d.last_of = Math.floor(raw.last_of);
@@ -348,12 +352,13 @@
   /** What the presenter changed in a deck (the page's status line, "Reset" shown or not). */
   function summary(ds, deck) {
     ds = ds || emptyDeck();
-    var firstPreset = deck && deck.presets && deck.presets[0] ? deck.presets[0].id : "";
     var details = Object.keys(ds.fill || {}).filter(function (k) { return String(ds.fill[k]).trim(); }).length;
     var checks = 0;
     Object.keys(ds.checks || {}).forEach(function (k) { checks += ds.checks[k].length; });
     var out = {
-      preset: ds.preset && ds.preset !== firstPreset ? ds.preset : "",
+      // (a version chosen, the first one too — none chosen, the deck's default is no change of the presenter's)
+      preset: ds.preset && (!deck || !Array.isArray(deck.presets) || deck.presets.some(function (p) { return p && p.id === ds.preset; }))
+        ? ds.preset : "",
       hidden: (ds.hidden || []).length,
       shown: (ds.shown || []).length,
       edited: Object.keys(ds.edits || {}).length,
@@ -546,19 +551,38 @@
     for (var i = 0; i < list.length; i++) if (list[i] && list[i].id === id) return list[i];
     return list[0] || { id: "", hide: [], only: null };
   }
+  /** When a paperwork meeting's day is over: its `over` (the build's midnight Central after it), else — a deck file
+   *  from before the build wrote it — 6 AM UTC the day after (midnight Central in winter, 1 AM in summer). */
+  function dayOver(r) {
+    var t = ms(r.over);
+    if (isFinite(t)) return t;
+    var p = r.ymd.split("-");
+    return Date.UTC(+p[0], +p[1] - 1, +p[2] + 1, 6);
+  }
+  /** The meeting the day's guest speaker facts are for ({live:speaker_…}: the build's meetingInfo) at nowMs: tonight's
+   *  until midnight Central after its day — during AND after the meeting —, then the next one. Never moved on by
+   *  "Start next month" (paperMeetings' `next` is: the agenda e-mail is next month's at once). null: none. */
+  function speakerMeeting(deck, nowMs) {
+    var now = isNum(nowMs) ? nowMs : Date.now();
+    var rows = meetingRows(deck);
+    for (var i = 0; i < rows.length; i++) if (dayOver(rows[i]) > now) return rows[i];
+    return null;
+  }
   /**
    * The version a deck opens on while the presenter has chosen none (ds.preset ""): its first one — and for a deck
-   * with the chair's paperwork, its "No guest speaker" (noSpeakerPreset) while the meeting the paperwork is for
-   * (paperMeetings' `next`: tonight's until it ends, after "Start next month" the one after it) is one the site lists
+   * with the chair's paperwork, its "No guest speaker" (noSpeakerPreset) while the meeting the speaker facts are for
+   * (speakerMeeting: tonight's until midnight Central after it, whatever "Start next month" did) is one the site lists
    * NO guest speaker for (its row's `no_speaker`: the meetings before January 20, 2027) — never for a speaker only not
-   * listed yet ("to be announced"), nor once the site lists one. A version the presenter chose stays theirs.
+   * listed yet ("to be announced"), nor once the site lists one. So the slides and the version agree: the guest
+   * speaker's slides never come back saying "none tonight" after tonight's meeting. A version the presenter chose
+   * stays theirs. (`ds` is not read: the argument stays for the callers.)
    */
   function defaultPreset(deck, ds, nowMs) {
     var first = presetOf(deck, "");
     if (!paperOf(deck)) return first;
-    var next = paperMeetings(deck, ds, nowMs).next;
-    var listed = next && isMap(next.speaker) && isStr(next.speaker.name) && next.speaker.name;
-    return (next && next.no_speaker === true && !listed && noSpeakerPreset(deck)) || first;
+    var row = speakerMeeting(deck, nowMs);
+    var listed = row && isMap(row.speaker) && isStr(row.speaker.name) && row.speaker.name;
+    return (row && row.no_speaker === true && !listed && noSpeakerPreset(deck)) || first;
   }
   /** The version the presenter's state shows at nowMs: the one they chose (one the deck has), else the default. */
   function presetFor(deck, ds, nowMs) {
@@ -1850,7 +1874,7 @@
     if (spSrc && hasSpeaker && chosen && !inPreset(spSrc, presetOf(deck, chosen)) && inPreset(spSrc, presetOf(deck, ""))) {
       version = "reset";
     } else if (spSrc && chosen && !hasSpeaker && coming && coming.no_speaker === true && inPreset(spSrc, presetOf(deck, chosen))
-      && !inPreset(spSrc, defaultPreset(deck, ds, now))) {
+      && noSpeakerPreset(deck)) {
       version = "without";
     }
     if (version) {
@@ -1911,7 +1935,8 @@
     emptyState: emptyState, emptyDeck: emptyDeck, normState: normState, normDeck: normDeck, deckState: deckState,
     summary: summary, sharedCount: sharedCount,
     // the current version, the clock
-    presetOf: presetOf, defaultPreset: defaultPreset, presetFor: presetFor, inPreset: inPreset, orderOf: orderOf,
+    presetOf: presetOf, defaultPreset: defaultPreset, presetFor: presetFor, speakerMeeting: speakerMeeting, inPreset: inPreset,
+    orderOf: orderOf,
     current: current, inVersion: inVersion,
     versioned: versioned, versionValue: versionValue, minutesOf: minutesOf, schedule: schedule,
     clock: clock, aboutText: aboutText, timeLine: timeLine, slideRef: slideRef, agendaRows: agendaRows,
