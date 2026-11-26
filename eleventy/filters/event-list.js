@@ -7,7 +7,7 @@
 //   {{ upcoming | evList(db, site, lang) }}  → { oneOff, series, nextUp, nextShown, facets } (eventList below)
 //   {{ ev | evFacets(site) | safe }}         → the card's filter attributes: ` data-kind="workshop" data-lang="es"
 //                                              data-mode="inperson" data-city="fort-worth"` (+ data-district)
-//   {{ db | evDataChecks(site) }}            → the events /status/ asks the committee to look at (dataChecks below)
+//   {{ db | evDataChecks(site, lang) }}      → the events /status/ asks the committee to look at (dataChecks below)
 //
 // The filters of the page (src/assets/js/committee.js cmEvents) read the attributes; without JavaScript every card
 // shows. A card's facets:
@@ -99,9 +99,11 @@ export function heldIn(ev, site) {
     || (ev.committee ? langWord(site?.meeting?.language) : "");
   if (own) return own;
   const words = wordsOf(ev);
-  if (SAYS_BOTH.test(words)) return "both";
-  if (heldInSpanish(ev) || SAYS_ES.test(words)) return "es";
-  return "en";
+  const en = SAYS_EN.test(words), es = SAYS_ES.test(words);
+  if (SAYS_BOTH.test(words) || en && es) return "both";
+  if (en) return "en";
+  // its words before its host: La Viña's "Taller (in English)" is held in English
+  return es || heldInSpanish(ev) ? "es" : "en";
 }
 
 /** Its city, in words ("Fort Worth"), "" for an online event or a place without one. */
@@ -161,6 +163,39 @@ function shortDay(ymd, lang) {
   if (!Number.isFinite(d.getTime())) return ymd;
   const s = new Intl.DateTimeFormat(lang === "es" ? "es-US" : "en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(d);
   return s.replace(/\.(?=\s|$)/g, "");
+}
+
+/**
+ * What changed about a series' dates, soonest first (its card on /events/, its own page: eleventy/event-page-model.js)
+ * → [{ type: "moved", ymd, from, to, anchor } (a date the host moved — ev.seriesOf —: the rule's day of that month and
+ * the day it is held), { type: "cancelled", ymd, day, href } (a date that will not take place: its notice page),
+ * { type: "skipped", ymd, day } (a month the rule skips — skip_dates — from `from` through `until`, when no moved date
+ * stands for it)]. opt: { dates (its dates still to come: events), rule ({ weekday, n } | { weekday, week_of_month }),
+ * skip (skip_dates), lang, from / until ("YYYY-MM-DD": the days the skipped months are said for; "" no limit),
+ * cancelled (its cancelled dates' notice pages: eleventy/cancelled-pages.js entries) }.
+ */
+export function seriesNotes(opt = {}) {
+  const o = opt || {};
+  const lang = o.lang || "en";
+  const notes = [];
+  const movedFrom = new Set();
+  for (const d of o.dates || []) {
+    if (!d || !d.seriesOf) continue;
+    const from = o.rule ? ruleDay(o.rule, d.startYmd) : null;
+    if (from && from !== d.startYmd) {
+      movedFrom.add(from);
+      notes.push({ type: "moved", ymd: d.startYmd, from: shortDay(from, lang), to: d.shortLabel, anchor: d.anchor });
+    }
+  }
+  for (const p of o.cancelled || []) {
+    if (p && p.ev) notes.push({ type: "cancelled", ymd: p.ev.startYmd, day: p.ev.shortLabel, href: p.path });
+  }
+  for (const s of o.skip || []) {
+    const ymd = String(s).slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd) || (o.from && ymd < o.from) || movedFrom.has(ymd) || (o.until && ymd > o.until)) continue;
+    notes.push({ type: "skipped", ymd, day: shortDay(ymd, lang) });
+  }
+  return notes.sort((a, b) => a.ymd.localeCompare(b.ymd));
 }
 
 const memo = new WeakMap();          // upcoming → [{ key, model }]
@@ -243,26 +278,8 @@ function buildList(upcoming, db, site, lang, weekly) {
     const rule = committee ? { weekday: site.meeting?.weekday ?? "wednesday", n: site.meeting?.week_of_month ?? 3 } : sn?.rule;
     const skip = committee ? (site.meeting?.skip_dates || []).map(String) : (sn?.rule?.skip || []);
     const shownLast = dates[Math.min(SERIES_DATES_SHOWN, dates.length) - 1];
-    const notes = [];
-    const movedFrom = new Set();
-    for (const d of dates) {
-      if (!d.seriesOf) continue;
-      const from = rule ? ruleDay(rule, d.startYmd) : null;
-      if (from && from !== d.startYmd) {
-        movedFrom.add(from);
-        notes.push({ type: "moved", ymd: d.startYmd, from: shortDay(from, lang), to: d.shortLabel, anchor: d.anchor });
-      }
-    }
-    for (const p of notices) {
-      if (seriesKeyOf(p.ev) !== k) continue;
-      notes.push({ type: "cancelled", ymd: p.ev.startYmd, day: p.ev.shortLabel, href: p.path });
-    }
-    for (const s of skip) {
-      const ymd = String(s).slice(0, 10);
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd) || ymd < todayYmd || movedFrom.has(ymd) || (shownLast && ymd > shownLast.startYmd)) continue;
-      notes.push({ type: "skipped", ymd, day: shortDay(ymd, lang) });
-    }
-    notes.sort((a, b) => a.ymd.localeCompare(b.ymd));
+    const notes = seriesNotes({ dates, rule, skip, lang, from: todayYmd, until: shownLast ? shownLast.startYmd : "",
+      cancelled: notices.filter((p) => seriesKeyOf(p.ev) === k) });
     const href = committee ? (lang === "en" ? "" : `/${lang}`) + COMMITTEE_MEETING_PATH
       : hasHub(k) ? seriesPagePath(k, lang) : "";
     series.push({
@@ -337,10 +354,12 @@ function headerOf(file) {
  *              its title — a content/events file with `flyer:` can say what it is;
  *   stale      a content/events file whose event ended more than STALE_FILE_DAYS (90) days ago — the calendar files
  *              no longer list it: the file can be deleted (cleanup).
- * Each item: its title (English), its day ("YYYY-MM-DD"), its file ("content/events/<name>.md", "" for a flyer) and its
- * page on the site ("" when it has none). dir: the content/events folder (CONTENT_EVENTS: a test's own, as src/_data/db.js).
+ * Each item: its title in the page's language (the one the rest of the site shows: events.json i18n.title — a file's
+ * title_es / title_en, or the translated one —, else its own; titleLang: the language it is in), its day ("YYYY-MM-DD"), its file ("content/events/
+ * <name>.md", "" for a flyer) and its page on the site (in English, "" when it has none: the page gives it its
+ * language). dir: the content/events folder (CONTENT_EVENTS: a test's own, as src/_data/db.js).
  */
-export function dataChecks(db, site, dir = process.env.CONTENT_EVENTS || path.join("content", "events")) {
+export function dataChecks(db, site, lang = "en", dir = process.env.CONTENT_EVENTS || path.join("content", "events")) {
   const built = Date.parse(String(site?.built || ""));
   const now = Number.isFinite(built) ? built : Date.now();
   const items = EMPTY ? [] : (db?.events?.items || []).filter((it) => it && it.kind === "event" && it.status !== "gone");
@@ -352,12 +371,14 @@ export function dataChecks(db, site, dir = process.env.CONTENT_EVENTS || path.jo
     const t = s.length > 10 ? Date.parse(s) : NaN;
     return Number.isFinite(t) ? new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date(t)) : s.slice(0, 10);
   };
-  const titleOf = (it) => String(it.i18n?.title?.en || it.title || "");
+  const titleOf = (it) => String(it.i18n?.title?.[lang] || it.i18n?.title?.en || it.title || "");
   const pathOf = (it) => {
     const page = Object.values(plan.byAnchor || {}).find((p) => p.en?.ev?.id === it.id)?.en;
     return page ? page.path : "";
   };
-  const row = (it) => ({ title: titleOf(it), ymd: ymdOf(it), file: String(it.extra?.file || ""), href: pathOf(it) });
+  // (titleLang: the language its title is in when that is not the page's — an English title on /es/status/)
+  const titleLangOf = (it) => (it.i18n?.title?.[lang] ? lang : it.i18n?.title?.en ? "en" : String(it.lang || "en"));
+  const row = (it) => ({ title: titleOf(it), titleLang: titleLangOf(it), ymd: ymdOf(it), file: String(it.extra?.file || ""), href: pathOf(it) });
   const upcoming = items.filter((it) => !it.extra?.past && it.category !== "committee" && it.category !== "recurring" && Number.isFinite(startOf(it)) && startOf(it) + DAY_MS > now);
   const within = (it, days) => startOf(it) - now <= days * DAY_MS;
   const byDay = (a, b) => a.ymd.localeCompare(b.ymd) || a.title.localeCompare(b.title);
@@ -375,7 +396,8 @@ export function dataChecks(db, site, dir = process.env.CONTENT_EVENTS || path.jo
     const head = headerOf(path.join(dir, name)) || {};
     const last = [head.end, head.start, head.date, FILE_DATE.exec(name)?.[1]].map((v) => String(v || "").slice(0, 10)).find((v) => /^\d{4}-\d{2}-\d{2}$/.test(v));
     if (!last || Date.parse(`${last}T23:59:59-06:00`) + STALE_FILE_DAYS * DAY_MS > now) continue;
-    stale.push({ title: head.title || name.replace(/\.md$/i, ""), ymd: last, file: `content/events/${name}`, href: "" });
+    const own = lang === "en" ? head.title_en : head[`title_${lang}`];
+    stale.push({ title: own || head.title || name.replace(/\.md$/i, ""), ymd: last, file: `content/events/${name}`, href: "" });
   }
   checks.push({ key: "stale", days: STALE_FILE_DAYS, items: stale });
   for (const c of checks) c.items.sort(byDay);
@@ -386,7 +408,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("evList", (upcoming, db, site, lang, weekly) => eventList(upcoming, db, site, lang, weekly));
   eleventyConfig.addFilter("evFacets", (ev, site) => facetAttrs(ev && ev.facets ? ev.facets : facetsOf(ev || {}, site)));
   // (a series' card: its next date's facets — evList gives every series' next date its own)
-  eleventyConfig.addFilter("evDataChecks", (db, site) => dataChecks(db, site));
+  eleventyConfig.addFilter("evDataChecks", (db, site, lang) => dataChecks(db, site, lang || "en"));
   // a card's old anchors ("ev-flyer-…", a readable one its day replaced: eleventy/event-redirects.js oldAnchors), so a
   // link made before the event got its readable address still lands on its card
   eleventyConfig.addFilter("evOldAnchors", (it) => oldAnchors(it));

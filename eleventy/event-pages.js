@@ -52,8 +52,9 @@
 //     hubs[]   { lang, key, path ("/[es/]events/series/<key>/"), kind, series (seriesNext's answer, with these next
 //              and dates), next (its next date: a shaped event), dates (its next 6 dates in date order: the rule's
 //              and those the host moved — ev.seriesOf, a month the rule skips —, never a cancelled one), datePages
-//              (each date's page in `pages`, or null), target ("/events/"), index (true), titleSuffix, head
-//              (seriesPageMeta) }
+//              (each date's page in `pages`, or null), allDates / allPages (EVERY date of it still to come that the data
+//              lists — through events_until's month —, a cancelled one never, and each one's page: its page's "All
+//              dates", #evp-all-dates), target ("/events/"), index (true), titleSuffix, head (seriesPageMeta) }
 //              — one per enabled config/site.yml recurring_events entry whose key is fit for an address and that
 //              has a date still to come in the data, in every language. A series date's page lists its series'
 //              next dates from its hub (plan.byPath[page.hubPath].dates), not from seriesNext: a moved date is
@@ -593,8 +594,16 @@ function buildPlan(items, site, langs, cancelled) {
         .slice(0, 6);
       if (!dates.length) return;
       const hubSeries = { ...s, next: dates[0], dates };
+      // …and EVERY date of it still to come that the data lists (through config/site.yml events_until's month, as
+      // /events/ and the calendar files): its page's "All dates", each to its own page
+      const known = new Set(dates.map((d) => d.anchor));
+      const allDates = [...dates, ...rows.filter((r) => r.lang === lang && !r.ev.past && !known.has(r.anchor)
+        && (r.ev.recurring ? r.ev.series === k : r.ev.seriesOf === k)).map((r) => r.ev)]
+        .filter((d) => !cancelledAnchors.has(d.anchor) && !eventCancelled(d))
+        .sort((a, b) => a.startMs - b.startMs || String(a.anchor).localeCompare(String(b.anchor)));
       hubs.push({ lang, key: k, path: seriesPagePath(k, lang), kind: eventKind(dates[0], site), series: hubSeries,
-        next: dates[0], dates, datePages: [], target: eventsPath(lang), index: true, titleSuffix: "", head: null });
+        next: dates[0], dates, datePages: [], allDates, allPages: [], target: eventsPath(lang), index: true,
+        titleSuffix: "", head: null });
     });
   }
   // (a hub in one language only — every date of it cancelled there, never — would have no twin: none at all)
@@ -619,6 +628,7 @@ function buildPlan(items, site, langs, cancelled) {
   }
   for (const h of keptHubs) {
     h.datePages = h.dates.map((d) => byAnchor[d.anchor]?.[h.lang] || null);
+    h.allPages = h.allDates.map((d) => byAnchor[d.anchor]?.[h.lang] || null);
     byPath[h.path] = h;
   }
   // 5) the heads, titles unique in each language

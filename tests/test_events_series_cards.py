@@ -10,20 +10,29 @@ committee meeting and Grapevine Meeting, and the build's clock stopped on Thursd
       - "Every month" after the months: the committee meeting's card (its dates' anchors on it), then one card per
         series — its title its series' page, its next three dates shown and the others waiting (data-cm-max), each a
         link to its date's own page, a moved date marked "new date", what changed ("Jan 9 moved to Jan 10", "Mar 20:
-        cancelled" — the notice —; a month the rule skips says nothing when a moved date stands for it);
+        cancelled" — the notice —; a month the rule skips says nothing when a moved date stands for it); its "Add to
+        calendar" and flyer are those of its next date, so they go when that date is over (data-cm-expire: the
+        browser rolls its dates on before the next build); "See all dates" goes to its series' page's every date;
       - each card's facets (evFacets): its kind, the language it is held in (La Viña's: Spanish; "bilingual" in its
         title: both), in person / online, its city and its district; the filter bar's choices are what the cards hold;
       - "Next up": the next five events (one-off events and each series' next date, never a cancelled one), three
         shown; "Save the date" shown under the hero on narrower screens too (side-below);
-      - an event with a readable address keeps its old anchor on its card (an old link still lands there).
-  * Facets (event-list.js heldIn, kindFacet, cityOf, modesOf, langWord): their rules, on events of their own.
+      - the old filter ?filter=neta (our events and the committee meetings) has a chip of its own while it is on;
+      - an event with a readable address keeps its old anchor on its card, its series' date entry and its row of
+        "Past events" (an old link still lands there).
+  * Facets (event-list.js heldIn, kindFacet, cityOf, modesOf, langWord): their rules, on events of their own — words
+    that say English ("(in English)", "en inglés") before the host: La Viña's own workshop in English is English.
+  * ASeriesPage (event-page.njk #evp-all-dates, eleventy/event-page-model.js everyDate): EVERY date to come, by year,
+    each a link to its own page — every date page of the series is linked there —, a moved one marked, and under its
+    year what changed (moved: its date's page; cancelled: the notice).
   * ThePages (src/_includes/partials/event-page.njk): the hero's actions — Join online (an online event), Add to
     calendar (the full links), Directions (a map of a real address) —, then "See all events", quieter, last; the
     district in the quick facts; "Organizer's page ↗" for an outside link.
   * Redirects (eleventy/event-redirects.js, src/pages/event-share-redirect.njk): the old address of an event with a
     readable one sends people on (script, meta refresh, a link), noindex, canonical, never in the sitemap.
   * Checks (event-list.js dataChecks, src/pages/status.njk "Events to check"): still tentative 60 days before, a
-    venue still to be announced 45 days before, a file with no url:, a flyer event with no summary, an old file.
+    venue still to be announced 45 days before, a file with no url:, a flyer event with no summary, an old file —
+    each by its title in the page's language (/es/status/: the Spanish one, a file's title_es).
 
 Runs Eleventy with Node.js (tests/nodejs.py); skipped without Node.js or the site's npm packages.
 
@@ -62,6 +71,7 @@ ZOOM = "https://us06web.zoom.us/j/81595931777"
 CAL_SLUG = "2027-01-23-taller-de-la-vina-en-riverside"
 OFF = "2026-12-05-zz-cancelled"
 MOVED_OFF = "2027-03-20-zz-booth-moved"
+PAST = "2026-11-07-zz-past-workshop"
 
 
 def booth_day(d: date) -> dict:
@@ -90,6 +100,9 @@ def items() -> tuple[list[dict], list[dict]]:
                  slug=CAL_SLUG, city="Riverside", state="CA", location="Riverside, CA"),
          "url": "https://www.aalavina.org/events/zz1", "lang": "es"},
         event("ev:flyer:zzflyer", "flyer", "ZZ Flyer Workshop", "2026-12-28", "2026-12-28", source="drive", **DALLAS),
+        # one that took place (its readable address since the redesign; its old anchor on its row of "Past events")
+        event("ev:flyer:zzpast", "flyer", "ZZ Past Workshop", at(date(2026, 11, 7), "13:00"), at(date(2026, 11, 7), "15:00"),
+              source="drive", slug=PAST, **DALLAS),
         *[booth_day(d) for d in (date(2026, 12, 12), date(2027, 2, 13), date(2027, 3, 13), date(2027, 4, 10))],
         # the host moved January's date (the rule's January 9 is in skip_dates): a dated flyer of the series
         {**event("ev:flyer:zzmoved", "flyer", "GV/LV booth at Test Hall", at(date(2027, 1, 10), "17:00"),
@@ -123,6 +136,8 @@ try {
     quietMode: true, configPath: "eleventy.config.js",
     config(c) {
       const none = (o) => Object.fromEntries(Object.keys(o || {}).map((k) => [k, null]));
+      // the series' pages are worked out from the global data (a pagination's `before`), not a page's computed data
+      c.addGlobalData("site", { "override:recurring_events": input.recurring.concat(cfg.recurring_events || []) });
       c.addGlobalData("eleventyComputed", {
         site: (data) => ({ ...data.site, meeting: { ...none(data.site.meeting), ...cfg.meeting }, recurring_events: input.recurring.concat(cfg.recurring_events || []) }),
       });
@@ -147,7 +162,7 @@ class Built:
             try:
                 (tmp / "events").mkdir()
                 # an old file (over more than 90 days ago) and one still to come
-                (tmp / "events" / "2026-07-01-zz-old.md").write_text('---\ntitle: "ZZ Old Booth"\nstart: 2026-07-01\n---\n', encoding="utf-8")
+                (tmp / "events" / "2026-07-01-zz-old.md").write_text('---\ntitle: "ZZ Old Booth"\ntitle_es: "Mesa vieja ZZ"\nstart: 2026-07-01\n---\n', encoding="utf-8")
                 (tmp / "events" / "2027-02-21-zz-acm.md").write_text('---\ntitle: "ZZ Winter ACM"\nstart: 2027-02-21\n---\n', encoding="utf-8")
                 (tmp / "events" / "README.md").write_text("# not an event\n", encoding="utf-8")
                 evs, off = items()
@@ -240,6 +255,14 @@ class TheList(unittest.TestCase):
                     self.assertIn("20 mar: cancelado", notes)
                 self.assertIn(f'href="{pre}/events/{MOVED_OFF}/"', booth, "the cancelled date's notice")
                 self.assertIn(T["evlist.series_all"][lang], text(booth))
+                self.assertIn(f'href="{pre}/events/series/{BOOTH}/#evp-all-dates"', booth, "See all dates: every date")
+                # its next date's "Add to calendar" (and flyer) go when that date is over, as its entry does
+                first = re.search(r'<li id="ev-recurring-zz-booth-2026-12-12" data-cm-expire="([^"]+)"', booth).group(1)
+                wraps = re.findall(r'<div class="contents" data-cm-expire="([^"]+)">\s*(<details class="cm-menu">)?', booth)
+                self.assertEqual([w[0] for w in wraps], [first, first], "the menu and flyer, then the thumbnail")
+                self.assertTrue(wraps[0][1], "the calendar menu inside the first")
+                self.assertEqual(booth.count('<details class="cm-menu">'), 1)
+                self.assertIn("20261212T", booth[booth.index('<details class="cm-menu">'):], "the menu is the next date's")
                 # a series' dates are no cards of their own
                 self.assertNotRegex(page, rf'<li id="ev-recurring-{BOOTH}-[0-9-]+" data-group=')
 
@@ -265,6 +288,15 @@ class TheList(unittest.TestCase):
         chips = re.findall(r'data-ev-kind="(\w*)"', page)
         # (no weekly open meetings in this build: no "Online meetings" chip — only the kinds a card has)
         self.assertEqual(chips, ["", "workshop", "area", "booth", "committee", "calendar", "other"])
+        # ?filter=neta (the old "NETA 65 events" chip): a pressed chip of its own while it is on, no kind of its own
+        neta = re.search(r'<button type="button" class="chip" x-show="group" x-cloak @click="dropGroup\(\)" aria-pressed="true">(.*?)</button>', page, re.S)
+        self.assertIsNotNone(neta)
+        self.assertEqual(text(neta.group(1)), T["evlist.group.neta"]["en"])
+        self.assertIn(T["evlist.group.neta"]["es"], text(self.pages()["/es/events/"]))
+        # "No events match": not while a folded card matches ("Show 2028 dates (n)" says it is there)
+        self.assertIn('x-show="active && !visibleCount && !moreCount"', page)
+        # the month chips' row goes as a whole while none of its chips shows
+        self.assertRegex(page, r'<nav class="[^"]*" x-show="anyMonth" aria-label="[^"]+">\s*<span class="shrink-0 text-faint" aria-hidden="true">')
 
     def test_next_up_and_save_the_date_on_a_phone(self):
         page = self.pages()["/events/"]
@@ -282,10 +314,53 @@ class TheList(unittest.TestCase):
         self.assertNotIn("side-hide", page)
 
     def test_an_old_anchor_stays_on_its_card(self):
-        page = self.pages()["/events/"]
-        self.assertIn('<span id="ev-lvcal-zz1" class="sr-only"></span>', card(page, CAL_SLUG))
-        ids = re.findall(r'\sid="([^"]+)"', page)
-        self.assertEqual([i for i in set(ids) if ids.count(i) > 1], [], "no id twice")
+        for pre in ("", "/es"):
+            page = self.pages()[f"{pre}/events/"]
+            with self.subTest(lang=pre or "en"):
+                self.assertIn('<span id="ev-lvcal-zz1" class="sr-only"></span>', card(page, CAL_SLUG))
+                # a series' date made from a flyer: on its entry of the series' card
+                entry = re.search(r'<li id="2027-01-10-zz-booth-moved"[^>]*>(.*?)</li>', card(page, f"ev-series-{BOOTH}")).group(1)
+                self.assertIn('<span id="ev-flyer-zzmoved"></span>', entry)
+                self.assertTrue(entry.endswith("</a>"), "inside its link")
+                # an event that took place: on its row of "Past events"
+                past = page[page.index("data-cm-past"):]
+                row = re.search(rf'<li id="{PAST}"[^>]*>(.*?)</li>', past, re.S).group(1)
+                self.assertTrue(row.startswith('<span id="ev-flyer-zzpast" class="sr-only"></span>'))
+                ids = re.findall(r'\sid="([^"]+)"', page)
+                self.assertEqual([i for i in set(ids) if ids.count(i) > 1], [], "no id twice")
+
+
+class ASeriesPage(unittest.TestCase):
+    def test_every_date_with_what_changed(self):
+        pages = Built.get(self)
+        for pre, lang in (("", "en"), ("/es", "es")):
+            with self.subTest(lang=lang):
+                page = pages[f"{pre}/events/series/{BOOTH}/"]
+                sec = section(page, '<section id="evp-all-dates"')
+                years = re.findall(r'<h3 class="evp-all-year">(\d{4})</h3>', sec)
+                self.assertEqual(years, ["2026", "2027"])
+                links = re.findall(r'<a class="ev-series-date" href="([^"]+)">(.*?)</a>', sec)
+                self.assertEqual([h for h, _ in links], [f"{pre}/events/{a}/" for a in (
+                    f"ev-recurring-{BOOTH}-2026-12-12", "2027-01-10-zz-booth-moved", f"ev-recurring-{BOOTH}-2027-02-13",
+                    f"ev-recurring-{BOOTH}-2027-03-13", f"ev-recurring-{BOOTH}-2027-04-10")])
+                self.assertIn(T["evlist.moved"][lang], links[1][1])
+                # every date page of the series is linked from here (the list's card shows three)
+                own = sorted(u for u in pages if re.fullmatch(rf"{pre}/events/ev-recurring-{BOOTH}-[0-9-]+/", u))
+                self.assertTrue(own)
+                self.assertEqual([u for u in own if f'href="{u}"' not in sec], [])
+                # what changed, under its year: January's date moved (its page), March 20 cancelled (the notice)
+                y2027 = sec[sec.index('<h3 class="evp-all-year">2027</h3>'):]
+                notes = y2027[:y2027.index('<ul class="ev-series-dates"')]
+                self.assertIn(f'<a class="link" href="{pre}/events/2027-01-10-zz-booth-moved/">', notes)
+                self.assertIn(f'<a class="link" href="{pre}/events/{MOVED_OFF}/">', notes)
+                if lang == "en":
+                    self.assertIn("Jan 9 moved to Jan 10", text(notes))
+                    self.assertIn("Mar 20: cancelled", text(notes))
+                else:
+                    self.assertIn("El 9 ene se cambió al 10 ene", text(notes))
+                self.assertNotIn("evp-all-notes", sec[:sec.index('<h3 class="evp-all-year">2027</h3>')], "2026: nothing changed")
+                # a date's page: its "Next dates" heading's link comes here
+                self.assertIn(f'href="{pre}/events/series/{BOOTH}/#evp-all-dates"', pages[f"{pre}/events/ev-recurring-{BOOTH}-2027-02-13/"])
 
 
 class ThePages(unittest.TestCase):
@@ -366,6 +441,13 @@ class Checks(unittest.TestCase):
         self.assertIn("December 12, 2026", found["nolink"], "its day in Central time (an evening event: not the 13th)")
         es = section(Built.get(self)["/es/status/"], '<section id="event-checks"')
         self.assertIn(T["evlist.check.title"]["es"], text(es))
+        # in Spanish: each event's Spanish title (the one the rest of /es/ shows), a file's title_es; the page in Spanish
+        found_es = {m.group(1): m.group(2) for m in re.finditer(r'<article class="card card-pad" aria-labelledby="evcheck-(\w+)">(.*?)</article>', es, re.S)}
+        self.assertIn("Taller de Escritura ZZ — Fort Worth", text(found_es["nolink"]))
+        self.assertNotIn("ZZ Writing Workshop", text(found_es["nolink"]))
+        self.assertIn('href="/es/events/zz-workshop/"', found_es["nolink"])
+        self.assertIn("Mesa vieja ZZ", text(found_es["stale"]))
+        self.assertIn("ZZ Old Booth", found["stale"], "English: its own title")
 
 
 FACETS_JS = r"""
@@ -379,6 +461,9 @@ out({
     lvHost: L.heldIn(ev({ title: "Workshop", host: "lv" }), site),
     saysSpanish: L.heldIn(ev({ title: "Workshop (in Spanish)" }), site),
     saysBoth: L.heldIn(ev({ title: "Taller", summary: "A bilingual workshop" }), site),
+    lvSaysEnglish: L.heldIn(ev({ title: "Workshop (in English)", host: "lv" }), site),
+    lvSaysIngles: L.heldIn(ev({ title: "Taller de La Viña (en inglés)", host: "lv" }), site),
+    saysEachLanguage: L.heldIn(ev({ title: "Workshop", summary: "Held in English, with a group in Spanish" }), site),
     own: L.heldIn(ev({ title: "Workshop (in Spanish)", item: { extra: { language: "en" } } }), site),
     series: L.heldIn(ev({ recurring: true, series: "zz", title: "Booth" }), site),
     committee: L.heldIn(ev({ committee: true, title: "Committee meeting" }), site),
@@ -399,7 +484,8 @@ class Facets(unittest.TestCase):
         r = run_js(self, FACETS_JS, now=NOW)
         self.assertEqual(r["words"], ["en", "es", "both", "en", "es", "both", "", ""])
         self.assertEqual(r["held"], {"plain": "en", "lvHost": "es", "saysSpanish": "es", "saysBoth": "both", "own": "en",
-                                     "series": "both", "committee": "es"})
+                                     "series": "both", "committee": "es", "lvSaysEnglish": "en", "lvSaysIngles": "en",
+                                     "saysEachLanguage": "both"})
         self.assertEqual(r["modes"], [["inperson"], ["online"], ["inperson", "online"], ["online"]])
         self.assertEqual(r["city"], ["Garland", "Tyler", "", ""])
         self.assertEqual(r["district"], ["87", ""])

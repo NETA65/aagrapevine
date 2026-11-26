@@ -382,8 +382,8 @@ sitemap: false
     its day, a venue still to be announced 45 days or less before it, a content/events file of an event to come with
     no `url:` (never made up: added when there is one), an event made from a dated flyer with no summary, and the
     content/events files of events over more than 90 days ago (to delete). Each: its day, its title (its page on the
-    site, when it has one) and its file (on GitHub). Nothing to check: no section. -#}
-{%- set evc = db | evDataChecks(site) -%}
+    site, when it has one), in the page's language, and its file (on GitHub). Nothing to check: no section. -#}
+{%- set evc = db | evDataChecks(site, lang) -%}
 {% if evc.n %}
 <section id="event-checks" class="section container-page pt-0" aria-labelledby="evcheck-title">
   {{ ui.sectionHead("evlist.check.title" | t(lang), "evlist.check.sub" | t(lang), "", "", "calendar-search", { eyebrow: "evlist.check.eyebrow" | t(lang), id: "evcheck-title", lang: lang }) }}
@@ -397,7 +397,7 @@ sitemap: false
         {%- for it in c.items %}
         <li class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-2.5">
           <time class="w-28 shrink-0 font-semibold tabular-nums text-muted" datetime="{{ it.ymd }}">{{ it.ymd | fmtDate(lang, "medium") }}</time>
-          <span class="min-w-0 flex-1 break-words font-medium text-ink">{% if it.href %}<a class="link" href="{{ it.href | lurl(lang) }}">{{ it.title }}</a>{% else %}{{ it.title }}{% endif %}</span>
+          <span class="min-w-0 flex-1 break-words font-medium text-ink"{% if it.titleLang and it.titleLang != lang %} lang="{{ it.titleLang }}"{% endif %}>{% if it.href %}<a class="link" href="{{ it.href | lurl(lang) }}">{{ it.title }}</a>{% else %}{{ it.title }}{% endif %}</span>
           {%- if it.file and site.repository %}
           <a class="link basis-full break-all font-mono text-xs text-muted" href="{{ site.repository }}/blob/main/{{ it.file }}" target="_blank" rel="noopener" translate="no">{{ it.file }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
           {%- endif %}

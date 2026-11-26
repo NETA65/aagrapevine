@@ -177,8 +177,39 @@
   {#- a series' dates — on its page (its own content: in the page's sitemap date) and on each date's page -#}
   {%- if m.dates | length %}
   <section class="mt-12" aria-labelledby="evp-dates-h"{% if not series %} data-lastmod="skip"{% endif %}>
-    {{ evp.head("evp-dates-h", "evpage.sec.dates" | t(lang), "", "calendar-range", "", m.banners.partOf.href if m.banners.partOf else "", "evpage.sec.all_dates" | t(lang)) }}
+    {{ evp.head("evp-dates-h", "evpage.sec.dates" | t(lang), "", "calendar-range", "", (m.banners.partOf.href + "#evp-all-dates") if m.banners.partOf else "", "evpage.sec.all_dates" | t(lang)) }}
     {{ evp.minis(m.dates) }}
+  </section>
+  {%- endif %}
+
+  {#- a series' page: EVERY date of it still to come (since the events list's redesign, whose card shows three) — by
+      year, each a link to its own page, a moved one marked — and what changed: a date moved, one cancelled (its
+      notice), a month the rule skips. /events/' "See all dates" lands here (#evp-all-dates). Its own content. -#}
+  {%- if m.every %}
+  <section id="evp-all-dates" class="mt-12" aria-labelledby="evp-all-h">
+    {{ evp.head("evp-all-h", "evpage.sec.all_dates" | t(lang), "", "calendar-days", "evpage.sec.all_dates_sub" | t(lang)) }}
+    {%- for y in m.every.years %}
+    <h3 class="evp-all-year">{{ y.year }}</h3>
+    {%- if y.notes | length %}
+    <ul class="ev-series-notes evp-all-notes" role="list">
+      {%- for n in y.notes %}
+      {%- set nIcon = { cancelled: "calendar-x", moved: "calendar-sync", skipped: "calendar-minus" }[n.type] %}
+      <li>{% icon nIcon, "mt-0.5 size-4 shrink-0" %}<span>
+        {%- if n.type == "moved" %}{% if n.href %}<a class="link" href="{{ n.href }}">{% endif %}{{ "evlist.note_moved" | t(lang, { from: n.from, to: n.to }) }}{% if n.href %}</a>{% endif %}
+        {%- elif n.type == "cancelled" %}<a class="link" href="{{ n.href }}">{{ "evlist.note_cancelled" | t(lang, { day: n.day }) }}</a>
+        {%- else %}{{ "evlist.note_skipped" | t(lang, { day: n.day }) }}{% endif -%}
+      </span></li>
+      {%- endfor %}
+    </ul>
+    {%- endif %}
+    {%- if y.dates | length %}
+    <ul class="ev-series-dates" role="list">
+      {%- for d in y.dates %}
+      <li>{% if d.href %}<a class="ev-series-date" href="{{ d.href }}">{% else %}<span class="ev-series-date">{% endif %}{{ d.label }}{% if d.moved %} <span class="ev-series-moved">{{ "evlist.moved" | t(lang) }}</span>{% endif %}{% if d.href %}</a>{% else %}</span>{% endif %}</li>
+      {%- endfor %}
+    </ul>
+    {%- endif %}
+    {%- endfor %}
   </section>
   {%- endif %}
 

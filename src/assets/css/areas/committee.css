@@ -1304,8 +1304,10 @@ html:not(.cm-js) [data-cm-js] { display: none !important; }
      wrapping on a phone.
    · A series' card (.ev-series): its next dates as small pills (the first one, .is-next, in its kind's colours), what
      changed about its dates (.ev-series-notes).
-   · A cancelled event (.ev-cancelled): its card faded, its words struck through (<s>), the "Cancelled" badge in the
-     danger colour — the badge says it in words. */
+   · A cancelled event (.ev-cancelled): its card on the second surface, its date tile without its kind's colours (the
+     muted words on the surface, a dashed edge, the day struck through — never faded: every word keeps 4.5:1 in
+     every theme), its words struck through (<s>), the "Cancelled" badge in the danger colour — the badge says it in
+     words. */
 .ev-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
 @media (width >= 64rem) {
   .ev-layout { grid-template-columns: minmax(0, 1fr) 20rem; grid-template-rows: 1fr auto; column-gap: 2.5rem; row-gap: 1.5rem; }
@@ -1362,7 +1364,9 @@ a.ev-series-date:hover { border-color: var(--ev, var(--c-gv)); color: var(--c-gv
 .ev-series-notes.is-dark { color: #fff; }
 .ev-series-notes.is-dark > li > svg, .ev-series-notes.is-dark .link { color: #fff; }
 .ev-cancelled { background: var(--c-surface-2); }
-.ev-cancelled .cm-date-tile { opacity: 0.6; }
+.ev-cancelled .cm-date-tile { background: var(--c-surface); border: 1px dashed var(--c-faint); color: var(--c-muted); }
+.ev-cancelled .cm-tile-day, .ev-cancelled .cm-tile-wd { color: var(--c-muted); }
+.ev-cancelled .cm-tile-day { text-decoration: line-through; text-decoration-thickness: 2px; }
 .ev-cancelled s { text-decoration-thickness: 1.5px; }
 .ev-badge-cancelled { background: color-mix(in srgb, var(--c-danger) 12%, var(--c-surface)); color: var(--c-danger); font-weight: 700; }
 /* An event's own page (src/_includes/partials/event-page.njk): its "Add to calendar" menu in the hero — the hero clips
@@ -1378,3 +1382,6 @@ a.ev-series-date:hover { border-color: var(--ev, var(--c-gv)); color: var(--c-gv
 @media (width >= 40rem) { .ev-more-filters { display: none !important; } }
 .ev-filter-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 @media (width >= 40rem) { .ev-filter-tools { order: 3; } }
+/* A series' page: "All dates" (event-page.njk #evp-all-dates) — each year: what changed, then its dates as pills */
+.evp-all-notes { margin-top: 0; margin-bottom: 0.75rem; }
+.evp-all-year { margin-top: 1.5rem; margin-bottom: 0.6rem; font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; color: var(--c-ink); }

@@ -34,8 +34,11 @@ tests/test_events_filters.py. The checks below say what of round 30 still holds.
     the "Next 5 weeks" calendar's window "cm:reveal" { id } — that the filters hide clears them, into a folded month
     opens the fold, to a weekly open meeting or a series' card brings that card; then the target is scrolled to,
     focused (tabindex="-1", no second scroll) and its card marked a moment (.cm-flash); a card that has passed is left
-    alone; on load a link into a folded month opens it, and ?filter=committee / ?filter=calendar (the old chips) pick
-    that kind.
+    alone; on load a link into a folded month opens it, one to a past event (its old anchor too) opens "Past events"
+    and marks its row, and ?filter=committee / ?filter=calendar (the old chips) pick
+    that kind, ?filter=neta shows what its chip showed (data-group~="neta": ours and the committee meetings) beside
+    the other filters, until it is let go; "No events match" waits while a folded card matches; the month chips' row
+    goes while none of its chips shows.
 
 Skipped without Node.js or the site's npm packages (tests/nodejs.py).
 
@@ -430,8 +433,11 @@ function setup(opts) {
   const series = el("section", { id: "ev-pinned" }, [el("h2", { id: "ev-pinned-title" }), el("ul", {}, [committee, booth])]);
   const weekly = el("section", { id: "ev-weekly" }, [el("ul", {}, [
     li("", "calendar", facets("online", "es", "online"), [el("article", { class: "card cm-event" }, [el("h3", { id: "ev-weekly-lv" })])])])]);
+  // "Past events": a row with its old anchor (evOldAnchors: an empty span on it)
+  const past = el("details", { "data-cm-past": "" }, [el("ol", {}, [
+    el("li", { id: "2026-11-07-zz-past" }, [el("span", { id: "ev-flyer-zzpast", class: "sr-only" })])])]);
   const root = el("section", { "data-count-label": "Showing {n} events", "data-count-label-one": "Showing 1 event" },
-                  [el("div", {}, chips.concat(menus))].concat(months, [series, weekly]));
+                  [el("div", {}, chips.concat(menus))].concat(months, [series, weekly, past]));
   const p = page([root], { files: ["time", "src/assets/js/app.js", "src/assets/js/committee.js"], alpine: true, at: opts.at || "2026-11-13T18:00:00Z" });
   if (opts.hash) p.win.location.hash = opts.hash;
   if (opts.search) p.win.location.search = opts.search;
@@ -443,7 +449,7 @@ function setup(opts) {
   c.$root = root; c.$nextTick = (fn) => fn(); c.$refs = {};
   c.init();
   const byId = (id) => p.doc.getElementById(id);
-  const state = () => ({ f: Object.assign({}, c.f), active: c.active, more: c.more, text: c.countText(), moreCount: c.moreCount,
+  const state = () => ({ f: Object.assign({}, c.f), group: c.group, active: c.active, months: c.anyMonth, more: c.more, text: c.countText(), moreCount: c.moreCount,
     counts: Object.fromEntries(chips.slice(1).map((b) => [b.attrs["data-ev-kind"], c.kindCount(b.attrs["data-ev-kind"])])),
     shown: [...root.querySelectorAll("li[data-group]")].filter((li) => c.show(li)).map(name) });
   const flashed = () => [...root.querySelectorAll(".cm-flash")].map((a) => name(a.parent));
@@ -532,9 +538,32 @@ const res = {};
   res.fromAddress = setup({ search: "?kind=workshop&lang=es&city=tyler&district=99&mode=boat" }).c.f;
   res.oldCalendar = setup({ search: "?filter=calendar" }).c.f.kind;
   res.oldCommittee = setup({ search: "?filter=committee&kind=booth" }).c.f.kind;
-  res.oldNeta = setup({ search: "?filter=neta" }).c.active;
+  const n = setup({ search: "?filter=neta" });
+  res.oldNeta = n.state();
+  n.c.setKind("calendar");
+  res.oldNetaCalendar = n.state();
+  n.c.setKind("calendar"); n.c.setKind("booth");
+  res.oldNetaBooth = n.state();
+  n.c.dropGroup();
+  res.oldNetaDropped = n.state();
+  const nc = setup({ search: "?filter=neta&lang=es" });
+  res.oldNetaSpanish = nc.state();
+  nc.c.clear();
+  res.oldNetaCleared = nc.state();
+  // "No events match these filters" (its x-show, events.njk): not while "Show 2028 dates (n)" has a match
+  const empty = (t) => new Function("c", "with (c) { return !!(" + input.emptyShow + "); }")(t.c);
+  const fo = setup(); fo.c.setKind("area");
+  res.emptyFolded = { shown: fo.state().shown, moreCount: fo.c.moreCount, empty: empty(fo) };
+  fo.c.setKind("committee"); fo.c.f.lang = "es";
+  res.emptyNone = empty(fo);
+  res.emptyAll = empty(setup());
   const u = setup({ hash: "#zz-workshop", search: "?kind=calendar" });
   res.loadHidden = u.c.active;
+  // a link to a past event by its old anchor: "Past events" opens, its row is marked and scrolled to
+  scrolled.length = 0;
+  const pt = setup({ hash: "#ev-flyer-zzpast" });
+  res.toPast = { open: !!pt.root.querySelector("details").open, marked: [...pt.root.querySelectorAll(".cm-target")].map(name),
+                 scrolled: scrolled.slice(-1) };   // (after the browser's own jump to the anchor)
 }
 out(res);
 """
@@ -547,7 +576,9 @@ class InTheBrowser(unittest.TestCase):
 
     def result(self) -> dict:
         if InTheBrowser.r is None:
-            InTheBrowser.r = TCT.js(self, LIST_JS)
+            page = (Path(__file__).resolve().parents[1] / "src" / "pages" / "events.njk").read_text(encoding="utf-8")
+            show = re.search(r'<div class="mt-2" data-js-only x-show="([^"]+)" x-cloak>\s*<div class="empty-state">', page)
+            InTheBrowser.r = TCT.js(self, LIST_JS, data={"emptyShow": show.group(1)})
         return InTheBrowser.r
 
     def test_chips_menus_and_the_fold(self):
@@ -568,6 +599,8 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual(r["spanish"]["shown"], ["zz-off", "ev-lv-calendar-zz-taller", "online"])
         self.assertEqual(r["spanish"]["counts"], {"workshop": 0, "area": 0, "booth": 0, "online": 1, "committee": 0, "calendar": 1})
         self.assertEqual((r["nothing"]["shown"], r["nothing"]["text"], r["nothing"]["active"]), ([], "Showing 0 events", True))
+        # the month chips' row: there while a chip of it shows, gone with nothing to show (no icon left alone)
+        self.assertEqual((s["months"], r["calendar"]["months"], r["nothing"]["months"]), (True, True, False))
         self.assertEqual((r["cleared"]["f"], r["cleared"]["active"]), ({"kind": "", "lang": "", "mode": "", "city": "", "district": ""}, False))
         self.assertTrue(r["readsMore"])
         self.assertEqual(r["label"], "Show 2028 dates (1)", "the cards the filters pick")
@@ -615,8 +648,26 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual(r["fromAddress"], {"kind": "workshop", "lang": "es", "mode": "", "city": "tyler", "district": ""})
         self.assertEqual(r["oldCalendar"], "calendar")
         self.assertEqual(r["oldCommittee"], "booth", "?kind= wins over the old ?filter=")
-        self.assertFalse(r["oldNeta"], "?filter=neta: every card")
+        # ?filter=neta: what its chip showed — ours and the committee meetings, never the calendars' or the weekly
+        # meetings' —, kept in the address; the other filters beside it; let go by its chip or "Clear filters"
+        neta = r["oldNeta"]
+        self.assertEqual((neta["group"], neta["active"], neta["f"]["kind"]), ("neta", True, ""))
+        self.assertEqual(neta["shown"], ["zz-workshop", "zz-off", "committee", "ev-series-zz-booth"])
+        self.assertEqual(neta["counts"], {"workshop": 1, "area": 1, "booth": 1, "online": 0, "committee": 1, "calendar": 0})
+        self.assertEqual(neta["moreCount"], 1, "the 2028 ACM, folded")
+        self.assertEqual(r["oldNetaCalendar"]["shown"], [])
+        self.assertEqual(r["oldNetaBooth"]["shown"], ["ev-series-zz-booth"])
+        self.assertEqual((r["oldNetaDropped"]["group"], r["oldNetaDropped"]["f"]["kind"], r["oldNetaDropped"]["shown"]),
+                         ("", "booth", ["ev-series-zz-booth"]))
+        self.assertEqual((r["oldNetaSpanish"]["group"], r["oldNetaSpanish"]["shown"]), ("neta", ["zz-off"]))
+        self.assertEqual((r["oldNetaCleared"]["group"], r["oldNetaCleared"]["active"]), ("", False))
+        # "No events match": a folded card matches (Assemblies & ACMs: the 2028 ACM) — the "Show 2028 dates (1)"
+        # button says so, the empty state waits; nothing anywhere — it shows; no filter — never
+        self.assertEqual(r["emptyFolded"], {"shown": [], "moreCount": 1, "empty": False})
+        self.assertTrue(r["emptyNone"])
+        self.assertFalse(r["emptyAll"])
         self.assertFalse(r["loadHidden"], "a link to a card the address's filter hides clears it")
+        self.assertEqual(r["toPast"], {"open": True, "marked": ["2026-11-07-zz-past"], "scrolled": ["2026-11-07-zz-past"]})
 
 
 if __name__ == "__main__":

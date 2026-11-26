@@ -99,7 +99,7 @@ calendarFeed: "/events.ics"
 {#- The anchors of a series' dates that its card does not list (the committee meeting's and the Grapevine Meeting's
     cards show one date, which rolls on in the browser): a link to any of them lands on the card -#}
 {% macro dateAnchors(s) %}
-{%- if s %}<span class="sr-only" aria-hidden="true">{% for d in s.dates %}<span id="{{ d.anchor }}"></span>{% endfor %}</span>{% endif -%}
+{%- if s %}<span class="sr-only" aria-hidden="true">{% for d in s.dates %}<span id="{{ d.anchor }}"></span>{% for a in d.item | evOldAnchors %}<span id="{{ a }}"></span>{% endfor %}{% endfor %}</span>{% endif -%}
 {% endmacro %}
 
 {#- What changed about a series' dates (evList notes): a date the host moved, a cancelled one, a month the rule skips -#}
@@ -270,9 +270,9 @@ calendarFeed: "/events.ics"
        the city and the district (only when an event names one) as menus, and "Clear filters". Every card of the page
        carries its facets (evFacets: data-kind, data-lang, data-mode, data-city, data-district) — the one-off events,
        the cancelled ones, the series' cards and the weekly meetings alike. The filters picked are kept in the
-       address (?kind=…&lang=…), so a filtered view can be shared; ?filter=committee / ?filter=calendar (the page's
-       old chips) still work. Then the months as jump chips (only those with something showing), "Every month" and
-       "Every week", and the colour key. ---------- -#}
+       address (?kind=…&lang=…), so a filtered view can be shared; ?filter=committee / ?filter=calendar / ?filter=neta
+       (the page's old chips) still work. Then the months as jump chips (only those with something showing), "Every
+       month" and "Every week", and the colour key. ---------- -#}
   {%- set fold = L.oneOff | cmEventsFold -%}
   <div class="mb-8 grid grid-cols-1 gap-3">
     <div id="ev-filters" class="ev-filters" data-js-only role="group" aria-label="{{ 'committee.events.filter_aria' | t(lang) }}">
@@ -281,6 +281,8 @@ calendarFeed: "/events.ics"
         {%- for k in L.facets.kinds %}
         <button type="button" class="chip" data-ev-kind="{{ k.key }}" @click="setKind('{{ k.key }}')" :aria-pressed="(f.kind === '{{ k.key }}').toString()" aria-pressed="false">{{ ("evlist.kind." + k.key) | t(lang) }} <span class="cm-chip-count" x-text="kindCount('{{ k.key }}')">{{ k.n }}</span></button>
         {%- endfor %}
+        {#- (the old ?filter=neta: our events and the committee meetings — no chip of its own but while it is on) #}
+        <button type="button" class="chip" x-show="group" x-cloak @click="dropGroup()" aria-pressed="true">{{ "evlist.group.neta" | t(lang) }} {% icon "x", "size-4" %}</button>
       </div>
       {#- (below 640px the menus fold behind "More filters" — open by themselves when the address picks one of them;
           "Clear filters" beside it, from 640px after the menus) -#}
@@ -321,7 +323,8 @@ calendarFeed: "/events.ics"
     </div>
     {%- set months = L.oneOff | groupBy("monthKey") %}
     {% if months | length or L.series | length or gm or wos | length %}
-    <nav class="flex min-w-0 max-w-full items-center gap-2.5" aria-label="{{ 'committee.events.months_aria' | t(lang) }}">
+    {#- (the whole row goes while none of its chips shows — the filters picked show nothing: anyMonth) #}
+    <nav class="flex min-w-0 max-w-full items-center gap-2.5" x-show="anyMonth" aria-label="{{ 'committee.events.months_aria' | t(lang) }}">
       <span class="shrink-0 text-faint" aria-hidden="true">{% icon "calendar-range", "size-4" %}</span>
       <ul class="chip-row min-w-0" role="list">
         {%- for grp in months %}
@@ -492,8 +495,9 @@ calendarFeed: "/events.ics"
   </section>
   {% endfor %}
 
-  {#- nothing the filters picked (cmEvents: no card shows) — "Clear filters" brings every card back -#}
-  <div class="mt-2" data-js-only x-show="active && !visibleCount" x-cloak>
+  {#- nothing the filters picked (cmEvents: no card shows, nor one folded behind "Show 2028 dates": moreCount — that
+      button says how many are there) — "Clear filters" brings every card back -#}
+  <div class="mt-2" data-js-only x-show="active && !visibleCount && !moreCount" x-cloak>
     <div class="empty-state">
       <span class="mx-auto mb-3 grid size-12 place-items-center rounded-full bg-surface-2 text-faint">{% icon "search-x", "size-6" %}</span>
       <p class="font-semibold text-ink">{{ "evlist.none_title" | t(lang) }}</p>
@@ -628,7 +632,7 @@ calendarFeed: "/events.ics"
       {{ seriesNotes(s) }}
       <div class="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9.5rem),1fr))] gap-2 sm:flex sm:flex-wrap">
         {% if gm.join.url %}<a class="btn-primary btn-sm col-span-full" href="{{ gm.join.url }}" target="_blank" rel="noopener" :class="phase !== 'upcoming' && 'cm-join-live'">{% icon "video", "size-4" %} <span x-text="joinText">{{ gmJoin }}</span><span class="sr-only"> — {{ gm.title }} ({{ "common.external" | t(lang) }})</span></a>{% endif %}
-        {% if s.href %}<a class="btn-secondary btn-sm" href="{{ s.href }}">{% icon "calendar-range", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evpage.sec.all_dates" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.series_all" | t(lang) }}</span><span class="sr-only"> — {{ gm.title }}</span></a>{% endif %}
+        {% if s.href %}<a class="btn-secondary btn-sm" href="{{ s.href }}#evp-all-dates">{% icon "calendar-range", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evpage.sec.all_dates" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.series_all" | t(lang) }}</span><span class="sr-only"> — {{ gm.title }}</span></a>{% endif %}
         {#- (the brief links in the page, Alpine's full ones once it runs: as the committee meeting's card above) -#}
         <details class="cm-menu">
           <summary class="btn-secondary btn-sm w-full sm:w-auto">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "common.add_to_calendar" | t(lang) }}</span> {% icon "chevron-down", "size-4 opacity-70" %}</summary>
@@ -678,7 +682,7 @@ calendarFeed: "/events.ics"
           <span class="ev-series-next-l">{{ "evlist.series_next" | t(lang) }}</span>
           <ol class="ev-series-dates" role="list" data-cm-max="{{ s.shown }}">
             {%- for d in s.dates %}
-            <li id="{{ d.anchor }}" data-cm-expire="{{ d.expireIso }}"{% if loop.index0 >= s.shown or loop.first %} class="{{ 'hidden' if loop.index0 >= s.shown }}{{ 'is-next' if loop.first }}"{% endif %}>{% if d.href %}<a class="ev-series-date" href="{{ d.href }}">{% else %}<span class="ev-series-date">{% endif %}{{ d.tile.wd }}, {{ d.shortLabel }}{% if d.seriesOf %} <span class="ev-series-moved">{{ "evlist.moved" | t(lang) }}</span>{% endif %}{% if d.href %}</a>{% else %}</span>{% endif %}</li>
+            <li id="{{ d.anchor }}" data-cm-expire="{{ d.expireIso }}"{% if loop.index0 >= s.shown or loop.first %} class="{{ 'hidden' if loop.index0 >= s.shown }}{{ 'is-next' if loop.first }}"{% endif %}>{% if d.href %}<a class="ev-series-date" href="{{ d.href }}">{% else %}<span class="ev-series-date">{% endif %}{{ d.tile.wd }}, {{ d.shortLabel }}{% if d.seriesOf %} <span class="ev-series-moved">{{ "evlist.moved" | t(lang) }}</span>{% endif %}{% for a in d.item | evOldAnchors %}<span id="{{ a }}"></span>{% endfor %}{% if d.href %}</a>{% else %}</span>{% endif %}</li>
             {%- endfor %}
           </ol>
         </div>
@@ -688,14 +692,16 @@ calendarFeed: "/events.ics"
           {% if ev.online %}
           <a class="btn-primary btn-sm" href="{{ ev.online }}" target="_blank" rel="noopener">{% icon "globe", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.join_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "committee.events.join_online" | t(lang) }}</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
           {% endif %}
-          {% if s.href %}<a class="btn-secondary btn-sm" href="{{ s.href }}">{% icon "calendar-range", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evpage.sec.all_dates" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.series_all" | t(lang) }}</span> <span aria-hidden="true">→</span><span class="sr-only"> — {{ s.title }}</span></a>{% endif %}
-          {{ calMenu(ev) }}
-          {{ ui.flyerButton(ev.flyer, s.title, lang) }}
+          {% if s.href %}<a class="btn-secondary btn-sm" href="{{ s.href }}#evp-all-dates">{% icon "calendar-range", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evpage.sec.all_dates" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.series_all" | t(lang) }}</span> <span aria-hidden="true">→</span><span class="sr-only"> — {{ s.title }}</span></a>{% endif %}
+          {#- (its next date's calendar entry and flyer: gone once that date is over — expire(), data-cm-expire —, so
+              the card never offers a date that has passed while its dates roll on in the browser before the next
+              build) -#}
+          <div class="contents" data-cm-expire="{{ ev.expireIso }}">{{ calMenu(ev) }}{{ ui.flyerButton(ev.flyer, s.title, lang) }}</div>
           {% if ev.link and ev.linkExternal and ev.link != (ev.flyer.view if ev.flyer else "") %}{{ organizerButton(ev) }}{% endif %}
           </div>
         </div>
       </div>
-      {{ ui.flyerThumb(ev.flyer, s.title, lang) }}
+      <div class="contents" data-cm-expire="{{ ev.expireIso }}">{{ ui.flyerThumb(ev.flyer, s.title, lang) }}</div>
     </article>
   </li>
   {%- endif %}
@@ -785,7 +791,7 @@ calendarFeed: "/events.ics"
   {% if nNetaOwn == 0 %}
   {#- No flyers / manual events yet: one line for visitors + a pointer to the committee how-to
       (the naming rule and the Drive folder are in "For committee members · Add an event", #how-events) -#}
-  <div id="ev-empty-neta" class="mt-2" x-show="!active">
+  <div id="ev-empty-neta" class="mt-2" x-show="!active || group">
     {{ ui.emptyState("calendar-days", "committee.events.empty_neta_title" | t(lang), "committee.events.empty_neta_text" | t(lang), "#how-events", "committee.events.how_link" | t(lang)) }}
   </div>
   {% endif %}
@@ -805,7 +811,7 @@ calendarFeed: "/events.ics"
     </summary>
     <ol class="divide-y divide-line border-t border-line">
       {% for ev in past | limit(40) %}
-      <li id="{{ ev.anchor }}" class="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5 sm:px-6">
+      <li id="{{ ev.anchor }}" class="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5 sm:px-6">{% for a in ev.item | evOldAnchors %}<span id="{{ a }}" class="sr-only"></span>{% endfor %}
         <time class="inline-flex w-32 shrink-0 items-center gap-2.5 text-sm font-semibold text-muted" datetime="{{ ev.startIso }}"><span class="ev-dot ev-tone-{{ ev | eventTone }}" aria-hidden="true"></span>{{ ev.startIso | fmtDate(lang, "short") }}</time>
         <span class="min-w-[11rem] flex-1 break-words font-medium text-ink">{{ ev.title }}{% if ev.location and not ev.locationTba %} <span class="text-sm font-normal text-muted">· {{ ev.location }}</span>{% endif %}</span>
         {% if ev.flyer %}{{ ui.flyerButton(ev.flyer, ev.title, lang, "btn-ghost btn-sm") }}

@@ -8,17 +8,21 @@ tests/test_events_series_cards.py; the filters on a page stand-in: tests/test_r3
               date" shows under the hero; the "Next 5 weeks" calendar is folded under its heading near the top, its
               button opens it (aria-expanded) and closes it again; no script error.
   * Desktop — at 1280 × 800: the calendar is the sidebar (to the right of the list, its button hidden), "Next up" is
-              not shown (the sidebar says it).
+              not shown (the sidebar says it). A cancelled card's date tile (never faded): its month, day and weekday
+              at 4.5:1 or more on the tile, light and dark, English and Spanish.
   * Filters — the "Workshops" chip shows only workshops, its kind in the address (?kind=workshop) so the view can be
               shared; picking it again shows every card; a language picked with it narrows them; an address with
               ?kind=…&lang=… opens with them picked; nothing picked: "Clear filters" is hidden, with one picked it shows.
-  * Pages   — an event's own page at 390px: Add to calendar and Directions in the hero, above the fold.
+              The old ?filter=neta (its "NETA 65 events" chip) shows ours and the committee meetings, a pressed chip
+              of its own says so; pressing it shows every card and drops it from the address.
+  * Pages   — an event's own page at 390px: Add to calendar and Directions in the hero, above the fold. A series'
+              card's "See all dates" lands on its page's "All dates", every date there a link to a page of the site.
 """
 from __future__ import annotations
 
 import unittest
 
-from .test_site_in_browser import S, new_context, open_page, setUpModule, tearDownModule  # noqa: F401
+from .test_site_in_browser import S, contrast, new_context, open_page, setUpModule, tearDownModule  # noqa: F401
 
 
 def phone(lang: str = "en"):
@@ -29,7 +33,7 @@ def phone(lang: str = "en"):
 
 # the cards shown: their id (a series' card or a weekly meeting's has its kind), top (page px), kind
 CARDS = """() => [...document.querySelectorAll('li[data-group]')].filter((li) => li.getClientRects().length)
-  .map((li) => ({ id: li.id || li.dataset.kind, kind: li.dataset.kind, lang: li.dataset.lang, cancelled: li.hasAttribute('data-ev-cancelled'),
+  .map((li) => ({ id: li.id || li.dataset.kind, kind: li.dataset.kind, lang: li.dataset.lang, group: li.dataset.group, cancelled: li.hasAttribute('data-ev-cancelled'),
                   oneOff: !li.closest('#ev-pinned, #ev-weekly'), top: Math.round(li.getBoundingClientRect().top + scrollY) }))"""
 
 
@@ -92,6 +96,28 @@ class Desktop(unittest.TestCase):
         finally:
             ctx.close()
 
+    def test_a_cancelled_cards_date_keeps_its_contrast(self):
+        for theme in ("light", "dark"):
+            for pre in ("", "es/"):
+                with self.subTest(theme=theme, lang=pre or "en"):
+                    ctx = new_context(1280, 900, lang="es" if pre else "en", theme=theme)
+                    try:
+                        page = open_page(ctx, pre + "events/")
+                        found = page.evaluate("""() => [...document.querySelectorAll('.ev-cancelled .cm-date-tile')]
+                          .filter((t) => t.getClientRects().length).flatMap((t) => [...t.children].map((s) => {
+                            const rgb = (c) => (c.match(/[\\d.]+/g) || []).slice(0, 4).map(Number);
+                            const cs = getComputedStyle(s), ts = getComputedStyle(t);
+                            return { text: s.textContent.trim(), fg: rgb(cs.color), bg: rgb(ts.backgroundColor), opacity: ts.opacity };
+                          }))""")
+                        if not found:
+                            self.skipTest("no cancelled event in the day's data")
+                        for f in found:
+                            self.assertEqual(f["opacity"], "1", f)
+                            self.assertFalse(len(f["bg"]) == 4 and f["bg"][3] < 1, f"an opaque tile: {f}")
+                            self.assertGreaterEqual(contrast(f["fg"], f["bg"]), 4.5, f)
+                    finally:
+                        ctx.close()
+
 
 class Filters(unittest.TestCase):
     def test_kind_language_and_the_address(self):
@@ -135,6 +161,32 @@ class Filters(unittest.TestCase):
         finally:
             ctx.close()
 
+    def test_the_old_neta_address(self):
+        ctx = new_context(1280, 900)
+        errors: list[str] = []
+        try:
+            page = open_page(ctx, "events/", errors)
+            page.wait_for_timeout(300)
+            everything = page.evaluate(CARDS)
+            page = open_page(ctx, "events/?filter=neta", errors)
+            page.wait_for_timeout(300)
+            shown = page.evaluate(CARDS)
+            self.assertTrue(shown)
+            self.assertTrue(all("neta" in c["group"].split() for c in shown), shown)
+            self.assertEqual(len(shown), len([c for c in everything if "neta" in c["group"].split()]))
+            chip = page.locator('button.chip[x-show="group"]')
+            self.assertTrue(chip.is_visible())
+            self.assertTrue(page.locator(".ev-clear").is_visible())
+            self.assertIn("filter=neta", page.url)
+            chip.click()
+            page.wait_for_timeout(200)
+            self.assertEqual(len(page.evaluate(CARDS)), len(everything))
+            self.assertFalse(chip.is_visible())
+            self.assertNotIn("filter=", page.url)
+            self.assertEqual(errors, [])
+        finally:
+            ctx.close()
+
 
 class Pages(unittest.TestCase):
     def test_the_hero_actions_above_the_fold(self):
@@ -153,6 +205,32 @@ class Pages(unittest.TestCase):
                 box = page.locator(sel).first.bounding_box()
                 self.assertIsNotNone(box, sel)
                 self.assertLess(box["y"] + box["height"], 844, sel)
+            self.assertEqual(errors, [])
+        finally:
+            ctx.close()
+
+    def test_see_all_dates_lands_on_every_date(self):
+        site = S["site"]
+        ctx = phone()
+        errors: list[str] = []
+        try:
+            page = open_page(ctx, "events/", errors)
+            link = page.locator('li[id^="ev-series-"] a[href$="#evp-all-dates"]').first
+            if not link.count():
+                self.skipTest("no monthly series with a page in the day's data")
+            link.tap()
+            page.wait_for_load_state("load")
+            page.wait_for_timeout(300)
+            self.assertIn("/events/series/", page.url)
+            sec = page.locator("#evp-all-dates")
+            self.assertTrue(sec.is_visible())
+            box = sec.bounding_box()
+            self.assertLess(abs(box["y"]), 200, "scrolled to it")
+            hrefs = page.evaluate("[...document.querySelectorAll('#evp-all-dates a.ev-series-date')].map((a) => a.pathname)")
+            self.assertGreater(len(hrefs), 3, "more dates than the card's three")
+            prefix = "/" + page.url.split("/", 3)[3].split("events/series/")[0]
+            missing = [h for h in hrefs if not (site / h[len(prefix):] / "index.html").is_file()]
+            self.assertEqual(missing, [])
             self.assertEqual(errors, [])
         finally:
             ctx.close()

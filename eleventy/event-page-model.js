@@ -44,6 +44,11 @@
 //               .ics —: the template gives it its language, `| lurl(lang)`, once the build knows which files it
 //               writes in each language) }] }] }
 //   dates       a series' next dates (its page's list; a date page's too, its own marked) → [mini]
+//   every       a series' page only (since the events list's redesign): EVERY date of it still to come, by year —
+//               { years: [{ year, notes, dates: [{ anchor, label ("Sat, Dec 12"), href (its own page, "" when it has
+//               none), moved (a date the host moved) }] }] } | null (an event's page). A year's notes: what changed
+//               about its dates (event-list.js seriesNotes — a date moved, cancelled, a month the rule skips, through
+//               the last date), so "Not held on Dec 24" is under its year; a year with notes and no date has its own.
 //   nextSame    the next event of the same kind (mini) | null
 //   coming      the next events of any kind (mini × ≤ 3)
 //   meeting     the committee's next meeting ({ when }: its day and time — its page is /meetings/#committee-meeting)
@@ -69,6 +74,8 @@ import {
   withoutJoinDetails, withoutJoinValues, normalizeEvents, ownPageOf, platformOf,
 } from "./filters/committee.js";
 import { eventTone } from "./filters/event-tone.js";
+import { seriesNotes } from "./filters/event-list.js";
+import { cancelledPages } from "./cancelled-pages.js";
 import { writerKit } from "./filters/read.js";
 import { monthModel } from "./filters/monthly.js";
 import { langPath, pickLang, siteUrl } from "../eleventy.config.js";
@@ -458,6 +465,7 @@ function eventModel(c, p) {
     prep: { heading: ev.past ? "evpage.sec.more" : "evpage.sec.prep", deck: ev.past ? null : deckOf(c, kind, lang),
       bingo: bingoHref(ev, kind, lang), resources: resources(cl) },
     dates,
+    every: null,
     nextSame: nextSame ? miniOf(nextSame) : null,
     coming: coming.map(miniOf),
     meeting: nextMeeting(c, lang),
@@ -467,6 +475,34 @@ function eventModel(c, p) {
     month: monthOf(cl, ev.monthKey),
     latest: kind.kind === "online-meeting" ? "gv" : "",
   };
+}
+
+// A series' every date still to come, by year, and what changed about them (the model's `every`, above). The cancelled
+// dates' notices once per build and language (eleventy/cancelled-pages.js: every language at once).
+function everyDate(c, h) {
+  const dates = Array.isArray(h.allDates) ? h.allDates : h.dates;
+  const pages = Array.isArray(h.allPages) ? h.allPages : h.datePages;
+  if (!dates.length) return null;
+  if (!c.notices) c.notices = cancelledPages(c.db.events?.cancelled || [], c.db.events?.items || [], c.site, c.plan.langs);
+  const byYear = new Map();
+  const yearOf = (ymd) => {
+    const y = String(ymd || "").slice(0, 4);
+    if (!byYear.has(y)) byYear.set(y, { year: y, notes: [], dates: [] });
+    return byYear.get(y);
+  };
+  dates.forEach((d, i) => {
+    yearOf(d.startYmd).dates.push({ anchor: d.anchor, label: `${d.tile.wd}, ${d.shortLabel}`, href: pages[i] ? pages[i].path : "", moved: !!d.seriesOf });
+  });
+  const cancelled = c.notices.filter((p) => p.lang === h.lang && String(p.ev.seriesOf || (p.ev.recurring ? p.ev.series : "")) === h.key);
+  const notes = seriesNotes({ dates, rule: h.series.rule, skip: h.series.rule?.skip || [], lang: h.lang,
+    from: String(c.plan.now).slice(0, 10), until: dates[dates.length - 1].startYmd, cancelled });
+  // (a moved date's note links its own page here — on /events/ it links its entry on the series' card)
+  const pageOf = new Map(dates.map((d, i) => [d.anchor, pages[i] ? pages[i].path : ""]));
+  for (const n of notes) {
+    if (n.type === "moved") n.href = pageOf.get(n.anchor) || "";
+    yearOf(n.ymd).notes.push(n);
+  }
+  return { years: [...byYear.values()].sort((a, b) => a.year.localeCompare(b.year)) };
 }
 
 function hubModel(c, h) {
@@ -483,6 +519,7 @@ function hubModel(c, h) {
     crumbs: crumbs(lang, null),
     prep: { heading: "evpage.sec.prep", deck: deckOf(c, kind, lang), bingo: bingoHref(next, kind, lang), resources: resources(cl) },
     dates: h.dates.map((d, i) => mini(d, h.datePages[i] ? h.datePages[i].path : h.target, false, sameOf(h))),
+    every: everyDate(c, h),
     nextSame: null,
     coming: coming.map(miniOf),
     meeting: nextMeeting(c, lang),

@@ -192,7 +192,10 @@
        them all back. The filters picked are kept in the address (?kind=workshop&lang=es&mode=inperson&city=…&
        district=…, history.replaceState: no new history entry), so a filtered view can be shared and comes back on
        reload; a value the page has no card for is left out. The page's old chips are still understood:
-       ?filter=committee (the committee meetings) and ?filter=calendar (the GV & LV calendars) set the kind.
+       ?filter=committee (the committee meetings) and ?filter=calendar (the GV & LV calendars) set the kind;
+       ?filter=neta (its "NETA 65 events": ours and the committee meetings, data-group~="neta") is a filter of its own
+       (`group`: no menu, a pressed chip of its own while it is on — a click, or "Clear filters", lets it go), kept in
+       the address as it came (?filter=neta), the other filters beside it.
        The months: those of the years after the build's — after the next one from November on (eventsFold,
        eleventy/filters/committee.js) — are folded — the month section and its jump chip carry data-cm-more —, shown
        once `more` is true: "Show 2028 dates (n)" (showMore; n = the folded cards the filters would show: moreCount)
@@ -213,7 +216,8 @@
        again — they read only Alpine's own state, which no hidden card changes. */
     Alpine.data("cmEvents", function () {
       var FACETS = ["kind", "lang", "mode", "city", "district"];
-      var LEGACY = { committee: "committee", calendar: "calendar" };       // ?filter= (the page's old chips)
+      // ?filter= (the page's old chips) → [the filter it sets, its value]
+      var LEGACY = { committee: ["kind", "committee"], calendar: ["kind", "calendar"], neta: ["group", "neta"] };
       function hashId() {
         try { return location.hash ? decodeURIComponent(location.hash.slice(1)) : ""; } catch (e) { return ""; }
       }
@@ -221,7 +225,7 @@
       function cards(root) { return root.querySelectorAll("li[data-group]"); }
       function live(li) { return !li.hasAttribute("data-cm-expired"); }
       return {
-        f: { kind: "", lang: "", mode: "", city: "", district: "" }, moreOpen: false,
+        f: { kind: "", lang: "", mode: "", city: "", district: "" }, group: "", moreOpen: false,
         more: false, labels: { many: "{n}", one: "{n}" }, tick: 0,
         init: function () {
           var self = this;
@@ -243,8 +247,10 @@
           if (el) this.reveal(el);
           else if (past && past.closest && past.closest("details[data-cm-past]")) {
             past.closest("details[data-cm-past]").open = true;
-            past.classList.add("cm-target");
-            this.$nextTick(function () { past.scrollIntoView({ block: "start" }); });
+            // (an old anchor — evOldAnchors — is an empty span on its row: the row is marked)
+            var row = past.closest("li") || past;
+            row.classList.add("cm-target");
+            this.$nextTick(function () { row.scrollIntoView({ block: "start" }); });
           }
           window.addEventListener("hashchange", function () {
             var t = self.go(hashId());
@@ -274,22 +280,24 @@
           var sel = root.querySelector('select[data-ev-facet="' + k + '"]');
           return sel ? Array.prototype.map.call(sel.querySelectorAll("option"), function (o) { return o.getAttribute("value") || ""; }) : [];
         },
-        /* the filters from the address (?kind=…&lang=… — ?filter=committee / calendar too), each only when the page
-           offers it */
+        /* the filters from the address (?kind=…&lang=… — ?filter=committee / calendar / neta too), each only when the
+           page offers it (?kind= before ?filter=) */
         fromAddress: function () {
           var q;
           try { q = new URLSearchParams(location.search); } catch (e) { return; }
-          var old = LEGACY[q.get("filter") || ""];
+          var old = LEGACY[q.get("filter") || ""] || ["", ""];
           for (var i = 0; i < FACETS.length; i++) {
-            var k = FACETS[i], v = q.get(k) || (k === "kind" ? old || "" : "");
+            var k = FACETS[i], v = q.get(k) || (k === old[0] ? old[1] : "");
             if (v && this.offered(k).indexOf(v) !== -1) this.f[k] = v;
           }
+          if (old[0] === "group" && Array.prototype.some.call(cards(this.$root), function (li) { return words(li, "group").indexOf(old[1]) !== -1; })) this.group = old[1];
         },
-        /* the filters into the address: ?kind=…&lang=… (the other parameters and the #hash stay; the old ?filter= goes) */
+        /* the filters into the address: ?kind=…&lang=… (the other parameters and the #hash stay; the old ?filter= goes,
+           but for ?filter=neta while `group` is on) */
         toAddress: function () {
           try {
             var u = new URL(location.href);
-            u.searchParams.delete("filter");
+            if (this.group) u.searchParams.set("filter", this.group); else u.searchParams.delete("filter");
             for (var i = 0; i < FACETS.length; i++) {
               var k = FACETS[i];
               if (this.f[k]) u.searchParams.set(k, this.f[k]); else u.searchParams.delete(k);
@@ -299,16 +307,20 @@
         },
         setKind: function (k) { this.f.kind = this.f.kind === k ? "" : k; this.toAddress(); },
         changed: function () { this.toAddress(); },
+        dropGroup: function () { this.group = ""; this.toAddress(); },
         clear: function () {
           for (var i = 0; i < FACETS.length; i++) this.f[FACETS[i]] = "";
+          this.group = "";
           this.toAddress();
         },
         get active() {
+          if (this.group) return true;
           for (var i = 0; i < FACETS.length; i++) if (this.f[FACETS[i]]) return true;
           return false;
         },
         /* the filters picked show this card (whatever the fold) — `skip`: one filter left out (a chip's count) */
         picked: function (el, skip) {
+          if (this.group && words(el, "group").indexOf(this.group) === -1) return false;
           for (var i = 0; i < FACETS.length; i++) {
             var k = FACETS[i], v = this.f[k];
             if (v && k !== skip && words(el, k).indexOf(v) === -1) return false;
@@ -325,6 +337,14 @@
         monthVisible: function (el) {
           var self = this;
           return !!el && Array.prototype.some.call(el.querySelectorAll("li[data-group]"), function (li) { return self.show(li); });
+        },
+        /* the month chips' row shows while one of its chips does: a month (an open one, or a folded one once `more`),
+           "Every month" or "Every week" with a card the filters show — else its icon would stand there alone */
+        get anyMonth() {
+          var self = this;
+          return Array.prototype.some.call(this.$root.querySelectorAll("[data-cm-month], #ev-pinned, #ev-weekly"), function (m) {
+            return (self.more || !m.hasAttribute("data-cm-more")) && self.monthVisible(m);
+          });
         },
         /* a kind chip's count: the cards of that kind the other filters show (the folded months' too — a click away),
            never a cancelled one */
