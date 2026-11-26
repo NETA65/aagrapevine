@@ -271,6 +271,24 @@ def safe_summary(text: str) -> str:
 
 
 # --------------------------------------------------------------------------- location
+def _title(s: str) -> str:
+    """"FORT WORTH" → "Fort Worth" (a capital after a space or a hyphen: eventPlace's titleCase)."""
+    return re.sub(r"(^|[\s-])(\w)", lambda m: m[1] + m[2].upper(), s.lower())
+
+
+def _caps_city(part: str) -> str | None:
+    """The one to three words in capitals that end a venue's name written in lower case: "Maude Cobb . Convenció
+    center LONGVIEW" → "Longview"; None when there are none, or nothing in lower case before them."""
+    words = part.split()
+    n = 0
+    while n < min(3, len(words) - 1) and len(words[-1 - n]) >= 2 and re.fullmatch(r"[^\W\d_]+", words[-1 - n]) \
+            and words[-1 - n].isupper():
+        n += 1
+    if not n or not any(ch.islower() for ch in " ".join(words[:-n])):
+        return None
+    return _title(" ".join(words[-n:]))
+
+
 def parse_location(loc: str, title: str = "", website: str | None = None) -> dict:
     """→ {display, city, state, country, online_url, platform}. `state` is a 2-letter US code."""
     loc = clean_text(re.sub(r"[*_]{1,3}", " ", loc or ""))      # "*Zoom ID: …*" markdown leftovers
@@ -291,8 +309,13 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
     if not out["platform"] and re.search(r"(?i)\bzoom\b", loc):
         out["platform"] = "Zoom"
     text = URL_IN_TEXT_RE.sub(" ", loc).strip()
-    # "Dallas TX 75247" (no comma) → "Dallas, TX 75247"
-    text = re.sub(r"(?<=[a-z.])\s+([A-Z]{2})(\s+\d{5}(?:-\d{4})?)?$", r", \1\2", text)
+    # "Dallas TX 75247" (no comma) → "Dallas, TX 75247" — also after a city in capitals ("Maude Cobb . Convenció
+    # center LONGVIEW TX 75604", "DALLAS TX"). After a capital, only a US state's code with its ZIP after it, or TX
+    # alone: the last word of a text in capitals may be any two letters ("SALON AB", "COME ON IN")
+    inline = re.sub(r"(?<=[A-Za-z.])\s+([A-Z]{2})(\s+\d{5}(?:-\d{4})?)?$",
+                    lambda m: f", {m[1]}{m[2] or ''}" if not m.string[m.start() - 1].isupper()
+                    or (m[1] in US_STATES and (m[2] or m[1] == "TX")) else m[0], text)
+    inline, text = inline != text, inline       # (the state came right after the city, with no comma)
     parts = [p.strip(" *") for p in re.split(r"[,\n]| - ", text) if p.strip(" *")]
     state_idx = None
     for i in range(len(parts) - 1, -1, -1):
@@ -320,11 +343,17 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
             break
     if out["state"]:
         out["country"] = "USA"
-    # City: the part just before the state, if it looks like a place (no street numbers).
+    # City: the part just before the state, if it looks like a place (no street numbers); a city in capitals as a
+    # name ("DALLAS, TX" → "Dallas"). With no comma before the state, the words in capitals at the end of a
+    # venue's name are its city ("Maude Cobb . Convenció center LONGVIEW" → "Longview", as eventPlace in
+    # eleventy/filters/committee.js reads it). Else a well-known Texas city at its end ("2010 Main St, Tyler").
     if state_idx is not None and state_idx > 0:
         cand = parts[state_idx - 1]
-        if not re.search(r"\d", cand) and len(cand.split()) <= 4:
-            out["city"] = cand
+        caps = _caps_city(cand) if inline and not re.search(r"\d", cand) else None
+        if caps:
+            out["city"] = caps
+        elif not re.search(r"\d", cand) and len(cand.split()) <= 4:
+            out["city"] = _title(cand) if cand.isupper() and re.search(r"\w{2}", cand) else cand
         else:
             fc = _fold(cand)
             for c in sorted(TX_CITIES, key=len, reverse=True):

@@ -106,6 +106,51 @@ class InTexas(unittest.TestCase):
                 self.assertEqual(bool(E.decide(ev).get("texas")), known[ev["title"]], ev["title"])
 
 
+# --------------------------------------------------------------------------- the city and state of a place
+class CityAndState(unittest.TestCase):
+    def place(self, location: str) -> tuple:
+        loc = E.parse_location(location)
+        return loc["city"], loc["state"], loc["country"]
+
+    def test_a_city_in_capitals_before_the_state_and_zip(self):
+        """La Viña's calendar writes "Maude Cobb . Convenció center LONGVIEW TX 75604": no comma, the city in
+        capitals, the ZIP right after the state. It reads as Longview, TX (it read as no city and no state)."""
+        self.assertEqual(self.place("Maude Cobb . Convenció center LONGVIEW TX 75604"), ("Longview", "TX", "USA"))
+        self.assertEqual(self.place("Centro Comunitario KILGORE TX 75662-1234"), ("Kilgore", "TX", "USA"))
+        self.assertEqual(self.place("DALLAS TX 75201"), ("Dallas", "TX", "USA"))
+        self.assertEqual(self.place("DALLAS TX"), ("Dallas", "TX", "USA"))
+        self.assertEqual(self.place("FORT WORTH, TX 76102"), ("Fort Worth", "TX", "USA"))
+        self.assertEqual(self.place("TULSA OK 74103"), ("Tulsa", "OK", "USA"))
+        # the place as written stays the event's place: only its parts are read
+        self.assertEqual(E.parse_location("Maude Cobb . Convenció center LONGVIEW TX 75604")["display"],
+                         "Maude Cobb . Convenció center LONGVIEW TX 75604")
+
+    def test_a_bare_zip(self):
+        self.assertEqual(self.place("Dallas TX 75247"), ("Dallas", "TX", "USA"))
+        self.assertEqual(self.place("Longview, TX, 75604"), ("Longview", "TX", "USA"))
+        self.assertEqual(self.place("Tyler TX"), ("Tyler", "TX", "USA"))
+
+    def test_two_capitals_at_the_end_are_not_always_a_state(self):
+        """After a word in capitals, two letters are a state only when they are a US state's code with a ZIP
+        after them, or TX: a text in capitals may end in any short word."""
+        self.assertEqual(self.place("SALON AB"), ("SALON AB", None, None))
+        self.assertEqual(self.place("COME ON IN"), ("COME ON IN", None, None))
+        self.assertEqual(self.place("SALON DE LA"), ("SALON DE LA", None, None))
+        self.assertEqual(self.place("Vancouver BC"), ("Vancouver", None, "Canada"))
+
+    def test_a_cached_event_gets_them_on_the_next_sync(self):
+        """decide() runs on every sync from the cache's raw fields (as data/raw/events_external.json keeps the
+        Longview page, November 2026): the cached event gets its city and state without its page fetched again."""
+        cached = {"title": "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )",
+                  "start": "2027-01-29", "end": "2027-01-31", "all_day": True, "lang": "es",
+                  "location_raw": "Maude Cobb . Convenció center LONGVIEW TX 75604",
+                  "location": "Maude Cobb . Convenció center LONGVIEW TX 75604", "online": False, "texas": True}
+        got = E.decide(cached)
+        self.assertEqual((got.get("city"), got.get("state"), got.get("country"), got.get("texas")),
+                         ("Longview", "TX", "USA", True))
+        self.assertEqual(E.build_item(LONGVIEW, got)["extra"]["city"], "Longview")
+
+
 # --------------------------------------------------------------------------- P3-11: dates
 def page(start: str, end: str | None, when: str, location: str = "Dallas, TX") -> str:
     ld = {"@type": "Event", "name": "Roundup", "startDate": start, "location": {"name": location}}
@@ -203,6 +248,7 @@ class SavedPages(unittest.TestCase):
         self.assertEqual(ev["title"], "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )")
         self.assertEqual((ev["start"], ev["end"], ev["all_day"]), ("2027-01-29", "2027-01-31", True))
         self.assertEqual(ev["location"], "Maude Cobb . Convenció center LONGVIEW TX 75604")
+        self.assertEqual((ev["city"], ev["state"], ev["country"]), ("Longview", "TX", "USA"))
         self.assertTrue(ev["texas"])
         self.assertEqual(ev["lang"], "es")
         self.assertNotIn("summary", ev, "only contacts' e-mail addresses: no description is kept")
