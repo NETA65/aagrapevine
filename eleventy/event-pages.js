@@ -129,7 +129,7 @@ const KINDS = {
   },
   "recording-workshop": {
     family: "workshop", label: "evkind.recording-workshop.label", phrase: "evkind.recording-workshop.phrase",
-    who: "evkind.recording-workshop.who", deck: "writing-workshop", deckClose: true, where: "workshop",
+    who: "evkind.recording-workshop.who", deck: "recording-workshop", where: "workshop",
     flyers: "recording workshop|audio workshop|taller de (grabaci|audio)",
     resources: ["record", "kit", "listen", "published", "tips", "booth"],
   },

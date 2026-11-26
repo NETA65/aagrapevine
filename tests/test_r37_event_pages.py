@@ -528,7 +528,8 @@ def _both(en: str, es: str) -> dict:
 
 
 KDECKS = [{"id": i, "title": _both(t, t), "card": {"title": _both(t, t), "summary": _both("About it.", "Sobre ella.")},
-           "minutes": 60} for i, t in (("writing-workshop", "Test writing deck"), ("information-workshop", "Test info deck"),
+           "minutes": 60} for i, t in (("writing-workshop", "Test writing deck"), ("recording-workshop", "Test recording deck"),
+                                       ("information-workshop", "Test info deck"),
                                        ("orientation-workshop", "Test orientation deck"), ("grapevine-meeting", "Test GV deck"))]
 LITTABLE = _both("Set up a test table people stop at.", "Arma una mesa de prueba.")
 KLESSONS = [{"id": "magazines", "title": _both("The magazines", "Las revistas"), "summary": _both("What they are.", "Qué son.")},
@@ -612,7 +613,7 @@ class EveryKind(unittest.TestCase):
         gvm0 = f"ev-recurring-grapevine-meeting-{gvm[0].isoformat()}"
         area = ["area", "booth", "littable", "offers"]
         want = {
-            "rec": ("recording-workshop", "writing-workshop", "workshop", ["record", "listen", "published", "tips", "booth"]),
+            "rec": ("recording-workshop", "recording-workshop", "workshop", ["record", "listen", "published", "tips", "booth"]),
             "acm": ("acm", "", "acm", area),
             "th": ("town-hall", "", "assembly", area),
             "ig": ("intergroup", "", "group", ["mags", "offers", "booth"]),
@@ -631,7 +632,7 @@ class EveryKind(unittest.TestCase):
                 got = r[anchor]
                 self.assertEqual((got["kind"], got["deck"], got["res"]), (kind, deck, res))
                 self.assertIn(f"&where={where}&", got["bingo"])
-        self.assertTrue(r["rec"]["close"], "the recording workshop's deck is the closest one")
+        self.assertFalse(r["rec"]["close"], "the recording workshop's deck is its own, not the closest one")
         self.assertIn("tel:+15550100002", r["rec"]["hrefs"], "La Viña's record-your-story line")
         self.assertIn("/listen/?show=lvo", r["rec"]["hrefs"])
         self.assertIn("/bulletin/#2099-01-01-offers", r[CW_DATES[1]]["hrefs"])

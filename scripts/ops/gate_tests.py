@@ -232,6 +232,8 @@ CONTENT_TESTS: dict[str, str] = {
         "guest speakers' keys, the GSR/DCM orientations, the booth's codes, the Conference's blanks, the story lines)",
     "test_presentations_welcome_visit_prep_recording.TheBuild.":
         "config/presentations: the build's loader reads those four decks with no problem, a code for every QR slide",
+    "test_presentations_welcome_visit_prep_recording.TheRecordingWorkshopsPage.":
+        "config/presentations/recording-workshop.yml and content/events: a recording workshop's page links that deck",
     "test_presentations_price_follow_up.PriceFollowUp.":
         "config/presentations/committee-meeting.yml: the 2027 price follow-up shown from January 1 through March 31, "
         "2027, in both versions, with the prices of the day",

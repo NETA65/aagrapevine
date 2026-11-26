@@ -1,6 +1,7 @@
 """The four presentations added in November 2026 (config/presentations/): the welcome for Panel 77's new GVRs and RLVs
 (welcome-panel-77), the booth or group visit built around QR codes (booth-visit), getting ready for the General Service
-Conference (conference-prep) and the recording workshop (recording-workshop).
+Conference (conference-prep) and the recording workshop (recording-workshop) — and a recording workshop's own page,
+which links its own presentation now (eleventy/event-pages.js, the kind "recording-workshop").
 
   * Files      — each deck passes the checker (tests/test_presentations.py), has the versions it was asked for, its
                  minutes add up EXACTLY in every version (the checker allows ±30 %), every slide shown in a version has
@@ -12,6 +13,8 @@ Conference (conference-prep) and the recording workshop (recording-workshop).
                  addresses config/site.yml `links:` gives (and three pages of the site); the Conference's agenda items
                  and dates are only the presenter's blanks; the recording workshop's story lines are the site's.
   * Build      — the build's loader reads the four with no problem, and their JSON has a code for every QR slide.
+  * Event page — a recording workshop's kind gives the recording-workshop deck (no longer "the closest one"), and its
+                 page's "Get ready" links it ("/orientation/?present=recording-workshop").
 
     python -m unittest tests.test_presentations_welcome_visit_prep_recording -v
 """
@@ -32,6 +35,8 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 from test_presentations import FOLDER, check_deck, slide_minutes  # noqa: E402
+from test_r37_spine import at, item, place  # noqa: E402
+from test_r37_event_pages import KSITE  # noqa: E402
 
 # deck → its versions (id: minutes) and how many slides its full version shows
 DECKS = {
@@ -280,6 +285,65 @@ class TheBuild(unittest.TestCase):
         self.assertIn("meeting", r["decks"]["welcome-panel-77"]["kinds"])
         self.assertIn("prices", r["decks"]["welcome-panel-77"]["kinds"])
         self.assertIn("deadlines", r["decks"]["recording-workshop"]["kinds"])
+
+
+EVENT_JS = r"""
+const P = await imp("eleventy/filters/presentations.js");
+const E = await imp("eleventy/event-pages.js");
+const M = await imp("eleventy/event-page-model.js");
+const { decks } = P.loadDecks("config/presentations", { now: new Date(input.now), shop: {} });
+const site = { ...input.site, built: input.now };
+const kinds = Object.fromEntries(input.items.map((it) => { const k = E.eventKind(it, site); return [it.extra.slug, [k.kind, k.deck, k.deckClose]]; }));
+const full = { db: { events: { items: input.items.filter((it) => it.extra.slug.startsWith("2099")), cancelled: [] },
+                     drive: { items: [] }, pdfs: { items: [] }, announcements: { items: [] }, audio_project: input.audio,
+                     articles: { items: [], issues: [] } },
+               site, languages: ["en", "es"], presentations: { decks, problems: [] },
+               orientation: { lessons: [] }, carry: {}, monthlyKeys: [] };
+const d = M.eventPageData(full);
+out({ kinds, table: E.EVENT_KINDS["recording-workshop"],
+      pages: d.pages.map((p) => ({ lang: p.lang, anchor: p.anchor, kind: p.kind.kind,
+        deck: p.m.prep.deck ? { id: p.m.prep.deck.id, href: p.m.prep.deck.href, card: p.m.prep.deck.card, close: p.m.prep.deck.close } : null })) });
+"""
+
+
+class TheRecordingWorkshopsPage(unittest.TestCase):
+    """A recording workshop's page links the Recording Workshop presentation (config/presentations/
+    recording-workshop.yml), as a writing workshop's links the writing one — no longer the writing workshop's, as
+    "The closest presentation"."""
+
+    def test_its_kind_and_its_page_link_the_recording_deck(self):
+        f = ROOT / "content" / "events" / "2026-10-17-lv-recording-workshop-duncanville.md"
+        meta = yaml.safe_load(f.read_text(encoding="utf-8").split("---")[1])
+        tyler = place("Grupo Uno", "100 Main St", "Tyler", "75702")
+        items = [
+            # the committee's own file (its title and tags), as data/site/events.json holds it
+            item(f.stem, meta["title"], "2026-10-17T19:00:00-05:00", "2026-10-17T21:00:00-05:00", tags=meta["tags"],
+                 title_es=meta["title_es"], **place("Grupo Progreso Latino", "101 East Camp Wisdom Rd.", "Duncanville", "75116")),
+            # one to come (a page with its "Get ready"), and a writing workshop beside it
+            item("2099-02-07-test-recording-workshop", "Grapevine Recording Workshop — Tyler", at(date(2099, 2, 7), "10:00"),
+                 at(date(2099, 2, 7), "12:00"), tags=["workshop"], **tyler),
+            item("2099-02-14-test-writing-workshop", "Grapevine Writing Workshop — Tyler", at(date(2099, 2, 14), "10:00"),
+                 at(date(2099, 2, 14), "12:00"), tags=["workshop"], **tyler),
+        ]
+        audio = json.loads((ROOT / "data" / "site" / "audio_project.json").read_text(encoding="utf-8"))
+        r = run_js(self, EVENT_JS, data={"items": items, "site": KSITE, "audio": audio, "now": "2099-01-10T18:00:00Z"},
+                   now="2099-01-10T18:00:00Z")
+        self.assertEqual(r["kinds"][f.stem], ["recording-workshop", "recording-workshop", False])
+        self.assertEqual(r["kinds"]["2099-02-14-test-writing-workshop"][:2], ["writing-workshop", "writing-workshop"])
+        self.assertEqual((r["table"]["deck"], r["table"]["deckClose"]), ("recording-workshop", False))
+        for lang, pre in (("en", ""), ("es", "/es")):
+            page = next(p for p in r["pages"] if p["lang"] == lang and p["anchor"] == "2099-02-07-test-recording-workshop")
+            with self.subTest(lang=lang):
+                self.assertEqual(page["kind"], "recording-workshop")
+                self.assertEqual(page["deck"], {"id": "recording-workshop", "href": f"{pre}/orientation/?present=recording-workshop",
+                                                "card": f"{pre}/orientation/#pres-recording-workshop", "close": False})
+
+    def test_the_deck_is_linked_only_while_its_file_is_there(self):
+        self.assertTrue((FOLDER / "recording-workshop.yml").exists())
+        js = (ROOT / "eleventy" / "event-pages.js").read_text(encoding="utf-8")
+        row = re.search(r'"recording-workshop": \{(.*?)\n  \},', js, re.S).group(1)
+        self.assertIn('deck: "recording-workshop"', row)
+        self.assertNotIn("deckClose", row)
 
 
 if __name__ == "__main__":

@@ -88,7 +88,7 @@ What the page shows, from the top:
 | Kind of event | What *Get ready* links |
 |---|---|
 | Writing workshop | the Writing Workshop presentation, Share your story, writing tips, how to send a story, the story deadlines (and their calendar), the workshop guides (PDF), recording your story (and the phone line), members of our Area in print, GVR / RLV 101's *Stories, audio and workshops*, the booth display |
-| Recording workshop | the Writing Workshop presentation (the closest one), recording your story, the workshop guides, the podcasts, members of our Area in print, writing tips, the booth display |
+| Recording workshop | the Recording Workshop presentation, recording your story, the workshop guides, the podcasts, members of our Area in print, writing tips, the booth display |
 | Information workshop | the Information Workshop presentation, magazine prices, GVR / RLV 101's *What Grapevine and La Viña are* and *Subscriptions and gifts*, the podcasts, the videos, the booth display, *Your literature table* |
 | GVR/RLV orientation | the Orientation Workshop presentation, GVR / RLV 101, the GVR / RLV corner (the job, first steps, kits), signing up as a GVR or an RLV, GVR / RLV 101's *The GVR / RLV service position* |
 | GSR/DCM orientation | our Area's website, GVR / RLV 101's *The GVR / RLV service position*, the GVR / RLV corner, the booth display, *Your literature table* |
