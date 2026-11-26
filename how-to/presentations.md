@@ -147,7 +147,10 @@ least time a slide can have). The speaker's name, service position and topic com
 gives no speaker (November 18 and December 16, 2026: the guest speakers start on January 20, 2027) says so: "none
 tonight" on the speaker's slides, "Guest speaker: none this time" on "Next meeting"; "to be announced" is only for a
 speaker the list doesn't name yet (a month after its last one, or an entry the site leaves out). "No guest speaker"
-is the version for those nights: the chair introduces a topic and the members share on it until 7:30 (the slides
+is the version for those nights (on a device where no version was ever chosen, the deck opens on it by itself for
+a meeting the list gives no speaker, never for one "to be announced", and Customize → Version says it was chosen
+for you; a version picked there, the first one too, stays the presenter's): the chair introduces a topic and the
+members share on it until 7:30 (the slides
 `topic-of-the-month` and `topic-sharing`, which start off and are in its `only` list), then the same second half;
 its welcome and prayer get a minute each (`version_minutes`), its welcome and agenda their own words
 (`version_fields`). The AA Preamble's slide stays, switched off and in no version (`starts_off`, `optional`), for a
@@ -1359,9 +1362,11 @@ come: the texts then agree with that version's agenda, even before the website's
 for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
 the text, and "Start next month" goes back to "With a guest speaker" when the next meeting has one (its Undo too).
 The other way round, when the website lists NO speaker for that meeting (November 18 and December 16, 2026) but the
-version is still the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
+version chosen is the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
 meeting") and names the version to choose, and "Start next month" switches to "No guest speaker" by itself when the
-website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). A detail left empty beside a
+website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). Either switch goes
+back to no version chosen, so the deck follows the website's list from then on: "No guest speaker" for a meeting
+with none, the first version again once a speaker is listed. A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the notes are drafted. The
