@@ -28,7 +28,10 @@ def step_code(run: str) -> str:
     if not m:
         raise ValueError(f"no Python in this step:\n{run[:400]}")
     module, args = m.group(1), shlex.split(m.group(2) or "")
-    return ("import runpy, sys\n"
+    # (a module the test process imported already is run afresh, as the step runs it: runpy's warning about that is
+    # expected here)
+    return ("import runpy, sys, warnings\n"
+            "warnings.filterwarnings('ignore', message='.*found in sys.modules', category=RuntimeWarning)\n"
             f"sys.argv = [{module!r}, *{args!r}]\n"
             f"runpy.run_module({module!r}, run_name='__main__', alter_sys=True)\n")
 

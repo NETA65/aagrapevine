@@ -82,7 +82,9 @@ const searchWith = (code) => {
 };
 const ytDefine = (code) => {
   const defined = {};
-  const ctx = vm.createContext({ HTMLElement: class {}, customElements: { define(n, c) { defined[n] = c.name; } } });
+  // (lite-youtube-embed 0.3.5 and later ask customElements.get first, and define the element only once)
+  const ctx = vm.createContext({ HTMLElement: class {}, customElements: {
+    get(n) { return defined[n]; }, define(n, c) { defined[n] = c.name; } } });
   vm.runInContext(code, ctx);
   return defined;
 };
