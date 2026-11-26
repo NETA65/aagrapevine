@@ -352,7 +352,7 @@ class HubBuild(unittest.TestCase):
         if kind not in self._decks:
             self._decks[kind] = run_js(self, """
               const { loadDecks } = await imp("eleventy/filters/presentations.js");
-              out(loadDecks(input.dir).decks.map((d) => ({ id: d.id, title: d.title, short: d.short, card: d.card,
+              out(loadDecks(input.dir).decks.map((d) => ({ id: d.id, lang: d.lang, title: d.title, short: d.short, card: d.card,
                 minutes: d.minutes, count: d.count, kinds: d.kinds, presets: d.presets, drive_title: d.drive_title,
                 url: d.url })));""",
                 data={"dir": str(self.dirs[kind])})
@@ -475,8 +475,11 @@ class HubBuild(unittest.TestCase):
                             self.assertNotRegex(also.get_text(), r"\((?:about|unos|unas) ")
                         else:
                             self.assertIsNone(also)
-                        badge = "Presentación en inglés"
-                        self.assertEqual(badge in c.get_text(" "), lang == "es")
+                        # the deck's language where it isn't the page's: an English deck on /es/, a Spanish one
+                        # (La Viña's) on the English page
+                        dl = d.get("lang", "en")
+                        self.assertEqual("Presentación en inglés" in c.get_text(" "), lang == "es" and dl == "en")
+                        self.assertEqual("Presentation in Spanish" in c.get_text(" "), lang == "en" and dl == "es")
                         self.assertEqual(len(c.select(".o101-pres-kinds > li")), len(d["kinds"]))
                         # Present · Customize · Presenter view: told apart by data-pres-mode, and their addresses say
                         # the mode too (a new tab, or a copied link, opens Customize or the presenter view)

@@ -28,7 +28,8 @@ change the code.
 The GVR / RLV 101 page has a "Presentations" section with a card per deck: four workshops (orientation, information,
 writing and recording), our two monthly meetings, the committee meeting (third Wednesday) and the Grapevine Meeting
 (first Wednesday), both on Google Meet, and three shorter sessions: the welcome for Panel 77's new GVRs and RLVs, a
-booth or group visit built around QR codes, and getting ready for the General Service Conference. Each card
+booth or group visit built around QR codes, and getting ready for the General Service Conference; and La Viña's two presentations in Spanish (its writing
+workshop and the orientation for new RLVs). Each card
 is made from **one YAML text file** in `config/presentations/`. Every build turns each file into
 a slide show that opens in a pop-up player, with speaker notes, a presenter view, shorter versions, four ways to
 print, and facts that stay current by themselves (meeting dates, story deadlines, prices, events). Presenters can
@@ -61,9 +62,13 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
   made from `content/booth/booth.csv`, the Drive booth folder and the site's live data (some of the same live facts:
   events, themes, prices, meetings). See [Booth display](booth.md).
 
-**Language.** The slides and the notes are in English (the owner's decision: every file must say `lang: "en"`). On
-the Spanish page the cards, buttons and menus are in Spanish, each card shows "Presentación en inglés", and the
-player adds "(en inglés)".
+**Language.** Each presentation is written in one language, its file's `lang`: English (`"en"`) for the committee's
+workshops and meetings, Spanish (`"es"`) for La Viña's two (`taller-de-escritura`, `orientacion-rlv`). The cards,
+buttons and menus are in the page's language. A presentation in another language than the page's says so: on the
+Spanish page an English one's card shows "Presentación en inglés" and the player adds "(en inglés)"; on the English
+page a Spanish one's card shows "Presentation in Spanish" and the player adds "(in Spanish)". A Spanish
+presentation's slides, notes, the player's own words on them and the day's facts are all Spanish
+([3.23](#323-a-presentation-in-spanish)).
 
 **Who can do it.** Editing these files needs only write access to the repository (the MKP715 login is enough).
 Nothing in this guide needs the NETA65 admin account.
@@ -134,6 +139,8 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `booth-visit.yml` | Booth or Group Visit: Scan, Read, Give, Write / Visita a la mesa o a un grupo: escanea, lee, regala, escribe | 7 | 10 | `lv` (orange) | `qr-code` | 13 / 10 | `full` (10), `short` (5) |
 | `conference-prep.yml` | Getting Ready for the Conference: Grapevine and La Viña / Preparándonos para la Conferencia: La Viña y Grapevine | 8 | 45 | `grape` (purple) | `landmark` | 23 / 20 | `full` (45), `short` (30) |
 | `recording-workshop.yml` | Grapevine and La Viña Recording Workshop / Taller de grabación de Grapevine y La Viña | 9 | 60 | `gv` (blue) | `mic` | 30 / 27 | `full` (60) |
+| `taller-de-escritura.yml` (**Spanish**) | La Viña Writing Workshop / Taller de escritura de La Viña | 10 | 115 | `lv` (orange) | `pen-line` | 55 / 47 | `full` (115), `short` (84) |
+| `orientacion-rlv.yml` (**Spanish**) | Orientation for New RLVs / Orientación para nuevos RLV | 11 | 90 | `lv` (orange) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
@@ -267,8 +274,8 @@ card:
 | Field | Rule (the checker) | What it does and where it shows |
 |---|---|---|
 | `id` | the file name without `.yml` | The card's anchor `#pres-<id>`, the address `?present=<id>`, the JSON file name, and the key under which presenters' own versions are kept. **Never rename a deck that is on the site**: presenters would lose their versions of it. |
-| `order` | a whole number 1–9, different in each deck | The order of the cards (then by id). |
-| `lang` | always `"en"` | — |
+| `order` | a whole number 1–99, different in each deck | The order of the cards (then by id). La Viña's Spanish decks come last (10, 11). |
+| `lang` | `"en"`, or `"es"` for a presentation written in Spanish | The language of its slides, notes, the player's words on them and its facts; the card's and the player's "(in Spanish)" / "(en inglés)"; its event pages' badge ([3.23](#323-a-presentation-in-spanish)). Anything else stops the build: `lang: "en" or "es" (the language the presentation is written in)`. |
 | `title` | text | The player's title, the print headings and the speaker script's heading. |
 | `short` | text | The player's header; the name in the "Print or save a copy" list on the English page; the start of the name of a saved printout ("Information Workshop – Handout for participants – 2026-10-02"). |
 | `eyebrow` | text | The small line above the titles before the first `section` slide. |
@@ -283,8 +290,8 @@ card:
 | `paperwork` | optional (today only in `committee-meeting.yml`, between `fillins:` and `slides:`) | The chair's agenda e-mail, reminder and draft notes, and what "Start next month" does: [3.22](#322-the-chairs-paperwork-agenda--notes). A deck without it has no **Agenda & notes** tab. |
 | `slides` | at least 5 | [3.6](#36-slides-the-fields-every-slide-can-have). |
 
-> **Note:** `README.md` says `order` is 1–4. The checker accepts 1–9; the test `tests/test_presentations.py` only
-> asks that each deck has its own number.
+> **Note:** The checker accepts 1–99; the test `tests/test_presentations.py` only asks that each deck has its own
+> number.
 
 **Example: change the card's summary.** Change both languages, in the same commit:
 
@@ -437,7 +444,7 @@ fillins:
 | `label` | `en` and `es` | The field's name in Customize → Your details (in the page's language). |
 | `hint` | required | What an empty blank shows on the slide, in orange brackets: `[Month DD, YYYY]`. |
 | `default` | text (optional) | What the slide says while the blank is empty, instead of the orange hint. |
-| `shared` | `true` / `false` | One answer for every deck whose blank has the same key and is shared (today `presenter` and `first_name`, in every deck). |
+| `shared` | `true` / `false` | One answer for every deck whose blank has the same key and is shared (today `first_name` in every deck, `presenter` in the English ones and `puesto`, the service position in Spanish, in La Viña's two Spanish ones). |
 | `notes_only` | `true` / `false` | The answer may appear only in the speaker notes, never on a slide. On a slide the checker refuses it: `{fill:first_name} is notes_only (never on a slide)`. |
 
 Before the show starts, the player warns "3 of your details are still blank" and offers **Fill them in** or
@@ -481,7 +488,7 @@ A slide is a block that starts with `  - id:` under `slides:`. It ends where the
 | `handout` | `true` / `false` | Printed for the participants. On a slide of the show: shown AND printed. |
 | `print` | `"portrait"` or `"landscape"`, only with `handout: true` | How a handout page prints. Left out: landscape. |
 | `accent` | `gv` `lv` `vine` `grape` `navy` | On a `section` slide: the colour of its part (the slides after it take it). On any other slide: that slide's colour only. Before the first section, and on a section without one: `gv`. |
-| `lang` | `"es"` or `"en"` | `"es"`: a slide written in Spanish (a handout, an announcement to read aloud). The player marks it as Spanish for screen readers. |
+| `lang` | `"es"` or `"en"` | `"es"`: a slide written in Spanish in an English presentation (a handout, an announcement to read aloud). The player marks it as Spanish for screen readers. Left out: the presentation's own `lang`. |
 | `source` | text | The small line in italics at the bottom, exactly as written: the player adds no "Sources:" of its own, so write it yourself (most slides start it with "Sources:" or "Source:"). |
 | `takeaway` | text | The highlighted box at the bottom. |
 | `version_minutes`, `version_fields`, `version_notes` | version ids of this deck | [3.4](#34-versions-presets) |
@@ -1507,6 +1514,32 @@ still publishes your words (those tests are in `CONTENT_TESTS`).
 5. Glance at the Spanish names of the controls: "Agenda y notas", "Correo con la agenda", "Recordatorio", "Borrador
    de las notas", "Empezar el mes siguiente", "Abrir en mi correo", "Copiar el asunto" (CCO for BCC).
 
+### 3.23 A presentation in Spanish
+
+`taller-de-escritura.yml` (the writing workshop for La Viña) and `orientacion-rlv.yml` (the orientation for new RLVs)
+say `lang: "es"`. They were written by hand from `writing-workshop.yml` and `orientation-workshop.yml`: the same parts,
+the same versions and timing (their `version_minutes` add up to the same plans: 115 and 84 minutes, 90 and 60), the
+same slide ids where a slide matches one there, and La Viña first everywhere (its two-month rhythm, its themes, its
+suggested topics, aalavina.org/comparte and manuscritoslv@aagrapevine.org, Graba tu historia, the Manual del RLV,
+preguntas@aagrapevine.org). The deck-writing rules are in
+[`config/presentations/README.md`](../config/presentations/README.md#a-presentation-in-spanish). What the code does
+with `lang: "es"`:
+
+| Where | What changes | The code |
+|---|---|---|
+| The checker | `lang` is `"en"` or `"es"`; a Spanish deck's line "No es una presentación oficial de AA Grapevine, Inc." counts as the disclaimer; a `TIEMPO:` line is refused like a `TIME:` one | `eleventy/filters/presentations.js` `checkDeck`, `DISCLAIMER`, `TIME_LINE`; `tests/test_presentations.py` (the same) |
+| The deck's shape | `lang: "es"` on the deck and on every slide without its own; a part's eyebrow "Parte 3 · …" | `shapeDeck` (`PART_WORD`) |
+| The facts | every `{live:…}` and every live slide in Spanish: dates (`H.fmtDate`, `dayLabel`), the meeting's rule and time (`recurrenceText(…, "es")`), issues (`issueLabel`), events (`normalizeEvents(…, "es")`), the weekly open meetings, the stores' offers, the Books of the Month, a price notice; La Viña's themes without their English gloss; the fallbacks in `FALLBACKS_ES` (and `NO_SPEAKER_ES`); links to the Spanish pages | `context(ctx, deck.lang)` → `c.lang`, read by `liveFacts` and `liveData` (an English deck's facts are exactly as before) |
+| The player's words | "Datos al …", the TIEMPO line, "(no está en esta versión)", the live lists' heads, "Detalles por confirmar", "Código de acceso", the time card's "minutos", the printed pages' "Diapositiva 3 de 47" | `presentations-core.js` `ES` and `words(lang)`; `presentations.js` `W(deck)`, `deckLang(deck)`, `PRINT_WORDS` |
+| Language marks | every slide `lang="es"`, the notes `lang="es"`; "(in Spanish)" after the deck's name on the English page, "(en inglés)" only for an English deck on `/es/` | `presentations.js` `start()` (`[data-gvp-in]`); `macros/presentations.njk` |
+| The card | "Presentation in Spanish" on the English page (`orientation.pres_spanish`), no badge on `/es/` | `src/pages/orientation.njk` |
+| Event pages | an event held in Spanish (`heldInSpanish`: tagged `la-vina`, or La Viña's own) links the Spanish deck of its kind — writing workshops `taller-de-escritura` (a recording workshop has its own deck, `recording-workshop`, in English), orientations `orientacion-rlv` — while it is in `presentations.decks`, else the English one; its card says "Presentation in Spanish" on the English page | `eleventy/event-pages.js` `deckEs` (`EVENT_KINDS`); `eleventy/event-page-model.js` `deckOf`; `macros/event-page.njk` |
+
+Not in Spanish (on purpose): the chair's paperwork (only the committee meeting has it), Grapevine's themes and book
+titles (as Grapevine writes them), and the names of the player's buttons in the notes, `{ui:…}`, which follow the
+page's language as in every deck. A third Spanish deck needs no code: give it `lang: "es"`; to link it from an
+event kind, give that kind a `deckEs`.
+
 ---
 
 ## 4. What happens after you save
@@ -1562,9 +1595,9 @@ calendar, the weekly open meetings, the story lines), a change there shows up af
 
 | Where | English | Spanish | What |
 |---|---|---|---|
-| GVR / RLV 101, "Presentations" | `/orientation/#presentations` | `/es/orientation/#presentations` | a card per deck, by `order`: icon in the deck's `tone`, "About 60 minutes · 49 slides", the "Also:" line, title, summary, "Who it's for", the "Stays current" chips, the device's status line, the buttons |
+| GVR / RLV 101, "Presentations" | `/orientation/#presentations` | `/es/orientation/#presentations` | a card per deck, by `order` (a deck in another language than the page's says so: "Presentación en inglés", "Presentation in Spanish"): icon in the deck's `tone`, "About 60 minutes · 49 slides", the "Also:" line, title, summary, "Who it's for", the "Stays current" chips, the device's status line, the buttons |
 | One card | `/orientation/#pres-<id>` | `/es/orientation/#pres-<id>` | — |
-| The player | `/orientation/?present=<id>` (+ `&mode=…`, `#slide-N`) | `/es/orientation/?present=<id>` | the slides (English), the notes, Customize, presenter view; on `/es/` the controls are Spanish |
+| The player | `/orientation/?present=<id>` (+ `&mode=…`, `#slide-N`) | `/es/orientation/?present=<id>` | the slides and notes (in the deck's language), Customize, presenter view; the controls in the page's language |
 | "Print or save a copy" | under the cards | same | the four print modes for any deck |
 | "Reset all N to the original" (N: the number of decks) | under the cards, only after a change on that device | same | — |
 | "How presenting works" | `/orientation/#presenting` | `/es/orientation/#presenting` | keys, presenter view, versions, details, privacy, saving, offline, reset |
@@ -1573,7 +1606,7 @@ calendar, the weekly open meetings, the story lines), a change there shows up af
 | Portfolio | `/portfolio/`, the PowerPoint copy's card (none while the decks' `drive_title:` lines are comments) | `/es/portfolio/` | "Present on the web" → `/orientation/?present=<id>`, with "A fixed copy: the web version stays current and can be customized." |
 | The data file | `/orientation/presentations/<id>.json` | the same file | [3.21](#321-the-json-file) |
 | Offline | kept by "Save key pages for offline" | same | every deck's JSON file |
-| An event's own page | `/events/<event>/`, *Get ready* | `/es/events/<event>/` | "Start the presentation" and "About this presentation" for the deck of its kind (`eleventy/event-pages.js` `KINDS`, `deck:`): a writing workshop `writing-workshop`, a recording workshop `recording-workshop` (before November 2026 the writing one, as "The closest presentation"), an information workshop `information-workshop`, a GVR/RLV orientation `orientation-workshop`, the Grapevine Meeting `grapevine-meeting`; only while that file is here, and only for an event still to come |
+| An event's own page | `/events/<event>/`, *Get ready* | `/es/events/<event>/` | "Start the presentation" and "About this presentation" for the deck of its kind (`eleventy/event-pages.js` `KINDS`, `deck:`): a writing workshop `writing-workshop`, a recording workshop `recording-workshop` (before November 2026 the writing one, as "The closest presentation"), an information workshop `information-workshop`, a GVR/RLV orientation `orientation-workshop`, the Grapevine Meeting `grapevine-meeting`; an event held in Spanish, La Viña's Spanish deck of its kind instead (`deckEs`: a writing workshop `taller-de-escritura`, an orientation `orientacion-rlv`); only while that file is here, and only for an event still to come |
 
 **Not shown in**: the site search (it finds the GVR / RLV 101 page, never a deck or its slides), What's New, the RSS feed, the calendar feed (`/events.ics`), the monthly digest
 e-mail, `/status/` and the Actions run summary. (The PowerPoint copies are Drive files: they appear on
@@ -1627,7 +1660,7 @@ In the browser:
 | [`src/_data/presentations.js`](../src/_data/presentations.js) | `PRESENTATIONS_DIR`, `I18N_STRICT` | which folder is read; stop or warn |
 | [`src/pages/presentations-json.11ty.js`](../src/pages/presentations-json.11ty.js) | `permalink` | the JSON's address |
 | [`src/pages/orientation.njk`](../src/pages/orientation.njk) | `id="presentations"`, `o101-pres-card`, `set modes`, `data-pres-reset="all"`, `"orientation-workshop"` | the cards, the print buttons, Reset all, the "A longer workshop?" card |
-| [`src/assets/js/presentations-core.js`](../src/assets/js/presentations-core.js) | `var EN = {` | the English words the player writes on slides ("Current as of {date}", "Details to be confirmed", "Online on {platform}", the TIME line) |
+| [`src/assets/js/presentations-core.js`](../src/assets/js/presentations-core.js) | `var EN = {`, `var ES = {` | the words the player writes on slides and in the notes, in the deck's language (`words(lang)`): "Current as of {date}" / "Datos al {date}", "Details to be confirmed" / "Detalles por confirmar", "Online on {platform}", the TIME / TIEMPO line |
 | same | `var LIMIT =`, `var LIMITS =`, `ADD_LAYOUTS`, `LAYOUT_FIELDS` | default list lengths; size limits; what Customize → Add and → Edit offer |
 | same | `function current`, `function schedule`, `function agendaRows`, `function subst`, `function reconcile`, `function validateImport` | what is in the show; times; tokens; updated decks; imported files |
 | same | `function paperMeetings`, `function paperText`, `function nextMonthPlan`, `function startNextMonth`, `function undoNextMonth`, `function lastStart` | Agenda & notes: which meeting a text is for, the texts, Start next month and its Undo (kept in the deck's stored state as `prev`) |
@@ -1687,7 +1720,8 @@ on made-up offers. It has no chip.
 
 The fifth, the Grapevine Meeting (`grapevine-meeting.yml`, November 2026), was added this way, and so were the four
 after it, later in November 2026 (`welcome-panel-77.yml`, `booth-visit.yml`, `conference-prep.yml`,
-`recording-workshop.yml`).
+`recording-workshop.yml`), and so were La Viña's two Spanish decks (`taller-de-escritura.yml`,
+`orientacion-rlv.yml`, with `lang: "es"`: [3.23](#323-a-presentation-in-spanish)).
 
 1. Copy a deck (the small sample `tests/fixtures/presentations/sample-meeting.yml` is a good start) to
    `config/presentations/<new-id>.yml`. Set `id: "<new-id>"`, a new `order` (the next free one: with nine decks,
@@ -1698,7 +1732,7 @@ after it, later in November 2026 (`welcome-panel-77.yml`, `booth-visit.yml`, `co
 3. **`tests/test_presentations.py`**: add the id to `DECKS = (` (`test_the_decks` wants exactly these files, each
    with its own `order`).
 4. **`tests/test_presentations_core.py`**: search `{"orientation-workshop", "information-workshop",
-   "writing-workshop", "committee-meeting",` and add the id.
+   "writing-workshop", "committee-meeting",` and add the id (its real-deck test also takes every file of the folder).
 5. **`config/presentations/README.md`**: add the file to the table at the top, and to [3.1](#31-the-files) here.
    A test of its own that reads the deck (as `tests/test_presentations_welcome_visit_prep_recording.py` does) judges
    the committee's files: list it in `scripts/ops/gate_tests.py` `CONTENT_TESTS`.
@@ -1756,6 +1790,7 @@ See [Pages and code](pages-and-code.md) for the i18n files in general.
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations -v` | the decks (exactly the files `DECKS` names, each with its own `order`), and the checker itself |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_welcome_visit_prep_recording -v` | the four decks of November 2026: the checker, their versions' minutes add up exactly, notes on every slide each version shows, their sizes, cards and agenda times; their facts (the guest speakers' keys, the Area's GSR/DCM orientations, the booth's codes against `config/site.yml` `links:`, the Conference's blanks, the story lines); the build's loader and their JSON; and a recording workshop's page linking `recording-workshop` (the Code check only: it reads the committee's files) |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_price_follow_up -v` | the committee meeting's 2027 price follow-up: in the show from January 1 through March 31, 2027 (the build's numbering and the player, by the viewer's clock), in both versions, with the prices of the day (the Code check only) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_spanish -v` | La Viña's two Spanish decks: their language, Spanish notes, versions (the same as their English sources'), register and quotations; the checker's language rules; the build's Spanish facts and the player's Spanish words; the event pages held in Spanish linking them (the Fort Worth workshop of December 12, 2026). In a real browser: `tests/browser/test_spanish_decks.py` |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_build -v` | the build side: the JavaScript checker gives the same lines as the Python one; the sample decks use everything; the JSON's shape; the facts at fixed dates; the README lists every fallback (builds the sample decks in a temporary folder) |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
 | `.venv\Scripts\python.exe -m unittest tests.test_r12_u9_meeting -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_r12_u9_meeting_browser.py`) |

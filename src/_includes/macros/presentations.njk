@@ -9,8 +9,10 @@
                     panel, the presenter view's timer / clock / next slide, the Customize drawer (eight tabs — the
                     "Agenda & notes" one only for a deck with the chair's paperwork; their panels are drawn by the
                     script), the overview, the control bar and its two menus (Print · More),
-                    a live region and the toast. Every label in the page language; the slides inside are English
-                    (marked lang="en" by the script; "(en inglés)" on /es/). Areas/presentations.css (prefix gvp-).
+                    a live region and the toast. Every label in the page language; the slides inside are in the
+                    deck's language (marked by the script); after the deck's name and over its notes, the script shows
+                    the words for a deck in another language ("(en inglés)" on /es/, "(in Spanish)" on the English
+                    page: data-gvp-in). Areas/presentations.css (prefix gvp-).
       #gvp-icons    the Lucide icons the script puts on the buttons it makes (Move up, Edit, Print …)
       #gvp-config   JSON for the script: the page language, the site's base path and the decks' JSON folder (both
                     with the path prefix), the decks (id, titles, slide count, versions — for the status lines,
@@ -90,7 +92,7 @@
     <h2 id="gvp-dialog-title" class="sr-only" data-gvp-dialog-title>{{ "pres.dialog_label" | t(lang) }}</h2>
     <div class="gvp-progress" aria-hidden="true"><span data-gvp-bar></span></div>
     <div class="gvp-top">
-      <p class="gvp-top-title"><span data-gvp-short></span>{% if lang == "es" %} <span class="gvp-top-lang">{{ "pres.in_english" | t(lang) }}</span>{% endif %}</p>
+      <p class="gvp-top-title"><span data-gvp-short></span>{% for l in ["en", "es"] %}{% if l != lang %} <span class="gvp-top-lang" data-gvp-in="{{ l }}" hidden>{{ ("pres.in_english" if l == "en" else "pres.in_spanish") | t(lang) }}</span>{% endif %}{% endfor %}</p>
       <button type="button" class="gvp-btn" data-gvp-act="close" aria-label="{{ 'pres.close_label' | t(lang) }}" title="{{ 'pres.close' | t(lang) }} (Esc)">{% icon "x", "size-5" %}</button>
     </div>
     <div class="gvp-pvbar" data-gvp-pv hidden>
@@ -121,7 +123,7 @@
         </div>
         <section class="gvp-notes" data-gvp-notes hidden aria-labelledby="gvp-notes-h">
           <h3 id="gvp-notes-h" class="gvp-notes-h" data-gvp-notes-title>{{ "pres.notes_h" | t(lang) }}</h3>
-          {%- if lang == "es" %}<p class="gvp-notes-lang">{{ "pres.notes_en" | t(lang) }}</p>{% endif %}
+          {%- for l in ["en", "es"] %}{% if l != lang %}<p class="gvp-notes-lang" data-gvp-in="{{ l }}" hidden>{{ ("pres.notes_en" if l == "en" else "pres.notes_es") | t(lang) }}</p>{% endif %}{% endfor %}
           <div class="gvp-notes-body" data-gvp-notes-body lang="en" tabindex="0"></div>
         </section>
       </div>
@@ -159,7 +161,7 @@
       <button type="button" class="gvp-btn" data-gvp-act="prev" aria-label="{{ 'pres.prev' | t(lang) }}" title="{{ 'pres.prev' | t(lang) }} (←)">{% icon "chevron-left", "size-5" %}</button>
       <p class="gvp-count" data-gvp-count aria-hidden="true">– / –</p>
       <button type="button" class="gvp-btn" data-gvp-act="next" aria-label="{{ 'pres.next' | t(lang) }}" title="{{ 'pres.next' | t(lang) }} (→)">{% icon "chevron-right", "size-5" %}</button>
-      <p class="gvp-bar-title"><span data-gvp-short></span>{% if lang == "es" %} <span class="gvp-top-lang">{{ "pres.in_english" | t(lang) }}</span>{% endif %}</p>
+      <p class="gvp-bar-title"><span data-gvp-short></span>{% for l in ["en", "es"] %}{% if l != lang %} <span class="gvp-top-lang" data-gvp-in="{{ l }}" hidden>{{ ("pres.in_english" if l == "en" else "pres.in_spanish") | t(lang) }}</span>{% endif %}{% endfor %}</p>
       <button type="button" class="gvp-btn gvp-btn--text" data-gvp-act="notes" aria-pressed="false" title="{{ 'pres.notes_btn' | t(lang) }} (N)">{% icon "notebook-pen", "size-5" %}<span class="gvp-btn-label">{{ "pres.notes_btn" | t(lang) }}</span></button>
       <button type="button" class="gvp-btn gvp-btn--text" data-gvp-act="overview" aria-pressed="false" title="{{ 'pres.overview_btn' | t(lang) }} (O)">{% icon "layout-grid", "size-5" %}<span class="gvp-btn-label">{{ "pres.overview_btn" | t(lang) }}</span></button>
       <button type="button" class="gvp-btn gvp-btn--text" data-gvp-act="customize" aria-pressed="false" title="{{ 'pres.customize_btn' | t(lang) }} (C)">{% icon "sliders-horizontal", "size-5" %}<span class="gvp-btn-label">{{ "pres.customize_btn" | t(lang) }}</span></button>

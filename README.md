@@ -475,7 +475,8 @@ What the newer pages do:
   the welcome for Panel 77's new GVRs and RLVs, a booth or group visit built around QR codes, and getting ready for
   the General Service Conference (and, in the committee meeting's deck, the 2027 price follow-up, "New prices since
   January 1, 2027", from January 1 to March 31, 2027). An event's own page links the deck of its kind (a recording
-  workshop's: the Recording Workshop). The monthly committee meeting's deck also makes the
+  workshop's: the Recording Workshop), and La Viña's two presentations in Spanish
+  (its writing workshop and the orientation for new RLVs; an event held in Spanish links them). The monthly committee meeting's deck also makes the
   chair's paperwork — the agenda e-mail, a reminder, the draft notes and **Start next month** (Customize →
   **Agenda & notes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--notes)).
 - **Meetings** (`/meetings/`, renamed from *Committee meeting*; the old `/meeting/` address forwards there,

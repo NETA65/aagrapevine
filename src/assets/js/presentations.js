@@ -24,8 +24,10 @@
    clicker's Page Down too) puts it away, and so does a slide change from the other window.
    Accessibility: a modal dialog (the page behind is inert, focus stays inside and goes back to the opener), every
    control labelled in the page language, a polite live region ("Slide 3 of 48: <title>"), each slide a labelled
-   region marked lang="en" (the content is English; a slide written in Spanish says lang="es", a {lang:es} span
-   too), English titles inside the Spanish controls marked lang="en". The small slide pictures (overview, the
+   region marked with the deck's language (lang="en"; a Spanish deck's lang="es"; a slide written in Spanish in an
+   English deck says lang="es", a {lang:es} span too), titles in another language than the page's marked with
+   theirs, and the words the player writes on the slides, in the notes and on paper in the deck's language
+   (presentations-core.js words). The small slide pictures (overview, the
    presenter view's next slide) are inert: nothing in them takes the focus.
    Storage: localStorage "gv-presentations-v1" (the presenter's version, presentations-core.js) and
    "gv-presentations-view" (notes open, notes size) — every read and write in try/catch: without storage it still
@@ -113,6 +115,17 @@
     Object.keys(keys).forEach(function (k) { if (typeof STRINGS[keys[k]] === "string") out[k] = STRINGS[keys[k]]; });
     return out;
   })();
+  /** The deck's language ("en" or "es": the language its slides and notes are written in), and the words the player
+   *  writes on its slides and in its notes in that language (presentations-core.js EN / ES). */
+  function deckLang(deck) { return deck && deck.lang === "es" ? "es" : "en"; }
+  function W(deck) { return G.words(deckLang(deck)); }
+  // what the player writes on a printed page, in the deck's language
+  var PRINT_WORDS = {
+    en: { slide_of: "Slide {n} of {total}", page_of: "Page {n} of {total}", script: "Speaker script", slides: "{n} slides",
+      slides_about: "{n} slides, about {min} minutes", about: /\(about [^)]*\)/i },
+    es: { slide_of: "Diapositiva {n} de {total}", page_of: "Página {n} de {total}", script: "Guion de quien presenta",
+      slides: "{n} diapositivas", slides_about: "{n} diapositivas, unos {min} minutos", about: /\(un[oa]s [^)]*\)/i },
+  };
   function reducedMotion() {
     try { return window.GV && window.GV.reducedMotion ? window.GV.reducedMotion() : window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
   }
@@ -393,7 +406,7 @@
         root.classList.add("has-qr");
         fit.appendChild(qrFigure(s.data, ""));
       }
-      if (L === "title" && cur.deck.as_of) root.appendChild(el("p", "gvp-s-asof", G.fmt(G.EN.current_as_of, { date: cur.deck.as_of })));
+      if (L === "title" && cur.deck.as_of) root.appendChild(el("p", "gvp-s-asof", G.fmt(W(cur.deck).current_as_of, { date: cur.deck.as_of })));
       return root;
     }
     if (L === "section") {
@@ -401,7 +414,7 @@
       // the part's number in its circle (a section the presenter added has none until they type one: no circle)
       if (num(s.number).trim()) {
         var badge = el("p", "gvp-s-num");
-        badge.appendChild(el("span", "sr-only", "Part "));
+        badge.appendChild(el("span", "sr-only", deckLang(cur.deck) === "es" ? "Parte " : "Part "));
         badge.appendChild(document.createTextNode(num(s.number)));
         sec.appendChild(badge);
       }
@@ -416,7 +429,7 @@
     // a content slide: eyebrow + title, the layout's body, the takeaway and the sources line, the footer
     var head = el("header", "gvp-s-head");
     // a pause slide (style "break") goes without its part's eyebrow, as the decks draw it; one of its own stays
-    var partBrow = s.part ? "Part " + s.part.n + " · " + s.part.title : "";
+    var partBrow = s.part ? (deckLang(cur.deck) === "es" ? "Parte " : "Part ") + s.part.n + " · " + s.part.title : "";
     if (s.eyebrow && !(tstyle === "break" && (s.eyebrow === partBrow || s.eyebrow === cur.deck.eyebrow))) head.appendChild(brow(s.eyebrow));
     head.appendChild(title);
     fit.appendChild(head);
@@ -648,10 +661,11 @@
     wrap.appendChild(main);
     var card = el("div", "gvp-s-timecard");
     card.appendChild(el("p", "gvp-s-tc-n", num(s.duration)));
-    card.appendChild(el("p", "gvp-s-tc-u", Number(s.duration) === 1 ? G.EN.minute : G.EN.minutes));
+    var w = W(ctx.deck);
+    card.appendChild(el("p", "gvp-s-tc-u", Number(s.duration) === 1 ? w.minute : w.minutes));
     var mats = Array.isArray(s.materials) ? s.materials : s.materials ? [s.materials] : [];
     if (mats.length) {
-      card.appendChild(el("p", "gvp-s-tc-h", G.EN.you_need));
+      card.appendChild(el("p", "gvp-s-tc-h", w.you_need));
       card.appendChild(list(mats, ctx, {}));
     }
     wrap.appendChild(card);
@@ -679,9 +693,9 @@
   function credits(body, s, ctx) {
     body.appendChild(list(s.sources, ctx, {}));
     if (s.note) body.appendChild(richInto(el("p", "gvp-s-note"), s.note, ctx));
-    // the standard lines, only when the slide does not already say it (decks/kit.py credits())
-    var said = /not an official aa grapevine/i.test(JSON.stringify([s.sources, s.note]));
-    if (s.disclaimer && !said) G.EN.disclaimer.forEach(function (l) { body.appendChild(el("p", "gvp-s-note", l)); });
+    // the standard lines, only when the slide does not already say it (decks/kit.py credits()), in the deck's language
+    var said = /not an official aa grapevine|no es una presentaci[oó]n oficial de aa grapevine/i.test(JSON.stringify([s.sources, s.note]));
+    if (s.disclaimer && !said) W(ctx.deck).disclaimer.forEach(function (l) { body.appendChild(el("p", "gvp-s-note", l)); });
   }
   function flow(s, ctx) {
     var steps = Array.isArray(s.steps) ? s.steps : [];
@@ -711,7 +725,7 @@
   function seeLine(url, deck) {
     var p = el("p", "gvp-live-none");
     var shown = G.showUrl(url || "", deck && deck.site && deck.site.host);
-    var parts = G.EN.none.split("{url}");
+    var parts = W(deck).none.split("{url}");
     p.appendChild(document.createTextNode(parts[0]));
     if (url) {
       var a = el("a", "", shown);
@@ -727,13 +741,15 @@
     var t = Date.parse(iso || "");
     return isFinite(t) && t + (slack || 0) < now;
   }
-  /** After an English gloss that is a machine translation (a row's gloss_machine), as the site marks one. */
-  function autoMark() { return el("small", "gvp-auto", " (" + G.EN.auto_translated + ")"); }
+  /** After an English gloss that is a machine translation (a row's gloss_machine), as the site marks one (in the
+   *  deck's language). */
+  function autoMark(deck) { return el("small", "gvp-auto", " (" + W(deck).auto_translated + ")"); }
   function liveBlock(s, cur, ctx) {
     var d = s.data || {};
     var now = cur.nowMs;
     var box = el("div", "gvp-live gvp-live--" + String(s.kind || "x").replace(/[^a-z-]/g, ""));
-    var EN = G.EN;
+    // the words of the deck's language: its table heads, "Details to be confirmed", "Meeting code" …
+    var EN = W(cur.deck);
     var opts = s.options || {};
     // every row the build knows, less the past ones, within the slide's limits (presentations-core.js liveRows)
     var rowsNow = function () { return G.liveRows(s.kind, d, opts, now); };
@@ -765,7 +781,7 @@
           theme.appendChild(th);
           if (r.gloss) {
             theme.appendChild(document.createTextNode(" (" + r.gloss + ")"));
-            if (r.gloss_machine === true) theme.appendChild(autoMark());
+            if (r.gloss_machine === true) theme.appendChild(autoMark(cur.deck));
           }
           var cells = [r.issue || "", { node: theme }, r.due_label || ""];
           return (both ? [r.pub === "lv" ? EN.lv : EN.gv] : []).concat(cells);
@@ -876,7 +892,7 @@
           col.appendChild(th2);
           if (p[1].gloss) {
             var gl = col.appendChild(el("p", "gvp-s-gloss", p[1].gloss));
-            if (p[1].gloss_machine === true) gl.appendChild(autoMark());
+            if (p[1].gloss_machine === true) gl.appendChild(autoMark(cur.deck));
           }
           two.appendChild(col);
         });
@@ -1066,13 +1082,21 @@
     P.deck = deck;
     var rec = prepare(deck);
     var short = deck.short || deck.title;
-    // the deck's (English) name inside the page language's words: "<title> (presentación)", marked lang="en"
+    // the deck's name inside the page language's words: "<title> (presentación)", marked with the deck's language
+    // (lang="en" on /es/ for an English deck, lang="es" on the English page for a Spanish one)
+    var dl = deckLang(deck);
     var titleEl = q("[data-gvp-dialog-title]");
-    if (titleEl) tInto(clear(titleEl), "pres.dialog_title", { title: deck.title }, ["title"]);
+    if (titleEl) tInto(clear(titleEl), "pres.dialog_title", { title: deck.title }, ["title"], dl);
     qa("[data-gvp-short]").forEach(function (n) {
       n.textContent = short;
-      if (LANG !== "en") n.setAttribute("lang", "en");
+      if (LANG !== dl) n.setAttribute("lang", dl);
+      else n.removeAttribute("lang");
     });
+    // "(en inglés)" / "(in Spanish)" after the name and "The notes are in …" over the notes: only for a deck in
+    // another language than the page's (macros/presentations.njk prints one of each per other language)
+    qa("[data-gvp-in]").forEach(function (n) { n.hidden = n.getAttribute("data-gvp-in") !== dl || dl === LANG; });
+    var nb = q("[data-gvp-notes-body]");
+    if (nb) nb.setAttribute("lang", dl);
     // "Agenda & notes": only for a deck with the chair's paperwork (the committee meeting)
     qa('[data-gvp-tab="paper"]').forEach(function (t) { t.hidden = !hasPaper(); });
     P.cur = G.current(deck, STATE, "", Date.now());
@@ -1426,9 +1450,9 @@
       richInto(p, l.text, ctx);
       target.appendChild(p);
     });
-    var tl = G.timeLine(e);
+    var tl = G.timeLine(e, deckLang(cur.deck));
     if (tl) {
-      var m = /^(TIME:)\s*(.*)$/.exec(tl);
+      var m = /^(TIME:|TIEMPO:)\s*(.*)$/.exec(tl);
       var p2 = el("p", "gvp-note gvp-timeline");
       p2.appendChild(el("strong", "gvp-note-label", m ? m[1] : ""));
       p2.appendChild(document.createTextNode(" " + (m ? m[2] : tl)));
@@ -2442,7 +2466,7 @@
     c.value = value;
     if (multi) c.rows = Math.min(12, Math.max(2, String(value).split("\n").length + 1, Math.ceil(String(value).length / 46)));
     c.setAttribute("spellcheck", "true");
-    c.setAttribute("lang", "en");
+    c.setAttribute("lang", deckLang(P.deck));
     return c;
   }
   function panelEdit(p) {
@@ -2781,7 +2805,7 @@
       if (!e.slide.facilitator && e.shown) bs.appendChild(badge(T("pres.b_in_show", { n: e.n })));
       if (bs.children.length) card.appendChild(bs);
       // a divider's notes are the section's own guidance ("Read these pages a week before …"): shown right here
-      if (divider) card.appendChild(renderNotes(attrs(el("div", "gvp-prep-notes"), { lang: "en" }), e, P.cur, {}));
+      if (divider) card.appendChild(renderNotes(attrs(el("div", "gvp-prep-notes"), { lang: deckLang(P.deck) }), e, P.cur, {}));
       if (e.slide.layout === "bullets" && e.slide.checklist) card.appendChild(checklist(e));
       var acts = el("div", "gvp-prep-acts");
       var view = btn("gvp-pill gvp-pill--sm", T("pres.view"), { icon: "eye" });
@@ -2830,7 +2854,7 @@
       });
       lab.appendChild(cb);
       var words = richInto(el("span", "gvp-check-t"), text, ctx);
-      words.setAttribute("lang", e.slide.lang || "en");
+      words.setAttribute("lang", e.slide.lang || deckLang(P.deck));
       lab.appendChild(words);
       li.appendChild(lab);
       return li;
@@ -3543,13 +3567,14 @@
     root.id = "gvp-print";
     // not hidden from assistive technology: off the screen it is visibility:hidden (nothing to hear), and the
     // print window builds the saved document's headings, lists and paragraphs from it
-    root.setAttribute("lang", "en");
+    root.setAttribute("lang", deckLang(cur.deck));
     var style = el("style");
     style.id = "gvp-print-style";
     style.textContent = pageCss(cur.deck.title);
     document.head.appendChild(style);
     var N = cur.shown.length;
-    var preset = cur.preset && cur.preset.label ? cur.preset.label.en || "" : "";
+    var PW = PRINT_WORDS[deckLang(cur.deck)];
+    var preset = cur.preset && cur.preset.label ? cur.preset.label[deckLang(cur.deck)] || cur.preset.label.en || "" : "";
     if (mode === "slides") {
       cur.shown.forEach(function (e) {
         var pg = el("div", "gvp-pp gvp-pp--slide");
@@ -3559,10 +3584,10 @@
     } else if (mode === "notes") {
       cur.shown.forEach(function (e) {
         var pg = el("div", "gvp-pp gvp-pp--notes");
-        pg.appendChild(printHead(cur, G.fmt("Slide {n} of {total}", { n: e.n, total: N })));
+        pg.appendChild(printHead(cur, G.fmt(PW.slide_of, { n: e.n, total: N })));
         pg.appendChild(slideBox(e, cur, "gvp-pp-slide"));
         var notes = el("div", "gvp-pp-notes");
-        notes.setAttribute("lang", "en");
+        notes.setAttribute("lang", deckLang(cur.deck));
         renderNotes(notes, e, cur, {});
         pg.appendChild(notes);
         root.appendChild(pg);
@@ -3572,7 +3597,7 @@
       var pages = Math.ceil(N / 3);
       for (var pgi = 0; pgi < pages; pgi++) {
         var pg2 = el("div", "gvp-pp gvp-pp--handout");
-        pg2.appendChild(printHead(cur, G.fmt("Page {n} of {total}", { n: pgi + 1, total: pages })));
+        pg2.appendChild(printHead(cur, G.fmt(PW.page_of, { n: pgi + 1, total: pages })));
         cur.shown.slice(pgi * 3, pgi * 3 + 3).forEach(function (e) {
           var row = el("div", "gvp-ho-row");
           row.appendChild(slideBox(e, cur, "gvp-ho-slide"));
@@ -3586,9 +3611,9 @@
       head.appendChild(el("h1", "", cur.deck.title));
       // the length once: a version label that gives it ("Full workshop (about 90 minutes)") is followed by the slide
       // count only, never by a second, computed length that can differ by a minute or two
-      var lenInLabel = /\(about [^)]*\)/i.test(preset || "");
-      head.appendChild(el("p", "", "Speaker script · " + [preset, lenInLabel ? G.fmt("{n} slides", { n: N })
-        : G.fmt("{n} slides, about {min} minutes", { n: N, min: Math.max(1, Math.round(cur.total)) })].filter(Boolean).join(" · ")));
+      var lenInLabel = PW.about.test(preset || "");
+      head.appendChild(el("p", "", PW.script + " · " + [preset, lenInLabel ? G.fmt(PW.slides, { n: N })
+        : G.fmt(PW.slides_about, { n: N, min: Math.max(1, Math.round(cur.total)) })].filter(Boolean).join(" · ")));
       root.appendChild(head);
       cur.shown.forEach(function (e) {
         var item = el("section", "gvp-sc-item");
@@ -3596,7 +3621,7 @@
         richInto(h, e.slide.title, ctxFor(cur, "slide"));
         item.appendChild(h);
         var notes = el("div", "gvp-pp-notes");
-        notes.setAttribute("lang", "en");
+        notes.setAttribute("lang", deckLang(cur.deck));
         renderNotes(notes, e, cur, {});
         item.appendChild(notes);
         root.appendChild(item);

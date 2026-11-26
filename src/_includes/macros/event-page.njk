@@ -117,8 +117,9 @@
       <h3 id="evp-deck-h" class="h-card mt-2 text-balance">{{ p.deck.title }}</h3>
       {% if p.deck.summary %}<p class="mt-2 text-sm leading-relaxed text-muted">{{ p.deck.summary }}</p>{% endif %}
       {% if p.deck.minutes %}<p class="mt-2 inline-flex items-center gap-1.5 text-sm text-muted">{% icon "clock", "size-4 shrink-0 text-faint" %}{{ "evpage.sec.deck_minutes" | t(lang, { n: p.deck.minutes }) }}</p>{% endif %}
-      {#- (the slides are in English, as /orientation/'s card says on a page in another language) #}
-      {%- if lang != "en" %}<p class="mt-2"><span class="badge-muted">{% icon "languages", "size-3" %} {{ "orientation.pres_english" | t(lang) }}</span></p>{% endif %}
+      {#- (the slides' language where it isn't the page's, as /orientation/'s card says it: "Presentación en inglés",
+          "Presentation in Spanish" for La Viña's Spanish decks) #}
+      {%- if (p.deck.lang or "en") != lang %}<p class="mt-2"><span class="badge-muted">{% icon "languages", "size-3" %} {{ ("orientation.pres_spanish" if p.deck.lang == "es" else "orientation.pres_english") | t(lang) }}</span></p>{% endif %}
       <div class="evp-btns">
         <a class="btn-primary btn-sm" href="{{ p.deck.href }}">{% icon "play", "size-4" %} {{ "evpage.cta.start" | t(lang) }}</a>
         <a class="btn-secondary btn-sm" href="{{ p.deck.card }}">{% icon "info", "size-4" %} {{ "evpage.sec.deck_card" | t(lang) }}</a>

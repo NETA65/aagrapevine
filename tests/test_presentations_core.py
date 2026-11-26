@@ -1026,7 +1026,8 @@ class Wording(unittest.TestCase):
 
 
 class RealDecks(unittest.TestCase):
-    """The committee's decks (config/presentations/), shaped by the build's own loader."""
+    """The committee's decks (config/presentations/: the English ones and La Viña's Spanish ones), shaped by the
+    build's own loader."""
 
     @classmethod
     def setUpClass(cls):
@@ -1086,9 +1087,11 @@ class RealDecks(unittest.TestCase):
             report[deck.id] = r;
           }
           out(report);""", needs_modules=True)
-        self.assertEqual(set(r), {"orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting",
-                                  "grapevine-meeting", "welcome-panel-77", "booth-visit", "conference-prep",
-                                  "recording-workshop"})
+        # every deck of the folder (the English ones and La Viña's Spanish ones among them)
+        self.assertEqual(set(r), {p.stem for p in (ROOT / "config" / "presentations").glob("*.yml")})
+        self.assertLessEqual({"orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting",
+                              "grapevine-meeting", "welcome-panel-77", "booth-visit", "conference-prep", "recording-workshop",
+                              "taller-de-escritura", "orientacion-rlv"}, set(r))
         for deck, rep in r.items():
             with self.subTest(deck=deck):
                 self.assertEqual(rep["errors"], [])

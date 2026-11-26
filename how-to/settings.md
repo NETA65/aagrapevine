@@ -1552,7 +1552,7 @@ update* still publishes it:
 | `tests/test_orientation.py` | 6 sessions, 5–8 minutes, lengths, questions, placeholders, wording, links |
 | `tests/test_history.py` | Exactly 40 milestones, oldest first, wording, official links |
 | `tests/test_expenses_page.py` | Ids, types, the 21 standard categories, `irs_charity` |
-| `tests/test_presentations.py`, `tests/test_presentations_core.py` | Exactly the decks `DECKS` names, each passing the checker |
+| `tests/test_presentations.py`, `tests/test_presentations_core.py` | Exactly the decks of `config/presentations/` (English and La Viña's Spanish ones), each passing the checker |
 | `tests/test_r12_u6_newcomers.py` (class `RealSettings`) | `links: aa_find`, `aa_is_aa_for_you`, `aa_meeting_guide` on www.aa.org, each `_es` twin the same page under `/es/`; the *New to AA?* offices are exactly the `meetings: feeds` offices with `in_area: true`, Alcohólicos Anónimos Dallas first on `/es/` |
 | `tests/test_r12_u5_gvr.py` (class `OfficeAddresses`) | `links: gvr_office_email` and `rlv_office_email` are e-mail addresses (any domain) |
 | `tests/test_r12_u9_meeting.py` (classes `RealDeck`, `Texts`, `NextMonth`) | The committee meeting deck's `paperwork:` block passes the checker, its texts word for word, and what *Start next month* clears and keeps ([presentations.md](presentations.md#322-the-chairs-paperwork-agenda--notes)) |

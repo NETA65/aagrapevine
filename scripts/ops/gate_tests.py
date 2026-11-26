@@ -218,7 +218,7 @@ CONTENT_TESTS: dict[str, str] = {
     "test_presentations.PresentationFiles.test_every_deck":
         "config/presentations: every deck passes the checker",
     "test_presentations.PresentationFiles.test_the_decks":
-        "config/presentations: exactly the decks it names, each with its own order",
+        "config/presentations: the decks of the folder (La Viña's two Spanish ones among them), each with its own order",
     "test_presentations.PresentationFiles.test_the_grapevine_meeting_names_what_it_never_quotes":
         "config/presentations/grapevine-meeting.yml: the Statement of Purpose named, never quoted; no deck says "
         "'Grapevine meetings'",
@@ -237,6 +237,14 @@ CONTENT_TESTS: dict[str, str] = {
     "test_presentations_price_follow_up.PriceFollowUp.":
         "config/presentations/committee-meeting.yml: the 2027 price follow-up shown from January 1 through March 31, "
         "2027, in both versions, with the prices of the day",
+    "test_presentations_spanish.SpanishDecks.":
+        "config/presentations: La Viña's two Spanish decks — their language, Spanish notes, versions, register, contacts "
+        "and quotations",
+    "test_presentations_spanish.SpanishBuild.":
+        "config/presentations and config/site.yml: La Viña's Spanish decks as built, their facts in Spanish",
+    "test_presentations_spanish.SpanishEvents.":
+        "content/events (the Fort Worth workshop of December 12, 2026) and config/presentations: a workshop held in "
+        "Spanish links La Viña's Spanish deck",
     "test_r12_u9_meeting.RealDeck.":
         "config/presentations/committee-meeting.yml: its paperwork passes the checker; the notes' and the reminder's "
         "wording; what its Start next month clears and keeps",

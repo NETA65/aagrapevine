@@ -2,7 +2,7 @@
 
 The presentations on the GVR / RLV 101 page (`/orientation/`, "Presentations": our workshops, our two monthly
 meetings — the committee meeting and the Grapevine Meeting —, the welcome for new reps, a booth or group visit and
-getting ready for the Conference) are made from the files in this folder: **one file per presentation**, written in
+getting ready for the Conference, and La Viña's two presentations in Spanish) are made from the files in this folder: **one file per presentation**, written in
 plain text (YAML). The site turns each file into a presentation that opens in a pop-up player, with speaker notes, a
 presenter view, versions, printing, and the presenter's own changes kept on their own device.
 
@@ -17,6 +17,8 @@ presenter view, versions, printing, and the presenter's own changes kept on thei
 | `booth-visit.yml` | Grapevine and La Viña: Scan, Read, Give, Write (a booth or group visit built around QR codes: 10 minutes, or 5) |
 | `conference-prep.yml` | Getting Ready for the Conference: Grapevine and La Viña (February–March: 45 minutes, or 30) |
 | `recording-workshop.yml` | Grapevine and La Viña Recording Workshop (60 minutes) |
+| `taller-de-escritura.yml` | Taller de escritura de La Viña — the writing workshop **in Spanish**, for La Viña (no PowerPoint copy) |
+| `orientacion-rlv.yml` | Orientación para nuevos RLV — the orientation **in Spanish**, for Representantes de La Viña (no PowerPoint copy) |
 
 The last four were added in November 2026 and have no PowerPoint copy (no `drive_title`). The committee meeting's
 deck also has a **2027 price follow-up**, "New prices since January 1, 2027" (`prices-since-january`, a block of its
@@ -24,18 +26,25 @@ own just before "Special offers"): the past tense of the heads-up, with the pric
 January 1 through March 31, 2027 (`show_from` / `show_until`), in both versions. In January the heads-up is in the
 show too, until January 31: the chair keeps one of the two.
 
-The content of the presentations stays in **English**. On the Spanish page the buttons and the cards are in
-Spanish, and each presentation is marked "(en inglés)".
+**Each presentation is written in one language**, its `lang`: English (`"en"`) for most of them, Spanish (`"es"`)
+for La Viña's two. On the Spanish page the buttons and the cards are in Spanish, and each English presentation is
+marked "(en inglés)" ("Presentación en inglés" on its card); on the English page each Spanish one is marked "(in
+Spanish)" ("Presentation in Spanish"). A Spanish presentation is Spanish all through: its slides, its notes, the
+words the player writes on them ("Datos al …", "Parte 1 · …", the TIEMPO line) and the day's facts (see
+[A presentation in Spanish](#a-presentation-in-spanish)).
 
 **Each event's own page links its presentation** (since round 37, November 2026): in its *Get ready* part, "Start
 the presentation" (`/orientation/?present=<id>`, the player opens at once) and "About this presentation" (its card,
 `/orientation/#pres-<id>`). A writing workshop's page links `writing-workshop`; a recording workshop's
 `recording-workshop` (since November 2026; before it, the writing workshop's, as "The closest presentation"); an
 information workshop's `information-workshop`; a GVR/RLV orientation's `orientation-workshop`; the Grapevine
-Meeting's pages `grapevine-meeting`. (The welcome, the booth visit and the Conference session are no kind's own: they
+Meeting's pages `grapevine-meeting`. An event **held in Spanish** (La Viña's: tagged `la-vina`, or held by
+La Viña) links the Spanish presentation of its kind instead: a writing workshop `taller-de-escritura`, an
+orientation `orientacion-rlv` (`deckEs` in the same table) — the Fort Worth writing workshop of December 12, 2026,
+for one. (The welcome, the booth visit and the Conference session are no kind's own: they
 are opened from their cards.) The kind of event decides
 (`eleventy/event-pages.js` `EVENT_KINDS`; a `content/events` file can set it with `type:`). A presentation is linked
-only while its file is here: renaming or removing a file takes its link off those pages by itself. (The rows of
+only while its file is here: renaming or removing a file takes its link off those pages by itself (an event held in Spanish then links the English one). (The rows of
 events inside the presentations are not changed: they still link the event's own page elsewhere, else its card on
 the Events page.)
 
@@ -121,7 +130,7 @@ texts). A value that starts with `{` must be in quotes, or the file cannot be re
 ```yaml
 id: "information-workshop"          # the file's name, without .yml
 order: 2                            # its place among the cards on /orientation/ (1, 2 …; each its own)
-lang: "en"                          # always "en"
+lang: "en"                          # "en", or "es" for a presentation written in Spanish (La Viña's)
 title: "Grapevine and La Viña Information Workshop"
 short: "Information Workshop"       # the short name in the player's header
 eyebrow: "Information Workshop"     # the small line above the titles before the first part
@@ -139,7 +148,7 @@ fillins: [ … ]                      # the presenter's blanks (below)
 slides: [ … ]                       # the slides (below)
 ```
 
-The Spanish texts are written by hand (Latin-American Spanish, "tú").
+The Spanish texts are written by hand (Latin-American Spanish, "tú"; "ustedes" to a room).
 
 ### Versions (`presets`)
 
@@ -202,7 +211,7 @@ new slide for them.
 | `layout` | the kind of slide (the list below) |
 | `title` | the slide's title |
 | `eyebrow` | the small line above the title. Left out: the current part ("Part 3 · Inside an issue …"), or the file's `eyebrow` before the first part — except on a `qa` or `credits` slide, which then has none (as the PowerPoint drew them; write one to show one, like "Closing"). Write it in normal letters; the player shows it in capitals |
-| `notes` | the speaker notes: one paragraph per line, each starting with its label — `SAY:` `DO:` `ASK:` `IF TIME, ASK:` `TIP:` `FACILITATOR TIP:` `SOURCES:` `TRANSITION:` `WATCH FOR:` … At least 25 words. No `TIME:` line: give `minutes` instead |
+| `notes` | the speaker notes: one paragraph per line, each starting with its label — `SAY:` `DO:` `ASK:` `IF TIME, ASK:` `TIP:` `FACILITATOR TIP:` `SOURCES:` `TRANSITION:` `WATCH FOR:` … (in a Spanish presentation `DI:` `HAZ:` `PREGUNTA:` `CONSEJO:` `PARA QUIEN FACILITA:` `FUENTE:` `TRANSICIÓN:` …). At least 25 words. No `TIME:` (or `TIEMPO:`) line: give `minutes` instead |
 | `minutes` | how long the slide takes (0.25 to 30; a minute and a quarter is `1.25`). The player writes the timing line of the notes ("about 2 minutes; you should be at about 0:08") for the version being shown |
 | `version_minutes` | how long the slide takes in one version, when that differs: `{ short: 7 }` (0.25 to 30, a version's `id`). That version's schedule, timing lines and the checker's sums use it |
 | `version_fields` | the slide's own text in one version: `{ short: { title: "Today's plan (about 60 minutes)" } }` — any field of its layout (below), its `title`, `eyebrow`, `source` or `takeaway` (an activity's `duration`, a break's `body` …). Not `kind`, `options` or `qr`, which are the same in every version. The checker holds the slide as each version shows it to the same rules. A presenter's own change (Customize → Edit) of a field that has words of its own in any version stays in the version they changed it in: it is stored for that version alone, so the other versions keep their words (typing the version's own words back removes the change; "Reset this slide to the original" removes the changes of every version). A change of any other field, and of `minutes`, applies to every version |
@@ -212,7 +221,7 @@ new slide for them.
 | `handout` | `true`: a page printed for the participants — a `facilitator` page (Prepare → Print), or a slide that is shown AND printed |
 | `print` | on a `handout` page: `"portrait"` to print it upright. Left out: it prints `"landscape"` (sideways) |
 | `accent` | a colour: `gv` `lv` `vine` `grape` `navy`. On a `section` slide, the colour of its part: the slides after it take it. On any other slide, the colour of that slide only |
-| `lang` | `"es"`: a slide written in Spanish (a handout, an announcement to read aloud); the player marks it as Spanish. Left out: English |
+| `lang` | `"es"`: a slide written in Spanish in an English presentation (a handout, an announcement to read aloud); the player marks it as Spanish. Left out: the presentation's own `lang` |
 | `source` | the small "Sources: …" line at the bottom |
 | `takeaway` | the highlighted box at the bottom |
 | `version_notes` | notes shown (highlighted) only in one version: `{ late: "RUNNING LATE: …" }`. For a line of the notes that only some versions need, or that some leave out, see `{only:…}` below |
@@ -392,13 +401,49 @@ Anyone can open the notes, so they follow the same rules as the slides.
   itself publishes (better: their `{live:…}` keys).
 - **Attraction rather than promotion**: describe, never sell — no "subscribe now", "hurry", "last chance", "before
   prices go up".
-- Keep the line **"Not an official AA Grapevine, Inc. presentation"** and the credit line under every quotation
-  and the Preamble, exactly as in the decks. No logos, covers or artwork of NETA 65, AA, Grapevine or La Viña.
+- Keep the line **"Not an official AA Grapevine, Inc. presentation"** (in a Spanish presentation **"No es una
+  presentación oficial de AA Grapevine, Inc."**) and the credit line under every quotation and the Preamble, exactly
+  as in the decks. No logos, covers or artwork of NETA 65, AA, Grapevine or La Viña.
 - The site's words: "document", never "PDF" — not even "Save as PDF": the print window can "save it as a
   document"; "stays current", never "automatically"; a session, workshop, facilitator, presenter or review
   questions — AA shares experience, so never lesson, course, class, training, trainer, quiz, teach or taught ("what
   my sponsor shared with me", "showed me"); GVR and RLV service is a "position", never a "job". A word-for-word
   quotation may keep its own words.
+
+## A presentation in Spanish
+
+`taller-de-escritura.yml` and `orientacion-rlv.yml` are La Viña's: written by hand in Spanish for a Spanish-speaking
+room, from the English writing workshop and orientation (the same parts, versions, timing and slide ids where a
+slide matches), not translated line by line. What is different in a file with `lang: "es"`:
+
+- **Everything is in Spanish**: titles, slides, notes (with Spanish labels: `DI:`, `HAZ:`, `PREGUNTA:`, `CONSEJO:`,
+  `TRANSICIÓN:` …), and the line "No es una presentación oficial de AA Grapevine, Inc.". A few English words inside
+  Spanish text are marked `{lang:en}…{/lang}` (a Grapevine section's name, an exercise's English prompt for a
+  bilingual room). `card`, `presets` and `fillins` keep their `en` and `es` texts, as in every file. The register is
+  the Spanish site's: "tú" to one person (the slides' instructions, the presenter in the notes), "ustedes" to the
+  room — never "usted" or "vosotros".
+- **The player writes its own words in Spanish**: "Datos al 26 de noviembre de 2026" on the title slide, "Parte 1 ·
+  …" over a part's slides, the notes' TIEMPO line, "(no está en esta versión)" for `{slide:…}`, a live list's heads
+  ("Edición", "Tema", "Fecha límite") and the time card's "minutos".
+- **The day's facts are in Spanish**: every `{live:…}` key and every `live` slide gives its dates, times, issues and
+  offers as the Spanish pages do — "cada tercer miércoles del mes", "7:00–8:00 p. m., hora del Centro", "miércoles,
+  16 de diciembre de 2026", "Noviembre–Diciembre 2026 · La alegría de vivir" — and La Viña's themes come without their
+  English gloss. Grapevine's themes and book titles stay as Grapevine writes them. A fact with nothing to say says
+  where to look in Spanish: "consulta la página de Reuniones", "consulta los temas de La Viña en aalavina.org", "por
+  anunciar" … (`FALLBACKS_ES` in `eleventy/filters/presentations.js`, the twin of the table's last column). Its
+  links go to the Spanish pages (`/es/contribute/#deadlines`).
+- **Quotations**: only a Spanish text the committee has word for word (the Preamble from the Libro de trabajo de La
+  Viña, the Responsibility Statement from the Manual del RLV), with its credit line. An English deck's A.A.W.S.
+  quotation with no Spanish text here becomes a slide that says the same in our own words, with its source named
+  ("en nuestras palabras").
+- **Facts the English decks do not give for La Viña are not guessed**: how La Viña prints a writer's name or edits a
+  story — the notes say to check aalavina.org. A phone number or an e-mail address is one the site or the other
+  decks already give (`preguntas@aagrapevine.org`, `manuscritoslv@aagrapevine.org`, (800) 640-8781 …).
+- The presenter's service position in Spanish is the blank `puesto`, shared by the Spanish presentations (the
+  English ones have `presenter`); the first name is shared by all.
+- Check them like the others: `tests\test_presentations.py config\presentations\taller-de-escritura.yml`; and
+  `python -m unittest tests.test_presentations_spanish -v` (both decks, their language, notes, versions and facts, and
+  the event pages that link them).
 
 ## Changing a presentation
 
@@ -412,6 +457,6 @@ Anyone can open the notes, so they follow the same rules as the slides.
 - Then run the checker, and have a look at `/orientation/` once the site is rebuilt.
 
 How it is built (for whoever maintains the site): `src/_data/presentations.js` reads and checks these files (the
-`presentations` list the page uses), `eleventy/filters/presentations.js` adds the day's facts, and
+`presentations` list the page uses), `eleventy/filters/presentations.js` adds the day's facts (in the deck's `lang`), and
 `src/pages/presentations-json.11ty.js` writes one file per presentation, `/orientation/presentations/<id>.json`,
 which the player opens.
