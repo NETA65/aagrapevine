@@ -275,8 +275,8 @@ class ReadAloudControls(unittest.TestCase):
 
     def test_the_aa_offices_on_new_to_aa_are_read(self):
         # The offices on the New to AA? card are links styled as chips: read, each one, right after their heading, an
-        # office's name in its site's language — while chips elsewhere (filters, jump links: Home's library
-        # shortcuts) are still left out.
+        # office's name in its site's language — while chips elsewhere (filters, jump links: the GVR / RLV corner's
+        # page nav; Home's library shortcuts until November 2026) are still left out.
         words = json.loads(B.ROOT.joinpath("src", "_i18n", "common.json").read_text(encoding="utf-8"))
         for path, lang in (("meetings/", "en"), ("es/meetings/", "es")):
             ctx = speech_context(1280, 800, lang=lang)
@@ -297,13 +297,18 @@ class ReadAloudControls(unittest.TestCase):
                 ctx.close()
         ctx = speech_context(1280, 800)
         try:
-            page = B.open_page(ctx, "")
-            quick = page.evaluate("() => [...document.querySelectorAll('main a.chip')].map((a) => a.textContent.replace(/\\s+/g, ' ').trim())")
-            self.assertTrue(quick)
-            texts = " | ".join(c["text"] for c in page.evaluate("GV.tts.collect()"))
-            for q in quick:
-                with self.subTest(chip=q):
-                    self.assertNotIn(q, texts)
+            page = B.open_page(ctx, "gvr/")
+            # its jump links' words are also its sections' headings, so a word of our own goes into each chip (and,
+            # to show the words of a page do get there, into the first paragraph)
+            got = page.evaluate("""() => {
+              const chips = [...document.querySelectorAll('main a.chip')];
+              chips.forEach((a, i) => a.append(' qzxchip' + i));
+              document.querySelector('main p').append(' qzxtext');
+              const read = GV.tts.collect().map((c) => c.text);
+              return { chips: chips.length, said: read.filter((t) => /qzx/.test(t)).map((t) => t.match(/qzx\\w+/g)).flat() };
+            }""")
+            self.assertGreaterEqual(got["chips"], 4)
+            self.assertEqual(got["said"], ["qzxtext"])
         finally:
             ctx.close()
 
