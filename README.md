@@ -2790,10 +2790,11 @@ The **Tracker** (Committee menu, <https://grapevine.neta65.org/tracker/>) is a G
 committee chair's own record of what their service costs and gives: miles, purchases, gift
 subscriptions, literature given away and reimbursements. It lives only in that browser — nothing is
 uploaded — so it asks for a backup now and then (**Back up now**: one `.zip` file with the receipt photos).
-Since November 2026 a quiet row above the tabs says so once a month — "Keep a copy of your Tracker" — while the
-ledger has entries and no copy was made within the backup reminder's days (Settings → Reminders, 30 by default; a
-CSV export counts too): **Export CSV (all)**, **Full backup (.zip)** or **Not now** (it then waits for the next
-month; the month is remembered in this browser).
+Since November 2026 a quiet row above the tabs says so about once a month — "Keep a copy of your Tracker" — while
+no copy was made within the backup reminder's days (Settings → Reminders, 30 by default; a CSV export counts too):
+**Export CSV (all)**, **Full backup (.zip)** or **Not now** (it then waits 30 days; the day is remembered in this
+browser). It waits for the ledger to hold something worth keeping: 5 entries, or 3 days since the first one (the
+examples do not count).
 This describes Tracker 1.2.0 (October 2026).
 
 **What to tell your GVRs**

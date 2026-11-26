@@ -111,9 +111,9 @@ pageStyles: ["/assets/css/expenses.css"]
         </div>
       </div>
 
-      {#- once a month, a gentle nudge to keep a copy (everything here is only in this browser): a CSV, or the full
-          backup with the receipt photos; "Not now" puts it off until next month (expenses.js nudgeDue / nudgeLater —
-          remembered in localStorage). Not a role="alert": nothing went wrong. -#}
+      {#- about once a month, a gentle nudge to keep a copy (everything here is only in this browser): a CSV, or the
+          full backup with the receipt photos; not on a new ledger, and "Not now" puts it off for 30 days (expenses.js
+          nudgeDue / nudgeLater — remembered in localStorage). Not a role="alert": nothing went wrong. -#}
       <div class="xp-nudge" x-show="nudgeDue()" x-cloak>
         <span class="xp-nudge-icon" aria-hidden="true">{% icon "hard-drive-download", "size-5" %}</span>
         <div class="min-w-0 flex-1">
