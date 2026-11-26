@@ -22,11 +22,18 @@
 
 ## 1. Raw file envelope — `data/raw/<source>.json`
 
+Since November 2026 a run that would change nothing in the file but its run times (`updated`, `attempted`, the
+`…seconds` of `stats` — `common.only_stamps_differ`) does not write it again: those times go to
+`common.RUN_STAMPS`, and `build_data` puts the newest of the file's, this run's and the last `status.json`'s into
+`data/site/status.json` `sources[]` — the place to read when a source last ran or last worked (the run summary, the
+"not checked" warning, the Morning check's `full_update`). Read a raw file through `common.load_raw` (or
+`build_data`'s `Ctx.load_raw`) to get those times.
+
 ```json
 {
   "source": "youtube",
-  "updated": "2026-09-23T10:17:00Z",   // last successful run of this module
-  "attempted": "2026-09-23T10:17:00Z", // last run, successful or not
+  "updated": "2026-09-23T10:17:00Z",   // last successful run of this module that CHANGED the file (below)
+  "attempted": "2026-09-23T10:17:00Z", // last run that changed the file, successful or not
   "first_harvest": "2026-09-01T10:17:00Z", // first successful read of this source; never moves
   "ok": true,                          // false if this run failed (items kept from before)
   "error": null,                       // short message when ok=false

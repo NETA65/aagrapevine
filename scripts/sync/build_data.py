@@ -43,7 +43,7 @@ from . import translate as T
 from . import writers_archive as WA
 from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, event_host, get_logger, load_config,
                      now_iso, parse_iso, read_capped, read_json, short_hash, slugify, strip_html, to_iso, truncate,
-                     unreadable_message, write_json)
+                     unreadable_message, with_run_stamps, write_json)
 # the magazine covers' labels, written by rule in both languages (drive.cover_of reads the covers' names)
 from .drive import COVER_MAG, cover_album, cover_label, cover_title
 from .events_external import platform_of
@@ -335,6 +335,15 @@ class Ctx:
                         log.error("raw file %s holds nothing since it went missing (its update failed: %s) — the site "
                                   "keeps the last build's %d item(s) of it", p.name, self.missing_failed[name], count)
                         env = {"source": name, "updated": None, "ok": False, "error": None, "stats": {}, "items": []}
+                    else:
+                        # The run's times: a raw file whose content did not change is not written again
+                        # (common.save_raw), so its `attempted` — and, once it has worked, its `updated` — come from this
+                        # run (common.RUN_STAMPS) or the last status.json, whichever is newest: status.json keeps them
+                        # from run to run.
+                        last_row = had.get(name) or {}
+                        times = {"attempted": last_row.get("attempted"),
+                                 "updated": last_row.get("updated") if env.get("updated") else None}
+                        env = with_run_stamps(p, env, times)
                 except Exception as e:
                     self.raw_problems[name] = f"unreadable: {type(e).__name__}: {e}"[:200]
                     self.unreadable.add(name)

@@ -549,16 +549,56 @@ def raw_unreadable(source: str) -> str | None:
     return None
 
 
+# This process's run stamps of the raw files save_raw did NOT write because only their run timestamps would have
+# changed (only_stamps_differ): the file's path → {"updated", "attempted", "stats"} of this run. Every reader of a raw
+# envelope takes them over the file's (with_run_stamps: load_raw here, build_data's Ctx.load_raw), so this run's
+# times reach data/site/status.json — where they are kept for the next runs (build_data also takes a source's times
+# from the last status.json when they are newer than its file's). Keyed by the path, so a test's raw folder never
+# sees another's.
+RUN_STAMPS: dict[str, dict] = {}
+
+
+def _later(a: Any, b: Any) -> Any:
+    """The later of two ISO times (a value that is not a time loses; both not: `a`)."""
+    ta, tb = parse_iso(a) if isinstance(a, str) else None, parse_iso(b) if isinstance(b, str) else None
+    if ta is not None and ta.tzinfo is None:
+        ta = ta.replace(tzinfo=timezone.utc)
+    if tb is not None and tb.tzinfo is None:
+        tb = tb.replace(tzinfo=timezone.utc)
+    if tb is not None and (ta is None or tb > ta):
+        return b
+    return a
+
+
+def with_run_stamps(path: Path, env: dict, *also: dict | None) -> dict:
+    """`env` (a raw envelope read from `path`) with the newest of its run times: this run's (RUN_STAMPS — then also
+    its `stats`, whose timing figures are this run's) and those of `also` (e.g. the source's row in the last
+    status.json: {"updated", "attempted"}). The file itself is not touched."""
+    stamp = RUN_STAMPS.get(str(path))
+    if not stamp and not any(also):
+        return env
+    out = dict(env)
+    for src in (stamp, *also):
+        if not isinstance(src, dict):
+            continue
+        for k in ("updated", "attempted"):
+            if src.get(k):
+                out[k] = _later(out.get(k), src[k])
+    if stamp and isinstance(stamp.get("stats"), dict):
+        out["stats"] = stamp["stats"]
+    return out
+
+
 def load_raw(source: str) -> dict:
     """The raw envelope of a source (an empty one if the file does not exist yet — a new source, or one a person
-    deleted on purpose to read it again from scratch).
+    deleted on purpose to read it again from scratch), with this run's stamps (with_run_stamps).
 
     A file that exists but cannot be parsed raises UnreadableRaw and is left exactly as it is: the source is not
     rebuilt from scratch over it (see UnreadableRaw)."""
     p = raw_path(source)
     if p.exists():
         try:
-            return _read_raw_file(p)
+            return with_run_stamps(p, _read_raw_file(p))
         except Exception as e:
             raise UnreadableRaw(source, f"{type(e).__name__}: {str(e)[:80]}") from e
     return {"source": source, "updated": None, "ok": False, "error": None, "stats": {}, "items": []}
@@ -577,6 +617,31 @@ def as_json(data: Any) -> Any:
     """`data` as write_json() stores it (dates → ISO text, sets → sorted lists, tuples → lists): what reading
     the file back gives, so a fresh value can be compared with a written one."""
     return json.loads(json.dumps(data, ensure_ascii=False, default=_json_default))
+
+
+# Run timestamps: they move on every run although nothing else did. A data file whose only differences are these
+# is not written again (write_json_if_changed, save_raw) — data/site/status.json keeps every run's times instead
+# (build_data: each source's `updated` / `attempted`, from this run's stamps, run_stamps()). Only an envelope's own
+# top-level times and the timing figures of its `stats` count: a time INSIDE the data (an item's `last_seen`, a
+# feed's `attempted` in data/state, a crawled page's `crawled_at`) is what the next run decides by, and is kept.
+STAMP_KEYS = frozenset({"updated", "attempted", "generated"})
+_STAMP_STATS = re.compile(r"(?:^|_)seconds$")          # stats.seconds, stats.backfill_seconds …
+
+
+def without_stamps(doc: Any) -> Any:
+    """`doc` (as JSON) without its run timestamps: the top-level STAMP_KEYS and the `…seconds` keys of its `stats`."""
+    doc = as_json(doc)
+    if not isinstance(doc, dict):
+        return doc
+    out = {k: v for k, v in doc.items() if k not in STAMP_KEYS}
+    if isinstance(out.get("stats"), dict):
+        out["stats"] = {k: v for k, v in out["stats"].items() if not _STAMP_STATS.search(str(k))}
+    return out
+
+
+def only_stamps_differ(old: Any, new: Any) -> bool:
+    """True when `new` differs from `old` (both as written, as_json) in its run timestamps only (without_stamps)."""
+    return as_json(old) != as_json(new) and without_stamps(old) == without_stamps(new)
 
 
 def write_json(path: Path, data: Any, compact: bool = False) -> None:
@@ -776,7 +841,17 @@ def save_raw(source: str, items: list[dict], ok: bool = True, error: str | None 
         env["first_harvest"] = first
     if extra:       # (`held` and `changes` are this function's own: a copy of the last envelope's never wins)
         env.update({k: v for k, v in extra.items() if k not in ("held", "changes")})
-    write_json(raw_path(source), env)
+    path = raw_path(source)
+    if path.exists() and without_stamps(prev) == without_stamps(env):
+        # Nothing but the run's times would change (its `updated`, `attempted`, the stats' seconds): the file stays
+        # as it is — no data commit rewrites a big file for a time — and the times go to RUN_STAMPS, from which
+        # build_data writes them to status.json (with_run_stamps).
+        RUN_STAMPS[str(path)] = {"updated": env.get("updated"), "attempted": env.get("attempted"),
+                                 "stats": as_json(env.get("stats") or {})}
+        log.debug("%s: unchanged but for its run times — data/raw/%s.json not written again", source, source)
+        return
+    RUN_STAMPS.pop(str(path), None)
+    write_json(path, env)
 
 
 def sort_items(items: list[dict]) -> list[dict]:

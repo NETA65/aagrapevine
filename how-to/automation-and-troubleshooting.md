@@ -1168,7 +1168,7 @@ goal, `site.morning_goal`), judged the way `/status/` judges them.
 - **Closes itself** after the first morning whose two quotes came in by the goal.
 
 The usual cause is the **morning alarm** at cron-job.org ([OPERATIONS → Set up the cron-job.org alarm
-later](../docs/OPERATIONS.md#set-up-the-cron-job-org-alarm-later)): its key expired (cron-job.org's history shows
+later](../docs/OPERATIONS.md#set-up-the-cron-joborg-alarm-later)): its key expired (cron-job.org's history shows
 **401**), the address changed (**404**), or the alarm is switched off. A morning on which a magazine published its
 quote late at the source (the Morning check's run says *"A daily quote is late at the source"*) also counts as
 missed; nothing needs fixing then.
