@@ -7,8 +7,8 @@ src/pages/read-archive.11ty.js `more`, src/assets/js/read.js:
               SSR_ROWS stories, with "Show all N stories" (a script button: data-read-more, the file's address) only when
               it has more; the file's `more` holds the rest of each, in order, with the credit line its Share sends
               (`ls`); an issue with SSR_ROWS stories or fewer has neither; the row template (no Alpine in it) is on the
-              page; the issue's "Read on …" link stays (without JavaScript: the whole table of contents, on the
-              magazine's site).
+              page; the issue's link to its own page on the magazine's site stays, and says "All 15 stories on
+              aagrapevine.org" (without JavaScript, where the button is not: the whole table of contents).
   * Script  — read.js on a page of its own: "Show all" fetches the file once, adds each story as the page draws it
               (its title and original title with their languages, its writer, free / subscribers, its Share: the
               magazine's own title and "— Grapevine, June 2026"), every value as text; the button goes and focus moves
@@ -47,7 +47,7 @@ def story(pub: str, key: str, n: int, **extra) -> dict:
 DATA = {"articles": {"updated": "2026-10-06T06:00:00Z", "issues": [], "items": [
     *[story("gv", "2026-10", n) for n in range(1, 4)],      # the current issues
     *[story("lv", "2026-09", n) for n in range(1, 4)],
-    *[story("gv", "2026-06", n) for n in range(1, 16)],     # earlier: 15 stories
+    *[story("gv", "2026-06", n, issue_url="https://www.aagrapevine.org/magazine-issue/june-2026") for n in range(1, 16)],  # earlier: 15
     *[story("lv", "2026-05", n) for n in range(1, 5)],      # earlier: 4 stories
 ]}}
 
@@ -91,7 +91,10 @@ class Built(unittest.TestCase):
                 self.assertEqual(ids, ["gv-2026-06"])
                 self.assertIn(f'data-json="{pre}/read-archive.json"', gv)
                 self.assertIn("data-js-only", gv[gv.index("data-read-more") - 200:gv.index("data-read-more")])
-                self.assertRegex(gv, r'<a class="link tap-link text-sm" href="https://www\.aagrapevine\.org[^"]*" target="_blank"')
+                # without JavaScript (no button) the issue's own link says where all of them are
+                link = re.search(r'<a class="link tap-link text-sm" href="(https://www\.aagrapevine\.org[^"]*)" target="_blank" rel="noopener">([^<]*)<', gv)
+                self.assertEqual(link.group(1), "https://www.aagrapevine.org/magazine-issue/june-2026")
+                self.assertEqual(link.group(2), "All 15 stories on aagrapevine.org" if pre == "" else "Las 15 historias en aagrapevine.org")
                 more = data["more"]["gv-2026-06"]
                 self.assertEqual(more["pub"], "gv")
                 self.assertEqual(more["count"], 15)

@@ -349,12 +349,14 @@ pageScripts: ["/assets/js/read.js"]
           </ul>
           {%- set aHub = v.url or (lvHub if v.pub == 'lv' else gvHub) -%}
           {#- the issue's other stories: /read-archive.json `more` (read.js readMore); without JavaScript, the issue's
-              own table of contents on the magazine's site (the link under it) -#}
+              own table of contents on the magazine's site — the link under it, which then says so ("All 15 stories on
+              aagrapevine.org": an issue with its own address and more stories than the page holds) -#}
           {% if v.articles.length > SSR_ROWS %}
           <p class="px-3 pt-2" data-js-only><button type="button" class="btn-secondary btn-sm" data-read-more="{{ v.id }}" data-json="{{ '/read-archive.json' | lurl(lang) }}"
             data-t-loading="{{ 'common.loading' | t(lang) }}" data-t-failed="{{ 'read.more_failed' | t(lang) }}">{% icon "chevron-down", "size-4" %} {{ "read.show_all" | t(lang, {n: v.count}) }}</button></p>
           {% endif %}
-          <p class="px-3 pb-1 pt-2"><a class="link tap-link text-sm" href="{{ aHub }}" target="_blank" rel="noopener">{{ "read.read_on" | t(lang, {site: aHub | hostname}) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+          {%- set allOn = v.url and v.articles.length > SSR_ROWS %}
+          <p class="px-3 pb-1 pt-2"><a class="link tap-link text-sm" href="{{ aHub }}" target="_blank" rel="noopener">{{ ("read.all_on" | t(lang, {n: v.count, site: aHub | hostname})) if allOn else ("read.read_on" | t(lang, {site: aHub | hostname})) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
         </div>
       </details>
       {% endfor %}

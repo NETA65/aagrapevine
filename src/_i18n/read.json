@@ -39,6 +39,7 @@
   "read.stat_new": { "en": "New", "es": "Nuevas" },
   "read.stat_free": { "en": "Free to read", "es": "Gratis" },
   "read.read_on": { "en": "Read on {site}", "es": "Leer en {site}" },
+  "read.all_on": { "en": "All {n} stories on {site}", "es": "Las {n} historias en {site}" },
   "read.in_this_issue": { "en": "In this issue", "es": "En esta edición" },
   "read.special_section": { "en": "Special section", "es": "Sección especial" },
   "read.also_in_issue": { "en": "Also in this issue", "es": "También en esta edición" },
