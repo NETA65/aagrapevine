@@ -18,10 +18,12 @@ committee's deck and the lessons —
                  English and Spanish; on January 10, 2027 no slide or note of any version reads "Rick W.." (a
                  name ends with its own period) — every text of a slide (an agenda row's too), and with next
                  month's speaker a bare name ("Greg G.", listed without a topic).
-  * Paperwork  — the agenda e-mail of November 18 in the first version: its row "Guest speaker: none at this
-                 meeting" and the panel's warning (speakerNone), none in "No guest speaker" (and no warning that a
-                 listed speaker is left out); "Start next month" after November 18 goes to "No guest speaker" by
-                 itself (its Undo too, also after a reload), and after December 16 back to the first version.
+  * Paperwork  — the agenda e-mail of November 18 in the first version (chosen): its row "Guest speaker: none at
+                 this meeting" and the panel's warning (speakerNone), none in "No guest speaker" — the version the
+                 deck opens on when none is chosen — (and no warning that a listed speaker is left out); "Start next
+                 month" after November 18 in the first version goes back to none chosen, so "No guest speaker" for
+                 December 16 and the first version for January 20 (its Undo too, also after a reload), and after
+                 December 16 a "No guest speaker" chosen goes back to none chosen: the first version.
   * Wording    — /orientation/role/ (and its handout), the orientation, information and writing workshops: "a guest
                  speaker each month" only with "from January 2027".
 
@@ -247,13 +249,13 @@ class Deck(unittest.TestCase):
     def test_the_next_meeting_slide_says_december_has_none(self):
         r = self.run_deck("""
             const st = G.emptyState();
-            out({ full: draw(st, "", input.now, "next-meeting"), none: draw(st, "no-speaker", input.now, "next-meeting"),
+            out({ full: draw(st, "full", input.now, "next-meeting"), none: draw(st, "no-speaker", input.now, "next-meeting"),
                   later: draw(st, "", input.later, "next-meeting"),
                   topic: draw(st, "no-speaker", input.now, "topic-of-the-month"), sharing: draw(st, "no-speaker", input.now, "topic-sharing"),
-                  offTopic: draw(st, "", input.now, "topic-of-the-month"), ns: draw(st, "no-speaker", input.now, "speaker-intro"),
-                  intro: draw(st, "", input.now, "speaker-intro"), talk: draw(st, "", input.now, "speaker-talk"),
-                  title: draw(st, "", input.now, "title", "notes"),
-                  thanks: draw(st, "", input.now, "speaker-thanks", "notes"),
+                  offTopic: draw(st, "full", input.now, "topic-of-the-month"), ns: draw(st, "no-speaker", input.now, "speaker-intro"),
+                  intro: draw(st, "full", input.now, "speaker-intro"), talk: draw(st, "full", input.now, "speaker-talk"),
+                  title: draw(st, "full", input.now, "title", "notes"),
+                  thanks: draw(st, "full", input.now, "speaker-thanks", "notes"),
                   presets: D.presets.map((p) => ({ id: p.id, note: p.note })) });""",
             NOV11, later=NOV19)
         for v in ("full", "none"):
@@ -287,6 +289,31 @@ class Deck(unittest.TestCase):
             self.assertIn("antes del 20 de enero de 2027", notes[pid]["es"], pid)
             self.assertNotIn("December 16", notes[pid]["en"], pid)
             self.assertNotIn("16 de diciembre", notes[pid]["es"], pid)
+
+    def test_december_16_opens_without_the_guest_speaker(self):
+        """No version chosen (a device that never picked one): the deck of December 16 — a week before, and during
+        the meeting — is "No guest speaker", with no guest speaker's slide (never "Welcome to our guest speaker ·
+        none tonight"); January 20's is the first version, with the speaker's; the first version chosen keeps the
+        speaker's part on December 16 (the rule itself: tests/test_presentations_default_version.py)."""
+        r = self.run_deck("""
+            const st = G.emptyState(), full = G.emptyState();
+            G.deckState(full, D.id).preset = "full";
+            const at = (s, when) => { const cur = G.current(D, s, "", ms(when)); return { preset: cur.preset.id, ids: cur.shown.map((e) => e.id) }; };
+            out({ dec9: at(st, input.dec9), during: at(st, input.during), jan: at(st, input.jan), full: at(full, input.dec9),
+                  sp: D.paperwork.speaker_slide, stored: G.deckState(st, D.id).preset });""",
+            NOV19, dec9="2026-12-09T18:00:00Z", during="2026-12-17T01:45:00Z", jan=JAN10)
+        sp = r["sp"]
+        for when in ("dec9", "during"):
+            with self.subTest(when=when):
+                self.assertEqual(r[when]["preset"], "no-speaker")
+                self.assertNotIn(sp, r[when]["ids"])
+                self.assertNotIn("speaker-talk", r[when]["ids"])
+                self.assertIn("topic-of-the-month", r[when]["ids"])
+        self.assertEqual(r["stored"], "", "worked out, never stored as a choice")
+        self.assertEqual(r["jan"]["preset"], "full")
+        self.assertIn(sp, r["jan"]["ids"])
+        self.assertEqual(r["full"]["preset"], "full")
+        self.assertIn(sp, r["full"]["ids"])
 
     def test_january_names_its_speaker(self):
         r = self.run_deck("""
@@ -362,8 +389,12 @@ class Paperwork(unittest.TestCase):
               const cur = G.current(D, st, "", ms(input.now));
               const o = {}; for (const w of G.PAPER_TEXTS) o[w] = plain(G.paperText(D, st, cur, w, ms(input.now)));
               return o; };
-            out({ full: texts(""), none: texts("no-speaker"), without: plain(G.noSpeakerPreset(D)).id });""", now=NOV11)
+            out({ full: texts("full"), none: texts("no-speaker"), unchosen: texts(""), without: plain(G.noSpeakerPreset(D)).id });""",
+            now=NOV11)
         full, none = r["full"], r["none"]
+        # none chosen: the deck's default for a meeting with no guest speaker is "No guest speaker" (its texts, word
+        # for word — tests/test_presentations_default_version.py)
+        self.assertEqual(r["unchosen"], none)
         self.assertEqual(full["agenda"]["meeting"]["ymd"], "2026-11-18")
         self.assertIn("\n7:01  Guest speaker: none at this meeting\n", full["agenda"]["text"])
         self.assertTrue(full["agenda"]["speakerNone"], "the panel warns: the first version keeps the speaker's part")
@@ -381,27 +412,40 @@ class Paperwork(unittest.TestCase):
 
     def test_start_next_month_picks_the_version(self):
         r = self.run_paper("""
+            const shows = (s, at) => G.current(D, s, "", ms(at)).preset.id;
             const st = G.emptyState();
             const ds = G.deckState(st, D.id);
-            // after November 18, in the first version: December 16 has no guest speaker
+            // after November 18, in the first version chosen: December 16 has no guest speaker
+            ds.preset = "full";
             const nov = plain(G.startNextMonth(D, st, [], ms(input.nov)));
-            const afterNov = ds.preset;
+            const afterNov = ds.preset, novShows = shows(st, input.nov), janShows = shows(st, input.jan);
             const stored = plain(G.normState(JSON.parse(JSON.stringify(st))).decks[D.id].prev);
             const reloaded = G.normState(JSON.parse(JSON.stringify(st)));
             G.undoNextMonth(D, reloaded);
             const undone = reloaded.decks[D.id].preset;
+            // after November 18, no version chosen: the deck's default is "No guest speaker" already — nothing stored
+            const st0 = G.emptyState();
+            const none = plain(G.startNextMonth(D, st0, [], ms(input.nov)));
+            const nonePrev = plain(st0.decks[D.id].prev);
             // after December 16, in "No guest speaker": January 20 has Rick W.
             const st2 = G.emptyState(); G.deckState(st2, D.id).preset = "no-speaker";
             const dec = plain(G.startNextMonth(D, st2, [], ms(input.dec)));
             // after November 18, already in "No guest speaker": nothing to change
             const st3 = G.emptyState(); G.deckState(st3, D.id).preset = "no-speaker";
             const kept = plain(G.startNextMonth(D, st3, [], ms(input.nov)));
-            out({ nov, afterNov, stored, undone, dec, decPreset: st2.decks[D.id].preset, kept, keptPreset: st3.decks[D.id].preset });""",
-            now=NOV11, nov=NOV18_AFTER, dec=DEC16_AFTER)
-        self.assertEqual((r["nov"]["version"], r["afterNov"]), ("without", "no-speaker"))
-        self.assertEqual(r["stored"]["preset"], "", "the first version, kept for the Undo after a reload")
-        self.assertEqual(r["undone"], "")
-        self.assertEqual((r["dec"]["version"], r["decPreset"]), ("reset", ""))
+            out({ nov, afterNov, novShows, janShows, stored, undone, none, noneKept: st0.decks[D.id].preset, nonePrev,
+                  noneShows: shows(st0, input.nov), dec, decPreset: st2.decks[D.id].preset, decShows: shows(st2, input.dec),
+                  kept, keptPreset: st3.decks[D.id].preset });""",
+            now=NOV11, nov=NOV18_AFTER, dec=DEC16_AFTER, jan=JAN10)
+        # a version chosen with the speaker's part goes back to none chosen: the default, "No guest speaker" for
+        # December 16, then the first version again for January 20 (by itself: no other "Start next month" needed)
+        self.assertEqual((r["nov"]["version"], r["afterNov"]), ("without", ""))
+        self.assertEqual((r["novShows"], r["janShows"]), ("no-speaker", "full"))
+        self.assertEqual(r["stored"]["preset"], "full", "the version chosen, kept for the Undo after a reload")
+        self.assertEqual(r["undone"], "full")
+        self.assertEqual((r["none"]["version"], r["noneKept"], r["noneShows"]), ("", "", "no-speaker"))
+        self.assertNotIn("preset", r["nonePrev"], "no version to put back")
+        self.assertEqual((r["dec"]["version"], r["decPreset"], r["decShows"]), ("reset", "", "full"))
         self.assertEqual((r["kept"]["version"], r["keptPreset"]), ("", "no-speaker"))
 
 

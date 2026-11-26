@@ -22,7 +22,10 @@
    THE PRESENTER'S VERSION — localStorage["gv-presentations-v1"] (presentations.js reads and writes it; never sent
    anywhere):
      { v: 1, shared: { fill: { key: "text" } },                      the blanks marked `shared` (every deck)
-       decks: { <deck id>: { preset: "<version id>",                 Customize → Version ("" = the first, the full one)
+       decks: { <deck id>: { preset: "<version id>",                 Customize → Version, as chosen (the first one's id
+                                                                      too); "" = none chosen: the deck's default
+                                                                      (defaultPreset: the first one, or "No guest
+                                                                      speaker" for a meeting the site lists none for)
          hidden: [ids], shown: [ids],                                 turned off / on, on top of the version
          order: null | [ids],                                         moved slides (null = the deck's order)
          edits: { <slide id>: { <field>: value, _h: "<the slide's h when it was edited>",
@@ -39,7 +42,8 @@
    normState() makes any stored value safe to use (unknown or broken parts are dropped, never thrown on).
 
    THE CURRENT VERSION — current(deck, state, presetId, nowMs): every slide in the presenter's order with its edits
-   applied, and for each one whether it is in the show and why not:
+   applied, in the version presetId, else the one the presenter chose, else the deck's default at nowMs
+   (defaultPreset), and for each one whether it is in the show and why not:
      a facilitator slide never is (Customize → Prepare) · a slide outside its show_from / show_until days, or a
      `when: "price_notice"` slide while no notice is on, is left out by the clock (never by a switch) · otherwise the
      presenter's own switch (hidden / shown) wins · otherwise the version: `only` lists exactly its slides (also
@@ -542,6 +546,26 @@
     for (var i = 0; i < list.length; i++) if (list[i] && list[i].id === id) return list[i];
     return list[0] || { id: "", hide: [], only: null };
   }
+  /**
+   * The version a deck opens on while the presenter has chosen none (ds.preset ""): its first one — and for a deck
+   * with the chair's paperwork, its "No guest speaker" (noSpeakerPreset) while the meeting the paperwork is for
+   * (paperMeetings' `next`: tonight's until it ends, after "Start next month" the one after it) is one the site lists
+   * NO guest speaker for (its row's `no_speaker`: the meetings before January 20, 2027) — never for a speaker only not
+   * listed yet ("to be announced"), nor once the site lists one. A version the presenter chose stays theirs.
+   */
+  function defaultPreset(deck, ds, nowMs) {
+    var first = presetOf(deck, "");
+    if (!paperOf(deck)) return first;
+    var next = paperMeetings(deck, ds, nowMs).next;
+    var listed = next && isMap(next.speaker) && isStr(next.speaker.name) && next.speaker.name;
+    return (next && next.no_speaker === true && !listed && noSpeakerPreset(deck)) || first;
+  }
+  /** The version the presenter's state shows at nowMs: the one they chose (one the deck has), else the default. */
+  function presetFor(deck, ds, nowMs) {
+    var id = ds && isStr(ds.preset) ? ds.preset : "";
+    var list = (deck && Array.isArray(deck.presets)) ? deck.presets : [];
+    return id && list.some(function (p) { return p && p.id === id; }) ? presetOf(deck, id) : defaultPreset(deck, ds, nowMs);
+  }
   /** Is a deck slide in this version before the presenter's own switches (facilitator slides never are)? */
   function inPreset(slide, preset) {
     if (!slide || slide.facilitator) return false;
@@ -631,7 +655,7 @@
         ds = raw;
       } else ds = state.decks[deck.id] = norm;
     }
-    var preset = presetOf(deck, isStr(presetId) && presetId ? presetId : ds.preset);
+    var preset = isStr(presetId) && presetId ? presetOf(deck, presetId) : presetFor(deck, ds, now);
     // lookups by id without a prototype: an id or key such as "constructor" is unknown, as any other would be
     var byDeck = Object.create(null);
     (deck.slides || []).forEach(function (s) { byDeck[s.id] = s; });
@@ -1259,7 +1283,7 @@
     (deck.slides || []).forEach(function (s) { if (s.id === id) src = s; });
     if (!src || !kindOf(src.layout, field)) return false;
     var e = ds.edits[id] || {};
-    var pid = isStr(presetId) && presetId ? presetId : presetOf(deck, ds.preset).id;
+    var pid = isStr(presetId) && presetId ? presetId : presetFor(deck, ds).id;
     var none = value === undefined || value === null || same(value, versionValue(src, field, pid));
     if (isStr(pid) && ID.test(pid) && versioned(src, field)) {
       delete e[field];                 // (an edit of every version, from before such edits were kept per version)
@@ -1786,9 +1810,9 @@
    * Starts next month in the presenter's version: the picked items (ids from nextMonthPlan; old business first, then
    * the action items; the old business rows' room at most) become old business (<row>_item, the status empty), the plan's blanks are
    * cleared, the minutes' month becomes the month of the meeting held, the listed checklists are unticked — and
-   * what was there before is kept in ds.prev (undoNextMonth puts it back). → { carried, held, version: "reset" (back
-   * to the first version: the next meeting has a guest speaker) | "without" (to "No guest speaker": the site lists
-   * none for the next meeting) | "" } (null: no plan).
+   * what was there before is kept in ds.prev (undoNextMonth puts it back). → { carried, held, version: "reset" (the
+   * version chosen goes back to the deck's default, the first version: the next meeting has a guest speaker) |
+   * "without" (…to the default "No guest speaker": the site lists none for the next meeting) | "" } (null: no plan).
    */
   function startNextMonth(deck, state, picks, nowMs) {
     var plan = nextMonthPlan(deck, state, nowMs);
@@ -1808,27 +1832,31 @@
     texts.forEach(function (text, i) { ds.fill[nm.old_business[i] + "_item"] = text.slice(0, LIMITS.fillText); });
     if (nm.minutes_month && plan.held && plan.held.month) ds.fill[nm.minutes_month] = plan.held.month;
     untick.forEach(function (id) { delete ds.checks[id]; });
-    // a version without the guest speaker ("No guest speaker", chosen for a month that had none) goes back to the
-    // first version when the next meeting has a speaker on the site's list and the first version shows their slide;
-    // and the other way round, a version with the speaker's part goes to the first one without it ("No guest
-    // speaker") when the site lists NO speaker for the next meeting (its row's `no_speaker`: after November 18,
-    // 2026, December 16 has none) — never for a speaker only not listed yet
+    // (first: the meeting the paperwork is for is now the one after the meeting it closes — pressed during tonight's
+    // meeting too)
+    ds.prev = before;
+    // A version the presenter chose goes back to none chosen — the deck's default (defaultPreset), which follows the
+    // site's list from then on — when it no longer fits the next meeting: one without the guest speaker ("No guest
+    // speaker", chosen for a month that had none) when the next meeting has a speaker on the site's list and the
+    // first version shows their slide ("reset"); one with the speaker's part when the site lists NO speaker for the
+    // next meeting (its row's `no_speaker`: after November 18, 2026, December 16 has none), where the default is "No
+    // guest speaker" ("without") — never for a speaker only not listed yet. None chosen: the default already fits.
     var spId = isStr(deck.paperwork.speaker_slide) ? deck.paperwork.speaker_slide : "";
     var spSrc = spId ? (deck.slides || []).filter(function (s) { return s.id === spId; })[0] : null;
     var coming = paperMeetings(deck, ds, now).next;
     var hasSpeaker = coming && isMap(coming.speaker) && isStr(coming.speaker.name) && coming.speaker.name;
-    var without = spSrc ? noSpeakerPreset(deck) : null;
+    var chosen = ds.preset && (deck.presets || []).some(function (p) { return p && p.id === ds.preset; }) ? ds.preset : "";
     var version = "";
-    if (spSrc && hasSpeaker && ds.preset && !inPreset(spSrc, presetOf(deck, ds.preset)) && inPreset(spSrc, presetOf(deck, ""))) {
-      before.preset = ds.preset;
-      ds.preset = "";
+    if (spSrc && hasSpeaker && chosen && !inPreset(spSrc, presetOf(deck, chosen)) && inPreset(spSrc, presetOf(deck, ""))) {
       version = "reset";
-    } else if (spSrc && without && !hasSpeaker && coming && coming.no_speaker === true && inPreset(spSrc, presetOf(deck, ds.preset))) {
-      before.preset = ds.preset;
-      ds.preset = without.id;
+    } else if (spSrc && chosen && !hasSpeaker && coming && coming.no_speaker === true && inPreset(spSrc, presetOf(deck, chosen))
+      && !inPreset(spSrc, defaultPreset(deck, ds, now))) {
       version = "without";
     }
-    ds.prev = before;
+    if (version) {
+      before.preset = ds.preset;
+      ds.preset = "";
+    }
     return { carried: texts.length, held: plan.held, version: version };
   }
   /** The deck's first version that leaves out the guest speaker's slide (paperwork.speaker_slide): the committee
@@ -1883,7 +1911,8 @@
     emptyState: emptyState, emptyDeck: emptyDeck, normState: normState, normDeck: normDeck, deckState: deckState,
     summary: summary, sharedCount: sharedCount,
     // the current version, the clock
-    presetOf: presetOf, inPreset: inPreset, orderOf: orderOf, current: current, inVersion: inVersion,
+    presetOf: presetOf, defaultPreset: defaultPreset, presetFor: presetFor, inPreset: inPreset, orderOf: orderOf,
+    current: current, inVersion: inVersion,
     versioned: versioned, versionValue: versionValue, minutesOf: minutesOf, schedule: schedule,
     clock: clock, aboutText: aboutText, timeLine: timeLine, slideRef: slideRef, agendaRows: agendaRows,
     agendaUnchanged: agendaUnchanged,

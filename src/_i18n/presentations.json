@@ -106,6 +106,7 @@
   "pres.version_now": { "en": "Now: {n} slides, about {min} minutes.", "es": "Ahora: {n} diapositivas, unos {min} minutos." },
   "pres.version_mine": { "en": "With your changes.", "es": "Con tus cambios." },
   "pres.version_set": { "en": "Version: {label}", "es": "Versión: {label}" },
+  "pres.version_auto": { "en": "Chosen for you: the Meetings page lists no guest speaker for {date}, so the presentation opens on “{version}”. A version you pick here stays your choice.", "es": "Elegida para ti: la página de reuniones no indica ningún(a) orador(a) invitado(a) para el {date}, así que la presentación se abre en «{version}». La versión que elijas aquí queda como tu elección." },
 
   "pres.slides_intro": { "en": "Turn slides on or off and change their order: drag a slide by its handle, or select it and use Move up / Move down. The selected slide is the one on the screen.", "es": "Activa o desactiva diapositivas y cambia su orden: arrastra una por su asa, o selecciónala y usa Subir / Bajar. La seleccionada es la que está en pantalla." },
   "pres.show_all": { "en": "Show all", "es": "Mostrar todas" },

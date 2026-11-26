@@ -319,8 +319,9 @@ class MeetingPaperwork(unittest.TestCase):
 
     def test_a_meeting_with_no_guest_speaker(self):
         """The agenda e-mail for a meeting the site lists no guest speaker for (November 18 and December 16, 2026),
-        in the first version (with the speaker's part): one word in the agenda's section, naming the version without
-        it with the player's own words in the page's language — never a key — and none in "No guest speaker"."""
+        in the first version chosen (with the speaker's part; none chosen, the deck opens on "No guest speaker":
+        test_deck_default_version.py): one word in the agenda's section, naming the version without it with the
+        player's own words in the page's language — never a key — and none in "No guest speaker"."""
         deck = json.loads((S["site"] / "orientation" / "presentations" / "committee-meeting.json").read_text(encoding="utf-8"))
         built = deck["built"]
         row = next((r for r in deck["paperwork"]["meetings"] if r["start"] > built and r.get("no_speaker")), None)
@@ -328,7 +329,7 @@ class MeetingPaperwork(unittest.TestCase):
             self.skipTest("the built deck lists no meeting without a guest speaker ahead")
         errors: list[str] = []
         seen = {}
-        for lang, preset in (("en", ""), ("es", ""), ("en", "no-speaker")):
+        for lang, preset in (("en", "full"), ("es", "full"), ("en", "no-speaker")):
             ctx = new_context(1280, 900, lang=lang)
             try:
                 ctx.clock.set_fixed_time(instant(row["start"], days=-7))
@@ -337,12 +338,12 @@ class MeetingPaperwork(unittest.TestCase):
                 self.show_tab(page)
                 secs = page.locator('[data-gvp-panel="paper"] .gvp-sec')
                 seen[(lang, preset)] = [secs.nth(i).locator('p.gvp-warn[data-gvp-warn="speaker"]').all_inner_texts() for i in range(3)]
-                if not preset:
+                if preset == "full":
                     self.assertIn("none at this meeting", secs.nth(0).locator(".gvp-out").inner_text())
             finally:
                 ctx.close()
         self.assertEqual(errors, [])
-        en, es, none = seen[("en", "")], seen[("es", "")], seen[("en", "no-speaker")]
+        en, es, none = seen[("en", "full")], seen[("es", "full")], seen[("en", "no-speaker")]
         self.assertEqual([len(x) for x in en], [1, 0, 0], "the agenda e-mail's section only")
         self.assertIn("lists no guest speaker for this meeting", en[0][0])
         self.assertIn("“No guest speaker (about 60 minutes)” (Customize → Version)", en[0][0])

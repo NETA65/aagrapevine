@@ -137,8 +137,9 @@
     var out = { v: state.v, shared: state.shared, decks: {} };
     Object.keys(state.decks).forEach(function (id) {
       var d = state.decks[id];
-      // (a deck with nothing else but the Undo of "Start next month" keeps it)
-      if (G.summary(d).any || d.last || d.prev) out.decks[id] = d;
+      // (a deck with nothing else but the Undo of "Start next month" keeps it — and one with a version chosen, the
+      // first one too: none chosen, the deck opens on its default for the next meeting, the core's defaultPreset)
+      if (G.summary(d).any || d.last || d.prev || d.preset) out.decks[id] = d;
     });
     var empty = !Object.keys(out.decks).length && !Object.keys(state.shared.fill).length;
     if (empty) localStorage.removeItem(G.STORAGE_KEY);
@@ -2163,9 +2164,16 @@
   function panelVersion(p) {
     heading(p, T("pres.tab_version"));
     para(p, T("pres.version_intro"));
+    // none chosen, and the deck's default is not its first version: "No guest speaker" for a meeting the Meetings
+    // page lists no guest speaker for (the core's defaultPreset) — said, with that a version picked here stays
+    var first = P.deck.presets[0] ? P.deck.presets[0].id : "";
+    if (!ds().preset && P.cur.preset.id && P.cur.preset.id !== first) {
+      var mn = meetingName(G.paperMeetings(P.deck, ds(), P.cur.nowMs).next);
+      var auto = attrs(p.appendChild(el("p", "gvp-pp")), { "data-gvp-version-auto": "" });
+      tInto(auto, "pres.version_auto", { date: mn[0], version: P.cur.preset.label[LANG] || P.cur.preset.label.en }, mn[1]);
+    }
     var fs = el("fieldset", "gvp-radios");
     fs.appendChild(el("legend", "sr-only", T("pres.tab_version")));
-    var first = P.deck.presets[0] ? P.deck.presets[0].id : "";
     P.deck.presets.forEach(function (pr) {
       var c = G.current(P.deck, STATE, pr.id, P.cur.nowMs);
       var lab = el("label", "gvp-radio");
@@ -2176,7 +2184,8 @@
       input.checked = P.cur.preset.id === pr.id;
       input.setAttribute("data-gvp-key", "preset:" + pr.id);
       input.addEventListener("change", function () {
-        ds().preset = pr.id === first ? "" : pr.id;
+        // (the first one by its id too: a version picked is kept, never the deck's default for the next meeting)
+        ds().preset = pr.id;
         changed();
         var live = q("[data-gvp-live]");
         if (live) live.textContent = T("pres.version_set", { label: pr.label[LANG] || pr.label.en });
@@ -3082,7 +3091,8 @@
       var firstPr = (P.deck.presets || [])[0];
       var msg = TN("pres.paper_next_done", res.carried, { date: meetingName(next)[0] });
       if (res.version === "reset" && firstPr) msg += " " + T("pres.paper_next_version", { version: firstPr.label[LANG] || firstPr.label.en });
-      var nowPr = res.version === "without" ? G.presetOf(P.deck, ds().preset) : null;
+      // (the version is now the deck's default for the next meeting: "No guest speaker")
+      var nowPr = res.version === "without" ? G.presetFor(P.deck, ds(), Date.now()) : null;
       if (nowPr) msg += " " + T("pres.paper_next_version_none", { version: nowPr.label[LANG] || nowPr.label.en });
       var b = toast(msg, undoAction(snap));
       if (b) b.focus();

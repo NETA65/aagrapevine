@@ -804,7 +804,8 @@ class Player(unittest.TestCase):
         self.assertIn("qa('[data-gvp-tab=\"paper\"]').forEach(function (t) { t.hidden = !hasPaper(); });", js)
         # every mailto: link has no address: the chair puts every one in BCC
         self.assertEqual(set(re.findall(r'"mailto:([^"]*)"', js)), {"?subject="})
-        self.assertIn("if (G.summary(d).any || d.last || d.prev) out.decks[id] = d;", js, "the Undo is stored")
+        self.assertIn("if (G.summary(d).any || d.last || d.prev || d.preset) out.decks[id] = d;", js,
+                      "the Undo is stored, and a version chosen (the first one too)")
         for name in ("copy", "mail", "calendar-plus"):
             self.assertIn(f'"{name}"', macro.split('<template id="gvp-icons">', 1)[1], name)
 
