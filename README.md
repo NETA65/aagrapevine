@@ -2,6 +2,10 @@
 
 [![Website update](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml/badge.svg)](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml)
 
+> **Volunteers, start here → [Volunteer guide](docs/VOLUNTEER-GUIDE.md)** · **Voluntarios, empiecen aquí →
+> [Guía para voluntarios](docs/GUIA-VOLUNTARIOS.md)** — two pages, no programming: is the site working, what to do
+> when something is red, how to add an event, a bulletin post or a photo, and who to ask.
+
 **Website:** [grapevine.neta65.org](https://grapevine.neta65.org/) ·
 **En español:** [grapevine.neta65.org/es/](https://grapevine.neta65.org/es/)
 (the old address, neta65.github.io/aagrapevine, forwards there:
