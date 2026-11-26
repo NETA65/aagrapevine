@@ -1,7 +1,7 @@
 {
  "source": "manual_events",
- "updated": "2026-11-26T02:46:32Z",
- "attempted": "2026-11-26T02:46:32Z",
+ "updated": "2026-11-26T14:03:37Z",
+ "attempted": "2026-11-26T14:03:37Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -358,7 +358,7 @@
    "lang": "en",
    "date": "2027-01-31T19:00:00Z",
    "first_seen": "2026-11-19T09:44:37Z",
-   "last_seen": "2026-11-19T09:44:37Z",
+   "last_seen": "2026-11-26T14:03:37Z",
    "image": null,
    "tags": [
     "neta65",
@@ -403,7 +403,7 @@
    "lang": "en",
    "date": "2027-01-24T19:00:00Z",
    "first_seen": "2026-11-19T09:44:37Z",
-   "last_seen": "2026-11-19T09:44:37Z",
+   "last_seen": "2026-11-26T14:03:37Z",
    "image": null,
    "tags": [
     "neta65",
@@ -448,7 +448,7 @@
    "lang": "en",
    "date": "2027-01-17T19:00:00Z",
    "first_seen": "2026-11-19T09:44:37Z",
-   "last_seen": "2026-11-19T09:44:37Z",
+   "last_seen": "2026-11-26T14:03:37Z",
    "image": null,
    "tags": [
     "neta65",
