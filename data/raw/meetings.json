@@ -1,7 +1,7 @@
 {
  "source": "meetings",
- "updated": "2026-11-25T18:07:50Z",
- "attempted": "2026-11-25T18:07:50Z",
+ "updated": "2026-11-26T17:53:41Z",
+ "attempted": "2026-11-26T17:53:41Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -1096,8 +1096,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   },
   {
@@ -1110,8 +1110,8 @@
    "method": "feed",
    "key_from": "config",
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   },
   {
@@ -1124,8 +1124,8 @@
    "method": "page",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   },
   {
@@ -1139,7 +1139,7 @@
    "key_from": null,
    "error": "alcoholicosanonimosdallas.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept",
    "updated": "2026-11-23T19:24:46Z",
-   "attempted": "2026-11-25T18:06:52Z"
+   "attempted": "2026-11-26T17:52:49Z"
   },
   {
    "id": "district71",
@@ -1151,8 +1151,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   },
   {
@@ -1165,8 +1165,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   },
   {
@@ -1179,8 +1179,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   },
   {
@@ -1193,8 +1193,8 @@
    "method": "feed",
    "key_from": null,
    "error": null,
-   "updated": "2026-11-25T18:06:52Z",
-   "attempted": "2026-11-25T18:06:52Z",
+   "updated": "2026-11-26T17:52:49Z",
+   "attempted": "2026-11-26T17:52:49Z",
    "note": null
   }
  ],

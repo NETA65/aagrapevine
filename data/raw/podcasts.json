@@ -1,7 +1,7 @@
 {
  "source": "podcasts",
- "updated": "2026-11-26T14:03:58Z",
- "attempted": "2026-11-26T14:03:58Z",
+ "updated": "2026-11-26T17:48:34Z",
+ "attempted": "2026-11-26T17:48:34Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -22,28 +22,28 @@
     "name": "AA Grapevine's Podcast",
     "episodes": 271,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-26T14:03:58Z"
+    "updated": "2026-11-26T17:48:34Z"
    },
    "wo": {
     "ok": true,
     "name": "Grapevine Weekly Open AA Meeting",
     "episodes": 42,
     "latest": "2026-11-20T05:15:00Z",
-    "updated": "2026-11-26T14:03:58Z"
+    "updated": "2026-11-26T17:48:34Z"
    },
    "lvo": {
     "ok": true,
     "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
     "episodes": 3,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-26T14:03:58Z"
+    "updated": "2026-11-26T17:48:34Z"
    }
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
   "discovery_checked": "2026-11-20T16:16:24Z",
   "discovered_feeds": [],
-  "seconds": 5.9,
+  "seconds": 3.7,
   "artwork": 4,
   "artwork_missing": 0,
   "artwork_removed": 0
@@ -848,7 +848,7 @@
    "lang": "en",
    "date": "2026-09-21T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -884,7 +884,7 @@
    "lang": "en",
    "date": "2026-09-18T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -923,7 +923,7 @@
    "lang": "en",
    "date": "2026-09-14T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -959,7 +959,7 @@
    "lang": "en",
    "date": "2026-09-11T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -998,7 +998,7 @@
    "lang": "en",
    "date": "2026-09-07T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1034,7 +1034,7 @@
    "lang": "en",
    "date": "2026-09-04T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1073,7 +1073,7 @@
    "lang": "en",
    "date": "2026-08-31T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1109,7 +1109,7 @@
    "lang": "en",
    "date": "2026-08-28T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1148,7 +1148,7 @@
    "lang": "en",
    "date": "2026-08-24T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1184,7 +1184,7 @@
    "lang": "en",
    "date": "2026-08-21T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1223,7 +1223,7 @@
    "lang": "en",
    "date": "2026-08-17T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1259,7 +1259,7 @@
    "lang": "en",
    "date": "2026-08-14T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1298,7 +1298,7 @@
    "lang": "en",
    "date": "2026-08-10T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1334,7 +1334,7 @@
    "lang": "en",
    "date": "2026-08-07T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1373,7 +1373,7 @@
    "lang": "en",
    "date": "2026-08-03T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1409,7 +1409,7 @@
    "lang": "en",
    "date": "2026-07-31T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1448,7 +1448,7 @@
    "lang": "en",
    "date": "2026-07-27T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1484,7 +1484,7 @@
    "lang": "en",
    "date": "2026-07-24T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1523,7 +1523,7 @@
    "lang": "en",
    "date": "2026-07-20T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1559,7 +1559,7 @@
    "lang": "en",
    "date": "2026-07-17T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1598,7 +1598,7 @@
    "lang": "en",
    "date": "2026-07-13T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1634,7 +1634,7 @@
    "lang": "en",
    "date": "2026-07-10T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1673,7 +1673,7 @@
    "lang": "en",
    "date": "2026-07-06T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-11"
@@ -1709,7 +1709,7 @@
    "lang": "en",
    "date": "2026-07-03T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-2"
@@ -1748,7 +1748,7 @@
    "lang": "en",
    "date": "2026-06-29T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -1784,7 +1784,7 @@
    "lang": "en",
    "date": "2026-06-26T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -1823,7 +1823,7 @@
    "lang": "en",
    "date": "2026-06-22T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -1859,7 +1859,7 @@
    "lang": "en",
    "date": "2026-06-19T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -1898,7 +1898,7 @@
    "lang": "en",
    "date": "2026-06-15T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -1934,7 +1934,7 @@
    "lang": "en",
    "date": "2026-06-12T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -1973,7 +1973,7 @@
    "lang": "en",
    "date": "2026-06-08T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2009,7 +2009,7 @@
    "lang": "en",
    "date": "2026-06-05T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2048,7 +2048,7 @@
    "lang": "en",
    "date": "2026-06-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2084,7 +2084,7 @@
    "lang": "en",
    "date": "2026-05-29T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2123,7 +2123,7 @@
    "lang": "en",
    "date": "2026-05-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2159,7 +2159,7 @@
    "lang": "en",
    "date": "2026-05-22T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2198,7 +2198,7 @@
    "lang": "en",
    "date": "2026-05-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2234,7 +2234,7 @@
    "lang": "en",
    "date": "2026-05-15T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2273,7 +2273,7 @@
    "lang": "en",
    "date": "2026-05-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2309,7 +2309,7 @@
    "lang": "en",
    "date": "2026-05-08T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2348,7 +2348,7 @@
    "lang": "en",
    "date": "2026-05-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2384,7 +2384,7 @@
    "lang": "en",
    "date": "2026-05-01T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2423,7 +2423,7 @@
    "lang": "en",
    "date": "2026-04-27T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2459,7 +2459,7 @@
    "lang": "en",
    "date": "2026-04-24T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2498,7 +2498,7 @@
    "lang": "en",
    "date": "2026-04-20T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2534,7 +2534,7 @@
    "lang": "en",
    "date": "2026-04-17T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2573,7 +2573,7 @@
    "lang": "en",
    "date": "2026-04-13T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2609,7 +2609,7 @@
    "lang": "en",
    "date": "2026-04-10T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2648,7 +2648,7 @@
    "lang": "en",
    "date": "2026-04-06T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2684,7 +2684,7 @@
    "lang": "en",
    "date": "2026-04-03T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2723,7 +2723,7 @@
    "lang": "en",
    "date": "2026-03-30T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2759,7 +2759,7 @@
    "lang": "en",
    "date": "2026-03-27T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2798,7 +2798,7 @@
    "lang": "en",
    "date": "2026-03-23T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2834,7 +2834,7 @@
    "lang": "en",
    "date": "2026-03-20T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2873,7 +2873,7 @@
    "lang": "en",
    "date": "2026-03-16T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2909,7 +2909,7 @@
    "lang": "en",
    "date": "2026-03-13T04:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -2948,7 +2948,7 @@
    "lang": "en",
    "date": "2026-03-09T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -2984,7 +2984,7 @@
    "lang": "en",
    "date": "2026-03-06T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -3023,7 +3023,7 @@
    "lang": "en",
    "date": "2026-03-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3059,7 +3059,7 @@
    "lang": "en",
    "date": "2026-02-27T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -3098,7 +3098,7 @@
    "lang": "en",
    "date": "2026-02-23T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3134,7 +3134,7 @@
    "lang": "en",
    "date": "2026-02-20T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -3173,7 +3173,7 @@
    "lang": "en",
    "date": "2026-02-16T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3209,7 +3209,7 @@
    "lang": "en",
    "date": "2026-02-13T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -3248,7 +3248,7 @@
    "lang": "en",
    "date": "2026-02-09T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3284,7 +3284,7 @@
    "lang": "en",
    "date": "2026-02-06T05:15:00Z",
    "first_seen": "2026-09-23T17:23:49Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/6b1f80c3-b80e-4988-bb2d-959fbec5e005/81444FEF-9557-4996-B7AB-9949DD0BA6C3-1-102-o.jpeg",
    "tags": [
     "season-1"
@@ -3323,7 +3323,7 @@
    "lang": "en",
    "date": "2026-02-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3359,7 +3359,7 @@
    "lang": "en",
    "date": "2026-01-26T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3395,7 +3395,7 @@
    "lang": "en",
    "date": "2026-01-19T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3431,7 +3431,7 @@
    "lang": "en",
    "date": "2026-01-12T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3467,7 +3467,7 @@
    "lang": "en",
    "date": "2026-01-05T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-10"
@@ -3503,7 +3503,7 @@
    "lang": "en",
    "date": "2025-12-29T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3539,7 +3539,7 @@
    "lang": "en",
    "date": "2025-12-22T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3575,7 +3575,7 @@
    "lang": "en",
    "date": "2025-12-15T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3611,7 +3611,7 @@
    "lang": "en",
    "date": "2025-12-08T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3647,7 +3647,7 @@
    "lang": "en",
    "date": "2025-12-01T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3683,7 +3683,7 @@
    "lang": "en",
    "date": "2025-11-24T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3719,7 +3719,7 @@
    "lang": "en",
    "date": "2025-11-17T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3755,7 +3755,7 @@
    "lang": "en",
    "date": "2025-11-10T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3791,7 +3791,7 @@
    "lang": "en",
    "date": "2025-11-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3827,7 +3827,7 @@
    "lang": "en",
    "date": "2025-10-27T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3863,7 +3863,7 @@
    "lang": "en",
    "date": "2025-10-20T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3899,7 +3899,7 @@
    "lang": "en",
    "date": "2025-10-13T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3935,7 +3935,7 @@
    "lang": "en",
    "date": "2025-10-06T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -3971,7 +3971,7 @@
    "lang": "en",
    "date": "2025-09-29T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4007,7 +4007,7 @@
    "lang": "en",
    "date": "2025-09-22T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4043,7 +4043,7 @@
    "lang": "en",
    "date": "2025-09-15T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4079,7 +4079,7 @@
    "lang": "en",
    "date": "2025-09-08T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4115,7 +4115,7 @@
    "lang": "en",
    "date": "2025-09-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4151,7 +4151,7 @@
    "lang": "en",
    "date": "2025-08-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4187,7 +4187,7 @@
    "lang": "en",
    "date": "2025-08-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4223,7 +4223,7 @@
    "lang": "en",
    "date": "2025-08-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4259,7 +4259,7 @@
    "lang": "en",
    "date": "2025-08-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4295,7 +4295,7 @@
    "lang": "en",
    "date": "2025-07-28T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4331,7 +4331,7 @@
    "lang": "en",
    "date": "2025-07-21T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4367,7 +4367,7 @@
    "lang": "en",
    "date": "2025-07-14T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4403,7 +4403,7 @@
    "lang": "en",
    "date": "2025-07-07T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-9"
@@ -4439,7 +4439,7 @@
    "lang": "en",
    "date": "2025-06-30T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4475,7 +4475,7 @@
    "lang": "en",
    "date": "2025-06-23T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4511,7 +4511,7 @@
    "lang": "en",
    "date": "2025-06-16T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4547,7 +4547,7 @@
    "lang": "en",
    "date": "2025-06-09T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4583,7 +4583,7 @@
    "lang": "en",
    "date": "2025-06-02T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4619,7 +4619,7 @@
    "lang": "en",
    "date": "2025-05-26T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4655,7 +4655,7 @@
    "lang": "en",
    "date": "2025-05-19T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4691,7 +4691,7 @@
    "lang": "en",
    "date": "2025-05-12T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4727,7 +4727,7 @@
    "lang": "en",
    "date": "2025-05-05T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4763,7 +4763,7 @@
    "lang": "en",
    "date": "2025-04-28T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4799,7 +4799,7 @@
    "lang": "en",
    "date": "2025-04-21T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4835,7 +4835,7 @@
    "lang": "en",
    "date": "2025-04-14T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4871,7 +4871,7 @@
    "lang": "en",
    "date": "2025-04-07T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4907,7 +4907,7 @@
    "lang": "en",
    "date": "2025-03-31T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4943,7 +4943,7 @@
    "lang": "en",
    "date": "2025-03-24T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -4979,7 +4979,7 @@
    "lang": "en",
    "date": "2025-03-17T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5015,7 +5015,7 @@
    "lang": "en",
    "date": "2025-03-10T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5051,7 +5051,7 @@
    "lang": "en",
    "date": "2025-03-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5087,7 +5087,7 @@
    "lang": "en",
    "date": "2025-02-24T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5123,7 +5123,7 @@
    "lang": "en",
    "date": "2025-02-17T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5159,7 +5159,7 @@
    "lang": "en",
    "date": "2025-02-10T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5195,7 +5195,7 @@
    "lang": "en",
    "date": "2025-02-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5231,7 +5231,7 @@
    "lang": "en",
    "date": "2025-01-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5267,7 +5267,7 @@
    "lang": "en",
    "date": "2025-01-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5303,7 +5303,7 @@
    "lang": "en",
    "date": "2025-01-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5339,7 +5339,7 @@
    "lang": "en",
    "date": "2025-01-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-8"
@@ -5375,7 +5375,7 @@
    "lang": "en",
    "date": "2024-12-30T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5411,7 +5411,7 @@
    "lang": "en",
    "date": "2024-12-23T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5447,7 +5447,7 @@
    "lang": "en",
    "date": "2024-12-16T13:30:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5483,7 +5483,7 @@
    "lang": "en",
    "date": "2024-12-09T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5519,7 +5519,7 @@
    "lang": "en",
    "date": "2024-12-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5555,7 +5555,7 @@
    "lang": "en",
    "date": "2024-11-25T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5591,7 +5591,7 @@
    "lang": "en",
    "date": "2024-11-18T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5627,7 +5627,7 @@
    "lang": "en",
    "date": "2024-11-11T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5663,7 +5663,7 @@
    "lang": "en",
    "date": "2024-11-04T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5699,7 +5699,7 @@
    "lang": "en",
    "date": "2024-10-28T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5735,7 +5735,7 @@
    "lang": "en",
    "date": "2024-10-21T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5771,7 +5771,7 @@
    "lang": "en",
    "date": "2024-10-14T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5807,7 +5807,7 @@
    "lang": "en",
    "date": "2024-10-07T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5843,7 +5843,7 @@
    "lang": "en",
    "date": "2024-10-04T13:00:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5879,7 +5879,7 @@
    "lang": "en",
    "date": "2024-09-30T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5915,7 +5915,7 @@
    "lang": "en",
    "date": "2024-09-23T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5951,7 +5951,7 @@
    "lang": "en",
    "date": "2024-09-16T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -5987,7 +5987,7 @@
    "lang": "en",
    "date": "2024-09-09T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6023,7 +6023,7 @@
    "lang": "en",
    "date": "2024-09-02T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6059,7 +6059,7 @@
    "lang": "en",
    "date": "2024-08-26T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6095,7 +6095,7 @@
    "lang": "en",
    "date": "2024-08-19T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6131,7 +6131,7 @@
    "lang": "en",
    "date": "2024-08-12T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6167,7 +6167,7 @@
    "lang": "en",
    "date": "2024-08-05T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6203,7 +6203,7 @@
    "lang": "en",
    "date": "2024-07-29T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6239,7 +6239,7 @@
    "lang": "en",
    "date": "2024-07-22T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6275,7 +6275,7 @@
    "lang": "en",
    "date": "2024-07-15T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6311,7 +6311,7 @@
    "lang": "en",
    "date": "2024-07-08T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6347,7 +6347,7 @@
    "lang": "en",
    "date": "2024-07-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-7"
@@ -6383,7 +6383,7 @@
    "lang": "en",
    "date": "2024-06-24T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6419,7 +6419,7 @@
    "lang": "en",
    "date": "2024-06-17T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6455,7 +6455,7 @@
    "lang": "en",
    "date": "2024-06-10T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6491,7 +6491,7 @@
    "lang": "en",
    "date": "2024-06-03T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6527,7 +6527,7 @@
    "lang": "en",
    "date": "2024-05-27T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6563,7 +6563,7 @@
    "lang": "en",
    "date": "2024-05-20T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6599,7 +6599,7 @@
    "lang": "en",
    "date": "2024-05-13T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6635,7 +6635,7 @@
    "lang": "en",
    "date": "2024-05-06T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6671,7 +6671,7 @@
    "lang": "en",
    "date": "2024-04-29T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6707,7 +6707,7 @@
    "lang": "en",
    "date": "2024-04-22T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6743,7 +6743,7 @@
    "lang": "en",
    "date": "2024-04-15T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6779,7 +6779,7 @@
    "lang": "en",
    "date": "2024-04-08T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6815,7 +6815,7 @@
    "lang": "en",
    "date": "2024-04-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6851,7 +6851,7 @@
    "lang": "en",
    "date": "2024-03-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6887,7 +6887,7 @@
    "lang": "en",
    "date": "2024-03-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6923,7 +6923,7 @@
    "lang": "en",
    "date": "2024-03-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6959,7 +6959,7 @@
    "lang": "en",
    "date": "2024-03-04T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -6995,7 +6995,7 @@
    "lang": "en",
    "date": "2024-02-26T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7031,7 +7031,7 @@
    "lang": "en",
    "date": "2024-02-19T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7067,7 +7067,7 @@
    "lang": "en",
    "date": "2024-02-12T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7103,7 +7103,7 @@
    "lang": "en",
    "date": "2024-02-05T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7139,7 +7139,7 @@
    "lang": "en",
    "date": "2024-01-29T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7175,7 +7175,7 @@
    "lang": "en",
    "date": "2024-01-22T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7211,7 +7211,7 @@
    "lang": "en",
    "date": "2024-01-15T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7247,7 +7247,7 @@
    "lang": "en",
    "date": "2024-01-08T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7283,7 +7283,7 @@
    "lang": "en",
    "date": "2024-01-01T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-6"
@@ -7319,7 +7319,7 @@
    "lang": "en",
    "date": "2023-12-25T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7355,7 +7355,7 @@
    "lang": "en",
    "date": "2023-12-18T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7391,7 +7391,7 @@
    "lang": "en",
    "date": "2023-12-11T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7427,7 +7427,7 @@
    "lang": "en",
    "date": "2023-12-04T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7463,7 +7463,7 @@
    "lang": "en",
    "date": "2023-11-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7499,7 +7499,7 @@
    "lang": "en",
    "date": "2023-11-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7535,7 +7535,7 @@
    "lang": "en",
    "date": "2023-11-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7571,7 +7571,7 @@
    "lang": "en",
    "date": "2023-11-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7607,7 +7607,7 @@
    "lang": "en",
    "date": "2023-10-30T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7643,7 +7643,7 @@
    "lang": "en",
    "date": "2023-10-23T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7679,7 +7679,7 @@
    "lang": "en",
    "date": "2023-10-16T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7715,7 +7715,7 @@
    "lang": "en",
    "date": "2023-10-09T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7751,7 +7751,7 @@
    "lang": "en",
    "date": "2023-10-02T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7787,7 +7787,7 @@
    "lang": "en",
    "date": "2023-09-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7823,7 +7823,7 @@
    "lang": "en",
    "date": "2023-09-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7859,7 +7859,7 @@
    "lang": "en",
    "date": "2023-09-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7895,7 +7895,7 @@
    "lang": "en",
    "date": "2023-09-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7931,7 +7931,7 @@
    "lang": "en",
    "date": "2023-08-28T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -7967,7 +7967,7 @@
    "lang": "en",
    "date": "2023-08-21T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8003,7 +8003,7 @@
    "lang": "en",
    "date": "2023-08-14T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8039,7 +8039,7 @@
    "lang": "en",
    "date": "2023-08-07T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8075,7 +8075,7 @@
    "lang": "en",
    "date": "2023-07-31T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8111,7 +8111,7 @@
    "lang": "en",
    "date": "2023-07-24T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8147,7 +8147,7 @@
    "lang": "en",
    "date": "2023-07-17T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8183,7 +8183,7 @@
    "lang": "en",
    "date": "2023-07-10T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8219,7 +8219,7 @@
    "lang": "en",
    "date": "2023-07-03T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-5"
@@ -8255,7 +8255,7 @@
    "lang": "en",
    "date": "2023-06-26T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8291,7 +8291,7 @@
    "lang": "en",
    "date": "2023-06-19T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8327,7 +8327,7 @@
    "lang": "en",
    "date": "2023-06-12T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8363,7 +8363,7 @@
    "lang": "en",
    "date": "2023-06-05T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8399,7 +8399,7 @@
    "lang": "en",
    "date": "2023-05-29T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8435,7 +8435,7 @@
    "lang": "en",
    "date": "2023-05-22T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8471,7 +8471,7 @@
    "lang": "en",
    "date": "2023-05-15T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8507,7 +8507,7 @@
    "lang": "en",
    "date": "2023-05-08T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8543,7 +8543,7 @@
    "lang": "en",
    "date": "2023-05-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8579,7 +8579,7 @@
    "lang": "en",
    "date": "2023-04-24T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8615,7 +8615,7 @@
    "lang": "en",
    "date": "2023-04-17T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8651,7 +8651,7 @@
    "lang": "en",
    "date": "2023-04-10T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8687,7 +8687,7 @@
    "lang": "en",
    "date": "2023-04-03T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8723,7 +8723,7 @@
    "lang": "en",
    "date": "2023-03-27T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8759,7 +8759,7 @@
    "lang": "en",
    "date": "2023-03-20T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8795,7 +8795,7 @@
    "lang": "en",
    "date": "2023-03-13T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8831,7 +8831,7 @@
    "lang": "en",
    "date": "2023-03-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8867,7 +8867,7 @@
    "lang": "en",
    "date": "2023-02-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8903,7 +8903,7 @@
    "lang": "en",
    "date": "2023-02-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8939,7 +8939,7 @@
    "lang": "en",
    "date": "2023-02-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -8975,7 +8975,7 @@
    "lang": "en",
    "date": "2023-02-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -9011,7 +9011,7 @@
    "lang": "en",
    "date": "2023-01-30T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -9047,7 +9047,7 @@
    "lang": "en",
    "date": "2023-01-23T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -9083,7 +9083,7 @@
    "lang": "en",
    "date": "2023-01-16T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -9119,7 +9119,7 @@
    "lang": "en",
    "date": "2023-01-09T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -9155,7 +9155,7 @@
    "lang": "en",
    "date": "2023-01-02T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-4"
@@ -9191,7 +9191,7 @@
    "lang": "en",
    "date": "2022-12-26T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9227,7 +9227,7 @@
    "lang": "en",
    "date": "2022-12-19T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9263,7 +9263,7 @@
    "lang": "en",
    "date": "2022-12-12T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9299,7 +9299,7 @@
    "lang": "en",
    "date": "2022-12-05T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9335,7 +9335,7 @@
    "lang": "en",
    "date": "2022-11-28T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9371,7 +9371,7 @@
    "lang": "en",
    "date": "2022-11-21T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9407,7 +9407,7 @@
    "lang": "en",
    "date": "2022-11-14T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9443,7 +9443,7 @@
    "lang": "en",
    "date": "2022-11-07T06:00:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9479,7 +9479,7 @@
    "lang": "en",
    "date": "2022-10-31T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9515,7 +9515,7 @@
    "lang": "en",
    "date": "2022-10-24T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9551,7 +9551,7 @@
    "lang": "en",
    "date": "2022-10-17T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9587,7 +9587,7 @@
    "lang": "en",
    "date": "2022-10-10T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9623,7 +9623,7 @@
    "lang": "en",
    "date": "2022-10-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9659,7 +9659,7 @@
    "lang": "en",
    "date": "2022-10-03T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9695,7 +9695,7 @@
    "lang": "en",
    "date": "2022-09-26T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9731,7 +9731,7 @@
    "lang": "en",
    "date": "2022-09-19T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9767,7 +9767,7 @@
    "lang": "en",
    "date": "2022-09-12T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9803,7 +9803,7 @@
    "lang": "en",
    "date": "2022-09-05T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9839,7 +9839,7 @@
    "lang": "en",
    "date": "2022-08-29T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9875,7 +9875,7 @@
    "lang": "en",
    "date": "2022-08-22T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9911,7 +9911,7 @@
    "lang": "en",
    "date": "2022-08-15T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9947,7 +9947,7 @@
    "lang": "en",
    "date": "2022-08-08T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -9983,7 +9983,7 @@
    "lang": "en",
    "date": "2022-08-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -10019,7 +10019,7 @@
    "lang": "en",
    "date": "2022-07-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -10055,7 +10055,7 @@
    "lang": "en",
    "date": "2022-07-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -10091,7 +10091,7 @@
    "lang": "en",
    "date": "2022-07-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -10127,7 +10127,7 @@
    "lang": "en",
    "date": "2022-07-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-3"
@@ -10163,7 +10163,7 @@
    "lang": "en",
    "date": "2022-06-27T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10199,7 +10199,7 @@
    "lang": "en",
    "date": "2022-06-20T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10235,7 +10235,7 @@
    "lang": "en",
    "date": "2022-06-13T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10271,7 +10271,7 @@
    "lang": "en",
    "date": "2022-06-06T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10307,7 +10307,7 @@
    "lang": "en",
    "date": "2022-05-30T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10343,7 +10343,7 @@
    "lang": "en",
    "date": "2022-05-23T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10379,7 +10379,7 @@
    "lang": "en",
    "date": "2022-05-16T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10415,7 +10415,7 @@
    "lang": "en",
    "date": "2022-05-09T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10451,7 +10451,7 @@
    "lang": "en",
    "date": "2022-05-02T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10487,7 +10487,7 @@
    "lang": "en",
    "date": "2022-04-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10523,7 +10523,7 @@
    "lang": "en",
    "date": "2022-04-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10559,7 +10559,7 @@
    "lang": "en",
    "date": "2022-04-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10595,7 +10595,7 @@
    "lang": "en",
    "date": "2022-04-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10631,7 +10631,7 @@
    "lang": "en",
    "date": "2022-03-28T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10667,7 +10667,7 @@
    "lang": "en",
    "date": "2022-03-21T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10703,7 +10703,7 @@
    "lang": "en",
    "date": "2022-03-14T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10739,7 +10739,7 @@
    "lang": "en",
    "date": "2022-03-07T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10775,7 +10775,7 @@
    "lang": "en",
    "date": "2022-02-28T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10811,7 +10811,7 @@
    "lang": "en",
    "date": "2022-02-21T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10847,7 +10847,7 @@
    "lang": "en",
    "date": "2022-02-14T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10883,7 +10883,7 @@
    "lang": "en",
    "date": "2022-02-07T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10919,7 +10919,7 @@
    "lang": "en",
    "date": "2022-01-31T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10955,7 +10955,7 @@
    "lang": "en",
    "date": "2022-01-24T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -10991,7 +10991,7 @@
    "lang": "en",
    "date": "2022-01-17T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -11027,7 +11027,7 @@
    "lang": "en",
    "date": "2022-01-10T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -11063,7 +11063,7 @@
    "lang": "en",
    "date": "2022-01-03T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-2"
@@ -11099,7 +11099,7 @@
    "lang": "en",
    "date": "2021-12-27T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11135,7 +11135,7 @@
    "lang": "en",
    "date": "2021-12-20T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11171,7 +11171,7 @@
    "lang": "en",
    "date": "2021-12-13T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11207,7 +11207,7 @@
    "lang": "en",
    "date": "2021-12-06T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11243,7 +11243,7 @@
    "lang": "en",
    "date": "2021-11-29T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11279,7 +11279,7 @@
    "lang": "en",
    "date": "2021-11-22T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11315,7 +11315,7 @@
    "lang": "en",
    "date": "2021-11-15T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11351,7 +11351,7 @@
    "lang": "en",
    "date": "2021-11-08T05:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11387,7 +11387,7 @@
    "lang": "en",
    "date": "2021-11-01T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11423,7 +11423,7 @@
    "lang": "en",
    "date": "2021-10-25T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11459,7 +11459,7 @@
    "lang": "en",
    "date": "2021-10-18T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"
@@ -11495,7 +11495,7 @@
    "lang": "en",
    "date": "2021-10-11T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/e9bd917e-0cc2-41eb-b715-84aa235671d1/Ou7Oe3iD0xewJjJ34rIGg0q-.jpeg",
    "tags": [
     "season-1"
@@ -11531,7 +11531,7 @@
    "lang": "en",
    "date": "2021-10-04T04:15:00Z",
    "first_seen": "2026-09-23T16:27:02Z",
-   "last_seen": "2026-11-19T16:40:28Z",
+   "last_seen": "2026-11-26T17:48:34Z",
    "image": "https://artwork.captivate.fm/0ad84761-e27d-40a0-be3f-982e28f5cfed/NA7eDTnRxVFYjt4qJyGSFDog.jpeg",
    "tags": [
     "season-1"

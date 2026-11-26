@@ -1,7 +1,225 @@
 {
- "updated": "2026-11-26T14:04:02Z",
+ "updated": "2026-11-26T18:31:12Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DgNj-m0O5XU",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNj-m0O5XU/",
+   "title": "La Viña en Instagram",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-26T16:43:54Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNj-m0O5XU.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNj-m0O5XU",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNj-m0O5XU.webp",
+    "embed_url": "https://www.instagram.com/p/DgNj-m0O5XU/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNj-m0O5XU/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña on Instagram",
+     "es": "La Viña en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true,
+   "wn_date": "2026-11-26T16:43:54Z"
+  },
+  {
+   "id": "ig:DgNe91yjfRR",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNe91yjfRR/",
+   "title": "Serenity Prayer - December issue",
+   "summary": "Serenity Prayer - December issue www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-26T16:00:15Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNe91yjfRR.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNe91yjfRR",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNe91yjfRR.webp",
+    "embed_url": "https://www.instagram.com/p/DgNe91yjfRR/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNe91yjfRR/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Serenity Prayer - December issue",
+     "es": "Serenity Prayer - Cuestión de diciembre"
+    },
+    "summary": {
+     "en": "Serenity Prayer - December issue www.aagrapevine.org",
+     "es": "Serenity Prayer - Número de diciembre www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-26T16:00:15Z"
+  },
+  {
+   "id": "ig:DgNe96yjYXK",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNe96yjYXK/",
+   "title": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026",
+   "summary": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-26T16:00:15Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNe96yjYXK.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNe96yjYXK",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNe96yjYXK.webp",
+    "embed_url": "https://www.instagram.com/p/DgNe96yjYXK/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNe96yjYXK/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Serenity Prayer - November / December 2026 Edition",
+     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026"
+    },
+    "summary": {
+     "en": "Serenity Prayer - November / December 2026 www.aalavina.org Edition",
+     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-26T16:00:15Z"
+  },
+  {
+   "id": "ig:DgNG70LjbKs",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNG70LjbKs/",
+   "title": "“When we concentrate on loving those we think are unlovable, we find out how expansive…",
+   "summary": "“When we concentrate on loving those we think are unlovable, we find out how expansive love is.” “Love,” North Hollywood, California, September 1988, Best of the Grapevine, Volume 3 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-26T12:30:16Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNG70LjbKs.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNG70LjbKs",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNG70LjbKs.webp",
+    "embed_url": "https://www.instagram.com/p/DgNG70LjbKs/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNG70LjbKs/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When we concentrate on loving those we think are unlovable, we find out how expansive…",
+     "es": "“Cuando nos concentramos en amar a aquellos que creemos que son inamables, descubrimos lo expansivo …"
+    },
+    "summary": {
+     "en": "“When we concentrate on loving those we think are unlovable, we find out how expansive love is.” “Love,” North Hollywood, California, September 1988, Best of the Grapevine, Volume 3 Daily Quote at www.aagrapevine.org",
+     "es": "“Cuando nos concentramos en amar a aquellos que creemos que son inamables, nos enteramos de lo expansivo que es el amor”. “Amor,” al norte de Hollywood, California, septiembre de 1988, lo mejor del Grapevine, volumen 3 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-26T12:30:16Z"
+  },
+  {
+   "id": "ig:DgNG7z6DYRc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNG7z6DYRc/",
+   "title": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que",
+   "summary": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que ‘tomaban’. Ahora que nos encontramos sobrios y, por la gracia de Dios, hemos llegado a ser ciudadanos responsables del mundo, ¿por qué no debemos dar un giro de 180 grados para convertirnos en ‘los que dan con gratitud’? Ya es hora de que lo hagamos”. \"“Séptima Tradición” BILL W., COFUNDADOR DE AA, JUNIO DE 1948 De El…",
+   "lang": "es",
+   "date": "2026-11-26T12:30:16Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNG7z6DYRc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNG7z6DYRc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNG7z6DYRc.webp",
+    "embed_url": "https://www.instagram.com/p/DgNG7z6DYRc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNG7z6DYRc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"Yes, once the AAs were a burden on everyone else. We were the ones who",
+     "es": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que"
+    },
+    "summary": {
+     "en": "\"Yes, once the AAs were a burden on everyone else. We were the ones who ‘take’. Now that we are sober and, by the grace of God, we have become responsible citizens of the world, why should we not give a 180 degree turn to become ‘those who give with gratitude’? It's time for us to do it.” \"Seventh Tradition\" Bill W., co-founder of AA, June 1948 of the …",
+     "es": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que ‘tomaban’. Ahora que nos encontramos sobrios y, por la gracia de Dios, hemos llegado a ser ciudadanos responsables del mundo, ¿por qué no debemos dar un giro de 180 grados para convertirnos en ‘los que dan con gratitud’? Ya es hora de que lo hagamos”. \"“Séptima Tradición” BILL W., COFUNDADOR DE AA, JUNIO DE 1948 De El…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-26T12:30:16Z"
+  },
   {
    "id": "ig:DgKlknsjTvt",
    "source": "instagram",
@@ -604,7 +822,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 205,
+    "views": 227,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -650,7 +868,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 61,
+    "views": 68,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -1328,7 +1546,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 190,
+    "views": 195,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2438,7 +2656,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 201,
+    "views": 212,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2658,7 +2876,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 292,
+    "views": 294,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2704,7 +2922,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 184,
+    "views": 187,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -6102,7 +6320,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 296,
+    "views": 298,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -6218,7 +6436,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-12T15:01:38Z"
   },
   {
@@ -6262,7 +6480,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-12T15:00:23Z"
   },
   {
@@ -6306,7 +6524,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-12T15:00:09Z"
   },
   {
@@ -7943,263 +8161,6 @@
    ],
    "is_new": false,
    "wn_date": "2026-11-11T12:30:16Z"
-  },
-  {
-   "id": "ig:DfmfArNjQSd",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfmfArNjQSd/",
-   "title": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly…",
-   "summary": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly certain that we shall always be strong enough and single-purposed enough from within, to relate ourselves rightly to the world without.” AA Co-Founder, Bill W., August 1945, “Modesty One Plank for Good Public Relations”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-11-11T12:30:15Z",
-   "first_seen": "2026-11-11T15:24:16Z",
-   "image": "/assets/cache/ig/DfmfArNjQSd.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfmfArNjQSd",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfmfArNjQSd.webp",
-    "embed_url": "https://www.instagram.com/p/DfmfArNjQSd/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfmfArNjQSd/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly…",
-     "es": "“Necesitamos constantemente examinarnos cuidadosamente, para hacer eternamente …"
-    },
-    "summary": {
-     "en": "“We need to constantly scrutinize ourselves carefully, in order to make everlastingly certain that we shall always be strong enough and single-purposed enough from within, to relate ourselves rightly to the world without.” AA Co-Founder, Bill W., August 1945, “Modesty One Plank for Good Public Relations”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“Necesitamos constantemente examinarnos cuidadosamente, para asegurarnos eternamente de que siempre seremos lo suficientemente fuertes y de un solo propósito desde dentro, para relacionarnos con el mundo sin justicia”. AA cofundador, Bill W., agosto de 1945, “Modesty One Plank for Good Public Relations”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-11T12:30:15Z"
-  },
-  {
-   "id": "ann:2026-11-11-holiday-gift-offers-free-shipping-and-new-prices",
-   "source": "committee",
-   "kind": "announcement",
-   "url": "/bulletin/#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices",
-   "title": "Grapevine and La Viña: holiday gift offers, free shipping and new prices",
-   "summary": "AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. The gift offers and free shipping are for U.S. and Canadian addresses and run through December 31, 2026. The holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at La Viña, with the first, for yourself or as a gift, at its regular price ($36.00 at…",
-   "lang": "en",
-   "date": "2026-11-11",
-   "first_seen": "2026-11-11T22:59:13Z",
-   "image": null,
-   "tags": [
-    "shop",
-    "gifts",
-    "subscriptions",
-    "shipping",
-    "prices",
-    "books"
-   ],
-   "category": "manual",
-   "status": "ok",
-   "extra": {
-    "body_md": "AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. The gift offers and free shipping are for U.S. and Canadian addresses and run through December 31, 2026.\n\nThe holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at La Viña, with the first, for yourself or as a gift, at its regular price ($36.00 at Grapevine, $18.00 at La Viña).\n\nAA Grapevine says neither of its two offers can be combined with any other offer.\n\nGVRs and RLVs: if anyone in your group orders Grapevine or La Viña books, subscriptions or gifts, a short mention at your group's business meeting lets everyone know.\n\n# Holiday gift offers\n\nThrough **December 31, 2026**, AA Grapevine and La Viña each have a holiday gift offer: with a 1-year print subscription at its regular price, for yourself or as a gift, a second 1-year print subscription as a gift is **$16.00** at Grapevine and **$8.00** at La Viña.\n\nBoth offers are for U.S. and Canadian addresses, and the details are on each store's page. AA Grapevine says its offer can't be combined with any other offer and is available only through its page.\n\n- **Grapevine:** the first is $36.00, the second $16.00. [Grapevine's offer page](https://www.aagrapevine.org/2gifts) · [Grapevine's page for Canada](https://www.aagrapevine.org/canada-2gifts)\n- **La Viña:** the first is $18.00, the second $8.00. [La Viña's offer page](https://www.aalavina.org/2regalos) (in Spanish) · [La Viña's page for Canada](https://www.aalavina.org/canada-2regalos) (in Spanish)\n- Both on our Shop page: [Shop — holiday gift offers](/shop/#offers-holiday-gifts-2026)\n\n# Free shipping\n\nFrom **November 1 through December 31, 2026**, AA Grapevine and La Viña offer **free shipping on all products** to U.S. and Canadian addresses. AA Grapevine says its offer can't be combined with any other offer.\n\n- Both stores and what each one says: [Shop — free shipping](/shop/#offers-free-shipping-2026)\n- [Grapevine store](https://www.aagrapevine.org/store)\n- [La Viña store](https://www.aalavina.org/tienda) (in Spanish)\n\n# New prices from January 1, 2027\n\nFrom **January 1, 2027**, a yearly Grapevine subscription costs **$39.00** in print or **$34.00** digital, a yearly La Viña subscription **$19.50** in print or **$17.00** digital, and every Grapevine and La Viña book **$2.00 more**.\n\nAA Grapevine announced the new prices in a letter to Intergroups and Central Offices. It explains that the costs of producing and distributing its publications and products keep rising: printing, paper and materials, fulfillment, postage and shipping.\n\n**What it means for your group.** If your group buys Grapevine or La Viña books or subscriptions, your treasurer may want to plan next year's budget with the new prices.\n\n- Today's prices and the new ones, side by side: [Shop — subscriptions and prices](/shop/#subscriptions)\n- AA Grapevine's notice: [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view)",
-    "expires": "2026-12-31",
-    "pinned": true,
-    "slug": "2026-11-11-holiday-gift-offers-free-shipping-and-new-prices",
-    "file": "content/bulletin/2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md",
-    "link": null,
-    "own_i18n": {
-     "title": {
-      "es": "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos precios"
-     },
-     "summary": {
-      "es": "La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026. Las ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año como regalo, con la primera, para ti o para regalar, a su…"
-     },
-     "body_md": {
-      "es": "La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026.\n\nLas ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año como regalo, con la primera, para ti o para regalar, a su precio habitual ($18.00 / $36.00).\n\nSegún AA Grapevine, ninguna de sus dos ofertas se puede combinar con ninguna otra.\n\nRLV y GVR: si en tu grupo alguien pide libros, suscripciones o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.\n\n# Ofertas de regalo para las fiestas\n\nHasta el **31 de diciembre de 2026**, La Viña y AA Grapevine tienen cada una su oferta de regalo para las fiestas: con una suscripción impresa de 1 año a su precio habitual, para ti o para regalar, una segunda suscripción impresa de 1 año como regalo cuesta **$8.00** en La Viña y **$16.00** en Grapevine.\n\nLas dos ofertas son para direcciones en EE. UU. y Canadá, y los detalles están en la página de cada tienda. Según AA Grapevine, su oferta no se puede combinar con ninguna otra y se obtiene únicamente en su página.\n\n- **La Viña:** la primera, $18.00; la segunda, $8.00. [Página de la oferta de La Viña](https://www.aalavina.org/2regalos) · [Página de La Viña para Canadá](https://www.aalavina.org/canada-2regalos)\n- **Grapevine:** la primera, $36.00; la segunda, $16.00. [Página de la oferta de Grapevine](https://www.aagrapevine.org/2gifts) (en inglés) · [Página de Grapevine para Canadá](https://www.aagrapevine.org/canada-2gifts) (en inglés)\n- Las dos, en nuestra Tienda: [Tienda: ofertas de regalo](/shop/#offers-holiday-gifts-2026)\n\n# Envío gratis\n\nDel **1 de noviembre al 31 de diciembre de 2026**, La Viña y AA Grapevine ofrecen **envío gratis en todos sus productos** a EE. UU. y Canadá. Según AA Grapevine, su oferta no se puede combinar con ninguna otra.\n\n- Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers-free-shipping-2026)\n- [Tienda de La Viña](https://www.aalavina.org/tienda)\n- [Tienda de Grapevine](https://www.aagrapevine.org/store) (en inglés)\n\n# Nuevos precios a partir del 1 de enero de 2027\n\nA partir del **1 de enero de 2027**, la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; a Grapevine, **$39.00** impresa o **$34.00** digital; y cada libro de La Viña y Grapevine, **$2.00 más**.\n\nAA Grapevine anunció los nuevos precios en una carta a las oficinas intergrupales y centrales. Explica que siguen subiendo los costos de producir y distribuir sus publicaciones y productos: impresión, papel y materiales, preparación de pedidos, correo y envío.\n\n**Qué significa para tu grupo.** Si tu grupo compra libros o suscripciones de La Viña y Grapevine, quizás el tesorero quiera planear el presupuesto del próximo año con los nuevos precios.\n\n- Los precios de hoy y los nuevos, lado a lado: [Tienda: suscripciones y precios](/shop/#subscriptions)\n- El aviso de AA Grapevine (en inglés): [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view)"
-     }
-    }
-   },
-   "i18n": {
-    "title": {
-     "en": "Grapevine and La Viña: holiday gift offers, free shipping and new prices",
-     "es": "La Viña y Grapevine: ofertas de regalo, envío gratis y nuevos precios"
-    },
-    "summary": {
-     "en": "AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. The gift offers and free shipping are for U.S. and Canadian addresses and run through December 31, 2026. The holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at La Viña, with the first, for yourself or as a gift, at its regular price ($36.00 at…",
-     "es": "La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026. Las ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año como regalo, con la primera, para ti o para regalar, a su…"
-    },
-    "body_md": {
-     "en": "AA Grapevine and La Viña have announced holiday gift offers, free shipping and new prices for 2027. The gift offers and free shipping are for U.S. and Canadian addresses and run through December 31, 2026.\n\nThe holiday gift offers: a second 1-year print subscription as a gift is $16.00 at Grapevine and $8.00 at La Viña, with the first, for yourself or as a gift, at its regular price ($36.00 at Grapevine, $18.00 at La Viña).\n\nAA Grapevine says neither of its two offers can be combined with any other offer.\n\nGVRs and RLVs: if anyone in your group orders Grapevine or La Viña books, subscriptions or gifts, a short mention at your group's business meeting lets everyone know.\n\n# Holiday gift offers\n\nThrough **December 31, 2026**, AA Grapevine and La Viña each have a holiday gift offer: with a 1-year print subscription at its regular price, for yourself or as a gift, a second 1-year print subscription as a gift is **$16.00** at Grapevine and **$8.00** at La Viña.\n\nBoth offers are for U.S. and Canadian addresses, and the details are on each store's page. AA Grapevine says its offer can't be combined with any other offer and is available only through its page.\n\n- **Grapevine:** the first is $36.00, the second $16.00. [Grapevine's offer page](https://www.aagrapevine.org/2gifts) · [Grapevine's page for Canada](https://www.aagrapevine.org/canada-2gifts)\n- **La Viña:** the first is $18.00, the second $8.00. [La Viña's offer page](https://www.aalavina.org/2regalos) (in Spanish) · [La Viña's page for Canada](https://www.aalavina.org/canada-2regalos) (in Spanish)\n- Both on our Shop page: [Shop — holiday gift offers](/shop/#offers-holiday-gifts-2026)\n\n# Free shipping\n\nFrom **November 1 through December 31, 2026**, AA Grapevine and La Viña offer **free shipping on all products** to U.S. and Canadian addresses. AA Grapevine says its offer can't be combined with any other offer.\n\n- Both stores and what each one says: [Shop — free shipping](/shop/#offers-free-shipping-2026)\n- [Grapevine store](https://www.aagrapevine.org/store)\n- [La Viña store](https://www.aalavina.org/tienda) (in Spanish)\n\n# New prices from January 1, 2027\n\nFrom **January 1, 2027**, a yearly Grapevine subscription costs **$39.00** in print or **$34.00** digital, a yearly La Viña subscription **$19.50** in print or **$17.00** digital, and every Grapevine and La Viña book **$2.00 more**.\n\nAA Grapevine announced the new prices in a letter to Intergroups and Central Offices. It explains that the costs of producing and distributing its publications and products keep rising: printing, paper and materials, fulfillment, postage and shipping.\n\n**What it means for your group.** If your group buys Grapevine or La Viña books or subscriptions, your treasurer may want to plan next year's budget with the new prices.\n\n- Today's prices and the new ones, side by side: [Shop — subscriptions and prices](/shop/#subscriptions)\n- AA Grapevine's notice: [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view)",
-     "es": "La Viña y AA Grapevine anunciaron ofertas de regalo para las fiestas, envío gratis y los nuevos precios de 2027. Las ofertas de regalo y el envío gratis valen para direcciones en EE. UU. y Canadá hasta el 31 de diciembre de 2026.\n\nLas ofertas de regalo: $8.00 en La Viña y $16.00 en Grapevine por una segunda suscripción impresa de 1 año como regalo, con la primera, para ti o para regalar, a su precio habitual ($18.00 / $36.00).\n\nSegún AA Grapevine, ninguna de sus dos ofertas se puede combinar con ninguna otra.\n\nRLV y GVR: si en tu grupo alguien pide libros, suscripciones o regalos de La Viña o Grapevine, un breve aviso en la reunión de trabajo de tu grupo ayuda a que todos lo sepan.\n\n# Ofertas de regalo para las fiestas\n\nHasta el **31 de diciembre de 2026**, La Viña y AA Grapevine tienen cada una su oferta de regalo para las fiestas: con una suscripción impresa de 1 año a su precio habitual, para ti o para regalar, una segunda suscripción impresa de 1 año como regalo cuesta **$8.00** en La Viña y **$16.00** en Grapevine.\n\nLas dos ofertas son para direcciones en EE. UU. y Canadá, y los detalles están en la página de cada tienda. Según AA Grapevine, su oferta no se puede combinar con ninguna otra y se obtiene únicamente en su página.\n\n- **La Viña:** la primera, $18.00; la segunda, $8.00. [Página de la oferta de La Viña](https://www.aalavina.org/2regalos) · [Página de La Viña para Canadá](https://www.aalavina.org/canada-2regalos)\n- **Grapevine:** la primera, $36.00; la segunda, $16.00. [Página de la oferta de Grapevine](https://www.aagrapevine.org/2gifts) (en inglés) · [Página de Grapevine para Canadá](https://www.aagrapevine.org/canada-2gifts) (en inglés)\n- Las dos, en nuestra Tienda: [Tienda: ofertas de regalo](/shop/#offers-holiday-gifts-2026)\n\n# Envío gratis\n\nDel **1 de noviembre al 31 de diciembre de 2026**, La Viña y AA Grapevine ofrecen **envío gratis en todos sus productos** a EE. UU. y Canadá. Según AA Grapevine, su oferta no se puede combinar con ninguna otra.\n\n- Las dos tiendas y lo que dice cada una: [Tienda: envío gratis](/shop/#offers-free-shipping-2026)\n- [Tienda de La Viña](https://www.aalavina.org/tienda)\n- [Tienda de Grapevine](https://www.aagrapevine.org/store) (en inglés)\n\n# Nuevos precios a partir del 1 de enero de 2027\n\nA partir del **1 de enero de 2027**, la suscripción anual a La Viña cuesta **$19.50** impresa o **$17.00** digital; a Grapevine, **$39.00** impresa o **$34.00** digital; y cada libro de La Viña y Grapevine, **$2.00 más**.\n\nAA Grapevine anunció los nuevos precios en una carta a las oficinas intergrupales y centrales. Explica que siguen subiendo los costos de producir y distribuir sus publicaciones y productos: impresión, papel y materiales, preparación de pedidos, correo y envío.\n\n**Qué significa para tu grupo.** Si tu grupo compra libros o suscripciones de La Viña y Grapevine, quizás el tesorero quiera planear el presupuesto del próximo año con los nuevos precios.\n\n- Los precios de hoy y los nuevos, lado a lado: [Tienda: suscripciones y precios](/shop/#subscriptions)\n- El aviso de AA Grapevine (en inglés): [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view)"
-    }
-   },
-   "machine": [],
-   "is_new": false,
-   "wn_date": "2026-11-11T12:00:00Z"
-  },
-  {
-   "id": "drive:1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-   "source": "drive",
-   "kind": "photo",
-   "url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
-   "title": "2026 Dallas Gathering Of Eagles",
-   "summary": "",
-   "lang": "en",
-   "date": "2026-11-11",
-   "first_seen": "2026-11-04T09:29:20Z",
-   "image": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
-   "tags": [
-    "panel-77",
-    "jpeg"
-   ],
-   "category": "photos",
-   "status": "ok",
-   "extra": {
-    "file_id": "1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-    "mime": "image/jpeg",
-    "name": "2026 Dallas Gathering Of Eagles.jpg",
-    "panel": 77,
-    "panel_label": "Panel 77 (2027–2028)",
-    "path": [
-     "photos",
-     "2026 Displays"
-    ],
-    "album": "2026 Displays",
-    "view_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/view",
-    "preview_url": "https://drive.google.com/file/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6/preview",
-    "download_url": "https://drive.google.com/uc?export=download&id=1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6",
-    "thumb_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w600",
-    "image_url": "https://lh3.googleusercontent.com/d/1lEdAVEDDOykjq7JXztKb90DsW6-0r9z6=w1600",
-    "is_image": true,
-    "is_video": false,
-    "is_pdf": false,
-    "file_type": "JPEG",
-    "folder_id": "1_2YCdQZoLw-EXbmJ8-CA0X85uBfu7CYR",
-    "folder_url": "https://drive.google.com/drive/folders/1_2YCdQZoLw-EXbmJ8-CA0X85uBfu7CYR",
-    "folder_chain": [
-     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
-     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
-     "1Hj05rGkkk_ajrai2r-w3j0Kqm_o2qcCI",
-     "1_2YCdQZoLw-EXbmJ8-CA0X85uBfu7CYR"
-    ],
-    "modified_text": "Nov 11"
-   },
-   "i18n": {
-    "title": {
-     "en": "2026 Dallas Gathering Of Eagles",
-     "es": "2026 Reunión de Dallas de águilas"
-    },
-    "summary": {
-     "en": "",
-     "es": ""
-    },
-    "album": {
-     "en": "2026 Displays",
-     "es": "2026 Pantallas"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-11T12:00:00Z"
-  },
-  {
-   "id": "ig:Dfj6N0WDezc",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dfj6N0WDezc/",
-   "title": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…",
-   "summary": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…",
-   "lang": "es",
-   "date": "2026-11-10T12:30:18Z",
-   "first_seen": "2026-11-10T15:40:46Z",
-   "image": "/assets/cache/ig/Dfj6N0WDezc.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dfj6N0WDezc",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dfj6N0WDezc.webp",
-    "embed_url": "https://www.instagram.com/p/Dfj6N0WDezc/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dfj6N0WDezc/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“With breaking our anonymity, we can resume our old disastrous … search",
-     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del…"
-    },
-    "summary": {
-     "en": "“With breaking our anonymity, we can resume our old disastrous pursuit of personal power and prestige, of public honor and money: the same implacable impulses as before, being frustrated, made us drink; the same forces that today tear the world apart.” \"Why Alcoholics Anonymous is anonymous\" Bill W., AA co-founder, January 1955 … language",
-     "es": "“Con romper nuestro anonimato, podemos reanudar nuestra vieja búsqueda desastrosa del poder y del prestigio personales, del honor público y del dinero: los mismos impulsos implacables que antes, al ser frustrados, nos hicieron beber; las mismas fuerzas que hoy en día desgarran el mundo”. \"“Por qué Alcohólicos Anónimos es anónimo” BILL W., COFUNDADOR DE AA, ENERO DE 1955 De El lenguaje del…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-10T12:30:18Z"
-  },
-  {
-   "id": "ig:Dfj6N1wDXPr",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dfj6N1wDXPr/",
-   "title": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
-   "summary": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-11-10T12:30:18Z",
-   "first_seen": "2026-11-10T15:40:46Z",
-   "image": "/assets/cache/ig/Dfj6N1wDXPr.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dfj6N1wDXPr",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dfj6N1wDXPr.webp",
-    "embed_url": "https://www.instagram.com/p/Dfj6N1wDXPr/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dfj6N1wDXPr/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.”",
-     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.”"
-    },
-    "summary": {
-     "en": "“Tomorrow – and all the tomorrows to come – are but extensions of right here, right now.” “Right Here Right Now!” Santa Barbara, California, September 1960, A.A. in Prison: Inmate to Inmate Daily Quote at www.aagrapevine.org",
-     "es": "“Mañana – y todos los mañanas por venir – son sólo extensiones de aquí, ahora mismo.” ¡Ahora mismo! Santa Barbara, California, septiembre de 1960, A.A. en prisión: Recluso para recluso Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-10T12:30:18Z"
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T18:03:20Z",
+ "updated": "2026-11-26T17:49:37Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17083,
-   "posts": 4050,
+   "followers": 17090,
+   "posts": 4054,
    "owner_id": "48108439509",
-   "checked": "2026-11-25T18:03:03Z",
+   "checked": "2026-11-26T17:49:19Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -19,13 +19,226 @@
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
    "followers": 2438,
-   "posts": 3080,
+   "posts": 3085,
    "owner_id": "48275839129",
-   "checked": "2026-11-25T18:03:06Z",
+   "checked": "2026-11-26T17:49:21Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgNj-m0O5XU",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNj-m0O5XU/",
+   "title": "La Viña en Instagram",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-26T16:43:54Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNj-m0O5XU.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNj-m0O5XU",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNj-m0O5XU.webp",
+    "embed_url": "https://www.instagram.com/p/DgNj-m0O5XU/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNj-m0O5XU/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "La Viña on Instagram",
+     "es": "La Viña en Instagram"
+    },
+    "summary": {
+     "en": "",
+     "es": ""
+    }
+   },
+   "machine": [],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgNe96yjYXK",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNe96yjYXK/",
+   "title": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026",
+   "summary": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-26T16:00:15Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNe96yjYXK.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNe96yjYXK",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNe96yjYXK.webp",
+    "embed_url": "https://www.instagram.com/p/DgNe96yjYXK/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNe96yjYXK/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Serenity Prayer - November / December 2026 Edition",
+     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026"
+    },
+    "summary": {
+     "en": "Serenity Prayer - November / December 2026 www.aalavina.org Edition",
+     "es": "Oración de la Serenidad - Edición de Noviembre/Diciembre 2026 www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgNe91yjfRR",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNe91yjfRR/",
+   "title": "Serenity Prayer - December issue",
+   "summary": "Serenity Prayer - December issue www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-26T16:00:15Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNe91yjfRR.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNe91yjfRR",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNe91yjfRR.webp",
+    "embed_url": "https://www.instagram.com/p/DgNe91yjfRR/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNe91yjfRR/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "Serenity Prayer - December issue",
+     "es": "Serenity Prayer - Cuestión de diciembre"
+    },
+    "summary": {
+     "en": "Serenity Prayer - December issue www.aagrapevine.org",
+     "es": "Serenity Prayer - Número de diciembre www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgNG7z6DYRc",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNG7z6DYRc/",
+   "title": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que",
+   "summary": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que ‘tomaban’. Ahora que nos encontramos sobrios y, por la gracia de Dios, hemos llegado a ser ciudadanos responsables del mundo, ¿por qué no debemos dar un giro de 180 grados para convertirnos en ‘los que dan con gratitud’? Ya es hora de que lo hagamos”. \"“Séptima Tradición” BILL W., COFUNDADOR DE AA, JUNIO DE 1948 De El…",
+   "lang": "es",
+   "date": "2026-11-26T12:30:16Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNG7z6DYRc.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNG7z6DYRc",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNG7z6DYRc.webp",
+    "embed_url": "https://www.instagram.com/p/DgNG7z6DYRc/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNG7z6DYRc/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "\"Yes, once the AAs were a burden on everyone else. We were the ones who",
+     "es": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que"
+    },
+    "summary": {
+     "en": "\"Yes, once the AAs were a burden on everyone else. We were the ones who ‘take’. Now that we are sober and, by the grace of God, we have become responsible citizens of the world, why should we not give a 180 degree turn to become ‘those who give with gratitude’? It's time for us to do it.” \"Seventh Tradition\" Bill W., co-founder of AA, June 1948 of the …",
+     "es": "\"“Sí, una vez los AA fuimos una carga para todos los demás. Éramos los que ‘tomaban’. Ahora que nos encontramos sobrios y, por la gracia de Dios, hemos llegado a ser ciudadanos responsables del mundo, ¿por qué no debemos dar un giro de 180 grados para convertirnos en ‘los que dan con gratitud’? Ya es hora de que lo hagamos”. \"“Séptima Tradición” BILL W., COFUNDADOR DE AA, JUNIO DE 1948 De El…"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgNG70LjbKs",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgNG70LjbKs/",
+   "title": "“When we concentrate on loving those we think are unlovable, we find out how expansive…",
+   "summary": "“When we concentrate on loving those we think are unlovable, we find out how expansive love is.” “Love,” North Hollywood, California, September 1988, Best of the Grapevine, Volume 3 Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-26T12:30:16Z",
+   "first_seen": "2026-11-26T17:49:36Z",
+   "image": "/assets/cache/ig/DgNG70LjbKs.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgNG70LjbKs",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgNG70LjbKs.webp",
+    "embed_url": "https://www.instagram.com/p/DgNG70LjbKs/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgNG70LjbKs/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“When we concentrate on loving those we think are unlovable, we find out how expansive…",
+     "es": "“Cuando nos concentramos en amar a aquellos que creemos que son inamables, descubrimos lo expansivo …"
+    },
+    "summary": {
+     "en": "“When we concentrate on loving those we think are unlovable, we find out how expansive love is.” “Love,” North Hollywood, California, September 1988, Best of the Grapevine, Volume 3 Daily Quote at www.aagrapevine.org",
+     "es": "“Cuando nos concentramos en amar a aquellos que creemos que son inamables, nos enteramos de lo expansivo que es el amor”. “Amor,” al norte de Hollywood, California, septiembre de 1988, lo mejor del Grapevine, volumen 3 Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DgKlkpCDXzl",
    "source": "instagram",
@@ -2522,7 +2735,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfpVAeMvo1Z",
@@ -2565,7 +2778,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfpU_DTyBBE",
@@ -2608,7 +2821,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true
+   "is_new": false
   },
   {
    "id": "ig:DfpDze9DZe_",
@@ -10193,49 +10406,6 @@
    "is_new": false
   },
   {
-   "id": "ig:Dd6OwdsF3fh",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd6OwdsF3fh/",
-   "title": "“It is out of our discussions, our differences of opinion, our daily experiences, and…",
-   "summary": "“It is out of our discussions, our differences of opinion, our daily experiences, and our general consent that the true answers must finally come.” AA Co-Founder, Bill W., September 1945, From: “’Rules’ Dangerous but Unity Vital”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-   "lang": "en",
-   "date": "2026-09-30T11:30:14Z",
-   "first_seen": "2026-09-30T15:47:18Z",
-   "image": "/assets/cache/ig/Dd6OwdsF3fh.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd6OwdsF3fh",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd6OwdsF3fh.webp",
-    "embed_url": "https://www.instagram.com/p/Dd6OwdsF3fh/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd6OwdsF3fh/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“It is out of our discussions, our differences of opinion, our daily experiences, and…",
-     "es": "“Está fuera de nuestras discusiones, nuestras diferencias de opinión, nuestras experiencias diarias, y …"
-    },
-    "summary": {
-     "en": "“It is out of our discussions, our differences of opinion, our daily experiences, and our general consent that the true answers must finally come.” AA Co-Founder, Bill W., September 1945, From: “’Rules’ Dangerous but Unity Vital”, The Language of the Heart Daily Quote at www.aagrapevine.org",
-     "es": "“Está fuera de nuestras discusiones, nuestras diferencias de opinión, nuestras experiencias diarias, y nuestro consentimiento general que las verdaderas respuestas deben finalmente llegar.” AA cofundador, Bill W., septiembre de 1945, de: “’rules’ peligroso pero de unidad Vital”, El lenguaje del corazón Cita diaria en www.aagrapevine.org"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:Dd3p9lAl9uB",
    "source": "instagram",
    "kind": "post",
@@ -10275,49 +10445,6 @@
    },
    "machine": [
     "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:Dd3p9kPl1uP",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd3p9kPl1uP/",
-   "title": "“Personal glorification, overweening pride, consuming ambition, exhibitionism…",
-   "summary": "“Personal glorification, overweening pride, consuming ambition, exhibitionism, intolerant smugness, money or power madness, refusal to admit mistakes and learn from them, self-satisfaction, lazy complacency – these and many more are the garden variety of ills which so often beset movements as well as individuals.” AA Co-Founder, Bill W., August 1945, From: “Modesty One Plank for Good Public…",
-   "lang": "en",
-   "date": "2026-09-29T11:30:14Z",
-   "first_seen": "2026-09-29T16:34:21Z",
-   "image": "/assets/cache/ig/Dd3p9kPl1uP.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd3p9kPl1uP",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd3p9kPl1uP.webp",
-    "embed_url": "https://www.instagram.com/p/Dd3p9kPl1uP/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd3p9kPl1uP/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“Personal glorification, overweening pride, consuming ambition, exhibitionism…",
-     "es": "“La glorificación personal, el orgullo abrumador, la ambición consumida, el exhibicionismo …"
-    },
-    "summary": {
-     "en": "“Personal glorification, overweening pride, consuming ambition, exhibitionism, intolerant smugness, money or power madness, refusal to admit mistakes and learn from them, self-satisfaction, lazy complacency – these and many more are the garden variety of ills which so often beset movements as well as individuals.” AA Co-Founder, Bill W., August 1945, From: “Modesty One Plank for Good Public…",
-     "es": "“La glorificación personal, el orgullo abrumador, la ambición consumida, el exhibicionismo, el aumento intolerante, el dinero o la locura del poder, la negativa a admitir errores y aprender de ellos, la autosatisfacción, la perezosa complacencia – estos y muchos más son la variedad del jardín de males que tan a menudo se presentan movimientos y individuos”. AA cofundador, Bill W., agosto de 1945, de: “Modesty One Plank for Good Public …"
-    }
-   },
-   "machine": [
-    "es"
    ],
    "is_new": false
   },
@@ -11094,92 +11221,6 @@
     "summary": {
      "en": "We're here to help! Contact Customer Service from Monday to Friday between 9:00 a.m. and 5:30 p.m. EST for the following numbers: Spanish: (800) 640-8781 (USA) / +1 (570) 567-0437 (International) English: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (international) French: (212) 870-3456 For all subscription-related queries, including new …",
      "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:Ddd6A-CDiwt",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Ddd6A-CDiwt/",
-   "title": "“La visión es la esencia misma de la prudencia”.",
-   "summary": "“La visión es la esencia misma de la prudencia”. \"“El liderazgo en AA: siempre una necesidad vital” BILL W., COFUNDADOR DE AA, ABRIL DE 1959 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org",
-   "lang": "es",
-   "date": "2026-09-19T11:30:03Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/Ddd6A-CDiwt.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Ddd6A-CDiwt",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Ddd6A-CDiwt.webp",
-    "embed_url": "https://www.instagram.com/p/Ddd6A-CDiwt/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Ddd6A-CDiwt/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "“The vision is the very essence of prudence.”",
-     "es": "“La visión es la esencia misma de la prudencia”."
-    },
-    "summary": {
-     "en": "“The vision is the very essence of prudence.” \"The leadership in AA: always a vital need\" Bill W., co-founder of AA, April 1959 Language of the Heart\" Daily Quote in www.aalavina.org",
-     "es": "“La visión es la esencia misma de la prudencia”. \"“El liderazgo en AA: siempre una necesidad vital” BILL W., COFUNDADOR DE AA, ABRIL DE 1959 De El lenguaje del corazón\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdUoETiownm",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdUoETiownm/",
-   "title": "La edición de septiembre/octubre de La Viña: Servicio en AA",
-   "summary": "La edición de septiembre/octubre de La Viña: Servicio en AA La recuperación nos regala mucho más que la sobriedad. Nos ofrece la oportunidad de reconstruir relaciones, descubrir un nuevo propósito y recuperar la alegría de vivir. En esta edición, miembros de AA comparten cómo la acción puede transformar nuestras vidas, fortalecer nuestra sobriedad y reafirmar el propósito de llevar el mensaje a…",
-   "lang": "es",
-   "date": "2026-09-15T21:00:03Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdUoETiownm.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdUoETiownm",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdUoETiownm.webp",
-    "embed_url": "https://www.instagram.com/p/DdUoETiownm/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdUoETiownm/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "The September/October edition of La Viña: Service in AA",
-     "es": "La edición de septiembre/octubre de La Viña: Servicio en AA"
-    },
-    "summary": {
-     "en": "The September/October edition of La Viña: AA Service The recovery gives us much more than the sobriety. It offers us the opportunity to rebuild relationships, discover a new purpose and recover the joy of living. In this edition, members of AA share how action can transform our lives, strengthen our sobriety and reaffirm the purpose of bringing the message to …",
-     "es": "La edición de septiembre/octubre de La Viña: Servicio en AA La recuperación nos regala mucho más que la sobriedad. Nos ofrece la oportunidad de reconstruir relaciones, descubrir un nuevo propósito y recuperar la alegría de vivir. En esta edición, miembros de AA comparten cómo la acción puede transformar nuestras vidas, fortalecer nuestra sobriedad y reafirmar el propósito de llevar el mensaje a…"
     }
    },
    "machine": [
