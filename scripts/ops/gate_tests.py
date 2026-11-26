@@ -218,12 +218,20 @@ CONTENT_TESTS: dict[str, str] = {
     "test_presentations.PresentationFiles.test_every_deck":
         "config/presentations: every deck passes the checker",
     "test_presentations.PresentationFiles.test_the_decks":
-        "config/presentations: the five decks, each with its own order",
+        "config/presentations: exactly the decks it names, each with its own order",
     "test_presentations.PresentationFiles.test_the_grapevine_meeting_names_what_it_never_quotes":
         "config/presentations/grapevine-meeting.yml: the Statement of Purpose named, never quoted; no deck says "
         "'Grapevine meetings'",
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
+    "test_presentations_welcome_visit_prep_recording.TheFiles.":
+        "config/presentations: the welcome for Panel 77, the booth visit, the Conference session and the recording "
+        "workshop pass the checker, their versions' minutes add up exactly, notes on every slide shown, their agendas",
+    "test_presentations_welcome_visit_prep_recording.TheFacts.":
+        "config/presentations, config/site.yml, config/history.yml and content/events: those four decks' facts (the "
+        "guest speakers' keys, the GSR/DCM orientations, the booth's codes, the Conference's blanks, the story lines)",
+    "test_presentations_welcome_visit_prep_recording.TheBuild.":
+        "config/presentations: the build's loader reads those four decks with no problem, a code for every QR slide",
     "test_presentations_price_follow_up.PriceFollowUp.":
         "config/presentations/committee-meeting.yml: the 2027 price follow-up shown from January 1 through March 31, "
         "2027, in both versions, with the prices of the day",

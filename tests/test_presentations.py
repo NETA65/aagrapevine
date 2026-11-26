@@ -1,5 +1,6 @@
-"""The presentations (config/presentations/<id>.yml → /orientation/, "Presentations": three workshops, the committee
-meeting and our Grapevine Meeting): every deck file stays complete, safe and in line with AA's principles and the
+"""The presentations (config/presentations/<id>.yml → /orientation/, "Presentations": the workshops, the committee
+meeting, our Grapevine Meeting, the welcome for Panel 77, the booth or group visit and getting ready for the
+Conference): every deck file stays complete, safe and in line with AA's principles and the
 site's wording rules.
 
 The site build (src/_data/presentations.js, I18N_STRICT=1) stops on the same problems; these tests name the deck
@@ -21,7 +22,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / "config" / "presentations"
-DECKS = ("orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting", "grapevine-meeting")
+DECKS = ("orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting", "grapevine-meeting",
+         "welcome-panel-77", "booth-visit", "conference-prep", "recording-workshop")
 # The phone numbers the site itself publishes (published_phones): a deck may show them
 SITE_YML = ROOT / "config" / "site.yml"
 AUDIO_PROJECT = ROOT / "data" / "site" / "audio_project.json"

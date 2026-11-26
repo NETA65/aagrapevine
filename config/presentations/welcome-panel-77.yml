@@ -1,0 +1,588 @@
+# =====================================================================
+#  "Welcome to Panel 77" — the committee's welcome for new GVRs and RLVs in January 2027, at the start of Panel 77
+#  (2027–2028): the service position and registering, what the Area committee is and does, its monthly meeting
+#  (3rd Wednesday) and its new format with a guest speaker from January 20, 2027, our new Grapevine Meeting (1st
+#  Wednesday, from January 6, 2027), the weekly open meetings of Grapevine and La Viña, the Area's GSR/DCM
+#  orientations (January 17, 24 and 31, 2027), the yearly prices of 2027, the tools on the committee website, and
+#  how to reach us. A web presentation on /orientation/ (Presentations), new in November 2026 (no PowerPoint copy:
+#  no `drive_title`).
+#
+#  How it is written (the patterns of the other decks):
+#   · the facts that change come from the site's data ({live:…}): the committee meeting's next date, time, Google
+#     Meet link and code (config/site.yml `meeting:`); its guest speakers (`meeting: speakers:`: the speaker of the
+#     meeting's own day with {live:meeting_day} and {live:speaker_note}, next month's with {live:meeting_after} and
+#     {live:speaker_after}, never mixed with {live:meeting_next}, which has a slide of its own); our Grapevine Meeting
+#     (`recurring_events:` grapevine-meeting); the weekly open meetings; the yearly prices of the day (`price_changes:`
+#     2027-01: the new prices from January 1, 2027; {live:price_change_note} says so in the notes during the notice);
+#     this month's issues and the coming events (the Events page). A fact the site has nothing for says where to look,
+#     so each sentence around one reads well with that phrase too;
+#   · the three GSR/DCM orientations are the Area's (content/events/2027-01-*-neta65-gsr-dcm-orientation-*.md): their
+#     slide leaves the show by itself after the last one (`show_until`), and the live "Coming up" list keeps the rest
+#     of the Area's dates. The deck has no agenda slide with clock times: a slide that leaves the show by date would
+#     move them (the "What we'll cover" slide names the parts instead);
+#   · the versions: "full" (about 30 minutes) and "short" (about 15 minutes, for a district meeting or the start of
+#     the committee meeting: `only` lists its slides, `version_minutes` gives them their shorter time). A TRANSITION
+#     to a slide the short version leaves out has its own {not:short} / {only:short} line;
+#   · anonymity and attraction rather than promotion, as in every deck: service positions, never names (the guest
+#     speakers by first name and last initial, as the Meetings page lists them); no prices as a reason to buy.
+#  The content stays English (the owner's decision); the card, the versions and the blanks' labels are bilingual.
+#  Checked by tests/test_presentations.py (and by the build, with I18N_STRICT=1).
+# =====================================================================
+id: "welcome-panel-77"
+order: 6
+lang: "en"
+title: "Welcome to Panel 77: New GVRs and RLVs"
+short: "Welcome, Panel 77"
+eyebrow: "Welcome"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 30
+icon: "hand-heart"
+tone: "vine"
+card:
+  title:
+    en: "Welcome to Panel 77: New GVRs and RLVs"
+    es: "Bienvenida al Panel 77: nuevos RLV y GVR"
+  summary:
+    en: "For January 2027: the GVR and RLV service position and how to register, what our Area committee does, its monthly meeting with a guest speaker from January 20, our new Grapevine Meeting, the weekly open meetings, the Area's GSR/DCM orientations, the 2027 prices, the tools on our website and how to reach us."
+    es: "Para enero de 2027: el puesto de servicio de RLV y GVR y cómo registrarte, lo que hace nuestro comité de Área, su reunión mensual con un(a) orador(a) invitado(a) desde el 20 de enero, nuestra nueva Reunión de Grapevine, las reuniones abiertas semanales, las orientaciones del Área para RSG y MCD, los precios de 2027, las herramientas de nuestro sitio web y cómo comunicarte con nosotros."
+  audience:
+    en: "For new GVRs and RLVs of Panel 77 (2027–2028), and the GSRs and DCMs who work with them: at the committee meeting, a district meeting or an orientation, online or in person."
+    es: "Para los nuevos RLV y GVR del Panel 77 (2027–2028), y los RSG y MCD que trabajan con ellos: en la reunión del comité, en una reunión de distrito o en una orientación, en línea o en persona."
+
+presets:
+  - id: "full"
+    label:
+      en: "The full welcome (about 30 minutes)"
+      es: "La bienvenida completa (unos 30 minutos)"
+    minutes: 30
+  - id: "short"
+    label:
+      en: "Short welcome (about 15 minutes)"
+      es: "Bienvenida breve (unos 15 minutos)"
+    minutes: 15
+    only: ["title", "welcome", "register", "committee", "committee-meeting", "guest-speakers", "grapevine-meeting",
+           "orientations", "prices", "tools", "reach-us", "questions", "thank-you"]
+    note:
+      en: "For a district meeting or the start of the committee meeting: registering, the committee and its two monthly meetings, the Area's orientations, the prices, the website's tools and how to reach us, then a few questions."
+      es: "Para una reunión de distrito o el comienzo de la reunión del comité: cómo registrarse, el comité y sus dos reuniones mensuales, las orientaciones del Área, los precios, las herramientas del sitio web y cómo comunicarte con nosotros, y luego unas preguntas."
+
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "Month DD, YYYY"
+  - key: "place"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "Place, or online"
+
+slides:
+  # ------------------------------------------------------------------ OPENING
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Welcome to Panel 77"
+    subtitle: "For new GVRs and RLVs, 2027–2028"
+    lines:
+      - "{fill:presenter} · {live:panel}"
+      - "{fill:date} · {fill:place}"
+    minutes: 0.5
+    notes: |
+      WHEN: up while people arrive.
+      SAY: Welcome, everyone, and congratulations: whether your group just elected you or you volunteered, you're now the link between your home group and AA's meeting in print. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} for Northeast Texas Area 65.
+      {not:short} SAY: In about half an hour I'll share what the service position is, how our Area committee can help you, the dates to know this month, and where to find everything on our website.
+      {only:short} SAY: In about fifteen minutes I'll share how to get started, how our Area committee can help you, the dates to know this month, and where to find everything on our website.
+      DO: Fill in the date and the place ({ui:customize} → {ui:your_details}), and choose the version: about 30 minutes, or the short one of about 15 ({ui:customize} → {ui:version}). Have this month's Grapevine and La Viña within reach to hold up: we never put covers on a slide.
+      TIP: This presentation and its notes are public on the committee's website. What you type in {ui:customize} stays on this device, but it shows on the screen: use service positions, not names.
+
+  - id: "welcome"
+    layout: "bullets"
+    title: "Welcome, new GVRs and RLVs"
+    items:
+      - "**GVR**: Grapevine representative · **RLV**: La Viña representative ({lang:es}representante de La Viña{/lang})"
+      - "Panel 77 is 2027 and 2028: a new term for many of us, at every level of service"
+      - "Questions are welcome at any time, and at the end"
+      - "Please don't photograph, screenshot or record anyone: who you see here stays here"
+    takeaway: "Presented by the NETA 65 Grapevine & La Viña Committee for local service. This is not an official AA Grapevine, Inc. presentation."
+    minutes: 1.5
+    version_minutes: { short: 1.25 }
+    notes: |
+      SAY: A GVR is a Grapevine representative, and an RLV is a La Viña representative, {lang:es}representante de La Viña{/lang}; some of us serve both magazines. Panel 77 is our Area's two years of service in 2027 and 2028, so many of us are starting a new term together, in our groups, our districts and the Area.
+      SAY: Two housekeeping notes. Questions are welcome at any time; I'll also leave a few minutes at the end. And please don't take photos, screenshots or recordings of anyone: you're welcome to the slides, which are on our website.
+      SAY: One more thing: this is our Area committee's presentation. We share what we've learned from AA Grapevine and La Viña, but we don't speak for them.
+      DO: Online, paste the no-screenshot reminder in the chat, and make sure nobody is recording.
+      {not:short} TRANSITION: Here's what we'll cover.
+      {only:short} TRANSITION: Your first step, if you'd like: register.
+
+  # No agenda with clock times: the orientations' slide leaves the show by date (see the comment at the top).
+  - id: "today"
+    layout: "bullets"
+    title: "What we'll cover"
+    numbered: true
+    items:
+      - "Your service position, and registering"
+      - "Your Area committee: our two monthly meetings, and the guest speakers"
+      - "In the Area this month, the 2027 prices and the tools on our website"
+      - "How to reach us, and your questions"
+    minutes: 0.5
+    notes: |
+      SAY: Here's our half hour. First, what the service position is, and the first step most reps take: registering. Then who we are, your Area committee, with our two monthly meetings and the guest speakers who start in January. Then the Area's dates, the prices for 2027 and the tools on our website. And we'll finish with how to reach us, and your questions.
+      TIP: Keep a steady pace: most of what's here is also on the committee website, so new reps can find it again.
+      TRANSITION: Let's start with you.
+
+  # ------------------------------------------------------------------ 1. YOUR SERVICE POSITION
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    title: "Your service position"
+    subtitle: "The link between your home group and AA's meeting in print"
+    accent: "vine"
+    minutes: 0.25
+    notes: |
+      SAY: Part one: your service position, what it is and how to get started.
+      DO: Hold up a printed Grapevine and a printed La Viña.
+      TRANSITION: So what does a GVR or an RLV actually do?
+
+  - id: "position"
+    layout: "bullets"
+    title: "What a GVR or RLV does"
+    items:
+      - "Announce each new issue, its theme and the story deadlines"
+      - "Keep the magazines visible at your group: a copy on the table, back issues to give away"
+      - "Invite members to write or record their stories"
+      - "Help members, and the group if it wishes, to subscribe or give a gift"
+      - "Work alongside your GSR, and report at the group's business meeting"
+    takeaway: "Ideas to choose from, not duties: each group decides what fits, and how its rep is chosen."
+    source: "Sources: aagrapevine.org (become a GVR) · aalavina.org ({lang:es}conviértete en RLV{/lang}) · GVR Workbook (2026), p. 24 · RLV Manual (2025), p. 6 · paraphrased"
+    minutes: 2
+    notes: |
+      SAY: Mostly small, steady things. You announce each new issue and what's in it: its theme, and when the next story deadline is. You keep the magazines where people can see them. You invite members to write or record their stories. You help members, and the group if its group conscience wishes, to subscribe or to give a gift subscription. And you work alongside your GSR: share your plans, and give a short report at your group's business meeting.
+      SAY: These are ideas, not duties. Some groups will be more interested than others, and that's their right. Pick one or two, do them well, and add more when you're ready.
+      ASK (if time): Which one could you start at your group this month?
+      TIP: Your group decides how its rep is chosen and for how long; two years, with the panel, is common. When you rotate out, tell the office, and hand your notes to the next rep.
+      SOURCES: aagrapevine.org/get-involved/become-grapevine-rep; aalavina.org/servicio/conviertete-en-rlv; GVR Workbook (2026), p. 24; RLV Manual (2025), pp. 6–7 (paraphrased).
+      TRANSITION: The first step most reps take: registering.
+
+  # The official forms and kits (config/site.yml links: gvr_register, rlv_register, gvr_resources, rlv_resources,
+  # gvr_office_email), as the other decks give them.
+  - id: "register"
+    layout: "resources"
+    title: "Register, and get your kit"
+    links:
+      - label: "Register as a GVR (Grapevine)"
+        url: "https://www.aagrapevine.org/get-involved/become-grapevine-rep"
+        note: "You'll receive the Digital Grapevine Kit and the monthly e-mail for reps"
+      - label: "Register as an RLV (La Viña)"
+        url: "https://www.aalavina.org/servicio/conviertete-en-rlv"
+        note: "In Spanish: La Viña's form for its representatives"
+      - label: "Free tools for GVRs: the GVR Workbook"
+        url: "https://www.aagrapevine.org/gvr-resources"
+        note: "On Grapevine's website"
+      - label: "Free tools for RLVs: the RLV Manual"
+        url: "https://www.aalavina.org/recursos"
+        note: "{lang:es}Manual del RLV{/lang}, on La Viña's website"
+      - label: "Questions about registering or your kit"
+        url: "gvrc@aagrapevine.org"
+        note: "AA Grapevine's address for group reps"
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: If you'd like, your first step is to register. It's a short online form. When you register as a GVR, Grapevine sends you its Digital Grapevine Kit and the monthly e-mail for reps, with the news to announce. La Viña's form for RLVs is in Spanish, and a registered RLV receives a complimentary copy of La Viña for a year, to use in the service position. Both offices have free tools: the GVR Workbook in English and the {lang:es}Manual del RLV{/lang} in Spanish. If you get stuck, write to the address at the bottom: that's AA Grapevine's office for group reps.
+      DO: If there's time and a connection, open one of the forms on the screen so people see how short it is. Never fill it in on the screen with anyone's details.
+      TIP: The office asks for your own contact information; that's how it reaches you, and the magazines never print it. Registering is your choice, not a requirement. Our committee's GVR / RLV corner ({live:site}/gvr/#kits) links the same kits.
+      SOURCES: aagrapevine.org/get-involved/become-grapevine-rep; aalavina.org/servicio/conviertete-en-rlv; aagrapevine.org/gvr-resources; aalavina.org/recursos; RLV Manual (2025), p. 7.
+      {not:short} TRANSITION: Now, who we are: your Area committee.
+      {only:short} TRANSITION: Now, who we are.
+
+  # ------------------------------------------------------------------ 2. YOUR AREA COMMITTEE
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    title: "Your Area committee"
+    subtitle: "Two monthly meetings online, workshops, our table, and the website"
+    accent: "grape"
+    minutes: 0.25
+    notes: |
+      SAY: Part two: your Area committee, the NETA 65 Grapevine and La Viña Committee, and how it can help you.
+      TIP: Say it warmly: the committee exists for the GVRs and RLVs. Every one of them is welcome at every meeting.
+      TRANSITION: Here's what we do.
+
+  # The deck's 2 × 2 cards, one accent each.
+  - id: "committee"
+    layout: "columns"
+    style: "cards"
+    title: "What the committee is, and what it does"
+    columns:
+      - heading: "We meet"
+        accent: "grape"
+        items:
+          - "The committee meeting, every 3rd Wednesday"
+          - "Our Grapevine Meeting, every 1st Wednesday"
+          - "Both online, on Google Meet; all AA members welcome"
+      - heading: "We come to you"
+        accent: "lv"
+        items:
+          - "Writing, recording and information workshops"
+          - "Welcomes and orientations for new reps"
+          - "Ask: grapevine@neta65.org"
+      - heading: "We keep a table"
+        accent: "gv"
+        items:
+          - "CityWide Dallas, every 2nd Saturday"
+          - "The Area's assemblies"
+      - heading: "We keep you current"
+        accent: "vine"
+        items:
+          - "The committee website, in English and Spanish"
+          - "This month's issues, themes, deadlines, offers and dates"
+    takeaway: "Trusted servants of Area 65: we serve, we don't govern. Each group decides for itself."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Our committee is a small group of AA members, trusted servants of Area 65, who help groups and members use Grapevine and La Viña to carry the message. We meet twice a month online: the committee meeting on the third Wednesday, and our Grapevine Meeting, an AA meeting around a Grapevine story, on the first Wednesday. We come to your group or district with a workshop: writing your story, recording it, getting to know the magazines, or a welcome like this one. We keep a Grapevine and La Viña table at CityWide Dallas every second Saturday and at the Area's assemblies. And our website keeps this month's issues, themes, deadlines, offers and dates in one place, in English and in Spanish.
+      SAY: We serve; we don't govern. What a group reads, buys or does is always its own group conscience's decision.
+      TIP: If someone asks how the committee is chosen or funded, point them to the Area's Policies and Procedures, or to the Area Secretary, rather than answering from memory.
+      SOURCES: the committee website ({live:site}: /meetings/, /events/, /contribute/#workshop); neta65.org/trusted-servants/grapevine-la-vina.
+      TRANSITION: Let's look at the committee meeting first.
+
+  # The next meeting alone ({live:meeting_next}: in a workshop, "the next meeting"), never with meeting_day on the
+  # same slide (the next slide has the speakers, by meeting_day and meeting_after).
+  - id: "committee-meeting"
+    layout: "bullets"
+    title: "The committee meeting: every 3rd Wednesday"
+    items:
+      - "**{live:meeting_time}**, on {live:meeting_platform}: {live:meeting_link} · meeting code {live:meeting_code}"
+      - "Next: **{live:meeting_next}**"
+      - "From January 20, 2027: a guest speaker and your questions until 7:30"
+      - "Then coming events, workshop requests, special offers, the magazines' topics and GVR and RLV sharing until 8:00"
+      - "Not a business meeting: no minutes, no reports. All AA members welcome, no registration"
+    takeaway: "Details and the flyer: [{live:site}/meetings/](/meetings/#committee-meeting)"
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: Our committee meets every third Wednesday, {live:meeting_time}, on {live:meeting_platform}, always on the same link, the one on the screen. The next meeting: {live:meeting_next}. Every AA member is welcome, and there's nothing to sign up for.
+      SAY: From January 20, 2027, each meeting has a new shape. We open with a moment of silence and the Serenity Prayer, then a guest speaker shares for about twenty minutes and takes your questions, done by 7:30. Then come the events coming up and your workshop requests, the stores' special offers, the magazines' topics, and the heart of it: GVRs and RLVs sharing what's working, a challenge, or help they need. We close at eight with the Responsibility Statement, and after the close there's the parking lot, for whatever is on your mind.
+      SAY: It isn't a business meeting: no minutes to approve, no reports. Come as you are, and share your experience.
+      TIP: Google Meet shows the name of the Google account you join with: a first name is enough, and the introductions go in the chat. The room has no number to call; a member without internet can still join the weekly open meetings by phone ({live:site}/accessibility/#phone).
+      STAYS CURRENT: the time, the link, the meeting code and the next date fill in by themselves from the committee website.
+      TRANSITION: Who are the guest speakers?
+
+  # The speakers of config/site.yml `meeting: speakers:` (first name and last initial, as /meetings/ lists them): the
+  # speaker of the meeting's own day ({live:meeting_day} with {live:speaker_note}: "no guest speaker this month" for
+  # a meeting before January 20, 2027), then next month's ({live:meeting_after} with {live:speaker_after}).
+  - id: "guest-speakers"
+    layout: "bullets"
+    accent: "lv"
+    title: "A guest speaker every month, from January 20, 2027"
+    items:
+      - "**{live:meeting_day}**: {live:speaker_note}"
+      - "Topic: {live:speaker_topic}"
+      - "Then **{live:meeting_after}**: {live:speaker_after}"
+      - "Members with years of general service, past and present delegates among them, on Grapevine and La Viña in service"
+    takeaway: "The year's speakers, by first name and last initial: [{live:site}/meetings/](/meetings/#committee-meeting)"
+    minutes: 1.25
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: Here's who's coming. At the meeting on {live:meeting_day}: {live:speaker_note}. Topic: {live:speaker_topic}. And the month after, on {live:meeting_after}: {live:speaker_after}. The committee has invited members with years of general service, past and present delegates among them, from Areas across the U.S., to share their experience of Grapevine and La Viña in service, one each month; the whole list is on our Meetings page.
+      IF THE SLIDE SAYS 'no guest speaker this month' or 'none this time': that meeting is before January 20, 2027, when the guest speakers start; it shares on a topic instead. 'To be announced': the committee's list doesn't name that month's speaker yet.
+      ANONYMITY: the speakers appear by first name and last initial and their service position, as the Meetings page lists them; never a last name, an e-mail or a phone number.
+      STAYS CURRENT: both speakers and both dates fill in by themselves from the committee website, and move on the night after each meeting.
+      TRANSITION: And something new for January: our Grapevine Meeting.
+
+  # Our Grapevine Meeting (config/site.yml recurring_events: grapevine-meeting, from January 6, 2027): its next date
+  # alone ({live:grapevine_meeting_next}), its time and link. Never "Grapevine meetings" (the list of AA groups that
+  # read Grapevine, /meetings/#grapevine-meetings).
+  - id: "grapevine-meeting"
+    layout: "bullets"
+    accent: "gv"
+    title: "New: our Grapevine Meeting, every 1st Wednesday"
+    items:
+      - "An online AA meeting in English, from January 6, 2027: **{live:grapevine_meeting_time}**"
+      - "Next: **{live:grapevine_meeting_next}** · the committee's Google Meet: {live:grapevine_meeting_link}"
+      - "The AA Grapevine Statement of Purpose, a story from AA Grapevine read aloud, then sharing on its topic"
+      - "Open to all AA members, across Area 65 and beyond"
+    takeaway: "Its flyer, to share with your home group: [{live:site}/meetings/](/meetings/#grapevine-meeting)"
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Something new this year: our Grapevine Meeting, an online AA meeting in English on the first Wednesday of each month, {live:grapevine_meeting_time}, on the same Google Meet link as the committee meeting. The first one is on January 6, 2027; the next one: {live:grapevine_meeting_next}. A reader reads the AA Grapevine Statement of Purpose, another reads a story from AA Grapevine aloud and starts the sharing, and then we share on its topic. It's open to all AA members, across Area 65 and beyond.
+      SAY: It's a lovely meeting to invite your home group to, and a good way to hear how members use the magazine. Its flyer is on our Meetings page.
+      TIP: Call it the Grapevine Meeting, in the singular: the same page also lists the AA groups in the Area that read Grapevine together, which are not this meeting.
+      STAYS CURRENT: the next date, the time and the link fill in by themselves.
+      {not:short} TRANSITION: Two more meetings every week, from the magazines themselves.
+      {only:short} TRANSITION: Now, the Area's dates and your tools.
+
+  # The weekly open meetings of the Meetings page (data/site/weekly_open.json, config/site.yml lavina_weekly_open:):
+  # their day, time and Zoom room. Not our committee's meetings: Grapevine's and La Viña's own.
+  - id: "open-meetings"
+    layout: "columns"
+    style: "panels"
+    title: "Every week: the magazines' own open meetings, on Zoom"
+    columns:
+      - heading: "Grapevine Weekly Open"
+        accent: "gv"
+        items:
+          - "**{live:gv_open_meeting}**"
+          - "In English: a host and two speakers"
+      - heading: "{lang:es}Reunión Abierta de La Viña{/lang}"
+        accent: "lv"
+        items:
+          - "**{live:lv_open_meeting}**"
+          - "In Spanish, in the same Zoom room"
+    takeaway: "Zoom room: {live:open_meeting_zoom}"
+    source: "Sources: aagrapevine.org/grapevine-weekly-open · La Viña's flyer (2026) · [{live:site}/meetings/](/meetings/#weekly-open)"
+    minutes: 1
+    notes: |
+      SAY: Every week there's something you can invite people to. Grapevine hosts its own weekly open AA meeting on Zoom, the Grapevine Weekly Open, in English: {live:gv_open_meeting}, with a host and two speakers. La Viña has its own open meeting in Spanish, the {lang:es}Reunión Abierta de La Viña{/lang}: {live:lv_open_meeting}, in the same Zoom room. They're not our committee's meetings, they're the magazines' own, and they're a lovely thing to mention to a homebound member or a newcomer.
+      ANONYMITY: AA Grapevine records both meetings to publish them as podcasts, and says its podcast respects anonymity. Anyone who speaks there should know they are recorded.
+      TIP: Before you announce the {lang:es}Reunión Abierta{/lang}, check its day and time at aalavina.org and on our Meetings page; members without internet can join by phone ({live:site}/accessibility/#phone).
+      STAYS CURRENT: both days and times and the Zoom room fill in by themselves from the committee's Meetings page.
+      TRANSITION: Now the Area's dates, and your tools.
+
+  # ------------------------------------------------------------------ 3. IN THE AREA, AND YOUR TOOLS
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    title: "In the Area, and your tools"
+    subtitle: "Dates to know, the 2027 prices, and the committee website"
+    accent: "gv"
+    minutes: 0.25
+    notes: |
+      SAY: Part three: what's coming up in the Area, the prices for 2027, and the tools on our website that make the service position easier.
+      TIP: Keep this part practical: one sentence a line, and leave the details to the website.
+      TRANSITION: First, the Area's dates.
+
+  # The Area's three GSR/DCM orientations of 2027 (content/events/2027-01-17-…-central, -24-…-west, -31-…-east: the
+  # owner, 2026-11-19), 1 to 6 PM. In the show until the last one (show_until), then "Coming up" has the Area's dates.
+  - id: "orientations"
+    layout: "table"
+    title: "The Area's GSR/DCM orientations, January 2027"
+    optional: true
+    show_until: "2027-01-31"
+    header: ["", "Sunday, 1–6 PM", "Where"]
+    rows:
+      - ["Central", "January 17, 2027", "Lewisville Group, Lewisville"]
+      - ["West", "January 24, 2027", "Eastland Group, Eastland"]
+      - ["East", "January 31, 2027", "Downtown Suburban Group, Tyler"]
+    widths: [2.2, 3.6, 6]
+    first_col_bold: true
+    takeaway: "For the Area's new GSRs and DCMs. Every date and address: [{live:site}/events/](/events/)"
+    source: "Source: Northeast Texas Area 65 (neta65.org), as the committee's Events page lists them"
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: In January, the Area holds three orientations for its new General Service Representatives and District Committee Members, GSRs and DCMs, on three Sundays from one to six: the Central Orientation on January 17 at the Lewisville Group in Lewisville, the West Orientation on January 24 at the Eastland Group in Eastland, and the East Orientation on January 31 at the Downtown Suburban Group in Tyler. If you're a GSR too, or you'd like to go along with yours, ask your DCM.
+      ADDRESSES: Lewisville Group, 1305 S. State Hwy 121, Bldg A Suite 105, Lewisville, TX 75067; Eastland Group, 302 North College Ave, Eastland, TX 76448; Downtown Suburban Group, 1700 E Front St., Tyler, TX 75702. Each orientation has its own page on our Events page.
+      TIP: These are the Area's orientations, not the committee's: check neta65.org before you announce a change. Our committee's own welcome for GVRs and RLVs is this presentation, and GVR / RLV 101 on our website ({live:site}/orientation/).
+      WHEN: this slide leaves the show by itself after January 31, 2027; the Area's other dates are on 'Coming up'.
+      {not:short} TRANSITION: And what else is coming up in the Area.
+      {only:short} TRANSITION: Now, the prices for 2027.
+
+  # The next events of /events/ (NETA 65's own: our table, our Grapevine Meeting, the orientations, the ACMs and the
+  # assemblies; a monthly series once, at its next date), with the next assembly above them.
+  - id: "coming-up"
+    layout: "live"
+    kind: "events"
+    title: "Coming up in the Area"
+    intro: "Next assembly: {live:assembly_next}"
+    options: { filter: "neta", limit: 5 }
+    takeaway: "Every date, and a calendar for your phone: [{live:site}/events/](/events/)"
+    minutes: 1
+    notes: |
+      SAY: Here's what's coming up: our table at CityWide Dallas, our Grapevine Meeting, and the Area's own dates, the orientations, the Area Committee Meetings and the assemblies. The next assembly is above the list: {live:assembly_next}. Our Events page has every date, and a calendar you can add to your phone.
+      DO: Read the rows in a sentence each. If a row says 'Details to be confirmed', say so, and check neta65.org before you announce it.
+      TIP: Our table needs volunteers at CityWide Dallas, the second Saturday from 5:30 to 7:30 PM at Lovers Lane United Methodist Church, and at the assemblies: a lovely, easy way for a new rep to serve.
+      STAYS CURRENT: every row and the next assembly fill in by themselves from the committee's Events page.
+      TRANSITION: Now, the prices for 2027.
+
+  # The 1-year prices of the day ({live:price_…}: from January 1, 2027 AA Grapevine's new prices, config/site.yml
+  # price_changes 2027-01, by themselves); during the notice, {live:price_change_note} says the change in the notes
+  # ("New prices as of January 1, 2027."; empty after January 31, 2027). Information only: never a reason to buy.
+  - id: "prices"
+    layout: "table"
+    title: "Yearly subscription prices"
+    header: ["1 year", "Grapevine", "La Viña"]
+    rows:
+      - ["Print", "{live:price_gv_print}", "{live:price_lv_print}"]
+      - ["Digital (the website and the app)", "{live:price_gv_digital}", "{live:price_lv_digital}"]
+    widths: [4.4, 3.7, 3.7]
+    first_col_bold: true
+    takeaway: "Every other plan, the books and Carry the Message: [{live:site}/shop/](/shop/)"
+    source: "Source: AA Grapevine's official stores (the 1-year prices, U.S.), as the committee's Shop page reads them; AA Grapevine's letter of October 1, 2026"
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: For your group's treasurer, who is planning the 2027 budget: these are AA Grapevine's yearly prices, the ones in effect today. Grapevine in print, {live:price_gv_print}; digital, {live:price_gv_digital}. La Viña in print, {live:price_lv_print}; digital, {live:price_lv_digital}. {live:price_change_note} For two or three years, Complete, the books and Carry the Message, our committee's Shop page has the current list.
+      FROM JANUARY 1, 2027: AA Grapevine's new prices are in effect (its letter of October 1, 2026): print $39.00 for Grapevine and $19.50 for La Viña, digital $34.00 and $17.00, and every book $2.00 more. The slide shows them by itself from that day.
+      TIP: Present prices as information, never as a reason to rush anyone: each member decides, and the group conscience decides for the group. Don't quote any other price from memory.
+      STAYS CURRENT: the four prices are the ones in effect on the day you present, from the committee's Shop page.
+      TRANSITION: And the tools that make the service position easier.
+
+  # The committee website's pages a new rep uses most (as the orientation workshop's "website" and "more-tools"
+  # slides name them).
+  - id: "tools"
+    layout: "table"
+    title: "Your tools on the committee website"
+    header: ["Page", "What it gives you"]
+    rows:
+      - ["/gvr/", "The GVR / RLV corner: first steps, the official kits, GVR / RLV Bingo"]
+      - ["/orientation/", "GVR / RLV 101: six short sessions, a handout, and these presentations"]
+      - ["/monthly/", "This month's issues, dates and ideas, and a ready GV/LV report for your district"]
+      - ["/contribute/", "Themes, deadlines, and how to send or record a story"]
+      - ["/shop/", "Prices, the stores' offers, Carry the Message, order forms"]
+      - ["/share/ · /events/", "QR codes and posters for your table · every date, with a calendar for your phone"]
+    widths: [2.7, 9.1]
+    first_col_bold: true
+    takeaway: "Start at {live:site}, in English and in Spanish (/es/)."
+    minutes: 2.5
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: Our website gathers what a GVR or RLV needs. The GVR and RLV corner has your first steps, with a checklist that remembers your progress on your own device, links to the official kits, and GVR and RLV Bingo. GVR and RLV 101 has six short sessions, five to eight minutes each, and the presentations, this one included. The Monthly toolkit is the page to bookmark: this month's issues and themes, the dates, ideas for putting an issue to work, and a ready-made GV/LV report for your district meeting.
+      SAY: Share your story has the themes and deadlines with countdowns, how to send a story, and how to record one, by phone or in your phone's browser. The Shop page has the current prices, the stores' offers, Carry the Message and the order forms. The Share page has QR codes, posters and table tents for your literature table, and the Events page every date, with a calendar you can add to your phone.
+      DO: If there's a connection, open the Monthly toolkit for thirty seconds and show the report.
+      TIP: Every page has its Spanish version under /es/, so RLVs can share the Spanish pages directly.
+      SOURCES: the committee website ({live:site}), November 2026.
+      {not:short} TRANSITION: Here's a first month, if you'd like a plan.
+      {only:short} TRANSITION: And how to reach us.
+
+  # A checklist on a shown slide: tick boxes, kept on the presenter's device.
+  - id: "first-month"
+    layout: "bullets"
+    checklist: true
+    title: "Your first month, if you'd like a plan"
+    items:
+      - "Register with Grapevine or La Viña, and open your kit"
+      - "Join the committee meeting: {live:meeting_next}"
+      - "Try our Grapevine Meeting: {live:grapevine_meeting_next}"
+      - "Bring this month's issue to your group: Grapevine, {live:gv_issue}; La Viña, {live:lv_issue}"
+      - "Ask your DCM how Grapevine and La Viña news reaches your district"
+      - "Tell us you're new, so we can add you to our reminders: grapevine@neta65.org"
+    minutes: 2
+    notes: |
+      SAY: If you'd like a plan for your first month, here's one. Register, and open your kit. Join our committee meeting: the next one is {live:meeting_next}. Try our Grapevine Meeting: {live:grapevine_meeting_next}. Bring this month's issue to your home group and say its theme in a sentence: Grapevine's is {live:gv_issue}, and La Viña's {live:lv_issue}. Ask your DCM how Grapevine and La Viña news reaches your district. And write to us, so we can add you to our reminders: we always send them with every address in BCC.
+      TIP: Six small steps, not a test: one of them this month is a good start.
+      STAYS CURRENT: both meeting dates and both issues fill in by themselves.
+      TRANSITION: And how to reach us, any time.
+
+  - id: "reach-us"
+    layout: "bullets"
+    title: "How to reach the committee"
+    items:
+      - "E-mail: [grapevine@neta65.org](grapevine@neta65.org): questions, a workshop, our reminders (always in BCC)"
+      - "The committee website: [{live:site}](/), in English and in Spanish"
+      - "Our page on the Area's website: [neta65.org](https://neta65.org/trusted-servants/grapevine-la-vina/)"
+      - "Online every 1st and 3rd Wednesday, and at our table at CityWide Dallas every 2nd Saturday"
+    takeaway: "Your questions are never a bother: that's what we're here for."
+    minutes: 1
+    notes: |
+      SAY: Here's how to reach us. Write to grapevine@neta65.org with a question, to ask for a workshop at your group or district, or to be added to our reminders; we always send them with every address in BCC. Our website is in English and in Spanish, and the Area's website has our committee's page too. And you'll find us online on the first and third Wednesdays, and at our table at CityWide Dallas on the second Saturday.
+      TIP: The contact on this slide is the committee's service address. Never give out a member's personal phone number or e-mail, here or in the chat.
+      TRANSITION: Your questions.
+
+  # ------------------------------------------------------------------ CLOSING
+  - id: "questions"
+    layout: "qa"
+    eyebrow: "Closing"
+    title: "Your questions"
+    prompts:
+      - "What would help you most in your first month?"
+      - "A question about registering, your kit or the magazines?"
+      - "Would your group or district like a workshop this year?"
+    note: "Ask now, or after the meeting: grapevine@neta65.org"
+    minutes: 5
+    version_minutes: { short: 3 }
+    notes: |
+      SAY: What questions do you have? About registering, your kit, the magazines, or what to say at your group's business meeting. And if your group or district would like a workshop this year, a writing or a recording workshop, or one about the magazines, tell us now or write to us.
+      DO: Online, read the questions from the chat aloud, without the names the chat shows. Write down each workshop request with a contact by service position.
+      TIP: If you don't know an answer, say so and point to the official page or to gvrc@aagrapevine.org; don't guess. A question about one member's situation is best answered privately afterwards.
+      {not:short} TRANSITION: Let's close together.
+      {only:short} TRANSITION: Thank you, and welcome.
+
+  - id: "responsibility"
+    layout: "quote"
+    eyebrow: "Closing"
+    accent: "grape"
+    title: "We close together"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    optional: true
+    minutes: 1
+    notes: |
+      SAY: Thank you all for saying yes to this service. Every issue you bring to your group is a hand reaching out to someone you may never meet. Those who wish, please join me in the Responsibility Statement. (Read it slowly.)
+      DO: Read the words exactly as they appear on the slide. If the group or the meeting you're visiting closes another way, follow its custom and switch this slide off ({ui:customize} → {ui:slides}).
+      TRANSITION: Move to the last slide and leave it up.
+
+  # The closing slide's code opens the GVR / RLV corner (`qr: "/gvr/"`).
+  - id: "thank-you"
+    layout: "closing"
+    title: "Welcome to Panel 77, and thank you"
+    message: "Scan the code for the GVR / RLV corner: your first steps and the kits."
+    lines:
+      - "Questions: grapevine@neta65.org"
+      - "Committee website: {live:site}"
+      - "Committee meeting: {live:meeting_rule}, {live:meeting_time}"
+    qr: "/gvr/"
+    minutes: 0.5
+    notes: |
+      SAY: Thank you, and welcome to Panel 77. This code opens our GVR and RLV corner, with your first steps and the official kits. If you have a question later, write to us at grapevine@neta65.org. We hope to see you at the committee meeting, {live:meeting_rule}: welcome aboard.
+      DO: Leave this slide up while people scan or leave. Stay a few minutes for questions.
+      TIP: The contact on this slide is the committee's service address. Never put a personal phone number or e-mail address here.
+
+  # ------------------------------------------------------------------ FOR THE PRESENTER
+  - id: "for-the-presenter"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    title: "For the presenter"
+    subtitle: "Before you present, and the sources. Never shown."
+    eyebrow: "Appendix · For the presenter"
+    accent: "navy"
+    notes: |
+      NOT PRESENTED: the welcome ends with the 'Thank you' slide just before this one.
+      WHAT'S HERE: a checklist for before you present, and the credits and sources, in {ui:customize} → {ui:prepare}, where you can read or print each one.
+
+  - id: "before-you-present"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "Appendix · For the presenter"
+    title: "Before you present"
+    items:
+      - "The date and the place: {ui:customize} → {ui:your_details}"
+      - "The version: about 30 minutes, or the short one of about 15 ({ui:customize} → {ui:version})"
+      - "The guest speakers and the dates: they fill in by themselves; a glance at the Meetings and Events pages"
+      - "This month's Grapevine and La Viña, to hold up"
+      - "Online: nobody recording; someone watching the chat"
+    notes: |
+      WHEN: the day before, about fifteen minutes.
+      STEP 1: Fill in the date and the place, and choose the version. The short one keeps registering, the committee and its two meetings, the guest speakers, the Area's orientations (until January 31, 2027), the prices, the website's tools and how to reach us.
+      STEP 2: Glance at the committee's Meetings page (the guest speakers) and Events page (the Area's dates): the slides take their facts from there. If something looks wrong, tell whoever looks after the website.
+      STEP 3: Online, open the slides in {ui:presenter_view}, test screen sharing, and ask someone to watch the chat and the raised hands.
+      ANONYMITY: first names only, on the screen and in the chat; no screenshots or recordings of members.
+
+  - id: "credits"
+    layout: "credits"
+    facilitator: true
+    eyebrow: "Appendix · For the presenter"
+    title: "Credits & sources"
+    sources:
+      - "The service position and registering: aagrapevine.org (become a GVR, GVR resources), aalavina.org (conviértete en RLV, recursos); GVR Workbook (2026); RLV Manual (2025)"
+      - "The committee meeting, its guest speakers, our Grapevine Meeting and the weekly open meetings: the committee website, {live:site}/meetings/, as of the date on the title slide"
+      - "The GSR/DCM orientations, the ACMs and the assemblies: Northeast Texas Area 65 (neta65.org), as the committee's Events page lists them"
+      - "Prices: AA Grapevine's official stores, as the committee's Shop page reads them; AA Grapevine's letter to intergroups and central offices, October 1, 2026"
+      - "Responsibility Statement: written for the 1965 International Convention, Toronto"
+    note: |-
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers or artwork are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not an official AA Grapevine, Inc. presentation, it is not AA Conference-approved literature, and it does not speak for AA as a whole or for AA Grapevine, Inc.
+    notes: |
+      NOT PRESENTED: this page keeps the record of where the words and facts come from.
+      SAY (if someone asks): This is our Area committee's welcome, for local service. It isn't Conference-approved literature or an official AA Grapevine, Inc. presentation, and it doesn't speak for AA as a whole.
+      UPDATE: nothing for the dates, the speakers and the prices: they come from the committee website. The orientations' slide leaves the show by itself after January 31, 2027.

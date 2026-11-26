@@ -25,7 +25,7 @@ What a presenter relies on, checked against values worked out by hand:
   * "my version" files    — export → import gives the same version back; strict refusal of foreign, broken,
                             oversized or HTML-carrying files
   * reset + Undo          — a deck, all of them
-  * the five real decks   — every text of every slide goes through the core; the information workshop's agenda
+  * the real decks        — every text of every slide goes through the core; the information workshop's agenda
                             computes the times the deck's author wrote; each version's length
 The file runs in a vm context, as tests/test_expenses_core.py runs expenses-core.js. Skipped without Node.js.
 
@@ -1026,7 +1026,7 @@ class Wording(unittest.TestCase):
 
 
 class RealDecks(unittest.TestCase):
-    """The committee's five decks (config/presentations/), shaped by the build's own loader."""
+    """The committee's decks (config/presentations/), shaped by the build's own loader."""
 
     @classmethod
     def setUpClass(cls):
@@ -1087,7 +1087,8 @@ class RealDecks(unittest.TestCase):
           }
           out(report);""", needs_modules=True)
         self.assertEqual(set(r), {"orientation-workshop", "information-workshop", "writing-workshop", "committee-meeting",
-                                  "grapevine-meeting"})
+                                  "grapevine-meeting", "welcome-panel-77", "booth-visit", "conference-prep",
+                                  "recording-workshop"})
         for deck, rep in r.items():
             with self.subTest(deck=deck):
                 self.assertEqual(rep["errors"], [])

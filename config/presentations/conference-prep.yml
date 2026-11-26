@@ -1,0 +1,517 @@
+# =====================================================================
+#  "Getting Ready for the Conference: Grapevine and La Viña" — for February and March 2027, before the 77th
+#  General Service Conference: what the Conference is, its Conference Committee on Grapevine and La Viña, how a
+#  group's voice reaches it (GSR, DCM, the Area assembly, the delegate), the Fellowship survey on Grapevine's
+#  products, the year's agenda items and a time to talk them over, the Area's dates, and inviting the delegate. A web
+#  presentation on /orientation/ (Presentations), new in November 2026 (no PowerPoint copy: no `drive_title`).
+#
+#  How it is written:
+#   · the year's agenda items are the presenter's blanks ({fill:item_1} … {fill:item_3}): they were not published
+#     in November 2026, and only the delegate's background material says what they are. So are the Conference's own
+#     dates ({fill:conference_dates}), the day the delegate needs the groups' input and the delegate's visit. Nothing
+#     on a slide guesses at them;
+#   · the facts the repository already holds, with their sources: the Conference committee on the Grapevine since
+#     1954 and its name since 2020, the Advisory Actions of 1954, 1960, 1962, 1978, 1986, 2001 and 2021 (as the
+#     booth's facts and the other decks cite them: M-39, the Service Manual, P-52), and the Fellowship survey the 75th
+#     Conference (2025) asked the AA Grapevine Board for, whose final report the committee meeting's notes expect on
+#     the 2027 agenda (M-39, p. 58: config/history.yml, committee-meeting.yml). The 2027 Conference is the 77th
+#     (config/site.yml `meeting: speakers:`). The delegate's service address is the Area's, delegate@neta65.org
+#     (content/events/2026-11-10-neta65-delegate-town-hall.md);
+#   · the Area's dates come from the Events page (a `live` events list: the ACM, the assembly …), and the
+#     committee's next meeting from config/site.yml `meeting:` ({live:meeting_next});
+#   · the agenda's times are worked out by the player (`from`): the times written are the full version's;
+#   · the versions: "full" (about 45 minutes) and "short" (about 30: the history and the delegate's Right of Decision
+#     left out, the talk shorter). A TRANSITION to a slide the short version leaves out has its own {not:short} /
+#     {only:short} line;
+#   · the delegate and every speaker by service position only; nothing here speaks for the Conference, the delegate
+#     or AA Grapevine, Inc.
+#  The content stays English (the owner's decision); the card, the versions and the blanks' labels are bilingual.
+#  Checked by tests/test_presentations.py (and by the build, with I18N_STRICT=1).
+# =====================================================================
+id: "conference-prep"
+order: 8
+lang: "en"
+title: "Getting Ready for the Conference: Grapevine and La Viña"
+short: "Conference Prep"
+eyebrow: "Getting ready for the Conference"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 45
+icon: "landmark"
+tone: "grape"
+card:
+  title:
+    en: "Getting Ready for the Conference: Grapevine and La Viña"
+    es: "Preparándonos para la Conferencia: La Viña y Grapevine"
+  summary:
+    en: "For February and March: what the General Service Conference is, its Conference Committee on Grapevine and La Viña, how a group's voice reaches it through the GSR, the DCM and the delegate, the Fellowship survey on Grapevine, this year's agenda items (filled in from the delegate's background) and a time to talk them over."
+    es: "Para febrero y marzo: qué es la Conferencia de Servicios Generales y su comité para las dos revistas, cómo llega la voz de un grupo por medio del RSG, el MCD y el delegado, la encuesta a la Comunidad sobre Grapevine, los puntos de agenda de este año (tomados del material de referencia del delegado) y un tiempo para conversarlos."
+  audience:
+    en: "For GVRs, RLVs, GSRs and DCMs, at the committee meeting, a district meeting or a group's business meeting, with the delegate or the alternate delegate if they can come."
+    es: "Para RLV, GVR, RSG y MCD, en la reunión del comité, en una reunión de distrito o en la reunión de trabajo de un grupo, con el delegado o el delegado suplente si pueden venir."
+
+presets:
+  - id: "full"
+    label:
+      en: "The full session (about 45 minutes)"
+      es: "La sesión completa (unos 45 minutos)"
+    minutes: 45
+  - id: "short"
+    label:
+      en: "Short session (about 30 minutes)"
+      es: "Sesión breve (unos 30 minutos)"
+    minutes: 30
+    hide: ["right-of-decision", "past-actions"]
+    note:
+      en: "Leaves out the history of the Conference's decisions about the magazines and the delegate's Right of Decision (say it in a sentence), and gives the talk and the questions less time."
+      es: "Deja fuera la historia de las decisiones de la Conferencia sobre las revistas y el Derecho de Decisión del delegado (dilo en una frase), y da menos tiempo a la conversación y a las preguntas."
+
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "Month DD, YYYY"
+  - key: "place"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "Place, or online"
+  - key: "conference_dates"
+    label: { en: "The Conference's dates (from aa.org or the delegate)", es: "Las fechas de la Conferencia (de aa.org o del delegado)" }
+    hint: "April DD–DD, 2027"
+  - key: "item_1"
+    label: { en: "Agenda item 1 (Grapevine and La Viña), in a few words", es: "Punto de agenda 1 (Grapevine y La Viña), en pocas palabras" }
+    hint: "agenda item, from the delegate's background"
+  - key: "item_2"
+    label: { en: "Agenda item 2, in a few words", es: "Punto de agenda 2, en pocas palabras" }
+    hint: "agenda item"
+  - key: "item_3"
+    label: { en: "Agenda item 3, in a few words", es: "Punto de agenda 3, en pocas palabras" }
+    hint: "agenda item"
+  - key: "input_by"
+    label: { en: "The delegate needs the groups' input by", es: "El delegado necesita lo que digan los grupos antes del" }
+    hint: "date"
+  - key: "delegate_visit"
+    label: { en: "The delegate's visit to us (date, or none yet)", es: "La visita del delegado (fecha, o todavía ninguna)" }
+    hint: "date, or none yet"
+
+slides:
+  # ------------------------------------------------------------------ OPENING
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Getting Ready for the Conference"
+    subtitle: "Grapevine and La Viña at the 77th General Service Conference"
+    lines:
+      - "{fill:presenter} · {live:panel}"
+      - "{fill:date} · {fill:place}"
+    minutes: 0.5
+    notes: |
+      WHEN: up while people arrive; for February and March, before the Conference.
+      SAY: Welcome, everyone. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} for Northeast Texas Area 65. Every spring, AA's General Service Conference takes up questions about our two magazines, and every group has a voice in it.
+      {not:short} SAY: In about forty-five minutes we'll look at what the Conference is, how its committee on Grapevine and La Viña works, how your group's voice reaches it, and this year's agenda items, with time to talk them over.
+      {only:short} SAY: In about half an hour we'll look at what the Conference is, how your group's voice reaches it, and this year's agenda items, with time to talk them over.
+      DO: Before you present, fill in the Conference's dates, the agenda items in a few words each, and the date the delegate needs the groups' input ({ui:customize} → {ui:your_details}). They come from the delegate's background material: ask the delegate or the alternate delegate for them. Choose the version: about 45 minutes, or the short one of about 30 ({ui:customize} → {ui:version}).
+      TIP: This presentation and its notes are public on the committee's website. Summarize an agenda item in your own words, and share only what the delegate says may be shared.
+
+  - id: "welcome"
+    layout: "bullets"
+    title: "Welcome"
+    items:
+      - "For GVRs, RLVs, GSRs, DCMs and any AA member who is curious"
+      - "We share information and experience: nothing here is decided tonight"
+      - "Please don't photograph, screenshot or record anyone"
+      - "Questions are welcome at any time, and at the end"
+    takeaway: "Presented by the NETA 65 Grapevine & La Viña Committee for local service. This is not an official AA Grapevine, Inc. presentation, and it doesn't speak for the Conference or our delegate."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: This session is for GVRs and RLVs, GSRs and DCMs, and any AA member who's curious about how AA as a whole makes its decisions about Grapevine and La Viña. We share information and experience here; nothing is decided, and nobody here speaks for the Conference, our delegate or AA Grapevine, Inc.
+      SAY: As always: please don't take photos, screenshots or recordings of anyone. And questions are welcome at any time.
+      DO: If the delegate or the alternate delegate is with us, welcome them by service position, and ask whether they'd like to say a word now or answer questions at the end.
+      TRANSITION: Here's our plan.
+
+  # The times are minutes from the start; with `from` the player works each one out for the version shown (the
+  # times written are the full version's).
+  - id: "agenda"
+    layout: "agenda"
+    title: "Our plan"
+    items:
+      - { time: "0:00", title: "Welcome", from: "title" }
+      - { time: "0:03", title: "Part 1 · The General Service Conference", from: "part-1" }
+      - { time: "0:10", title: "Part 2 · Grapevine and La Viña at the Conference", from: "part-2" }
+      - { time: "0:16", title: "Part 3 · Your group's voice in 2027", from: "part-3" }
+      - { time: "0:19", title: "Talk it over", from: "talk-it-over" }
+      - { time: "0:37", title: "Questions, and closing", from: "questions" }
+    minutes: 0.5
+    notes: |
+      SAY: Here's our plan. First, what the Conference is and how a group's voice travels to it. Then the Conference's committee on Grapevine and La Viña, and a few of its decisions that shaped our service. Then this year: the agenda items, a time to talk them over, how to pass on what you think, and the dates. And your questions.
+      DO: The times are minutes from the start, so they work whatever time you begin; they follow the version chosen in {ui:customize} → {ui:version}.
+      TRANSITION: So, what is the General Service Conference?
+
+  # ------------------------------------------------------------------ 1. THE GENERAL SERVICE CONFERENCE
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    title: "The General Service Conference"
+    subtitle: "Once a year, the groups of the U.S. and Canada speak together"
+    accent: "grape"
+    minutes: 0.25
+    notes: |
+      SAY: Part one: the General Service Conference, and how a group's voice travels to it.
+      TIP: Keep it simple: many in the room know the structure well, others are hearing it for the first time.
+      TRANSITION: Let's start with what the Conference is.
+
+  - id: "what-is-the-conference"
+    layout: "bullets"
+    title: "What the Conference is"
+    items:
+      - "AA's yearly meeting of the U.S. and Canada, in the spring: in 2027 the **77th**, {fill:conference_dates}"
+      - "A delegate from each Area, Area 65 among them, with the trustees, the directors of A.A. World Services and AA Grapevine, and staff"
+      - "It hears the groups' conscience on the questions of AA as a whole, through their delegates"
+      - "What it recommends becomes an **Advisory Action**; the delegates report back to their Areas"
+    source: "Sources: The A.A. Service Manual, 2024–2026 (Concepts I–III) · P-52 (2026), pp. 6–7"
+    minutes: 3.25
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: Once a year, in the spring, AA's General Service Conference brings together a delegate from each Area of the U.S. and Canada, our own Area 65 among them, with the trustees of the General Service Board, the directors of AA's two companies, A.A. World Services and AA Grapevine, and staff of the General Service Office and of Grapevine. In 2027 it's the 77th Conference: {fill:conference_dates}.
+      SAY: The Conference is how the groups speak together about AA as a whole: our literature, our services, and our two magazines. Its committees study the agenda items first; then the whole Conference discusses them, and what it recommends becomes an Advisory Action. Afterwards, each delegate reports back to the Area, and the Area to the districts and the groups.
+      DO: Fill in the Conference's dates ({ui:customize} → {ui:your_details}): aa.org lists them, and the delegate has them.
+      TIP: Say 'recommends', not 'rules': AA's Conference acts in the spirit of the Concepts, and each group remains autonomous. Don't quote numbers of delegates or members from memory.
+      SOURCES: The A.A. Service Manual, 2024–2026 (the Twelve Concepts, I to III); P-52 (2026), pp. 6–7. The 77th Conference in 2027: the committee's guest speakers' list (the Meetings page).
+      TRANSITION: How does a group's voice get all the way there?
+
+  # Five boxes with arrows: the group's voice, up to the Conference and back.
+  - id: "how-a-voice-travels"
+    layout: "flow"
+    title: "How a group's voice reaches the Conference"
+    steps:
+      - { title: "Your group", text: "The GSR brings the agenda items; the group conscience shares" }
+      - { title: "Your district", text: "GSRs share their groups' sense with the DCM" }
+      - { title: "The Area", text: "The assembly and the delegate hear the districts" }
+      - { title: "The Conference", text: "The delegate takes it all to the committee and the floor" }
+      - { title: "Back home", text: "The delegate's report, and the Advisory Actions" }
+    takeaway: "As a GVR or RLV, you bring the Grapevine and La Viña side: how your group reads and uses the magazines."
+    minutes: 2.5
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: Here's how a voice travels. In your group, the GSR, your General Service Representative, brings the agenda items to the business meeting, and the group conscience shares on them. The GSRs carry their groups' sense to the district, to the DCM, the District Committee Member. The districts bring it to the Area: to the assembly, and to our delegate. The delegate takes all of it to the Conference, to a committee and to the floor. And after the Conference, the delegate reports back, with the Advisory Actions, all the way down to the groups again.
+      SAY: Where do you fit as a GVR or RLV? Right beside your GSR. When the agenda item is about Grapevine or La Viña, you know how your group actually reads and uses the magazines. That experience is exactly what the delegate needs to hear.
+      ASK: Has your group ever discussed a Conference agenda item? How did it go?
+      TIP: How the Area gathers the groups' sense, at the assembly, in districts or by e-mail to the delegate, is the Area's own way: ask the delegate or the DCM, rather than describing it from memory.
+      {not:short} TRANSITION: One thing about the delegate's vote.
+      {only:short} TRANSITION: Now, Grapevine and La Viña at the Conference.
+
+  # Concept III ("Right of Decision"), paraphrased, never quoted.
+  - id: "right-of-decision"
+    layout: "bullets"
+    title: "What the delegate carries"
+    optional: true
+    items:
+      - "Our delegate listens to the groups, the districts and the assembly"
+      - "At the Conference, the delegate hears the whole discussion, then votes as conscience leads"
+      - "AA calls it the **Right of Decision** (Concept Three): trust, not instructions"
+      - "So what helps most is experience: what your group has seen, not a vote count"
+    source: "Source: The A.A. Service Manual, 2024–2026, Twelve Concepts for World Service (Concept III), paraphrased"
+    minutes: 1.5
+    notes: |
+      SAY: One thing that surprises many of us: the delegate isn't sent with instructions. Our delegate listens carefully to the groups, the districts and the assembly, then at the Conference hears the whole discussion, including what the other Areas and the trustees have learned, and votes as conscience leads. AA's Third Concept calls this the Right of Decision. It rests on trust.
+      SAY: So what helps the delegate most isn't a tally of yes and no. It's experience: what your group has seen, what worked, what members would miss.
+      OPTIONAL: when running late, leave this slide out (the short version does), and say one sentence: 'Our delegate listens to us all, then votes as conscience leads: what helps most is our experience.'
+      SOURCE: The A.A. Service Manual, 2024–2026, Twelve Concepts for World Service, Concept III (paraphrased).
+      TRANSITION: Now, Grapevine and La Viña at the Conference.
+
+  # ------------------------------------------------------------------ 2. GRAPEVINE AND LA VIÑA AT THE CONFERENCE
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    title: "Grapevine and La Viña at the Conference"
+    subtitle: "A committee of its own since 1954"
+    accent: "gv"
+    minutes: 0.25
+    notes: |
+      SAY: Part two: how the Conference looks after our two magazines.
+      DO: Hold up a printed Grapevine and a printed La Viña.
+      TRANSITION: Every Conference has a committee just for them.
+
+  - id: "conference-committee"
+    layout: "bullets"
+    title: "The Conference Committee on Grapevine and La Viña"
+    items:
+      - "One of the Conference's committees: delegates who study the agenda items about AA Grapevine, Grapevine and La Viña"
+      - "A committee on the Grapevine since 1954; its name includes La Viña since 2020"
+      - "Its recommendations go to the whole Conference; those it approves become Advisory Actions"
+      - "The Conference doesn't review each issue before it prints: the editors choose the content"
+    source: "Sources: P-52 (2026), p. 7 · Conference Advisory Actions (M-39), p. 57 · The A.A. Service Manual, 2024–2026, pp. 79–85"
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      SAY: Each delegate serves on one of the Conference's committees, and one of them is the Conference Committee on Grapevine and La Viña. Its delegates study the agenda items about AA Grapevine, Inc. and the two magazines, before the Conference and during it, and bring their recommendations to the whole Conference. What the Conference approves becomes an Advisory Action.
+      SAY: The Conference has had a committee on the Grapevine since 1954, and since 2020 its name includes La Viña. One thing it doesn't do: it doesn't review each issue before it prints. The editors, sober AA members, choose what goes in, and AA's Conference Charter protects that.
+      TIP: Some of AA Grapevine's directors and staff are voting members of the Conference too; a magazine that comes out every month can't go through the yearly approval process, which is why the Conference recognizes Grapevine as AA's international journal rather than as Conference-approved literature.
+      SOURCES: P-52 (2026), p. 7; Conference Advisory Actions (M-39), p. 57 (the name, 2020); The A.A. Service Manual, 2024–2026, pp. 79–85.
+      {not:short} TRANSITION: A few of its decisions shaped the service you're doing now.
+      {only:short} TRANSITION: On this year's agenda, something that asks every member.
+
+  # The Advisory Actions the committee's other material cites (content/booth/booth.csv, content/bingo/bingo.csv, the
+  # information and orientation workshops), with their pages.
+  - id: "past-actions"
+    layout: "table"
+    title: "Conference decisions that shaped our service"
+    optional: true
+    header: ["Year", "What the Conference recommended"]
+    rows:
+      - ["1954", "Each group may name a Grapevine reporter, for subscriptions and stories"]
+      - ["1960", "An informative attitude, not a hard sell, in Grapevine presentations"]
+      - ["1962", "Retiring delegates become GVRs, toward a GVR in every group"]
+      - ["1978", "A Grapevine information table at conferences, conventions and assemblies"]
+      - ["1986", "AA Grapevine recognized as AA's international journal (and so La Viña)"]
+      - ["2001", "La Viña continues, supported by the General Service Board"]
+      - ["2021", "The Preamble's “men and women” becomes “people”"]
+    widths: [1.6, 10.2]
+    first_col_bold: true
+    source: "Sources: Conference Advisory Actions (M-39), pp. 51–57 · The A.A. Service Manual, 2024–2026, p. 85 · P-52 (2026)"
+    minutes: 2
+    notes: |
+      SAY: A few of the Conference's decisions shaped exactly what you're doing now. In 1954, delegates suggested that each group name a Grapevine reporter, to handle subscriptions and encourage members to send stories: today's GVRs and RLVs do both. In 1960, the Conference asked for an informative attitude rather than a hard sell in Grapevine presentations, which is still how we talk about the magazines. In 1962, it asked retiring delegates to become GVRs, toward a GVR in every group. In 1978, a Grapevine information table at conferences, conventions and assemblies, like ours. In 1986, it recognized AA Grapevine as AA's international journal, and that extends to La Viña. In 2001, it recommended that La Viña continue, supported by the General Service Board as a service to the Fellowship. And in 2021, the Preamble, first printed in the Grapevine, changed 'men and women' to 'people'.
+      TIP: Each one began as an agenda item somebody cared about. That's the point of this slide.
+      OPTIONAL: the short version leaves this slide out.
+      SOURCES: Conference Advisory Actions (M-39), pp. 51 (1954), 52 (1960, 1962), 53 (1978), 57 (2021); The A.A. Service Manual, 2024–2026, p. 85 (1986); P-52 (2026) and aagrapevine.org/history-aa-lavina (2001).
+      TRANSITION: And on this year's agenda, something that asks every member.
+
+  # The Fellowship survey: config/history.yml ("2025: the 75th Conference directs the Grapevine Board to survey the
+  # full Fellowship on relevance, usefulness, and viability") and committee-meeting.yml (its final report on the 2027
+  # agenda, M-39 p. 58). What it says is AA Grapevine's: the slide never guesses at results.
+  - id: "the-survey"
+    layout: "bullets"
+    title: "The Fellowship survey on Grapevine"
+    items:
+      - "In 2025 the 75th Conference asked the AA Grapevine Board to survey the Fellowship"
+      - "On the relevance, usefulness and viability of Grapevine's products"
+      - "Its final report is expected on the 2027 agenda of the Conference Committee on Grapevine and La Viña"
+      - "Ask the delegate what the background material says, and what our groups can add"
+    takeaway: "The survey is AA Grapevine's own: we never collect members' answers ourselves."
+    source: "Sources: Conference Advisory Actions (M-39), p. 58 · the delegate's background material"
+    minutes: 1.5
+    notes: |
+      SAY: Here's one item many members care about. In 2025, the 75th Conference asked the AA Grapevine Board to survey the Fellowship on the relevance, usefulness and viability of Grapevine's products: the magazines, the books, the apps and the rest. Its final report is expected on this year's agenda of the Conference Committee on Grapevine and La Viña.
+      SAY: What does it say? Only the background material can tell us, so ask the delegate. And whatever it says, our experience matters: how your group reads the magazines today, and what members would miss.
+      TIP: Don't guess at results or numbers, and never run a survey of your own on the delegate's behalf: the survey is AA Grapevine's. Several of the committee's guest speakers in 2027 share on the Conference and on what members want from the magazines (the Meetings page lists them).
+      SOURCES: Conference Advisory Actions (M-39), p. 58; config/history.yml (2025).
+      TRANSITION: Now, your group's voice this year.
+
+  # ------------------------------------------------------------------ 3. YOUR GROUP'S VOICE IN 2027
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    title: "Your group's voice in 2027"
+    subtitle: "This year's agenda items, talked over together"
+    accent: "lv"
+    minutes: 0.25
+    notes: |
+      SAY: Part three: this year's agenda items for the Conference Committee on Grapevine and La Viña, and what you can do with them.
+      TIP: If the delegate is in the room, this is the moment to hand over: they know the background best.
+      TRANSITION: Here are this year's items.
+
+  # The year's items: the presenter's blanks, from the delegate's background material (never typed in this file).
+  - id: "agenda-items"
+    layout: "bullets"
+    title: "On the 2027 agenda: Grapevine and La Viña"
+    numbered: true
+    items:
+      - "{fill:item_1}"
+      - "{fill:item_2}"
+      - "{fill:item_3}"
+    takeaway: "Summaries in our own words, from the delegate's background material: the full list comes from our delegate."
+    minutes: 3
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: These are some of the items the Conference Committee on Grapevine and La Viña will consider this year. (Read each one, and say in a sentence or two what it asks, from the delegate's summary.) They're in our own words: the full list and the background come from our delegate.
+      DO: Fill in the items ({ui:customize} → {ui:your_details}): one line each, in your own words. Three is plenty; if there are more, choose the ones the groups will care about most, and say where the rest are. An empty line shows in orange: fill it in, or change the slide ({ui:customize} → {ui:edit}).
+      TIP: Share only what the delegate says may be shared, and never paste background material on a slide or in the chat. If you don't know what an item means, say so: the delegate does.
+      TRANSITION: Let's talk them over.
+
+  # An activity is green, whatever its part.
+  - id: "talk-it-over"
+    layout: "activity"
+    eyebrow: "Activity"
+    accent: "vine"
+    title: "Talk it over"
+    steps:
+      - "Choose one item on the screen"
+      - "Hear its summary again, in a sentence or two"
+      - "Share: what has our experience with Grapevine or La Viña been, on this?"
+      - "One sentence your GSR could carry to your group and district"
+    duration: 12
+    materials: ["The delegate's summaries of the items", "Paper and pens, or the chat"]
+    version_fields:
+      short:
+        duration: 7
+    takeaway: "Not a vote: experience, shared before each group's own discussion."
+    minutes: 12
+    version_minutes: { short: 7.75 }
+    notes: |
+      SAY: Let's talk them over. Choose one of the items on the screen. I'll read its summary again, and then let's share: what has our experience been, in our groups and our own lives, on this question? To close, let's find one sentence your GSR could carry back to your group and district.
+      DO: In a room of more than ten, make small groups of three or four, one item each, and ask each group for its sentence at the end. Online, use breakout rooms if the platform has them, or share in the main room with a raised hand. Keep shares to about two minutes.
+      TIP: This isn't a vote and nothing is decided here: each group's own conscience speaks at its business meeting. Our part is to share experience, so members arrive at that discussion ready. If the talk drifts into outside issues, gently bring it back to how the magazines carry the message.
+      TRANSITION: Thank you. Now, how does what you said get to the delegate?
+
+  - id: "passing-it-on"
+    layout: "bullets"
+    title: "Passing it on"
+    items:
+      - "Your GSR brings the items to your group's business meeting; the group conscience shares"
+      - "As a GVR or RLV, offer the Grapevine and La Viña side: how members read and use the magazines"
+      - "The GSR carries the group's sense to the district meeting, and the DCM to the Area"
+      - "Or write to the delegate: [delegate@neta65.org](delegate@neta65.org), by {fill:input_by}"
+    takeaway: "Experience, not a tally, is what the delegate needs most."
+    minutes: 2.5
+    version_minutes: { short: 2 }
+    notes: |
+      SAY: Here's how what you said gets to the Conference. Your GSR brings the items to your group's business meeting, and the group conscience shares on them. As a GVR or RLV, offer the Grapevine and La Viña side: how members actually read the magazines and use them in Twelfth Step work. The GSR carries the group's sense to the district meeting, and the DCM to the Area. Or any member can write to the delegate directly, at the Area's address on the screen. The delegate needs it by {fill:input_by}.
+      DO: Fill in the date the delegate gave ({ui:customize} → {ui:your_details}). Ask the DCMs in the room when their district meets before then.
+      {only:short} SAY: And one thing about the delegate's vote: our delegate listens to us all, then votes as conscience leads. What helps most is our experience.
+      TIP: Don't describe the Area's own steps from memory (how the assembly takes the groups' sense, which forms or deadlines): the delegate, the DCMs and neta65.org say how.
+      SOURCE: the delegate's address: the Area's own (neta65.org, the Area's town halls with the delegate).
+      TRANSITION: Here are the dates on the way to the Conference.
+
+  # The next events of /events/ (NETA 65's own: the ACMs, the assemblies, our table, our Grapevine Meeting; a monthly
+  # series once), with the Conference's dates above them (the presenter's blank).
+  - id: "dates"
+    layout: "live"
+    kind: "events"
+    title: "On the way to the Conference: the Area's dates, and ours"
+    intro: "The 77th General Service Conference: {fill:conference_dates}"
+    options: { filter: "neta", limit: 6 }
+    takeaway: "Every date, and a calendar for your phone: [{live:site}/events/](/events/)"
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Here are the Area's dates between now and the Conference, and just after it: the Area Committee Meetings and the assemblies, with our own table and Grapevine Meeting. The Conference itself: {fill:conference_dates}. The next assembly: {live:assembly_next}.
+      DO: Ask the delegate, or check neta65.org, which of these dates the delegate will use to hear the districts before the Conference, and say it here.
+      IN 2027 (as the Area listed them in November 2026): the Winter ACM, Sunday, February 21, noon to 5 PM, at the Mid-Cities Group in Hurst; the Spring Assembly, March 19 to 21, at the DoubleTree by Hilton Hotel Dallas Near the Galleria; the Spring ACM, Sunday, April 11, venue to be announced. Check neta65.org before you announce any of them.
+      STAYS CURRENT: every row fills in by itself from the committee's Events page.
+      TRANSITION: And one more thing worth doing: inviting the delegate.
+
+  # The committee meeting's next date alone ({live:meeting_next}); the delegate by service position only.
+  - id: "invite-the-delegate"
+    layout: "bullets"
+    title: "Invite the delegate"
+    items:
+      - "To our committee meeting, every 3rd Wednesday: next, {live:meeting_next}"
+      - "To your district or group, before the Conference: ask early, those weeks fill up"
+      - "After the Conference, for the report: in May, to the Area, the districts and our committee"
+      - "Write: [delegate@neta65.org](delegate@neta65.org) · the delegate's visit to us: {fill:delegate_visit}"
+    takeaway: "The delegate is our trusted servant: their time is a gift. Ask early, and say thank you."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: The best way to understand an agenda item is to ask the delegate. So invite them: to our committee meeting on the third Wednesday, the next one is {live:meeting_next}; to your district or group before the Conference; and after it, in May, for the report on what the Conference decided. Ask early: the weeks before the Conference are full, for the delegate and the alternate delegate alike.
+      DO: If the delegate has agreed to visit us, fill in the date ({ui:customize} → {ui:your_details}); if not, write 'none yet'. Send the invitation from the committee's address, grapevine@neta65.org.
+      TIP: Name the delegate by service position only, on the slides and in the notes. If the committee invites someone from outside the Area to speak, the committee that invites them covers their expenses.
+      TRANSITION: Your questions.
+
+  # ------------------------------------------------------------------ CLOSING
+  - id: "questions"
+    layout: "qa"
+    eyebrow: "Closing"
+    title: "Your questions"
+    prompts:
+      - "About the Conference, the agenda items or the survey?"
+      - "What will you bring to your group's next business meeting?"
+      - "What would you like to ask the delegate?"
+    note: "A question we can't answer goes to the delegate: delegate@neta65.org"
+    minutes: 7
+    version_minutes: { short: 5 }
+    notes: |
+      SAY: What questions do you have? About the Conference, this year's items or the survey. And if you're willing, tell us what you'll bring to your group's next business meeting.
+      DO: Write down the questions for the delegate, and send them on from the committee's address. Online, read questions from the chat aloud, without the names the chat shows.
+      TIP: If you don't know an answer, say so: never guess at what the Conference will decide, or what an item means. The delegate knows the background best.
+      TRANSITION: Let's close together.
+
+  - id: "responsibility"
+    layout: "quote"
+    eyebrow: "Closing"
+    accent: "grape"
+    title: "We close together"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    minutes: 1
+    notes: |
+      SAY: Thank you all for taking part in AA as a whole: that's what the Conference is, all of us, together. Those who wish, please join me in the Responsibility Statement. (Read it slowly.)
+      DO: Read the words exactly as they appear on the slide. If the meeting you're visiting closes another way, follow its custom.
+      TRANSITION: Move to the last slide and leave it up.
+
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you for your service"
+    message: "Your group's experience is the Conference's best guide."
+    lines:
+      - "The delegate: delegate@neta65.org"
+      - "The committee: grapevine@neta65.org · {live:site}"
+      - "Committee meeting: {live:meeting_rule}, {live:meeting_time}"
+    qr: "/events/"
+    minutes: 0.5
+    notes: |
+      SAY: Thank you for everything you do to carry the message, and for bringing your group's voice to AA as a whole. The code opens our Events page, with the Area's dates. Questions for the delegate go to the Area's address on the screen, and questions for us to ours.
+      DO: Leave this slide up while people leave. Send the questions you collected to the delegate, by e-mail from grapevine@neta65.org.
+      TIP: Both addresses on this slide are service addresses. Never put a personal phone number or e-mail address here.
+
+  # ------------------------------------------------------------------ FOR THE PRESENTER
+  - id: "for-the-presenter"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    title: "For the presenter"
+    subtitle: "Before you present, and the sources. Never shown."
+    eyebrow: "Appendix · For the presenter"
+    accent: "navy"
+    notes: |
+      NOT PRESENTED: the session ends with the 'Thank you' slide just before this one.
+      WHAT'S HERE: a checklist for the weeks before, and the credits and sources, in {ui:customize} → {ui:prepare}, where you can read or print each one.
+
+  - id: "before-you-present"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "Appendix · For the presenter"
+    title: "Before you present"
+    items:
+      - "Ask the delegate or the alternate for the year's items, in a few words each, and what may be shared"
+      - "Type them in {ui:customize} → {ui:your_details}, with the Conference's dates and the date for the groups' input"
+      - "Invite the delegate or the alternate, from grapevine@neta65.org, weeks ahead"
+      - "Choose the version: about 45 minutes, or 30 ({ui:customize} → {ui:version})"
+      - "Online: breakout rooms for the talk, if there are many; nobody recording"
+    notes: |
+      WHEN: two or three weeks before, when the delegate has the background material.
+      STEP 1: Write to the delegate (delegate@neta65.org) from the committee's address: ask for the agenda items of the Conference Committee on Grapevine and La Viña, in a sentence each, which of them may be shared at a district or group meeting, and the date the delegate needs the groups' input. Ask whether the delegate or the alternate could come.
+      STEP 2: Fill in the blanks ({ui:customize} → {ui:your_details}): the Conference's dates, up to three items, the date for the input, and the delegate's visit. Every blank still empty shows in orange.
+      STEP 3: A week ahead, glance at the Events page: the Area's dates on 'On the way to the Conference' come from there.
+      TIP: In February and March the committee meeting itself can take the Conference as its topic, on a night without a guest speaker; the committee meeting's 'Suggested topics' page says the same.
+
+  - id: "credits"
+    layout: "credits"
+    facilitator: true
+    eyebrow: "Appendix · For the presenter"
+    title: "Credits & sources"
+    sources:
+      - "The Conference and the Concepts: The A.A. Service Manual, 2024–2026 Edition (Twelve Concepts for World Service, I–III), paraphrased"
+      - "The Conference Committee on Grapevine and La Viña: AA Grapevine and La Viña: Our Meetings in Print (P-52, 2026), p. 7; Conference Advisory Actions (M-39), p. 57"
+      - "The Advisory Actions of 1954, 1960, 1962, 1978 and 2021: M-39, pp. 51–57; 1986: The A.A. Service Manual, 2024–2026, p. 85; 2001: P-52 (2026)"
+      - "The Fellowship survey (2025): M-39, p. 58"
+      - "This year's agenda items: the delegate's background material, summarized by the presenter"
+      - "The Area's dates: Northeast Texas Area 65 (neta65.org), as the committee's Events page lists them"
+      - "Responsibility Statement: written for the 1965 International Convention, Toronto"
+    note: |-
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers or artwork are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not an official AA Grapevine, Inc. presentation, it is not AA Conference-approved literature, and it does not speak for AA as a whole, the General Service Conference, the delegate or AA Grapevine, Inc.
+    notes: |
+      NOT PRESENTED: this page keeps the record of where the words and facts come from.
+      SAY (if someone asks): This is our Area committee's session, for local service. It isn't Conference-approved literature, and it doesn't speak for the Conference, the delegate or AA Grapevine, Inc.
+      UPDATE: each year, the items, the dates and the input date in {ui:customize} → {ui:your_details}; the Conference's number in the title slide's subtitle and in the notes (the 78th in 2028); and the survey's slide once its final report has been heard.
