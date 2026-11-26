@@ -751,5 +751,21 @@
   "ctm.in_lang": {
     "en": "In English",
     "es": "En español"
+  },
+  "nav.gvr_menu": {
+    "en": "Group reps (GVR/RLV)",
+    "es": "Representantes de grupo (RLV/GVR)"
+  },
+  "nav.orientation_menu": {
+    "en": "New rep orientation",
+    "es": "Orientación para nuevos representantes"
+  },
+  "nav.stay_updated": {
+    "en": "Stay updated",
+    "es": "Mantente al día"
+  },
+  "nav.stay_updated_all": {
+    "en": "All the ways to stay updated",
+    "es": "Todas las formas de mantenerte al día"
   }
 }

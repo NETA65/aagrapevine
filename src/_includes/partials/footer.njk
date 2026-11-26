@@ -2,7 +2,8 @@
 {%- set st = db.status -%}
 <footer class="site-footer mt-16 border-t border-line bg-surface text-sm text-muted" style="padding-bottom: env(safe-area-inset-bottom)">
   {#- The footer mirrors the header: "Explore" (the top-level pages), one list per dropdown group
-      (Get involved, Committee — nav.primary items with children) and "Stay updated" (the official
+      (Get involved, Committee — nav.primary items with children; a page's menu words, menuKey, where it has
+      them) and "Stay updated" (the Stay updated page — nav.footer group "hub" —, the official
       aagrapevine.org / aalavina.org sites, the nav.footer entries of group "stay" — Instagram and
       QR Post —, the RSS and calendar feeds). Under the about blurb: About us · neta65.org ·
       e-mail. The other site pages of group "site" (Accessibility, Saved pages & app, Search, Update
@@ -47,7 +48,7 @@
         <h2 class="eyebrow mb-2 font-sans sm:mb-3">{{ item.key | t(L) }}</h2>
         <ul class="grid gap-y-0 sm:gap-y-2">
           {%- for c in item.children %}
-          <li class="flex"><a class="inline-flex min-h-11 items-center hover:text-gv sm:min-h-0" href="{{ c.url | lurl(L) }}"{% if pageKey == c.page %} aria-current="page"{% endif %}>{{ c.key | t(L) }}</a></li>
+          <li class="flex"><a class="inline-flex min-h-11 items-center hover:text-gv sm:min-h-0" href="{{ c.url | lurl(L) }}"{% if pageKey == c.page %} aria-current="page"{% endif %}>{{ (c.menuKey or c.key) | t(L) }}</a></li>
           {%- endfor %}
         </ul>
       </div>
@@ -55,7 +56,12 @@
       <div>
         <h2 class="eyebrow mb-2 font-sans sm:mb-3">{{ "footer.stay_updated" | t(L) }}</h2>
         <ul class="grid gap-y-0 sm:gap-y-2">
-          {#- The official sites first (La Viña first on the Spanish pages). They leave this site, among
+          {#- First the page that gathers every way to keep up (nav.js group "hub": /stay-updated/ — the e-mail digest,
+              the calendar files, RSS, Instagram, the app, WhatsApp), in the column's own words. -#}
+          {%- for f in nav.footer %}{% if f.group == "hub" %}
+          <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 font-semibold text-ink hover:text-gv sm:min-h-0" href="{{ f.url | lurl(L) }}"{% if pageKey == f.page %} aria-current="page"{% endif %}>{% icon f.icon, "size-4 shrink-0" %} <span class="min-w-0">{{ "nav.stay_updated_all" | t(L) }}</span></a></li>
+          {%- endif %}{% endfor %}
+          {#- The official sites next (La Viña first on the Spanish pages). They leave this site, among
               links that stay on it, so they carry a small arrow as well as the screen-reader note (not
               below 360px, where the column has no room for it). A long name may wrap before ".org". -#}
           {%- set officialSites = [site.links.lv_home, site.links.gv_home] if L == "es" else [site.links.gv_home, site.links.lv_home] %}
