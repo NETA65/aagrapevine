@@ -264,22 +264,22 @@ def post(pid, title, title_es, summary, summary_es, date, **x):
 
 
 # A Drive post's summary is the sync's: its body run into one line (scripts/sync/announcements.py markdown_to_text) —
-# headings and lists included; the slide's teaser is the body's first paragraph instead. p1 (with a translated body)
-# would else say an unverified claim the booth refuses; p3 starts with a heading and has no Spanish body (its Spanish
-# summary is used, never the English body).
+# headings (each ending its sentence: "Why it matters.") and lists included; the slide's teaser is the body's first
+# paragraph instead. p1 (with a translated body) would else say an unverified claim the booth refuses; p3 starts with
+# a heading and has no Spanish body (its Spanish summary is used, never the English body).
 P1_BODY = ("A pinned **post** about the [workshops](/events/).\n\n# Why it matters\n\n"
            "- **A meeting in print.** Grapevine and La Viña reach millions of people.")
 P1_BODY_ES = ("Un aviso fijado sobre los [talleres](/events/).\n\n# Por qué importa\n\n"
               "- **Una reunión impresa.** Grapevine y La Viña llegan a millones de personas.")
 P1 = post("p1", "Pinned post", "Aviso fijado",
-          "A pinned post about the workshops. Why it matters A meeting in print. Grapevine and La Viña reach millions of people.",
-          "Un aviso fijado sobre los talleres. Por qué importa Una reunión impresa. Grapevine y La Viña llegan a millones de personas.",
+          "A pinned post about the workshops. Why it matters. A meeting in print. Grapevine and La Viña reach millions of people.",
+          "Un aviso fijado sobre los talleres. Por qué importa. Una reunión impresa. Grapevine y La Viña llegan a millones de personas.",
           "2099-10-01", pinned=True, expires="2099-12-31", body_md=P1_BODY)
 P1["i18n"]["body_md"] = {"en": P1_BODY, "es": P1_BODY_ES}
 ANNOUNCEMENTS = [
     P1,
     post("p2", "Newest post", "Aviso más nuevo", "Download the PDF flyer.", "Descarga el volante.", "2099-10-10"),
-    post("p3", "Older post", "Aviso anterior", "Older news An older post, with a link. More text.", "Un aviso anterior.",
+    post("p3", "Older post", "Aviso anterior", "Older news. An older post, with a link. More text.", "Un aviso anterior.",
          "2099-10-05", body_md="# Older news\n\nAn *older* post, with [a link](/events/).\n\nMore text."),
     post("p4", "Expired post", "Aviso vencido", "Over.", "Terminado.", "2099-09-20", expires="2099-10-01"),
 ]

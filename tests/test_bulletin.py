@@ -71,6 +71,15 @@ class Folder(unittest.TestCase):
 
 
 class NoHeader(Folder):
+    def test_the_summary_ends_a_heading_with_a_period(self):
+        """A post's summary (Home's card, What's New, the feed) is its text in one line: a heading in it ends its
+        sentence (PastedHtml.test_a_heading_ends_its_sentence_in_the_teaser; a Drive post's summary is made the
+        same way, scripts/sync/drive.py fill_announcements)."""
+        it = self.parse("why.md", "---\ntitle: Ways to help\n---\nIntro.\n\n# Why it matters\n\nA meeting in print.")
+        self.assertEqual(it["summary"], "Intro. Why it matters. A meeting in print.")
+        es = self.parse("por-que.md", "---\ntitle: Formas de ayudar\n---\nIntro.\n\n# Por qué importa\n\nUna reunión impresa.")
+        self.assertEqual(es["summary"], "Intro. Por qué importa. Una reunión impresa.")
+
     def test_title_from_the_first_heading(self):
         it = self.parse("welcome.md", "# Welcome, **new** GVRs!\n\nCome to our meeting.\n\n## Details\n\nSoon.")
         self.assertEqual(it["title"], "Welcome, new GVRs!")
@@ -153,6 +162,29 @@ class PastedHtml(unittest.TestCase):
     def test_a_teaser_is_prose(self):
         self.assertEqual(A.markdown_to_text("Intro.\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n- one\n    - two\n\n---\nEnd."),
                          "Intro. one two End.")
+
+    def test_a_heading_ends_its_sentence_in_the_teaser(self):
+        """Home's card read "…learn from it. Why it matters A meeting in print…": every block runs into one line,
+        so a heading with text after it ends with a period — unless it ends with a mark of its own (? ! : …) — in
+        English and in Spanish; a heading alone (a title's words) stays as it is."""
+        en = ("A living list of ways to support Grapevine and La Viña. Share what works.\n\n# Why it matters\n\n"
+              "- **A meeting in print, every day.** Grapevine and La Viña reach millions of people.\n\n"
+              "## What groups can do ##\n\n- **Subscribe as a group.** It is Seventh Tradition support.")
+        self.assertEqual(A.markdown_to_text(en),
+                         "A living list of ways to support Grapevine and La Viña. Share what works. Why it matters. "
+                         "A meeting in print, every day. Grapevine and La Viña reach millions of people. What groups "
+                         "can do. Subscribe as a group. It is Seventh Tradition support.")
+        es = ("Una lista viva de formas de apoyar a Grapevine y La Viña.\n\n# Por qué importa\n\n"
+              "- **Una reunión impresa, todos los días.** Llegan a millones de personas.\n\n"
+              "# ¿Qué pueden hacer los grupos?\n\nSuscribirse como grupo.\n\n### **En las reuniones:**\n\nMencionarlo.")
+        self.assertEqual(A.markdown_to_text(es),
+                         "Una lista viva de formas de apoyar a Grapevine y La Viña. Por qué importa. Una reunión "
+                         "impresa, todos los días. Llegan a millones de personas. ¿Qué pueden hacer los grupos? "
+                         "Suscribirse como grupo. En las reuniones: Mencionarlo.")
+        self.assertEqual(A.markdown_to_text("# Older news\n\nAn *older* post."), "Older news. An older post.")
+        self.assertEqual(A.markdown_to_text("# *Why?*\n\nText."), "Why? Text.")
+        self.assertEqual(A.markdown_to_text("# Big news"), "Big news")
+        self.assertEqual(A.markdown_to_text("#hashtag stays\n\nText."), "#hashtag stays Text.")
 
 
 class TitlesAndOldFolder(Folder):

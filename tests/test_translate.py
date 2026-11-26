@@ -769,7 +769,7 @@ class CommitteeContent(unittest.TestCase):
             self.assertEqual((it["extra"]["city"], it["extra"]["state"]), ("Tyler", "TX"))
 
     def test_markdown_to_text(self):
-        self.assertEqual(markdown_to_text("## Hi\n- **Bold** [x](http://a) `c`"), "Hi Bold x c")
+        self.assertEqual(markdown_to_text("## Hi\n- **Bold** [x](http://a) `c`"), "Hi. Bold x c")
 
 
 class BuildRules(unittest.TestCase):

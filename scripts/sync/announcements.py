@@ -197,13 +197,26 @@ def lenient_header(header: str) -> dict | None:
     return meta
 
 
+# A heading's own end mark (its last character, before any closing ** _ ` ~~): "¿Por qué importa?", "Prices:"
+_ENDS_SENTENCE = re.compile(r"[.!?:;…][*_`~]*$")
+
+
+def _heading_sentence(m: re.Match) -> str:
+    """A heading with text after it ends a sentence in the teaser: "# Why it matters" → "Why it matters." (every
+    block runs into one line: "…learn from it. Why it matters A meeting in print…" read as one sentence)."""
+    words = m[1].rstrip()
+    return words if _ENDS_SENTENCE.search(words) else words + "."
+
+
 def markdown_to_text(md: str) -> str:
-    """Plain-text teaser from Markdown (links → their label, formatting marks removed)."""
+    """Plain-text teaser from Markdown (links → their label, formatting marks removed; a heading ends with a
+    period when it has none of its own and text follows it — one alone, a title's, stays as it is)."""
     t = re.sub(r"```.*?```", " ", md or "", flags=re.S)
     t = re.sub(r"(?m)^\s*\|.*$", " ", t)                            # tables (a teaser is prose)
     t = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", t)                     # images
     t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)                  # links → label
     t = re.sub(r"<(https?://[^>]+)>", r"\1", t)
+    t = re.sub(r"(?m)^[ \t]*#{1,6}[ \t]+(.+?)(?:[ \t]+#+)?[ \t]*$(?=\s*\S)", _heading_sentence, t)  # "Heading."
     t = re.sub(r"(?m)^\s*(#{1,6}|>|[-*+]|\d+[.)])\s+", "", t)       # headings, quotes, bullets (nested too)
     t = re.sub(r"(?m)^\s*(?:[-*_]\s*){3,}$", " ", t)                # --- / *** lines
     t = re.sub(r"(\*\*|__|\*|_|~~|`)(?=\S)(.+?)(?<=\S)\1", r"\2", t)
