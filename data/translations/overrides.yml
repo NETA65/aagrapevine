@@ -223,7 +223,7 @@
 # Home, /monthly/, the district report, the search), as its /contribute page names them — its departments and what it
 # is "always in need of" (scripts/sync/editorial.py gv_suggested_topics) — written by hand 2026-10-16 in AA's
 # Spanish (apadrinamiento, grupo base, veteranos: long-time members, as the department means;
-# tests/test_r13_u1_gvtopics.py (Spanish) checks every topic the page names is here). "Emotional Sobriety" is also a
+# tests/test_gv_topics.py (Spanish) checks every topic the page names is here). "Emotional Sobriety" is also a
 # dated theme (June 2027): the same words.
 "Emotional Sobriety": { es: "Sobriedad emocional" }
 "Sponsorship": { es: "Apadrinamiento" }
