@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-27T02:47:30Z",
- "updated": "2026-11-27T02:47:30Z",
+ "generated": "2026-11-27T09:05:12Z",
+ "updated": "2026-11-27T09:05:12Z",
  "fixture": false,
  "sources": [
   {
@@ -8,8 +8,8 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-27T02:47:04Z",
-   "attempted": "2026-11-27T02:47:04Z",
+   "updated": "2026-11-27T09:03:51Z",
+   "attempted": "2026-11-27T09:03:51Z",
    "count": 1221,
    "new_7d": 0,
    "error": null,
@@ -132,8 +132,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-27T02:47:04Z",
-   "attempted": "2026-11-27T02:47:04Z",
+   "updated": "2026-11-27T09:03:51Z",
+   "attempted": "2026-11-27T09:03:51Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -156,8 +156,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-27T02:47:04Z",
-   "attempted": "2026-11-27T02:47:04Z",
+   "updated": "2026-11-27T09:03:51Z",
+   "attempted": "2026-11-27T09:03:51Z",
    "count": 21,
    "new_7d": 0,
    "error": null,
@@ -211,8 +211,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-27T02:47:12Z",
-   "attempted": "2026-11-27T02:47:12Z",
+   "updated": "2026-11-27T09:04:58Z",
+   "attempted": "2026-11-27T09:04:58Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -367,16 +367,16 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-27T02:47:07Z",
-   "attempted": "2026-11-27T02:47:07Z",
-   "count": 316,
-   "new_7d": 3,
+   "updated": "2026-11-27T09:03:55Z",
+   "attempted": "2026-11-27T09:03:55Z",
+   "count": 317,
+   "new_7d": 4,
    "error": null,
    "stats": {
-    "fetched": 316,
-    "new": 0,
-    "total": 316,
-    "active": 316,
+    "fetched": 317,
+    "new": 1,
+    "total": 317,
+    "active": 317,
     "gone": 0,
     "spanish": 3,
     "shows": {
@@ -385,34 +385,34 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 271,
       "latest": "2026-11-23T05:15:00Z",
-      "updated": "2026-11-27T02:47:07Z"
+      "updated": "2026-11-27T09:03:55Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
-      "episodes": 42,
-      "latest": "2026-11-20T05:15:00Z",
-      "updated": "2026-11-27T02:47:07Z"
+      "episodes": 43,
+      "latest": "2026-11-27T05:15:00Z",
+      "updated": "2026-11-27T09:03:55Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 3,
       "latest": "2026-11-23T05:15:00Z",
-      "updated": "2026-11-27T02:47:07Z"
+      "updated": "2026-11-27T09:03:55Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-20T16:16:24Z",
     "discovered_feeds": [],
-    "seconds": 3.2,
+    "seconds": 3.8,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
    },
    "changes": {
-    "added": 0,
+    "added": 1,
     "removed": 0,
     "held": 0
    },
@@ -501,8 +501,8 @@
    "label": "GV/LV event calendars",
    "label_es": "Calendarios de eventos de GV/LV",
    "ok": true,
-   "updated": "2026-11-26T17:53:41Z",
-   "attempted": "2026-11-26T17:53:41Z",
+   "updated": "2026-11-27T09:04:54Z",
+   "attempted": "2026-11-27T09:04:54Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -520,7 +520,7 @@
     "online_es": 0,
     "items": 2,
     "new": 0,
-    "requests": 36
+    "requests": 1
    },
    "changes": {
     "added": 0,
@@ -585,26 +585,28 @@
    "label": "Grapevine meetings (our Area and nearby)",
    "label_es": "Reuniones de Grapevine (nuestra Área y cercanas)",
    "ok": true,
-   "updated": "2026-11-26T17:53:41Z",
-   "attempted": "2026-11-26T17:53:41Z",
+   "updated": "2026-11-27T09:04:49Z",
+   "attempted": "2026-11-27T09:04:49Z",
    "count": 23,
    "new_7d": 0,
    "error": null,
    "stats": {
     "offices": 8,
-    "offices_ok": 7,
-    "listed": 5406,
-    "grapevine": 24,
+    "offices_ok": 5,
+    "listed": 3635,
+    "grapevine": 16,
     "meetings": 23,
     "in_area": 13,
     "nearby": 10,
     "inactive": 0,
     "incomplete": 0,
     "duplicates_merged": 1,
-    "kept_from_before": 0,
-    "requests": 7,
+    "kept_from_before": 8,
+    "requests": 9,
     "warnings": [
-     "Alcohólicos Anónimos Dallas: alcoholicosanonimosdallas.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept"
+     "Alcohólicos Anónimos Dallas: alcoholicosanonimosdallas.org's robots.txt could not be checked (no answer) — nothing was read; the last good list is kept",
+     "OKC Intergroup: feed: the answer is not a meeting list (not JSON); page: no meeting list was found on the office's meetings page",
+     "Northwest Texas Area 66: nwta66.org answered with a bot check (HTTP 202) — nothing is wrong on our side; the last good list is kept"
     ]
    },
    "changes": {
@@ -619,8 +621,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-27T02:47:28Z",
-   "attempted": "2026-11-27T02:47:28Z",
+   "updated": "2026-11-27T09:05:10Z",
+   "attempted": "2026-11-27T09:05:10Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -628,12 +630,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-26",
-    "new": 0
+    "today": "2026-11-27",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -650,6 +652,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-11-27",
+    "goal_at": "2026-11-27T11:30:00Z",
+    "gv": "2026-11-27T09:04:59Z",
+    "lv": "2026-11-27T09:05:10Z"
+   },
    {
     "day": "2026-11-26",
     "goal_at": "2026-11-26T11:30:00Z",
@@ -685,16 +693,11 @@
     "goal_at": "2026-11-21T11:30:00Z",
     "gv": "2026-11-21T11:26:32Z",
     "lv": "2026-11-21T11:26:42Z"
-   },
-   {
-    "day": "2026-11-20",
-    "goal_at": "2026-11-20T11:30:00Z",
-    "gv": "2026-11-20T10:14:20Z",
-    "lv": "2026-11-20T10:14:30Z"
    }
   ]
  },
  "full_update": "2026-11-26T17:53:41Z",
+ "morning_alarm_since": null,
  "crawl": {
   "attempted": "2026-11-26T18:31:10Z",
   "crawled_pages": 3448,
@@ -713,22 +716,22 @@
   "updated": "2026-11-26T18:31:10Z"
  },
  "translations": {
-  "cached": 4402,
+  "cached": 4405,
   "engine": "argos1.0-ct2/v6",
   "model_enabled": true,
-  "translated_this_run": 0,
+  "translated_this_run": 3,
   "from_cache": 4402,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.3,
-  "model_seconds": 0.0,
-  "texts_per_second": null,
+  "seconds": 1.4,
+  "model_seconds": 0.6,
+  "texts_per_second": 2.2,
   "glossary_entries": 269,
   "problems": []
  },
  "counts": {
   "videos": 553,
-  "episodes": 316,
+  "episodes": 317,
   "instagram": 260,
   "articles": 329,
   "pdfs": 100,
@@ -754,12 +757,13 @@
    "label_es": "Talleres de NETA 65",
    "category": "neta65",
    "group": "neta",
-   "state": "blocked",
+   "state": "paused",
+   "paused": "the site blocks automated readers (Cloudflare's bot check)",
    "http_status": 403,
    "error": "neta65.org answered with a bot check (HTTP 403) — nothing is wrong on our side; there is no good copy of it yet",
    "last_success": null,
    "last_attempt": "2026-11-27T02:47:28Z",
-   "checked_this_run": true,
+   "checked_this_run": false,
    "from_copy": false,
    "events_count": 0,
    "duplicates": 0,
@@ -768,7 +772,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-26",
+  "today": "2026-11-27",
   "home_days": 60,
   "list_days": [
    60,

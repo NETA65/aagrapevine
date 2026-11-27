@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T21:38:21Z",
+ "updated": "2026-11-27T09:05:12Z",
  "fixture": false,
  "items": [
   {
@@ -329,7 +329,8 @@
     "online": false,
     "site": "grapevine",
     "date_text": "January 8, 2027 - January 10, 2027",
-    "past": false
+    "past": false,
+    "slug": "2027-01-08-64th-seta-convention"
    },
    "i18n": {
     "title": {
@@ -660,9 +661,9 @@
     "end": "2027-01-31",
     "all_day": true,
     "location": "Maude Cobb . Convenció center LONGVIEW TX 75604",
-    "city": null,
-    "state": null,
-    "country": null,
+    "city": "Longview",
+    "state": "TX",
+    "country": "USA",
     "region": null,
     "online_url": null,
     "platform": null,
@@ -674,7 +675,8 @@
     "online": false,
     "site": "lavina",
     "date_text": "Enero 29, 2027 - Enero 31, 2027",
-    "past": false
+    "past": false,
+    "slug": "2027-01-29-xlii-reunion-de-a-a-zona-norte-de-texas-a-a-un-camino"
    },
    "i18n": {
     "title": {
@@ -6218,7 +6220,8 @@
     "platform": "Zoom",
     "meeting_id": "815 9593 1777",
     "contact": "lveditorial@aagrapevine.org",
-    "past": true
+    "past": true,
+    "slug": "2026-11-18-la-vina-monthly-virtual-workshop-in-spanish"
    },
    "machine": [],
    "i18n": {
@@ -6445,7 +6448,8 @@
     "drive_id": "drive:1w99vMZxsm2saZc8bs9b2RiOR5swvN0TG",
     "is_pdf": false,
     "is_image": true,
-    "past": true
+    "past": true,
+    "slug": "2026-10-31-grapevine-committee-crash"
    },
    "i18n": {
     "title": {

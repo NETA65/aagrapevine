@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-26T17:53:41Z",
- "attempted": "2026-11-26T17:53:41Z",
+ "updated": "2026-11-27T09:04:54Z",
+ "attempted": "2026-11-27T09:04:54Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -23,7 +23,7 @@
   "online_es": 0,
   "items": 2,
   "new": 0,
-  "requests": 36
+  "requests": 1
  },
  "items": [
   {
@@ -48,9 +48,9 @@
     "end": "2027-01-31",
     "all_day": true,
     "location": "Maude Cobb . Convenció center LONGVIEW TX 75604",
-    "city": null,
-    "state": null,
-    "country": null,
+    "city": "Longview",
+    "state": "TX",
+    "country": "USA",
     "region": null,
     "online_url": null,
     "platform": null,
