@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27T09:05:12Z",
+ "updated": "2026-11-27T13:59:19Z",
  "fixture": false,
  "items": [
   {
@@ -5956,7 +5956,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-13T12:30:16Z"
   },
   {
@@ -6000,7 +6000,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-13T12:30:15Z"
   },
   {
@@ -6056,7 +6056,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-13T12:00:00Z"
   },
   {
@@ -6112,7 +6112,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-13T12:00:00Z"
   },
   {
@@ -6168,7 +6168,7 @@
    "machine": [
     "en"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-13T12:00:00Z"
   },
   {
@@ -6222,7 +6222,7 @@
    "machine": [
     "es"
    ],
-   "is_new": true,
+   "is_new": false,
    "wn_date": "2026-11-13T12:00:00Z"
   },
   {
