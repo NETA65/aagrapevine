@@ -1,7 +1,7 @@
 {
  "source": "announcements",
- "updated": "2026-11-27T02:47:04Z",
- "attempted": "2026-11-27T02:47:04Z",
+ "updated": "2026-11-27T17:32:43Z",
+ "attempted": "2026-11-27T17:32:43Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -27,7 +27,7 @@
    "lang": "en",
    "date": "2027-01-01",
    "first_seen": "2026-10-02T04:55:24Z",
-   "last_seen": "2026-11-20T16:15:30Z",
+   "last_seen": "2026-11-27T17:32:43Z",
    "image": null,
    "tags": [
     "prices",

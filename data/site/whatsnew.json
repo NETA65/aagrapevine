@@ -1,7 +1,143 @@
 {
- "updated": "2026-11-27T13:59:19Z",
+ "updated": "2026-11-27T17:52:27Z",
  "fixture": false,
  "items": [
+  {
+   "id": "ig:DgPruqGDSl1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgPruqGDSl1/",
+   "title": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not…",
+   "summary": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not -- thank God -- wistful or wishful thinking, but an historical record of how more than 25,000 [now over 2,000,000] alcoholics achieved sobriety.” “A Way of Life,” Chicago, Illinois, July 1946, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-27T12:30:15Z",
+   "first_seen": "2026-11-27T17:34:34Z",
+   "image": "/assets/cache/ig/DgPruqGDSl1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgPruqGDSl1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgPruqGDSl1.webp",
+    "embed_url": "https://www.instagram.com/p/DgPruqGDSl1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgPruqGDSl1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not…",
+     "es": "“En los Doce Pasos, AA no ofrece una teoría, no una hipótesis, no una esperanza piadosa, no …"
+    },
+    "summary": {
+     "en": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not -- thank God -- wistful or wishful thinking, but an historical record of how more than 25,000 [now over 2,000,000] alcoholics achieved sobriety.” “A Way of Life,” Chicago, Illinois, July 1946, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“En los Doce Pasos, AA no ofrece una teoría, no una hipótesis, no una esperanza piadosa, no -- gracias a Dios -- pensamiento miserable o deseable, sino un registro histórico de cómo más de 25.000 [ahora más de 2,000,000] alcohólicos alcanzaron sobriedad.” “Una forma de vida”, Chicago, Illinois, julio de 1946, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-27T12:30:15Z"
+  },
+  {
+   "id": "ig:DgPrurlDajk",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgPrurlDajk/",
+   "title": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con…",
+   "summary": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con frecuencia”. \"“Confiar en el silencio” NOVIEMBRE DE 1991 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-27T12:30:15Z",
+   "first_seen": "2026-11-27T17:34:34Z",
+   "image": "/assets/cache/ig/DgPrurlDajk.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgPrurlDajk",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgPrurlDajk.webp",
+    "embed_url": "https://www.instagram.com/p/DgPrurlDajk/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgPrurlDajk/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“My prayers are often brief and concise. ‘Help!’ is one of those I say with …",
+     "es": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con…"
+    },
+    "summary": {
+     "en": "“My prayers are often brief and concise. ‘Help!’ is one of those I often say.’ \"Confiar en el silencio\" November 1991 From the best of the Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con frecuencia”. \"“Confiar en el silencio” NOVIEMBRE DE 1991 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-27T12:30:15Z"
+  },
+  {
+   "id": "yt:2ymZmKCz5Lc",
+   "source": "youtube",
+   "kind": "video",
+   "url": "https://www.youtube.com/watch?v=2ymZmKCz5Lc",
+   "title": "Grapevine Weekly Open AA Meeting, November 25, 2026 [Season 2, Episode 22]",
+   "summary": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on November 25, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Vera welcomes speakers Dwayne and Rezan, who share their experience…",
+   "lang": "en",
+   "date": "2026-11-27T05:26:26Z",
+   "first_seen": "2026-11-27T17:34:15Z",
+   "image": "https://i.ytimg.com/vi/2ymZmKCz5Lc/hqdefault.jpg",
+   "tags": [
+    "season-2",
+    "weekly-open",
+    "live"
+   ],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "video_id": "2ymZmKCz5Lc",
+    "channel_id": "UCI9uFLJ__aXT3-At0PlPWUQ",
+    "duration_sec": null,
+    "playlists": [
+     "Grapevine Weekly Open AA Meeting"
+    ],
+    "is_short": false,
+    "views": 51,
+    "is_live_recording": true,
+    "date_approx": false,
+    "season": 2,
+    "episode": 22
+   },
+   "i18n": {
+    "title": {
+     "en": "Grapevine Weekly Open AA Meeting, November 25, 2026 [Season 2, Episode 22]",
+     "es": "Grapevine Weekly Open AA Meeting, 25 de noviembre de 2026 [Temporada 2, Episodio 22]"
+    },
+    "summary": {
+     "en": "In this AA Grapevine podcast, you'll hear a recording of Grapevine's open AA meeting, held on November 25, 2026. We meet every Wednesday at Noon Eastern and hope that you will join us. The code on Zoom is 871 2036 8287 and the password is 238047. Each meeting is recorded and distributed as a podcast. This week meeting leader Vera welcomes speakers Dwayne and Rezan, who share their experience…",
+     "es": "En este AA Grapevine Podcast, usted escuchará una grabación de la reunión abierta AA de Grapevine, celebrada el 25 de noviembre de 2026. Nos reunimos cada miércoles al mediodía (hora del Este) y esperamos que se una a nosotros. El código de Zoom es 871 2036 8287 y la contraseña es 238047. Cada reunión se graba y distribuye como podcast. Esta semana el líder de la reunión Vera da la bienvenida a los oradores Dwayne y Rezan, que comparten su experiencia …"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true,
+   "wn_date": "2026-11-27T05:26:26Z"
+  },
   {
    "id": "pod:wo:3448ce257a11",
    "source": "podcast",
@@ -875,7 +1011,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 227,
+    "views": 239,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -921,7 +1057,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 68,
+    "views": 78,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -1599,7 +1735,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 195,
+    "views": 205,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -2709,7 +2845,7 @@
      "American Sign Language"
     ],
     "is_short": false,
-    "views": 212,
+    "views": 216,
     "is_live_recording": true,
     "date_approx": false
    },
@@ -2929,7 +3065,7 @@
      "AA Grapevine's Podcast"
     ],
     "is_short": false,
-    "views": 294,
+    "views": 296,
     "is_live_recording": false,
     "date_approx": false,
     "season": 11,
@@ -2975,7 +3111,7 @@
      "Reunión abierta semanal de Alcohólicos Anónimos de La Viña"
     ],
     "is_short": false,
-    "views": 187,
+    "views": 191,
     "is_live_recording": false,
     "date_approx": false,
     "season": 1,
@@ -6373,7 +6509,7 @@
      "Grapevine Weekly Open AA Meeting"
     ],
     "is_short": false,
-    "views": 298,
+    "views": 306,
     "is_live_recording": true,
     "date_approx": false,
     "season": 2,
@@ -8038,138 +8174,6 @@
    "machine": [],
    "is_new": false,
    "wn_date": "2026-11-12T12:00:00Z"
-  },
-  {
-   "id": "ig:Dfmktsbg5kO",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dfmktsbg5kO/",
-   "title": "Off the Pity Pot, with Olis, Sam and Peyton.",
-   "summary": "Off the Pity Pot, with Olis, Sam and Peyton.",
-   "lang": "en",
-   "date": "2026-11-11T13:21:17Z",
-   "first_seen": "2026-11-11T15:24:16Z",
-   "image": "/assets/cache/ig/Dfmktsbg5kO.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dfmktsbg5kO",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dfmktsbg5kO.webp",
-    "embed_url": "https://www.instagram.com/p/Dfmktsbg5kO/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dfmktsbg5kO/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Off the Pity Pot, with Olis, Sam and Peyton.",
-     "es": "Fuera del pote de la piedad, con Olis, Sam y Peyton."
-    },
-    "summary": {
-     "en": "Off the Pity Pot, with Olis, Sam and Peyton.",
-     "es": "Fuera del pote de la piedad, con Olis, Sam y Peyton."
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-11T13:21:17Z"
-  },
-  {
-   "id": "ig:DfmicbGjXw7",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfmicbGjXw7/",
-   "title": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…",
-   "summary": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…",
-   "lang": "es",
-   "date": "2026-11-11T13:00:17Z",
-   "first_seen": "2026-11-11T15:24:16Z",
-   "image": "/assets/cache/ig/DfmicbGjXw7.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfmicbGjXw7",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfmicbGjXw7.webp",
-    "embed_url": "https://www.instagram.com/p/DfmicbGjXw7/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfmicbGjXw7/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, La Viña performs an open virtual meeting of AA with a host and two …",
-     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos…"
-    },
-    "summary": {
-     "en": "Each week, La Viña holds an open virtual meeting of AA with a host and two speakers. To join the live meeting on Thursdays at 12:00 p.m. (Eastern time), use the Zoom 871 2036 8287 code with password 238047. Is Thursday not a good time? Listen to the meeting at our new podcast and YouTube. Podcast respects anonymity and is available in the main …",
-     "es": "Cada semana, La Viña realiza una reunión virtual abierta de AA con un anfitrión y dos oradores. Para unirse a la reunión en vivo los jueves a las 12:00 p. m. (hora del Este), use el código de Zoom 871 2036 8287 con la contraseña 238047. ¿El jueves no es un buen momento? Escuche la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales…"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-11T13:00:17Z"
-  },
-  {
-   "id": "ig:DfmicXuDRea",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DfmicXuDRea/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-11-11T13:00:15Z",
-   "first_seen": "2026-11-11T15:24:16Z",
-   "image": "/assets/cache/ig/DfmicXuDRea.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DfmicXuDRea",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DfmicXuDRea.webp",
-    "embed_url": "https://www.instagram.com/p/DfmicXuDRea/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DfmicXuDRea/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false,
-   "wn_date": "2026-11-11T13:00:15Z"
   }
  ]
 }

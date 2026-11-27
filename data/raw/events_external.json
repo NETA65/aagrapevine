@@ -1,7 +1,7 @@
 {
  "source": "events_external",
- "updated": "2026-11-27T09:04:54Z",
- "attempted": "2026-11-27T09:04:54Z",
+ "updated": "2026-11-27T17:38:35Z",
+ "attempted": "2026-11-27T17:38:35Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -15,7 +15,7 @@
   "upcoming_urls": 9,
   "kept_from_cache": 0,
   "fetched": 0,
-  "refreshed": 0,
+  "refreshed": 1,
   "failed": 0,
   "pending": 0,
   "cached": 11,
@@ -23,7 +23,7 @@
   "online_es": 0,
   "items": 2,
   "new": 0,
-  "requests": 1
+  "requests": 43
  },
  "items": [
   {
@@ -264,7 +264,7 @@
    "fails": 0
   },
   "https://www.aagrapevine.org/get-involved/events/2027-02-19/meeting-paradise-2027": {
-   "at": "2026-11-13T15:37:22Z",
+   "at": "2026-11-27T17:38:35Z",
    "ev": {
     "title": "Meeting in Paradise 2027",
     "date_text": "February 19, 2027 - February 21, 2027",

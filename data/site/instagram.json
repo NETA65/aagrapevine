@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-26T17:49:37Z",
+ "updated": "2026-11-27T17:34:34Z",
  "fixture": false,
  "profiles": {
   "gv": {
@@ -7,10 +7,10 @@
    "name": "AA Grapevine",
    "url": "https://www.instagram.com/alcoholicsanonymous_gv/",
    "full_name": "AA Grapevine Magazine",
-   "followers": 17090,
-   "posts": 4054,
+   "followers": 17101,
+   "posts": 4056,
    "owner_id": "48108439509",
-   "checked": "2026-11-26T17:49:19Z",
+   "checked": "2026-11-27T17:34:17Z",
    "avatar": "/assets/cache/ig/_avatar_gv.webp"
   },
   "lv": {
@@ -18,14 +18,100 @@
    "name": "La Viña",
    "url": "https://www.instagram.com/alcoholicosanonimos_lv/",
    "full_name": "Revista La Viña",
-   "followers": 2438,
-   "posts": 3085,
+   "followers": 2437,
+   "posts": 3087,
    "owner_id": "48275839129",
-   "checked": "2026-11-26T17:49:21Z",
+   "checked": "2026-11-27T17:34:19Z",
    "avatar": "/assets/cache/ig/_avatar_lv.webp"
   }
  },
  "items": [
+  {
+   "id": "ig:DgPrurlDajk",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgPrurlDajk/",
+   "title": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con…",
+   "summary": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con frecuencia”. \"“Confiar en el silencio” NOVIEMBRE DE 1991 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org",
+   "lang": "es",
+   "date": "2026-11-27T12:30:15Z",
+   "first_seen": "2026-11-27T17:34:34Z",
+   "image": "/assets/cache/ig/DgPrurlDajk.webp",
+   "tags": [],
+   "category": "lv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgPrurlDajk",
+    "account": "lv",
+    "username": "alcoholicosanonimos_lv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgPrurlDajk.webp",
+    "embed_url": "https://www.instagram.com/p/DgPrurlDajk/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgPrurlDajk/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“My prayers are often brief and concise. ‘Help!’ is one of those I say with …",
+     "es": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con…"
+    },
+    "summary": {
+     "en": "“My prayers are often brief and concise. ‘Help!’ is one of those I often say.’ \"Confiar en el silencio\" November 1991 From the best of the Grapevine, Volume III\" Daily Quote in www.aalavina.org",
+     "es": "“Mis oraciones suelen ser breves y concisas. ‘¡Ayuda!’ es una de las que digo con frecuencia”. \"“Confiar en el silencio” NOVIEMBRE DE 1991 De Lo mejor del Grapevine, Volumen III\" Cita Diaria en www.aalavina.org"
+    }
+   },
+   "machine": [
+    "en"
+   ],
+   "is_new": true
+  },
+  {
+   "id": "ig:DgPruqGDSl1",
+   "source": "instagram",
+   "kind": "post",
+   "url": "https://www.instagram.com/p/DgPruqGDSl1/",
+   "title": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not…",
+   "summary": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not -- thank God -- wistful or wishful thinking, but an historical record of how more than 25,000 [now over 2,000,000] alcoholics achieved sobriety.” “A Way of Life,” Chicago, Illinois, July 1946, AA Grapevine Daily Quote at www.aagrapevine.org",
+   "lang": "en",
+   "date": "2026-11-27T12:30:15Z",
+   "first_seen": "2026-11-27T17:34:34Z",
+   "image": "/assets/cache/ig/DgPruqGDSl1.webp",
+   "tags": [],
+   "category": "gv",
+   "status": "ok",
+   "extra": {
+    "shortcode": "DgPruqGDSl1",
+    "account": "gv",
+    "username": "alcoholicsanonymous_gv",
+    "media_type": "image",
+    "thumb": "/assets/cache/ig/DgPruqGDSl1.webp",
+    "embed_url": "https://www.instagram.com/p/DgPruqGDSl1/embed/captioned/",
+    "permalink": "https://www.instagram.com/p/DgPruqGDSl1/",
+    "is_reel": false,
+    "manual": false,
+    "strategy": "profile_embed",
+    "caption_known": true,
+    "embed_checked": null
+   },
+   "i18n": {
+    "title": {
+     "en": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not…",
+     "es": "“En los Doce Pasos, AA no ofrece una teoría, no una hipótesis, no una esperanza piadosa, no …"
+    },
+    "summary": {
+     "en": "“In the Twelve Steps, AA offers not a theory, not a hypothesis, not a pious hope, not -- thank God -- wistful or wishful thinking, but an historical record of how more than 25,000 [now over 2,000,000] alcoholics achieved sobriety.” “A Way of Life,” Chicago, Illinois, July 1946, AA Grapevine Daily Quote at www.aagrapevine.org",
+     "es": "“En los Doce Pasos, AA no ofrece una teoría, no una hipótesis, no una esperanza piadosa, no -- gracias a Dios -- pensamiento miserable o deseable, sino un registro histórico de cómo más de 25.000 [ahora más de 2,000,000] alcohólicos alcanzaron sobriedad.” “Una forma de vida”, Chicago, Illinois, julio de 1946, AA Grapevine Cita diaria en www.aagrapevine.org"
+    }
+   },
+   "machine": [
+    "es"
+   ],
+   "is_new": true
+  },
   {
    "id": "ig:DgNj-m0O5XU",
    "source": "instagram",
@@ -10320,49 +10406,6 @@
    "is_new": false
   },
   {
-   "id": "ig:Dd6SMJoF36j",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/Dd6SMJoF36j/",
-   "title": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-   "summary": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-   "lang": "en",
-   "date": "2026-09-30T12:00:14Z",
-   "first_seen": "2026-09-30T15:47:18Z",
-   "image": "/assets/cache/ig/Dd6SMJoF36j.webp",
-   "tags": [],
-   "category": "gv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "Dd6SMJoF36j",
-    "account": "gv",
-    "username": "alcoholicsanonymous_gv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/Dd6SMJoF36j.webp",
-    "embed_url": "https://www.instagram.com/p/Dd6SMJoF36j/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/Dd6SMJoF36j/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_embed",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers.",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores."
-    },
-    "summary": {
-     "en": "Each week, AA Grapevine holds an open virtual AA meeting with a host and two speakers. To join the meeting live on Wednesdays at Noon Eastern, use Zoom code 871 2036 8287 with password 238047 Wednesday's not a good time? Catch the meeting on our new podcast and on YouTube. The podcast respects anonymity and is available on major platforms. To support the Grapevine Weekly Open AA Meeting Podcast…",
-     "es": "Cada semana, AA Grapevine celebra una reunión virtual de AA abierta con un anfitrión y dos oradores. Para unirse a la reunión en vivo los miércoles al mediodía (hora del Este), utilice el código Zoom 871 2036 8287 con contraseña 238047 ¿El miércoles no es un buen momento? No te pierdas la reunión en nuestro nuevo podcast y en YouTube. El podcast respeta el anonimato y está disponible en las principales plataformas. Para apoyar el Grapevine Weekly Open AA Meeting Podcast …"
-    }
-   },
-   "machine": [
-    "es"
-   ],
-   "is_new": false
-  },
-  {
    "id": "ig:Dd6OwdEl4sp",
    "source": "instagram",
    "kind": "post",
@@ -11178,49 +11221,6 @@
     "summary": {
      "en": "“When everything else fails, try to follow the directions.” \"Hear in meetings\" JANUARY 1961 AA Grapevine Daily Quote in www.aalavina.org",
      "es": "“Cuando todo lo demás falle, intenta seguir las indicaciones”. \"“Oído en reuniones” ENERO DE 1961 Del AA Grapevine\" Cita Diaria en www.aalavina.org"
-    }
-   },
-   "machine": [
-    "en"
-   ],
-   "is_new": false
-  },
-  {
-   "id": "ig:DdeSDBpFuxK",
-   "source": "instagram",
-   "kind": "post",
-   "url": "https://www.instagram.com/p/DdeSDBpFuxK/",
-   "title": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…",
-   "summary": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…",
-   "lang": "es",
-   "date": "2026-09-19T15:00:02Z",
-   "first_seen": "2026-09-23T16:36:37Z",
-   "image": "/assets/cache/ig/DdeSDBpFuxK.webp",
-   "tags": [],
-   "category": "lv",
-   "status": "ok",
-   "extra": {
-    "shortcode": "DdeSDBpFuxK",
-    "account": "lv",
-    "username": "alcoholicosanonimos_lv",
-    "media_type": "image",
-    "thumb": "/assets/cache/ig/DdeSDBpFuxK.webp",
-    "embed_url": "https://www.instagram.com/p/DdeSDBpFuxK/embed/captioned/",
-    "permalink": "https://www.instagram.com/p/DdeSDBpFuxK/",
-    "is_reel": false,
-    "manual": false,
-    "strategy": "profile_html",
-    "caption_known": true,
-    "embed_checked": null
-   },
-   "i18n": {
-    "title": {
-     "en": "We're here to help! Contact Customer Service Monday through Friday between …",
-     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre…"
-    },
-    "summary": {
-     "en": "We're here to help! Contact Customer Service from Monday to Friday between 9:00 a.m. and 5:30 p.m. EST for the following numbers: Spanish: (800) 640-8781 (USA) / +1 (570) 567-0437 (International) English: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (international) French: (212) 870-3456 For all subscription-related queries, including new …",
-     "es": "¡Estamos aquí para ayudar! Comuníquese con Servicio al Cliente de lunes a viernes entre las 9:00 a. m. y las 5:30 p. m. EST por los siguientes números: Español: (800) 640-8781 (EE.UU.) / +1 (570) 567-0437 (Internacional) Inglés: (800) 631-6025 (EE. UU.) / +1 (570) 567-0431 (internacional) Francés: (212) 870-3456 Para todas las consultas relacionadas con las suscripciones, incluidas nuevas…"
     }
    },
    "machine": [
