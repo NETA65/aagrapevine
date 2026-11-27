@@ -56,6 +56,7 @@ from scripts.sync import shop as S  # noqa: E402
 from scripts.sync import translate as T  # noqa: E402
 from scripts.sync.common import load_config  # noqa: E402
 from scripts.sync.drive_listing import Entry  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 E_AT = "2027-01-01T06:00:00Z"          # 00:00 Central (CST) on January 1, 2027: the new prices
 N_AT = "2027-02-01T06:00:00Z"          # 00:00 Central on February 1: the "New prices as of …" notice is over
@@ -236,7 +237,7 @@ class Settings(unittest.TestCase):
     def test_the_run_summary_names_the_problem(self):
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")
-        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(step["run"])
         tmp = Path(tempfile.mkdtemp(prefix="gv-pc-summary-"))
         self.addCleanup(shutil.rmtree, tmp, True)
         (tmp / "data" / "site").mkdir(parents=True)

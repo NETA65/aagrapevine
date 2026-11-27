@@ -310,9 +310,9 @@ class Counts(unittest.TestCase):
         self.assertFalse(r["focused"], "never hidden under the reader")
         self.assertEqual(r["after"], [True, False, "2"], "gone once focus left it; '-' never ends")
 
-    def test_the_committee_counts_carry_their_moments(self):
-        # committeeNav writes one moment per thing it counts: an event's end (the instant /events/ hides its
-        # card at), a monthly series once — its last listed date's —, a post's `expires` day end ("-": none)
+    def test_the_committee_subnav_has_no_counts(self):
+        # committeeNav, on data with events and bulletin posts that end: until November 2026 its Events and Bulletin
+        # tabs counted them, each with the moment it ended (data-gv-expire-count)
         ev = lambda iid, start, end, **x: {"id": iid, "kind": "event", "status": "ok", "source": "committee", "category": x.pop("category", "manual"),
                                            "title": iid, "url": "/events/", "date": start, "lang": "en", "i18n": {}, "machine": [],
                                            "extra": {"start": start, "end": end, **x}}
@@ -328,13 +328,17 @@ class Counts(unittest.TestCase):
           const C = await imp("eleventy/filters/committee.js");
           const sc = {};
           C.default(new Proxy({}, { get: (_t, name) => (name === "addShortcode" ? (n, fn) => { sc[n] = fn; } : () => {}) }));
-          out(sc.committeeNav("en", "bulletin", input.db));""", data={"db": db})
-        import re
-        counts = dict(re.findall(r'href="/(events|bulletin)/"[^>]*>(?:(?!</a>).)*?<span class="cm-subnav-count" data-gv-expire-count="([^"]*)">\d+</span>',
-                                 html, re.S))
-        self.assertEqual(counts["events"].split(), ["2030-03-02T18:00:00.000Z", "2030-04-14T02:00:00.000Z"])
-        self.assertEqual(counts["bulletin"].split(), ["2030-01-15T06:00:00.000Z", "-"])
-        self.assertNotIn('data-gv-expire-count', re.search(r'href="/meetings/".*?</a>', html, re.S).group(0))
+          out({ withData: sc.committeeNav("en", "bulletin", input.db), without: sc.committeeNav("en", "bulletin"),
+                es: sc.committeeNav("es", "events", input.db) });""", data={"db": db})
+        # since November 2026 the tabs carry no counts (the UX review: noise), so nothing in the bar expires
+        for k, page in html.items():
+            with self.subTest(k):
+                self.assertNotIn("cm-subnav-count", page)
+                self.assertNotIn("data-gv-expire-count", page)
+        # the bar depends on the language and the current tab only: the data changes nothing
+        self.assertEqual(html["withData"], html["without"])
+        self.assertIn('href="/bulletin/" class="cm-subnav-link is-current" aria-current="page"', html["withData"])
+        self.assertIn('href="/es/events/" class="cm-subnav-link is-current" aria-current="page"', html["es"])
 
 
 class CommitteeExpire(unittest.TestCase):
@@ -577,18 +581,14 @@ class Pages(unittest.TestCase):
 
     def test_home_and_bulletin_carry_the_attributes(self):
         home = (ROOT / "src" / "pages" / "index.njk").read_text(encoding="utf-8")
-        # the bulletin section and the events section are lists; their cards are items with a moment
-        self.assertRegex(home, r'<section[^>]*aria-labelledby="ann-title"[^>]*data-gv-expire-list')
+        # the events section is a list; its cards are items with a moment (the bulletin's posts and the themes' cards
+        # went with their sections in November 2026: the bulletin keeps its own, below)
+        self.assertNotIn('aria-labelledby="ann-title"', home)
         self.assertRegex(home, r'<section[^>]*aria-labelledby="events-title"[^>]*data-gv-expire-list')
-        self.assertRegex(home, r'<article class="home-ann[^"]*"[^>]*data-gv-expire-item\{% if annEnd %\} data-gv-expire="\{\{ annEnd \}\}"')
-        self.assertIn('(a.extra.expires | fsDayEnd)', home)
-        self.assertIn('(th.extra.deadline | fsDayEnd)', home)
-        self.assertRegex(home, r'<li class="home-theme[^"]*"[^>]*data-gv-expire-item\{% if thEnd %\} data-gv-expire="\{\{ thEnd \}\}"')
+        # the write button's "Next deadline" line goes once its day is over
+        self.assertIn('data-gv-expire="{{ nextTheme.extra.deadline | fsDayEnd }}"', home)
         self.assertIn('{%- set evEndAt = e | homeEventEnd -%}', home)
-        self.assertRegex(home, r'data-gv-expire-item\{% if evEndAt %\} data-gv-expire="\{\{ evEndAt \}\}"')
-        # the 4th event (hidden on a phone) is a spare that steps in there
-        self.assertIn('<li{% if loop.index > 3 %} class="max-sm:hidden" data-gv-expire-spare="max-sm:hidden"{% endif %} '
-                      'data-gv-expire-item', home)
+        self.assertRegex(home, r'<li data-gv-expire-item\{% if evEndAt %\} data-gv-expire="\{\{ evEndAt \}\}"')
         # the calendar card in the events row is not an event: never an item
         cta = home.split('class="home-cal-cta', 1)[1].split("</article>", 1)[0]
         self.assertNotIn("data-gv-expire", cta)

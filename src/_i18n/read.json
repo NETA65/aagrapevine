@@ -39,6 +39,7 @@
   "read.stat_new": { "en": "New", "es": "Nuevas" },
   "read.stat_free": { "en": "Free to read", "es": "Gratis" },
   "read.read_on": { "en": "Read on {site}", "es": "Leer en {site}" },
+  "read.all_on": { "en": "All {n} stories on {site}", "es": "Las {n} historias en {site}" },
   "read.in_this_issue": { "en": "In this issue", "es": "En esta edición" },
   "read.special_section": { "en": "Special section", "es": "Sección especial" },
   "read.also_in_issue": { "en": "Also in this issue", "es": "También en esta edición" },
@@ -621,5 +622,33 @@
   "read.contrib.aside_lv": { "en": "La Viña takes stories all year.", "es": "La Viña recibe historias todo el año." },
   "read.contrib.aside_lv_pub": { "en": "La Viña · stories in Spanish", "es": "La Viña · historias en español" },
   "read.contrib.aside_record_text": { "en": "Tell it in your own voice, right on this page or by phone", "es": "Cuéntala con tu propia voz, aquí mismo o por teléfono" },
-  "read.gvr.aside_title": { "en": "To announce this month", "es": "Para anunciar este mes" }
+  "read.gvr.aside_title": { "en": "To announce this month", "es": "Para anunciar este mes" },
+  "read.contrib.nd_title": {
+    "en": "Next story deadlines",
+    "es": "Próximas fechas límite para historias"
+  },
+  "read.contrib.nd_none_gv": {
+    "en": "No dated Grapevine theme right now: the magazine welcomes stories on any topic.",
+    "es": "Grapevine no tiene un tema con fecha por ahora: la revista recibe historias sobre cualquier tema."
+  },
+  "read.contrib.nd_topics": {
+    "en": "See the suggested topics",
+    "es": "Ver los temas sugeridos"
+  },
+  "read.contrib.nd_sub_text": {
+    "en": "Every deadline of both magazines in your calendar, with a reminder the day before.",
+    "es": "Todas las fechas límite de las dos revistas en tu calendario, con un aviso el día anterior."
+  },
+  "read.contrib.nd_subscribe": {
+    "en": "Subscribe to all deadlines",
+    "es": "Suscríbete a todas las fechas"
+  },
+  "read.more_failed": {
+    "en": "couldn't load the stories, try again",
+    "es": "no se pudieron cargar las historias, inténtalo de nuevo"
+  },
+  "read.contrib.aside_record_title": {
+    "en": "Rather tell it out loud?",
+    "es": "¿Prefieres contarla en voz alta?"
+  }
 }

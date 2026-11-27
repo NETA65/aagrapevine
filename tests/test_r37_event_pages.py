@@ -371,6 +371,8 @@ class EventPages(unittest.TestCase):
 
     def test_a_writing_workshop(self):
         s = settings(self)
+        # La Viña's workshop is held in Spanish: it links the Spanish deck while the site has it, else the English one
+        deck_id = "taller-de-escritura" if "taller-de-escritura" in s["decks"] else "writing-workshop"
         for lang, pre in (("en", ""), ("es", "/es")):
             p = main_of(self.page(f"{pre}/events/{WS}/"))
             with self.subTest(lang=lang):
@@ -381,16 +383,19 @@ class EventPages(unittest.TestCase):
                              f"{pre}/events/#{WS}",
                              # (what the settings have: its presentation, GVR / RLV 101's lesson, the committee's
                              # next meeting)
-                             *((f"{pre}/orientation/?present=writing-workshop", f"{pre}/orientation/#pres-writing-workshop")
-                               if "writing-workshop" in s["decks"] else ()),
+                             *((f"{pre}/orientation/?present={deck_id}", f"{pre}/orientation/#pres-{deck_id}")
+                               if deck_id in s["decks"] else ()),
                              *((f"{pre}/orientation/stories/",) if "stories" in s["lessons"] else ()),
                              *((f"{pre}/meetings/#committee-meeting",) if s["meeting"] else ())):
                     self.assertIn(want, hrefs)
                 self.assertFalse([h for h in hrefs if "bs=" in h], "never a booth link that replaces its settings")
-                # (round 37's fixer) the slides are in English: a page in another language says so on the deck's card
-                if "writing-workshop" in s["decks"]:
+                # (round 37's fixer) the deck's card says its language on a page in another one: the Spanish deck
+                # "Presentation in Spanish" on the English page, the English one "Presentación en inglés" on /es/
+                if deck_id in s["decks"]:
                     deck = re.search(r'<article class="card card-pad evp-deck".*?</article>', p, re.S).group(0)
-                    self.assertEqual("Presentación en inglés" in text_of(deck), lang == "es")
+                    spanish = deck_id == "taller-de-escritura"
+                    self.assertEqual("Presentación en inglés" in text_of(deck), lang == "es" and not spanish)
+                    self.assertEqual("Presentation in Spanish" in text_of(deck), lang == "en" and spanish)
                     self.assertNotIn("Presentation in English", text_of(deck))
                 # the bingo card made for it: in Spanish (held in Spanish), La Viña, a workshop, its title and day
                 bingo = re.search(r'href="([^"]+)"[^>]*data-evp-bingo', p).group(1)
@@ -450,7 +455,7 @@ class EventPages(unittest.TestCase):
                 self.assertIn(lede, text_of(main_of(self.page(f"{pre}/events/{ASM}/"))))
         cal = hrefs(f"/events/{CAL}/")
         self.assertIn("https://www.aalavina.org/get-involved/events/2099-02-28/prueba", cal)
-        self.assertIn("/events/?filter=calendar", cal)
+        self.assertIn("/events/?kind=calendar", cal)          # (the list's "GV & LV calendars" filter)
         # a series' page: its next dates, each to its own page (its list is its own content: not skipped)
         cws = self.series("citywide-dallas")
         if cws:
@@ -528,7 +533,8 @@ def _both(en: str, es: str) -> dict:
 
 
 KDECKS = [{"id": i, "title": _both(t, t), "card": {"title": _both(t, t), "summary": _both("About it.", "Sobre ella.")},
-           "minutes": 60} for i, t in (("writing-workshop", "Test writing deck"), ("information-workshop", "Test info deck"),
+           "minutes": 60} for i, t in (("writing-workshop", "Test writing deck"), ("recording-workshop", "Test recording deck"),
+                                       ("information-workshop", "Test info deck"),
                                        ("orientation-workshop", "Test orientation deck"), ("grapevine-meeting", "Test GV deck"))]
 LITTABLE = _both("Set up a test table people stop at.", "Arma una mesa de prueba.")
 KLESSONS = [{"id": "magazines", "title": _both("The magazines", "Las revistas"), "summary": _both("What they are.", "Qué son.")},
@@ -612,7 +618,7 @@ class EveryKind(unittest.TestCase):
         gvm0 = f"ev-recurring-grapevine-meeting-{gvm[0].isoformat()}"
         area = ["area", "booth", "littable", "offers"]
         want = {
-            "rec": ("recording-workshop", "writing-workshop", "workshop", ["record", "listen", "published", "tips", "booth"]),
+            "rec": ("recording-workshop", "recording-workshop", "workshop", ["record", "listen", "published", "tips", "booth"]),
             "acm": ("acm", "", "acm", area),
             "th": ("town-hall", "", "assembly", area),
             "ig": ("intergroup", "", "group", ["mags", "offers", "booth"]),
@@ -631,7 +637,7 @@ class EveryKind(unittest.TestCase):
                 got = r[anchor]
                 self.assertEqual((got["kind"], got["deck"], got["res"]), (kind, deck, res))
                 self.assertIn(f"&where={where}&", got["bingo"])
-        self.assertTrue(r["rec"]["close"], "the recording workshop's deck is the closest one")
+        self.assertFalse(r["rec"]["close"], "the recording workshop's deck is its own, not the closest one")
         self.assertIn("tel:+15550100002", r["rec"]["hrefs"], "La Viña's record-your-story line")
         self.assertIn("/listen/?show=lvo", r["rec"]["hrefs"])
         self.assertIn("/bulletin/#2099-01-01-offers", r[CW_DATES[1]]["hrefs"])

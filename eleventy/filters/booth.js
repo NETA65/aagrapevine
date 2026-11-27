@@ -1187,11 +1187,15 @@ const flatText = (md) => oneLine(String(md ?? "")
 // a line that is not prose: a heading, a list item, a quote, a table row
 const HEADING_LINE = /^#{1,6}(?:\s|$)/;
 const BLOCK_LINE = /^(?:#{1,6}(?:\s|$)|[-*+]\s|\d+[.)]\s|>|\|)/;
+/** A heading with text after it, in the sync's teaser: it ends its sentence ("Why it matters."; one with a mark of its
+ *  own keeps it: "¿Por qué importa?") — announcements.py _heading_sentence. */
+const headingSentence = (s) => (s && !/[.!?:;…]$/u.test(s) ? `${s}.` : s);
 /**
- * A post's first paragraph (its body, Markdown) as one plain line → { lead, before }: the heading(s) at the top are
- * skipped (`before`: their words — the sync's teaser starts with them), and the paragraph stops at the first heading,
+ * A post's first paragraph (its body, Markdown) as one plain line → { lead, before, heads }: the heading(s) at the top
+ * are skipped (`heads`: their words as the sync's teaser starts with them, each ending its sentence — `before`: run
+ * together, as an older teaser has them, synced before November 27, 2026), and the paragraph stops at the first heading,
  * list, quote or table line. lead "" when the post starts with a list, a quote or a table (the teaser it has is used).
- * The bulletin's teaser on a slide: the sync's runs every block into one line ("…learn from it. Why it matters A
+ * The bulletin's teaser on a slide: the sync's runs every block into one line ("…learn from it. Why it matters. A
  * meeting in print…"), a heading and a list included.
  */
 function firstParagraph(md) {
@@ -1205,9 +1209,9 @@ function firstParagraph(md) {
     let j = i;
     while (j < lines.length && !BLOCK_LINE.test(lines[j])) j++;
     const lead = flatText(lines.slice(i, j).join("\n"));
-    if (lead) return { lead, before: flatText(before.join("\n")) };
+    if (lead) return { lead, before: flatText(before.join("\n")), heads: oneLine(before.map((h) => headingSentence(flatText(h))).join(" ")) };
   }
-  return { lead: "", before: "" };
+  return { lead: "", before: "", heads: "" };
 }
 
 /* ------------------------------------------------------------------ */
@@ -1727,7 +1731,7 @@ const bodyOf = (p, lang) => {
 /** live-bulletin: the bulletin's two newest posts (committee.js announcementList: pinned first, none past its
  *  `expires` day) as messages — the title and its teaser in each language, the QR to the post on /bulletin/ — each
  *  until its `expires` day is over. The teaser: the post's first paragraph when its summary is the one the sync makes
- *  from the body (every block run into one line — headings and lists included: "…learn from it. Why it matters A
+ *  from the body (every block run into one line — headings and lists included: "…learn from it. Why it matters. A
  *  meeting in print…"), else its summary (one written by hand); 280 characters at most. A post that says a word the
  *  booth never shows is left out and named (screenLive), and the next post takes its place. */
 function liveBulletin(c) {
@@ -1736,11 +1740,14 @@ function liveBulletin(c) {
   for (const p of announcementList(arr(c.db.announcements && c.db.announcements.items), c.now)) {
     if (items.length >= 2) break;
     // the sync's summary starts with the body's first words (its headings, then the first paragraph) — cut at 400
-    // characters with "…" when the paragraph is longer
+    // characters with "…" when the paragraph is longer (its headings end their sentences; run together in an older
+    // summary, firstParagraph's `before`)
     const first = firstParagraph(bodyOf(p, p.lang === "es" ? "es" : "en"));
     const sum = oneLine(p.summary);
-    const start = oneLine(`${first.before} ${first.lead}`);
-    const fromBody = !!first.lead && (sum.startsWith(start) || (sum.length > 1 && sum.endsWith("…") && start.startsWith(sum.slice(0, -1))));
+    const fromBody = !!first.lead && [first.heads, first.before].some((h) => {
+      const start = oneLine(`${h} ${first.lead}`);
+      return sum.startsWith(start) || (sum.length > 1 && sum.endsWith("…") && start.startsWith(sum.slice(0, -1)));
+    });
     const words = (lang) => ({
       title: oneLine(H.pickLang(p, "title", lang) || p.title),
       text: clip((fromBody && firstParagraph(bodyOf(p, lang)).lead) || plain(H.pickLang(p, "summary", lang) || p.summary || ""), 280),

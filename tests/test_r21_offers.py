@@ -7,7 +7,8 @@ then the holiday gift offers):
                   (links.gv_store / lv_store; a store's own page for the offer — url, url_ca — instead), the banner
                   the Drive's `flyers` folder holds (banner_match) or none, a block with a mistake left out and
                   named, the month's lines, an offer whose stores give no first day (show_starts: false, "Through
-                  December 31, 2026"); Home's committee uploads leave the banners out (shopOfferBanners → homeDrive);
+                  December 31, 2026"). (Home's "Shared by the committee" — which left the banners out — went in the UX
+                  review of November 2026: the banners are on /shop/#offers only.)
   * DriveNames  — scripts/sync/drive.py build_item: the banners' names in `flyers` make no event (no date, no month)
                   and say their language;
   * Message     — the monthly toolkit's message (monthly.js monthMessage) names the offer in the months it runs, with
@@ -192,30 +193,6 @@ class Offers(unittest.TestCase):
         self.assertEqual([s["banner"] for s in r["pdf"]["offers"][0]["stores"]], [None, None], "only a picture is a banner")
         self.assertEqual([s["banner"] for s in r["newer-pdf"]["offers"][0]["stores"]],
                          [both["gv"], None], "a newer PDF that matches too never hides the banner (the newest picture)")
-
-    def test_homes_uploads_leave_the_banners_out(self):
-        # Home's "Shared by the committee" (index.njk: homeDrive with shopOfferBanners) — a banner stands next to the
-        # offer's conditions on /shop/#offers, never alone; the folder's other flyers stay, before and after the days
-        items = [*OTHER_ITEMS, LV_ITEM, GV_ITEM]
-        r = run_js(self, r"""
-          const S = await imp("eleventy/filters/shop.js");
-          const res = {};
-          for (const [name, site] of Object.entries(input.sites)) {
-            const skip = filters.shopOfferBanners(site, input.items);
-            res[name] = { skip, home: filters.homeDrive(input.items, 6, skip).map((i) => i.id) };
-          }
-          res.plain = filters.homeDrive(input.items, 6).map((i) => i.id);
-          res.direct = S.shopOfferBanners(input.sites.offer, input.items);
-          out(res);""", data={"items": items, "sites": {
-            "offer": SITE, "later": {"links": LINKS, "store_offers": [{**OFFER, "starts": "2027-03-01", "ends": "2027-03-31"}]},
-            "none": {"links": LINKS}, "gv-only": {"links": LINKS, "store_offers": [{k: v for k, v in OFFER.items() if k != "lv"}]}}})
-        self.assertEqual(r["offer"]["skip"], ["drive:GVbanner1", "drive:LVbanner1"])
-        self.assertEqual(r["direct"], r["offer"]["skip"])
-        self.assertEqual(r["offer"]["home"], ["drive:Cards1", "drive:Notes1"])
-        self.assertEqual(r["later"]["home"], ["drive:Cards1", "drive:Notes1"], "also before (and after) its days")
-        self.assertEqual(r["none"]["skip"], [])
-        self.assertEqual(sorted(r["none"]["home"]), sorted(r["plain"]), "no store_offers: every upload, as before")
-        self.assertEqual(r["gv-only"]["skip"], ["drive:GVbanner1"], "only the banners a block finds")
 
     def test_a_block_with_a_mistake_is_left_out_and_named(self):
         good = {**OFFER, "key": "good", "starts": "2026-11-20", "ends": "2026-11-30"}

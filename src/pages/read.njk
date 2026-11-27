@@ -18,6 +18,7 @@ pageScripts: ["/assets/js/read.js"]
     OWN width (container queries, @container / @4xl: …), not the screen's. -#}
 {% import "macros/ui.njk" as ui with context %}
 {%- set SSR_ARCHIVE = readSsrArchive -%}{#- earlier issues shown here; the rest: /read-archive.json (read.js SSR_ARCHIVE) -#}
+{%- set SSR_ROWS = readSsrRows -%}{#- the stories of each of those the page holds; the rest: /read-archive.json `more` (read.js SSR_ROWS) -#}
 {%- set spot = db.spotlight | readSpotlight -%}
 {%- set gvIssues = db.articles | readIssues("gv") -%}
 {%- set lvIssues = db.articles | readIssues("lv") -%}
@@ -343,11 +344,32 @@ pageScripts: ["/assets/js/read.js"]
           {% icon "chevron-down", "size-5 shrink-0 text-muted transition group-open/past:rotate-180" %}
         </summary>
         <div class="border-t border-line p-2 sm:p-3" x-ignore>
-          <ul class="grid grid-cols-1 gap-x-3 @xl:grid-cols-2 @5xl:grid-cols-3">
-            {% for a in v.articles %}{{ articleRow(a, lang, true, false, false, "", v) }}{% endfor %}
+          <ul class="grid grid-cols-1 gap-x-3 @xl:grid-cols-2 @5xl:grid-cols-3" data-read-rows>
+            {% for a in v.articles | limit(SSR_ROWS) %}{{ articleRow(a, lang, true, false, false, "", v) }}{% endfor %}
           </ul>
+          {#- …and without JavaScript (no "Show all"), the issue's other stories too, as plain links (title, original title,
+              writer): in a <noscript>, which a browser that runs scripts never turns into elements — the page starts as
+              light as before for nearly everyone, and every story of every issue here is still reachable without it -#}
+          {%- if v.articles.length > SSR_ROWS %}
+          <noscript><ul class="grid grid-cols-1 gap-x-3 px-3 pb-1 @xl:grid-cols-2 @5xl:grid-cols-3">
+            {%- for a in v.articles.slice(SSR_ROWS) %}
+            <li class="py-1.5 text-sm leading-snug"><a class="link font-semibold" href="{{ a.url }}" target="_blank" rel="noopener" lang="{{ a.titleLang }}">{{ a.title }}</a>
+              {%- if a.original %} <span class="text-xs italic text-muted" lang="{{ a.origLang }}">{% if a.machine %}{% ricon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}:</span> {% endif %}{{ a.original }}</span>
+              {%- elif a.machine %} <span class="auto-note">{% ricon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}</span></span>{% endif %}
+              {%- if a.author %} <span class="text-xs text-muted">· {{ "common.by" | t(lang, {name: a.author}) }}</span>{% endif %}</li>
+            {%- endfor %}
+          </ul></noscript>
+          {%- endif %}
           {%- set aHub = v.url or (lvHub if v.pub == 'lv' else gvHub) -%}
-          <p class="px-3 pb-1 pt-2"><a class="link tap-link text-sm" href="{{ aHub }}" target="_blank" rel="noopener">{{ "read.read_on" | t(lang, {site: aHub | hostname}) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
+          {#- the issue's other stories: /read-archive.json `more` (read.js readMore); without JavaScript, the issue's
+              own table of contents on the magazine's site — the link under it, which then says so ("All 15 stories on
+              aagrapevine.org": an issue with its own address and more stories than the page holds) -#}
+          {% if v.articles.length > SSR_ROWS %}
+          <p class="px-3 pt-2" data-js-only><button type="button" class="btn-secondary btn-sm" data-read-more="{{ v.id }}" data-json="{{ '/read-archive.json' | lurl(lang) }}"
+            data-t-loading="{{ 'common.loading' | t(lang) }}" data-t-failed="{{ 'read.more_failed' | t(lang) }}">{% icon "chevron-down", "size-4" %} {{ "read.show_all" | t(lang, {n: v.count}) }}</button></p>
+          {% endif %}
+          {%- set allOn = v.url and v.articles.length > SSR_ROWS %}
+          <p class="px-3 pb-1 pt-2"><a class="link tap-link text-sm" href="{{ aHub }}" target="_blank" rel="noopener">{{ ("read.all_on" | t(lang, {n: v.count, site: aHub | hostname})) if allOn else ("read.read_on" | t(lang, {site: aHub | hostname})) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
         </div>
       </details>
       {% endfor %}
@@ -391,6 +413,30 @@ pageScripts: ["/assets/js/read.js"]
         </details>
       </template>
     </div>
+
+    {#- One story row of an earlier issue, as articleRow draws it (compact), for the stories "Show all N stories" adds
+        (read.js readMore clones it and fills in each story of /read-archive.json `more`: its title, original title,
+        writer, free / subscribers, the magazine's colour on hover and the Share button's words). No Alpine here. -#}
+    {% if archive.length %}
+    <template id="read-row-tpl">
+      <li class="read-article">
+        <a href="#" target="_blank" rel="noopener" class="group flex h-full min-w-0 flex-1 flex-col gap-1 rounded-xl px-3 py-3 no-underline transition hover:bg-surface-2">
+          <span class="flex items-start justify-between gap-2">
+            <span class="font-display text-[0.98rem] font-semibold leading-snug text-ink transition" data-f="t"></span>
+            {% ricon "arrow-up-right", "mt-1 size-4 shrink-0 text-faint transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" %}
+          </span>
+          <span class="flex items-center gap-1 text-xs text-muted" data-f="orig" title="{{ 'common.auto_translated' | t(lang) }} — {{ 'common.auto_translated_help' | t(lang) }}"><span data-f="mt">{% ricon "languages", "size-3 shrink-0" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}:</span></span><span class="italic" data-f="o"></span></span>
+          <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted" data-f="meta">
+            <span data-f="a" data-t="{{ 'common.by' | t(lang) }}"></span>
+            <span class="badge-vine" data-f="free">{% ricon "lock-open", "size-3" %} {{ "read.free_story" | t(lang) }}</span>
+            <span class="read-sub-badge" data-f="sub" title="{{ 'read.subscriber_help' | t(lang) }}">{% ricon "key-round", "size-3" %} {{ "read.subscriber_story" | t(lang) }}</span>
+          </span>
+          <span class="sr-only">({{ "common.external" | t(lang) }})</span>
+        </a>
+        <button type="button" class="read-share" data-t="{{ 'common.share' | t(lang) }}" title="{{ 'common.share' | t(lang) }}">{% ricon "share-2", "size-4" %}</button>
+      </li>
+    </template>
+    {% endif %}
 
     {% if archive.length > SSR_ARCHIVE %}
     <div class="mt-6 text-center" x-show="remaining > 0">

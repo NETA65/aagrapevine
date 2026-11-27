@@ -14,6 +14,9 @@
 //                                     ("" none — link it only when presentations.decks has it), deckMag: the deck
 //                                     only for that magazine's events ("gv": the Grapevine Meeting deck), deckClose:
 //                                     the deck is the closest one, not the kind's own ("The closest presentation");
+//                                     deckEs: the deck for an event of the kind held in Spanish (heldInSpanish: La
+//                                     Viña's), a Spanish one ("" none: the kind's `deck` for every event) — linked in
+//                                     place of `deck` while presentations.decks has it (event-page-model.js deckOf);
 //                                     where: the bingo card's occasion (bingo-core.js WHERES); flyers: the
 //                                     "similar flyers" pattern for driveMatch (a RegExp source, case-insensitive),
 //                                     "series" (the series' own config/site.yml flyer_match) or ""; resources: the
@@ -29,7 +32,8 @@
 //   eventKind(ev, site?)              → { kind, family, mag ("lv" | "gv" | "both"), spanish, outside, series (its
 //                                     series' key or ""), source (which rule decided: "type" | "series-type" |
 //                                     "committee" | "series" | "tag" | "title" | "calendar" | "tone" | "default"),
-//                                     label, phrase, who, deck (resolved for the magazine: "" none), deckClose,
+//                                     label, phrase, who, deck (resolved for the magazine: "" none), deckEs (the
+//                                     Spanish deck for an event held in Spanish: "" none or not held in Spanish), deckClose,
 //                                     where, flyers (resolved: a pattern or ""), resources, resourceFallback,
 //                                     resourceAnchors }. ev: a /events/ event (normalizeEvents) or a data item.
 //   eventPageTier(ev, site, langs)    → "leaf" | "page" | "date" | "cancelled" | "none" — in ONE language (the plan
@@ -52,8 +56,9 @@
 //     hubs[]   { lang, key, path ("/[es/]events/series/<key>/"), kind, series (seriesNext's answer, with these next
 //              and dates), next (its next date: a shaped event), dates (its next 6 dates in date order: the rule's
 //              and those the host moved — ev.seriesOf, a month the rule skips —, never a cancelled one), datePages
-//              (each date's page in `pages`, or null), target ("/events/"), index (true), titleSuffix, head
-//              (seriesPageMeta) }
+//              (each date's page in `pages`, or null), allDates / allPages (EVERY date of it still to come that the data
+//              lists — through events_until's month —, a cancelled one never, and each one's page: its page's "All
+//              dates", #evp-all-dates), target ("/events/"), index (true), titleSuffix, head (seriesPageMeta) }
 //              — one per enabled config/site.yml recurring_events entry whose key is fit for an address and that
 //              has a date still to come in the data, in every language. A series date's page lists its series'
 //              next dates from its hub (plan.byPath[page.hubPath].dates), not from seriesNext: a moved date is
@@ -123,13 +128,13 @@ const AREA_RESOURCES = ["official", "booth", "littable", "displays", "offers"];
 const KINDS = {
   "writing-workshop": {
     family: "workshop", label: "evkind.writing-workshop.label", phrase: "evkind.writing-workshop.phrase",
-    who: "evkind.writing-workshop.who", deck: "writing-workshop", where: "workshop",
+    who: "evkind.writing-workshop.who", deck: "writing-workshop", deckEs: "taller-de-escritura", where: "workshop",
     flyers: "writing workshop|taller de escritura",
     resources: ["contribute", "tips", "submit", "deadlines", "kit", "record", "published", "stories", "booth"],
   },
   "recording-workshop": {
     family: "workshop", label: "evkind.recording-workshop.label", phrase: "evkind.recording-workshop.phrase",
-    who: "evkind.recording-workshop.who", deck: "writing-workshop", deckClose: true, where: "workshop",
+    who: "evkind.recording-workshop.who", deck: "recording-workshop", where: "workshop",
     flyers: "recording workshop|audio workshop|taller de (grabaci|audio)",
     resources: ["record", "kit", "listen", "published", "tips", "booth"],
   },
@@ -142,7 +147,7 @@ const KINDS = {
   },
   "gvr-orientation": {
     family: "workshop", label: "evkind.gvr-orientation.label", phrase: "evkind.gvr-orientation.phrase",
-    who: "evkind.gvr-orientation.who", deck: "orientation-workshop", where: "workshop",
+    who: "evkind.gvr-orientation.who", deck: "orientation-workshop", deckEs: "orientacion-rlv", where: "workshop",
     // ("orienta": "Orientación para RLV y GVR" and "GVR Orientation" alike)
     flyers: "(gvr|rlv).*orienta|orienta.*(gvr|rlv)",
     resources: ["sessions", "gvr", "register", "role"],
@@ -197,7 +202,7 @@ const freeze = (o) => {
 };
 /** The one table of the kinds (see INTERFACE). Every kind has every field ("" / false / [] / {} when unused). */
 export const EVENT_KINDS = freeze(Object.fromEntries(Object.entries(KINDS).map(([k, d]) => [k, {
-  who: "", deck: "", deckMag: "", deckClose: false, flyers: "", resourceFallback: {}, resourceAnchors: {},
+  who: "", deck: "", deckEs: "", deckMag: "", deckClose: false, flyers: "", resourceFallback: {}, resourceAnchors: {},
   ...d, resources: [...d.resources],
 }])));
 /** The kinds' names, in the table's order: content/events `type:` takes one of these (Python EVENT_TYPES). */
@@ -288,7 +293,7 @@ function onlineOnly(ev) {
 
 /**
  * The kind of an event (a /events/ event, a data item) → { kind, family, mag, spanish, outside, series, source,
- * and the kind's table row resolved: label, phrase, who, deck, deckClose, where, flyers, resources,
+ * and the kind's table row resolved: label, phrase, who, deck, deckEs, deckClose, where, flyers, resources,
  * resourceFallback, resourceAnchors } (INTERFACE). The first rule that matches wins; titles are read in every
  * language the event has (titlesOf, the same order on each language's page — so the English and the Spanish page
  * give one kind):
@@ -314,6 +319,13 @@ function onlineOnly(ev) {
  * (from the magazines' own calendars), series (its series' key, or ""). site: for 1 and for a series' flyer_match
  * (the kind's "series" flyers); without it neither is read.
  */
+// A joint Grapevine and La Viña event (tagged both) whose titles don't say "(in Spanish)" / "en español": held in
+// English or in both languages, so it links the kind's English deck, never its Spanish one (deckEs).
+const SAYS_SPANISH = /\((?:in spanish|en español)\)|\ben español\b/i;
+function jointInEnglish(tags, titles) {
+  return tags.includes("grapevine") && tags.includes("la-vina") && !titles.some((t) => SAYS_SPANISH.test(String(t || "")));
+}
+
 export function eventKind(ev, site) {
   const e = ev && typeof ev === "object" ? ev : {};
   const rec = recordOf(e);
@@ -360,10 +372,14 @@ export function eventKind(ev, site) {
   const def = EVENT_KINDS[kind];
   const mag = magOf(e, titles, host, tags);
   const flyers = def.flyers === "series" ? String((entry && entry.flyer_match) || "").trim() : def.flyers;
+  const spanish = heldInSpanish(e);
   return {
-    kind, family: def.family, mag, spanish: heldInSpanish(e), outside, series, source,
+    kind, family: def.family, mag, spanish, outside, series, source,
     label: def.label, phrase: def.phrase, who: def.who,
-    deck: def.deck && (!def.deckMag || def.deckMag === mag) ? def.deck : "", deckClose: def.deckClose,
+    deck: def.deck && (!def.deckMag || def.deckMag === mag) ? def.deck : "",
+    // (La Viña's writing workshop, held in Spanish: taller-de-escritura in place of the English deck — never for a
+    // joint Grapevine and La Viña event whose titles don't say it is held in Spanish: it keeps the English deck)
+    deckEs: spanish && !jointInEnglish(tags, titles) ? def.deckEs : "", deckClose: def.deckClose,
     where: def.where, flyers, resources: def.resources, resourceFallback: def.resourceFallback,
     resourceAnchors: def.resourceAnchors,
   };
@@ -593,8 +609,16 @@ function buildPlan(items, site, langs, cancelled) {
         .slice(0, 6);
       if (!dates.length) return;
       const hubSeries = { ...s, next: dates[0], dates };
+      // …and EVERY date of it still to come that the data lists (through config/site.yml events_until's month, as
+      // /events/ and the calendar files): its page's "All dates", each to its own page
+      const known = new Set(dates.map((d) => d.anchor));
+      const allDates = [...dates, ...rows.filter((r) => r.lang === lang && !r.ev.past && !known.has(r.anchor)
+        && (r.ev.recurring ? r.ev.series === k : r.ev.seriesOf === k)).map((r) => r.ev)]
+        .filter((d) => !cancelledAnchors.has(d.anchor) && !eventCancelled(d))
+        .sort((a, b) => a.startMs - b.startMs || String(a.anchor).localeCompare(String(b.anchor)));
       hubs.push({ lang, key: k, path: seriesPagePath(k, lang), kind: eventKind(dates[0], site), series: hubSeries,
-        next: dates[0], dates, datePages: [], target: eventsPath(lang), index: true, titleSuffix: "", head: null });
+        next: dates[0], dates, datePages: [], allDates, allPages: [], target: eventsPath(lang), index: true,
+        titleSuffix: "", head: null });
     });
   }
   // (a hub in one language only — every date of it cancelled there, never — would have no twin: none at all)
@@ -619,6 +643,7 @@ function buildPlan(items, site, langs, cancelled) {
   }
   for (const h of keptHubs) {
     h.datePages = h.dates.map((d) => byAnchor[d.anchor]?.[h.lang] || null);
+    h.allPages = h.allDates.map((d) => byAnchor[d.anchor]?.[h.lang] || null);
     byPath[h.path] = h;
   }
   // 5) the heads, titles unique in each language

@@ -271,6 +271,94 @@ def safe_summary(text: str) -> str:
 
 
 # --------------------------------------------------------------------------- location
+# Place names with a capital inside that no rule gives ("DESOTO" → "DeSoto"); every "Mc…" has one by rule
+# ("MCKINNEY" → "McKinney", "MCALLEN" → "McAllen", "MCLENDON-CHISHOLM" → "McLendon-Chisholm")
+_INNER_CAPITALS = {"desoto": "DeSoto", "decordova": "DeCordova", "dekalb": "DeKalb"}
+
+
+def _title(s: str) -> str:
+    """"FORT WORTH" → "Fort Worth" (a capital after a space or a hyphen: eventPlace's titleCase), for a name written
+    all in capitals or all in lower case: "MCKINNEY" → "McKinney", "DESOTO" → "DeSoto"; an acronym of two or three
+    letters with no vowel stays as it is ("DFW")."""
+    out = []
+    for w in re.split(r"([\s-]+)", s):
+        lw = w.lower()
+        if not w or re.fullmatch(r"[\s-]+", w):
+            out.append(w)
+        elif lw in _INNER_CAPITALS:
+            out.append(_INNER_CAPITALS[lw])
+        elif re.fullmatch(r"[B-DF-HJ-NP-TV-XZ]{2,3}", w) and lw not in _PLACE_FIRST:
+            out.append(w)
+        elif re.match(r"mc[a-z]", lw):
+            out.append("Mc" + lw[2].upper() + lw[3:])
+        else:
+            out.append(lw[:1].upper() + lw[1:])
+    return "".join(out)
+
+
+# The first word of a place name in capitals that is no acronym ("LAS VEGAS", "EL PASO", "SAN JUAN"): a run of words
+# in capitals that starts with one is the city as a whole
+_PLACE_FIRST = {"el", "la", "las", "los", "san", "santa", "new", "fort", "ft", "mount", "mt", "port", "saint", "st",
+                "north", "south", "east", "west", "lake"}
+
+
+def _tx_city_at_end(part: str) -> str | None:
+    """The longest well-known Texas city that ends `part` ("2010 Main St Tyler", "First UMC GARLAND" → "Garland"),
+    spelled as `part` writes it ("Iglesia Cristiana DeSoto" → "DeSoto", "McKinney" stays "McKinney"); written all in
+    capitals or all in lower case, as a name (_title: "MCKINNEY" → "McKinney"). A longer Texas place that ends with
+    it (data/geo/texas_places.json: "Lake Dallas", "South Houston", "West Odessa") is that place, not the city."""
+    fc = _fold(part)
+    for c in sorted(TX_CITIES, key=len, reverse=True):
+        c0 = re.sub(r" tx$", "", c)
+        if fc.endswith(" " + c0) or fc == c0:
+            words = part.split()
+            n = len(c0.split())
+            tail = " ".join(words[-n:])
+            if _fold(tail) != c0:
+                return _title(c0)
+            for k in (n + 2, n + 1):
+                if k <= len(words) and geo.normalize_place(" ".join(words[-k:])) in geo.gazetteer():
+                    tail = " ".join(words[-k:])
+                    break
+            mixed = any(ch.isupper() for ch in tail) and any(ch.islower() for ch in tail)
+            return tail if mixed else _title(tail)
+    return None
+
+
+def _inline_city(part: str, state: str | None) -> str | None:
+    """The city in the words right before a state written with no comma ("… center LONGVIEW TX 75604"): a venue's
+    name and the city run together, so only what can only be the city — never a venue's words ("GRUPO NUEVA VIDA
+    GARLAND", "Sheraton DALLAS HOTEL"):
+      · in Texas, the longest well-known Texas city at their end ("Garland", "Dallas", "Longview");
+      · words all in capitals: one or two of them as a whole ("TULSA", "LAS VEGAS"), never more;
+      · a venue's name in lower case and then words in capitals: the one word in capitals at its end, after any
+        acronym of two or three letters ("Club AA TOPEKA" → "Topeka"; "First UMC" is no city), or a place name that
+        starts with "Las", "El", "San" … ("Caesars Palace LAS VEGAS"); two other words ("DALLAS HOTEL"): none;
+      · else, in lower case, the part as a whole when it is short enough to be a place ("Las Vegas", "Hall B").
+    No street numbers: None."""
+    if state == "TX":
+        tx = _tx_city_at_end(part)
+        if tx:
+            return tx
+    if re.search(r"\d", part):
+        return None
+    words = part.split()
+    if not any(ch.islower() for ch in part):
+        return _title(part) if 1 <= len(words) <= 2 and re.search(r"\w{2}", part) else None
+    n = 0
+    while n < min(3, len(words) - 1) and len(words[-1 - n]) >= 2 and re.fullmatch(r"[^\W\d_]+", words[-1 - n]) \
+            and words[-1 - n].isupper():
+        n += 1
+    if not n:
+        return part if len(words) <= 4 else None
+    run = words[-n:]
+    if len(run) >= 2 and _fold(run[0]) in _PLACE_FIRST:
+        return _title(" ".join(run))
+    while len(run) > 1 and len(run[0]) <= 3:
+        run = run[1:]
+    return _title(run[0]) if len(run) == 1 else None
+
+
 def parse_location(loc: str, title: str = "", website: str | None = None) -> dict:
     """→ {display, city, state, country, online_url, platform}. `state` is a 2-letter US code."""
     loc = clean_text(re.sub(r"[*_]{1,3}", " ", loc or ""))      # "*Zoom ID: …*" markdown leftovers
@@ -291,8 +379,13 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
     if not out["platform"] and re.search(r"(?i)\bzoom\b", loc):
         out["platform"] = "Zoom"
     text = URL_IN_TEXT_RE.sub(" ", loc).strip()
-    # "Dallas TX 75247" (no comma) → "Dallas, TX 75247"
-    text = re.sub(r"(?<=[a-z.])\s+([A-Z]{2})(\s+\d{5}(?:-\d{4})?)?$", r", \1\2", text)
+    # "Dallas TX 75247" (no comma) → "Dallas, TX 75247" — also after a city in capitals ("Maude Cobb . Convenció
+    # center LONGVIEW TX 75604", "DALLAS TX"). After a capital, only a US state's code with its ZIP after it, or TX
+    # alone: the last word of a text in capitals may be any two letters ("SALON AB", "COME ON IN")
+    inline = re.sub(r"(?<=[A-Za-z.])\s+([A-Z]{2})(\s+\d{5}(?:-\d{4})?)?$",
+                    lambda m: f", {m[1]}{m[2] or ''}" if not m.string[m.start() - 1].isupper()
+                    or (m[1] in US_STATES and (m[2] or m[1] == "TX")) else m[0], text)
+    inline, text = inline != text, inline       # (the state came right after the city, with no comma)
     parts = [p.strip(" *") for p in re.split(r"[,\n]| - ", text) if p.strip(" *")]
     state_idx = None
     for i in range(len(parts) - 1, -1, -1):
@@ -320,18 +413,18 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
             break
     if out["state"]:
         out["country"] = "USA"
-    # City: the part just before the state, if it looks like a place (no street numbers).
+    # City: the part just before the state, if it looks like a place (no street numbers); a city in capitals as a
+    # name ("DALLAS, TX" → "Dallas"). With no comma before the state, a venue's name and the city run together: only
+    # what can only be the city (_inline_city: "Maude Cobb . Convenció center LONGVIEW" → "Longview", never "GRUPO
+    # NUEVA VIDA GARLAND" as a whole). Else a well-known Texas city at its end ("2010 Main St, Tyler").
     if state_idx is not None and state_idx > 0:
         cand = parts[state_idx - 1]
-        if not re.search(r"\d", cand) and len(cand.split()) <= 4:
-            out["city"] = cand
+        if inline:
+            out["city"] = _inline_city(cand, out["state"])
+        elif not re.search(r"\d", cand) and len(cand.split()) <= 4:
+            out["city"] = _title(cand) if cand.isupper() and re.search(r"\w{2}", cand) else cand
         else:
-            fc = _fold(cand)
-            for c in sorted(TX_CITIES, key=len, reverse=True):
-                c0 = re.sub(r" tx$", "", c)
-                if fc.endswith(" " + c0) or fc == c0:
-                    out["city"] = c0.title()
-                    break
+            out["city"] = _tx_city_at_end(cand)
     elif len(parts) == 1 and not re.search(r"\d", parts[0]) and len(parts[0].split()) <= 4 \
             and not out["country"] and not ONLINE_WORD_RE.search(parts[0]):
         out["city"] = parts[0]

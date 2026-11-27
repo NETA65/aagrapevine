@@ -8,13 +8,10 @@
      with that date's guest speaker, or none. The next Grapevine Meeting's compact card (round 30:
      index.njk gvmCard, under the committee meeting's) uses it too, with its series' rule (its first
      date, `starts`, in data-rule) and data-first: "First meeting" (isFirst) while it shows that date.
-   - homePlayer: the "More episodes" play buttons load into the featured audio player, which keeps the same
-     saved places as Listen's player (media.js — this device only): an episode goes on where it stopped, a
-     finished one says "Played", and "Continue listening: <title> — 23 min left" offers the last one left
-     part-way (wherever it was started).
-   - Published-writers spotlight: recounts the "last 60 days" window with the visitor's own
-     date (plain JS, no Alpine needed), so stories drop out on time between daily builds,
-     and re-sizes the "see the full list" tile that closes the grid's last row.
+   - homePlayer: the featured episode's audio player, which keeps the same saved places as Listen's player
+     (media.js — this device only): an episode goes on where it stopped, a finished one says "Played", and
+     "Continue listening: <title> — 23 min left" offers the last one left part-way (wherever it was started)
+     and loads it into the player (load; play(el) does the same for any link that carries an episode's data-*).
    - Daily quote: "Today" / "Yesterday" next to each quote (Central time), the link name for a quote
      that is not today's ("Today's quote on …"), and on phones the button that shows the other
      magazine's quote.
@@ -308,14 +305,7 @@
   /* Words that wait in data-gv-say until their part shows (app.js GV.say: loaded before this file) */
   function say(el) { if (window.GV && window.GV.say) window.GV.say(el); }
 
-  /* ---------- Published-writers spotlight: keep the "last N days" window current ----------
-     The page is built once a day; this recounts with the visitor's date (Central time, like
-     the build — eleventy/filters/home.js homeSpotlight: pub_date >= today − N days) and hides
-     the stories that have left the window since, then updates the counts, the notes
-     ("no Area 65 story" / "no Texas story") and the "see the full list" tile that closes the
-     grid's last row (fillGrid). Stories can only leave the window, never join it, so it only
-     ever hides what the server rendered. The column count per screen width is CSS
-     (home.css), so nothing needs redoing on resize. */
+  /* Today's day in Central time (the build's), and a day N days before it: the daily quote's "Today" / "Yesterday" */
   function ymdToday() {
     try {
       var s = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
@@ -327,92 +317,6 @@
     var p = ymd.split("-");
     return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] - days)).toISOString().slice(0, 10);
   }
-  /* How the grid closes its last row at `cols` columns: `a` Area 65 cards two columns wide (or
-     the two-column "no Area 65 story" note when a = 0 and t > 0), then `t` Texas cards, placed
-     like CSS `grid-auto-flow: row dense`. → { span: empty columns at the end of the last row
-     (the "see the full list" tile fills them; 0 = no tile), full: Area 65 cards would leave gaps
-     higher up, so each takes a whole row }. Same function as spotFill in
-     eleventy/filters/home.js (which renders the first version): keep the two in step. */
-  function spotFill(a, t, cols) {
-    function run(featSpan) {
-      var rows = [];
-      function put(span) {
-        for (var r = 0; ; r++) {
-          if (!rows[r]) { rows[r] = []; for (var z = 0; z < cols; z++) rows[r].push(false); }
-          for (var c = 0; c + span <= cols; c++) {
-            var ok = true;
-            for (var k = c; k < c + span; k++) if (rows[r][k]) { ok = false; break; }
-            if (ok) { for (k = c; k < c + span; k++) rows[r][k] = true; return; }
-          }
-        }
-      }
-      var i;
-      if (a > 0) for (i = 0; i < a; i++) put(featSpan);
-      else if (t > 0) put(Math.min(2, cols));
-      for (i = 0; i < t; i++) put(1);
-      var free = 0, trailing = 0, last = rows[rows.length - 1] || [];
-      for (i = 0; i < rows.length; i++) for (var j = 0; j < cols; j++) if (!rows[i][j]) free++;
-      for (var n = last.length - 1; n >= 0 && !last[n]; n--) trailing++;
-      return { free: free, trailing: trailing };
-    }
-    if (!a && !t) return { span: 0, full: false };
-    var res = run(Math.min(2, cols)), full = false;
-    if (res.free !== res.trailing) { full = true; res = run(cols); }
-    return { span: res.trailing, full: full };
-  }
-  // Write the tile spans (data-f2…data-f5) and the whole-row columns (data-full) that home.css reads.
-  function fillGrid(root, a, t) {
-    var grid = root.querySelector("[data-spot-grid]"), tile = root.querySelector("[data-spot-fill]");
-    if (!grid || !tile) return;
-    var full = [];
-    for (var cols = 2; cols <= 5; cols++) {
-      var r = spotFill(a, t, cols);
-      tile.setAttribute("data-f" + cols, String(r.span));
-      if (r.full) full.push(cols);
-    }
-    if (full.length) grid.setAttribute("data-full", full.join(" ")); else grid.removeAttribute("data-full");
-  }
-
-  function spotlight(root) {
-    var days = parseInt(root.getAttribute("data-days"), 10);
-    if (!(days > 0)) return;
-    var cutoff = ymdMinus(ymdToday(), days);
-    var counts = { neta65: 0, texas: 0 };
-    var items = root.querySelectorAll("[data-pub]");
-    for (var i = 0; i < items.length; i++) {
-      var li = items[i], pub = li.getAttribute("data-pub") || "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(pub) && pub < cutoff) li.hidden = true;
-      if (!li.hidden) counts[li.getAttribute("data-scope")] = (counts[li.getAttribute("data-scope")] || 0) + 1;
-    }
-    var total = counts.neta65 + counts.texas;
-    var lists = root.querySelectorAll("[data-spot-list]");
-    for (var j = 0; j < lists.length; j++) lists[j].hidden = !lists[j].querySelector("[data-pub]:not([hidden])");
-    // a note that shows writes its words in first (they wait in data-gv-say: app.js GV.say, since round 35)
-    var toggle = function (sel, hide) { var el = root.querySelector(sel); if (!el) return; if (!hide) say(el); el.hidden = hide; };
-    toggle("[data-spot-grid]", !total);
-    toggle("[data-spot-empty]", !!total);
-    toggle("[data-spot-counts]", !total);
-    toggle("[data-spot-none-a65]", counts.neta65 > 0 || counts.texas === 0);
-    fillGrid(root, counts.neta65, counts.texas);
-    var nf = null;
-    try { nf = new Intl.NumberFormat(locale()); } catch (e) { nf = null; }
-    var chips = root.querySelectorAll("[data-spot-count]");
-    for (var k = 0; k < chips.length; k++) {
-      var chip = chips[k], n = counts[chip.getAttribute("data-spot-count")] || 0;
-      chip.hidden = !n;
-      var tpl = n === 1 ? chip.getAttribute("data-one") : chip.getAttribute("data-many");
-      var txt = chip.querySelector("[data-text]");
-      if (txt && tpl) txt.textContent = tpl.replace("{n}", nf ? nf.format(n) : String(n));
-    }
-  }
-  function initSpotlights() {
-    var roots = document.querySelectorAll("[data-home-spot]");
-    for (var i = 0; i < roots.length; i++) {
-      try { spotlight(roots[i]); } catch (e) { /* keep the server-rendered list */ }
-    }
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initSpotlights); else initSpotlights();
-
   /* Daily quote card: the "Today" / "Yesterday" badge of each quote (data-quote-day, Central time), and
      its first link: "Read it on …" for today's quote, "Today's quote on …" for an older one (the
      official page shows a newer quote by then). The server never says "today" (the page may be read

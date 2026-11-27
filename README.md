@@ -2,6 +2,10 @@
 
 [![Website update](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml/badge.svg)](https://github.com/NETA65/aagrapevine/actions/workflows/update.yml)
 
+> **Volunteers, start here → [Volunteer guide](docs/VOLUNTEER-GUIDE.md)** · **Voluntarios, empiecen aquí →
+> [Guía para voluntarios](docs/GUIA-VOLUNTARIOS.md)** — two pages, no programming: is the site working, what to do
+> when something is red, how to add an event, a bulletin post or a photo, and who to ask.
+
 **Website:** [grapevine.neta65.org](https://grapevine.neta65.org/) ·
 **En español:** [grapevine.neta65.org/es/](https://grapevine.neta65.org/es/)
 (the old address, neta65.github.io/aagrapevine, forwards there:
@@ -197,13 +201,17 @@ la mañana** (sección [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-5
 - **Eventos sin volante** (talleres, asambleas): un archivo en `content/events`. Si todavía faltan
   detalles, `tentative: true` muestra "Detalles por confirmar"; el lugar en español va en `location_es`. Si se
   cancela, se deja el archivo y se agrega `cancelled: true` (desde la ronda 37, noviembre de 2026): el evento sale de
-  todas las listas, su dirección muestra "Cancelado" hasta su día y los calendarios suscritos lo marcan cancelado
-  (así se canceló el taller de La Viña en Garland del 28 de noviembre de 2026).
+  las demás listas, en la página de Eventos queda tachado como "Cancelado" hasta su día, su dirección muestra el aviso
+  y los calendarios suscritos lo marcan cancelado (así se canceló el taller de La Viña en Garland del 28 de noviembre
+  de 2026). `district: 87` (opcional) indica el distrito que lo organiza y `language: es` el idioma en que se
+  realiza: son filtros de la página de Eventos. ¿No usas GitHub? El formulario "New event / Evento nuevo" (Issues →
+  New issue) pide los datos en palabras sencillas.
 - **La página de cada evento** (desde la ronda 37): cada evento tiene su propia página, `/es/events/<evento>/`, que
   se arma sola al agregarlo — sus datos, un resumen de una frase, la presentación que le corresponde, un cartón de
   Bingo de RLV/GVR ya preparado para ese evento, los enlaces de su tipo (taller de escritura: Comparte tu historia,
   las fechas límite, la pantalla de la mesa…), el próximo evento parecido, los volantes de eventos parecidos y las
-  ediciones de La Viña y Grapevine de ese mes —, y cada serie mensual la suya, `/es/events/series/<serie>/`. Si el
+  ediciones de La Viña y Grapevine de ese mes —, y cada serie mensual la suya, `/es/events/series/<serie>/` (la
+  reunión del comité, todas sus fechas: `/es/events/series/committee-meeting/`). Si el
   sitio adivina mal el tipo, `type:` en el archivo lo corrige (guía en inglés: `content/events/README.md`). La
   búsqueda del sitio encuentra cada evento, cada serie, las secciones de las páginas, los kits del mes, las
   presentaciones, los volantes, la edición actual, cada historia del archivo de escritores de Texas y la tienda
@@ -368,9 +376,23 @@ What the newer pages do:
   settings — its facts, one plain sentence about it, the presentation and the links that fit its kind (a writing
   workshop: Share your story, the story deadlines, the workshop guides, the booth display), a GVR/RLV Bingo card
   already filled in for it, the next event like it, similar events' flyers and the month's Grapevine and La Viña
-  issues. Each monthly series has one more, `/events/series/<key>/`, with its next dates. Every link to an event
+  issues. Each monthly series has one more, `/events/series/<key>/`, with its next dates, and the committee meeting
+  one with every date to come, `/events/series/committee-meeting/` (since round 38). Every link to an event
   goes there; search engines get the pages of the events to come (section [12b](#12b-search-engines-google-bing)).
-  What each kind shows, `type:` and `cancelled: true`: [content/events/README.md](content/events/README.md).
+  What each kind shows, `type:` and `cancelled: true`: [content/events/README.md](content/events/README.md). Its
+  hero has **Join online**, **Add to calendar** and **Directions** above the fold on a phone. An event made from a
+  dated flyer or an outside calendar has a readable address too — `/events/2026-10-31-grapevine-committee-crash/`,
+  its day and title, kept when the title changes later (`scripts/sync/build_data.py` `pin_event_slugs`); its old
+  `/events/ev-flyer-…/` address sends people on.
+- **The Events list** (`/events/`, redesigned November 2026: `eleventy/filters/event-list.js`): the one-off events
+  first, month by month — a cancelled one stays as a struck-through "Cancelled" card until its day, linked to its
+  notice —, then **one card per monthly series** ("Every second Saturday of the month · Next: Sat, Dec 12 … · See all
+  dates", and what changed: "Nov 26 moved to Nov 18", "Not held on Dec 24"), then the weekly open meetings. Filters
+  (with JavaScript; without it every card shows): the kind, the language it is held in, in person or online, the
+  city and a content/events file's `district:` — kept in the address, `/events/?kind=workshop&lang=es`, to share a
+  filtered view. On a phone: **Next up** (the next three events) and the "Next 5 weeks" calendar near the top; from
+  1024px the calendar is the sidebar. About 350 KB of HTML per language (it was about 1.2 MB). The Status page's
+  **Events to check** lists what the event files still need (section [6](#6-bulletin-posts-and-events-without-drive-optional)).
 - **An offer from the stores** (`/shop/#offers`, since November 2026): while AA Grapevine and La Viña run an offer —
   free shipping on all products to U.S. and Canadian addresses, November 1 – December 31, 2026; the holiday gift
   offers, a second 1-year print subscription as a gift for $16 at Grapevine and $8 at La Viña, through December 31
@@ -469,8 +491,14 @@ What the newer pages do:
   `/orientation/?slides#slide-12` resumes, `#lesson-role` starts a lesson), a **printable handout** (printing
   the hub gives one Letter sheet per lesson) and a 45-minute plan for district trainers. The lessons live in
   `config/orientation.yml` (both languages, checked by the build and by `tests/test_orientation.py`); the GVR
-  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's five web slide decks
-  ([how-to/presentations.md](how-to/presentations.md)); the monthly committee meeting's deck also makes the
+  corner and the Monthly toolkit link to it. Its **Presentations** are the committee's web slide decks
+  ([how-to/presentations.md](how-to/presentations.md)): the orientation, information, writing and recording
+  workshops, our two monthly meetings (the committee meeting and the Grapevine Meeting) and, since November 2026,
+  the welcome for Panel 77's new GVRs and RLVs, a booth or group visit built around QR codes, and getting ready for
+  the General Service Conference (and, in the committee meeting's deck, the 2027 price follow-up, "New prices since
+  January 1, 2027", from January 1 to March 31, 2027). An event's own page links the deck of its kind (a recording
+  workshop's: the Recording Workshop), and La Viña's two presentations in Spanish
+  (its writing workshop and the orientation for new RLVs; an event held in Spanish links them). The monthly committee meeting's deck also makes the
   chair's paperwork — the agenda e-mail, a reminder, the draft notes and **Start next month** (Customize →
   **Agenda & notes**: [The committee meeting's paperwork](#the-committee-meetings-paperwork-agenda--notes)).
 - **Meetings** (`/meetings/`, renamed from *Committee meeting*; the old `/meeting/` address forwards there,
@@ -1418,8 +1446,21 @@ a mistake shows as a red ✗ on the Code check of your save. *Website update* st
 and, for the place, `location: "Venue to be announced"` with `location_es: "Lugar por anunciarse"`.
 The event shows a **"Details to be confirmed"** badge everywhere and calendar apps mark it tentative.
 
+**Not on GitHub?** The **New event / Evento nuevo** form (the repository's Issues → New issue,
+`.github/ISSUE_TEMPLATE/new-event.yml`) asks for the same facts in plain English and Spanish; a committee member
+turns the answers into a file. The quick start is at the top of
+[how-to/flyers-and-events.md](how-to/flyers-and-events.md#add-an-event-in-5-minutes).
+
+**The district and the language** (optional, since November 2026): `district: 87` and `language: es` (`en`, `es` or
+`both`) — filters of the Events page; `district:` also shows on the event's card and page. Never guess a district.
+
+**What still needs doing:** the Status page's **Events to check** (`/status/#event-checks`) lists an event still
+"to be confirmed" 60 days before its day, a venue still to be announced 45 days before, a file of an event to come
+with no `url:`, a dated-flyer event with no summary, and the files of events over more than 90 days ago (to delete).
+
 **Called off** (since round 37): keep the file and add `cancelled: true` (optional: `cancelled_note:`, a sentence
-to people). At the next update the event leaves every list, its page shows **"This event has been cancelled. It will
+to people). At the next update the event leaves the other lists — the Events page keeps it as a struck-through
+**"Cancelled"** card until its day —, its page shows **"This event has been cancelled. It will
 not take place."** until its day is over (then its address sends people to the Events page), search engines are
 told it is cancelled, and subscribed calendars show "Cancelled: …" for 90 days. Don't delete the file: that would
 remove it from people's calendars without a word. The La Viña writing workshop in Garland on November 28, 2026 was
@@ -2533,6 +2574,54 @@ The matching CSS utilities (cards, buttons, chip rows, `sticky-aside`, `meta-row
 the language banner and never grow taller than the window), and the one gap before the footer is
 the footer's own margin.
 
+### The home page, the menus and Stay updated (the UX review of November 2026)
+
+A review of the site on a phone found the home page 16 screens long (14 sections, about 200 links), the meetings hidden
+under "Committee", committee shorthand in the menus and about 250 KB of fonts on every page. What changed:
+
+- **Home** (`src/pages/index.njk`, its own stylesheet `/assets/css/home.css`) has seven blocks, each a way in to the
+  page that holds the whole of it: the hero (with **Find an AA meeting near you**, AA's own finder, and our two
+  monthly meetings), **Where would you like to start?** — four big buttons: *I'm new to AA* (the "New to AA?" card on
+  Meetings), *I'm a group rep (GVR / RLV)* (the GVR / RLV corner), *I want to write my story* (Share your story, with
+  the next story deadline) and *I want to subscribe* (the Shop's subscriptions) —, **Pinned on the Bulletin** while a
+  pinned post is on (two at most: its title, one line of it and **Read**; no pinned post, no card), the daily quote,
+  the latest magazines (three stories each, and the Book of the Month while it is on), **Listen & Watch** (the newest
+  podcast episode beside three more, and the newest video as one compact strip under them), the next three events,
+  and **More on this site** (Bulletin, Library, Published writers, Instagram, Portfolio, Photos, Stay updated). The
+  bulletin's other posts, the published writers, the library, Instagram, the committee's uploads and the service band
+  are on their own pages. On a phone the page went from 14,240 to about 8,200 pixels (with this month's pinned post).
+- **The menus** (`src/_data/nav.js`): **Meetings** is a top link; the GVR pages say what they are (**Group reps
+  (GVR/RLV)**, **New rep orientation** — the pages keep their own names); **Share your story** leads *Get involved*. The
+  phone menu shows Home and the top links, then *Get involved*, *Committee* and *More* as three folded groups (the
+  one that holds the current page starts open).
+- **The committee pages' tabs** (Meetings · Events · Portfolio · Photos · Bulletin · Tracker) have no counts any more,
+  and on a phone the current tab is brought to the middle of the bar, with a neighbour in view on each side.
+- **Service words** — GVR, RLV, NETA 65, Area 65, DCM, GSR, ACM, Assembly, Delegate, Panel — have a dotted underline
+  where they first appear on Home, the GVR / RLV corner, GVR / RLV 101 and Meetings: a tap (or Enter) shows what the
+  word means, in English or Spanish. The whole list is on the GVR / RLV corner (`/gvr/#glossary`). The words are in
+  `src/_i18n/glossary.json`; a page marks a sentence with `| gloss(lang)` (`eleventy/filters/glossary.js`).
+- **Stay updated** (`/stay-updated/`, `/es/stay-updated/`) gathers every way to keep up: the monthly digest (read it,
+  or ask the chair to send it each month — a ready-made message to the committee's address; to stop it, write to the
+  same address), the calendars to subscribe to (events, story deadlines), this month's dates and the weekly open
+  meetings as files, the RSS feed, Instagram, YouTube, the podcasts, the app and saved pages, the QR Post and a
+  WhatsApp message. The footer's *Stay updated* column starts with it, and the phone menu's *More* lists it. Its
+  words don't promise the automatic monthly e-mail (*Monthly e-mail digest*: off until its SMTP secrets are set, which
+  the build can't see); once it is on, `stay.email_join_text` and `stay.email_leave` in `src/_i18n/stay.json` may
+  say so. The story deadlines calendar's "Step-by-step help" link (to `/contribute/#deadlines-calendar`) shows only
+  while a dated deadline is open — that section of Share your story is left out otherwise — and the same goes for
+  Home's **Story deadlines in my calendar**.
+- **The Tracker** reminds, once a month, to keep a copy — a CSV or the full backup — since everything in it lives in
+  the browser (see *The Tracker* below).
+- **Lighter pages:** no Inter italic file (52 KB): Inter's italic is the upright face slanted by the browser, very
+  nearly what its own italic is — Fraunces' italic, the display italic of the hero and the quotes, stays, and like
+  every face it downloads only on a page whose text uses it; the home page, the Library with the site search, and
+  Published writers have stylesheets of their own (main.css 416 → about 345 KB); `/read/` holds the first six stories
+  of each earlier issue, and **Show all N stories** adds the rest from `/read-archive.json` (the page went from 670
+  to about 400 KB, 51 → 43 KB as sent; without JavaScript the rest are in a `<noscript>` list under the first six —
+  title, original title, writer —, which a browser that runs scripts never builds, and the issue's link says **All N
+  stories on aagrapevine.org** when the issue has its own page there). The committee pages' tabs no longer count photos
+  and files on every build (2.5 s less per build).
+
 ### Reading & display settings and the Accessibility page
 
 The **Aa** button at the top of every page (in the Menu on phones) opens **Reading & display**: text size
@@ -2751,6 +2840,11 @@ The **Tracker** (Committee menu, <https://grapevine.neta65.org/tracker/>) is a G
 committee chair's own record of what their service costs and gives: miles, purchases, gift
 subscriptions, literature given away and reimbursements. It lives only in that browser — nothing is
 uploaded — so it asks for a backup now and then (**Back up now**: one `.zip` file with the receipt photos).
+Since November 2026 a quiet row above the tabs says so about once a month — "Keep a copy of your Tracker" — while
+no copy was made within the backup reminder's days (Settings → Reminders, 30 by default; a CSV export counts too):
+**Export CSV (all)**, **Full backup (.zip)** or **Not now** (it then waits 30 days; the day is remembered in this
+browser). It waits for the ledger to hold something worth keeping: 5 entries, or 3 days since the first one (the
+examples do not count).
 This describes Tracker 1.2.0 (October 2026).
 
 **What to tell your GVRs**
@@ -3161,8 +3255,12 @@ it:
 - Beside each deadline on Share your story: **Add to my calendar** (Google Calendar, Outlook.com, "Apple / Outlook
   (.ics file)") adds that one deadline; it has the same ID as in the subscribed calendar and the month files, so
   adding it twice never makes a copy.
-- **Home** ("Write for the magazines": **Story deadlines in my calendar**) and **What's New** ("Stay in the loop":
-  **Story deadlines calendar (.ics)**, with a copy button).
+- **Share your story, right under its page nav** (`/contribute/#next-deadlines`, since November 2026): **Next story
+  deadlines** — each magazine's next deadline (its date, the days left, its theme and issue, **Add to my calendar**),
+  then **Subscribe to all deadlines** (the calendar's `webcal://` address, which Apple, Outlook and most phones open),
+  **Google Calendar** and the step-by-step help.
+- **Home** (under the magazines: **Story deadlines in my calendar**), **What's New** ("Stay in the loop":
+  **Story deadlines calendar (.ics)**, with a copy button) and **Stay updated** (`/stay-updated/`).
 
 **One reminder in every "Add to calendar" file.** Each calendar file a member downloads or adds now carries one
 reminder: **1 hour before** a timed or online event (the committee meeting, a workshop, a weekly open meeting),
@@ -3202,8 +3300,9 @@ Spanish. The **New to AA? / ¿Eres nuevo en AA?** card points them to **any** AA
   first), with the three aa.org links and **AA offices in our Area →** to the full card. GitHub Pages answers every
   missing address with the root `/404.html`, a broken Spanish link (`/aagrapevine/es/…`) too: there the Spanish
   card comes first (a tiny script in the page, before it shows; without JavaScript the English one stays first).
-- **Home:** one line near the end, before the "For GVRs, RLVs & districts" band — "New to AA? AA's own sites list
-  the AA meetings near you, in English and in Spanish. First steps →".
+- **Home:** high on the page, the first of the four **Where would you like to start?** buttons — "I'm new to AA:
+  AA's own sites list the AA meetings near you, in English and in Spanish" — opens this card; the hero's **Find an AA
+  meeting near you** opens AA's own finder (`aa_find`) directly.
 
 No phone numbers (nothing to keep current), no outside services and no clinical wording. The site search finds
 the Meetings page for *help*, *new to AA*, *newcomer*, *Meeting Guide*, *intergroup* (*ayuda*, *nuevo en AA*,
@@ -3213,7 +3312,7 @@ red); the offices are the `meetings:` → `feeds` entries with `in_area: true` a
 `lang: es` ones first on `/es/`; never the `feed` address); the Area's site is `site:` → `area_website`. Details:
 how-to/settings.md [§3.11 `links:`](how-to/settings.md#311-links--official-links-used-across-the-site) (the three
 aa.org links) and [§3.9 `meetings:`](how-to/settings.md#39-meetings--grapevine-meetings-near-us) (the offices). For
-maintainers: `src/_includes/macros/ui.njk` (`newcomerCard`, `newcomerLine`), `eleventy/filters/newcomer.js`
+maintainers: `src/_includes/macros/ui.njk` (`newcomerCard`), `eleventy/filters/newcomer.js`
 (`ncOffices`), `src/_i18n/common.json` (`newcomer.*`), `tests/test_r12_u6_newcomers.py`.
 
 ### The GVR / RLV corner: Pass it on and the question of the day
@@ -3423,8 +3522,8 @@ built entirely from open-source tools — thank you to their authors:
 
 **Automation:** [GitHub Actions](https://docs.github.com/actions) (`actions/checkout`, `setup-python`,
 `setup-node`, `cache`, `configure-pages`, `upload-pages-artifact`, `deploy-pages`, `upload-artifact`,
-`download-artifact` — MIT), [lychee](https://github.com/lycheeverse/lychee) link checker (MIT / Apache-2.0; its
-action pinned to a commit), Dependabot.
+`download-artifact` — MIT; each pinned to a commit), [lychee](https://github.com/lycheeverse/lychee) link checker
+(MIT / Apache-2.0; its action pinned to a commit), Dependabot.
 
 *AA Grapevine®, La Viña® and their content are the property of AA Grapevine, Inc. This committee
 website links to the official sources and is not affiliated with or endorsed by AA Grapevine, Inc.

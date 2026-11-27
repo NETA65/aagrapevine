@@ -131,10 +131,11 @@ published, without the part it could not read (4.8).
 Times measured on 2 October 2026: a quick run took 1.4 to 2.2 minutes from start to published, the full run 10
 to 14 minutes, a morning refresh 2 minutes. Since October 2026 every run's build also makes the monthly posters'
 share pictures (4.2), about a minute more, so a quick run or a morning refresh now publishes in about 3 minutes.
-A run whose **code** is new to the tests also waits for them before it publishes (4.8): `update.yml` reckons
-about 3 to 4 minutes, setup included, and they run while the site is built, so a change of code goes live in
-about 5 minutes. The runs that bring only new data (the morning, midday and evening refreshes, the nightly
-update, a *Run workflow*) and the saves of content, settings or translation fixes skip them.
+A run whose **code** is new to the tests also waits for them before it publishes (4.8): they took about 9 to 14
+minutes on GitHub in November 2026, setup included (the build beside them, about a minute), so a change of code
+goes live about 12 to 17 minutes after its push. The runs that bring only new data (the morning, midday and
+evening refreshes, the nightly update, a *Run workflow*) and the saves of content, settings or translation fixes
+skip them.
 At the very most a full update takes a little over 2 hours: its sync step's time box is 130 minutes (4.2), and it
 gets near that only when the document search uses its whole 40 minutes and translation its whole 40 (a big
 catch-up after weeks of new titles, or a lost crawl state).
@@ -151,6 +152,7 @@ All five live in [`.github/workflows/`](../.github/workflows/). Their names in t
 | **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | an hourly backstop through the night, the morning alarm, *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do | a run summary; its no-op runs are deleted a day later |
 | **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the browser checks + every Python test + an e-mail dry run. Publishes nothing | about 10 minutes | a ✓ or ✗ on the commit or pull request |
 | **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest, once. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; the month's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM` or `digest-unsent-YYYY-MM`; a `digest-preview` download |
+| **Gate list check** (since November 2026) | [`gate-lists.yml`](../.github/workflows/gate-lists.yml) | every pull request; a push that changes code, settings, content or a workflow (as the Code check); every night; *Run workflow* | runs the tests the publish gate runs again, in copies of the repository with committee-like edits (4.8): a gated test that judges the committee's files fails here first | 5 to 10 min | a ✓ or ✗ (never touches the site) |
 | **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | finds the address GitHub Pages serves (job *Find the site's address*), then checks every link on the site built for it, the official links in the settings and the root robots.txt (skipped with the custom domain: the site's own is that file) (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
 
 Plus **Dependabot** ([`.github/dependabot.yml`](../.github/dependabot.yml)): once a month it may open a pull
@@ -283,7 +285,7 @@ which then shows as grey "cancelled". Nothing is lost, because the run that star
    search engines about (IndexNow, below), hands the new sitemap dates to the publish job, and uploads the site for
    publishing. Its time limit is 40 minutes (35 until October 2026).
 3. **Test the code before publishing** (job id `tests`): at the same time as the build, on the same commit, the
-   offline tests, only when the code is new to them (4.8). Time limit 20 minutes.
+   offline tests, only when the code is new to them (4.8). Time limit 30 minutes (20 until November 2026).
 4. **Publish to GitHub Pages** (job id `publish`): only when the build **and** the tests succeeded, and only after
    it checked that both used the very same commit (otherwise it stops with *Not published*: "The website was built
    from … but the tests ran on … (a change arrived between the two) — nothing was published; the next run
@@ -470,10 +472,10 @@ checks that the monthly e-mail still builds (`send_digest --dry-run`, nothing is
 two jobs run side by side: **Test build of the website** (steps *Build the website (as for GitHub Pages)*, *Check
 the build*, then *Set up Python (for the browser checks)*, *Install the browser checks' tools (Playwright, for the
 runner's Chrome)* and *Browser checks (focus ring, sticky bar, large text, offline update, script errors)*; time
-limit 20 minutes) and **Python tests (offline)** (about 10 minutes since October 2026, time limit 25). A push or a
-pull request keeps GitHub's own title (the commit message, the pull request's title); a run started by hand is
-"Code check (started by hand)". Besides code, settings, content and workflows, a change of `data/geo/**` (the
-Texas places list the place tests read) starts it too.
+limit 30 minutes) and **Python tests (offline)** (about 6 to 25 minutes, depending on GitHub's machine; time limit
+35 since November 2026). A push or a pull request keeps GitHub's own title (the commit message, the pull request's
+title); a run started by hand is "Code check (started by hand)". Besides code, settings, content and workflows, a
+change of `data/geo/**` (the Texas places list the place tests read) starts it too.
 
 - A red ✗ on a push means **that change broke something**: fix it or undo it. The live site keeps working. For a
   change of the code, *Website update* runs the same tests before it publishes (4.8), so the change is not
@@ -507,9 +509,10 @@ light, dark, high contrast and high-contrast dark, at the top and scrolled); tha
 never hides the focused element (also after relaxed spacing is switched off); that no page scrolls sideways at
 360 px wide with 150 % text (Home, About, Published, Events, Meetings and Photos, English and Spanish); that a new
 version of the offline worker takes over in under 6 seconds while a tab's page is slow, and that a page opened
-before an update keeps its own stylesheet offline; that 26 main pages run without a script error in both
-languages; that two Tracker tabs keep a receipt photo when one deletes an entry the other is editing, and that
-closing a tab whose entries the browser would not store asks first; that a poster's share picture can be made; and
+before an update keeps its own stylesheet offline (Home: its own version's `main.css` and `home.css`); that 26 main
+pages run without a script error in both languages; that two Tracker tabs keep a receipt photo when one deletes an
+entry the other is editing, and that closing a tab whose entries the browser would not store asks first; that a
+poster's share picture can be made; and
 that Share your story's recorder works, in English and Spanish, with Chromium's fake microphone (a browser of its
 own, its profile kept): the microphone test moves the meter, a take of about 3 seconds after the 3-2-1 countdown
 plays as an MP3 and is on the device as bytes (one final record, no draft left, every PCM byte once), closing the
@@ -588,10 +591,10 @@ Since October 2026 it is two jobs: **Check links** (it may only read the reposit
 official-links check and the root robots.txt check and keeps their reports as the download `link-check-report`, 7
 days) and **Report broken links (the issue)** (the only one allowed to write issues; it runs no outside code and
 only reads that download).
-lychee's action, the one action from outside GitHub in the workflows, is pinned to an exact commit:
-`lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0`. Dependabot's monthly
-`chore(actions)` pull request moves the commit and its `# v…` note together; a test checks that every outside
-action is pinned this way.
+Every action in the workflows is pinned to an exact commit — lychee's (the one from outside GitHub)
+`lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0`, and since November 2026 GitHub's own
+`actions/*` too. Dependabot's monthly `chore(actions)` pull request moves each commit and its `# v…` note together;
+a test checks that every action is pinned this way.
 
 ### 4.8 The tests before publishing
 
@@ -617,7 +620,7 @@ the build, so nothing is published until the file is fixed (the live site keeps 
 | When do they run? | only when the **code** is new to them. The job's step *Fingerprint the code* takes a fingerprint of every file in git except the robot's own (`data/raw`, `data/site`, `data/state`, `data/translations/cache.json`, `src/assets/cache`), the committee's (`content/`, `config/`, `data/translations/glossary.yml`, `data/translations/overrides.yml`) and the documentation (`README.md` and the other `.md` files at the top, `docs/`, `how-to/`); its log says `Code fingerprint: …`. `data/geo`, the tests (their fixtures included), the workflows, `NOTICE`, `LICENSE` and the Markdown pages in `src/` stay in. A pass is remembered in the Actions cache (`tests-passed-v1-<fingerprint>`) |
 | And the daily runs, and your content? | the morning, midday and evening refreshes, the nightly update and every save of content, settings, translation fixes or a guide leave the fingerprint as it is, so they find the pass and skip the tests in a few seconds, with the summary line "The tests passed already for this code (content, settings and the bot's data may have changed since) — not run again." The log adds which run made that pass: `The pass: <time, UTC> run <run id> commit <commit>` |
 | What makes them run? | a commit of code: `scripts/`, `src/` (templates, scripts, styles, the texts in `src/_i18n`), `eleventy/`, `tests/`, the workflows, `package.json`, `requirements.txt`, `data/geo`. The run of that push tests it (a change made only in `tests/` starts a run too); after a commit of code that starts no *Website update* (another workflow, `.github/dependabot.yml`, `NOTICE`, `LICENSE`, `data/geo/README.md`), the next run tests once. Each run that finds the pass reads it back (a real restore of its one small file), which keeps it in the cache: GitHub deletes a cache nobody used for 7 days. If it is gone all the same, the tests simply run again |
-| How long? | `update.yml` reckons about 3 to 4 minutes on GitHub, setup included, about as long as the build |
+| How long? | about 9 to 14 minutes on GitHub in November 2026, setup included (up to about 17 on a slow machine; the job's limit is 30 minutes), while the build beside them takes about a minute |
 | What does the summary say? | a section **Tests before publishing**: "All N tests passed (M skipped) — the website may be published." and "Left to the Code check (they judge the day's synced data, the committee's own files or the documentation, not the code): 80." |
 | And when one fails? | "**N of M tests failed — the website was NOT published** (the live site keeps the version before). The failing tests (the job's log says why):", one line per test, with " — it read the committee's files: config/site.yml …" after a test that Python saw open one of them (or the documentation), then advice (14.10), and the red annotation *Tests failed — not published*. The data commit was made as usual |
 
@@ -629,8 +632,10 @@ the code, and keep every run from publishing until that file was fixed. The guar
 at once), makes committee-like edits and slips in each (events, bulletin posts, booth rows added, deleted or
 switched off, an archive export, many `config/site.yml` settings such as the meeting's day, time and link, the
 decks, orientation, expenses, monthly tips, history, the glossary and the overrides) and deletes the
-documentation, then runs every gated test again: each must still pass. It is a `LIST_CHECKS` entry, so only the
-Code check runs it (it takes a few minutes of the Code check's ten). When it fails, it names the test: give that
+documentation, then runs every gated test again: each must still pass. It is a `LIST_CHECKS` entry, so the gate
+never runs it; since November 2026 its own workflow does, **Gate list check** (`gate-lists.yml`: on every pull
+request, on a push the Code check runs for, every night, and by *Run workflow*), with
+`GV_GATE_LISTS=1` — the Code check and a run of the tests on a PC skip it (it takes 4 to 10 minutes). When it fails, it names the test: give that
 test data of its own, or move the part that judges the committee's files into a test of its own listed in
 `CONTENT_TESTS`. A new kind of committee edit goes into `tests/committee_edits.py`.
 
@@ -1153,6 +1158,27 @@ Its text names the job that failed, with what to do:
 The live site stays as it was published last. The Morning check still reports a morning that did not reach the
 site (14.7).
 
+### 8.5 "The daily quote missed the morning goal"
+
+Since November 2026, kept by the same *report* job (its step *Open, update or close the issue about missed
+mornings*, `scripts/ops/report_issues.py`) — **only once the outside morning alarm is set up** and
+`config/site.yml` says `morning_alarm: true` (until then GitHub's own schedule puts the morning up, and it can run
+late: a late morning is no news then). After every *Website update* run it looks at the last mornings on the
+Status page (`status.json` `quote_days`: when each day's Grapevine and La Viña quotes came in, against the 5:30 AM
+goal, `site.morning_goal`), judged the way `/status/` judges them.
+
+- **Opens** when **two mornings in a row** missed the goal (a quote came in after it, or not at all). One late
+  morning alone opens nothing, and neither do the mornings before `morning_alarm: true` was saved: the first build
+  that sees it notes the time (`status.json` `morning_alarm_since`), and only the mornings after it count.
+- **Updates** its table silently when the next morning is missed too (no e-mail).
+- **Closes itself** after the first morning whose two quotes came in by the goal.
+
+The usual cause is the **morning alarm** at cron-job.org ([OPERATIONS → Set up the cron-job.org alarm
+later](../docs/OPERATIONS.md#set-up-the-cron-joborg-alarm-later)): its key expired (cron-job.org's history shows
+**401**), the address changed (**404**), or the alarm is switched off. A morning on which a magazine published its
+quote late at the source (the Morning check's run says *"A daily quote is late at the source"*) also counts as
+missed; nothing needs fixing then.
+
 ---
 
 ## 9. The data folder and what the robot commits
@@ -1168,9 +1194,12 @@ The repository is the database: every run's results are committed, so the histor
 | `data/translations/overrides.yml`, `glossary.yml` | **people** | **yes** | your translation fixes; saving one rebuilds the site ([Translations](translations.md)) |
 | `data/geo/texas_places.json` | people, rarely (`python -m scripts.dev.build_texas_gazetteer`) | rarely | Texas town → county, for the published writers (the recent stories and the Texas writers archive) and the Meetings page's "Our Area"; saving it starts a quick run that also reads the meeting lists again, and a Code check |
 
-In `data/raw`: `updated` moves only when a run worked, `attempted` on every try (and `pdfs.json`'s also on each
-full update while the document search is paused, `minutes_per_run: 0`), and `ok: false` + `error` mark a failed run
-(the older items are kept). Since October 2026 every raw file also says what the run changed, `changes` (items
+In `data/raw`: `updated` moves only when a run worked, and `ok: false` + `error` mark a failed run (the older items
+are kept). Since November 2026 a raw file is written again only when its content changes, not for new run times
+alone, so its own `updated` and `attempted` can be days old: the times of each source's last run, and of its last
+run that worked, are `attempted` and `updated` in `data/site/status.json` (`sources`) — the Status page's. (Only
+`pdfs.json`'s `attempted` is still written on each full update while the document search is paused,
+`minutes_per_run: 0`.) Since October 2026 every raw file also says what the run changed, `changes` (items
 added, removed, held back), and, while a sudden drop is not believed yet, `held` (since when, how many, a few of
 their titles: the Status page's **On hold**, 7.1). `data/site/status.json` is the health report behind the Status
 page and the run summary. The fields: [docs/DATA_SCHEMA.md](../docs/DATA_SCHEMA.md).
@@ -1277,7 +1306,8 @@ error up close, or to preview the site. These steps are for Windows PowerShell.
 ### 11.1 One-time setup
 
 You need **Python 3.12 or 3.13** (python.org; the workflows use 3.12, and the full test suite also passes on
-3.13), **Node.js 22** (20 at least; nodejs.org) and **Git** (or GitHub Desktop).
+3.13), **Node.js 22 or newer** (nodejs.org; `package.json` asks for 22 since November 2026) and **Git** (or GitHub
+Desktop).
 
 ```powershell
 git clone https://github.com/NETA65/aagrapevine.git

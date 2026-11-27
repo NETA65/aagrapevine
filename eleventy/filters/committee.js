@@ -1616,6 +1616,72 @@ export function seriesPageMeta(hub, site, lang = "en") {
   };
 }
 
+/* ---- Round 38: the committee meeting's own "All dates" page (src/pages/events-committee.njk) ----
+   The monthly series each have their page (/events/series/<key>/: eleventy/event-pages.js hubs); since the events
+   list's redesign /events/ shows the committee meeting as ONE card (its next date), and its later dates — those of
+   2028 too — were on no page. This one lists EVERY committee meeting still to come (the same events /events/ and the
+   calendar files have: normalizeEvents, through config/site.yml events_until's month), by year, each with its guest
+   speaker, its own "Add to calendar", its flyer and Share (a link to it on this page: #ev-committee-YYYY-MM-DD — an
+   old /events/#ev-committee-… link is sent on here, committee.js cmEvents). Indexable, in the sitemap with its twin,
+   in the site search (eleventy/filters/library.js), like a series' page. Its address: the key evList gives the
+   committee meeting's series ("committee-meeting") under /events/series/ — no config/site.yml recurring_events key
+   may take it. */
+export const COMMITTEE_DATES_KEY = "committee-meeting";
+export const COMMITTEE_DATES_PATH = `/events/series/${COMMITTEE_DATES_KEY}/`;
+
+const committeeMemo = new WeakMap();
+const NO_EVENTS = [];
+/**
+ * The committee meeting's dates page in a language → { path ("/[es/]events/series/committee-meeting/"), dates (every
+ * committee meeting still to come: /events/ events, soonest first — never a cancelled one), years ([{ year, dates }]),
+ * next (its first date, or null), rule ("Every third Wednesday of the month · 7:00 – 8:00 PM Central time": the
+ * settings' own line, with its zone), platform ("Google Meet"), head: { title ("<its title> — Every third Wednesday of
+ * the month", as a series' page's), titleTail, description (its rule, where, its next date and what the page holds:
+ * at most EVENT_PAGE_DESC_MAX characters, never how to join), nextText, ogImage (the next date's flyer) } } — with no
+ * date to come (no meeting: in the settings, COMMITTEE_EMPTY) dates is [] and head null: the template writes no page.
+ * `now`: the build's moment (site.built).
+ */
+export function committeeDatesPage(items, site, lang = "en") {
+  const list = Array.isArray(items) ? items : NO_EVENTS;
+  const key = `${lang}|${site?.built ?? ""}|${site?.url ?? ""}`;
+  const memo = committeeMemo.get(list) || {};
+  if (memo[key]) return memo[key];
+  const built = Date.parse(String(site?.built || ""));
+  const now = Number.isFinite(built) ? new Date(built) : new Date();
+  const m = site?.meeting || {};
+  const dates = !Object.keys(m).length ? [] : normalizeEvents(EMPTY ? [] : list, site || {}, lang, { now })
+    .filter((ev) => ev.committee && !ev.past && !eventCancelled(ev));
+  const next = dates[0] || null;
+  const platform = String(m.platform || "").trim() || "Zoom";
+  const rule = recurrenceText(monthlyRule(m), lang) || meetingRuleText(m, lang);
+  const years = [];
+  for (const ev of dates) {
+    const y = ev.startYmd.slice(0, 4);
+    if (!years.length || years[years.length - 1].year !== y) years.push({ year: y, dates: [] });
+    years[years.length - 1].dates.push(ev);
+  }
+  let head = null;
+  if (next) {
+    const title = String(next.title || "").replace(/\s+/g, " ").trim();
+    const pageTitle = t("evkind.series_title", lang, { title, when: meetingRuleText(m, lang) }).replace(/ · /g, " — ");
+    const nextText = seriesNextText(next, lang);
+    const place = t("committee.events.online_on", lang, { platform });
+    const text = `${[rule, place].filter(Boolean).join(" · ")} — ${[nextText, t("evlist.cm_dates_desc", lang)].filter(Boolean).join(" ")}`;
+    const picture = shareImage(eventSharePicture(next), site || {});
+    head = {
+      title: pageTitle,
+      titleTail: eventsTitleTail(pageTitle, lang),
+      description: clipDescription(text),
+      nextText,
+      ogImage: picture ? { src: picture.url, alt: t("committee.events.flyer_alt", lang, { title }) } : null,
+    };
+  }
+  const page = { path: localPath(COMMITTEE_DATES_PATH, lang), dates, years, next, rule, platform, head };
+  memo[key] = page;
+  committeeMemo.set(list, memo);
+  return page;
+}
+
 // (round 37's fixer) A series' next date as a sentence — "Next: Thursday, January 28, 2027." ("Próxima fecha: jueves,
 // 28 de enero de 2027."; over several days its range): the rule alone ("Every fourth Thursday") lets a reader, or an
 // AI tool, work out a date that does not happen (a month the series skips, a date the host moved, a series that has
@@ -3449,7 +3515,7 @@ export function gvMeetings(data, lang = "en", site = {}) {
 }
 
 /**
- * The upcoming events, one entry per event — the committee sub-nav's Events count and the /search/ page's Events
+ * The upcoming events, one entry per event — the /search/ page's Events
  * tile (cmEventEnds): the moment each is over (ISO), a monthly series once (cmCollapseRecurring), until its last
  * listed date is over. Committee meetings are not counted. Not the number of cards /events/ shows: since round 30
  * that page has a card for every date of a series and for every committee meeting, and its filter chips count those.
@@ -3524,10 +3590,10 @@ export default function (eleventyConfig, helpers) {
   // {{ ev.body | md(…) | cmNoSnippet | safe }} (since round 35): how to join an online meeting kept out of search
   // engines' snippets and AI answers — each value in <span data-nosnippet> (noSnippetJoin; plain text: `| escape` first)
   eleventyConfig.addFilter("cmNoSnippet", (html) => noSnippetJoin(html));
-  // {{ db | cmEventEnds(lang) }}: the upcoming events' end moments (upcomingEventEnds) — their number is the Events count
+  // {{ db | cmEventEnds(lang) }}: the upcoming events' end moments (upcomingEventEnds) — their number is /search/'s Events tile
   eleventyConfig.addFilter("cmEventEnds", (db, lang) => upcomingEventEnds(db, lang));
   // {% set dt = db.drive.items | cmDocTabs(lang, site.drive.pinned_flyers) %}: the Portfolio's tabs (documentTabs;
-  // the pins put the committee's pinned flyers first in the flyers tab — /meetings/ and the sub-nav pass none)
+  // the pins put the committee's pinned flyers first in the flyers tab — /meetings/ passes none)
   eleventyConfig.addFilter("cmDocTabs", (items, lang, pins) => documentTabs(EMPTY ? [] : items, lang, pins));
   // The Portfolio hero card (docTeaser): "Flyers to share" — the pinned flyers first (config/site.yml
   // drive.pinned_flyers), up to 4 — or "Latest upload"; never the list's first category.
@@ -3741,48 +3807,38 @@ export default function (eleventyConfig, helpers) {
 </div>`;
   });
 
-  // Committee section sub-navigation: {% committeeNav lang, "events", db %}
-  // The Events and Bulletin counts go down between builds as those things end: each carries, in
-  // data-gv-expire-count, the moment each thing it counts is over (src/assets/js/app.js GV.expire recounts
-  // it — the moments /events/ and /bulletin/ hide their cards at — and hides it at 0).
-  eleventyConfig.addShortcode("committeeNav", function (lang, current, db) {
+  // Committee section sub-navigation: {% committeeNav lang, "events", db %} (the third argument, the page's db, is
+  // accepted and not read: the bar holds the same words and links on every build).
+  // No counts on the tabs since the UX review of November 2026: "Photos 1160", "Events 17" were noise beside the
+  // tab's own name, and counting them — photoAlbums() and documentTabs() over every Drive item, on each of the 12
+  // pages that show the bar — took about 2.5 s of every build. The bar now depends only on the language and the
+  // current tab, so each of its 12 versions is made once per build and kept (navCache, emptied before each build:
+  // an `npm start` rebuild after a change of the words gets the new ones).
+  const navCache = new Map();
+  eleventyConfig.on("eleventy.before", () => navCache.clear());
+  eleventyConfig.addShortcode("committeeNav", function (lang, current) {
     const L = lang || "en";
-    // upcoming events, one per event: a series once, no committee meetings (upcomingEventEnds; the /search/ page's
-    // Events tile counts the same)
-    const eventEnds = upcomingEventEnds(db, L);
-    // the bulletin's posts: each is over at midnight Central after its `expires` day (bulletin.njk's rule)
-    const posts = announcementList(EMPTY ? [] : db?.announcements?.items);
-    const postEnd = (p) => {
-      const t = chicagoDayEndMs(String(p.extra?.expires || "").slice(0, 10));
-      return Number.isFinite(t) ? new Date(t).toISOString() : "-";
-    };
-    const n = {
-      events: eventEnds.length,
-      portfolio: documentTabs(EMPTY ? [] : db?.drive?.items, L).total,
-      // everything /photos/ shows: the committee's photos and videos and the magazine covers
-      photos: photoAlbums(EMPTY ? [] : db?.drive?.items, L).reduce((s, a) => s + a.count, 0),
-      bulletin: posts.length,
-    };
-    const ends = { events: eventEnds, bulletin: posts.map(postEnd) };
+    const key = L + " " + (current || "");
+    if (navCache.has(key)) return navCache.get(key);
     const pages = [
       { key: "meetings", url: "/meetings/", icon: "calendar-clock" },
       { key: "events", url: "/events/", icon: "calendar-days" },
       { key: "portfolio", url: "/portfolio/", icon: "folder-open" },
       { key: "photos", url: "/photos/", icon: "images" },
       { key: "bulletin", url: "/bulletin/", icon: "megaphone" },
-      // the Tracker's entries live on the visitor's device: no count
       { key: "tracker", url: "/tracker/", icon: "receipt" },
     ];
     const links = pages.map((p) => {
       const on = p.key === current;
-      const until = ends[p.key] ? ` data-gv-expire-count="${esc(ends[p.key].join(" "))}"` : "";
-      const count = n[p.key] ? `<span class="cm-subnav-count"${until}>${n[p.key]}</span>` : "";
-      return `<a href="${localPath(p.url, L)}" class="cm-subnav-link${on ? " is-current" : ""}"${on ? ' aria-current="page"' : ""}>${icon(p.icon, "size-4")}<span>${esc(t("committee.subnav." + p.key, L))}</span>${count}</a>`;
+      return `<a href="${localPath(p.url, L)}" class="cm-subnav-link${on ? " is-current" : ""}"${on ? ' aria-current="page"' : ""}>${icon(p.icon, "size-4")}<span>${esc(t("committee.subnav." + p.key, L))}</span></a>`;
     });
     // page-overlap (main.css): the pill bar tucks into the hero's faded bottom edge — the
     // shared "page start" for pages whose first block overlaps the hero. The bar (.cm-subnav) keeps
     // its frame; its inside scrolls sideways on a phone, with a fade on the side that has more
-    // tabs (committee.js marks it .is-overflow / .at-start / .at-end).
-    return `<nav class="container-page page-overlap" aria-label="${esc(t("committee.subnav.aria", L))}"><div class="cm-subnav"><div class="cm-subnav-scroll">${links.join("")}</div></div></nav>`;
+    // tabs (committee.js marks it .is-overflow / .at-start / .at-end, and brings the current tab to the
+    // middle of the bar, with its neighbours in view on both sides).
+    const html = `<nav class="container-page page-overlap" aria-label="${esc(t("committee.subnav.aria", L))}"><div class="cm-subnav"><div class="cm-subnav-scroll">${links.join("")}</div></div></nav>`;
+    navCache.set(key, html);
+    return html;
   });
 }

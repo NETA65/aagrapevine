@@ -1,0 +1,607 @@
+# =====================================================================
+#  "Grapevine and La Viña Recording Workshop" — an hour on recording your story for Grapevine's Audio Project or La
+#  Viña's Graba tu historia: why record, choosing one topic, what to say first, anonymity on a recording, a quiet
+#  room, the three ways to record (by phone, in the browser with the committee's story recorder, a file you made),
+#  sending it once, and the themes coming up. A web presentation on /orientation/ (Presentations), new in November
+#  2026 (no PowerPoint copy: no `drive_title`). A recording workshop's own page links it ("Start the
+#  presentation": eleventy/event-pages.js, the kind "recording-workshop"); until then it linked the writing
+#  workshop's, as "The closest presentation".
+#
+#  Where the facts come from:
+#   · the two programs, as the committee website reads them from the official pages every day
+#     (data/site/audio_project.json): Grapevine's Audio Project (aagrapevine.org/audio-portal: 6 to 8 minutes, the
+#     story line's keys 1 · # · 1 · 2, WAV or MP3 to webcoord@aagrapevine.org) and La Viña's Graba tu historia
+#     (aalavina.org/graba-tu-historia and its instructions, tips, topics and sample pages: up to 7 minutes, the line's
+#     key 1, long-distance charges may apply); La Viña's address for a file is the committee's, as on its pages
+#     (config/site.yml links.lv_email_editorial: manuscritoslv@aagrapevine.org). Neither magazine takes recordings of
+#     speakers at meetings or events. The two story lines' numbers are {live:gv_audio_phone} and {live:lv_audio_phone};
+#   · the committee's story recorder (Share your story, /contribute/#record; README "The story recorder"): the
+#     magazine first, what to say first, the microphone test, at most 8 takes on a device, Trim or adjust, MP3 for
+#     e-mail and WAV for the magazines' upload forms (one file, up to 100 MB), Add a recording (at most 80 MB and 20
+#     minutes), "Show my name as", and nothing uploaded to the committee website;
+#   · the writing workshop's own words where the two overlap (its "Record your story" slide and its editing and
+#     anonymity slides), and the story deadlines from the site's data (a `live` deadlines list);
+#   · La Viña's permission sentence is La Viña's own words: never on a slide; the recorder and La Viña's instructions
+#     page show it, and the member reads it from there.
+#  How it is written: one version (about 60 minutes); the agenda's times are worked out by the player (`from`); each
+#  note's TIME line is `minutes`; the notes name the player's buttons with {ui:…}; Spanish words are {lang:es}…{/lang}.
+#  The content stays English (the owner's decision): for a workshop in Spanish, the notes give a few lines in Spanish,
+#  and the presenter speaks Spanish; the card, the version and the blanks' labels are bilingual.
+#  Checked by tests/test_presentations.py (and by the build, with I18N_STRICT=1).
+# =====================================================================
+id: "recording-workshop"
+order: 9
+lang: "en"
+title: "Grapevine and La Viña Recording Workshop"
+short: "Recording Workshop"
+eyebrow: "Recording Workshop"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 60
+icon: "mic"
+tone: "gv"
+card:
+  title:
+    en: "Grapevine and La Viña Recording Workshop"
+    es: "Taller de grabación de Grapevine y La Viña"
+  summary:
+    en: "Telling your story out loud for Grapevine's Audio Project or La Viña's Graba tu historia: one topic, what to say first, anonymity, a quiet room, recording by phone or in your browser with the committee's story recorder, and sending it once."
+    es: "Cómo contar tu historia en voz alta para Graba tu historia de La Viña o el Audio Project de Grapevine: un solo tema, qué decir primero, el anonimato, un lugar tranquilo, grabar por teléfono o en tu navegador con la grabadora del comité, y enviarla una sola vez."
+  audience:
+    en: "AA members who would rather talk than write, in English for Grapevine or in Spanish for La Viña. A group or district hosts it, in person or online; everyone brings a phone."
+    es: "Miembros de AA que prefieren hablar a escribir, en español para La Viña o en inglés para Grapevine. Lo organiza un grupo o un distrito, en persona o en línea; cada quien trae su teléfono."
+
+presets:
+  - id: "full"
+    label:
+      en: "The workshop (about 60 minutes)"
+      es: "El taller (unos 60 minutos)"
+    minutes: 60
+
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "Month DD, YYYY"
+  - key: "host_group"
+    label: { en: "Host group or district", es: "Grupo o distrito anfitrión" }
+    hint: "host group or district"
+  - key: "place"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "in person / online"
+  # (The two story lines are not blanks: {live:gv_audio_phone} and {live:lv_audio_phone}, the numbers the committee
+  # website's Share your story page gives from the two official audio pages.)
+
+slides:
+  # ------------------------------------------------------------------ OPENING
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Grapevine and La Viña Recording Workshop"
+    subtitle: "Rather talk than write? Tell your story out loud"
+    lines:
+      - "{fill:presenter} · {live:panel}"
+      - "{fill:date} · {fill:host_group} · {fill:place}"
+    minutes: 0.75
+    notes: |
+      WHEN: up while people arrive.
+      SAY: Welcome, everyone, and thank you to {fill:host_group} for hosting. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} for Northeast Texas Area 65. Some of us are talkers, not writers, and this hour is for us: how to tell your story out loud for Grapevine or La Viña, and send it.
+      DO: Fill in the date, the host and the place ({ui:customize} → {ui:your_details}). Ask everyone to bring a phone; a few earphones help. Have this month's Grapevine and La Viña to hold up: never covers on a slide.
+      FOR A WORKSHOP IN SPANISH: speak Spanish; the slides stay in English, and a few lines of these notes are in Spanish. {lang:es}Bienvenidos: este taller es para contar tu historia en voz alta, para La Viña o para Grapevine.{/lang}
+      TIP: This presentation and its notes are public on the committee's website. Use service positions, never names, on the slides and in what you type.
+
+  - id: "welcome"
+    layout: "bullets"
+    title: "Welcome"
+    items:
+      - "**Anonymity:** no photos, screenshots or recordings of anyone here. Each of us records only our own story, later, by our own choice"
+      - "**Phones:** on silent, but keep yours: we'll use it"
+      - "Questions are welcome: we'll gather them and answer at the end"
+      - "Nothing here is a requirement: each member decides whether to record and send a story"
+    takeaway: "Presented by the NETA 65 Grapevine & La Viña Committee for local service. This is not an official AA Grapevine, Inc. presentation."
+    minutes: 2
+    notes: |
+      SAY: A few things so this hour goes well. First, anonymity, and it matters even more today, because we're talking about recordings. Please don't photograph, screenshot or record anyone here, in the room or on the screen. Each of us records only our own story, later, in a quiet place, and only if we choose to. Second, phones on silent, but keep yours handy: we'll use it. And questions are welcome; I'll gather them for the end.
+      SAY: One more thing: our Area committee presents this workshop, not AA Grapevine, Inc. We share what the magazines ask for, and nothing here is a requirement.
+      DO: Online, paste the no-recording reminder in the chat and make sure the meeting isn't being recorded. In a room, have a sheet or a whiteboard for questions.
+      TRANSITION: Many groups open with the Preamble. Let's read it together.
+
+  # The Preamble, word for word, with AA Grapevine's credit line exactly as on the information workshop's slide.
+  - id: "preamble"
+    layout: "quote"
+    eyebrow: "Opening"
+    accent: "grape"
+    title: "The AA Preamble"
+    quote: "Alcoholics Anonymous® is a fellowship of people who share their experience, strength and hope with each other that they may solve their common problem and help others to recover from alcoholism. The only requirement for membership is a desire to stop drinking. There are no dues or fees for A.A. membership; we are self-supporting through our own contributions. A.A. is not allied with any sect, denomination, politics, organization or institution; does not wish to engage in any controversy; neither endorses nor opposes any causes. Our primary purpose is to stay sober and help other alcoholics to achieve sobriety."
+    credit: "Copyright © by AA Grapevine, Inc.; reprinted with permission."
+    optional: true
+    minutes: 1.25
+    notes: |
+      SAY: Let's open with a moment of silence, and then the Preamble. (Pause.) Many of us know it by heart. It was first printed in the Grapevine, in June 1947, and it starts with what we'll do today: share our experience, strength and hope with each other. (Read it together.)
+      DO: Read it aloud, or invite the room to read it together. If the host group opens another way, follow its custom and switch this slide off ({ui:customize} → {ui:slides}).
+      SOURCES: Text and credit line: P-52 (2026), p. 2. History: P-52 (2026), p. 5.
+      TRANSITION: Here's our hour.
+
+  # The times are minutes from the start; with `from` the player works each one out.
+  - id: "agenda"
+    layout: "agenda"
+    title: "Our hour together"
+    items:
+      - { time: "0:00", title: "Welcome and opening", from: "title" }
+      - { time: "0:05", title: "Part 1 · Why record your story", from: "part-1" }
+      - { time: "0:11", title: "Part 2 · Before you record, and planning your share", from: "part-2" }
+      - { time: "0:32", title: "Part 3 · Three ways to record", from: "part-3" }
+      - { time: "0:46", title: "Part 4 · Send it, then let it go", from: "part-4" }
+      - { time: "0:51", title: "Questions, and closing", from: "questions" }
+    minutes: 0.5
+    notes: |
+      SAY: Here's our hour. First, why record, and the two programs, Grapevine's and La Viña's. Then what to do before you record, and a few minutes to plan your own share. Then the three ways to record: by phone, in your phone's browser, or with a recording you already made, and you'll try it. Then how to send it, and what happens next. And your questions.
+      DO: The times are minutes from the start, so they work whatever time you begin.
+      TRANSITION: So, why record?
+
+  # ------------------------------------------------------------------ 1. WHY RECORD YOUR STORY
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    title: "Why record your story"
+    subtitle: "Your voice can reach an alcoholic you'll never meet"
+    accent: "gv"
+    minutes: 0.25
+    notes: |
+      SAY: Part one: why record a story, and the two places to send one.
+      TIP: Keep this part warm and short: most people came because they already want to try.
+      TRANSITION: Some of us are talkers.
+
+  - id: "talkers"
+    layout: "bullets"
+    title: "Rather talk than write?"
+    items:
+      - "Both magazines welcome recorded stories, told the way you'd share in a meeting"
+      - "One topic, your own experience, strength and hope"
+      - "Recorded stories go through the same editorial process as written ones"
+      - "Grapevine publishes the stories its editors accept on AA Grapevine's YouTube channel"
+      - "No writing needed, and no special equipment: a phone is enough"
+    takeaway: "Each magazine chooses which stories it publishes: the gift is in the sharing."
+    source: "Sources: aagrapevine.org/audio-portal · aalavina.org/graba-tu-historia"
+    minutes: 2.5
+    notes: |
+      SAY: Some of us are talkers, not writers, and both magazines welcome recorded stories. You tell it the way you'd share in a meeting: one topic, your own experience, strength and hope. Recorded stories go through the same editorial process as written ones, and the stories Grapevine's editors accept go on AA Grapevine's YouTube channel, where members listen to them. You don't need to write a word, and you don't need special equipment: the phone in your pocket is enough.
+      ASK: Has anyone here listened to a member's recorded story? What stayed with you?
+      TIP: Never promise anyone that a recording will be published: each magazine chooses. Don't mention a subscription requirement: neither audio page states one.
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/graba-tu-historia (both read by the committee website every day).
+      TRANSITION: There are two programs, one for each magazine.
+
+  # The two programs side by side, as data/site/audio_project.json reads them (the writing workshop's "Record your
+  # story" table, with its numbers from the site: {live:gv_audio_phone}, {live:lv_audio_phone}).
+  - id: "two-programs"
+    layout: "table"
+    accent: "gv"
+    title: "Two programs, one for each magazine"
+    header: ["", "Grapevine: the Audio Project", "La Viña: {lang:es}_Graba tu historia_{/lang}"]
+    rows:
+      - ["Language", "English", "Spanish"]
+      - ["Length", "6 to 8 minutes, one topic", "Up to 7 minutes"]
+      - ["By phone", "**{live:gv_audio_phone}**", "**{live:lv_audio_phone}** (long-distance charges may apply)"]
+      - ["A file", "WAV or MP3 to webcoord@aagrapevine.org", "WAV or MP3 to manuscritoslv@aagrapevine.org"]
+    widths: [1.6, 5.1, 5.1]
+    first_col_bold: true
+    takeaway: "Neither magazine takes recordings of speakers at AA meetings or events: only your own story."
+    source: "Sources: aagrapevine.org/audio-portal · aalavina.org/graba-tu-historia and its instructions page"
+    minutes: 2.5
+    notes: |
+      SAY: Grapevine's program is the Audio Project, in English: a story of six to eight minutes on one topic. La Viña's is {lang:es}Graba tu historia{/lang}, record your story, in Spanish: up to seven minutes. Each has a phone line you can call to record, the numbers on the screen, and each takes a file you recorded yourself, WAV or MP3, by e-mail. Long-distance charges may apply on La Viña's line.
+      SAY: And one rule they share: they want your own story, never a recording of a speaker at an AA meeting or event.
+      EN ESPAÑOL (if Spanish speakers are present): {lang:es}Graba tu historia, de La Viña: hasta siete minutos, por teléfono o enviando un archivo WAV o MP3 a manuscritoslv@aagrapevine.org.{/lang}
+      DO: Write both numbers on a whiteboard, or paste them in the chat.
+      STAYS CURRENT: the two numbers come from the committee website, which reads the official pages every day.
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/graba-tu-historia and aalavina.org/instrucciones-graba-tu-historia; La Viña's address for a file, as the committee gives it: manuscritoslv@aagrapevine.org.
+      TRANSITION: Before anyone records, it helps to listen to one.
+
+  - id: "listen-first"
+    layout: "resources"
+    title: "Listen to one first"
+    links:
+      - label: "Grapevine's Audio Project"
+        url: "https://www.aagrapevine.org/audio-portal"
+        note: "How it works, and its playlists of members' stories"
+      - label: "La Viña: {lang:es}audio de muestra{/lang}"
+        url: "https://www.aalavina.org/audio-de-muestra"
+        note: "A sample recording, in Spanish"
+      - label: "La Viña: {lang:es}consejos de grabación{/lang}"
+        url: "https://www.aalavina.org/consejos-de-grabacion"
+        note: "La Viña's own recording tips, in Spanish"
+      - label: "Our Listen and Watch pages"
+        url: "/listen/"
+        note: "Grapevine's and La Viña's podcasts and recorded stories"
+    minutes: 1.5
+    notes: |
+      SAY: Before you record, listen to one or two. Grapevine's Audio Project page explains how it works, and AA Grapevine's YouTube channel has playlists of members' recorded stories, on sponsorship, on relapse and recovery, and more. La Viña has a sample recording on its site, and its own recording tips, in Spanish. Our committee's Listen and Watch pages gather the magazines' podcasts and recorded stories in one place.
+      DO: If there's a connection and a speaker, play the first minute of one story, so people hear how simple it is.
+      TIP: These links were checked in November 2026. Before each workshop, open each one once.
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/audio-de-muestra and /consejos-de-grabacion; the committee website ({live:site}/listen/ and /watch/).
+      TRANSITION: Now, what to do before you press record.
+
+  # ------------------------------------------------------------------ 2. BEFORE YOU RECORD
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    title: "Before you record"
+    subtitle: "One topic, the right words first, your anonymity, a quiet room"
+    accent: "lv"
+    minutes: 0.25
+    notes: |
+      SAY: Part two: what to do before you record. Then we'll take a few minutes to plan your own share.
+      TIP: These are the magazines' own tips, as the committee's story recorder gives them too.
+      TRANSITION: Start with one topic.
+
+  - id: "one-topic"
+    layout: "bullets"
+    title: "One story, one topic"
+    items:
+      - "Choose one topic, as you would share it in a meeting"
+      - "A theme of a coming issue, or a topic either magazine takes any time"
+      - "Your own story only: never a speaker's talk, never someone else's story"
+      - "No last names of others, and no outside issues"
+    takeaway: "La Viña's suggested topics: [www.aalavina.org/temas-sugeridos](https://www.aalavina.org/temas-sugeridos) · both magazines' themes: [{live:site}/contribute/](/contribute/#deadlines)"
+    minutes: 2
+    notes: |
+      SAY: The magazines ask for one thing above all: one topic, told the way you'd share it in a meeting. It can be a theme of a coming issue, we'll see them at the end, or a topic they take any time: La Viña keeps a list of suggested topics, and Grapevine always needs stories on the Steps and the Traditions. Tell your own story only: never a speaker's talk from a meeting or an event, and never someone else's story. Leave out other people's last names, and outside issues.
+      ASK: What's one topic you could talk about for six minutes without notes?
+      TIP: The committee's story recorder has a topic list too, with the themes of the coming issues and La Viña's suggested topics, in La Viña's own words.
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/temas-sugeridos; the committee's story recorder ({live:site}/contribute/#record).
+      TRANSITION: What do you say first? Each magazine asks for something a little different.
+
+  # What to say first, as the committee's story recorder gives it from each magazine's instructions. La Viña's
+  # permission sentence is La Viña's words: read from its instructions page or the recorder, never on a slide.
+  - id: "say-first"
+    layout: "columns"
+    style: "panels"
+    title: "What to say first"
+    columns:
+      - heading: "Grapevine"
+        accent: "gv"
+        items:
+          - "Your full name and phone number, and where you are"
+          - "That you give AA Grapevine permission to use your story (on the phone line: a key)"
+          - "Then: “My name is …, and I'm an alcoholic.”"
+      - heading: "La Viña"
+        accent: "lv"
+        items:
+          - "Begin as you would in a meeting"
+          - "Then your full name and phone number"
+          - "Then La Viña's permission statement, word for word, from its instructions page"
+    takeaway: "Your name and number are for the editors, to reach you: the magazine protects your anonymity."
+    source: "Sources: aagrapevine.org/audio-portal · aalavina.org/instrucciones-graba-tu-historia · the committee's story recorder"
+    minutes: 2.5
+    notes: |
+      SAY: Each magazine asks you to start a certain way. For Grapevine: your full name and phone number, where you are, and that you give AA Grapevine permission to use your story; on the phone line, permission is a key you press. Then begin: 'My name is …, and I'm an alcoholic.' For La Viña: begin as you would in a meeting, then give your full name and phone number, then read La Viña's permission statement word for word. It's on La Viña's instructions page, and our story recorder shows it too.
+      EN ESPAÑOL (if Spanish speakers are present): {lang:es}Para La Viña: empieza como en una reunión, luego di tu nombre completo y tu teléfono, y después lee la declaración de permiso de La Viña, palabra por palabra, de su página de instrucciones.{/lang}
+      TIP: Don't read La Viña's permission statement from this slide: it's La Viña's own text, and the member reads it from La Viña's page or the recorder, exactly as written.
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/instrucciones-graba-tu-historia; the committee's story recorder ({live:site}/contribute/#record).
+      TRANSITION: Which brings us to anonymity.
+
+  - id: "anonymity"
+    layout: "bullets"
+    title: "Anonymity on a recording"
+    items:
+      - "Your name and phone number go to the editors only, to reach you"
+      - "Say how you'd like your name shown: first name and last initial, initials only, or anonymous"
+      - "Other people: first names at most, or none, and nothing that points to them"
+      - "Never record anyone else, at a meeting or anywhere"
+    takeaway: "The same care as in a meeting: who you hear about stays private."
+    source: "Sources: Anonymity (P-47, Sept. 2026) · the committee's story recorder"
+    minutes: 2
+    notes: |
+      SAY: Your full name and phone number are for the editors, so they can reach you; the magazines protect your anonymity when they publish. Tell them how you'd like your name shown: first name and last initial, initials only, or anonymous. The committee's story recorder puts that choice in the e-mail it writes for you.
+      SAY: The people in your story deserve the same care: first names at most, or none, and nothing that points to them, like a workplace or a town. And never record anyone else, at a meeting or anywhere.
+      ASK: Is there someone in your story you'd describe without a name? How?
+      SOURCES: Anonymity (P-47, Sept. 2026); the committee's story recorder ({live:site}/contribute/#record).
+      TRANSITION: And a quiet room.
+
+  - id: "quiet-room"
+    layout: "bullets"
+    title: "A quiet room, and a test first"
+    items:
+      - "A quiet room: no music, no television, the door closed"
+      - "Hold the phone, or set it down, the same distance from you all the way through"
+      - "Make a short test take first, and listen to it"
+      - "Keep the screen on: a call or a locked screen pauses the recording"
+    takeaway: "A take that sounds like you, in a quiet room, is all the magazines need."
+    minutes: 2
+    notes: |
+      SAY: A few practical things. Find a quiet room: no music, no television, the door closed. Keep the phone at the same distance from your mouth all the way through. Make a short test take first and listen to it: it tells you more than any tip. And keep the screen on while you record: on most phones a call, a locked screen or another app pauses the recording.
+      TIP: The committee's story recorder tests the microphone and says the level in words ('Good level', 'A bit quiet: move closer'), and its 'Reduce background noise' is for a noisy place only: in a quiet room, leave it off.
+      SOURCES: the magazines' tips, as the committee's story recorder gives them ({live:site}/contribute/#record); aalavina.org/consejos-de-grabacion.
+      TRANSITION: Now let's plan your own share.
+
+  # An activity is green in every deck (its eyebrow, steps and time card).
+  - id: "plan-your-share"
+    layout: "activity"
+    eyebrow: "Activity"
+    accent: "vine"
+    title: "Plan your share"
+    steps:
+      - "Choose one topic, and write it at the top of the page"
+      - "Three lines: what it was like · what happened · what it's like now"
+      - "One moment you can see: a place, a day, a few words someone said"
+      - "In pairs: tell your partner your share in two minutes; the listener only listens"
+    duration: 12
+    materials: ["Paper and pens", "A visible timer"]
+    takeaway: "Notes, not a script: a recording sounds best when you talk, not read."
+    minutes: 12
+    notes: |
+      SAY: Let's plan. Take a sheet of paper. Write one topic at the top. Then three lines: what it was like, what happened, and what it's like now. Then one moment you can see: a place, a day, a few words someone said to you. That's all: notes, not a script. A recording sounds best when you talk, not when you read.
+      DO: Give five minutes for the notes. Then make pairs: each person tells their share in about two minutes while the partner listens, then they swap. Ring a bell or say 'swap' at the halfway point. Online, use breakout rooms of two if the platform has them, or share in the main room with a raised hand.
+      TIP: The listener is a listener, not an editor: no advice, no fixing. What a partner shares stays in the pair. Walk the room quietly for anyone who looks stuck, and offer a question: 'Where were you?' 'Who was there?'
+      EN ESPAÑOL (read it aloud or paste it in the chat): {lang:es}Escribe un tema arriba de la hoja. Luego tres líneas: cómo era, qué pasó, cómo es ahora. Y un momento que puedas ver. Después, en parejas, cuenta tu historia en dos minutos; quien escucha, solo escucha.{/lang}
+      TRANSITION: Thank you. Now, three ways to record it.
+
+  # ------------------------------------------------------------------ 3. THREE WAYS TO RECORD
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    title: "Three ways to record"
+    subtitle: "By phone · in your browser · a recording you already made"
+    accent: "grape"
+    minutes: 0.25
+    notes: |
+      SAY: Part three: three ways to record, and you'll try one of them.
+      TIP: Keep phones out for this part: the people who try it here are the ones who send a story later.
+      TRANSITION: The simplest first: by phone.
+
+  # The story lines' keys as data/site/audio_project.json reads them (Grapevine: 1 · # · 1 · 2; La Viña: 1).
+  - id: "by-phone"
+    layout: "table"
+    title: "1 · By phone: call the story line"
+    header: ["", "Grapevine", "La Viña"]
+    rows:
+      - ["Call", "**{live:gv_audio_phone}**", "**{live:lv_audio_phone}**"]
+      - ["Then", "1 for the tips and to record after the tone; # when you're done", "1 to record"]
+      - ["Finish", "1 to save, 2 to give Grapevine permission", "Your name and phone, then the permission statement"]
+    widths: [1.6, 5.1, 5.1]
+    first_col_bold: true
+    takeaway: "Any phone works, no internet needed. Long-distance charges may apply on La Viña's line."
+    minutes: 2
+    notes: |
+      SAY: The simplest way: call the story line. For Grapevine, call the number on the screen, press 1 to hear the tips and record after the tone, press pound when you're done, then 1 to save and 2 to give Grapevine permission to use your story. For La Viña, call its line and press 1 to record; begin as in a meeting, give your name and phone number, and read the permission statement from La Viña's instructions page. Any phone works, and you don't need the internet.
+      FACILITATOR TIP: Test both lines before the workshop: the Grapevine line was reported down in May 2026. If a line doesn't answer, the other two ways still work.
+      STAYS CURRENT: both numbers come from the committee website; the keys are as the official pages gave them in November 2026. If one changes, edit this slide ({ui:customize} → {ui:edit}).
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/instrucciones-graba-tu-historia.
+      TRANSITION: The second way: right in your phone's browser.
+
+  # The committee's story recorder (Share your story, /contribute/#record), as README "The story recorder" describes it.
+  - id: "in-the-browser"
+    layout: "bullets"
+    title: "2 · In your browser: the committee's story recorder"
+    items:
+      - "Open **{live:site}/contribute/#record** and choose the magazine first"
+      - "**Test the microphone**, then **Start recording**: pause and resume as you need"
+      - "**Stop and save**; listen; keep up to 8 takes, and trim the start or the end"
+      - "**Download the MP3** right after a good take; then send it"
+      - "Nothing is uploaded to our website: your takes stay on your device until you delete them"
+    takeaway: "It works on a phone or a computer, in English and in Spanish."
+    minutes: 3
+    notes: |
+      SAY: The second way: our committee's story recorder, on the Share your story page of our website. Choose the magazine first: it sets the length to aim for, what to say first and the address. Test the microphone: it tells you in words whether the level is good. Start recording, pause and resume if you need to, then Stop and save. Listen to it. You can keep up to eight takes on your device, mark your pick, and trim the start or the end. Right after a good take, download the MP3, and send it.
+      SAY: Nothing is uploaded to our website. Your takes stay on your own phone or computer until you delete them, and the page writes the e-mail for you, with the address, a subject and how you'd like your name shown: you attach the file it names.
+      TIP: On an iPhone, 'Save to Files' is the download. A copy saved outside the browser is the one the browser can never remove: tell people to save it right after a good take.
+      SOURCES: the committee website, {live:site}/contribute/#record (the story recorder).
+      TRANSITION: Let's try it.
+
+  - id: "try-it"
+    layout: "activity"
+    eyebrow: "Activity"
+    accent: "vine"
+    title: "Try the recorder"
+    steps:
+      - "Open the page with the code on the next slide, or type {live:site}/contribute/#record"
+      - "Choose your magazine"
+      - "Test the microphone, then record ten seconds: say your topic"
+      - "Play it back, then delete it: your real take is for a quiet room at home"
+    duration: 6
+    materials: ["Your phone", "Earphones, if you have them"]
+    takeaway: "A test only: nobody records a story here, and nothing is sent."
+    minutes: 6
+    notes: |
+      SAY: Let's try it, all of us at once. Open the recorder: the code on the next slide opens it, or type the address. Choose your magazine. Test the microphone, then record about ten seconds: just say your topic. Play it back, and then delete it. Your real take is for a quiet room at home.
+      DO: Show the next slide (the code) while people open the page, then come back here. Walk the room and help anyone stuck; online, ask people to unmute only if they need help. In a room, a test of ten seconds each keeps the noise down.
+      TIP: Nobody records a story at the workshop, and nobody sends anything here. If a browser asks for the microphone, the person allows it; if a phone says it can't record, the phone line still works.
+      TRANSITION: Here's the code.
+
+  - id: "qr-recorder"
+    layout: "live"
+    kind: "qr"
+    title: "The story recorder, on your phone"
+    intro: "Share your story on the committee website: record, listen, trim and send, in English or in Spanish"
+    options:
+      url: "/contribute/#record"
+      caption: "The story recorder (the committee website)"
+    minutes: 1
+    notes: |
+      SAY: Point your phone's camera at the code, and tap the link: it opens the story recorder. Bookmark it, or add it to your home screen, so it's there when you have a quiet room.
+      DO: Leave the code up until everyone has the page open. Then go back one slide for the steps, if people want them.
+      TIP: Some phone cameras take a moment to find a code on a screen: closer and steadier helps, and a brighter screen.
+      TRANSITION: And the third way, a recording you already made.
+
+  - id: "a-file"
+    layout: "bullets"
+    title: "3 · A recording you already made"
+    items:
+      - "Recorded on your phone already, in its voice memos app? That works too"
+      - "On the recorder, **Add a recording**: a file up to 80 MB and 20 minutes"
+      - "Trim it, then send it as an MP3 or a WAV"
+    takeaway: "MP3 for e-mail; WAV is larger, for the magazines' own upload forms."
+    minutes: 1.5
+    notes: |
+      SAY: The third way: you've already recorded it, maybe in your phone's voice memos app. That works too. On the recorder, 'Add a recording' turns the file into a take, up to 80 megabytes and 20 minutes long. Trim the start or the end, then send it as an MP3 or a WAV.
+      TIP: MP3 is the one for e-mail: eight minutes is about 7.7 megabytes. A WAV is full quality and much larger, too big for most e-mail: it goes through the magazine's own upload form, one file of up to 100 megabytes.
+      SOURCES: the committee website, {live:site}/contribute/#record (the story recorder).
+      TRANSITION: Now, sending it.
+
+  # ------------------------------------------------------------------ 4. SEND IT, THEN LET IT GO
+  - id: "part-4"
+    layout: "section"
+    number: 4
+    title: "Send it, then let it go"
+    subtitle: "Once, to one place, and the editors take it from there"
+    accent: "gv"
+    minutes: 0.25
+    notes: |
+      SAY: Part four: sending your story, and what happens after it's sent. It's the shortest part, and the one people forget: a good take on a phone helps nobody until it's sent.
+      TIP: Keep it simple: one address per magazine, and send it once.
+      TRANSITION: Where it goes.
+
+  - id: "send-it"
+    layout: "table"
+    title: "Where to send it"
+    header: ["", "Grapevine", "La Viña"]
+    rows:
+      - ["By e-mail", "The MP3 to webcoord@aagrapevine.org", "The MP3 to manuscritoslv@aagrapevine.org"]
+      - ["Or online", "The upload form on Grapevine's website", "The upload form on La Viña's website"]
+      - ["By phone", "Already sent when you saved it", "Already sent when you finished the call"]
+    widths: [1.8, 5, 5]
+    first_col_bold: true
+    takeaway: "Send it once: by e-mail or on the magazine's site, not both."
+    minutes: 2
+    notes: |
+      SAY: For Grapevine, e-mail the MP3 to the Audio Project's address on the screen, or use the upload form on Grapevine's website. For La Viña, e-mail it to {lang:es}manuscritos{/lang} L V at aagrapevine.org, or use La Viña's upload form. A story you recorded on the phone line is already sent. And send it once: by e-mail or on the site, not both.
+      DO: Say La Viña's address aloud as '{lang:es}manuscritos{/lang} L V', for La Viña: on a screen a lowercase l can look like a capital I.
+      TIP: The committee's recorder buttons open the right upload form for the magazine chosen; the addresses here are the ones the committee's Share your story page gives.
+      SOURCES: aagrapevine.org/audio-portal; aalavina.org/graba-tu-historia; the committee's Share your story page ({live:site}/contribute/#record).
+      TRANSITION: And after you send it?
+
+  - id: "after-you-send"
+    layout: "bullets"
+    title: "After you send it"
+    items:
+      - "The editors listen, and choose; it may take a long time, or never be published"
+      - "Grapevine publishes the stories it accepts on AA Grapevine's YouTube channel"
+      - "No payment: the story is a gift, like a share"
+      - "Keep your copy, and delete the takes you don't need from your device"
+    takeaway: "Let it go: it was worth telling, whatever the editors decide."
+    minutes: 1.5
+    notes: |
+      SAY: Once it's sent, the editors listen and choose. It may take a long time, and a story may never be published: that's no judgment on your recovery. The stories Grapevine accepts go on AA Grapevine's YouTube channel. There's no payment: the story is a gift, the same way a share is.
+      SAY: Keep your own copy, and delete the takes you don't need from your device: the recorder never deletes one by itself.
+      TIP: Never promise publication. For questions you can't answer, the Grapevine office's customer service is customerservice@aagrapevine.org (in Spanish, preguntas@aagrapevine.org).
+      TRANSITION: If you'd like a theme to record on, here are the next ones.
+
+  # The next deadlines of both magazines from the site's data (/contribute/#deadlines): two of each.
+  - id: "themes"
+    layout: "live"
+    kind: "deadlines"
+    title: "Themes coming up"
+    options: { pub: "both", limit: 4, limit_each: 2 }
+    takeaway: "Every theme, with countdowns: [{live:site}/contribute/](/contribute/#deadlines)"
+    minutes: 1.5
+    notes: |
+      SAY: If you'd like a theme, here are the next ones of each magazine, with their deadlines. A recorded story can be on a theme or on any topic the magazine takes at any time; a story that misses its deadline may still be used later.
+      STAYS CURRENT: the next two deadlines of each magazine fill in by themselves from the committee's Share your story page. When the website has no date yet, the themes are on the magazines' own sites.
+      TIP: Grapevine starts choosing stories about five months before an issue's cover date, so its deadlines come early.
+      TRANSITION: Your questions.
+
+  # ------------------------------------------------------------------ CLOSING
+  - id: "questions"
+    layout: "qa"
+    eyebrow: "Closing"
+    accent: "grape"
+    title: "Questions & answers"
+    prompts:
+      - "What questions do you have about recording or sending your story?"
+      - "Which topic will you record first?"
+      - "What would help you finish: a quiet room, a partner, another workshop?"
+    note: "Please keep shares short so everyone has a turn."
+    minutes: 7
+    notes: |
+      SAY: We have a few minutes for questions and sharing. Ask anything about recording or sending your story. And if you're willing, tell us which topic you'll record first: saying it out loud is a good way to make it happen.
+      DO: Online, read questions from the chat aloud, without the names the chat shows. Keep each share to about a minute.
+      FACILITATOR TIP: If you don't know an answer, say so and point to the official page or to customerservice@aagrapevine.org; don't guess. A question about one member's situation is best answered privately afterwards.
+      TRANSITION: Let's close together.
+
+  - id: "responsibility"
+    layout: "quote"
+    eyebrow: "Closing"
+    accent: "grape"
+    title: "We close together"
+    quote: "I am responsible. When anyone, anywhere, reaches out for help, I want the hand of A.A. always to be there. And for that: I am responsible."
+    credit: "— Responsibility Statement, written for the 1965 International Convention, Toronto"
+    minutes: 1
+    notes: |
+      SAY: Thank you for your willingness today. Your voice could be the one another alcoholic needs to hear. Please join me in the Responsibility Statement. (Read it together, slowly.)
+      DO: Read the text exactly as shown, word for word. If the host group closes differently, follow its custom.
+      TRANSITION: Move to the last slide and leave it up while people leave.
+
+  # The closing slide's code opens the committee's Share your story page.
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you, and keep talking"
+    message: "Your story could be what another alcoholic needs to hear."
+    lines:
+      - "NETA 65 Grapevine & La Viña Committee"
+      - "{live:email} · {live:site}"
+      - "Committee meeting: {live:meeting_rule}, {live:meeting_time}"
+    qr: "/contribute/"
+    minutes: 1
+    notes: |
+      SAY: Thank you for coming, and thank you to {fill:host_group} for hosting. The code opens our Share your story page, with the recorder, the story lines and the themes. If you'd like help, or you'd like to host a workshop at your group, write to us at grapevine@neta65.org. Our committee meets on Google Meet {live:meeting_rule}, {live:meeting_time}, and every AA member is welcome.
+      DO: Leave this slide up while people leave. Stay a few minutes for private questions.
+      TIP: The contact on this slide is the committee's service address. Never put a personal phone number or e-mail address here.
+
+  # ------------------------------------------------------------------ FOR FACILITATORS
+  - id: "facilitators"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    accent: "navy"
+    title: "For facilitators"
+    subtitle: "Before the day, the room, and the sources"
+    eyebrow: "Appendix · For facilitators"
+    notes: |
+      NOT PRESENTED: the workshop ends with the 'Thank you' slide just before this one.
+      WHAT'S HERE: a checklist for before the day, and the credits and sources, in {ui:customize} → {ui:prepare}, where you can read or print each one.
+
+  - id: "before-the-day"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "Appendix · For facilitators"
+    title: "Before the day"
+    items:
+      - "Date, place, language and format agreed with the host group or district: they decide"
+      - "The date, the host and the place: {ui:customize} → {ui:your_details}"
+      - "Both story lines called once to test them"
+      - "The story recorder opened on a phone, and the code scanned from the back of the room"
+      - "Paper, pens and a timer; a whiteboard or the chat for the numbers"
+      - "Online: breakout rooms of two for the activity; nobody recording"
+    notes: |
+      WHEN: a week before, about an hour.
+      STEP 1: The host decides the date, the place, the language and the format; the committee suggests and supports. For a workshop in Spanish, the presenter speaks Spanish: these notes have a few lines in Spanish, and the recorder and the story lines work in Spanish.
+      STEP 2: Call both story lines to test them, open the story recorder on your own phone, and scan the code on its slide from the back of the room.
+      STEP 3: In a room, find a quiet corner or two where members can try the recorder for ten seconds each. Online, plan breakout rooms of two for 'Plan your share'.
+      TIP: Don't record the workshop, and don't record anyone for the magazines: each member records their own story, at home, by their own choice. Don't promise the host a published story.
+
+  - id: "credits"
+    layout: "credits"
+    facilitator: true
+    eyebrow: "Appendix · For facilitators"
+    title: "Credits & sources"
+    sources:
+      - "Grapevine's Audio Project: aagrapevine.org/audio-portal; La Viña's Graba tu historia: aalavina.org/graba-tu-historia, instrucciones-graba-tu-historia, consejos-de-grabacion, temas-sugeridos, audio-de-muestra (as the committee website reads them, November 2026)"
+      - "The story recorder: the committee website, {live:site}/contribute/#record"
+      - "Anonymity (P-47, Sept. 2026); AA Grapevine and La Viña: Our Meetings in Print (P-52, 2026)"
+      - "Preamble: Copyright © by AA Grapevine, Inc.; reprinted with permission. Responsibility Statement: 1965 International Convention, Toronto"
+    note: |-
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers, artwork or recordings are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not an official AA Grapevine, Inc. presentation, it is not AA Conference-approved literature, and it does not speak for AA as a whole or for AA Grapevine, Inc.
+    notes: |
+      NOT PRESENTED: this page keeps the record of where the words and facts come from.
+      SAY (if someone asks): This workshop is a local service piece from our Area committee. It isn't Conference-approved literature or an official AA Grapevine, Inc. presentation.
+      UPDATE: the story lines' keys and the addresses once a year, with the official pages; the numbers come from the committee website by themselves.

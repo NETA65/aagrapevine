@@ -30,7 +30,8 @@
 //               committee: "evpage.lede.org_ours", "…_past" — "It is organized by the …") } — one plain sentence for
 //               people, search engines and AI answers alike; never a meeting link, ID or code (only the platform's
 //               name), never a person's name
-//   facts       [{ k ("what" | "when" | "where" | "language" | "organizer" | "cost" | "who" | "repeats" | "contact"),
+//   facts       [{ k ("what" | "when" | "where" | "district" | "language" | "organizer" | "cost" | "who" | "repeats" |
+//               "contact"),
 //               v (a value) | vKey (a key to translate) | vOnline (a platform: "Online on …"), href, ext (outside),
 //               mail, map (a map link: an upcoming event held at a real address) }]
 //   banners     { past, tentative, partOf ({ title, href }: its series' page) }
@@ -43,6 +44,11 @@
 //               .ics —: the template gives it its language, `| lurl(lang)`, once the build knows which files it
 //               writes in each language) }] }] }
 //   dates       a series' next dates (its page's list; a date page's too, its own marked) → [mini]
+//   every       a series' page only (since the events list's redesign): EVERY date of it still to come, by year —
+//               { years: [{ year, notes, dates: [{ anchor, label ("Sat, Dec 12"), href (its own page, "" when it has
+//               none), moved (a date the host moved) }] }] } | null (an event's page). A year's notes: what changed
+//               about its dates (event-list.js seriesNotes — a date moved, cancelled, a month the rule skips, through
+//               the last date), so "Not held on Dec 24" is under its year; a year with notes and no date has its own.
 //   nextSame    the next event of the same kind (mini) | null
 //   coming      the next events of any kind (mini × ≤ 3)
 //   meeting     the committee's next meeting ({ when }: its day and time — its page is /meetings/#committee-meeting)
@@ -68,6 +74,8 @@ import {
   withoutJoinDetails, withoutJoinValues, normalizeEvents, ownPageOf, platformOf,
 } from "./filters/committee.js";
 import { eventTone } from "./filters/event-tone.js";
+import { seriesNotes } from "./filters/event-list.js";
+import { cancelledPages } from "./cancelled-pages.js";
 import { writerKit } from "./filters/read.js";
 import { monthModel } from "./filters/monthly.js";
 import { langPath, pickLang, siteUrl } from "../eleventy.config.js";
@@ -179,7 +187,7 @@ function resource(id, c) {
     case "weekly": return r(lurl("/meetings/#weekly-open", lang));
     case "read": return r(lurl("/read/", lang));
     case "lvshare": return site.links?.lv_share_story ? r(site.links.lv_share_story) : null;
-    case "calfilter": return r(lurl("/events/?filter=calendar", lang));
+    case "calfilter": return r(lurl("/events/?kind=calendar", lang));
     case "bulletin": return c.bulletin ? r(lurl(`/bulletin/#${c.bulletin}`, lang)) : null;
     default: {
       if (LESSON[id]) {
@@ -308,6 +316,9 @@ function facts(ev, kind, site, lang, opt = {}) {
     out.push({ k: "where", v: where, vOnline: ev.isOnline ? platform || "-" : "",
       map: addr ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}` : "" });
   }
+  // (a content/events file's `district:` — the district that holds it, "87": shown only when the file names one)
+  const district = String(ev.item?.extra?.district ?? "").trim();
+  if (/^\d{1,3}$/.test(district)) out.push({ k: "district", v: district });
   out.push({ k: "language", vKey: kind.spanish ? "evpage.lang_es" : "evpage.lang_en" });
   const org = outside ? null : eventOrganizer(ev, site, lang);
   // (the committee itself: its About page on this site — its Organization's url is the site's own home; anyone else:
@@ -401,13 +412,18 @@ function context(full, plan) {
     months: new Map(), meetings: new Map(), decks: Array.isArray(full.presentations?.decks) ? full.presentations.decks : [] };
 }
 
+// The kind's presentation (event-pages.js eventKind): for an event held in Spanish, its Spanish deck (deckEs: La
+// Viña's writing workshop → taller-de-escritura) while the site has it, else the kind's own; `lang`, the language the
+// deck is written in (the card's "Presentation in English / in Spanish" badge where it isn't the page's).
 function deckOf(c, kind, lang) {
-  const d = kind.deck ? c.decks.find((x) => x && x.id === kind.deck) : null;
+  const byId = (id) => (id ? c.decks.find((x) => x && x.id === id) : null);
+  const d = byId(kind.deckEs) || byId(kind.deck);
   if (!d) return null;
   const pick = (o) => (o && typeof o === "object" ? o[lang] || o.en || "" : String(o || ""));
   return { id: d.id, href: lurl(`/orientation/?present=${encodeURIComponent(d.id)}`, lang),
     card: lurl(`/orientation/#pres-${d.id}`, lang), title: line(pick(d.card?.title) || pick(d.title)),
-    summary: line(pick(d.card?.summary)), minutes: Number(d.minutes) || 0, close: !!kind.deckClose };
+    summary: line(pick(d.card?.summary)), minutes: Number(d.minutes) || 0, close: !!kind.deckClose,
+    lang: d.lang === "es" ? "es" : "en" };
 }
 
 function crumbs(lang, hub) {
@@ -454,6 +470,7 @@ function eventModel(c, p) {
     prep: { heading: ev.past ? "evpage.sec.more" : "evpage.sec.prep", deck: ev.past ? null : deckOf(c, kind, lang),
       bingo: bingoHref(ev, kind, lang), resources: resources(cl) },
     dates,
+    every: null,
     nextSame: nextSame ? miniOf(nextSame) : null,
     coming: coming.map(miniOf),
     meeting: nextMeeting(c, lang),
@@ -463,6 +480,34 @@ function eventModel(c, p) {
     month: monthOf(cl, ev.monthKey),
     latest: kind.kind === "online-meeting" ? "gv" : "",
   };
+}
+
+// A series' every date still to come, by year, and what changed about them (the model's `every`, above). The cancelled
+// dates' notices once per build and language (eleventy/cancelled-pages.js: every language at once).
+function everyDate(c, h) {
+  const dates = Array.isArray(h.allDates) ? h.allDates : h.dates;
+  const pages = Array.isArray(h.allPages) ? h.allPages : h.datePages;
+  if (!dates.length) return null;
+  if (!c.notices) c.notices = cancelledPages(c.db.events?.cancelled || [], c.db.events?.items || [], c.site, c.plan.langs);
+  const byYear = new Map();
+  const yearOf = (ymd) => {
+    const y = String(ymd || "").slice(0, 4);
+    if (!byYear.has(y)) byYear.set(y, { year: y, notes: [], dates: [] });
+    return byYear.get(y);
+  };
+  dates.forEach((d, i) => {
+    yearOf(d.startYmd).dates.push({ anchor: d.anchor, label: `${d.tile.wd}, ${d.shortLabel}`, href: pages[i] ? pages[i].path : "", moved: !!d.seriesOf });
+  });
+  const cancelled = c.notices.filter((p) => p.lang === h.lang && String(p.ev.seriesOf || (p.ev.recurring ? p.ev.series : "")) === h.key);
+  const notes = seriesNotes({ dates, rule: h.series.rule, skip: h.series.rule?.skip || [], lang: h.lang,
+    from: String(c.plan.now).slice(0, 10), until: dates[dates.length - 1].startYmd, cancelled });
+  // (a moved date's note links its own page here — on /events/ it links its entry on the series' card)
+  const pageOf = new Map(dates.map((d, i) => [d.anchor, pages[i] ? pages[i].path : ""]));
+  for (const n of notes) {
+    if (n.type === "moved") n.href = pageOf.get(n.anchor) || "";
+    yearOf(n.ymd).notes.push(n);
+  }
+  return { years: [...byYear.values()].sort((a, b) => a.year.localeCompare(b.year)) };
 }
 
 function hubModel(c, h) {
@@ -479,6 +524,7 @@ function hubModel(c, h) {
     crumbs: crumbs(lang, null),
     prep: { heading: "evpage.sec.prep", deck: deckOf(c, kind, lang), bingo: bingoHref(next, kind, lang), resources: resources(cl) },
     dates: h.dates.map((d, i) => mini(d, h.datePages[i] ? h.datePages[i].path : h.target, false, sameOf(h))),
+    every: everyDate(c, h),
     nextSame: null,
     coming: coming.map(miniOf),
     meeting: nextMeeting(c, lang),

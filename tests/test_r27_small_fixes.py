@@ -99,7 +99,7 @@ const S = typeof site === "function" ? await site() : site;
 const res = {};
 for (const lang of ["en", "es"]) {
   const items = JSON.parse(filters.searchIndexJson({ events: { items: [input.ev] } }, [], lang, S)).items;
-  res[lang] = items.filter((e) => e.k === "event").map((e) => ({ t: e.t, o: e.o || "" }));
+  res[lang] = items.filter((e) => e.k === "event").map((e) => ({ id: e.id, t: e.t, o: e.o || "" }));
 }
 out(res);
 """
@@ -177,8 +177,11 @@ out({ district: Object.fromEntries(["en", "es"].map((l) => [l, m.langs[l].sectio
 class TidyTitles(unittest.TestCase):
     def test_the_site_search_shows_the_title_as_events_does(self):
         r = run_js(self, SEARCH_JS, data={"ev": event_item()}, now="2026-11-12T18:00:00Z")
-        self.assertEqual(r["es"], [{"t": TIDY_ES, "o": ""}], "the Spanish title is the original's, respelled")
-        self.assertEqual(r["en"], [{"t": EN, "o": TIDY}], "its original shown under the English, tidied too")
+        # (round 38) the committee meeting's dates page has an event entry of its own, made from the meeting rule in
+        # config/site.yml, whatever events the index is given: only this event's entry is judged here
+        mine = {lang: [{"t": e["t"], "o": e["o"]} for e in r[lang] if e["id"] == "ev:lvcal:zz-xlii"] for lang in r}
+        self.assertEqual(mine["es"], [{"t": TIDY_ES, "o": ""}], "the Spanish title is the original's, respelled")
+        self.assertEqual(mine["en"], [{"t": EN, "o": TIDY}], "its original shown under the English, tidied too")
         for lang in ("en", "es"):
             for e in r[lang]:
                 self.assertNotRegex(e["t"] + " " + e["o"], r"\(\s|\s\)")

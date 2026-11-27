@@ -1,0 +1,134 @@
+{
+  "glossary.title": {
+    "en": "Service words, in plain language",
+    "es": "Palabras de servicio, en lenguaje sencillo"
+  },
+  "glossary.sub": {
+    "en": "The words you will hear at your district, at the assembly and on this site. Tap a dotted word anywhere on the site to see what it means.",
+    "es": "Las palabras que vas a oír en tu distrito, en la asamblea y en este sitio. Toca una palabra subrayada con puntos en cualquier parte del sitio para ver qué significa."
+  },
+  "glossary.eyebrow": {
+    "en": "Glossary",
+    "es": "Glosario"
+  },
+  "glossary.term.gvr": {
+    "en": "GVR",
+    "es": "GVR"
+  },
+  "glossary.name.gvr": {
+    "en": "Grapevine Representative",
+    "es": "Representante de Grapevine"
+  },
+  "glossary.def.gvr": {
+    "en": "the member who brings AA Grapevine, AA's magazine in English, to their home group and keeps it informed.",
+    "es": "el miembro que lleva AA Grapevine, la revista de AA en inglés, a su grupo base y lo mantiene informado."
+  },
+  "glossary.term.rlv": {
+    "en": "RLV",
+    "es": "RLV"
+  },
+  "glossary.name.rlv": {
+    "en": "La Viña Representative (Representante de La Viña)",
+    "es": "Representante de La Viña"
+  },
+  "glossary.def.rlv": {
+    "en": "the member who brings La Viña, AA's magazine in Spanish, to their home group and keeps it informed.",
+    "es": "el miembro que lleva La Viña, la revista de AA en español, a su grupo base y lo mantiene informado."
+  },
+  "glossary.term.neta": {
+    "en": "NETA 65",
+    "es": "NETA 65"
+  },
+  "glossary.name.neta": {
+    "en": "Northeast Texas Area 65",
+    "es": "Área 65 del Noreste de Texas"
+  },
+  "glossary.def.neta": {
+    "en": "our AA service area, one of 93 in the U.S. and Canada; its groups and districts cover northeast Texas.",
+    "es": "nuestra área de servicio de AA, una de las 93 de Estados Unidos y Canadá; sus grupos y distritos abarcan el noreste de Texas."
+  },
+  "glossary.term.area65": {
+    "en": "Area 65",
+    "es": "Área 65"
+  },
+  "glossary.name.area65": {
+    "en": "Area 65 (NETA 65)",
+    "es": "Área 65 (NETA 65)"
+  },
+  "glossary.def.area65": {
+    "en": "the AA service area of northeast Texas that our committee serves, with its districts and home groups.",
+    "es": "el área de servicio de AA del noreste de Texas a la que sirve nuestro comité, con sus distritos y grupos base."
+  },
+  "glossary.term.dcm": {
+    "en": "DCM",
+    "es": "MCD"
+  },
+  "glossary.name.dcm": {
+    "en": "District Committee Member",
+    "es": "Miembro del Comité de Distrito"
+  },
+  "glossary.def.dcm": {
+    "en": "elected by the GSRs of a district to link its groups with the Area, and to bring the Area's news back to them.",
+    "es": "elegido por los RSG de un distrito para enlazar sus grupos con el Área y llevarles las noticias del Área."
+  },
+  "glossary.term.gsr": {
+    "en": "GSR",
+    "es": "RSG"
+  },
+  "glossary.name.gsr": {
+    "en": "General Service Representative",
+    "es": "Representante de Servicios Generales"
+  },
+  "glossary.def.gsr": {
+    "en": "the voice of a home group in AA's service structure, at the district and at the Area assembly.",
+    "es": "la voz de un grupo base en la estructura de servicio de AA, en el distrito y en la asamblea de Área."
+  },
+  "glossary.term.acm": {
+    "en": "ACM",
+    "es": "ACM"
+  },
+  "glossary.name.acm": {
+    "en": "Area Committee Meeting",
+    "es": "Reunión del Comité de Área"
+  },
+  "glossary.def.acm": {
+    "en": "where the Area's officers, DCMs and committee chairs meet between assemblies to plan the Area's service.",
+    "es": "donde los oficiales del Área, los MCD y los coordinadores de comité se reúnen entre asambleas para planear el servicio del Área."
+  },
+  "glossary.term.assembly": {
+    "en": "Assembly",
+    "es": "Asamblea"
+  },
+  "glossary.name.assembly": {
+    "en": "Area assembly",
+    "es": "Asamblea de Área"
+  },
+  "glossary.def.assembly": {
+    "en": "GSRs, DCMs and officers meet to share, vote and elect the Delegate, who takes the groups' voice to the General Service Conference.",
+    "es": "los RSG, los MCD y los oficiales se reúnen para compartir, votar y elegir al Delegado, que lleva la voz de los grupos a la Conferencia de Servicios Generales."
+  },
+  "glossary.term.delegate": {
+    "en": "Delegate",
+    "es": "Delegado"
+  },
+  "glossary.name.delegate": {
+    "en": "Area Delegate",
+    "es": "Delegado de Área"
+  },
+  "glossary.def.delegate": {
+    "en": "the Area's elected voice at AA's yearly General Service Conference in New York, for a two-year term.",
+    "es": "la voz elegida del Área en la Conferencia de Servicios Generales anual de AA en Nueva York, por un periodo de dos años."
+  },
+  "glossary.term.panel": {
+    "en": "Panel",
+    "es": "Panel"
+  },
+  "glossary.name.panel": {
+    "en": "Panel",
+    "es": "Panel"
+  },
+  "glossary.def.panel": {
+    "en": "a two-year service term, numbered by the year it begins: Panel 75 began in 2025.",
+    "es": "un periodo de servicio de dos años, numerado según el año en que empieza: el Panel 75 empezó en 2025."
+  }
+}

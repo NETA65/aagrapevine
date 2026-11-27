@@ -1,5 +1,5 @@
-// Area filters: newcomer — the "New to AA? / ¿Eres nuevo en AA?" card (src/_includes/macros/ui.njk newcomerCard /
-// newcomerLine: its home is /meetings/#new-to-aa, a shorter copy is on the 404 page, and Home has one line to it).
+// Area filters: newcomer — the "New to AA? / ¿Eres nuevo en AA?" card (src/_includes/macros/ui.njk newcomerCard: its
+// home is /meetings/#new-to-aa, a shorter copy is on the 404 page, and Home's "I'm new to AA" button opens it).
 //   ncOffices(site, lang)  the local AA offices the card lists
 // The card points ONLY to AA (no outside enterprise, attraction rather than promotion): aa.org's own pages and AA's
 // Meeting Guide app page (config/site.yml links: aa_find, aa_is_aa_for_you, aa_meeting_guide and their _es twins —

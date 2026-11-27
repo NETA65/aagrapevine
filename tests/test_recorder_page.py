@@ -58,7 +58,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 # the page-area stylesheets' class prefixes (one list), and the service worker in a pretend world (network, caches)
-from test_page_weight import AREAS  # noqa: E402
+from test_page_weight import AREA_RE  # noqa: E402
 from test_pwa_worker import HARNESS_JS  # noqa: E402
 
 PAGE = ROOT / "src" / "pages" / "contribute.njk"
@@ -710,7 +710,7 @@ class Markup(unittest.TestCase):
         self.assertEqual(loose, {}, "the recorder's rules (community.css) would also style these")
 
     def test_no_page_area_classes(self):
-        area = re.compile(r"(?<![\w-])(" + "|".join(re.escape(p) for p in AREAS.values()) + r")[a-z0-9]")
+        area = AREA_RE
         for p in (APP, CORE, PARTIAL):
             with self.subTest(file=p.name):
                 self.assertEqual(area.findall(read(p)), [], "a page-area stylesheet's prefix (mp-, rp-, xp-, …): main.css has no rules for it")

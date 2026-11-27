@@ -2503,4 +2503,4 @@ with Edge ([Automation and troubleshooting §11.5](automation-and-troubleshootin
   steps ([§4.2](automation-and-troubleshooting.md#42-website-update-and-its-three-modes)), running things on a PC.
 - [Pages and code](pages-and-code.md) — the site's pages, styles and the service worker.
 - [Translations](translations.md) — the words in `src/_i18n/`.
-- [Presentations](presentations.md) — the five web slide decks, another kind of show.
+- [Presentations](presentations.md) — the web slide decks, another kind of show.

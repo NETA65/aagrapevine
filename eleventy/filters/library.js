@@ -1412,6 +1412,23 @@ export function searchIndex(db, nav, lang, helpers, site, extra = {}) {
     });
   });
 
+  /* ---- Since round 38: the committee meeting's DATES page (/events/series/committee-meeting/: committee.js
+     committeeDatesPage, src/pages/events-committee.njk) — one entry, as a monthly series' page has one: its title, its
+     rule and platform, its next date; found by the committee's and the meeting's names and "all dates" — only when the
+     build writes it (`written`, as a series' page; given none, while it has a date to come) ---- */
+  safely("committee dates", () => {
+    if (typeof committee.committeeDatesPage !== "function") return;
+    const cd = committee.committeeDatesPage(db.events?.items || [], site || {}, lang);
+    if (!cd || !cd.head || !cd.next || (written && !written.has(cd.path))) return;
+    push({
+      id: "series:" + (committee.COMMITTEE_DATES_KEY || "committee-meeting"), k: "event", t: cd.head.title, tl: lang,
+      s: [cd.rule, T("committee.events.online_on", { platform: cd.platform })].filter(Boolean).join(" · "),
+      x: uniq([both("committee.meetings.committee_title"), squish(site?.committee || ""), both("evpage.sec.all_dates"),
+        both("search.kw.recurring"), both("search.kw.event"), both("search.kw.upcoming")].map(squish), " "),
+      u: neutral(cd.path), d: cd.next.startYmd || "", src: "neta",
+    });
+  });
+
   /* ---- Since round 37: the Drive's FLYERS (the Portfolio's flyers tab — pictures, never a Library document: those have
      their entries above) — each found by its title in both languages and "flyer" / "volante" (search.kw.flyer), opening
      the page of the event it is the flyer of (normalizeEvents' ev.flyer: its own page, a monthly series' page, or

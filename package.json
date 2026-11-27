@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "build": "eleventy",
@@ -15,21 +15,21 @@
     "sync": "python -m scripts.sync.run_all"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy": "^3.1.8",
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/inter": "^5.3.0",
-    "@tailwindcss/cli": "^4.3.3",
-    "alpinejs": "^3.17.4",
+    "@tailwindcss/cli": "^4.3.5",
+    "alpinejs": "^3.17.5",
     "esbuild": "0.28.2",
     "glightbox": "^3.3.1",
     "html-to-image": "^1.11.13",
-    "js-yaml": "^5.4.2",
-    "lite-youtube-embed": "^0.3.4",
-    "lucide-static": "^1.51.0",
-    "markdown-it": "^15.0.2",
+    "js-yaml": "^5.5.0",
+    "lite-youtube-embed": "^0.3.5",
+    "lucide-static": "^1.81.0",
+    "markdown-it": "^15.0.3",
     "minisearch": "^7.2.0",
     "qrcode": "^1.5.4",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "wasm-media-encoders": "^0.7.0"
   }
 }

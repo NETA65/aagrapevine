@@ -47,6 +47,7 @@ import os
 import sys
 import time
 import traceback
+from datetime import timezone
 from pathlib import Path
 
 from .common import (RAW_DIR, UnreadableRaw, get_logger, load_config, load_raw, now_iso, parse_iso, raw_path,
@@ -123,12 +124,36 @@ def _read(name: str) -> dict:
         return {}
 
 
+def _last_status_row(name: str) -> dict:
+    """The module's source in the last build's status.json (next to data/raw: data/site/status.json) — {} when there
+    is none, it is sample data, or the raw folder is not a data/raw (a test's)."""
+    from . import common
+    raw_dir = Path(common.RAW_DIR)
+    if raw_dir.name != "raw":
+        return {}
+    try:
+        st = json.loads((raw_dir.parent / "site" / "status.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(st, dict) or st.get("fixture") is True:
+        return {}
+    own = RAW_NAME.get(name, name)
+    return next((r for r in (st.get("sources") or []) if isinstance(r, dict) and r.get("source") == own), {})
+
+
 def _attempted_on(name: str, day, tz) -> bool:
     """data/raw/<name>.json was read — or tried — on `day`, the site's calendar day (time zone `tz`); a file that
-    cannot be read was not."""
+    cannot be read was not. A raw file whose content did not change is not written again (common.save_raw), so the
+    time is also taken from the last status.json, which keeps every run's (whichever is later)."""
     raw = _read(name)
-    t = parse_iso(str(raw.get("attempted") or raw.get("updated") or ""))
-    return t is not None and t.astimezone(tz).date() == day
+    if not raw:
+        return False
+    row = _last_status_row(name)
+    for v in (raw.get("attempted") or raw.get("updated"), row.get("attempted") or row.get("updated")):
+        t = parse_iso(str(v or ""))
+        if t is not None and (t if t.tzinfo else t.replace(tzinfo=timezone.utc)).astimezone(tz).date() == day:
+            return True
+    return False
 
 
 def _raw_summary(name: str) -> dict:

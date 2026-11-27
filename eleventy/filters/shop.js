@@ -17,8 +17,6 @@
 //   shopOffers(site, lang, driveItems) → the offers the stores announced (config/site.yml store_offers: free
 //                               shipping …) that are not over: /shop/#offers and the monthly toolkit's rows, each with
 //                               its window (shopWindow)
-//   shopOfferBanners(site, driveItems) → the Drive ids of the banners those blocks find: Home's committee uploads
-//                               leave them out (/shop/#offers shows them, next to the offer's conditions)
 // (and, for the other filter files: shopWindow, shopPriceChangeIn, shopPlanPrice, shopNextChange, botmPriceState,
 //  dayLabel, shopOfferIn, offerDates)
 //
@@ -741,24 +739,6 @@ export function shopOfferIn(site, first, last, lang = "en", today = "") {
   });
 }
 
-/** The Drive file ids of the banners config/site.yml store_offers finds (the picture shopOffers shows for each store,
- *  before, during and after its days) → [id]. Home's "Shared by the committee" leaves them out (index.njk →
- *  homeDrive): there a banner would stand alone, cropped to the tile, without the offer's conditions (U.S. and
- *  Canada) — and, once the offer is over, still announce it until the banners go to Drive `private`. */
-export function shopOfferBanners(site, items = []) {
-  const ids = [];
-  for (const s of offerSpecs(site)) {
-    for (const pub of ["gv", "lv"]) {
-      const b = s.o[pub];
-      if (!b || !b.banner_match || !twinOf(b, "text", "en").text) continue;
-      const pic = driveMatch(items, b.banner_match, "flyers", Infinity).find((p) => p.extra && p.extra.is_image);
-      if (pic && pic.id && !ids.includes(pic.id)) ids.push(pic.id);
-    }
-  }
-  return ids;
-}
-
-
 /* ---------------- Specialty items (greeting cards, pocket planner, wall calendar, holiday cards) ---------------- */
 // The page order. The holiday cards come last: the stores sell them in season only (from about September), so
 // out of season the other three keep their places (build_data leaves a seasonal item off two weeks after its store
@@ -855,7 +835,6 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("shopSubs", (shop, lang) => shopSubs(shop, lang, t));
   eleventyConfig.addFilter("shopPriceChanges", (shop, lang) => shopPriceChanges(shop, lang, t));
   eleventyConfig.addFilter("shopOffers", (site, lang, items) => shopOffers(site, lang, items, t, nowDate(), buildWarning));
-  eleventyConfig.addFilter("shopOfferBanners", (site, items) => shopOfferBanners(site, items));
   eleventyConfig.addFilter("shopCost", (shop, lang) => shopCost(shop, lang, t));
   eleventyConfig.addFilter("shopBulk", (shop, lang) => shopBulk(shop, lang, t));
   eleventyConfig.addFilter("shopSpecialty", (shop, lang) => shopSpecialty(shop, lang, t));

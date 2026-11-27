@@ -14,8 +14,9 @@ pageScripts: ["/assets/js/community.js"]
     enhancements (community.js → whatsNew); without JS the first 10 days render
     with up to 6 entries each (the rest stay x-cloak'ed).
     Page weight: the ~300 repeated icons are ONE sprite (cmIconSprite) plus tiny
-    <use> references (ic macro); badge / auto-note / language pill below mirror
-    ui.sourceBadge / ui.autoNote / ui.langPill with those sprite icons. -#}
+    <use> references (ic macro); the source badge below is this page's own (the
+    home page's ui.sourceBadge went in November 2026); auto-note / language pill
+    mirror ui.autoNote / ui.langPill with those sprite icons. -#}
 {%- set items = db.whatsnew.items | cmWnPrepare -%}
 {%- set days = items | cmWnDays(lang) -%}
 {%- set chips = items | cmWnChips -%}
@@ -30,7 +31,7 @@ pageScripts: ["/assets/js/community.js"]
 {%- set toneCls = { gv: "bg-gv-soft text-gv", lv: "bg-lv-soft text-lv", grape: "bg-grape-soft text-grape", vine: "bg-vine-soft text-vine", muted: "bg-surface-2 text-muted" } -%}
 
 {% macro ic(name, cls="size-5") %}{{ name | cmUse(cls) | safe }}{% endmacro %}
-{#- Same labels/colors as ui.sourceBadge (podcast / YouTube / Instagram first, then publisher). -#}
+{#- The source badge: podcast / YouTube / Instagram first, then the publisher. -#}
 {% macro badge(item, lang) %}
 {%- set src = item.source -%}
 {%- set isLv = (item.extra and item.extra.host and 'lavina' in item.extra.host) -%}

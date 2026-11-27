@@ -29,8 +29,11 @@
      @keydown.escape.window="onEscape($event)" @click.outside="onOutside($event)" @focusout="onFocusOut($event)"
      data-read-now="{{ 'comfort.read_now' | t(L) }}" data-read-paused="{{ 'comfort.read_paused' | t(L) }}" data-read-done="{{ 'comfort.read_done' | t(L) }}"
      data-read-top="{{ 'comfort.read_top' | t(L) }}" data-read-empty="{{ 'comfort.read_empty' | t(L) }}" data-reset-done="{{ 'comfort.reset_done' | t(L) }}">
+  {#- The dialog's name (aria-labelledby): a <p>, not a heading — the panel comes before the page's <main> in the
+      document, and an <h2> here put "Reading & display" ahead of every page's <h1> in its outline (the UX review of
+      November 2026). Its look is card-h's, as before. -#}
   <div class="gvlv-head">
-    <h2 id="gvlv-title" class="card-h"><span>{% icon "a-large-small", "size-5" %}</span>{{ "comfort.title" | t(L) }}</h2>
+    <p id="gvlv-title" class="card-h tracking-[-0.01em]"><span>{% icon "a-large-small", "size-5" %}</span>{{ "comfort.title" | t(L) }}</p>
     <button type="button" class="gvlv-close" @click="close(true)" aria-label="{{ 'common.close' | t(L) }}">{% icon "x", "size-5" %}</button>
   </div>
   <p class="gvlv-note">{{ "comfort.saved_note" | t(L) }}</p>

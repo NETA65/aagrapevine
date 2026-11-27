@@ -5,8 +5,9 @@
 //   base      the site's base path ("/aagrapevine/" on GitHub Pages, "/" on a custom domain)
 //   tz        the site's time zone (config/site.yml site.timezone, as src/_data/site.js checked it): the worker
 //             has no window.SITE, and "this month's page" ({month} below) is the month there
-//   shell     what is saved on install: styles, scripts, the two main fonts and their italics, the header's logo,
-//             the favicons and the app icon,
+//   shell     what is saved on install: styles (main.css, and Home's own home.css — the app's start page), scripts,
+//             the two main fonts and Fraunces' italic (Home's hero and quotes: Inter's italic is its upright face
+//             slanted), the header's logo, the favicons and the app icon,
 //             and the two offline pages (/offline/, /es/offline/ — "Saved pages & app", also the
 //             stand-in for a page not saved; the worker keeps them up to date with the daily content,
 //             which doesn't change the version: sw-core.js refreshOffline); `required` is the part
@@ -95,13 +96,16 @@ export function render(data) {
     // the time-zone math (window.GVTime): a saved page rolls the next meeting on with it — optional (without it the
     // pages keep the dates they were built with)
     a(`assets/js/central-time.js?v=${v}`),
+    // Home's own stylesheet (since November 2026 its rules are not in main.css): Home is the app's start page — optional
+    // (Home opened online keeps it in the static cache as well)
+    a(`assets/css/home.css?v=${v}`),
     a(`assets/js/install-core.js?v=${v}`),
     a(`assets/js/hero-canvas.js?v=${v}`),
     a(`assets/vendor/alpine.min.js?v=${v}`),
     a("assets/fonts/inter-latin-wght-normal.woff2"),
     a("assets/fonts/fraunces-latin-opsz-normal.woff2"),
-    // …and their italics (main.css: quotes, the Monthly pages), so a saved page's italic text keeps its face offline
-    a("assets/fonts/inter-latin-wght-italic.woff2"),
+    // Fraunces' italic (the hero's "meeting in print", the daily quotes on Home, the app's start page); no Inter italic
+    // file (main.css "Fonts": its italic is the upright face slanted, offline too)
     a("assets/fonts/fraunces-latin-opsz-italic.woff2"),
     // the header's NETA 65 wordmark; the grape icon the pages name in their <head> (partials/icon-links.njk): a tab's
     // favicon (the ICO, the SVG) and the 48 px one; the 192 px app icon (the footer, the install notice, the share

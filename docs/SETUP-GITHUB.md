@@ -114,7 +114,7 @@ You can close the browser. What happens:
 |---|---|---|
 | *Sync content + translate* | ~1–1½ hours (up to ~6 hours with `300`) | Fetches every source, downloads the free translation models (~175 MB, only the first time), translates new titles, commits the data |
 | *Build website* | ~3–4 minutes | Builds the site, and makes the monthly posters' share pictures (about a minute) |
-| *Test the code before publishing* | ~3–4 minutes, at the same time as the build | Runs the code's tests; the site is published only when they pass (later runs skip them in seconds while the code has not changed — the daily data and the committee's content and settings do not count) |
+| *Test the code before publishing* | ~9–14 minutes, at the same time as the build | Runs the code's tests; the site is published only when they pass (later runs skip them in seconds while the code has not changed — the daily data and the committee's content and settings do not count) |
 | *Publish to GitHub Pages* | ~1 minute | Publishes the site built from that same commit |
 | *Report sources that stopped updating, and updates that keep failing* | seconds | Opens or closes the two automatic issues of Step 8 |
 

@@ -1086,8 +1086,91 @@
     });
   });
 
+  /* ---------------- service words: the glossary's dotted terms (eleventy/filters/glossary.js gloss) ----------------
+     The build marks a word's first appearance as <abbr class="gl-term" data-gl title="Its name: its meaning">GVR</abbr>
+     (the browser's own tooltip, on hover, without JavaScript). Here each becomes a disclosure that works with a tap and
+     the keyboard: a button (its name: the word itself, as written — the abbr inside it) that shows and hides the
+     definition, a note right after it in the page (so a screen reader reads it next; aria-controls / aria-expanded say
+     so). The note is drawn under the word, fixed to the window (main.css .gl-pop: never clipped by the hero, never past
+     the screen's edge; it follows its word as the page scrolls). One open at a time; Escape, a tap elsewhere or resizing close it — Escape puts the
+     focus back on the word. A mark inside a link or a button stays a plain <abbr> (a button may not sit in a control). */
+  var glN = 0;
+  GV.glossary = function (root) {
+    (root || document).querySelectorAll("abbr[data-gl]").forEach(function (ab) {
+      ab.removeAttribute("data-gl");
+      var def = ab.getAttribute("title");
+      if (!def || ab.closest("a, button, summary, label")) return;
+      var id = "gl-def-" + (++glN);
+      var btn = document.createElement("button"), pop = document.createElement("span");
+      btn.type = "button";
+      btn.className = "gl-btn";
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-controls", id);
+      pop.id = id;
+      pop.className = "gl-pop";
+      pop.setAttribute("role", "note");
+      pop.hidden = true;
+      pop.textContent = def;
+      ab.removeAttribute("title");
+      ab.parentNode.insertBefore(btn, ab);
+      btn.appendChild(ab);
+      btn.parentNode.insertBefore(pop, btn.nextSibling);
+    });
+  };
+  function glPlace(btn, pop) {
+    var r = btn.getBoundingClientRect(), vw = document.documentElement.clientWidth, pad = 12;
+    var w = Math.min(320, vw - 2 * pad);
+    pop.style.width = w + "px";
+    pop.style.left = Math.max(pad, Math.min(r.left, vw - w - pad)) + "px";
+    pop.style.top = (r.bottom + 6) + "px";
+    // no room under the word: above it
+    var h = pop.offsetHeight;
+    if (r.bottom + 6 + h > window.innerHeight - pad && r.top - 6 - h > pad) pop.style.top = (r.top - 6 - h) + "px";
+  }
+  function glClose(except) {
+    document.querySelectorAll(".gl-btn[aria-expanded='true']").forEach(function (b) {
+      if (b === except) return;
+      b.setAttribute("aria-expanded", "false");
+      var p = document.getElementById(b.getAttribute("aria-controls"));
+      if (p) p.hidden = true;
+    });
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".gl-btn");
+    if (!b) { if (!(e.target.closest && e.target.closest(".gl-pop"))) glClose(null); return; }
+    var p = document.getElementById(b.getAttribute("aria-controls"));
+    if (!p) return;
+    var open = b.getAttribute("aria-expanded") !== "true";
+    glClose(b);
+    b.setAttribute("aria-expanded", open ? "true" : "false");
+    p.hidden = !open;
+    if (open) glPlace(b, p);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    var b = document.querySelector(".gl-btn[aria-expanded='true']");
+    if (b) { glClose(null); b.focus(); }
+  });
+  // scrolling carries the note along with its word (and closes it once the word has left the window)
+  window.addEventListener("scroll", function () {
+    var b = document.querySelector(".gl-btn[aria-expanded='true']"), p = b && document.getElementById(b.getAttribute("aria-controls"));
+    if (!p) return;
+    var r = b.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) glClose(null); else glPlace(b, p);
+  }, { passive: true });
+  // a new width (a phone turned, a window resized) closes it; a new height alone does not — a phone's address bar
+  // showing or hiding as the page scrolls is one: the note is placed again by its word
+  var glWidth = window.innerWidth;
+  window.addEventListener("resize", function () {
+    if (window.innerWidth !== glWidth) { glWidth = window.innerWidth; glClose(null); return; }
+    var b = document.querySelector(".gl-btn[aria-expanded='true']"), p = b && document.getElementById(b.getAttribute("aria-controls"));
+    if (p) glPlace(b, p);
+  });
+
   /* ---------------- progressive enhancements ---------------- */
   function enhance() {
+    // The glossary's dotted terms become buttons that open their definition (GV.glossary, above)
+    GV.glossary();
     // The status live region exists from page load, so its first message is announced.
     liveRegion();
     // Show build/update times in the visitor's local time

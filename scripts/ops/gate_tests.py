@@ -218,12 +218,33 @@ CONTENT_TESTS: dict[str, str] = {
     "test_presentations.PresentationFiles.test_every_deck":
         "config/presentations: every deck passes the checker",
     "test_presentations.PresentationFiles.test_the_decks":
-        "config/presentations: the five decks, each with its own order",
+        "config/presentations: the decks of the folder (La Viña's two Spanish ones among them), each with its own order",
     "test_presentations.PresentationFiles.test_the_grapevine_meeting_names_what_it_never_quotes":
         "config/presentations/grapevine-meeting.yml: the Statement of Purpose named, never quoted; no deck says "
         "'Grapevine meetings'",
     "test_presentations_core.RealDecks.":
         "config/presentations: every text of every slide of the decks",
+    "test_presentations_welcome_visit_prep_recording.TheFiles.":
+        "config/presentations: the welcome for Panel 77, the booth visit, the Conference session and the recording "
+        "workshop pass the checker, their versions' minutes add up exactly, notes on every slide shown, their agendas",
+    "test_presentations_welcome_visit_prep_recording.TheFacts.":
+        "config/presentations, config/site.yml, config/history.yml and content/events: those four decks' facts (the "
+        "guest speakers' keys, the GSR/DCM orientations, the booth's codes, the Conference's blanks, the story lines)",
+    "test_presentations_welcome_visit_prep_recording.TheBuild.":
+        "config/presentations: the build's loader reads those four decks with no problem, a code for every QR slide",
+    "test_presentations_welcome_visit_prep_recording.TheRecordingWorkshopsPage.":
+        "config/presentations/recording-workshop.yml and content/events: a recording workshop's page links that deck",
+    "test_presentations_price_follow_up.PriceFollowUp.":
+        "config/presentations/committee-meeting.yml: the 2027 price follow-up shown from January 1 through March 31, "
+        "2027, in both versions, with the prices of the day",
+    "test_presentations_spanish.SpanishDecks.":
+        "config/presentations: La Viña's two Spanish decks — their language, Spanish notes, versions, register, contacts "
+        "and quotations",
+    "test_presentations_spanish.SpanishBuild.":
+        "config/presentations and config/site.yml: La Viña's Spanish decks as built, their facts in Spanish",
+    "test_presentations_spanish.SpanishEvents.":
+        "content/events (the Fort Worth workshop of December 12, 2026) and config/presentations: a workshop held in "
+        "Spanish links La Viña's Spanish deck",
     "test_r12_u9_meeting.RealDeck.":
         "config/presentations/committee-meeting.yml: its paperwork passes the checker; the notes' and the reminder's "
         "wording; what its Start next month clears and keeps",
@@ -257,11 +278,14 @@ CONTENT_TESTS: dict[str, str] = {
     "test_r13_u1_gvtopics.Spanish.":
         "data/translations/overrides.yml: Spanish words for every suggested topic Grapevine's /contribute page names",
     # ---- docs/
+    "test_morning.AlarmDocs.":
+        "docs/OPERATIONS.md (documentation): the section on setting up the morning alarm later",
     "test_seo_robots.UserSite.":
         "docs/user-site (documentation): the robots.txt and index.html for NETA65/neta65.github.io, against site.url",
 }
 
-# test id prefix → what it checks (these lists; slow: the Code check runs them)
+# test id prefix → what it checks (these lists; slow: .github/workflows/gate-lists.yml runs them — on every pull
+# request, on a push the Code check runs for, and every night — with GV_GATE_LISTS=1; every other run skips them)
 LIST_CHECKS: dict[str, str] = {
     "test_automation.GateLists.":
         "these lists are complete: the gate's tests once more, on a copy whose committee files were edited",

@@ -258,6 +258,14 @@ const monthName = (y, m, lang, withYear) =>
     always starts with the issue right after the page's last one. */
 export const SSR_ARCHIVE = 8;
 
+/** How many stories of each of those earlier issues the page holds itself (since November 2026: their whole tables
+    of contents were 440 KB of the page's 670 KB, all inside folded rows). The rest of each issue's stories are in
+    /read-archive.json (`more`, by issue id), added under its first ones by the issue's "Show all N stories" button
+    (read.js); without JavaScript (no button), the rest are in a <noscript> list under the first ones (read.njk: plain
+    links, never built by a browser that runs scripts), and the issue's "Read on …" link opens its table of contents
+    on the magazine's site. The page reads it as the global `readSsrRows`, the JSON file by importing it. */
+export const SSR_ROWS = 6;
+
 /** Every issue that has stories, except the newest one of each publication (those are "current"). */
 export function archiveIssues(file) {
   const all = groupIssues(file, "");
@@ -873,7 +881,7 @@ function spotlightFile(v) {
 }
 
 /* The day a spotlight story counts as published (YYYY-MM-DD): extra.pub_date, else its date —
-   the same rule as the home page (home.js spotPubDate) and /published/ (published.js). */
+   the same rule as /published/ (published.js) and the spotlight's own list (community.js). */
 function spotDate(i) {
   const p = String((i && i.extra && i.extra.pub_date) || "").slice(0, 10);
   return /^\d{4}-\d{2}-\d{2}$/.test(p) ? p : (String((i && i.date) || "").match(/^\d{4}-\d{2}-\d{2}/) || [""])[0];
@@ -1031,6 +1039,7 @@ export default function (eleventyConfig, helpers) {
   eleventyConfig.addFilter("readIssues", (file, pub) => groupIssues(file, pub || ""));
   eleventyConfig.addFilter("readArchive", (file) => archiveIssues(file));
   eleventyConfig.addGlobalData("readSsrArchive", SSR_ARCHIVE); // the earlier issues /read/ shows itself (SSR_ARCHIVE)
+  eleventyConfig.addGlobalData("readSsrRows", SSR_ROWS); // the stories of each it holds itself (SSR_ROWS)
   eleventyConfig.addFilter("readArchiveSince", (file) => archiveSince(file));
   eleventyConfig.addFilter("readIssueView", (issue, lang) => issueView(issue, lang, h));
   eleventyConfig.addFilter("readPdfTitle", (item, lang) => pdfTitle(item, lang, h));

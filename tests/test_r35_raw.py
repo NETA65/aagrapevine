@@ -10,16 +10,16 @@ stories in the last 60 days" above a list of them. The same in a real browser: t
                  name in it never reaches the alt text); any other title stays as it is; words several photos of an
                  album share get each one's place ("Grapevine, November 1960 (2 of 4)" / "(2 de 4)").
   * Say        — app.js GV.say writes the words an element keeps in data-gv-say; GV.expire writes a list's empty note's
-                 words as it shows it (/bulletin/); home.js writes Published writers' "no story" notes as they show
-                 and the daily quote's "Today" / "Yesterday" and its other link name.
+                 words as it shows it (/bulletin/); home.js writes the daily quote's "Today" / "Yesterday" and its
+                 other link name. (Home's Published writers, whose "no story" notes home.js wrote, and its bulletin
+                 posts with their "Read more" went in the UX review of November 2026.)
   * Built      — the six pages as the site builds them (its own data), English and Spanish:
                  - a hidden or x-cloak element never holds words that wait in data-gv-say (they are written in when
                    true), and an element with data-gv-say holds text only;
                  - the live labels ("Happening now", "Starting soon", "Live now", "Meets today", "Now playing", "No
                    meetings match", the header's "(your settings are on)") are never in the raw text, and an empty
                    state is there only when it is true
-                   (the bulletin's with no post, /published/'s with no story in the view, Home's with no story);
-                 - Home's "Read more" names its post for screen readers and crawlers ("Read more: <title>");
+                   (the bulletin's with no post, /published/'s with no story in the view);
                  - every join value printed (the Meet code, the Zoom ID, the passcode) is inside an element with
                    data-nosnippet, and data-nosnippet is only ever on a <span> (never a whole card, never a <dd>);
                  - no photo's alt text or "Open photo: …" name is a file name.
@@ -119,38 +119,6 @@ class Say(unittest.TestCase):
         self.assertEqual(r["solo"], "Its own words", "the element itself too: its words replace what is inside")
         self.assertIsNone(r["none"])
         self.assertEqual(r["errors"], [])
-
-    SPOT = r"""
-      const spot = (pubs) => '<section data-home-spot data-days="60"><div data-spot-grid>' +
-        '<ul data-spot-list>' + pubs.a65.map((d) => '<li data-pub="' + d + '" data-scope="neta65">A</li>').join("") + '</ul>' +
-        '<div id="none" data-spot-none-a65 hidden><h3 id="none-h" data-gv-say="No Area 65 stories in the last 60 days"></h3>' +
-        '<p id="none-p" data-gv-say="Yours could be next!"></p></div>' +
-        '<ul data-spot-list>' + pubs.tx.map((d) => '<li data-pub="' + d + '" data-scope="texas">T</li>').join("") + '</ul>' +
-        '<a data-spot-fill></a></div>' +
-        '<div id="empty" data-spot-empty hidden><h3 id="empty-h" data-gv-say="No stories from Texas writers in the last 60 days"></h3></div></section>';
-    """
-
-    def test_published_writers_notes_get_their_words_as_they_show(self):
-        r = run_js(self, PAGE_JS + self.SPOT + r"""
-          const res = {};
-          for (const [name, pubs] of Object.entries({ a65gone: { a65: ["2026-07-01"], tx: ["2026-09-30"] },
-                                                     allgone: { a65: ["2026-07-01"], tx: ["2026-07-02"] },
-                                                     both: { a65: ["2026-09-29"], tx: ["2026-09-30"] } })) {
-            const p = page({ html: spot(pubs), scripts: ["src/assets/js/app.js", "src/assets/js/home.js"], globals: { SITE: { lang: "en", base: "/" } } });
-            await p.ready();
-            res[name] = { none: [p.$("#none").hidden, p.$("#none-h").textContent, p.$("#none-p").textContent],
-                          empty: [p.$("#empty").hidden, p.$("#empty-h").textContent], errors: p.errors.map(String) };
-          }
-          out(res);""", needs_modules=False)
-        # (the page's clock: October 6, 2026 — 60 days back is August 7)
-        self.assertEqual(r["a65gone"]["none"], [False, "No Area 65 stories in the last 60 days", "Yours could be next!"])
-        self.assertEqual(r["a65gone"]["empty"], [True, ""])
-        self.assertEqual(r["allgone"]["empty"], [False, "No stories from Texas writers in the last 60 days"])
-        self.assertEqual(r["allgone"]["none"][0], True)
-        self.assertEqual(r["both"]["none"], [True, "", ""], "a note that stays hidden stays wordless")
-        self.assertEqual(r["both"]["empty"], [True, ""])
-        for v in r.values():
-            self.assertEqual(v["errors"], [])
 
     def test_the_daily_quotes_today_and_yesterday(self):
         r = run_js(self, PAGE_JS + r"""
@@ -310,24 +278,9 @@ class Built(unittest.TestCase):
                         rows = len(re.findall(r'<li class="pw-arc-row', page))
                         self.assertEqual(t("published.archive.empty_title", lang) in text, rows == 0, f"{rows} archive rows")
                 elif base == "":
-                    a65 = len(re.findall(r'data-scope="neta65">', page))
-                    tx = len(re.findall(r'data-scope="texas">', page))
-                    self.assertEqual(bool(words_re("home.spot_none_a65_title", lang).search(text)), a65 == 0 and tx > 0, (a65, tx))
-                    self.assertEqual(bool(words_re("home.spot_empty_title", lang).search(text)), a65 + tx == 0, (a65, tx))
                     # the daily quote never says "Today" / "Yesterday" in the HTML
                     for key in ("home.quote_today", "home.quote_yesterday"):
                         self.assertRegex(page, rf'data-quote-(today|yesterday) hidden data-gv-say="{t(key, lang)}"></span>')
-
-    def test_read_more_names_its_post(self):
-        for url, lang, page in self.each():
-            if url not in ("/", "/es/"):
-                continue
-            more = [l for l in scan(page).links if flat(l["text"]).startswith(t("common.read_more", lang))]
-            with self.subTest(url=url):
-                for l in more:
-                    self.assertRegex(flat(l["sr"]), r"^: \S", l)
-                    self.assertEqual(flat(l["text"]), t("common.read_more", lang) + flat(l["sr"]))
-                    self.assertNotEqual(flat(l["text"]), t("common.read_more", lang), "a bare Read more says nothing")
 
     def test_join_values_are_never_quoted(self):
         # the values themselves: what the copy buttons on /meetings/ copy (the code, the Zoom ID, the passcode — not

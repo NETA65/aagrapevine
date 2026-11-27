@@ -617,7 +617,7 @@ entries of the search index in [library.js](../eleventy/filters/library.js).
 | Library | never |
 
 Code: `plan_whatsnew()`, `album_slug()` and `finish_group()` in [build_data.py](../scripts/sync/build_data.py);
-`homeDrive` in [home.js](../eleventy/filters/home.js); the "albums" part of the search index in
+the "albums" part of the search index in
 [library.js](../eleventy/filters/library.js); `monthNews()` in [community.js](../eleventy/filters/community.js) and
 its twin `album_key()` / `is_album_media()` in [send_digest.py](../scripts/notify/send_digest.py).
 
@@ -892,18 +892,11 @@ python -c "from scripts.sync import drive as D; print(D.is_generic_media_name(D.
 `tests/test_events_feeds.py`. To change the caption pattern itself, edit the `if generic:` block in `build_item()`
 (`title = f"{label} #{f.seq}"`).
 
-### 7.6 Show more committee files on the home page
+### 7.6 The committee's files and the home page
 
-File: [src/pages/index.njk](../src/pages/index.njk), search `homeDrive(6`:
-
-```jinja
-{% set driveItems = D.drive.items | homeDrive(12, site | shopOfferBanners(D.drive.items)) %}
-```
-
-The tiles are 6 to a row on a wide screen, so 12 makes two full rows. Which files count (not events, not bulletin
-posts, not closed forms; newest by date) is the filter `homeDrive` in [home.js](../eleventy/filters/home.js); its
-second value leaves out a store offer's banners (`shopOfferBanners` in
-[shop.js](../eleventy/filters/shop.js): they show on `/shop/#offers`, next to the offer's conditions).
+Since November 2026 (a UX review) the home page has no tiles of the committee's files: its *More on this site* row
+links the Portfolio and Photos, where every file and album is. (Before, "Shared by the committee" showed the 6
+newest; a store offer's banners are on `/shop/#offers`, next to the offer's conditions.)
 
 ### 7.7 Add a new category with its own Portfolio tab
 

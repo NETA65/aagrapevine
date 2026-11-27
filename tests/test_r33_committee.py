@@ -234,7 +234,10 @@ class XIgnoreTemplates(unittest.TestCase):
         for tag in re.findall(r"<(?:article|li|section)\b[^>]*>", ev):
             if "x-ignore" in tag:
                 self.assertNotRegex(tag, r'\s(x-(?!ignore)[\w:.-]+|@[\w:.-]+|:[\w:.-]+)=', tag)
-        self.assertEqual(ev.count("x-ignore>"), 1)
+        # (since the list's redesign) three kinds of card: a one-off event, a cancelled one, a monthly series'
+        self.assertEqual(len(re.findall(r"<article [^>]*\bx-ignore\b", ev)), 3)
+        self.assertIn('<article class="card cm-event ev-accent ev-tone-{{ kind }} ev-cancelled" x-ignore>', ev)
+        self.assertIn('<article class="card cm-event ev-accent ev-tone-{{ kind }} ev-series" x-ignore>', ev)
         ph = read("src", "pages", "photos.njk")
         self.assertIn('<ul class="cm-cover-grid" x-ignore>', ph)
         self.assertEqual(ph.count("x-ignore>"), 1)

@@ -29,7 +29,8 @@ workshop, a price change, a service opportunity. A post comes from one of two pl
   dates and switches, your own translation, pictures saved next to the post.
 
 Both kinds look the same on the site. Every post is translated English ⇄ Spanish and shows on the Bulletin page,
-the home page, What's New, the RSS feed, the site search and the monthly digest (page and e-mail).
+What's New, the RSS feed, the site search and the monthly digest (page and e-mail). (The home page showed the two
+newest too until November 2026; now its *More on this site* row links the Bulletin.)
 [Section 5](#5-where-it-shows-on-the-website) lists every place.
 
 > **Note — the old name.** Until September 2026 the bulletin was called "Announcements", and the code and data
@@ -59,7 +60,7 @@ the home page, What's New, the RSS feed, the site search and the monthly digest 
    few minutes).
 
 What you get: a post headed "Welcome new GVRs", dated Sunday, January 10, 2027, on `/bulletin/` and, translated,
-on `/es/bulletin/`; on the home page under "From the committee"; in What's New and the RSS feed.
+on `/es/bulletin/`; in What's New and the RSS feed.
 
 ### From GitHub (when you want more options)
 
@@ -201,7 +202,7 @@ Everything else stays in the headline exactly as you typed it — including othe
 
 | Switch | Write in the name | What it does | If the date has no year (or is not a date) |
 |---|---|---|---|
-| Pin | `(pinned)` `(fijado)` `(fijo)` `(pin)` `[pinned]` `📌` | first on the bulletin, on the home page and in the digest, with a "Pinned" / "Destacado" badge | — (no date needed) |
+| Pin | `(pinned)` `(fijado)` `(fijo)` `(pin)` `[pinned]` `📌` | first on the bulletin and in the digest, with a "Pinned" / "Destacado" badge; on the home page under "Pinned on the Bulletin" | — (no date needed) |
 | Until | `(until 2027-03-01)` `(expires 2027-03-01)` `(hasta 2027-03-01)` `(vence 2027-03-01)` | shown **through** that day (Central time), gone after it | the words stay in the headline and the post never comes down |
 | From | `(from 2027-02-01)` `(publish 2027-02-01)` `(desde 2027-02-01)` `(publicar 2027-02-01)` | not on the site before that day; appears with that day's first update | the words stay in the headline and the post shows at once |
 
@@ -340,11 +341,11 @@ it is a note for you; the site ignores it.
 | `date:` | a date (forms below) | a date in the file name, else the `publish:` day, else the day the post first appears (its Central-time day: a post first seen at 9:30 PM CDT keeps that evening's date) | the date printed on the post; the order of the lists (newest first); the "New" badge and What's New |
 | `publish:` | a date | on the site as soon as it is saved | keeps the post out of every page until that day (Central time); meanwhile the run summary lists it under "Scheduled bulletin posts" |
 | `expires:` | a date | never comes down | shown through that day, gone after it; "until …" shows under the date |
-| `pinned:` | `true` `yes` `y` `on` `1` `sí` `si` (any capitals) = pinned; anything else = not | not pinned | first on the bulletin, on the home page and in the digest; "Pinned" / "Destacado" badge |
+| `pinned:` | `true` `yes` `y` `on` `1` `sí` `si` (any capitals) = pinned; anything else = not | not pinned | first on the bulletin and in the digest; "Pinned" / "Destacado" badge; on the home page (two at most) |
 | `lang:` (or `language:`) | `en` or `es` — only the first two letters count, so `English`, `Español` and `es-MX` work, but `Spanish` does **not** | guessed from the title and text | the language you wrote in; the other page gets the translation |
 | `url:` (or `link:`) | a web address (`www.…` without `https://` is repaired by itself), a page of the site like `/events/`, or a file saved next to the post | none | a **More information** button; also where What's New, the RSS feed and the digest link to ([5.2](#52-which-link-goes-where)) |
 | `image:` | a picture saved next to the post (`flyer.jpg`) or a web address | none | **only the RSS feed** shows it (see the note below) |
-| `summary:` | one line of text | the text below the header, as plain words | the teaser (400 characters at most): home card of a long post, What's New, the feed, the search, the Share text, the digest page. The Bulletin page still shows the whole text |
+| `summary:` | one line of text | the text below the header, as plain words | the teaser (400 characters at most): What's New, the feed, the search, the Share text, the digest page. The Bulletin page still shows the whole text |
 | `tags:` | `prices, books` or a YAML list | none | stored only — not shown or searched anywhere |
 | `title_es:` + `summary_es:` (file written in English), `title_en:` + `summary_en:` (file written in Spanish) | text; for paragraphs or a list, write `summary_es: \|` and the text on the lines below, each indented two spaces | machine translation | your own words on the other-language page, with no "Auto-translated" note. `summary_es` is the **whole** Spanish text, not just a teaser ([3.14](#314-languages-automatic-and-by-hand)) |
 
@@ -504,7 +505,7 @@ Come to our committee meeting on the third Wednesday of the month.
 
 What happens: headline "Welcome, new GVRs and RLVs!", dated January 10, 2027 (from the name), language guessed
 (English). On `/bulletin/#2027-01-10-welcome-new-gvrs`; machine-translated on `/es/bulletin/#2027-01-10-welcome-new-gvrs`
-with an "Auto-translated" note and a "Show original" box. On the home page in full (the text is short). In What's
+with an "Auto-translated" note and a "Show original" box. In What's
 New, the RSS feed and the search.
 
 **Example 2 — a pinned notice with an end date and a button.** File `2027-02-15-booth-volunteers.md`:
@@ -523,7 +524,7 @@ Sign up at the March committee meeting, or write to grapevine@neta65.org.
 ```
 
 What happens: first on `/bulletin/` — with the badge "Pinned" / "Destacado" and "until March 20, 2027" / "hasta el
-20 de marzo de 2027" under the date — and first in the home page's "From the committee". A **More information** button
+20 de marzo de 2027" under the date. A **More information** button
 opens neta65.org in a new tab. What's New, the RSS feed and the digest link the headline to neta65.org (the `url:`),
 not to the post. After March 20 it is gone (pages already open hide it at midnight Central).
 
@@ -538,7 +539,7 @@ expires: 2027-03-01
 Sign up at the February committee meeting. Every GVR and RLV is welcome.
 ```
 
-What happens: until January 31 the post is in no page at all — not the bulletin, the home page, What's New, the feed,
+What happens: until January 31 the post is in no page at all — not the bulletin, What's New, the feed,
 the search or the digest. Each update's run summary lists it under **Scheduled bulletin posts (not on the site yet)**:
 `- 2027-02-01 — Spring Assembly sign-ups are open (content/bulletin/2027-02-01-spring-assembly-sign-ups.md)`.
 On February 1 the day's first update (normally the morning refresh, by about 5:30 AM Central) puts it up, marked
@@ -594,13 +595,13 @@ headline and the `summary_es` text exactly as written (paragraphs, headings and 
 lists them as **In this post**, and each section's link (`…#2026-11-11-holiday-gift-offers-free-shipping-and-new-prices--free-shipping`)
 is the same on both pages. The `/shop/#…` links open `/es/shop/#…` on the Spanish page. The text opens with four short
 paragraphs before the first heading — about 680 characters in English, 690 in Spanish, its first sentence under 140
-and its first paragraph under 280; the second gives the gift offers' prices, theirs first —, so what the other places show is that opening, never a heading run into it: the Spanish teaser (home
-card, What's New, the feed) is the first 400 characters of `summary_es` without the Markdown marks, Share sends the
-first 140 characters (the whole first sentence and the start of the next), the booth the first paragraph. The text is longer than 700 characters, so the home card shows a
-320-character teaser and "Read more", and the e-mail the opening's paragraphs — the gift offers' prices among them — and "Details →" (the HTML
+and its first paragraph under 280; the second gives the gift offers' prices, theirs first —, so what the other places show is that opening, never a heading run into it: the Spanish teaser (What's
+New, the feed) is the first 400 characters of `summary_es` without the Markdown marks, Share sends the
+first 140 characters (the whole first sentence and the start of the next), the booth the first paragraph. The text is longer than 700 characters, so the e-mail
+shows the opening's paragraphs — the gift offers' prices among them — and "Details →" (the HTML
 half, up to 700 characters, the whole opening; the text half, up to 600, its first three paragraphs, with the gift
 prices and without the GVR / RLV line). Pinned, so it comes
-first on the bulletin, on the home page and in the digest (What's New and the feed keep their date order); shown
+first on the bulletin and in the digest (What's New and the feed keep their date order); shown
 through December 31, 2026; in the November 2026 digest (sent December 1) when it goes up by November 30 — the
 digest counts a post in the month it first shows, and this one is gone before the January 1 e-mail.
 
@@ -671,8 +672,7 @@ Write to grapevine@neta65.org.
 
 What happens: on a wide screen the post gets **In this post** with three links: `#2027-01-10-orientation--who-we-are`,
 `…--what-a-gvr-does`, `…--how-to-reach-us`. Each section can be shared on its own. A text longer than about 700
-characters shows in the digest e-mail as its first whole paragraphs, then "Details →"; on the home card, as a
-320-character teaser and "Read more".
+characters shows in the digest e-mail as its first whole paragraphs, then "Details →".
 
 **Example 8 — send readers to another page.** File `2027-04-10-citywide.md`:
 
@@ -695,7 +695,7 @@ calendar file — for that, add the event itself ([Flyers and events](flyers-and
 | Show from a day | `(from 2027-02-01)` | `publish: 2027-02-01` | Not in any page before February 1 (Central time). Goes up with the first update on February 1 — normally the morning refresh, by about 5:30 AM. Counts as "New" and as news (What's New, the feed, the digest month) from that day, whatever its date says |
 | Show through a day | `(until 2027-03-01)` | `expires: 2027-03-01` | Shown all of March 1. At midnight Central, pages already open hide it; the next update removes it from the data. "until March 1, 2027" / "hasta el 1 de marzo de 2027" shows under the date |
 | Both | `(from 2027-02-01) (until 2027-03-01)` | both lines | Shown February 1 through March 1. A GitHub post with `publish:` after `expires:` is reported as a mistake; a Drive name with them the wrong way round is listed as scheduled until its until-day and then dropped, without a warning |
-| Pin | `(pinned)`, `(fijado)`, `📌` | `pinned: true` | First on `/bulletin/`, on the home page and in the digest, with the badge "Pinned" / "Destacado". Several pinned posts: newest first among them |
+| Pin | `(pinned)`, `(fijado)`, `📌` | `pinned: true` | First on `/bulletin/` and in the digest, with the badge "Pinned" / "Destacado". Several pinned posts: newest first among them |
 | Unpin | rename the file without the word | `pinned: false`, or delete the line | at the next update |
 | Take down now | delete the file, move it out of the folder, or put `PRIVATE` in its name | delete the file (or set `expires:` to yesterday) | at the next update |
 
@@ -722,8 +722,7 @@ headline and the first 600 characters of the text.
 the other language — offline, inside the GitHub job; nothing is sent to an outside service. Links, pictures and code
 stay as they are; heading and list marks are kept. On the other language's page the post shows:
 
-- an **Auto-translated** / **Traducción automática** note (also on the home card, in What's New, the RSS feed and the
-  digest);
+- an **Auto-translated** / **Traducción automática** note (also in What's New, the RSS feed and the digest);
 - a **Show original** / **Ver el original** box with the original headline and text.
 
 Bulletin texts are among the first to be translated. The morning refresh allows only 5 minutes of new translations
@@ -846,7 +845,7 @@ All addresses below are under `https://neta65.github.io/aagrapevine/`.
 | Monthly toolkit | the current month's page, e.g. `/monthly/2026-10/` · `/es/monthly/2026-10/` | In "Keep up all month": a Bulletin row with the number of live posts and a link to the newest |
 | Committee decks | a `bulletin` slide ([Presentations](presentations.md)) | The 3 newest posts, with English headlines |
 | Booth display | `/about/#booth` · `/es/about/#booth` | The 2 newest posts (pinned first), each a slide of its own: the headline and the first paragraph (a `summary:` written by hand instead), at most 280 characters, in each language, with a QR code to the post on `/bulletin/`; gone after its last day (`expires:` / `(until …)`). A post that says a word the booth never shows ("PDF", "donate", "buy now" …) is left out and the next one takes its place ([Booth display](booth.md)) |
-| Committee menu | the sub-menu on the Committee pages | "Bulletin" with the number of live posts |
+| Committee menu | the sub-menu on the Committee pages | "Bulletin" (no count since November 2026) |
 | Old address | `/announcements/` · `/es/announcements/` | forwards to `/bulletin/`, keeping the `#anchor` |
 | Status | `/status/` · `/es/status/` | Row "Bulletin (content/bulletin)": OK or not, last update, the number of posts in `content/bulletin/` (scheduled and expired ones included). Drive posts are counted in the "Google Drive" row. No per-file problems here (section 7) |
 
@@ -884,13 +883,12 @@ Where everything lives (search for the name in the right-hand column; line numbe
 | "New" badge, What's New timing | `scripts/sync/build_data.py` | `effective_ts`, `is_new`, `NEW_DAYS`, `plan_whatsnew` |
 | Which fields get translated | `scripts/sync/build_data.py` | `text_fields`, `own_words`, `def apply` (class `I18n`) |
 | The Bulletin page | `src/pages/bulletin.njk` | `cm-ann`, `committee.ann.more_info` |
-| Home cards | `src/pages/index.njk`, `eleventy/filters/home.js` | `homeAnnouncements`, `body.length <= 700` |
 | The page's list and anchors | `eleventy/filters/committee.js` | `announcementList`, `itemAnchor`, `RESERVED_IDS` |
 | How Markdown is shown | `eleventy.config.js` | `markdownIt({ html: false, linkify: true, breaks: true })`, `mdHeadingPlan`, `mdToc` |
 | What's New and RSS | `src/pages/whats-new.njk`, `src/pages/feed.11ty.js`, `eleventy/filters/community.js` | `hrefOf` |
 | Search | `eleventy/filters/library.js` | `the bulletin's posts` |
 | Digest page and e-mail | `eleventy/filters/community.js`, `src/pages/digest.njk`, `scripts/notify/send_digest.py` | `monthNews`; `month_news`, `post_when`, `md_excerpt` |
-| Words on the pages | `src/_i18n/committee.json`, `src/_i18n/home.json`, `src/_i18n/common.json` | `committee.ann.`, `home.ann_`, `home.pinned`, `nav.bulletin` |
+| Words on the pages | `src/_i18n/committee.json`, `src/_i18n/common.json`, `src/_i18n/home.json` | `committee.ann.`, `nav.bulletin`, `home.pins_` |
 | Run summary lists | `.github/workflows/update.yml` | `Bulletin files to fix`, `Scheduled bulletin posts` |
 
 What the site stores for a post (real data, shortened) — `data/site/announcements.json`:
@@ -1017,9 +1015,8 @@ In `src/pages/bulletin.njk`, right after the `</h2>` that closes the post's head
 ```
 
 `a.image` is `/bulletin/files/<name>` for a file next to the post (the build adds the site's `/aagrapevine` prefix by
-itself), a web address, or — for a Drive PDF or picture post — its Drive thumbnail. Do the same in the home card in
-`src/pages/index.njk` (inside `<article class="home-ann`) if you want. Keep `alt=""` only when the text says what the
-picture says; otherwise describe the picture.
+itself), a web address, or — for a Drive PDF or picture post — its Drive thumbnail. Keep `alt=""` only when the
+text says what the picture says; otherwise describe the picture.
 
 ### 6.5 Recipe: make Drive posts link to the bulletin (What's New, RSS, digest)
 
@@ -1038,7 +1035,6 @@ picture says; otherwise describe the picture.
    new line, or the test fails. Then run the tests (`tests/test_digest_parity.py` checks that the e-mail and the digest
    page still agree).
 
-The home card's **Read more** then goes to the post as well (it follows any `url` that starts with `/bulletin/`).
 
 ### 6.6 Recipe: keep line breaks from Word files
 
@@ -1068,8 +1064,6 @@ give `fetch_body` a reader like `docx_to_text`.
 | Drive text: 12,000 characters | `scripts/sync/drive.py` | `MAX_BODY_CHARS` |
 | Drive downloads per run: 40 | `scripts/sync/drive.py` | `MAX_ANNOUNCEMENT_FETCHES` |
 | Teaser: 400 characters | `scripts/sync/announcements.py` (`parse_announcement`, `own_translations`), `scripts/sync/drive.py` (`fill_announcements`) | `truncate(summary, 400)`, the `400` in `own_translations`, `truncate(plain, 400)` |
-| Home page: 2 posts | `src/pages/index.njk` | `homeAnnouncements) \| limit(2)` |
-| Home page: full text up to 700 characters, else a 320-character teaser | `src/pages/index.njk` | `body.length <= 700`, `excerpt(320)` |
 | "New" badge: 14 days | `scripts/sync/build_data.py` | `NEW_DAYS` |
 | What's New teaser: 220 characters | `src/pages/whats-new.njk` | `excerpt(220)` |
 | Share text: 140 characters | `src/pages/bulletin.njk` | `excerpt(140)` |
@@ -1090,7 +1084,6 @@ Each entry has an `"en"` and an `"es"` value; change both and keep placeholders 
 | More information · Open the document | `committee.ann.more_info` · `committee.ann.open_doc` |
 | Nothing on the bulletin right now (and its text) | `committee.ann.empty_title`, `committee.ann.empty_text` |
 | The four steps in *Post to the bulletin*, and the example name | `committee.ann.how_1` … `committee.ann.how_4`, `committee.ann.example_name` |
-| Home: "From the committee", its subtitle, "Read the bulletin", "Pinned" | `home.ann_title`, `home.ann_sub`, `home.ann_all`, `home.pinned` |
 | The menu's "Bulletin" / "Boletín" | `nav.bulletin` |
 | The e-mail's "Bulletin" and "Details" | the `T` table in `scripts/notify/send_digest.py` (keys `"announcement"`, `"details"`) — separate from the site's words |
 
@@ -1102,7 +1095,7 @@ The rule is written in several places that must agree:
 
 - `scripts/sync/build_data.py`, `build_announcements` — the data;
 - `eleventy/filters/committee.js`, `announcementList` — the Bulletin page, the search, the decks, the toolkit;
-- `eleventy/filters/home.js`, `homeAnnouncements` — the home page;
+- (the home page shows no posts since November 2026: its *More on this site* row links the Bulletin);
 - `eleventy/filters/community.js`, `monthNews`, and `scripts/notify/send_digest.py`, `month_news` — the digest page and
   e-mail (`tests/test_digest_parity.py` keeps the two equal);
 - `data-gv-expire` in `src/pages/bulletin.njk` and `src/pages/index.njk`, with `GV.expire` in `src/assets/js/app.js` —
@@ -1189,13 +1182,14 @@ and the copy rule in `eleventy.config.js` (search `bulletin/files`). Keep both l
   Every file in `content/bulletin/` — `_draft…` files and every picture and PDF included — is public the moment it is
   saved. There is no draft mode in the Drive bulletin folder: `(draft)` in a name is just a word, and the post goes
   live. Write drafts outside A65_GV and outside the repository.
-- **Put the message in the first sentence.** The home card, What's New (two lines), Share (140 characters) and the
+- **Put the message in the first sentence.** What's New (two lines), Share (140 characters) and the
   e-mail (about 700 characters) show only the beginning, and a list at the start runs together into one line in a
   teaser.
 - **Date every post.** Start each Drive name with `YYYY-MM-DD`. An undated doc takes a new date whenever it is edited.
 - **Let time-bound notices expire** — but if a notice should go out in the monthly e-mail, let it run at least until
   the 3rd of the next month.
-- **Pin sparingly.** The home page shows only 2 posts; one or two pinned posts is plenty.
+- **Pin sparingly.** One or two pinned posts is plenty: they come first on the Bulletin and in the digest, and the
+  home page shows them near the top (two at most: the title, one line and **Read**) until their `until` day.
 - **One language per post**, and add the other by hand when the wording matters (`title_es` + `summary_es`, or
   `overrides.yml` for a Drive post).
 - **Keep files small:** a flyer photo under 1 MB.

@@ -87,7 +87,7 @@ presets:
       es: "Sin orador(a) invitado(a) (unos 60 minutos)"
     minutes: 60
     only: ["title", "welcome", "serenity-prayer", "topic-of-the-month", "topic-sharing", "part-1", "agenda", "coming-up",
-           "open-meetings", "workshops-volunteers", "special-offers", "price-heads-up", "this-month", "deadlines",
+           "open-meetings", "workshops-volunteers", "prices-since-january", "special-offers", "price-heads-up", "this-month", "deadlines",
            "new-reps", "sharing", "part-3", "next-meeting", "responsibility", "parking-lot", "thank-you"]
     note:
       en: "No guest speaker at this meeting: we share on a topic until 7:30, then the same second half. For every meeting before January 20, 2027 (the guest speakers start then), or a month whose guest speaker can't come. The agenda shows this version's own times."
@@ -156,7 +156,7 @@ fillins:
 #   {fill:…} a blank · {live:…} a fact of the day · {paper:meeting} the date of the meeting the text is for (the
 #   agenda and the reminder: the next meeting; the notes: the last one held) · {paper:month} its month ·
 #   {paper:after} the meeting after it · {paper:agenda} the rows of the agenda slide, in the version the chair
-#   chose (a line of its own) · {paper:meeting_es} / {paper:time_es} that date and the time in Spanish ·
+#   chose (none chosen: the one the deck opens on for that meeting) (a line of its own) · {paper:meeting_es} / {paper:time_es} that date and the time in Spanish ·
 #   {paper:committee_es} the committee's name as the Spanish pages give it (config/site.yml site.committee_es) ·
 #   {paper:speaker} that meeting's guest speaker (name and service position), {paper:speaker_position},
 #   {paper:speaker_topic}, and for the Spanish paragraph {paper:speaker_es} / {paper:speaker_topic_es} (the
@@ -545,7 +545,7 @@ slides:
     notes: |
       WHEN: shown at 7:30, after the guest speaker (or tonight's topic): here's the rest of our hour.
       SAY: Here's the plan for the rest of our hour: what's coming up and your workshop requests, the stores' special offers, the magazines' topics, and then your sharing. We close with the Responsibility Statement at eight, and the parking lot follows. Our timekeeper tonight is (first name), who'll give a gentle signal in the chat when an item runs over.
-      TIP (timekeeping): about 30 seconds. The times on the slide are the committee's plan, not a rule: the second half keeps a few minutes spare before eight (through January 2027 the price heads-up takes one of them). If the sharing runs long because members are sharing real experience, shorten the announcements instead: the sharing belongs to the members. Start on time even if only a few people are there; it respects the people who came on time.
+      TIP (timekeeping): about 30 seconds. The times on the slide are the committee's plan, not a rule: the second half keeps a few minutes spare before eight (through March 2027 a price slide takes one of them). If the sharing runs long because members are sharing real experience, shorten the announcements instead: the sharing belongs to the members. Start on time even if only a few people are there; it respects the people who came on time.
       UPDATE: Change the times only if the committee changes its format ({ui:customize} → {ui:edit}). The version 'No guest speaker' shows its own plan by itself.
 
   # The table of fill-in rows → the next events on /events/ (the CityWide table, our Grapevine Meeting, workshops,
@@ -624,6 +624,40 @@ slides:
       TIP: Say plainly at every workshop that our Area committee presents it, not AA Grapevine, Inc. If you invite Grapevine office staff to speak, the committee that invites them pays their expenses. And never promise anyone that their story will be published.
       UPDATE ({ui:customize} → {ui:your_details}): the volunteer lines, every month, from the events on the 'Coming up' slide that need help.
 
+  # ================================================================== 2027 PRICE FOLLOW-UP (a block of its own)
+  # After AA Grapevine's price change of January 1, 2027 (config/site.yml price_changes: 2027-01). The heads-up
+  # ("price-heads-up", after "Special offers") announces it, with the letter's own figures, and leaves the show
+  # after December 31, 2026; this slide says it in the past tense, with the prices of the day ({live:price_…}: the new
+  # ones from January 1, 2027, by themselves), from January 1 through March 31, 2027 (show_from / show_until: the
+  # meetings of January, February and March, while treasurers set the year's budget). The two are never in the
+  # show together. It is in both versions ("No guest speaker" lists it in `only`),
+  # and optional: the first slide to go when the second half runs long. Information only: never a reason to buy.
+  - id: "prices-since-january"
+    layout: "table"
+    title: "New prices since January 1, 2027"
+    optional: true
+    show_from: "2027-01-01"
+    show_until: "2027-03-31"
+    header: ["1 year", "Grapevine", "La Viña"]
+    rows:
+      - ["Print", "**{live:price_gv_print}**", "**{live:price_lv_print}**"]
+      - ["Digital", "**{live:price_gv_digital}**", "**{live:price_lv_digital}**"]
+      - ["Every book", "$2.00 more than in 2026", "$2.00 more than in 2026"]
+    widths: [3.0, 4.4, 4.4]
+    first_col_bold: true
+    source: "Source: AA Grapevine's letter to intergroups and central offices, October 1, 2026. Today's prices: the official stores, as [{live:site}/shop/](/shop/) reads them"
+    takeaway: "For your groups' treasurers and their 2027 budget. Other plans: the official stores or our Shop page."
+    minutes: 1
+    notes: |
+      WHEN: in the show by itself from January 1 through March 31, 2027 (the meetings of January, February and March), and gone after it. (The heads-up with the old and the new figures left the show on December 31, 2026.)
+      TIP (timekeeping): about a minute: it comes out of the few minutes the second half keeps spare. It's optional: the first slide to go when the sharing runs long.
+      SAY: A reminder for your groups' treasurers: since January 1, AA Grapevine's prices are new. A year of Grapevine in print is now {live:price_gv_print}, and digital {live:price_gv_digital}; a year of La Viña in print is {live:price_lv_print}, and digital {live:price_lv_digital}. Every Grapevine and La Viña book costs $2 more than in 2026. For the two- and three-year plans, Complete and everything else, the official stores and our Shop page have the current prices. As always, each group decides what, if anything, to buy.
+      DO: If reps ask, post the four prices and the Shop page's link in the chat ({live:site}/shop/).
+      TIP: Information only: never a reason to rush, never a price as a bargain, and never a guess at a plan the letter doesn't name (2- or 3-year, Complete, monthly, other regions): point people to the official stores or the Shop page.
+      STAYS CURRENT: the four prices are the ones in effect on the day shown, from the committee's Shop page (the stores' own prices once they show the new ones).
+      SOURCE: AA Grapevine, Inc., letter to intergroups and central offices, October 1, 2026: 'Grapevine & La Viña Pricing Update, Effective January 1, 2027'.
+  # ================================================================== (end of the 2027 price follow-up)
+
   # The stores' offers of the day ({live:store_offers}: config/site.yml store_offers, as /shop/#offers lists
   # them, each with its days; the line switches when an offer starts or ends, so a copy opened later stays right)
   # and both Books of the Month ({live:botm}, {live:botm_lv}: until each offer ends, then where to look). Carry the
@@ -649,16 +683,15 @@ slides:
       STAYS CURRENT: the stores' offers (with their days, as the committee's /shop/ page lists them) and both Books of the Month fill in by themselves, each until its offer ends; when there is none, the line points to the Shop page or to the magazine's own page instead.
 
   # AA Grapevine's letter of October 1, 2026. The slide is in the show only while the site's price notice is
-  # current (config/site.yml price_changes: from October 1, 2026 through January 31, 2027 — the deck's "the
-  # October to December 2026 meetings and January 2027 at the latest"), and never after January 31, 2027
-  # (show_until, the generator's PRICE_HEADS_UP_UNTIL): a notice of a later price change must not bring these
+  # current (config/site.yml price_changes: from October 1, 2026), and never after December 31, 2026 (show_until:
+  # the October to December 2026 meetings; from January 1, 2027 "prices-since-january" says it in the past tense): a notice of a later price change must not bring these
   # figures back. They are the letter's own (new price, up from the old one), so they stay as written rather
   # than {live:price_…}, which would show the price of the day. Information only: never "before prices go up".
   - id: "price-heads-up"
     layout: "table"
     title: "Heads-up: new prices from January 1, 2027"
     when: "price_notice"
-    show_until: "2027-01-31"
+    show_until: "2026-12-31"
     header: ["", "Grapevine", "La Viña"]
     rows:
       - ["Print, 1 year", "**$39.00** (up from $36.00)", "**$19.50** (up from $18.00)"]
@@ -670,13 +703,13 @@ slides:
     takeaway: "Pass it on to your groups, and to treasurers planning the 2027 budget."
     minutes: 1
     notes: |
-      WHEN: for the November and December 2026 meetings, and January 2027 at the latest: this slide is in the show by itself only until January 31, 2027. If the committee still wants a reminder after that, add a slide of your own that says the prices changed ('New prices as of January 1, 2027'), without the 'up from' figures ({ui:customize} → {ui:add}).
+      WHEN: for the November and December 2026 meetings: this slide is in the show by itself only until December 31, 2026. From January 1 through March 31, 2027 the slide 'New prices since January 1, 2027' takes its place, in the past tense and with the prices of the day.
       TIP (timekeeping): a minute, while this slide is in the show: it comes out of the few minutes the second half keeps spare, so keep the offers just before it short.
       SAY: Here's a heads-up from AA Grapevine to pass on. On October 1, AA Grapevine wrote to intergroups and central offices that its prices change on January 1, 2027. A year of Grapevine in print goes from $36 to $39, and a year of La Viña in print from $18 to $19.50. Digital goes from $29.99 to $34 for Grapevine, and from $14.99 to $17 for La Viña. And every Grapevine and La Viña book costs $2 more. AA Grapevine gives the reason as rising costs: printing, paper and materials, fulfillment, postage and shipping. Please tell your groups, and especially the group treasurers who are planning the 2027 budget. As always, each group decides what, if anything, to buy.
       DO: Post the prices in the chat so reps can copy them. The committee website announces the change on its Shop and Bulletin pages, and its Shop page switches to the new prices by itself on January 1, 2027.
       TIP: Share it as information, not as a reason to rush: never suggest subscribing or buying ahead of the new prices. The Conference asked for an informative attitude rather than a hard sell in Grapevine presentations (1960 Advisory Action). The letter covers only the yearly print and digital subscriptions and the books; it says nothing about 2- or 3-year, Complete or monthly plans or other regions, so don't guess at those: point people to the official stores or the committee's Shop page.
       SOURCE: AA Grapevine, Inc., letter to intergroups and central offices, October 1, 2026: 'Grapevine & La Viña Pricing Update, Effective January 1, 2027'. The 2026 prices: the official stores, October 2026.
-      UPDATE: nothing: the slide leaves the show by itself after January 31, 2027 (see WHEN).
+      UPDATE: nothing: the slide leaves the show by itself after December 31, 2026 (see WHEN).
 
   # This month's issues and the next ones, with their themes, come from the site's data ({live:…}); the stories to
   # mention are the chair's blanks. (Both Books of the Month are on "Special offers".)
@@ -959,7 +992,7 @@ slides:
     header: ["Slide", "What to update", "Where to look"]
     rows:
       - ["Special offers", "Nothing: the stores' offers and both Books of the Month fill in by themselves", "/shop/"]
-      - ["Price heads-up (until Jan. 2027)", "Nothing: it leaves the show by itself after January 31, 2027", "Its notes"]
+      - ["Price heads-up (until Dec. 2026)", "Nothing: it leaves the show by itself after December 31, 2026; the past-tense follow-up shows January through March 2027", "Its notes"]
       - ["Magazine topics", "One story per magazine (the issues fill in by themselves)", "/monthly/"]
       - ["Story deadlines", "Nothing: the next two of each magazine fill in by themselves", "/contribute/#deadlines; the deadline pages here"]
       - ["The AA Preamble (switched off)", "Nothing; switch it on only if the committee asks for it", "Its notes"]
@@ -968,7 +1001,7 @@ slides:
     notes: |
       NOT PRESENTED: a reference for preparation. This continues the table on the previous page.
       SPECIAL OFFERS: the stores' current offers (config/site.yml on the website, as its /shop/ page lists them) and both Books of the Month fill in by themselves, each until its offer ends. Carry the Message is described there, never sold: a member or a group buys a gift certificate or a subscription from the official stores, and AA Grapevine or La Viña turns it into a subscription for an alcoholic in need.
-      PRICE HEADS-UP: the slide after 'Special offers' announces AA Grapevine's prices from January 1, 2027. It is for the November and December 2026 meetings and January 2027 at the latest, and it leaves the show by itself after January 31, 2027. To remind the room after that, add a slide of your own in the past tense ({ui:customize} → {ui:add}).
+      PRICE HEADS-UP: the slide after 'Special offers' announces AA Grapevine's prices from January 1, 2027. It is for the November and December 2026 meetings, and it leaves the show by itself after December 31, 2026. From January 1 through March 31, 2027 the slide 'New prices since January 1, 2027' says it in the past tense, with the prices of the day.
       TONIGHT'S TOPIC: the next page suggests one for each month, for a night without a guest speaker (the version 'No guest speaker', {ui:customize} → {ui:version}), or to suggest to a guest speaker.
       EVENTS: the 'Coming up' slide fills in by itself from the committee's /events/ page, with the next NETA 65 assembly above the list, and the Area's website (neta65.org) lists what's coming too. The volunteer lines on the workshop slide come from the events that need help.
       NOTES OF THE MEETING: there are no minutes to approve. {ui:customize} → {ui:paperwork} drafts short notes (service positions and counts only) from your details, and 'Start next month' clears the blanks that were for one night only.
@@ -1099,7 +1132,7 @@ slides:
     notes: |
       NOT PRESENTED: a reference for the chair. The same rules as the previous page: the committee meets on the third Wednesday, our Grapevine Meeting is on the first Wednesday, and the CityWide booth is on the second Saturday, at Lovers Lane United Methodist Church. This list fills in by itself from the committee's /events/ page, every booth Saturday and every Grapevine Meeting included (the 'Coming up' slide shows each of them once, at its next date), and the line above it names the next NETA 65 assembly.
       FALL ASSEMBLY AND SERVICE WORKSHOP: September 17 to 19, 2027, at the DoubleTree by Hilton Fort Worth South (the Convention Chair's report at the Fall ACM, October 18, 2026): all day Saturday and Sunday morning, nothing at the hotel on Friday night. In October 2026 the host districts were still to be confirmed (District 64 yes; District 62 had put off its discussion until its November meeting). Check neta65.org before you announce it.
-      HOLIDAYS: if the committee decides to skip or move the November or December meeting, tell whoever looks after the website, so the dates here, on the slides and the website's countdown stay right. La Viña's monthly workshop is usually on the fourth Thursday, but in November and December La Viña has held it on the Thursday before Thanksgiving and before Christmas (November 20 and December 18 in 2025). Check La Viña's events calendar (aalavina.org/calendario-de-eventos) each month before you announce a date.
+      HOLIDAYS: if the committee decides to skip or move the November or December meeting, tell whoever looks after the website, so the dates here, on the slides and the website's countdown stay right. La Viña's monthly workshop is usually on the fourth Thursday, but in November and December La Viña has usually held it on the Thursday before Thanksgiving and before Christmas (as it did in 2024 and 2025); each year's dates are La Viña's to announce. Check La Viña's events calendar (aalavina.org/calendario-de-eventos) each month before you announce a date.
 
   # The deadline tables (as of October 2026) → the deadlines from the site's data (an issue with two themes,
   # like Grapevine's December 2027, always shows both). The 2027 dates the deck listed stay in the notes, in case
@@ -1118,7 +1151,8 @@ slides:
       NOT PRESENTED: a reference for the chair.
       SOURCE: AA Grapevine's editorial calendar (aagrapevine.org/contribute). This list stays current by itself, and the 'Story topics and deadlines coming up' slide shows the next ones.
       AS OF OCTOBER 2026, the 2027 calendar: August 2027, 'Sober Seniors', due January 1, 2027; September 2027, 'Young & Sober', due February 1, 2027; October 2027, 'AA in the Military', due March 1, 2027; November 2027, 'Classic Grapevine' (stories from the archive), no deadline; December 2027, 'Remote Communities / Sober Holidays!', due May 1, 2027. The 2028 calendar was not yet published; it was expected in early 2027.
-      EARLIER DEADLINES, for a meeting before January 2027: the June 2027 issue, 'Emotional Sobriety', is due November 1, 2026, and the July 2027 Annual Prison Issue is due December 1, 2026; for that issue the editors especially want stories from women in long-term custody. The November issue is 'Classic Grapevine', made of stories from the archive, so it has no deadline.
+      NEXT DEADLINE (from the site, by today's date): {live:next_deadline_gv}
+      EARLIER DEADLINES, past for a meeting in December 2026 or later: the June 2027 issue, 'Emotional Sobriety', was due November 1, 2026, and the July 2027 Annual Prison Issue was due December 1, 2026 (its editors especially wanted stories from women in long-term custody). The November issue is 'Classic Grapevine', made of stories from the archive, so it has no deadline.
       TIP: Stories go through aagrapevine.org/submit-your-story or to gveditorial@aagrapevine.org. Grapevine suggests 300 to 1,800 words. A story that misses its deadline may still be used later.
       UPDATE: nothing: when the 2028 calendar comes out, its issues appear here once the committee's /contribute/ page shows them.
 
@@ -1135,7 +1169,8 @@ slides:
       NOT PRESENTED: a reference for the chair.
       SOURCE: La Viña's themes ({lang:es}Temas de LV{/lang}, on aalavina.org/recursos); this list fills in from the committee website. La Viña comes out every two months, so there are six issues a year.
       AS OF OCTOBER 2026 (in case the list doesn't show them yet), the 2027 themes: September/October 2027, '{lang:es}Hispanos Veteranos en AA{/lang}' (Hispanic veterans), due February 2, 2027; November/December 2027, '{lang:es}Celebrando en sobriedad{/lang}' (celebrating in sobriety), due April 3, 2027. The 2028 themes were not yet published; they were expected in early 2027.
-      EARLIER DEADLINES, for a meeting before January 2027: the May/June 2027 issue, '{lang:es}Recaídas{/lang}' (relapses), is due October 17, 2026, and the July/August 2027 issue, '{lang:es}Prisiones{/lang}' (prisons), is due December 15, 2026.
+      NEXT DEADLINE (from the site, by today's date): {live:next_deadline_lv}
+      EARLIER DEADLINES, past for a meeting from December 16, 2026 on: the May/June 2027 issue, '{lang:es}Recaídas{/lang}' (relapses), was due October 17, 2026, and the July/August 2027 issue, '{lang:es}Prisiones{/lang}' (prisons), was due December 15, 2026.
       BEFORE YOU ANNOUNCE A THEME: read La Viña's own description of it. '{lang:es}Veteranos{/lang}' usually means long-time members (La Viña's {lang:es}Veteranos{/lang} section is for old-timers), but it can also mean military veterans, and La Viña's themes list gives only the title (the committee website's English, 'Hispanic Veterans in AA', keeps both meanings), so check the description of the September/October theme before you explain it.
       TIP: La Viña wants personal stories told as in a meeting, about five or six double-spaced typed pages. Stories go by email to manuscritoslv@aagrapevine.org, the address the committee gives, as on its /contribute/ page (say it '{lang:es}manuscritos{/lang} L V', for La Viña: on screen a lowercase l can look like a capital I); La Viña's web form, aalavina.org/comparte, works too. La Viña also keeps a list of open topics that can be sent at any time (aalavina.org/temas-sugeridos).
       UPDATE: nothing: when the 2028 themes come out, they appear here once the committee's /contribute/ page shows them.

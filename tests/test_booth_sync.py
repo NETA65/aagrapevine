@@ -48,6 +48,7 @@ from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import common  # noqa: E402
 from scripts.sync import drive as D  # noqa: E402
 from scripts.sync.drive_listing import FOLDER_MIME, Entry, Listing  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 try:
     import yaml
@@ -660,7 +661,7 @@ class RunSummary(unittest.TestCase):
             self.skipTest("PyYAML is not installed")
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(st for st in wf["jobs"]["sync"]["steps"] if st.get("name") == "Write run summary")
-        code = step["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(step["run"])
         tmp = Path(tempfile.mkdtemp(prefix="gv-booth-summary-"))
         self.addCleanup(shutil.rmtree, tmp, True)
         (tmp / "data" / "site").mkdir(parents=True)

@@ -135,6 +135,10 @@
     "en": "Questions",
     "es": "Preguntas"
   },
+  "evpage.facts.district": {
+    "en": "District",
+    "es": "Distrito"
+  },
   "evpage.where_tba": {
     "en": "To be announced",
     "es": "Por anunciarse"
@@ -154,6 +158,14 @@
   "evpage.map": {
     "en": "Map",
     "es": "Mapa"
+  },
+  "evpage.sec.all_dates_sub": {
+    "en": "Every date to come, each with a page of its own — all of them are in the calendar files too.",
+    "es": "Todas las fechas que vienen, cada una con su propia página; también están todas en los archivos de calendario."
+  },
+  "evpage.directions": {
+    "en": "Directions",
+    "es": "Cómo llegar"
   },
   "evpage.map_aria": {
     "en": "Map of {place}",
@@ -546,5 +558,13 @@
   "evpage.res.bulletin_t": {
     "en": "The latest news and offers from our committee.",
     "es": "Las últimas noticias y ofertas de nuestro comité."
+  },
+  "evpage.add_next": {
+    "en": "Add the next date to calendar",
+    "es": "Agregar la próxima fecha al calendario"
+  },
+  "evpage.add_every": {
+    "en": "Every date: subscribe to the calendar",
+    "es": "Todas las fechas: suscribirse al calendario"
   }
 }

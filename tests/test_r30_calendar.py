@@ -361,18 +361,28 @@ def cell(cal: str, ymd: str) -> str:
 
 
 class Page(unittest.TestCase):
-    def test_the_sidebar_feed_first_then_the_sticky_calendar(self):
+    def test_the_calendar_before_the_list_then_the_feed(self):
+        # (since the list's redesign) the calendar's aside comes BEFORE the list in the page — near the top on a phone,
+        # folded under its heading; the sidebar's top from 1024px (committee.css .ev-layout) — and the subscription
+        # card's aside after it (the sidebar's second row)
         for lang, got in built(self).items():
             html = got["html"]
             with self.subTest(lang=lang):
-                aside = html[html.index('<aside class="min-w-0" aria-label='):]
+                aside = html[html.index('<aside class="ev-side-cal min-w-0" aria-label='):]
                 aside = aside[:aside.index("</aside>")]
                 self.assertNotIn("sticky-aside\" aria-label", html, "the aside itself is not sticky")
-                self.assertLess(aside.index('<div id="subscribe">'), aside.index('<div class="sticky-aside mt-6">'))
-                self.assertLess(aside.index('<div class="sticky-aside mt-6">'), aside.index('<section id="ev-cal"'))
+                self.assertLess(aside.index('<div class="sticky-aside">'), aside.index('<section id="ev-cal"'))
                 self.assertNotIn("<aside", aside[1:], "no aside inside the aside")
                 self.assertRegex(aside, r'<section id="ev-cal" class="cm-cal-card card card-pad" data-cm-cal data-lastmod="skip" '
                                         r'aria-labelledby="ev-cal-title">')
+                # its fold: a button for phones (JavaScript only), what it opens, and its words for both ways
+                self.assertRegex(aside, r'<button type="button" class="btn-secondary btn-sm ev-cal-toggle" data-js-only '
+                                        r'data-ev-cal-toggle aria-expanded="false" aria-controls="ev-cal-body"')
+                self.assertIn('<div id="ev-cal-body" class="ev-cal-body">', aside)
+                self.assertLess(html.index('<aside class="ev-side-cal'), html.index('<section class="ev-main'))
+                self.assertLess(html.index('<section class="ev-main'), html.index('<aside class="ev-side-sub'))
+                sub = html[html.index('<aside class="ev-side-sub'):]
+                self.assertIn('<div id="subscribe">', sub[:sub.index("</aside>")])
                 self.assertFalse(got["fingerprinted"], "the card moves with the day: never part of the page's fingerprint")
 
     def test_the_grid(self):

@@ -1,0 +1,1304 @@
+# =====================================================================
+#  "Taller de escritura de La Viña" — the committee's writing workshop in
+#  Spanish, for La Viña: the deck an RLV presents at a Spanish-language
+#  writing workshop (the Spanish La Viña workshops' event pages link it:
+#  eleventy/event-pages.js `deckEs`). Read by src/_data/presentations.js,
+#  checked by tests/test_presentations.py (run it on this file after every
+#  change), like the English decks.
+#
+#  Adapted by hand from writing-workshop.yml (not translated line by line):
+#  the same parts, timing versions (115 minutes and the 90-minute plan) and
+#  four exercises, written for a room that writes for La Viña:
+#  - La Viña comes first everywhere: every two months, in Spanish, its own
+#    sections, its themes and deadlines (a `live` list), its suggested
+#    topics with no deadline, its own way to send a story (aalavina.org/
+#    comparte, manuscritoslv@aagrapevine.org, its postal address) and to
+#    record one (Graba tu historia: {live:lv_audio_phone}). Grapevine stays
+#    for the members who write in English: one column, one line, and its
+#    themes on a slide that starts switched off (turn it on in a bilingual
+#    room: Customize → Slides).
+#  - Every fact is one the repository already has (writing-workshop.yml,
+#    orientation-workshop.yml, config/site.yml links); what it does not have
+#    (how La Viña prints a byline, how it edits) the notes say to check on
+#    aalavina.org, never guess.
+#  - Quotations: only the Spanish texts the repository has word for word
+#    (the Preamble from the Libro de trabajo de La Viña, the Responsibility
+#    Statement from the Manual del RLV, with their credit lines). The English
+#    deck's A.A.W.S. quotations have no Spanish text here, so their slides say
+#    the same thing in our own words, with the source named.
+#  - The register is the Spanish site's: "tú" to one person (the slides'
+#    instructions, the presenter in the notes), "ustedes" to the room.
+#  - The notes' labels are Spanish (DI:, HAZ:, PREGUNTA:, CONSEJO:,
+#    PARA QUIEN FACILITA:, ACTUALIZA:, TRANSICIÓN:); the player writes the
+#    TIEMPO line itself, in Spanish, from `minutes`. In a bilingual room the
+#    exercises' notes also carry the English deck's prompts word for word
+#    ({lang:en}IN ENGLISH …{/lang}).
+#  - Same slide ids as writing-workshop.yml where a slide matches one there
+#    (to compare the two decks), new ids for La Viña's own slides.
+# =====================================================================
+
+id: "taller-de-escritura"
+order: 10              # after the English decks (their cards first): its own number, as every deck
+lang: "es"
+title: "Taller de escritura de La Viña"
+short: "Taller de escritura"
+eyebrow: "Taller de escritura"
+footer: "Comité de Grapevine y La Viña de NETA 65 · {live:panel}"
+minutes: 115            # the full plan, as the English deck's: 115 minutes in a two-hour slot
+icon: "pen-line"
+tone: "lv"
+
+card:
+  title:
+    en: "La Viña Writing Workshop"
+    es: "Taller de escritura de La Viña"
+  summary:
+    en: "The writing workshop in Spanish, for La Viña: four short writing exercises with sharing in pairs, what La Viña publishes, its themes and deadlines, anonymity in your writing, and how to send or record your story for La Viña."
+    es: "El taller de escritura en español, para La Viña: cuatro ejercicios breves de escritura con momentos para compartir en parejas, lo que publica La Viña, sus temas y fechas límite, cómo cuidar el anonimato al escribir y cómo enviar o grabar tu historia para La Viña."
+  audience:
+    en: "AA members who want to write their story for La Viña, in Spanish, and the RLVs, groups and districts who host a writing workshop in Spanish, in person or online."
+    es: "Miembros de AA que quieren escribir su historia para La Viña, y los RLV, grupos y distritos que organizan un taller de escritura en español, en persona o en línea."
+
+presets:
+  - id: "full"
+    label: { en: "Full workshop (about 2 hours)", es: "Taller completo (unas 2 horas)" }
+    minutes: 115
+  # The English deck's 90-minute plan, the same way: Exercise 4 is done at home, the break takes 5 minutes, and the
+  # rest comes from trimming the talking, never the writing (welcome: 7, Parts 1–3: 12, Exercise 1: 8, Part 4: 8,
+  # Exercise 2: 12, break: 5, Part 5: 5, Exercise 3: 12, checklist: 3, submit and record: 6, closing: 6).
+  - id: "short"
+    label: { en: "90-minute workshop (Exercise 4 at home)", es: "Taller de 90 minutos (el ejercicio 4, en casa)" }
+    minutes: 84
+    hide: ["exercise-4"]
+    note:
+      en: "The 90-minute plan: Exercise 4 is done at home and the break is about five minutes; the rest of the time comes from trimming the talking, never the writing. The agenda, the exercises' time cards, the break and the times in the notes follow this plan, and each part's target time is in the notes."
+      es: "El plan de 90 minutos: el ejercicio 4 se hace en casa y el descanso dura unos cinco minutos; el resto del tiempo sale de hablar menos, nunca de escribir menos. La agenda, el tiempo de cada ejercicio, el descanso y los tiempos de las notas siguen este plan, y el tiempo de cada parte está en las notas."
+
+# The presenter's blanks (Customize → Your details). `puesto` is the presenter's service position in Spanish, shared
+# by the Spanish presentations (the English ones have their own `presenter`); the first name is shared by all.
+fillins:
+  - key: "puesto"
+    label: { en: "Presenter's service position (in Spanish)", es: "Puesto de servicio de quien presenta" }
+    hint: "puesto de servicio"
+    default: "Coordinador(a) de Grapevine / La Viña del Área 65"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "nombre de pila"
+    shared: true
+    notes_only: true
+  - key: "date"
+    label: { en: "Date", es: "Fecha" }
+    hint: "DD de mes de AAAA"
+  - key: "host_group"
+    label: { en: "Host group or district", es: "Grupo o distrito anfitrión" }
+    hint: "grupo o distrito anfitrión"
+  - key: "place"
+    label: { en: "Place, or online", es: "Lugar, o en línea" }
+    hint: "en persona / en línea"
+  - key: "break_end"
+    label: { en: "Back from the break at (clock time)", es: "Hora de regreso del descanso" }
+    hint: "hora"
+  - key: "supported_by"
+    label: { en: "Who supports this workshop (host group, district or Area)", es: "Quién sostiene este taller (grupo, distrito o Área)" }
+    hint: "el grupo, el distrito o el Área anfitrión"
+  - key: "basket_for"
+    label: { en: "Who today's basket supports (host group or district)", es: "A quién sostiene la canasta de hoy (grupo o distrito)" }
+    hint: "el grupo o el distrito anfitrión"
+
+slides:
+  # ---------------------------------------------------------------- Apertura
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Comité de Grapevine y La Viña"
+    title: "Taller de escritura de La Viña"
+    subtitle: "Poner por escrito nuestra experiencia, fortaleza y esperanza"
+    lines:
+      - "{fill:puesto}"
+      - "{fill:date} · {fill:host_group} · {fill:place}"
+    minutes: 1
+    notes: |
+      {not:short} DI: Buenas [tardes / noches] a todos y bienvenidos al Taller de escritura de La Viña. Me llamo {fill:first_name}, soy alcohólico(a) y sirvo como {fill:puesto} en el Comité de Grapevine y La Viña de NETA 65. Gracias a {fill:host_group} por invitarnos y por abrirnos sus puertas. En las próximas dos horas vamos a escribir más de lo que vamos a escuchar. Cuando terminemos, la mayoría de ustedes tendrá el comienzo de una historia, tal vez una historia completa, que podrá mandar a La Viña si así lo decide.
+      {only:short} DI: Buenas [tardes / noches] a todos y bienvenidos al Taller de escritura de La Viña. Me llamo {fill:first_name}, soy alcohólico(a) y sirvo como {fill:puesto} en el Comité de Grapevine y La Viña de NETA 65. Gracias a {fill:host_group} por invitarnos y por abrirnos sus puertas. En los próximos noventa minutos vamos a escribir más de lo que vamos a escuchar. Cuando terminemos, la mayoría de ustedes tendrá el comienzo de una historia, tal vez una historia completa, que podrá mandar a La Viña si así lo decide.
+      HAZ: Antes de que llegue la gente, deja en cada silla un planificador de tu historia, una lista de revisión, papel y pluma; abre la presentación en esta diapositiva y ten listo un cronómetro. En línea: abre la reunión 15 minutos antes, pide a un servidor de confianza que te ayude con las salas para grupos pequeños si tu plataforma las tiene, y pega en el chat el enlace a la página Comparte tu historia del comité. Preséntate solo con tu nombre de pila. Esta presentación está publicada en internet, así que la diapositiva lleva tu puesto de servicio, nunca un nombre: tu nombre de pila solo aparece en estas notas.
+      PARA QUIEN FACILITA: Todo lo que necesitas (una lista para antes del día, los materiales, cómo hacerlo en línea, el plan de 90 y de 120 minutos y las hojas para imprimir) está en la sección para quien facilita, {ui:customize} → {ui:prepare}. Esas páginas nunca se proyectan, así que la presentación termina en los créditos. Para imprimir las hojas: {ui:customize} → {ui:prepare} → {ui:print}. Cualquier miembro en quien confíe el grupo anfitrión puede dar este taller: las notas están escritas para leerlas casi palabra por palabra.
+      ACTUALIZA: tu puesto, la fecha, el grupo anfitrión y el lugar: {ui:customize} → {ui:your_details}. La fecha de «Datos al» se pone sola.
+      TRANSICIÓN: «Empecemos como empezamos nuestras reuniones: con unas palabras sobre quiénes somos y qué vamos a hacer hoy».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: la bienvenida, el Preámbulo, la sala segura y la agenda toman unos 7 minutos (9 en el plan completo)."
+
+  - id: "welcome"
+    layout: "bullets"
+    eyebrow: "Bienvenida"
+    title: "Bienvenidos: este es tu lugar"
+    items:
+      - "No hace falta experiencia escribiendo: basta la buena voluntad y una historia"
+      - "Un taller práctico: cuatro ejercicios breves de escritura, y compartir en parejas (siempre opcional)"
+      - "Escribimos en español, para La Viña; si escribes en inglés, tu historia es para Grapevine"
+      - "Lo presenta el Comité de Grapevine y La Viña de NETA 65: **no** es una presentación oficial de AA Grapevine, Inc."
+      - "Compartimos experiencia y sugerencias; lo que hagas con ellas es decisión tuya"
+    takeaway: "Cada persona aquí tiene una historia que alguien más necesita leer."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Tanto si han escrito una docena de historias como si no han tomado una pluma desde la escuela, están en el lugar correcto. Quiero dejar claras dos cosas. Primero, este taller lo organiza nuestro comité de Área. Somos servidores de confianza, no expertos, y no hablamos en nombre de AA Grapevine, Inc., que publica La Viña, ni de su redacción. Lo que van a oír sobre cómo funciona la revista viene de sus propias pautas publicadas, y les voy a mostrar dónde consultarlas. Segundo, hoy nadie tiene que leer nada en voz alta. Cuando compartamos en parejas, siempre pueden pasar. La Viña recibe historias en español; si alguien prefiere escribir en inglés, su historia va a Grapevine.
+      PREGUNTA: Levanten la mano: ¿quién ha leído una historia en La Viña que se le quedó en el corazón? ¿Y quién ha pensado alguna vez «eso lo pude haber escrito yo»? Guarden ese pensamiento: por eso están aquí.
+      CONSEJO: Si en la sala hay quien escribe en inglés, siéntalos juntos para que compartan en parejas en inglés, e invita a un miembro bilingüe a ayudar con las instrucciones. Nunca señales a un recién llegado; deja que la gente se ofrezca.
+      TRANSICIÓN: «Abramos con un momento de silencio y el Preámbulo de AA».
+
+  # The Spanish Preamble word for word, as orientation-workshop.yml gives it (Libro de trabajo de La Viña, 2023, p. 2),
+  # with its credit line.
+  - id: "preamble"
+    layout: "quote"
+    eyebrow: "Bienvenida · Apertura"
+    title: "Abrimos con el Preámbulo de AA"
+    quote: |-
+      Alcohólicos Anónimos es una comunidad de personas que comparten su mutua experiencia, fortaleza y esperanza para resolver su problema común y ayudar a otros a recuperarse del alcoholismo.
+      El único requisito para ser miembro de AA es el deseo de dejar la bebida. Para ser miembro de AA no se pagan derechos de admisión ni cuotas; nos mantenemos con nuestras propias contribuciones.
+      AA no está afiliada a ninguna secta, religión, partido político, organización o institución alguna, no desea intervenir en controversias, no respalda ni se opone a ninguna causa.
+      Nuestro objetivo primordial es mantenernos sobrios y ayudar a otros alcohólicos a alcanzar el estado de sobriedad.
+    credit: "Copyright © The AA Grapevine, Inc., reimpreso con permiso."
+    source: "Libro de trabajo de La Viña (2023), p. 2."
+    minutes: 2
+    notes: |
+      DI: Los invito a un momento de silencio. (Pausa.) ¿Alguien quiere leernos el Preámbulo de AA? (Invita a un voluntario, o léelo tú.) Gracias. Un poco de historia que viene al caso: el Preámbulo apareció por primera vez en el Grapevine en junio de 1947, y lo escribió un editor del Grapevine. Las palabras con que abrimos casi todas nuestras reuniones salieron de la misma casa editorial que publica La Viña, la revista para la que vamos a escribir hoy.
+      HAZ: Deja la diapositiva en pantalla mientras se lee. Lee el texto tal como aparece, sin acortarlo. La línea de copyright se queda en la diapositiva.
+      CONSEJO: Sigue la costumbre del grupo anfitrión. Si el grupo abre con la Oración de la Serenidad, o lee el Preámbulo de su propia tarjeta, hazlo así y pasa esta diapositiva. Este es el texto en español del Libro de trabajo de La Viña (2023).
+      TRANSICIÓN: «Antes de escribir una sola palabra, pongámonos de acuerdo en cómo vamos a cuidar esta sala».
+
+  # The English slide's P-47 quotation has no Spanish text here: its point, in our own words, with its source.
+  - id: "safe-room"
+    layout: "bullets"
+    eyebrow: "Bienvenida"
+    title: "Una sala segura para escribir y compartir"
+    items:
+      - "**Lo que se comparte aquí, aquí se queda:** en la sala, en parejas, en las salas para grupos pequeños"
+      - "Nada de fotos, capturas de pantalla ni grabaciones de nadie, en la sala o en línea"
+      - "En línea: nombre de pila e inicial del apellido; la cámara es opcional"
+      - "Compartir es opcional: siempre puedes pasar"
+      - "En parejas: escucha sin corregir; después, habla solo de lo que tú escribiste"
+      - "Tu borrador es tuyo: solo tú decides si lo mandas"
+    source: "Fuente: Anonymity — Our Spiritual Foundation (P-47), p. 12, de A.A. World Services, Inc.: tomar fotos o capturas de pantalla no va con los principios del anonimato (en nuestras palabras)."
+    minutes: 3
+    version_minutes: { short: 2 }
+    notes: |
+      DI: Hoy vamos a escribir sobre vidas reales: las nuestras, y a veces las de la gente que forma parte de ellas. Por eso necesitamos la misma seguridad que tenemos en una reunión. Lo que oigan hoy se queda aquí, y eso incluye lo que su compañero o compañera les lea en los ejercicios en parejas. Por favor, no tomen fotos, capturas de pantalla ni grabaciones de nadie, en la sala ni en la pantalla; el folleto de AA sobre el anonimato dice lo mismo de las reuniones en línea. Si quieren las diapositivas, no hace falta fotografiar la pantalla: están publicadas en el sitio de nuestro comité, y las hojas son suyas. Cuando compartan en parejas, son oyentes, no editores: sin consejos y sin corregir. Y cuando hablemos con toda la sala, hablen solo de lo que ustedes escribieron, nunca de lo que escribió su pareja.
+      PREGUNTA: ¿Están todos de acuerdo? ¿El grupo quiere agregar algo? (Es la conciencia de la sala: acepta cualquier sugerencia que ayude a que la gente se sienta segura.)
+      CONSEJO: En línea, di en voz alta lo de las capturas de pantalla y pégalo también en el chat. Repíteselo por chat, en privado, a quien llegue tarde. Confirma que la reunión no se está grabando. La fuente al pie es material de A.A.W.S. dicho en nuestras palabras; si editas la diapositiva, deja la fuente.
+      TRANSICIÓN: «Así vamos a usar nuestro tiempo juntos».
+
+  # The rows' times are worked out by the player from `from` for the version shown; the 90-minute plan's own rows
+  # (version_fields.short) are the English deck's. Change a row in both lists.
+  - id: "agenda"
+    layout: "agenda"
+    eyebrow: "Bienvenida"
+    title: "Nuestro tiempo juntos"
+    items:
+      - { time: "0:00", title: "Bienvenida, apertura y una sala segura", from: "title" }
+      - { time: "0:09", title: "Por qué escribimos · lo que publica La Viña · sus temas", from: "part-1" }
+      - { time: "0:27", title: "Ejercicio 1: para entrar en calor", from: "exercise-1" }
+      - { time: "0:37", title: "Qué hace fuerte una historia · Ejercicio 2", from: "part-4" }
+      - { time: "1:02", title: "Descanso", from: "break" }
+      - { time: "1:09", title: "El anonimato al escribir · Ejercicio 3", from: "part-5" }
+      - { time: "1:30", title: "Revisar (Ejercicio 4) · cómo enviar o grabar tu historia", from: "part-6" }
+      - { time: "1:48", title: "Preguntas y cierre", from: "self-support" }
+      - { time: "1:55", title: "Terminamos", from: "credits" }
+    minutes: 1
+    version_fields:
+      short:
+        items:
+          - { time: "0:00", title: "Bienvenida, apertura y una sala segura", from: "title" }
+          - { time: "0:07", title: "Por qué escribimos · lo que publica La Viña · sus temas", from: "part-1" }
+          - { time: "0:19", title: "Ejercicio 1: para entrar en calor", from: "exercise-1" }
+          - { time: "0:27", title: "Qué hace fuerte una historia · Ejercicio 2", from: "part-4" }
+          - { time: "0:47", title: "Descanso", from: "break" }
+          - { time: "0:52", title: "El anonimato al escribir · Ejercicio 3", from: "part-5" }
+          - { time: "1:09", title: "Revisar · cómo enviar o grabar tu historia", from: "part-6" }
+          - { time: "1:18", title: "Preguntas y cierre", from: "self-support" }
+          - { time: "1:24", title: "Terminamos", from: "credits" }
+    notes: |
+      {not:short} DI: Este es el plan. Empezamos con por qué escribimos y qué publica La Viña, incluidos los temas que la redacción está pidiendo ahora mismo. Después escribimos: cuatro ejercicios breves, cada uno apoyado en el anterior, con un descanso a la mitad. Entre ejercicio y ejercicio les comparto algunas ideas sobre qué hace fuerte una historia, cómo cuidar el anonimato en el papel y cómo mandar su historia cuando esté lista. Dejamos tiempo para preguntas al final, y terminamos a tiempo.
+      {only:short} DI: Este es el plan. Empezamos con por qué escribimos y qué publica La Viña, incluidos los temas que la redacción está pidiendo ahora mismo. Después escribimos: tres ejercicios breves, cada uno apoyado en el anterior, con un descanso a la mitad, y un cuarto para hacer en casa. Entre ejercicio y ejercicio les comparto algunas ideas sobre qué hace fuerte una historia, cómo cuidar el anonimato en el papel y cómo mandar su historia cuando esté lista. Dejamos tiempo para preguntas al final, y terminamos a tiempo.
+      HAZ: Indica dónde están los baños y el café. En línea, si hay salas para grupos pequeños, explica que se abren solas y que se cierran con un aviso de un minuto.
+      PARA QUIEN FACILITA: Los tiempos cuentan desde el inicio, así que sirven para cualquier hora de comienzo; si quieres, anota la hora del reloj al lado en una copia impresa. Si solo tienes 90 minutos, elige la versión de 90 minutos ({ui:customize} → {ui:version}): el ejercicio 4 se hace en casa y el descanso dura cinco minutos.
+      ACTUALIZA: nada a mano: los tiempos siguen la versión que presentas y las diapositivas que apagas ({ui:customize} → {ui:slides}).
+      TRANSICIÓN: «Entonces, ¿para qué escribir?».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: los tiempos de esta diapositiva son los del plan de 90 minutos. El ejercicio 4 se hace en casa (en «Revisar», muestra la lista de revisión), el descanso dura unos cinco minutos y el plan deja unos minutos libres en una hora y media."
+
+  # ---------------------------------------------------------------- Parte 1 · Por qué escribimos
+  - id: "part-1"
+    layout: "section"
+    number: 1
+    accent: "gv"
+    title: "Por qué escribimos"
+    subtitle: "Nuestra reunión impresa, y el trabajo de Paso Doce en papel"
+    minutes: 0.5
+    notes: |
+      DI: Antes de tomar la pluma, dediquemos unos minutos a por qué esto importa. Algunos de ustedes leen La Viña desde hace años; otros tal vez la tienen en las manos por primera vez. Sea como sea, espero que se vayan viéndola un poco distinto: no como algo que escriben otros, sino como algo de lo que ustedes pueden formar parte.
+      HAZ: Si trajiste la edición actual de La Viña, levántala ahora y pásala. Muestra la revista impresa en lugar de una portada en pantalla: las portadas son obra de AA Grapevine.
+      TRANSICIÓN: «Empecemos por de dónde viene la revista».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: las partes 1 a 3 (hasta el primer ejercicio) toman unos 12 minutos (18 en el plan completo). Recorta lo que se habla, no el tiempo para escribir: si vas corto de tiempo, acorta las diapositivas de las partes 1 y 2."
+
+  - id: "meeting-in-print"
+    layout: "bullets"
+    title: "Nuestra reunión impresa"
+    items:
+      - "La Viña: cada dos meses, en español, desde **1996**"
+      - "Grapevine, su revista hermana: cada mes, en inglés, desde **junio de 1944**"
+      - "En los años cuarenta, los miembros que servían en las fuerzas armadas la llamaron su _reunión impresa_"
+      - "Casi todas las historias las escriben miembros de AA: gente como nosotros"
+      - "La Conferencia de Servicios Generales reconoció al Grapevine como _la revista internacional de Alcohólicos Anónimos_ (1986), y ese reconocimiento incluye a La Viña"
+      - "Las historias son la experiencia de los miembros, no la política de AA"
+    source: "Fuentes: aagrapevine.org/history-aa-grapevine y /history-aa-lavina; P-52 (2026); The A.A. Service Manual, 2024–2026, pp. 81–85."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      DI: La Viña nació en 1996, para que los miembros de habla hispana tuvieran una reunión impresa en su propio idioma, y sale cada dos meses. Su revista hermana, el Grapevine, salió por primera vez en junio de 1944. La empezaron seis miembros de la zona de Nueva York, y se mandó a todos los grupos de AA, unos 300 en ese entonces, y a cada miembro que se sabía que servía en las fuerzas armadas fuera del país. Esos miembros escribieron de vuelta, y cada mes se imprimía una página entera con sus cartas. Empezaron a llamarla su «reunión impresa», y las dos revistas todavía llevan esa frase. Quiero que noten algo: casi todo lo que publica La Viña lo escriben miembros de AA. No profesionales: gente como nosotros. Y es la redacción la que decide qué va en cada edición; lo que leen allí es la experiencia de los miembros, no la política de AA. Esa libertad es justamente lo que le hace lugar a su historia.
+      PREGUNTA: ¿Cómo conocieron La Viña? (Toma una o dos respuestas.)
+      CONSEJO: Di «reconocida por la Conferencia como la revista internacional de AA», no «aprobada por la Conferencia»: una revista que sale cada mes o cada dos meses no puede pasar por el proceso anual de aprobación, y por eso la Conferencia la reconoció de esta manera en 1986.
+      TRANSICIÓN: «¿Y por qué alguno de nosotros se sentaría a escribir para ella?».
+
+  - id: "twelfth-step-work"
+    layout: "columns"
+    style: "cards"
+    title: "Escribir es trabajo de Paso Doce"
+    columns:
+      - heading: "Lleva el mensaje"
+        text: "Una historia escrita hoy puede llegar a alguien dentro de años: en una cárcel, un hospital, una biblioteca, en la mesa de una cocina a las 2 de la mañana."
+      - heading: "Le ayuda a quien escribe"
+        text: "Poner la experiencia en papel se parece mucho a un buen inventario: claridad, gratitud y una mirada nueva."
+      - heading: "Se necesita cada voz"
+        text: "La Viña no les paga a sus escritores. Depende de las historias de los miembros: recién llegados y veteranos, de todos los países y de todos los rincones."
+    takeaway: "Tu experiencia, fortaleza y esperanza, para alguien a quien nunca vas a conocer."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Cuando escribimos una historia, hacemos trabajo de Paso Doce. Una historia que escriban hoy puede leerla, dentro de años, alguien en una celda, en la cama de un hospital, en una biblioteca pública o en la mesa de su cocina a las dos de la mañana: alguien que nunca va a entrar a su grupo base. Las pautas de La Viña hasta llaman a su artículo un Paso Doce. Escribir también le hace algo a quien escribe. Muchos encontramos que poner nuestra experiencia en papel funciona como un inventario: las cosas se aclaran, y terminamos más agradecidos que cuando empezamos. Y la revista nos necesita. No puede pagar por las historias; depende de los miembros que quieren compartir, y es más rica cuando suena como todos nosotros: recién llegados y veteranos, de la ciudad y del rancho, de cada país de donde venimos.
+      PREGUNTA: ¿Alguna vez una historia les llegó justo en el momento preciso? (Si tienes una, compártela en una o dos frases, sin nombres, y luego invita a una persona de la sala.)
+      CONSEJO: Que tu propio compartimiento sea breve. Lo importante de esta diapositiva es la buena voluntad de la sala, no la historia de quien presenta.
+      TRANSICIÓN: «Y si están pensando "pero yo no soy escritor", la que sigue es para ustedes».
+
+  # The English slide quotes the Service Manual (p. 85); its Spanish text is not in the repository, so its point and La
+  # Viña's own words (writing-workshop.yml: "the only requirement is that you're an alcoholic in recovery") are said in
+  # our own words, with the source named.
+  - id: "not-a-writer"
+    layout: "bullets"
+    accent: "grape"
+    title: "No necesitas ser escritor"
+    items:
+      - "El Manual de Servicio de A.A. anima a los miembros a mandar sus artículos aunque piensen que su gramática y su ortografía no son perfectas"
+      - "Las pautas de La Viña dicen lo mismo: no hace falta tener experiencia escribiendo; el único requisito es ser alcohólico en recuperación"
+      - "La gramática y la ortografía son tarea de la redacción, no tuya"
+    takeaway: "Lo que la redacción necesita de ti es honestidad, no perfección."
+    source: "Fuentes: The A.A. Service Manual, 2024–2026, p. 85, y las pautas de La Viña (aalavina.org/guia-para-contribuciones), en nuestras palabras."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Esto viene del Manual de Servicio de A.A., y me encanta que esté allí: anima a los miembros a mandar sus artículos aunque piensen que su gramática y su ortografía no son perfectas. La gramática y la ortografía son tarea de la redacción, no de ustedes. Si alguna vez escribieron un Cuarto Paso, una nota a su padrino o madrina, o un mensaje largo, pueden escribir una historia. La Viña dice lo mismo en sus pautas: no hace falta tener experiencia escribiendo; el único requisito es ser alcohólico en recuperación. Lo que la redacción necesita de ustedes es honestidad, no perfección.
+      PREGUNTA: ¿Qué es lo que más les frena para escribir? (Toma dos o tres respuestas: el tiempo, el miedo, «mi historia no tiene nada de interesante». Responde a cada una con cariño: los ejercicios de hoy toman minutos, no horas; nadie ve su borrador si ustedes no quieren; y cada historia le sirve a alguien.)
+      CONSEJO: Si alguien dice que su historia es «aburrida», recuérdale que quien lee en un hospital o en una cárcel busca a alguien como él o ella, no un drama.
+      TRANSICIÓN: «Ahora veamos qué publica La Viña».
+
+  # ---------------------------------------------------------------- Parte 2 · Lo que publica La Viña
+  - id: "part-2"
+    layout: "section"
+    number: 2
+    accent: "lv"
+    title: "Lo que publica La Viña"
+    subtitle: "Testimonios, secciones, piezas cortas, extensión y tono"
+    minutes: 0.5
+    notes: |
+      DI: Saber lo que busca la redacción nos ahorra muchas suposiciones. En las próximas diapositivas vamos a ver qué tipo de historias publica La Viña, sus secciones, algunas piezas cortas que son una manera fácil de empezar, qué extensión debe tener una historia y lo que no se publica.
+      HAZ: Ten a mano un ejemplar de La Viña abierto en el índice, para mostrar una sección si alguien pregunta.
+      TRANSICIÓN: «Dos revistas, un mismo mensaje».
+
+  # La Viña first, in its orange; Grapevine for the members who write in English.
+  - id: "two-magazines"
+    layout: "columns"
+    style: "panels"
+    accent: "lv"
+    title: "Dos revistas, un mismo mensaje"
+    columns:
+      - heading: "La Viña: en español"
+        accent: "lv"
+        items:
+          - "Cada dos meses"
+          - "Testimonios contados como en una reunión: cómo era tu vida, cómo llegaste a AA, cómo es ahora"
+          - "Historias originales en español, y algunas traducidas del Grapevine"
+          - "También fotos de salas de reunión y chistes favoritos"
+      - heading: "Grapevine: en inglés"
+        accent: "gv"
+        items:
+          - "Cada mes"
+          - "Historias en primera persona sobre el alcoholismo y AA"
+          - "Un artículo sobre un Paso y otro sobre una Tradición en cada edición"
+          - "Cartas, opiniones, chistes y fotos de lugares de reunión"
+    source: "Fuentes: las pautas para colaborar de las dos revistas; P-52 (2026); La Viña News (sept.–oct. 2026)."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: La Viña sale cada dos meses, en español. Nos pide nuestro testimonio contado como lo contaríamos en una reunión: cómo era nuestra vida, cómo llegamos a AA y cómo es ahora. La mayoría de sus historias las escriben en español miembros de habla hispana, y algunas se traducen del Grapevine. También publica fotos de salas de reunión y chistes. El Grapevine sale cada mes, en inglés; casi todo lo que imprime son historias en primera persona, y cada edición trae un artículo sobre un Paso y otro sobre una Tradición.
+      PREGUNTA: ¿Alguien aquí piensa escribir en inglés? (Levanten la mano; te ayuda a formar las parejas para los ejercicios.)
+      CONSEJO: Si un miembro bilingüe pregunta a cuál revista mandar su historia: que escriba en el idioma en que piensa y en que reza. Una historia va a una sola revista, en su propio idioma.
+      TRANSICIÓN: «La Viña tiene secciones fijas, y cada una es una puerta para su historia».
+
+  - id: "departments"
+    layout: "columns"
+    style: "panels"
+    accent: "lv"
+    title: "Las secciones: un lugar para tu historia"
+    columns:
+      - heading: "Algunas secciones de La Viña"
+        accent: "lv"
+        text: "**_Pasos y Tradiciones_** · _Veteranos_, para quienes llevan muchos años · _Jóvenes en AA_ · _Servicio_"
+      - heading: "Si escribes en inglés: Grapevine"
+        accent: "gv"
+        text: "{lang:en}Emotional Sobriety · Sponsorship · Newcomers · Old-Timers · Young & Sober (YES) · Spiritual Awakenings · Home Group · Into Action · Our Personal Stories · **Steps and Traditions**{/lang}"
+    takeaway: "Las historias sobre los Pasos y las Tradiciones siempre hacen falta."
+    source: "Fuentes: las Pautas para Colaborar de La Viña (2020); aagrapevine.org/contribute."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Cada edición está organizada en secciones, y son una gran manera de encontrar su ángulo. La Viña tiene, entre otras, Pasos y Tradiciones, Veteranos para los miembros con muchos años, Jóvenes en AA y Servicio. Si su padrino o madrina les cambió la vida, si su grupo base los sostuvo en un momento difícil, si el servicio les abrió una puerta: ahí hay una historia. Fíjense en la frase de abajo: la redacción del Grapevine dice que siempre necesita historias sobre los Pasos Cuatro al Doce y sobre cada Tradición, y la sección de Pasos y Tradiciones de La Viña es justamente para eso. Son más difíciles de escribir, y por eso hacen falta. Su experiencia con la Séptima Tradición en una junta de trabajo del grupo es una historia.
+      PREGUNTA: Mirando estas secciones, ¿para cuál podrían escribir hoy? Solo piénsenlo; lo van a usar en unos minutos.
+      CONSEJO: Estas son las secciones que mencionan las pautas de La Viña (2020) y aagrapevine.org a octubre de 2026. Las secciones cambian de vez en cuando; el índice de la edición actual es la mejor manera de confirmarlas.
+      TRANSICIÓN: «Si una historia completa les parece mucho, empiecen con algo pequeño».
+
+  - id: "short-pieces"
+    layout: "bullets"
+    title: "Piezas cortas: un primer paso fácil"
+    items:
+      - "**Una foto de tu sala de reunión,** sin ninguna persona: las sillas, la mesa, la cafetera"
+      - "**Tus chistes favoritos** de AA, y los momentos graciosos de la vida en sobriedad"
+      - "**Fotos e ilustraciones:** el formulario de La Viña también las recibe (JPEG de alta resolución, 300 dpi)"
+      - "**Si escribes en inglés:** las secciones de cartas, opiniones y chistes del Grapevine ({lang:en}Dear Grapevine, What's On Your Mind?, At Wit's End{/lang})"
+    takeaway: "Una foto o un chiste también es una contribución a nuestra reunión impresa."
+    source: "Fuentes: aalavina.org/comparte; La Viña News (sept.–oct. 2026); aagrapevine.org/contribute."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: No todo el mundo tiene que empezar con una historia completa. La Viña pide también fotos de salas de reunión y chistes favoritos. La foto es de la sala, nunca de las personas: las sillas, la mesa, la cafetera que ha visto cuarenta años de reuniones. Su formulario en línea también recibe fotos e ilustraciones, en archivos JPEG de alta resolución, de 300 dpi. Y quienes escriben en inglés tienen en el Grapevine secciones de cartas, de opiniones y de chistes que salen casi enteras de sus lectores. Una foto o un chiste es una contribución de verdad a nuestra reunión impresa.
+      PREGUNTA: ¿Su grupo base tiene una sala con historia? ¿Una cafetera que ha visto décadas de reuniones? Esa es una foto para La Viña.
+      CONSEJO: Insiste en el anonimato: en una foto no debe reconocerse a nadie.
+      TRANSICIÓN: «¿Qué tan larga debe ser una historia?».
+
+  - id: "length-format"
+    layout: "table"
+    title: "Extensión, formato y tono"
+    header: ["", "La Viña", "Grapevine (en inglés)"]
+    rows:
+      - ["Extensión", "De 5 a 6 páginas a máquina, a doble espacio", "De 300 a 1,800 palabras (de 3 a 5 páginas a doble espacio); también anécdotas cortas"]
+      - ["A mano", "Con letra legible, de un solo lado de la hoja y con espacio entre líneas", "Con letra clara, de un solo lado de la hoja"]
+      - ["Idioma", "Español", "Inglés"]
+      - ["Tono", "Como en una reunión: en primera persona, con honestidad y esperanza", "El mismo: como cuando compartes en tu grupo base"]
+    widths: [1.5, 3.2, 2.6]
+    first_col_bold: true
+    source: "Fuentes: aalavina.org/guia-para-contribuciones; aagrapevine.org/guidelines-contributing-grapevine."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: La Viña pide de cinco a seis páginas escritas a máquina, a doble espacio. Si escriben a mano, también está bien: con letra legible, de un solo lado de la hoja y dejando espacio entre las líneas. El tono es el de una reunión: en primera persona, con honestidad, con esperanza. Fíjense que la cifra de 300 a 1,800 palabras es la del Grapevine, no la de La Viña; no las confundan. Según nuestra experiencia, una historia corta y enfocada es más fácil de terminar y de mandar, así que no se preocupen si la suya les sale breve.
+      HAZ: Si tienes a mano una historia impresa, muestra cuánto es una página a doble espacio.
+      CONSEJO: Los borradores de hoy van a ser cortos, y está bien. No hables en nombre de la redacción sobre lo que escoge; di lo que han encontrado los miembros.
+      TRANSICIÓN: «Y unas cuantas cosas que no se publican».
+
+  - id: "not-published"
+    layout: "bullets"
+    title: "Lo que La Viña no publica"
+    items:
+      - "Poemas ni canciones"
+      - "Homenajes a personas"
+      - "Nada que ya se haya publicado en otro lugar"
+      - "Material que no tiene que ver con AA, o que va en contra de sus principios"
+    takeaway: "¿Llevas un poema dentro? Cuenta como historia la experiencia que hay detrás."
+    source: "En nuestras palabras, de las Pautas para Colaborar de La Viña (2020) y las Guidelines for Contributing del Grapevine (rev. abril de 2019)."
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      DI: Esto sorprende siempre: La Viña no publica poemas. Sus pautas tampoco aceptan canciones ni homenajes a personas, y el Grapevine dice lo mismo, y además deja fuera las oraciones y las obras de teatro. Ninguna de las dos imprime algo que ya se haya publicado en otro lugar, ni material que no tenga que ver con AA o que vaya en contra de sus principios. Así que manden solo lo que ustedes mismos escribieron. Si escriben poesía, no la dejen: tomen la experiencia que hay detrás del poema y cuéntenla como historia. Casi siempre ahí está lo mejor.
+      PREGUNTA: ¿Alguna pregunta, hasta ahora, sobre qué mandar? (Respuestas breves; las preguntas largas van al final.)
+      CONSEJO: «Homenajes a personas» quiere decir un texto para alabar a alguien, por ejemplo en memoria de un padrino. Una historia sobre lo que tu padrino compartió contigo (o te mostró), contada como tu propia experiencia, es otra cosa, y es bienvenida.
+      TRANSICIÓN: «Ahora, ¿qué temas está pidiendo La Viña?».
+
+  # ---------------------------------------------------------------- Parte 3 · Los temas y las fechas límite
+  - id: "part-3"
+    layout: "section"
+    number: 3
+    accent: "grape"
+    title: "Los temas y las fechas límite"
+    subtitle: "Revísalos antes de cada taller"
+    minutes: 0.5
+    notes: |
+      DI: La Viña planea sus ediciones con meses de anticipación y publica sus temas y fechas límite: seis temas al año, uno por edición, cada uno con su propia fecha. Un tema es un gran punto de partida, porque la redacción está buscando esas historias. Pero los temas siempre son opcionales: La Viña también tiene temas sugeridos, sin fecha límite.
+      ACTUALIZA: la diapositiva que sigue viene del calendario de La Viña, a través de la página del comité {live:site}/es/contribute/#deadlines, que se mantiene al día y muestra una cuenta regresiva para cada fecha: las fechas que ya pasaron se quitan solas, y la presentación muestra la fecha de los datos. Aun así, antes de cada taller conviene revisar la lista de Temas de La Viña en aalavina.org/recursos.
+      TRANSICIÓN: «Esto es lo que está pidiendo La Viña».
+
+  # La Viña's dated themes, from the site's data at every build (its themes in Spanish, without an English gloss in
+  # a Spanish deck); a passed deadline never shows.
+  - id: "lv-themes"
+    layout: "live"
+    kind: "deadlines"
+    options: { pub: "lv", limit: 6 }
+    accent: "lv"
+    eyebrow: "Información actual"
+    title: "La Viña: los próximos temas"
+    source: "Fuente: Temas de La Viña (aalavina.org/recursos)."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      DI: Estos son los próximos temas de La Viña. Como sale cada dos meses, tiene seis temas al año, y cada uno cierra con mucha anticipación a su edición. La próxima fecha límite: {live:next_deadline_lv}. Las demás, con sus fechas, están en la diapositiva. Si su historia es para un tema que ya cerró, igual pueden escribirla: los temas son opcionales, y en un momento les muestro los temas sugeridos, que no tienen fecha límite.
+      HAZ: Si la diapositiva todavía no muestra temas, dilo, y lee los próximos de la lista de Temas de La Viña en aalavina.org/recursos (cada tema, su edición y su fecha).
+      PREGUNTA: ¿Qué tema les llama? (Pide que anoten uno; lo van a escoger en el ejercicio 3.)
+      CONSEJO: Si en la diapositiva aparece «Hispanos Veteranos en AA», ten en cuenta que «veteranos» puede querer decir miembros con muchos años (la sección Veteranos de La Viña es para ellos) o veteranos militares, y la lista de temas de La Viña da solo el título. Revisa la descripción de La Viña antes de explicar ese tema.
+      ACTUALIZA: nada a mano: las filas vienen del sitio del comité, y los temas cuya fecha ya pasó se quitan solos. La Viña publica los temas del año siguiente en aalavina.org/recursos a principios de año; aparecen aquí en cuanto el sitio del comité los tiene.
+      TRANSICIÓN: «Y si ningún tema les llama, hay otra puerta».
+
+  # La Viña's suggested topics, as writing-workshop.yml names them (aalavina.org/temas-sugeridos): the titles in La
+  # Viña's words. "Lo que me enseñó mi Padrino" is the title of one of them, quoted as La Viña writes it.
+  - id: "suggested-topics"
+    layout: "bullets"
+    eyebrow: "Información actual"
+    title: "Temas sugeridos: sin fecha límite"
+    items:
+      - "Los temas de las ediciones son opcionales: una buena historia siempre es bienvenida"
+      - "La Viña tiene una lista de **temas sugeridos** para escribir en cualquier época del año"
+      - "Por ejemplo: _Mi Primer Paso_ · _Lo que me enseñó mi Padrino_ · _Cómo trato con el miedo hoy_ · _Tiempos de fiesta en sobriedad_"
+      - "Los temas de las próximas ediciones: en la diapositiva {slide:lv-themes}, en cuanto se publican"
+    takeaway: "Cada fecha límite, con su cuenta regresiva: [{live:site}/es/contribute/](/contribute/)"
+    source: "Fuentes: aalavina.org/temas-sugeridos; aalavina.org/recursos."
+    allow_words: ["enseñó"]
+    minutes: 1.5
+    notes: |
+      DI: Los temas de cada edición son opcionales, y una buena historia siempre es bienvenida. La Viña tiene además una lista de temas sugeridos para escribir en cualquier época del año: mi Primer Paso, lo que me enseñó mi Padrino, cómo trato con el miedo hoy, los tiempos de fiesta en sobriedad, y otros más en aalavina.org/temas-sugeridos. Y la página del comité muestra cada fecha límite que viene, con una cuenta regresiva, para que nunca tengan que adivinar.
+      PREGUNTA: ¿A quién le gustaría que le recordaran la próxima fecha límite? (Diles que la página {live:site}/es/contribute/#deadlines está en la diapositiva. Quien quiera un recordatorio puede escribir él mismo a {live:email}; no juntes correos electrónicos en el taller.)
+      ACTUALIZA: nada a mano: La Viña publica los temas del año siguiente a principios de año, y la diapositiva de los temas los muestra en cuanto el sitio del comité los tiene.
+      TRANSICIÓN: «Basta de escuchar. A escribir».
+
+  # Grapevine's themes, for the members in the room who write in English: off at the start (Customize → Slides turns it
+  # on in a bilingual room); its rows in English, as Grapevine publishes them.
+  - id: "gv-themes"
+    layout: "live"
+    kind: "deadlines"
+    options: { pub: "gv", limit: 6 }
+    optional: true
+    starts_off: true
+    accent: "navy"
+    eyebrow: "Información actual · si escribes en inglés"
+    title: "Grapevine: los próximos temas"
+    source: "Fuente: aagrapevine.org/contribute. Noviembre: Classic Grapevine (sin fecha límite)."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Para quienes escriben en inglés: estos son los próximos temas del Grapevine. Fíjense qué temprano cierran: el Grapevine empieza a escoger las historias de una edición unos cinco meses antes de la fecha de la portada. Su próxima fecha límite: {live:next_deadline_gv}. Si una historia se queda fuera de su tema, el Grapevine la guarda en archivo y puede usarla en una edición posterior. La edición de noviembre es Classic Grapevine, hecha con historias del archivo, así que no tiene fecha límite.
+      HAZ: Esta diapositiva empieza apagada: enciéndela en un taller bilingüe ({ui:customize} → {ui:slides}). Lee los temas en inglés, como los publica el Grapevine.
+      ACTUALIZA: nada a mano: las filas vienen del calendario editorial del Grapevine a través del sitio del comité, y los temas cuya fecha pasó se quitan solos.
+      TRANSICIÓN: «Basta de escuchar. A escribir».
+
+  # Every exercise is green, as in the English deck. The steps are the English deck's "EN ESPAÑOL" prompt, which was
+  # written in Spanish by hand; the English steps are in the notes for a bilingual room.
+  - id: "exercise-1"
+    layout: "activity"
+    accent: "vine"
+    eyebrow: "Ejercicio 1 de 4 · para entrar en calor"
+    title: "Para entrar en calor: un momento divertido en sobriedad"
+    steps:
+      - "Piensa en una vez que te divertiste en sobriedad: un viaje, una noche de juegos, un baile, un evento de servicio, una carcajada"
+      - "Escribe **5 minutos** sin parar. No corrijas nada"
+      - "¿No sabes cómo empezar? Comienza así: _La primera vez que me di cuenta de que me estaba divirtiendo en sobriedad…_"
+      - "En parejas, lee una frase que te guste (1 minuto cada uno), o pasa"
+    duration: 10
+    materials: ["Papel y pluma, o tu teléfono", "Un cronómetro (quien facilita lleva el tiempo)"]
+    takeaway: "**Para compartir:** ¿Qué te sorprendió de tu propio recuerdo?"
+    minutes: 10
+    version_minutes: { short: 8 }
+    version_fields:
+      short: { duration: 8 }
+    notes: |
+      DI: Nuestro primer ejercicio es para entrar en calor, y la idea es que sea divertido. Nuestro Libro Grande nos recuerda que no somos gente triste. Piensen en una vez que se divirtieron en sobriedad: un viaje, una noche de juegos, un baile, un evento de servicio, un momento en que se rieron hasta llorar. Ahora escriban cinco minutos sin parar. No corrijan la ortografía, no tachen nada, no se preocupen por adónde va. Si se atoran, escriban la frase de la pantalla y sigan. ¿Listos? Empiecen.
+      {not:short} HAZ: Pon a la vista un cronómetro de 5 minutos. A los 4 minutos di «queda un minuto», y luego «terminen su frase». Forma las parejas (con quien está al lado en la sala; en línea, salas de dos por 3 minutos, que se abran solas, o parejas que se turnan en voz alta si la plataforma no tiene salas). Cada persona lee una frase que le guste, o pasa. Reúne a todos y toma dos o tres respuestas a la pregunta para compartir, solo sobre lo que cada quien escribió.
+      {only:short} HAZ: Pon a la vista un cronómetro de 5 minutos. A los 4 minutos di «queda un minuto», y luego «terminen su frase». Forma las parejas en el tiempo que queda (con quien está al lado en la sala; en línea, salas de dos que se abran solas, o parejas que se turnan en voz alta si la plataforma no tiene salas). Cada persona lee una frase que le guste, o pasa. Reúne a todos y toma dos o tres respuestas a la pregunta para compartir, solo sobre lo que cada quien escribió.
+      CONSEJO: El calentamiento no está atado a una fecha límite. Una historia divertida en sobriedad le queda bien al tema sugerido de La Viña «Tiempos de fiesta en sobriedad», que no tiene fecha límite, o a uno de los temas de la diapositiva {slide:lv-themes}. Escribe con la sala durante el primer minuto: así a los demás les cuesta menos empezar.
+      {lang:en}IN ENGLISH (for anyone writing in English, read it aloud or paste it in the chat): Think of one time you had fun sober: a trip, a game night, a dance, a service event, a belly laugh. Write for 5 minutes without stopping. Don't fix anything. Stuck? Begin with: The first time I noticed I was having fun sober… In pairs, read one sentence you like (1 minute each), or pass. Share back: What surprised you in your own memory?{/lang}
+      {not:short} REPARTO DEL TIEMPO: 5 para escribir, 3 en parejas, 2 para compartir.
+      TRANSICIÓN: «Guarden lo que escribieron. Ahora hablemos de qué hace fuerte una historia».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: deja los cinco minutos para escribir; las parejas y el compartir se reparten el resto. Nunca quites del todo el compartir en parejas: ahí la gente descubre que su historia vale la pena."
+
+  # ---------------------------------------------------------------- Parte 4 · Qué hace fuerte una historia
+  - id: "part-4"
+    layout: "section"
+    number: 4
+    accent: "gv"
+    title: "Qué hace fuerte una historia"
+    subtitle: "Un momento, contado con honestidad, con tu propia voz"
+    minutes: 0.5
+    notes: |
+      DI: Acaban de escribir cinco minutos. Ahora veamos algunas cosas que convierten un texto en una historia que otro alcohólico no puede dejar de leer. Nada de esto son reglas: es experiencia, de miembros a quienes les han publicado historias y de lo que la propia redacción ha compartido.
+      TRANSICIÓN: «Primero, tres cosas».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: la parte 4 toma unos 8 minutos (11 en el plan completo)."
+
+  - id: "strong-story"
+    layout: "columns"
+    style: "cards"
+    title: "Una historia fuerte es…"
+    columns:
+      - heading: "1 · Un momento"
+        text: "Una experiencia o un punto decisivo, no toda tu vida. Ve directo al grano."
+      - heading: "2 · Honesta"
+        text: "Cuéntala como pasó. Que quede claro que eres alcohólico y miembro de AA."
+      - heading: "3 · Concreta"
+        text: "Un detalle real (una cafetera, una llamada a medianoche, tu primera ficha) pone a quien lee en la sala."
+    takeaway: "Pregúntate: ¿quien lea esto se va a reconocer en mi historia?"
+    minutes: 2.5
+    version_minutes: { short: 2 }
+    notes: |
+      DI: Primero, un momento. El error más común es querer contar toda la vida en cinco páginas. Escojan una experiencia, un punto decisivo, y cuéntenlo bien. Unos consejos de una editora del Grapevine, compartidos en uno de nuestros talleres, lo dicen así de simple: vayan directo al grano. Segundo, honesta. Cuéntenla como pasó, incluidas las partes que no los dejan bien parados. Y que quede claro desde el principio que son alcohólicos y miembros de AA: quien lee necesita saber que le habla uno de los suyos. Tercero, concreta. «Me sentía solo» es una frase. «Durante un año cené cada noche de pie, junto al mostrador de la cocina» es una imagen. La otra pregunta de la editora es la de abajo: ¿quien lea esto se va a reconocer en mi historia?
+      PREGUNTA: Miren lo que escribieron en el calentamiento. ¿Hay algún detalle concreto? Subráyenlo.
+      CONSEJO: Los consejos de la editora vienen de un taller anterior del comité; atribúyelos a «una editora del Grapevine», nunca con su nombre.
+      TRANSICIÓN: «Cuatro rasgos más de una historia fuerte».
+
+  - id: "sounds-like-you"
+    layout: "bullets"
+    title: "…y suena como tú"
+    items:
+      - "**Muestra, no cuentes:** deja que quien lee vea lo que hiciste y oíste, en lugar de nombrar el sentimiento"
+      - "**El lenguaje de AA:** escribe como compartes en tu grupo base: _yo_, no _tú deberías_; nuestras palabras, no las de una clínica"
+      - "**Humildad:** comparte, no prediques; experiencia, no consejos"
+      - "**Humor:** la risa es parte de la recuperación; un momento gracioso puede llevar un mensaje serio"
+    takeaway: "Tu propia voz es la que le da confianza a quien lee."
+    minutes: 2
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Muestra, no cuentes: en la próxima diapositiva vemos un ejemplo. El lenguaje de AA: escriban como comparten en su grupo base. Digan «yo», no «tú deberías». Usen las palabras de nuestras reuniones, como los Pasos, el padrino o la madrina, un Poder Superior como cada quien lo concibe, en lugar de términos de clínica o de libro de texto. Humildad: compartan, no prediquen. Una historia llena de consejos es un sermón; una historia llena de experiencia es una reunión. Dejen que lo que les pasó lleve el mensaje, y que quien lea saque su propia conclusión. Y humor: la risa es parte de la recuperación. Algunas de las historias que los miembros recuerdan por más tiempo son las graciosas, y un momento ligero puede llevar un mensaje serio más lejos que uno pesado.
+      PREGUNTA: ¿Cuál de estas les cuesta más? (Casi todas las salas dicen «muestra, no cuentes»; es la siguiente diapositiva.)
+      CONSEJO: Si alguien pregunta por Dios o la espiritualidad en su historia: que escriba sobre su propia experiencia, con sus propias palabras. La revista publica a miembros de todas las creencias y de ninguna; no hay un vocabulario obligatorio.
+      TRANSICIÓN: «Así se ve "muestra, no cuentes"».
+
+  # The English deck's example, written again in Spanish for this deck (neither example comes from a published story).
+  - id: "show-dont-tell"
+    layout: "columns"
+    style: "panels"
+    accent: "navy"
+    title: "Muestra, no cuentes: un ejemplo"
+    columns:
+      - heading: "Contar"
+        accent: "navy"
+        text: "Llegué a AA en muy mal estado, y la gente de ahí de veras me ayudó."
+      - heading: "Mostrar"
+        accent: "vine"
+        text: "La noche de mi primera reunión me quedé veinte minutos en la camioneta con el motor prendido. Un señor tocó la ventanilla, levantó dos vasos de café y me dijo: «Ya está el café». Apagué el motor."
+    takeaway: "Los mismos hechos. La segunda deja que quien lee se siente contigo en la camioneta."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      DI: Las dos dicen lo mismo. La primera nos lo cuenta: estaba mal y AA me ayudó. Asentimos y se nos olvida. La segunda nos lo muestra: estamos sentados en esa camioneta, oímos el motor, vemos los vasos de café, y cuando quien escribe apaga el motor, sabemos exactamente lo que pasó sin que nadie nos lo diga. Nadie tuvo que escribir «tenía miedo» ni «me sentí bienvenido». Eso es lo que buscamos. No hace falta hacerlo en cada frase: una historia también necesita contar para avanzar. Pero los momentos que más importan merecen una escena.
+      PREGUNTA: Tomen una frase de su calentamiento que «cuenta», algo como «me la pasé muy bien», y digan en voz alta qué habría visto u oído alguien. (Toma uno o dos voluntarios.)
+      CONSEJO: Los dos ejemplos se escribieron para este taller; ninguno viene de una historia publicada. Nunca pongas una historia publicada en una diapositiva: las historias son de AA Grapevine, Inc. Mejor levanta la revista o lee en voz alta un pasaje corto del ejemplar impreso.
+      TRANSICIÓN: «Ahora, ¿cómo se arma una historia completa?».
+
+  - id: "three-parts"
+    layout: "columns"
+    style: "cards"
+    accent: "navy"
+    title: "Una forma conocida: tres partes"
+    columns:
+      - heading: "1 · Cómo era"
+        accent: "navy"
+        text: "Breve y verdadero. Lo suficiente para identificarse; no hace falta contar cada trago."
+      - heading: "2 · Lo que pasó"
+        accent: "gv"
+        text: "El punto decisivo: una reunión, un Paso, un padrino o una madrina, un momento de buena voluntad."
+      - heading: "3 · Cómo es ahora"
+        accent: "vine"
+        text: "Donde está la esperanza: qué es distinto hoy, y qué haces para que siga así."
+    takeaway: "Así compartimos en las reuniones, y así pide La Viña los testimonios."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      DI: Esta forma ya la conocen: es como compartimos en las reuniones. Cómo era, lo que pasó y cómo es ahora. La Viña pide los testimonios justamente así. Unas sugerencias de miembros a quienes les han publicado: que la primera parte sea breve. Quien lee necesita lo suficiente para identificarse, no cada trago que se tomaron. Denle espacio de verdad a lo que pasó, al punto decisivo. Y pongan el mayor cuidado en cómo es ahora, porque ahí está la esperanza, y la esperanza es lo que vino a buscar quien lee. La misma forma sirve para una historia pequeña: lo que yo hacía cuando me enojaba, lo que pasó, lo que hago ahora.
+      PREGUNTA: En su propia sobriedad, ¿cuál es un momento de «lo que pasó» sobre el que podrían escribir?
+      TRANSICIÓN: «Hay otra manera de armar una historia, y muchas veces es más fuerte».
+
+  - id: "single-scene"
+    layout: "bullets"
+    title: "O cuenta una sola escena"
+    items:
+      - "Escoge una hora, una noche, una llamada"
+      - "¿**Dónde** estabas? ¿**Cuándo** fue? ¿**Quién** estaba ahí (solo nombres de pila)?"
+      - "¿**Qué** viste, oíste, oliste? ¿Qué se dijo?"
+      - "¿**Por qué** te importa hoy?"
+      - "Empieza en medio de la acción; termina en lo que significa ahora"
+    takeaway: "Una sola escena puede ser toda la historia, o el corazón de una más larga."
+    minutes: 2
+    version_minutes: { short: 1.5 }
+    notes: |
+      DI: En lugar de cubrir años, algunas de las mejores historias cubren una sola noche. Una llamada al padrino o a la madrina. Una reunión en el salón de una iglesia. Las preguntas de esta diapositiva son las de su planificador: quién, qué, dónde, cuándo y por qué. Contéstenlas y tienen el esqueleto de una escena. Un consejo que funciona casi siempre: empiecen en medio de la acción. No «nací en 1962»; empiecen con «sonó el teléfono a las tres de la mañana». Y terminen en lo que esa escena significa para ustedes hoy. Una sola escena puede ser toda la historia, o el corazón de una más larga.
+      HAZ: Levanta el planificador para que todos sepan de qué hoja hablas. En línea, pega en el chat el enlace a la hoja.
+      CONSEJO: Recuerda aquí, antes del ejercicio 3, lo de usar solo nombres de pila, para que forme parte de los borradores desde el principio.
+      TRANSICIÓN: «Probemos ahora la forma de tres partes».
+
+  # The steps are the English deck's Spanish prompt for this exercise. The 90-minute plan gives it 12 minutes: its
+  # time card says so, and the pairs get no count the 12 minutes could not hold. Change a step in both versions.
+  - id: "exercise-2"
+    layout: "activity"
+    accent: "vine"
+    eyebrow: "Ejercicio 2 de 4 · sobriedad emocional"
+    title: "Antes, lo que pasó, ahora"
+    steps:
+      - "Recuerda un momento en que reaccionaste de manera diferente a como lo hacías antes: ante el enojo, el miedo, un resentimiento o una mala noticia"
+      - "3 minutos: lo que yo hacía antes"
+      - "3 minutos: lo que pasó (la herramienta, el Paso, la persona)"
+      - "3 minutos: cómo es ahora"
+      - "En parejas, lee tu párrafo de _ahora_ (2 minutos cada uno)"
+    duration: 14
+    materials: ["Papel y pluma", "Tus notas del calentamiento"]
+    takeaway: "**Para compartir:** ¿Qué herramienta del programa apareció en lo que escribiste?"
+    minutes: 14
+    version_minutes: { short: 12 }
+    version_fields:
+      short:
+        duration: 12
+        steps:
+          - "Recuerda un momento en que reaccionaste de manera diferente a como lo hacías antes: ante el enojo, el miedo, un resentimiento o una mala noticia"
+          - "3 minutos: lo que yo hacía antes"
+          - "3 minutos: lo que pasó (la herramienta, el Paso, la persona)"
+          - "3 minutos: cómo es ahora"
+          - "En parejas, lee tu párrafo de _ahora_"
+    notes: |
+      DI: Este ejercicio va con la sobriedad emocional. En enero de 1958, Bill W. escribió en el Grapevine un artículo llamado «{lang:en}The Next Frontier: Emotional Sobriety{/lang}», y desde entonces los miembros no han dejado de escribir sobre ella. En La Viña, este ejercicio le queda bien al tema sugerido «Cómo trato con el miedo hoy». Piensen en un momento en que reaccionaron de manera distinta a como lo hacían antes: alguien se les cerró en el tráfico, llegó una mala noticia, volvió un viejo resentimiento, y esta vez no hicieron lo de siempre. Van a escribir en tres partes de tres minutos. Yo les aviso el tiempo. Primera parte: lo que yo hacía antes. Empiecen.
+      {not:short} HAZ: Avisa cada 3 minutos: «Ahora escriban lo que pasó: la herramienta, el Paso, la persona». Luego: «Ahora escriban cómo es ahora». Después, parejas, 2 minutos cada uno, leyendo solo el párrafo de «ahora» (en línea, salas de dos por 5 minutos, si la plataforma las tiene). Para compartir, dos o tres voluntarios, sobre lo que cada quien escribió.
+      {only:short} HAZ: Avisa cada 3 minutos: «Ahora escriban lo que pasó: la herramienta, el Paso, la persona». Luego: «Ahora escriban cómo es ahora». Después, parejas, leyendo solo el párrafo de «ahora», en el tiempo que queda (en línea, salas de dos, si la plataforma las tiene). Para compartir, dos o tres voluntarios, sobre lo que cada quien escribió.
+      CONSEJO: Si alguien escribe sobre algo doloroso y se conmueve, deja que se tome un respiro; ofrécele una palabra en privado después y sugiérele que hable con su padrino o madrina. Nadie tiene que compartir. También le puede servir el próximo tema abierto de La Viña, en la diapositiva {slide:lv-themes}.
+      {lang:en}IN ENGLISH (read it aloud or paste it in the chat): Recall a moment you reacted differently than you used to: to anger, fear, a resentment, bad news. 3 minutes: what I used to do. 3 minutes: what happened (the tool, the Step, the person). 3 minutes: what it's like now. In pairs, read your now paragraph. Share back: Which tool of the program showed up in your own writing?{/lang}
+      {not:short} REPARTO DEL TIEMPO: 9 para escribir, 4 en parejas, 1 para compartir.
+      TRANSICIÓN: «Buen trabajo. Tomemos un descanso».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: deja las tres partes de escritura como están; las parejas y el compartir se reparten el resto (nunca quites del todo el compartir en parejas)."
+
+  # A centred pause; "Volvemos a las" is a presenter blank. The 90-minute plan's break is five minutes.
+  - id: "break"
+    layout: "text"
+    style: "break"
+    title: "Un descanso"
+    body: |-
+      **Unos siete minutos**
+
+      Volvemos a las {fill:break_end}
+
+      Estírate, sírvete otro café, descansa la mano. En línea: quédate en la reunión; puedes apagar la cámara.
+    minutes: 7
+    version_minutes: { short: 5 }
+    version_fields:
+      short:
+        body: |-
+          **Unos cinco minutos**
+
+          Volvemos a las {fill:break_end}
+
+          Estírate, sírvete otro café, descansa la mano. En línea: quédate en la reunión; puedes apagar la cámara.
+    notes: |
+      {not:short} DI: Tomemos unos siete minutos. Estírense, sírvanse otro café, descansen la mano. Al volver vamos a hablar del anonimato en el papel, de cómo aparece su nombre y cómo proteger a las personas de su historia, y después van a escribir una escena completa.
+      {only:short} DI: Tomemos unos cinco minutos. Estírense, sírvanse otro café, descansen la mano. Al volver vamos a hablar del anonimato en el papel, de cómo aparece su nombre y cómo proteger a las personas de su historia, y después van a escribir una escena completa.
+      HAZ: Pon la hora de regreso en {ui:customize} → {ui:your_details} antes del taller, o dila en voz alta. En línea, deja esta diapositiva en pantalla y pide que se queden conectados. Aprovecha el descanso para revisar la temperatura de la sala, los materiales y las salas para el ejercicio 3. Nuestro Google Meet usa la cuenta de Google Workspace del comité, así que no tiene límite de tiempo: la llamada sigue abierta durante el descanso.
+      CONSEJO: Quédate disponible en el descanso: es cuando quienes dudan hacen las preguntas que no harían frente a todos. Guarda en confidencia lo que oigas.
+      ACTUALIZA: la hora de regreso ({ui:customize} → {ui:your_details}), y la duración si tu plan es otro ({ui:customize} → {ui:edit}).
+      TRANSICIÓN: «Bienvenidos de nuevo. Hablemos del anonimato al escribir».
+
+  # ---------------------------------------------------------------- Parte 5 · El anonimato al escribir
+  - id: "part-5"
+    layout: "section"
+    number: 5
+    accent: "lv"
+    title: "El anonimato al escribir"
+    subtitle: "Tu nombre, los nombres de otros, y las Tradiciones en el papel"
+    minutes: 0.5
+    notes: |
+      DI: Bienvenidos de nuevo. Antes de escribir una escena completa, hablemos del anonimato, porque cambia lo que ponemos en la página. La buena noticia: la oficina que publica las revistas lleva más de ochenta años cuidando el anonimato de quienes escriben, y el sistema es sencillo. Lo que nos toca a nosotros es proteger a las otras personas de nuestras historias.
+      HAZ: Revisa que todos hayan vuelto; en línea, espera a que el número de participantes deje de cambiar.
+      TRANSICIÓN: «Primero, su propio nombre».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: la parte 5 toma unos 5 minutos (6 en el plan completo)."
+
+  # What a La Viña byline looks like in print is not in the repository: the slide says what the editors receive and
+  # that the writer chooses, and the notes say to look at an issue for the rest.
+  - id: "your-name"
+    layout: "columns"
+    style: "panels"
+    accent: "navy"
+    title: "Cómo aparece tu nombre"
+    columns:
+      - heading: "Lo que recibe la redacción"
+        accent: "navy"
+        items:
+          - "Tu nombre completo, dirección, teléfono y correo electrónico"
+          - "La oficina los usa para comunicarse contigo; nunca se publican"
+          - "La oficina protege el anonimato en todo momento (Acción Consultiva de 1974)"
+      - heading: "Lo que ven quienes leen"
+        accent: "vine"
+        items:
+          - "Tú decides cómo aparece tu nombre: díselo a la redacción al mandar tu historia"
+          - "La costumbre de AA en lo impreso: nombre de pila e inicial del apellido"
+          - "Si prefieres, puedes pedir que se publique como _Anónimo_"
+    takeaway: "Tu nombre completo, para la oficina; tu nombre de pila y una inicial, o menos, en la revista."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Cuando mandan una historia, le dan a la redacción su nombre completo, su dirección, su teléfono y su correo, para que puedan localizarlos si escogen su historia. Eso nunca se publica: ya en 1974 la Conferencia de Servicios Generales dejó constancia de que la oficina del Grapevine, que también publica La Viña, protege el anonimato en todo momento. En la revista, ustedes deciden cómo aparece su nombre: díganlo al mandar su historia. La costumbre de AA en lo impreso es el nombre de pila y la inicial del apellido. Si viven en un pueblo muy chico y eso les preocupa, pueden pedir que se publique como Anónimo.
+      PREGUNTA: ¿Alguien tiene una pregunta sobre su propio nombre en la revista? (Responde en general; invita a quien tenga una situación personal a hablar contigo en privado, en el descanso o al final.)
+      CONSEJO: Para saber cómo firma La Viña las historias (si lleva la ciudad, el país…), muestra una edición reciente; no lo des por hecho. El formulario del Grapevine da tres opciones de nombre: nombre de pila e inicial, solo iniciales, o Anónimo, y sus historias publicadas suelen llevar la ciudad y el estado.
+      TRANSICIÓN: «Esta es la costumbre de AA, en palabras de AA».
+
+  # The English slide quotes SMF-197 word for word; with no Spanish text of it here, the custom is said in our words
+  # (a text slide, in the quotations' grape).
+  - id: "custom-in-print"
+    layout: "text"
+    accent: "grape"
+    title: "La costumbre de AA en lo impreso"
+    body: |-
+      **En artículos impresos, en sitios web y en correos electrónicos, nos identificamos solo con el nombre de pila y la inicial del apellido.**
+
+      Es una costumbre de toda la Comunidad, no solo de las revistas.
+    source: "En nuestras palabras, de Anonymity Online and Digital Media (SMF-197), p. 1, de A.A. World Services, Inc."
+    minutes: 1
+    notes: |
+      DI: Esta costumbre no es solo de las revistas: es de toda la Comunidad. El texto de servicio de AA sobre el anonimato en línea lo dice, en nuestras palabras, así: en artículos impresos, en sitios web y en correos electrónicos, nos identificamos solo con el nombre de pila y la inicial del apellido. La Undécima Tradición nos pide mantener el anonimato personal ante la prensa, la radio y el cine, y hoy eso incluye internet y las redes sociales. Así que, si publican su historia, celébrenlo, compártanla con su grupo base, y piénsenlo dos veces antes de subirla a las redes sociales con su nombre completo o su foto al lado.
+      PREGUNTA: ¿Cómo cuida su grupo base el anonimato en línea, en los grupos de WhatsApp o en las redes sociales? (Una o dos respuestas; que no se vuelva un debate.)
+      CONSEJO: Si alguien pregunta si puede compartir en línea su historia publicada: que comparta el enlace de la propia revista, sin su nombre completo ni su foto, y que recuerde que, una vez publicada, el copyright de la historia es de AA Grapevine, Inc. Esta diapositiva dice en nuestras palabras lo que el folleto dice en inglés; no la presentes como una cita textual.
+      TRANSICIÓN: «Ahora, las personas de nuestras historias».
+
+  - id: "other-people"
+    layout: "bullets"
+    title: "Cómo proteger a otras personas en tu historia"
+    items:
+      - "Padrinos, madrinas, familia, amistades: solo nombres de pila, o ninguno (_mi madrina_, _mi hermana_)"
+      - "Nunca reveles que otra persona es miembro de AA si se le puede reconocer"
+      - "Deja fuera los detalles que señalan a una sola persona: un lugar de trabajo, un oficio poco común, un pueblo muy chico"
+      - "Fotos: nadie a quien se pueda reconocer; muestra la sala, las sillas, la cafetera"
+      - "Cuenta tu parte de la historia; la suya les toca contarla a ellos"
+    takeaway: "Pregúntate: si esta persona leyera mi historia, ¿se sentiría segura?"
+    minutes: 1.5
+    notes: |
+      DI: Nuestras historias están llenas de otras personas: padrinos y madrinas, esposos, hijos, el amigo que nos llevó a la primera reunión. Su anonimato importa tanto como el nuestro. Usen solo nombres de pila, o ningún nombre: «mi padrino», «mi hermana» funciona de maravilla. Nunca revelen que otra persona es miembro de AA si se le puede reconocer. Cuidado con los detalles que señalan a una sola persona, como su lugar de trabajo o un oficio poco común. En las fotos, nadie a quien se pueda reconocer. Y lo más profundo: cuenten su parte de la historia. Si su historia toca las luchas de un familiar, escriban sobre lo que ustedes hicieron y cómo cambiaron, y dejen que esa persona cuente la suya.
+      PREGUNTA: Miren sus borradores de los ejercicios 1 y 2. ¿Hay un nombre completo, o un detalle que identifique a alguien? Arréglenlo ahora; toma diez segundos.
+      CONSEJO: Esto vale también para la sala: si en las parejas se habla de otras personas, eso se queda en la pareja.
+      TRANSICIÓN: «Y unas cuantas Tradiciones que se aplican al escribir».
+
+  - id: "traditions-on-paper"
+    layout: "bullets"
+    title: "Que siga siendo AA: las Tradiciones en el papel"
+    items:
+      - "**Unidad de propósito:** tu experiencia con el alcohol y con la recuperación en AA"
+      - "**Ningún asunto ajeno:** nada de política, causas ni noticias; ningún consejo médico ni legal; ninguna opinión sobre tratamientos, medicamentos u otras comunidades"
+      - "**Atracción, no promoción:** no recomiendes negocios, sitios web, productos ni centros de tratamiento; mencionar la literatura de AA está bien; deja que la esperanza de tu historia haga el trabajo"
+      - "**Tu experiencia, no la voz de AA:** las historias no son declaraciones de la política de AA"
+    source: "Nuestro resumen de las Tradiciones Cinco, Seis, Diez y Once; las pautas del Grapevine (rev. abril de 2019) piden que las historias reflejen la unidad de propósito de AA."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Las Tradiciones se aplican en el papel igual que en la sala de reunión. Escriban sobre su experiencia con el alcohol y con la recuperación en AA: esa es nuestra unidad de propósito. La Décima Tradición: ningún asunto ajeno. Nada de política, causas ni noticias, ningún consejo médico ni legal, y ninguna opinión sobre tratamientos, medicamentos u otras comunidades. Si algo de eso fue parte de su vida, digan lo que hicieron, sin decirle a quien lee qué hacer o qué pensar. La Sexta y la Undécima: atracción, no promoción. No recomienden un negocio, un sitio web, un producto o un centro de tratamiento como la respuesta; mencionar el Libro Grande u otra literatura de AA está bien. Y cada quien habla solo por sí: las historias son la experiencia de los miembros, nunca la política de AA.
+      PREGUNTA: ¿A alguien se le ocurre cómo escribir sobre, digamos, una estancia en el hospital sin dar consejos médicos? (Respuesta: describe lo que te pasó y lo que hiciste; deja fuera las recomendaciones.)
+      CONSEJO: Presenta esto como nuestro resumen de lo que dicen las Tradiciones, no como reglas del comité ni de la revista: la redacción decide lo que publica.
+      TRANSICIÓN: «Ahora juntemos todo en una escena completa».
+
+  # The steps are the English deck's Spanish prompt for this exercise, which points to La Viña's calendar (the theme
+  # slide) and its suggested topics. The 90-minute plan gives it 12 minutes, as in the English deck.
+  - id: "exercise-3"
+    layout: "activity"
+    accent: "vine"
+    eyebrow: "Ejercicio 3 de 4 · escoge un tema"
+    title: "Escribe una escena"
+    steps:
+      - "Elige un tema: uno del calendario de La Viña (diapositiva {slide:lv-themes}), un tema sugerido (por ejemplo, _Mi Primer Paso_) o cualquier Paso o Tradición"
+      - "Elige un solo momento: una hora, una noche, una llamada"
+      - "Escribe **10 minutos**: dónde estás, qué ves y oyes, algo que alguien dijo, qué cambió en ti"
+      - "En parejas (2 minutos cada uno): lee tu escena; tu compañero o compañera menciona un detalle que se le quedó grabado"
+    duration: 15
+    materials: ["El planificador de tu historia", "Tus notas hasta ahora"]
+    takeaway: "**Para compartir:** ¿Qué dejaste fuera, y le hace falta a tu historia?"
+    minutes: 15
+    version_minutes: { short: 12 }
+    version_fields:
+      short:
+        duration: 12
+        steps:
+          - "Elige un tema: uno del calendario de La Viña (diapositiva {slide:lv-themes}), un tema sugerido (por ejemplo, _Mi Primer Paso_) o cualquier Paso o Tradición"
+          - "Elige un solo momento: una hora, una noche, una llamada"
+          - "Escribe **10 minutos**: dónde estás, qué ves y oyes, algo que alguien dijo, qué cambió en ti"
+          - "En parejas: lee tu escena; tu compañero o compañera menciona un detalle que se le quedó grabado"
+    notes: |
+      DI: Este es el tiempo de escritura más largo de hoy: diez minutos. Escojan un tema del calendario de La Viña que vimos en la diapositiva {slide:lv-themes}, un tema sugerido como «Mi Primer Paso», o cualquier Paso o Tradición, y elijan un solo momento que le pertenezca. Usen su planificador si les ayuda: dónde estaban, quién estaba ahí, solo nombres de pila, qué vieron y oyeron, qué cambió. Empiecen en medio de la acción, por ejemplo: «Sonó el teléfono a las tres de la mañana…». Diez minutos. Empiecen.
+      {not:short} HAZ: Pon un cronómetro de 10 minutos; avisa a los 2 minutos y al minuto final. Después, parejas de 2 minutos cada uno (en línea: salas de dos, 5 minutos, con aviso de un minuto, si la plataforma las tiene). Quien escucha menciona un detalle que se le quedó grabado: nada más, sin consejos. Para compartir, dos o tres voluntarios.
+      {only:short} HAZ: Pon un cronómetro de 10 minutos; avisa a los 2 minutos y al minuto final. Después, parejas, en el tiempo que queda (en línea: salas de dos, con aviso de un minuto, si la plataforma las tiene). Quien escucha menciona un detalle que se le quedó grabado: nada más, sin consejos. Para compartir, dos o tres voluntarios.
+      CONSEJO: Camina por la sala en silencio (o vigila el chat, en línea) por si alguien se atora, y ofrécele una pregunta: «¿Dónde estabas sentado?», «¿A qué olía el cuarto?». A quien prefiera hablar en lugar de escribir, recuérdale que puede grabar su historia después (Graba tu historia, en un momento).
+      {lang:en}IN ENGLISH (read it aloud or paste it in the chat): Pick a theme from the current calendars, or any Step or Tradition. Choose one moment: an hour, an evening, a phone call. Write for 10 minutes: where you are, what you see and hear, one thing someone said, what changed in you. In pairs, read your scene; your partner names one detail that stayed with them. Share back: What did you leave out, and does your story need it?{/lang}
+      ACTUALIZA: nada: el primer paso apunta a la diapositiva de los temas, que se mantiene al día sola.
+      {not:short} REPARTO DEL TIEMPO: 10 para escribir, 4 en parejas, 1 para compartir.
+      TRANSICIÓN: «Ya tienen un borrador. Preparémoslo para mandarlo».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: deja los diez minutos para escribir; las parejas y el compartir se reparten el resto (nunca quites del todo el compartir en parejas)."
+
+  # ---------------------------------------------------------------- Parte 6 · Revisar y enviar
+  - id: "part-6"
+    layout: "section"
+    number: 6
+    accent: "vine"
+    title: "Revisar y enviar"
+    subtitle: "Una lista, el envío, una grabación, y luego soltarlo"
+    minutes: 0.5
+    notes: |
+      {not:short} DI: Ya tienen tres textos, y por lo menos uno trae una historia adentro. En esta última parte vamos a ver una lista para revisar, haremos un último ejercicio corto, y después veremos exactamente cómo mandar su historia a La Viña, cómo grabarla si prefieren hablar en lugar de escribir, y qué pasa después de que la mandan.
+      {only:short} DI: Ya tienen tres textos, y por lo menos uno trae una historia adentro. En esta última parte vamos a ver una lista para revisar, que pueden usar en casa para un último ejercicio corto, y después veremos exactamente cómo mandar su historia a La Viña, cómo grabarla si prefieren hablar en lugar de escribir, y qué pasa después de que la mandan.
+      TRANSICIÓN: «Esta es la lista; también está en su hoja».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: esta sección y la lista toman unos 3 minutos, y el ejercicio 4 se hace en casa (no está en esta versión): muestra la lista de revisión e invita a usarla antes de mandar la historia."
+
+  # The English deck's Spanish checklist (its handout 'lista-de-revision'), shown AND printed here: the revision
+  # handout for everyone. In the 90-minute plan it takes Exercise 4's place.
+  - id: "checklist"
+    layout: "columns"
+    style: "panels"
+    checklist: true
+    handout: true
+    title: "Lista de revisión"
+    columns:
+      - heading: "La historia"
+        accent: "vine"
+        items:
+          - "Un momento o un punto decisivo"
+          - "Una primera línea que empieza en la acción"
+          - "Queda claro que soy alcohólico y miembro de AA"
+          - "Muestro más de lo que cuento"
+          - "Experiencia, no consejos"
+          - "Esperanza: cómo es ahora"
+      - heading: "Los detalles"
+        accent: "lv"
+        items:
+          - "Otras personas: solo nombre de pila, o ninguno"
+          - "Sin asuntos ajenos ni promoción"
+          - "Original y sin publicar"
+          - "De 5 a 6 páginas a doble espacio"
+          - "Un título y mis datos de contacto"
+          - "Leerla en voz alta, o que mi padrino o madrina la lea"
+    minutes: 1.5
+    version_minutes: { short: 2.5 }
+    notes: |
+      DI: Esta es una lista para revisar. A la izquierda, la historia: ¿es una sola historia? ¿La primera línea empieza en la acción? ¿Queda claro desde temprano que soy alcohólico y miembro de AA? ¿Muestro más de lo que cuento? ¿Es mi experiencia, y no consejos? ¿Tiene esperanza? A la derecha, los detalles: las otras personas protegidas, sin asuntos ajenos ni promoción, un texto original, de cinco a seis páginas a doble espacio, un título y mis datos de contacto para la oficina. Y el último punto es el que los miembros más recomiendan: léanla en voz alta, o pídanle a su padrino o madrina, o a alguien del programa, que la lea. Les va a decir si suena verdadera. Y luego, mándenla.
+      HAZ: Señala la lista impresa. En línea, pega en el chat el enlace a esta presentación o a la página Comparte tu historia del comité.
+      CONSEJO: Esta diapositiva es también la hoja de revisión: imprime una por persona ({ui:customize} → {ui:prepare} → {ui:print}). Que la lista no se vuelva un pretexto para no mandar: «buena y enviada» lleva el mensaje; «perfecta y en un cajón», no.
+      {not:short} TRANSICIÓN: «Usémosla ahora mismo».
+      {only:short} TRANSICIÓN: «Cuando estén listos, aquí es adonde la mandan».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: el ejercicio 4 se hace en casa (no está en esta versión): invita a usar esta lista antes de mandar la historia, y sigue con cómo enviarla."
+
+  # The steps are the English deck's Spanish prompt for this exercise.
+  - id: "exercise-4"
+    layout: "activity"
+    eyebrow: "Ejercicio 4 de 4"
+    title: "Revisa y ponle un título"
+    steps:
+      - "Elige tu borrador favorito de hoy"
+      - "Repasa la lista de revisión y encierra en un círculo una sola cosa para mejorar"
+      - "Vuelve a escribir tu primera línea para que empiece en el momento"
+      - "Ponle un título; escribe arriba el tema y la fecha límite"
+      - "En parejas: lee tu nueva primera línea y tu título (1 minuto cada uno)"
+    duration: 8
+    materials: ["Tus borradores", "La hoja con la lista de revisión"]
+    takeaway: "**Para compartir:** ¿Cuál es un próximo paso para tu historia esta semana?"
+    minutes: 8
+    notes: |
+      DI: Último ejercicio, y es corto. Elijan su borrador favorito de hoy. Repasen la lista y encierren en un círculo una cosa para mejorar; solo una. Luego vuelvan a escribir su primera línea para que empiece en el momento. Después pónganle un título a su historia y escriban arriba de la página el tema y la fecha límite, para que su yo del futuro sepa adónde va. Cinco minutos. Empiecen.
+      HAZ: Cronómetro de 5 minutos, luego parejas de 1 minuto cada uno (en línea: salas de dos, 3 minutos, si la plataforma las tiene). Para compartir: invita a dos o tres personas a decir en voz alta su próximo paso. Que cada quien escoja libremente; a nadie se le pide prometer nada.
+      CONSEJO: En el plan de 90 minutos este ejercicio no se hace (la versión de 90 minutos lo deja fuera): muestra la lista e invita a hacerlo en casa antes de mandar la historia.
+      {lang:en}IN ENGLISH (read it aloud or paste it in the chat): Choose your favorite draft from today. Run the checklist and circle one thing to fix. Rewrite your first line so it starts in the moment. Give it a title; write the theme and deadline at the top. In pairs: read your new first line and title (1 minute each). Share back: What is one next step for your story this week?{/lang}
+      REPARTO DEL TIEMPO: 5 para escribir, 2 en parejas, 1 para compartir (10 con la diapositiva de la lista).
+      TRANSICIÓN: «Cuando estén listos, aquí es adonde la mandan».
+
+  # The English deck's Spanish handout "Cómo enviar tu historia a La Viña", shown AND printed here (La Viña first, as
+  # it was): the web form, the e-mail and postal addresses, the length, what to include, the story line.
+  - id: "how-to-submit"
+    layout: "bullets"
+    handout: true
+    accent: "lv"
+    eyebrow: "Información actual"
+    title: "Cómo enviar tu historia a La Viña"
+    items:
+      - "**En línea:** [www.aalavina.org/comparte](https://www.aalavina.org/comparte) (texto, fotos o ilustraciones)"
+      - "**Correo electrónico:** [manuscritoslv@aagrapevine.org](manuscritoslv@aagrapevine.org)"
+      - "**Correo postal:** La Viña, 475 Riverside Drive, Suite 1100, New York, NY 10115"
+      - "**Extensión:** de 5 a 6 páginas a doble espacio; a mano, con letra legible, de un solo lado y con espacio entre líneas"
+      - "**¿Escribes en inglés?** Grapevine: [aagrapevine.org/submit-your-story](https://www.aagrapevine.org/submit-your-story) o [gveditorial@aagrapevine.org](gveditorial@aagrapevine.org)"
+    takeaway: "Envía cada historia una sola vez (por el formulario o por correo) y guarda una copia."
+    source: "Fuentes: aalavina.org/guia-para-contribuciones; aagrapevine.org/contact-us."
+    minutes: 1.5
+    notes: |
+      DI: Escribir en español quiere decir mandar a La Viña. La manera más rápida es el formulario en línea, en aalavina.org/comparte, que también recibe fotos e ilustraciones. También pueden mandarla por correo electrónico a manuscritoslv@aagrapevine.org, o por correo postal a La Viña, 475 Riverside Drive, Suite 1100, en Nueva York. Dos cosas: manden cada historia una sola vez, por el formulario o por correo, pero no por los dos, y guarden una copia, porque los manuscritos no se devuelven. Quien escriba en inglés la manda al Grapevine: su formulario está en aagrapevine.org/submit-your-story.
+      HAZ: Deja esta diapositiva un poco más de tiempo; la gente copia las direcciones. Diles que también está en su hoja y en la página Comparte tu historia del comité. Deletrea en voz alta el correo de La Viña, «manuscritos L V», todo junto, con L minúscula: en pantalla puede parecer una I mayúscula.
+      CONSEJO: Para una historia en español, el comité da manuscritoslv@aagrapevine.org; el formulario de La Viña, aalavina.org/comparte, también funciona. No uses «manuscritos@aagrapevine.org», que aparece en una presentación vieja del comité: está mal. Esta diapositiva es también una hoja para imprimir, una por persona ({ui:customize} → {ui:prepare} → {ui:print}).
+      ACTUALIZA: revisa las direcciones una vez al año en aalavina.org/guia-para-contribuciones; si alguna cambia, corrige esta diapositiva y la de Graba tu historia ({slide:record}) con {ui:customize} → {ui:edit}, y avísale al comité.
+      TRANSICIÓN: «¿Qué deben incluir?».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: de «Cómo enviar tu historia» a «Dónde encontrarlo todo» son unos 6 minutos (8 en el plan completo)."
+
+  - id: "what-to-include"
+    layout: "bullets"
+    title: "Qué incluir"
+    items:
+      - "Tu historia con un título: a máquina, o a mano con letra legible, de un solo lado de la hoja"
+      - "Tu nombre completo, dirección, teléfono y correo electrónico (solo para la redacción)"
+      - "Cómo quieres que aparezca tu nombre"
+      - "¿Escribiste para un tema? Dilo"
+      - "Fotos o ilustraciones: JPEG de alta resolución, 300 dpi"
+      - "Un texto tuyo, sin publicar, que no hayas mandado a otro lugar"
+    source: "Fuentes: aalavina.org/guia-para-contribuciones; aalavina.org/comparte."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Esto es lo que va con su historia. Un título. Su nombre completo, dirección, teléfono y correo, que, como dijimos, la redacción guarda para sí. Cómo quieren que aparezca su nombre. Si escribieron para un tema, díganlo. Las fotos y las ilustraciones van en JPEG de alta resolución, de 300 dpi. Y que sea un texto suyo, sin publicar, que no hayan mandado a otro lugar. Si La Viña acepta su historia, les manda una carta para firmar la cesión de los derechos de autor.
+      PREGUNTA: ¿Alguien piensa mandar por correo una historia escrita a mano? (Asegúrate de que tenga la dirección de la hoja.)
+      CONSEJO: Cada quien manda su propia historia, con sus propios datos. Nunca mandes la historia de otra persona sin su consentimiento, y el comité no junta historias para mandarlas en grupo.
+      TRANSICIÓN: «¿Qué pasa después de mandarla?».
+
+  - id: "after-you-send"
+    layout: "columns"
+    style: "panels"
+    accent: "lv"
+    title: "Después de mandarla"
+    columns:
+      - heading: "La Viña"
+        accent: "lv"
+        items:
+          - "Un acuse de recibo por cada historia"
+          - "Si la escogen: una carta para firmar la cesión de los derechos y la fecha en que se publicará"
+          - "Un ejemplar gratis de la edición con tu historia"
+      - heading: "Y luego, soltarla"
+        accent: "vine"
+        items:
+          - "Las revistas reciben cientos de historias al mes: esperar es normal"
+          - "Mientras esperas, escribe la siguiente"
+          - "La redacción decide; la Carta Constitutiva de la Conferencia protege su derecho de aceptar o rechazar"
+    takeaway: "No podemos prometer que se publique: la redacción decide."
+    minutes: 1.5
+    version_minutes: { short: 1 }
+    notes: |
+      DI: Esto es lo que pueden esperar. La Viña le manda a cada persona un acuse de recibo de que su historia llegó, y si la escogen, una carta con la cesión de los derechos de autor y la fecha en que va a salir. Quien publica recibe un ejemplar gratis de la edición con su historia. Las revistas reciben varios cientos de historias al mes, así que esperar es normal. Yo no le puedo prometer a nadie que su historia se publique; nadie aquí puede. La redacción decide, y la Carta Constitutiva de la Conferencia protege su derecho de aceptar o rechazar material. Lo nuestro es escribirla y mandarla. Después, la soltamos.
+      PREGUNTA: ¿Cómo se sentirían esperando meses sin saber nada? (Invita una respuesta; sugiere escribir la siguiente historia mientras esperan.)
+      CONSEJO: Si a alguien le publican una historia, al comité le encanta saberlo: pueden escribirnos a {live:email}. Lo mencionamos solo como lo imprimió la revista, y solo con su permiso.
+      TRANSICIÓN: «Unas palabras sobre la edición y los derechos».
+
+  # How La Viña edits is not in the repository on its own: the slide gives what holds for both magazines (AA
+  # Grapevine, Inc. publishes them) and names Grapevine's editorial policy where it is the source.
+  - id: "editing-rights"
+    layout: "bullets"
+    title: "La edición, los derechos y el agradecimiento"
+    items:
+      - "La política editorial del Grapevine: las historias se editan un poco, por claridad, estilo y extensión, y no se cambian una vez publicadas"
+      - "Si aceptan tu historia, los derechos de autor pasan a AA Grapevine, Inc., que publica las dos revistas"
+      - "No se paga: quien publica recibe un ejemplar gratis de la edición"
+      - "Los libros de La Viña reúnen historias publicadas primero en sus páginas"
+    source: "Fuentes: la política editorial del Grapevine (aagrapevine.org); aalavina.org/guia-para-contribuciones; The A.A. Service Manual, 2024–2026, p. 81."
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      DI: A algunos les preocupa que les reescriban su historia. La política editorial del Grapevine dice que las historias se editan un poco, por claridad, estilo y extensión, y que no se cambian una vez publicadas. Cuando aceptan una historia, los derechos de autor pasan a AA Grapevine, Inc., la casa editorial de las dos revistas. Los libros de La Viña y del Grapevine son colecciones de historias que se publicaron primero en sus páginas, así que una historia puede seguir llevando el mensaje mucho después de su edición. No se paga: quien publica recibe un ejemplar. Eso va con lo que somos: la historia es un regalo, igual que lo que compartimos en una reunión.
+      PREGUNTA: ¿Alguna pregunta sobre la edición o los derechos? (Si la pregunta va más allá de esto, di que no sabes y sugiere preguntarle directamente a la revista; no adivines.)
+      CONSEJO: Para lo que no sepas contestar, el servicio al cliente de la oficina de AA Grapevine en español es preguntas@aagrapevine.org, o el (800) 640-8781. Si alguien pregunta cómo edita La Viña en particular, remítelo a aalavina.org/guia-para-contribuciones.
+      TRANSICIÓN: «Y si escribir no es lo suyo, pueden hablar».
+
+  # La Viña's story line comes from the site's data ({live:lv_audio_phone}, as /es/contribute/#record shows it);
+  # the steps are the English deck's, said for La Viña alone; Grapevine's Audio Project is one line for English.
+  - id: "record"
+    layout: "bullets"
+    accent: "lv"
+    eyebrow: "Información actual"
+    title: "¿Prefieres hablar? Graba tu historia"
+    items:
+      - "**_Graba tu historia_** de La Viña: hasta 7 minutos, como compartes en una reunión"
+      - "Llama al **{live:lv_audio_phone}** y marca 1; di tu nombre y tu teléfono, y lee la declaración de permiso"
+      - "O manda un archivo WAV o MP3 a manuscritoslv@aagrapevine.org"
+      - "Las historias grabadas pasan por el mismo proceso editorial que las escritas"
+      - "¿En inglés? El Audio Project del Grapevine: **{live:gv_audio_phone}**"
+    takeaway: "Ninguna de las dos revistas recibe grabaciones de oradores en reuniones o eventos de AA."
+    source: "Fuentes: aalavina.org/graba-tu-historia y aalavina.org/instrucciones-graba-tu-historia; aagrapevine.org/audio-portal."
+    minutes: 1.5
+    notes: |
+      DI: Algunos somos de hablar, no de escribir, y La Viña recibe historias grabadas. Se llama «Graba tu historia» y acepta grabaciones de hasta siete minutos. Llamen al número de la pantalla, marquen 1, empiecen como lo harían en una reunión, digan su nombre y su número de teléfono, y lean en voz alta la declaración de permiso que está en la página de instrucciones de La Viña. También pueden grabarse con el teléfono y mandar el archivo por correo a La Viña. Las historias grabadas pasan por el mismo proceso editorial que las escritas. Quien prefiera grabar en inglés tiene el Audio Project del Grapevine, en el otro número.
+      HAZ: Escribe el número en un pizarrón o pégalo en el chat.
+      CONSEJO: Prueba la línea antes del taller. Las instrucciones están en aalavina.org/instrucciones-graba-tu-historia; la llamada a la línea de La Viña puede tener cargos de larga distancia. No grabes a nadie en el taller para esto; cada miembro graba por su cuenta y por decisión propia.
+      ACTUALIZA: nada a mano para los números: vienen de las páginas oficiales a través del sitio del comité (su página Comparte tu historia). Los pasos son los que esas páginas daban en octubre de 2026; si cambian, corrige esta diapositiva ({ui:customize} → {ui:edit}).
+      TRANSICIÓN: «Todo lo que vimos está en unos cuantos lugares en línea».
+
+  - id: "find-it-all"
+    layout: "resources"
+    title: "Dónde encontrarlo todo"
+    links:
+      - { label: "La Viña: guía para contribuir", url: "https://aalavina.org/guia-para-contribuciones", note: "Pautas, temas, el formulario" }
+      - { label: "La Viña: comparte tu historia", url: "https://www.aalavina.org/comparte", note: "El formulario en línea" }
+      - { label: "La Viña: Graba tu historia", url: "https://aalavina.org/graba-tu-historia", note: "Graba por teléfono, en español" }
+      - { label: "La Viña: temas sugeridos", url: "https://aalavina.org/temas-sugeridos", note: "Para escribir en cualquier época del año" }
+      - { label: "Nuestro comité: Comparte tu historia", url: "/contribute/", note: "Fechas límite con cuenta regresiva, consejos, talleres" }
+      - { label: "Correo del comité", url: "grapevine@neta65.org", note: "Preguntas, o para organizar un taller" }
+    minutes: 1
+    version_minutes: { short: 0.5 }
+    notes: |
+      DI: Aquí está todo en un solo lugar. La guía de La Viña para contribuir tiene las pautas, los temas y el formulario. La página de Graba tu historia explica cómo grabar por teléfono. Los temas sugeridos son para escribir en cualquier época del año. La página Comparte tu historia de nuestro comité lo reúne todo, con una cuenta regresiva para cada fecha límite, consejos para escribir y cómo organizar un taller como este en su grupo. Y si tienen preguntas, escríbanle al comité a grapevine@neta65.org.
+      HAZ: Si quieres, deja esta diapositiva durante las preguntas, para que la gente copie las direcciones.
+      CONSEJO: Estos enlaces se revisaron en octubre de 2026. Antes de cada taller, abre cada uno una vez.
+      TRANSICIÓN: «Antes de las preguntas, unas palabras sobre el automantenimiento».
+
+  # ---------------------------------------------------------------- Cierre
+  - id: "self-support"
+    layout: "bullets"
+    accent: "navy"
+    eyebrow: "Cierre"
+    title: "El automantenimiento: la Séptima Tradición"
+    items:
+      - "Este taller se sostiene con las contribuciones de los propios miembros de AA, a través de {fill:supported_by}"
+      - "Si hoy pasa una canasta, es para {fill:basket_for}, no para La Viña"
+      - "AA Grapevine, Inc. no acepta contribuciones: las suscripciones, los libros y otros artículos sostienen las revistas, y la Junta de Servicios Generales cubre lo que le falta a La Viña"
+      - "Para leer o regalar La Viña: [{live:site}/es/shop/](/shop/) (enlaces a las dos tiendas oficiales)"
+    takeaway: "La Viña se sostiene con los miembros que la compran y la usan en su trabajo de Paso Doce."
+    source: "Fuentes: The A.A. Service Manual, 2024–2026, p. 66; F-3, Self-Support (junio de 2026), pp. 12–13."
+    minutes: 0.5
+    notes: |
+      DI: Unas palabras sobre el dinero, porque la Séptima Tradición importa aquí también. El taller de hoy se sostiene con las contribuciones de los propios miembros de AA, a través de {fill:supported_by}. Si se pasa una canasta, es para {fill:basket_for}, no para La Viña: AA Grapevine, Inc. no acepta contribuciones. Las revistas se sostienen con los miembros que las compran y las usan en su trabajo de Paso Doce. La Viña todavía no se mantiene sola, y la Junta de Servicios Generales cubre la diferencia como un servicio a la Comunidad.
+      HAZ: Sigue la costumbre del grupo anfitrión con la canasta. Nunca pases una canasta «para La Viña», y no vendas nada en el taller más allá de lo que el grupo anfitrión haya acordado.
+      CONSEJO: Nunca llames a una suscripción una «contribución a La Viña». Una suscripción del grupo es un gasto normal del grupo, que decide la conciencia de grupo (F-3). No pongas precios en esta diapositiva: cambian, y la página de la Tienda se actualiza cada día. Mantén una actitud informativa, no de venta (Acción Consultiva de 1960).
+      ACTUALIZA: los dos espacios en naranja, en cada taller ({ui:customize} → {ui:your_details}).
+      TRANSICIÓN: «Abramos el espacio para preguntas».
+    version_notes:
+      short: "PLAN DE 90 MINUTOS: el automantenimiento, las preguntas y el cierre toman unos 6 minutos (7 en el plan completo)."
+
+  - id: "questions"
+    layout: "qa"
+    accent: "grape"
+    eyebrow: "Cierre"
+    title: "Preguntas y respuestas"
+    prompts:
+      - "¿Qué preguntas tienen sobre escribir o mandar su historia?"
+      - "¿Para qué tema o sección de La Viña van a escribir ahora?"
+      - "¿Qué les ayudaría a terminar: alguien con quien escribir, que su padrino o madrina la lea, otro taller?"
+    note: "Por favor, compartan brevemente para que todos tengan su turno."
+    minutes: 4.5
+    version_minutes: { short: 3.5 }
+    notes: |
+      DI: Tenemos unos minutos para preguntas y para compartir. Pregunten lo que quieran sobre escribir, mandar o grabar su historia. Y si están dispuestos, dígannos para qué tema o sección van a escribir ahora. Decirlo en voz alta es una buena manera de que suceda.
+      HAZ: En línea, lee en voz alta las preguntas del chat. Que cada intervención dure más o menos un minuto. Si una pregunta necesita una respuesta larga, ofrece hablar al final.
+      CONSEJO: Si no sabes una respuesta, dilo y remite a la página oficial o a preguntas@aagrapevine.org; no adivines. Las preguntas sobre la situación personal de un miembro se contestan mejor en privado, después del taller.
+      TRANSICIÓN: «Cerremos juntos».
+
+  # The Responsibility Statement in Spanish word for word, as orientation-workshop.yml gives it (Manual del RLV, 2025).
+  - id: "responsibility"
+    layout: "quote"
+    accent: "grape"
+    eyebrow: "Cierre"
+    title: "Cerramos juntos"
+    quote: "Yo soy responsable. Cuando cualquiera, dondequiera, extienda su mano pidiendo ayuda, quiero que la mano de AA siempre esté allí. Y de esto: yo soy responsable."
+    credit: "— Declaración de la Responsabilidad, escrita para la Convención Internacional de 1965, Toronto (Manual del RLV, 2025)"
+    minutes: 1
+    notes: |
+      DI: Gracias a todos por su buena voluntad hoy. Cada historia que escriban es una mano que se extiende hacia alguien a quien nunca van a conocer. Viene al caso: esta declaración se escribió para la Convención Internacional de 1965, y la escribió quien había sido editor del Grapevine. Los invito a decir juntos la Declaración de la Responsabilidad. (Léanla juntos, despacio.)
+      HAZ: Lee el texto tal como aparece, palabra por palabra. Si el grupo anfitrión cierra de otra manera, sigue su costumbre.
+      CONSEJO: No des el nombre del autor; «quien había sido editor del Grapevine» es suficiente. Es el texto en español del Manual del RLV (2025).
+      TRANSICIÓN: Pasa a la última diapositiva y déjala en pantalla mientras la gente se va.
+
+  # The committee meeting's rule, time, platform and link come from config/site.yml `meeting:` at every build, in
+  # Spanish ("cada tercer miércoles del mes, 7:00–8:00 p. m., hora del Centro").
+  - id: "thank-you"
+    layout: "closing"
+    title: "Gracias, y sigan escribiendo"
+    message: "Tu historia podría ser justo lo que otro alcohólico necesita."
+    lines:
+      - "Comité de Grapevine y La Viña de NETA 65"
+      - "{live:email} · {live:site}/es/"
+      - "Reunión del comité: {live:meeting_rule}, {live:meeting_time}, por {live:meeting_platform}"
+      - "{live:meeting_link} · Todos los miembros de AA son bienvenidos"
+    minutes: 1
+    notes: |
+      DI: Gracias por venir, y gracias a {fill:host_group} por recibirnos. Llévense sus hojas y sus borradores, y manden su historia cuando esté lista. Si quieren ayuda, o si quieren organizar un taller en su grupo, escríbannos a grapevine@neta65.org. Nuestro comité se reúne {live:meeting_rule}, {live:meeting_time}, por {live:meeting_platform}, y desde enero de 2027 cada reunión empieza con un(a) orador(a) invitado(a); todos los miembros de AA son bienvenidos y no hace falta registrarse. Sigan escribiendo.
+      HAZ: Deja esta diapositiva en pantalla mientras la gente se va. Quédate unos minutos para preguntas privadas. Pide comentarios en persona, no con una hoja de asistencia con nombres.
+      CONSEJO: La diapositiva que sigue tiene las fuentes y la aclaración; se queda en la presentación porque está publicada en internet, y es la última de la presentación. Las páginas para quien facilita que vienen después nunca se proyectan ({ui:customize} → {ui:prepare}).
+      TRANSICIÓN: Fin del taller.
+
+  # Not presented: it follows the Thank-you slide (the presentation is public, and this is where its sources and its
+  # disclaimer, in Spanish, are), with the smallest time the player takes.
+  - id: "credits"
+    layout: "credits"
+    accent: "gv"
+    eyebrow: "Cierre"
+    title: "Créditos y fuentes"
+    sources:
+      - "aalavina.org: guía para contribuciones, comparte, temas sugeridos, Graba tu historia, Pautas para Colaborar (2020), Temas de La Viña"
+      - "aagrapevine.org: contribute, guidelines (rev. abril de 2019), submit-your-story, editorial policy, audio-portal, history"
+      - "Libro de trabajo de La Viña (2023); Manual del RLV (2025); La Viña News (sept.–oct. 2026)"
+      - "A.A.W.S.: The A.A. Service Manual, 2024–2026; P-52; P-47 (sept. de 2026); SMF-197; F-3 (junio de 2026); M-39"
+      - "Preámbulo: Copyright © The AA Grapevine, Inc., reimpreso con permiso. Declaración de la Responsabilidad: Convención Internacional de 1965, Toronto"
+    note: |-
+      Presentado por el Comité de Grapevine y La Viña de NETA 65. No es una presentación oficial de AA Grapevine, Inc. Fechas y datos al {live:as_of}.
+      Grapevine y La Viña son marcas registradas de AA Grapevine, Inc. Los nombres se usan solo para identificar las revistas; no se reproducen logotipos, portadas ni ilustraciones.
+      Esta presentación la preparó el Comité de Grapevine y La Viña de NETA 65 para el servicio local. No es literatura aprobada por la Conferencia de AA y no habla en nombre de AA en su conjunto ni de AA Grapevine, Inc.
+    minutes: 0.25
+    notes: |
+      DI: (No se presenta: esta diapositiva va después de la de agradecimiento.) Si alguien pregunta de dónde vienen los datos: todo lo de este taller viene de estas fuentes, las páginas y pautas de las propias revistas y la literatura de servicio de AA. Este taller lo preparó nuestro comité de Área para el servicio local. No es literatura aprobada por la Conferencia, no es una presentación oficial de AA Grapevine, Inc., y no habla en nombre de AA en su conjunto. Ante la duda, las páginas de las propias revistas tienen la última palabra.
+      HAZ: Al final deja en pantalla la diapositiva de agradecimiento; muestra esta solo si alguien pregunta. Se queda en la presentación, visible, porque la presentación está publicada en internet.
+      CONSEJO: Las citas textuales (el Preámbulo, la Declaración de la Responsabilidad) llevan su línea de crédito en su propia diapositiva. El material del Grapevine y de La Viña se dice en nuestras palabras, nunca se copia; en esta presentación no aparecen logotipos, portadas ni ilustraciones.
+      TRANSICIÓN: Fin de la presentación. La sección para quien facilita viene después ({ui:customize} → {ui:prepare}).
+
+  # ---------------------------------------------------------------- Para quien facilita (nunca se proyecta)
+  - id: "facilitators"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    accent: "navy"
+    title: "Para quien facilita"
+    subtitle: "Preparación, materiales, en línea, tiempos y las hojas"
+    notes: |
+      DI: Esta sección es para quien dirige el taller. Sus páginas nunca se proyectan: están en {ui:customize} → {ui:prepare}. Tiene lo que hay que hacer antes del día, los materiales para un taller en persona, cómo hacer los ejercicios en línea, un plan de 90 y de 120 minutos, las hojas para imprimir y cómo mantener esta presentación al día.
+      CONSEJO: Lee estas páginas una semana antes del taller, y otra vez el día anterior. Los talleres siguen las pautas para talleres de escritura de AA Grapevine (Writing Workshop Guidelines, en aagrapevine.org/gvr-resources): de hora y media a dos horas, una sala bien iluminada, plumas y papel, compartir para inspirarse, tiempo para escribir, y leer en voz alta para quien quiera.
+      TRANSICIÓN: Antes del día.
+
+  - id: "before-the-day"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "Para quien facilita"
+    title: "Antes del día"
+    items:
+      - "Acuerda con el grupo o el distrito anfitrión la fecha, el lugar o el enlace, el idioma y el formato: ellos deciden"
+      - "Invita en las reuniones y con un volante; piensa en invitar a un miembro a quien le hayan publicado una historia"
+      - "Llena los espacios en naranja ({ui:customize} → {ui:your_details}); los temas, las fechas límite, la línea de Graba tu historia y los tiempos de la agenda se mantienen al día solos"
+      - "Llama a la línea de Graba tu historia para probarla"
+      - "Imprime para cada persona el planificador (dos páginas), la lista de revisión y «Cómo enviar tu historia a La Viña»"
+      - "Materiales impresos gratis: escribe a gvrc@aagrapevine.org con 4 a 6 semanas de anticipación (pueden ser solo para eventos más grandes; pregunta)"
+    notes: |
+      DI: Los talleres se hacen porque un grupo o un distrito lo pide, y el anfitrión decide la fecha, el lugar, el idioma y el formato; el comité sugiere y apoya. Invita en las reuniones y con un volante; el comité puede ayudar con uno. Algunos talleres invitan a un miembro a quien le publicaron una historia para que comparta cómo fue escribirla. Si lo haces, preséntalo solo por su nombre de pila, y que comparta su experiencia en lugar de leer la historia publicada en una pantalla. Llena los espacios, prueba la línea de teléfono e imprime las hojas para cada persona, y unas cuantas en letra grande ({ui:customize} → {ui:prepare} → {ui:print}): el planificador (dos páginas), la lista de revisión ({slide:checklist}) y «Cómo enviar tu historia a La Viña» ({slide:how-to-submit}).
+      HAZ: Para pedir materiales impresos gratis, escribe a gvrc@aagrapevine.org con 4 a 6 semanas de anticipación, con tu nombre, Área, puesto de servicio y datos de contacto, y el nombre, la fecha y la asistencia esperada del evento. Pregunta si tu evento califica: los materiales pueden ser solo para eventos más grandes, así que no cuentes con ellos para un taller pequeño.
+      CONSEJO: No le prometas al anfitrión una historia publicada ni un número de historias enviadas. Lo nuestro es la invitación y la sala. Si en la sala habrá quien escriba en inglés, las hojas en inglés están en la presentación «Grapevine and La Viña Writing Workshop», en su {ui:prepare}.
+      PREPARACIÓN: más o menos una hora, una semana antes.
+      TRANSICIÓN: Los materiales y los talleres en línea.
+
+  - id: "supplies"
+    layout: "columns"
+    style: "panels"
+    facilitator: true
+    eyebrow: "Para quien facilita"
+    title: "Materiales, sala y en línea"
+    columns:
+      - heading: "En persona"
+        accent: "navy"
+        items:
+          - "Papel, plumas, tablas para apoyar"
+          - "Un cronómetro visible o una campana"
+          - "Las hojas, algunas en letra grande"
+          - "Ejemplares actuales de La Viña para pasar"
+          - "Sobres para las historias que se manden por correo"
+          - "Buena luz y una sala tranquila"
+      - heading: "En línea"
+        accent: "gv"
+        items:
+          - "Salas de dos, si la plataforma las tiene"
+          - "Nombre de pila e inicial: al renombrarse, o en el chat"
+          - "Nada de capturas de pantalla; nada de grabar"
+          - "Cada instrucción también en el chat"
+          - "Si son impares: un grupo de tres"
+          - "Las hojas por enlace, no como archivo adjunto"
+    notes: |
+      DI: En persona: papel con renglones, plumas, unas cuantas tablas para quien no tenga mesa, un cronómetro visible o una campana, las hojas impresas, unos ejemplares actuales de La Viña para pasar, y algunos sobres para quien quiera mandar por correo una historia escrita a mano. Escoge una sala tranquila y bien iluminada. En línea, en una plataforma con salas para grupos pequeños (Zoom las tiene): pide a un servidor de confianza que maneje salas de dos, asignadas al azar, con la cuenta regresiva y un aviso de un minuto; si son impares, haz una sala de tres, o que la persona que ayuda haga pareja. Al principio, pide que cada quien muestre su nombre de pila y la inicial de su apellido (renombrándose, o escribiéndolo en el chat) y recuérdales: nada de capturas de pantalla y nada de grabar. Tú tampoco grabes la sesión. Pega cada instrucción en el chat también, para quien no vea bien las diapositivas.
+      CONSEJO: Accesibilidad: lee cada instrucción en voz alta, ofrece hojas en letra grande y deja que quien prefiera hablar use Graba tu historia en lugar de escribir.
+      EN GOOGLE MEET (la plataforma que usa el comité para sus propias reuniones y talleres en línea): las salas para grupos pequeños dependen del plan de la cuenta (una cuenta personal de Google no las tiene), así que revisa el enlace del comité antes del taller; sin salas, las parejas se turnan en voz alta en la reunión principal, de dos en dos, o comparten en el chat; con más de unas cuantas parejas, acorta cada turno o usa el chat, para que el tiempo de parejas alcance. Un miembro que entró con su cuenta no puede renombrarse, así que los nombres de pila van en el chat.
+      TRANSICIÓN: Los tiempos.
+
+  # The timing plan. Each segment's slides add up to its row: `minutes` for the full plan, `version_minutes` (else
+  # `minutes`) of the "short" version for the 90-minute one. Change a slide's time and its row together.
+  - id: "timing"
+    layout: "table"
+    facilitator: true
+    eyebrow: "Para quien facilita"
+    title: "Los tiempos: unas 2 horas, o 90 minutos"
+    header: ["Segmento (minutos)", "Completo: 115", "Corto: 84 (+6 libres)"]
+    rows:
+      - ["Bienvenida, Preámbulo, sala segura, agenda", "9", "7"]
+      - ["Partes 1–3: por qué escribimos, lo que publica La Viña, sus temas", "18", "12"]
+      - ["Ejercicio 1 · Parte 4 (una historia fuerte) · Ejercicio 2", "35", "28"]
+      - ["Descanso", "7", "5"]
+      - ["Parte 5 (el anonimato) · Ejercicio 3", "21", "17"]
+      - ["Parte 6: lista, Ejercicio 4, enviar, grabar", "18", "9 (el ejercicio 4, en casa)"]
+      - ["Automantenimiento, preguntas, cierre", "7", "6"]
+    widths: [5.4, 1.2, 3.0]
+    first_col_bold: true
+    notes: |
+      DI: Dos planes. El plan completo dura unos 115 minutos y deja unos minutos de holgura en dos horas. El plan de 90 minutos recorta lo que se habla, acorta el descanso a 5 minutos y deja el ejercicio 4 para la casa: muestra la lista de revisión e invita a usarla antes de mandar la historia. Nunca quites del todo el compartir en parejas; ahí la gente descubre que su historia vale la pena. Si vas corto de tiempo, recorta las diapositivas de las partes 1 y 2, no el tiempo para escribir. En detalle, minutos del plan completo (y del de 90): bienvenida, Preámbulo, sala segura y agenda – 9 (7); partes 1–3 – 18 (12); ejercicio 1 – 10 (8); parte 4: qué hace fuerte una historia – 11 (8); ejercicio 2 – 14 (12); descanso – 7 (5); parte 5: el anonimato – 6 (5); ejercicio 3 – 15 (12); lista de revisión y ejercicio 4 – 10 (3); enviar, grabar, después de mandarla – 8 (6); automantenimiento, preguntas y cierre – 7 (6).
+      HAZ: Pídele a un servidor de confianza que lleve el tiempo, aparte de quien presenta.
+      CONSEJO: Estos minutos coinciden con la agenda (minutos desde el inicio), con el tiempo de cada ejercicio y con la línea de TIEMPO de las notas de cada diapositiva, en los dos planes: elige la versión que vas a presentar ({ui:customize} → {ui:version}), el plan completo o el de 90 minutos sin el ejercicio 4, y esta presentación calcula los tiempos para ella y para las diapositivas que apagues ({ui:customize} → {ui:slides}). La diapositiva de los temas del Grapevine empieza apagada y no cuenta en estos minutos; si la enciendes, suma uno o dos. El reparto de cada ejercicio en sus notas (REPARTO DEL TIEMPO) es el del plan completo; en 90 minutos, deja el tiempo para escribir y acorta las parejas y el compartir.
+      TRANSICIÓN: La hoja del planificador.
+
+  # The printable pages: the English deck's Spanish story planner (two pages), as it wrote them; the revision checklist
+  # and "Cómo enviar tu historia a La Viña" are shown slides that also print.
+  - id: "planificador-1"
+    layout: "columns"
+    style: "cards"
+    facilitator: true
+    handout: true
+    eyebrow: "Para imprimir · las dos páginas, una por persona"
+    title: "Planificador de tu historia (1 de 2)"
+    columns:
+      - heading: "¿Quién estaba allí?"
+        accent: "navy"
+        text: "Solo nombres de pila, o ninguno"
+      - heading: "¿Dónde y cuándo?"
+        accent: "navy"
+        text: "Un lugar, un momento"
+      - heading: "¿Qué pasó?"
+        accent: "navy"
+        text: "El momento mismo, paso a paso"
+    notes: |
+      DI: (No se presenta.) Es la página 1 del planificador de tu historia; imprime las dos páginas para cada persona. Sigue las preguntas de la diapositiva de una sola escena: quién, dónde y cuándo, qué pasó, cómo era antes, cómo es ahora y por qué importa. La página 2 termina con renglones para la primera línea y el título, que se llenan en el ejercicio 4.
+      HAZ: Imprime las dos páginas ({ui:customize} → {ui:prepare} → {ui:print}) con la lista de revisión ({slide:checklist}) y «Cómo enviar tu historia a La Viña» ({slide:how-to-submit}). Papel tamaño carta, horizontal. Las dos páginas pueden ir por los dos lados de la hoja.
+      CONSEJO: El planificador es una ayuda, no un formulario: algunas personas lo van a ignorar y se van a poner a escribir, y eso está perfecto.
+      TRANSICIÓN: La página 2 del planificador.
+
+  - id: "planificador-2"
+    layout: "columns"
+    style: "cards"
+    facilitator: true
+    handout: true
+    eyebrow: "Para imprimir · las dos páginas, una por persona"
+    title: "Planificador de tu historia (2 de 2)"
+    columns:
+      - heading: "¿Cómo era antes?"
+        accent: "navy"
+        text: "Algunos detalles verdaderos"
+      - heading: "¿Cómo es ahora?"
+        accent: "navy"
+        text: "Qué es diferente hoy"
+      - heading: "¿Por qué importa?"
+        accent: "navy"
+        text: "Para ti y para quien lo lea"
+    takeaway: |-
+      **Mi primera línea:**
+
+      **Mi título:**
+    notes: |
+      DI: (No se presenta.) La página 2 del planificador: cómo era antes, cómo es ahora, por qué importa, y renglones para la primera línea y el título. Se llenan en el ejercicio 4, o en casa en el plan de 90 minutos.
+      HAZ: Imprímela con la página 1 ({ui:customize} → {ui:prepare} → {ui:print}). Papel tamaño carta, horizontal. Las dos páginas pueden ir por los dos lados de la hoja.
+      TRANSICIÓN: Cómo mantener esta presentación al día.
+
+  - id: "keeping-current"
+    layout: "bullets"
+    facilitator: true
+    eyebrow: "Para quien facilita"
+    title: "Cómo mantener esta presentación al día"
+    items:
+      - "Temas y fechas límite: la diapositiva de los temas ({slide:lv-themes}) viene del sitio del comité y quita sola las fechas que ya pasaron (compárala con aalavina.org/recursos); los ejercicios ({slide:exercise-1}, {slide:exercise-2}, {slide:exercise-3}) apuntan a ella"
+      - "Direcciones y teléfono: las diapositivas {slide:how-to-submit} y {slide:record}; el número de Graba tu historia viene del sitio del comité y se mantiene al día solo"
+      - "Diapositiva del título: tu puesto de servicio, la fecha, el anfitrión, en persona o en línea ({ui:customize} → {ui:your_details}; tu nombre de pila, solo en las notas)"
+      - "Los tiempos de la agenda siguen la versión y las diapositivas que presentas; la hora de regreso del descanso y la línea de la Séptima Tradición están en {ui:your_details}"
+      - "La fecha de «Datos al» y la reunión del comité en la diapositiva de agradecimiento ({slide:thank-you}) se ponen solas"
+      - "Para encontrar todo lo que hay que cambiar: {ui:customize} → {ui:your_details} (un espacio vacío se ve en naranja)"
+    notes: |
+      DI: Casi todo en esta presentación sigue siendo cierto durante años. Unas cuantas cosas cambian, y todas están marcadas. Las diapositivas con «Información actual» llevan fechas, fechas límite, teléfonos o direcciones; los temas, las fechas límite y la línea de Graba tu historia vienen del sitio del comité y se mantienen al día solos. El texto entre corchetes en naranja es un espacio para llenar en cada taller ({ui:customize} → {ui:your_details}). Los temas vienen de la lista anual de temas de La Viña, que publica los del año siguiente a principios de año, y la diapositiva de los temas los muestra en cuanto el sitio del comité los tiene. Los ejercicios apuntan a la diapositiva de los temas, así que van al paso con ella. Nunca agregues precios a una diapositiva: enlaza la página de la Tienda del comité, que se actualiza cada día.
+      HAZ: Para cambiar una diapositiva para tu taller, usa {ui:customize} → {ui:edit}: tus cambios se quedan en este dispositivo, y al restablecer la diapositiva vuelve la versión del comité.
+      CONSEJO: Mantén el anonimato al editarla: solo puestos de servicio, a lo más nombre de pila e inicial, ningún teléfono ni correo personal, ninguna foto de personas, y ningún logotipo, portada ni ilustración de Grapevine o La Viña. Las notas también son públicas. Las páginas para quien facilita (esta sección) nunca se proyectan.
+      TRANSICIÓN: Fin de la presentación.

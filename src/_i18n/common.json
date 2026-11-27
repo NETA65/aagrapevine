@@ -264,10 +264,6 @@
     "en": "Translated automatically from the original language. Tap the original link for the source text.",
     "es": "Traducido automáticamente del idioma original. Abre el enlace original para ver el texto fuente."
   },
-  "common.read_more": {
-    "en": "Read more",
-    "es": "Leer más"
-  },
   "common.view_all": {
     "en": "View all",
     "es": "Ver todo"
@@ -732,10 +728,6 @@
     "en": "AA's own sites list the AA meetings near you, in English and in Spanish.",
     "es": "Los sitios de AA tienen las reuniones de AA cerca de ti, en español y en inglés."
   },
-  "newcomer.line_link": {
-    "en": "First steps",
-    "es": "Primeros pasos"
-  },
   "ctm.title": {
     "en": "Want to help financially?",
     "es": "¿Quieres ayudar económicamente?"
@@ -751,5 +743,21 @@
   "ctm.in_lang": {
     "en": "In English",
     "es": "En español"
+  },
+  "nav.gvr_menu": {
+    "en": "Group reps (GVR/RLV)",
+    "es": "Representantes de grupo (RLV/GVR)"
+  },
+  "nav.orientation_menu": {
+    "en": "New rep orientation",
+    "es": "Orientación para nuevos representantes"
+  },
+  "nav.stay_updated": {
+    "en": "Stay updated",
+    "es": "Mantente al día"
+  },
+  "nav.stay_updated_all": {
+    "en": "All the ways to stay updated",
+    "es": "Todas las formas de mantenerte al día"
   }
 }

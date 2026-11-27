@@ -59,9 +59,12 @@ class Decks(unittest.TestCase):
         self.assertIn("object-position: top;", base)
         self.assertLess(self.css.index(".cm-doc-thumb img {"), self.css.index(".cm-doc-thumb.is-slides img {"))
 
-    def test_the_home_tiles_show_a_deck_whole_too(self):
+    def test_home_has_no_tiles_of_its_own(self):
+        # Home's "Shared by the committee" tiles (a deck shown whole there too) went in the UX review of November 2026:
+        # the committee's files have one home, /portfolio/, which Home's "More on this site" row links
         home = read("src", "pages", "index.njk")
-        self.assertIn("""("object-contain" if f.kind == "slides" else ("object-cover" ~ ("" if isPhoto else " object-top")))""", home)
+        self.assertNotIn("home-drive-grid", home)
+        self.assertIn('{ url: "/portfolio/", icon: "folder-open", key: "nav.portfolio", desc: "nav.portfolio_desc" }', home)
 
 
 class NewBadge(unittest.TestCase):

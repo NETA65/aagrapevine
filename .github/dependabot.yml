@@ -7,9 +7,11 @@
 #   runs the tests. Merge only when the pull request shows a green ✓; a
 #   red ✗ means leave it (the live site is not affected).
 #   * "github-actions" updates keep the daily workflow running when GitHub
-#     retires old versions (the one outside action, in link-check.yml, is
-#     pinned to a commit: the pull request moves the commit and its
-#     "# vX.Y.Z" note together).
+#     retires old versions. Every action is pinned to a commit with its
+#     release as a note ("uses: actions/checkout@<commit> # v7.0.1"): the
+#     pull request moves the commit and its "# vX.Y.Z" note together
+#     (Dependabot rewrites a note that names the pinned commit's release,
+#     so keep the notes in that form; tests/test_automation.py → Pinned).
 #   * "npm" updates are the site-building tools. After merging, glance at
 #     the next "Website update" run; if it fails, revert the merge (one click).
 #   * "pip" updates are the Python packages of the daily sync — only NEW
@@ -37,6 +39,9 @@ updates:
     commit-message:
       prefix: "chore(actions)"
     open-pull-requests-limit: 2
+    # a release is proposed only once it is a week old (a broken one is usually pulled or fixed by then)
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: npm
     directory: /
@@ -53,6 +58,9 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     open-pull-requests-limit: 2
+    # a release is proposed only once it is a week old (lucide-static 1.81.0 was hours old when it was taken in)
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: pip
     directory: /

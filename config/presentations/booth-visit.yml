@@ -1,0 +1,333 @@
+# =====================================================================
+#  "Grapevine and La Viña: Scan, Read, Give, Write" — a short talk built around QR codes, for our table at
+#  CityWide Dallas (every 2nd Saturday, 5:30–7:30 PM) or an assembly, or a visit to a group or a district
+#  meeting, as a web presentation on /orientation/ (Presentations). New in November 2026 (no PowerPoint copy:
+#  no `drive_title`).
+#
+#  How it is written:
+#   · each code is a `live` slide of kind "qr" (the build draws the code, eleventy/filters/community.js qrSvg),
+#     one address per slide, so a phone camera never has to choose: the two official stores' subscription pages
+#     and the two gift programs (config/site.yml `links:` gv_subscribe, lv_subscribe, carry_the_message,
+#     lleva_el_mensaje, written out as the site gives them), and three pages of the committee website (Share your
+#     story, Events with its calendar, and the home page on the closing slide). A code's caption is plain text;
+#   · attraction rather than promotion: the slides describe, never sell. A subscription code is "if you'd like";
+#     Carry the Message is a purchase in the official store, never a donation; cash handed to us at the table buys
+#     Carry the Message gift subscriptions (src/_i18n/common.json ctm.text), and nobody's name is linked to the gift
+#     (ctm.note). No prices on the slides: they change, and the Shop page has them;
+#   · the versions: "full" (about 10 minutes, every code) and "short" (about 5 minutes: the two magazines, Carry
+#     the Message and Share your story, then the closing slide's code for the website, with the questions there).
+#     A TRANSITION to a slide the short version leaves out has its own {not:short} / {only:short} line;
+#   · anonymity: people photograph the codes, never each other; the presenter is a service position; the only
+#     addresses are the committee's and the magazines' service addresses.
+#  The content stays English (the owner's decision); the card, the versions and the blanks' labels are bilingual.
+#  Checked by tests/test_presentations.py (and by the build, with I18N_STRICT=1).
+# =====================================================================
+id: "booth-visit"
+order: 7
+lang: "en"
+title: "Grapevine and La Viña: Scan, Read, Give, Write"
+short: "Booth or Group Visit"
+eyebrow: "Grapevine & La Viña"
+footer: "NETA 65 Grapevine & La Viña Committee · {live:panel}"
+minutes: 10
+icon: "qr-code"
+tone: "lv"
+card:
+  title:
+    en: "Booth or Group Visit: Scan, Read, Give, Write"
+    es: "Visita a la mesa o a un grupo: escanea, lee, regala, escribe"
+  summary:
+    en: "A short talk built around QR codes, one per slide, that people scan with their own phones: subscribing to Grapevine or La Viña, Carry the Message and Lleva el Mensaje, sending or recording a story, and the committee's website and calendar."
+    es: "Una charla breve con códigos QR, uno en cada diapositiva, que cada quien escanea con su propio teléfono: suscribirse a La Viña o a Grapevine, Lleva el Mensaje y Carry the Message, enviar o grabar una historia, y el sitio web y el calendario del comité."
+  audience:
+    en: "For whoever staffs our table at CityWide Dallas or an assembly, or visits a group or a district meeting: people scan the codes with their own phones."
+    es: "Para quien atiende nuestra mesa en CityWide Dallas o en una asamblea, o visita un grupo o una reunión de distrito: cada quien escanea los códigos con su propio teléfono."
+
+presets:
+  - id: "full"
+    label:
+      en: "Every code (about 10 minutes)"
+      es: "Todos los códigos (unos 10 minutos)"
+    minutes: 10
+  - id: "short"
+    label:
+      en: "Five-minute version"
+      es: "Versión de cinco minutos"
+    minutes: 5
+    only: ["title", "hello", "qr-grapevine", "qr-la-vina", "qr-carry", "qr-story", "thank-you"]
+    note:
+      en: "The two magazines, Carry the Message and Share your story, then the closing slide with the website's code and a question or two. Lleva el Mensaje, the calendar and the questions slide are left out: say them in a sentence."
+      es: "Las dos revistas, Carry the Message y Comparte tu historia, y luego la diapositiva final con el código del sitio web y una o dos preguntas. Quedan fuera Lleva el Mensaje, el calendario y la diapositiva de preguntas: menciónalos en una frase."
+
+fillins:
+  - key: "presenter"
+    label: { en: "Presenter's service position", es: "Puesto de servicio de quien presenta" }
+    hint: "Service position"
+    default: "Area 65 Grapevine / La Viña Chair"
+    shared: true
+  - key: "first_name"
+    label: { en: "Your first name (only in your notes)", es: "Tu nombre de pila (solo en tus notas)" }
+    hint: "first name"
+    shared: true
+    notes_only: true
+  - key: "event"
+    label: { en: "Where we are (the event, group or district)", es: "Dónde estamos (el evento, el grupo o el distrito)" }
+    hint: "event, group or district"
+
+slides:
+  # ------------------------------------------------------------------ OPENING
+  - id: "title"
+    layout: "title"
+    eyebrow: "NETA 65 · Grapevine & La Viña Committee"
+    title: "Grapevine and La Viña: Scan, Read, Give, Write"
+    subtitle: "Point your phone's camera at a code: nothing to sign up for"
+    lines:
+      - "{fill:presenter} · {live:panel}"
+      - "{fill:event}"
+    minutes: 0.5
+    version_minutes: { short: 0.25 }
+    notes: |
+      WHEN: up while people gather at the table, or while the group settles in before your visit.
+      SAY: Hi, everyone, and thank you for having us. My name is {fill:first_name}, I'm an alcoholic, and I serve as {fill:presenter} for Northeast Texas Area 65.
+      {not:short} SAY: In about ten minutes I'll show you a few codes you can scan with your phone: to read Grapevine or La Viña, to give a subscription to an alcoholic who can't get one, to send your own story, and to find our dates.
+      {only:short} SAY: In about five minutes I'll show you a few codes you can scan with your phone: to read Grapevine or La Viña, to give a subscription to an alcoholic who can't get one, and to send your own story.
+      DO: Before you start, type where you are in {ui:customize} → {ui:your_details} (for example 'CityWide Dallas' or the group's name), check that the screen is bright enough for a phone to read a code from the back of the room, and have a printed Grapevine and a printed La Viña in your hand to hold up: we never put covers on a slide.
+      TIP: This presentation and its notes are public on the committee's website. Use service positions, not names, and never put a member's phone number or e-mail on a slide.
+
+  # Who we are and the house rules, with the disclaimer every deck keeps.
+  - id: "hello"
+    layout: "bullets"
+    title: "Who we are, and how the codes work"
+    items:
+      - "The **NETA 65 Grapevine & La Viña Committee**: AA members in service, here to share information"
+      - "**Grapevine** (English, every month) and **La Viña** (Spanish, every two months): AA's meeting in print"
+      - "Scan a code with your phone's camera: it opens an official page or our committee's website"
+      - "Please photograph the codes, never people"
+    takeaway: "Not an official AA Grapevine, Inc. presentation. We share information; each member and each group decides."
+    minutes: 1.25
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: We're your Area's Grapevine and La Viña Committee, a few AA members who serve by helping groups and members get to know AA's two magazines. Grapevine comes out every month, in English, and La Viña every two months, in Spanish. Many of us call them our meeting in print: stories from AA members, their experience, strength and hope.
+      SAY: Each slide has one code. Point your phone's camera at it and tap the link that appears. Every code opens an official Grapevine or La Viña page or our committee's own website. Nothing asks for your name, and you don't have to sign up for anything.
+      SAY: One request: feel free to photograph the codes, but please never photograph people. Who you see here stays here.
+      TIP: Say the disclaimer plainly: our committee is not AA Grapevine, Inc., and we don't speak for it. We share information, and each member and each group decides what, if anything, to buy or do (Tradition Four).
+      TRANSITION: Let's start with Grapevine.
+
+  # ------------------------------------------------------------------ THE CODES
+  # The official stores' subscription pages (config/site.yml links: gv_subscribe, lv_subscribe), as the site's own
+  # buttons give them. "If you'd like": describe, never sell.
+  - id: "qr-grapevine"
+    layout: "live"
+    kind: "qr"
+    eyebrow: "Read it"
+    accent: "gv"
+    title: "Grapevine: in print, online and in the app"
+    intro: "Grapevine's official store: its subscriptions, if you'd like to read it or give one"
+    options:
+      url: "https://www.aagrapevine.org/store/grapevine-subscriptions"
+      caption: "Grapevine's subscriptions, in English (aagrapevine.org)"
+    takeaway: "Mailed in plain packaging, with nothing on the outside that says AA."
+    minutes: 1
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: This code opens Grapevine's official store, on its subscriptions page. Grapevine comes in print, twelve issues a year; digital, which gives you the website and the app, with the Story Archive; or both together. If you'd like to read it, or give a subscription to a sponsee or a newcomer, this is where. And something worth knowing for anyone who is private about their membership: the magazine comes in plain packaging, with nothing on the outside that says AA.
+      DO: Hold up a printed Grapevine while people scan. Leave the slide up for about thirty seconds: some phones take a moment to find the code.
+      TIP: No prices on the slide, and no pressure: if someone asks what it costs, the store and our committee's Shop page ({live:site}/shop/) always have the current prices. Today a year of Grapevine in print is {live:price_gv_print}, and digital {live:price_gv_digital}. {live:price_change_note}
+      SOURCES: aagrapevine.org (its store); Grapevine Workbook (2026), p. 32 (plain packaging).
+      TRANSITION: And in Spanish, La Viña.
+
+  - id: "qr-la-vina"
+    layout: "live"
+    kind: "qr"
+    eyebrow: "Read it"
+    accent: "lv"
+    title: "La Viña: AA's magazine in Spanish"
+    intro: "La Viña's official store, in Spanish: its subscriptions, six issues a year"
+    options:
+      url: "https://www.aalavina.org/suscripciones"
+      caption: "La Viña's subscriptions, in Spanish (aalavina.org)"
+    takeaway: "Stories written in Spanish by Spanish-speaking members: La Viña's own meeting in print."
+    minutes: 1
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: La Viña is AA's magazine in Spanish. It comes out every two months, six issues a year, and most of its stories are written in Spanish by Spanish-speaking members, so it's La Viña's own meeting in print, not a translation of Grapevine. This code opens La Viña's official store, on its subscriptions page, in Spanish: for yourself, for your group's Spanish-speaking members, or as a gift.
+      EN ESPAÑOL (if Spanish speakers are present): {lang:es}La Viña es la revista de AA en español; sale cada dos meses. Este código abre la página de suscripciones de su tienda oficial.{/lang}
+      DO: Hold up a printed La Viña. If a Spanish-speaking member is with you at the table, ask them to say a sentence about it in Spanish.
+      TIP: If someone asks for the price: today a year of La Viña in print is {live:price_lv_print}, and digital {live:price_lv_digital}; the store and our Shop page have every plan. Say it as information, never as a reason to buy.
+      SOURCES: aalavina.org; P-52 (2026), pp. 9–10; RLV Manual (2025), p. 4.
+      TRANSITION: Now a way to carry the message to someone who can't get a magazine at all.
+
+  # Carry the Message and Lleva el Mensaje: a gift certificate bought in the official store, which AA Grapevine or La
+  # Viña turns into a subscription for an alcoholic in need (config/site.yml links carry_the_message and
+  # lleva_el_mensaje). A purchase, not a donation (common.json ctm.note).
+  - id: "qr-carry"
+    layout: "live"
+    kind: "qr"
+    eyebrow: "Give it"
+    accent: "grape"
+    title: "Carry the Message: a magazine for an alcoholic in need"
+    intro: "A gift certificate from Grapevine's official store becomes a subscription for an alcoholic who can't get one"
+    options:
+      url: "https://www.aagrapevine.org/carry-the-message"
+      caption: "Carry the Message (aagrapevine.org)"
+    takeaway: "A purchase, not a donation, and your name isn't linked to the subscription."
+    minutes: 1
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: Carry the Message is a way to reach an alcoholic who can't get the magazines: someone in a treatment center, a correctional facility, a hospital or a detox. Anyone who wishes can buy a Carry the Message gift certificate in the official store, and AA Grapevine turns it into a subscription for an alcoholic in need. It's a purchase, not a donation, and your name isn't linked to the subscription.
+      {not:short} SAY: Prefer cash? You can hand it to us here at our table, and the committee uses it to buy Carry the Message gift subscriptions.
+      {only:short} SAY: La Viña has the same program in Spanish, {lang:es}Lleva el Mensaje{/lang}, on its own site, aalavina.org. And if you prefer cash, you can hand it to us at our table, and the committee uses it to buy Carry the Message gift subscriptions.
+      TIP: Describe, never sell: never call a purchase a contribution to Grapevine (AA Grapevine, Inc. accepts no contributions), never name an amount, and never ask anyone to buy. Each member decides. If you take cash at the table, follow the committee's own way of recording it.
+      SOURCES: aagrapevine.org/carry-the-message; the committee website ({live:site}/shop/#carry); Service Manual, p. 66.
+      {not:short} TRANSITION: La Viña has the same program, in Spanish.
+      {only:short} TRANSITION: Now, your own story.
+
+  - id: "qr-lleva"
+    layout: "live"
+    kind: "qr"
+    eyebrow: "Give it"
+    accent: "lv"
+    title: "{lang:es}Lleva el Mensaje{/lang}: La Viña's gift program"
+    intro: "The same gift, in Spanish, from La Viña's official site, for an alcoholic who reads Spanish"
+    options:
+      url: "https://www.aalavina.org/lleva-el-mensaje"
+      caption: "Lleva el Mensaje, in Spanish (aalavina.org)"
+    takeaway: "Prefer cash? Hand it to us at our table: the committee buys Carry the Message gift subscriptions with it."
+    minutes: 0.75
+    notes: |
+      SAY: La Viña has its own page for the same program, {lang:es}Lleva el Mensaje{/lang}, carry the message, in Spanish. A gift certificate bought there becomes a subscription to La Viña for a Spanish-speaking alcoholic in need, in a treatment center, a hospital or behind the walls.
+      EN ESPAÑOL (if Spanish speakers are present): {lang:es}Con Lleva el Mensaje, un certificado de regalo comprado en la tienda oficial de La Viña se convierte en una suscripción para un alcohólico que la necesita. ¿Prefieres efectivo? Entrégalo en nuestra mesa.{/lang}
+      DO: Point to the table if you're at a booth, so people know where to hand in cash if they'd rather.
+      TIP: The same rule as the slide before: a purchase in the official store, never a donation, and never a request to buy. The committee's Shop page has both programs side by side ({live:site}/shop/#carry).
+      SOURCES: aalavina.org/lleva-el-mensaje; src/_i18n/common.json (the committee's own Carry the Message words).
+      TRANSITION: The magazines are written by people like us. Here's how to send your own story.
+
+  # Share your story on the committee website: both magazines' themes and deadlines, how to send a story, and the
+  # story recorder (record it in the browser) and the two story lines.
+  - id: "qr-story"
+    layout: "live"
+    kind: "qr"
+    eyebrow: "Write it"
+    accent: "vine"
+    title: "Your story could help another alcoholic"
+    intro: "Themes, deadlines and how to send or record a story, for Grapevine and for La Viña"
+    options:
+      url: "/contribute/"
+      caption: "Share your story (the committee website)"
+    takeaway: "Anyone in AA can write. The editors take care of the spelling, and each magazine chooses what it publishes."
+    minutes: 1
+    version_minutes: { short: 0.75 }
+    notes: |
+      SAY: Almost every story in Grapevine and La Viña is written by an AA member, someone like you. You don't need to be a writer: you write the way you'd share in a meeting, and the editors take care of the spelling. This code opens our committee's 'Share your story' page: the themes of the coming issues with their deadlines, how to send a story to Grapevine or La Viña, and, if you'd rather talk than write, how to record it, by phone or right there in your phone's browser.
+      DO: Mention the next deadlines in a sentence, if you know them: Grapevine, {live:next_deadline_gv}; La Viña, {live:next_deadline_lv}.
+      TIP: Never promise that a story will be published: each magazine chooses. Grapevine takes a story, a joke, a photo or art; La Viña a story, a photo or art. Both protect the writer's anonymity in print.
+      SOURCES: the committee website ({live:site}/contribute/); aagrapevine.org/submit-your-story; aalavina.org/comparte.
+      {not:short} TRANSITION: And to find us again: our dates.
+      {only:short} TRANSITION: Thank you for listening. One last code.
+
+  # Events: every date of our table, our Grapevine Meeting, the workshops and the assemblies, with the calendar
+  # feed people can add to their phone.
+  - id: "qr-calendar"
+    layout: "live"
+    kind: "qr"
+    eyebrow: "Find us"
+    accent: "gv"
+    title: "Our dates, in your phone's calendar"
+    intro: "Our table at CityWide Dallas (every 2nd Saturday), our Grapevine Meeting (1st Wednesday), the committee (3rd Wednesday), workshops and assemblies"
+    options:
+      url: "/events/"
+      caption: "Events and calendar (the committee website)"
+    takeaway: "All AA members are welcome at our online meetings; no registration needed."
+    minutes: 1
+    notes: |
+      SAY: This one opens the Events page of our committee's website: our table here at CityWide Dallas on the second Saturday of every month, from 5:30 to 7:30; our Grapevine Meeting, an online AA meeting in English around a Grapevine story, on the first Wednesday at seven; our committee meeting on the third Wednesday, same time, same Google Meet link, with a guest speaker each month from January 2027; and the workshops and assemblies across the Area. You can add the whole calendar to your phone from that page, so the dates come to you.
+      DO: If someone asks, say the next ones aloud: our Grapevine Meeting, {live:grapevine_meeting_next}; the committee meeting, {live:meeting_next}; the next assembly, {live:assembly_next}.
+      TIP: At a district visit, ask the DCM beforehand whether the district has a workshop coming up, and mention it here.
+      SOURCES: the committee website ({live:site}/events/ and /meetings/).
+      TRANSITION: Your questions.
+
+  # ------------------------------------------------------------------ CLOSING
+  - id: "questions"
+    layout: "qa"
+    eyebrow: "Closing"
+    title: "Questions?"
+    prompts:
+      - "About the magazines, a subscription or a gift"
+      - "A GVR or an RLV for your group: what the service position is, and how to start"
+      - "A writing, recording or information workshop for your group or district"
+    note: "Ask us now, or write to grapevine@neta65.org"
+    minutes: 1.75
+    notes: |
+      SAY: What questions do you have? About the magazines, a subscription or a gift. About having a GVR or an RLV at your group, a Grapevine or La Viña representative: what the service position is and how to start. Or a workshop for your group or district: writing your story, recording it, or getting to know the magazines. We'd be glad to come.
+      DO: Keep each answer short. A question that needs time can wait until after the talk, at the table, or go to the committee's address. Write down a workshop request with a contact by service position.
+      TIP: If you don't know an answer, say so and point to the official page or to customerservice@aagrapevine.org (in Spanish, preguntas@aagrapevine.org); don't guess.
+      TRANSITION: Thank you. One last code, for everything else.
+
+  # The closing slide's code opens the committee website's home page (`qr: "/"`).
+  - id: "thank-you"
+    layout: "closing"
+    title: "Thank you for stopping by"
+    message: "Everything on these slides, and more, is on our website."
+    lines:
+      - "NETA 65 Grapevine & La Viña Committee"
+      - "Questions: grapevine@neta65.org"
+      - "Committee website: {live:site}"
+    qr: "/"
+    minutes: 0.75
+    version_minutes: { short: 1 }
+    notes: |
+      SAY: Thank you for your time, and for everything you do to carry the message. This last code opens our committee's website, in English and in Spanish: the magazines, the dates, the workshops and how to reach us. If you have a question later, write to us at grapevine@neta65.org.
+      {only:short} SAY: Any quick questions? (Take one or two; a longer one can wait until after the talk, at the table.) Lleva el Mensaje, La Viña's own gift program, and every date of our table and our meetings are one tap away on the website.
+      DO: Leave this slide up while people scan or leave. At the table, it can stay up all evening.
+      TIP: The contact on this slide is the committee's service address. Never put a personal phone number or e-mail address here.
+
+  # ------------------------------------------------------------------ FOR THE PRESENTER
+  - id: "for-the-presenter"
+    layout: "section"
+    facilitator: true
+    number: "A"
+    title: "For the presenter"
+    subtitle: "Before the booth or the visit, and the sources. Never shown."
+    eyebrow: "Appendix · For the presenter"
+    accent: "navy"
+    notes: |
+      NOT PRESENTED: the talk ends with the 'Thank you' slide just before this one.
+      WHAT'S HERE: a checklist for the table or the visit, and the credits and sources, in {ui:customize} → {ui:prepare}, where you can read or print each one.
+
+  - id: "before-you-go"
+    layout: "bullets"
+    facilitator: true
+    checklist: true
+    eyebrow: "Appendix · For the presenter"
+    title: "Before the booth or the visit"
+    items:
+      - "Where we are: {ui:customize} → {ui:your_details}"
+      - "Each code scanned once, from a phone, at the distance people will stand"
+      - "The screen bright, and the version chosen ({ui:customize} → {ui:version})"
+      - "A printed Grapevine and La Viña to hold up; the Share page's poster or table tent printed ({live:site}/share/)"
+      - "Free printed materials for a larger event: gvrc@aagrapevine.org, 4–6 weeks ahead"
+      - "No photos of people; photos of the table only"
+    notes: |
+      WHEN: the day before, and again at the table.
+      STEP 1: Fill in where you are ({ui:customize} → {ui:your_details}), and choose the version: about ten minutes with every code, or five ({ui:customize} → {ui:version}).
+      STEP 2: Scan every code once with your own phone, from where people will stand. A dim screen or a code too small on a projector is the usual problem: make the slide bigger ({ui:full_screen}) and the screen brighter.
+      STEP 3: The committee's Share page ({live:site}/share/) prints a poster and a fold-over table tent with the website's code, for the table itself. For a larger event, the Grapevine office can send free printed materials: write to gvrc@aagrapevine.org four to six weeks ahead with the event's name, date and expected attendance.
+      AT THE TABLE: we show the magazines and share information. Members buy from the official stores themselves; a member who prefers cash for Carry the Message may hand it to us, and the committee buys the gift subscriptions with it. Take photos only of the table, never of people.
+
+  - id: "credits"
+    layout: "credits"
+    facilitator: true
+    eyebrow: "Appendix · For the presenter"
+    title: "Credits & sources"
+    sources:
+      - "The codes' addresses: aagrapevine.org (its store's subscriptions page and Carry the Message) and aalavina.org (suscripciones, Lleva el Mensaje), as the committee website links them (November 2026)"
+      - "Share your story, the events and the calendar: the committee website, {live:site}, as of the date on the title slide"
+      - "Carry the Message at our table: the committee's own words, as on its website"
+      - "The magazines: AA Grapevine and La Viña: Our Meetings in Print (P-52, 2026); The A.A. Service Manual, 2024–2026, p. 66; the Grapevine Workbook (2026)"
+    note: |-
+      Grapevine and La Viña are trademarks of AA Grapevine, Inc. The names are used only to identify the magazines; no logos, covers or artwork are reproduced.
+      This presentation was prepared by the NETA 65 Grapevine & La Viña Committee for local service use. It is not an official AA Grapevine, Inc. presentation, it is not AA Conference-approved literature, and it does not speak for AA as a whole or for AA Grapevine, Inc.
+    notes: |
+      NOT PRESENTED: this page keeps the record of where the words and the addresses come from.
+      SAY (if someone asks): This is a short talk by our Area committee for local service. It isn't Conference-approved literature or an official AA Grapevine, Inc. presentation, and it doesn't speak for AA as a whole.
+      UPDATE: if an official address changes, change it on its slide ({ui:customize} → {ui:edit}) and tell whoever looks after the website, so config/site.yml `links:` follows.

@@ -93,6 +93,7 @@ from scripts.sync import build_data as B  # noqa: E402
 from scripts.sync import common  # noqa: E402
 from scripts.sync import podcasts as P  # noqa: E402
 from scripts.sync import weekly_open as W  # noqa: E402
+from workflow_steps import step_code, step_source  # noqa: E402
 
 FIXTURE = ROOT / "tests" / "fixtures" / "podcasts" / "reunin-abierta-semanal.xml"
 # La Viña's page for its meeting (the committee's choice, 2026-11-11): its podcast's page. Exactly so: with a "/" at
@@ -581,7 +582,7 @@ class RunSummaryShows(RunSummary):
     def test_the_report_issue_says_what_to_do(self):
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         step = next(s for s in wf["jobs"]["report"]["steps"] if s.get("name") == "Open, update or close the report issue")
-        code = step["run"].split("<<'PY'\n", 1)[1]
+        code = step_source(step["run"])
         part = code[code.index("HINTS = {"):code.index("def gh(")]
         ns: dict = {}
         exec(part, ns)                                                      # noqa: S102 — the workflow's own code

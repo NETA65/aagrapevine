@@ -1,5 +1,5 @@
-"""Round 12, "New to AA? / ¿Eres nuevo en AA?" — the first-steps card (src/_includes/macros/ui.njk newcomerCard and
-newcomerLine, eleventy/filters/newcomer.js, config/site.yml links: aa_find / aa_is_aa_for_you / aa_meeting_guide):
+"""Round 12, "New to AA? / ¿Eres nuevo en AA?" — the first-steps card (src/_includes/macros/ui.njk newcomerCard,
+Home's "I'm new to AA" button, eleventy/filters/newcomer.js, config/site.yml links: aa_find / aa_is_aa_for_you / aa_meeting_guide):
 
   * the offices    — ncOffices lists the offices of meetings.feeds that are in our Area, by their own sites (never a
                      feed address), each once, in the settings' order; on a Spanish page the Spanish-speaking office
@@ -16,7 +16,8 @@ newcomerLine, eleventy/filters/newcomer.js, config/site.yml links: aa_find / aa_
                      no other host, no tel: link), each new tab said to a screen reader; the 404 page shows the
                      compact card in both languages (the page's first; the root page, which answers a missing /es/…
                      address too, puts the Spanish first there), each with a link to the full card; Home has one
-                     line to it, before the service band.
+                     way to it, high on the page (the first "Where would you like to start?" button, November 2026),
+                     and the hero's "Find an AA meeting near you" (aa.org's finder).
 
     python -m unittest tests.test_r12_u6_newcomers -v        (or: python -m unittest discover -s tests)
 """
@@ -377,7 +378,11 @@ class Pages(unittest.TestCase):
         es_first, en_first = ["new-to-aa-es:es", "new-to-aa-en:en"], ["new-to-aa-en:en", "new-to-aa-es:es"]
         self.assertEqual(r, {"es": es_first, "en": en_first, "file": es_first, "word": en_first, "pages": es_first, "other": en_first})
 
-    def test_home_has_one_line_to_it_before_the_service_band(self):
+    def test_home_has_one_way_to_it_high_on_the_page(self):
+        # since the UX review of November 2026: the first of Home's "Where would you like to start?" buttons, right
+        # under the hero — before the daily quote and the magazines (it was one line near the foot of the page) —, and
+        # the hero's "Find an AA meeting near you" (AA's own finder, the card's first link)
+        home = json.loads(read("src", "_i18n", "home.json"))
         p = self.built()
         for url, lang in (("/", "en"), ("/es/", "es")):
             with self.subTest(url=url):
@@ -385,11 +390,15 @@ class Pages(unittest.TestCase):
                 target = ("/es" if lang == "es" else "") + "/meetings/#new-to-aa"
                 self.assertEqual(page.count(f'href="{target}"'), 1)
                 at = page.index(f'href="{target}"')
-                self.assertLess(at, page.index('aria-labelledby="svc-title"'))
-                line = page[page.rindex('<p class="panel-muted', 0, at):page.index("</p>", at)]
-                self.assertIn(COMMON["newcomer.title"][lang], line)
-                self.assertIn(COMMON["newcomer.line"][lang].replace("'", "&#39;"), line)
-        self.assertEqual(read("src", "pages", "index.njk").count("ui.newcomerLine(L)"), 1)
+                self.assertLess(page.index('<section class="card home-choose"'), at)
+                self.assertLess(at, page.index('aria-labelledby="quote-title"') if 'aria-labelledby="quote-title"' in page else len(page))
+                self.assertLess(at, page.index('aria-labelledby="mag-title"'))
+                button = page[at:page.index("</a>", at)]
+                self.assertIn(home["home.choose_new"][lang].replace("'", "&#39;"), button)
+                self.assertIn(COMMON["newcomer.line"][lang].replace("'", "&#39;"), button)
+                hero = page[page.index('id="homeHero"'):page.index("</section>", page.index('id="homeHero"'))]
+                self.assertIn(f'href="{LINKS["aa_find_es" if lang == "es" else "aa_find"]}"', hero)
+                self.assertIn(home["home.cta_find_aa"][lang], hero)
 
 
 if __name__ == "__main__":

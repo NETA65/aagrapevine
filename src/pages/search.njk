@@ -7,6 +7,7 @@ titleKey: nav.search
 ldType: SearchResultsPage
 descKey: search.meta_desc
 pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
+pageStyles: ["/assets/css/library.css"]
 ---
 {#- SITE-WIDE SEARCH — /assets/js/search.js loads /search-index.json
     (src/pages/search-index.11ty.js: every article, PDF, episode, video, post,
@@ -25,9 +26,9 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
 {#- (the same index as /search-index.json: the presentations too — the `presentations` global) -#}
 {%- set counts = db | searchKindCounts(nav, lang, site, presentations) -%}
 {%- set nDocs = (counts.pdf or 0) + (counts.document or 0) + (counts.slides or 0) + (counts.form or 0) -%}
-{#- Events tile = the count on the Events page's own tab (committee sub-nav): its upcoming events, a monthly
+{#- Events tile: the upcoming events, a monthly
     series once, no committee meetings (cmEventEnds). Each entry is the moment that event is over: the count
-    goes down between builds as they end (app.js GV.expire, data-gv-expire-count), as on the tab. -#}
+    goes down between builds as they end (app.js GV.expire, data-gv-expire-count). -#}
 {%- set eventEnds = db | cmEventEnds(lang) -%}
 {%- set nEvents = eventEnds | length -%}
 {%- set kinds = ["all", "pages", "articles", "docs", "podcasts", "videos", "instagram", "committee"] -%}
@@ -218,7 +219,7 @@ pageScripts: ["/assets/vendor/minisearch.js", "/assets/js/search.js"]
 <template id="ss-icons">
   {%- for name in ["file-text", "book-open", "pen-line", "presentation", "file-pen-line", "headphones", "circle-play", "instagram", "images", "megaphone", "calendar-days", "video", "languages", "arrow-up-right", "house", "sparkles", "library", "users", "folder-open", "badge-check", "map", "mail-open", "info", "mail", "qr-code", "search", "activity", "hand-heart", "award", "calendar-clock", "map-pin", "grid-3x3",
     "newspaper", "calendar-range", "bookmark", "monitor-play", "history", "list-checks", "lightbulb", "handshake", "send", "shield-check", "circle-help", "hand", "captions", "phone", "printer", "badge-dollar-sign", "gift", "truck", "mic", "accessibility", "heart-handshake",
-    "shopping-bag", "sprout", "calendar-heart", "receipt", "hard-drive-download", "clipboard-list"] %}
+    "shopping-bag", "sprout", "calendar-heart", "receipt", "hard-drive-download", "clipboard-list", "bell-ring"] %}
   <i data-icon="{{ name }}">{% icon name, "size-4" %}</i>
   {%- endfor %}
 </template>

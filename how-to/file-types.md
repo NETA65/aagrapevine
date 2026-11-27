@@ -1187,7 +1187,6 @@ to tests/test_sync_pipeline.py and one to tests/test_booth_names.py, then run bo
 | which site file an item reaches | [build_data.py](../scripts/sync/build_data.py) | `Ctx.items()`, `simple()`, `closed_form()`, `build_announcements()`, `flyer_events()`, `plan_whatsnew()`, `build_booth()` |
 | Portfolio cards and albums | [committee.js](../eleventy/filters/committee.js) | `isDocItem()`, `isPhotoItem()`, `fileType()`, `documentTabs()`, `photoAlbums()` |
 | Library and search | [library.js](../eleventy/filters/library.js) | `libraryDocs()`, `DRIVE_SKIP_KINDS`, `DRIVE_SKIP_CATS`, `docKitType()` |
-| home tiles | [home.js](../eleventy/filters/home.js) | the `homeDrive` filter |
 | monthly digest | [community.js](../eleventy/filters/community.js); [send_digest.py](../scripts/notify/send_digest.py) | `monthNews()`; `DRIVE_CATEGORIES` |
 
 **Run the tests** before you push (the *Code check* runs them again on every push): on a computer,

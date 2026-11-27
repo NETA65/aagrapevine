@@ -307,7 +307,10 @@ class Build(unittest.TestCase):
                          "the last two held, then the year ahead")
         # each meeting with its guest speaker (name, service position, topic) — never `confirmed` or `slides`, which
         # are the chair's notes': the paperwork goes out by e-mail
+        # (`over`: midnight Central after its day — until then the speaker facts are that meeting's, and so is the
+        # version the deck opens on)
         self.assertEqual(rows[2], {"ymd": "2026-10-21", "start": "2026-10-22T00:00:00.000Z", "end": "2026-10-22T01:00:00.000Z",
+                                   "over": "2026-10-22T05:00:00.000Z",
                                    "label": "Wednesday, October 21, 2026", "label_es": "miércoles, 21 de octubre de 2026",
                                    "month": "October 2026",
                                    "speaker": {"name": "Rick W.", "position": "Past delegate, Area 65 (Panel 73)",
@@ -804,7 +807,8 @@ class Player(unittest.TestCase):
         self.assertIn("qa('[data-gvp-tab=\"paper\"]').forEach(function (t) { t.hidden = !hasPaper(); });", js)
         # every mailto: link has no address: the chair puts every one in BCC
         self.assertEqual(set(re.findall(r'"mailto:([^"]*)"', js)), {"?subject="})
-        self.assertIn("if (G.summary(d).any || d.last || d.prev) out.decks[id] = d;", js, "the Undo is stored")
+        self.assertIn("if (G.summary(d).any || d.last || d.prev || d.preset) out.decks[id] = d;", js,
+                      "the Undo is stored, and a version chosen (the first one too)")
         for name in ("copy", "mail", "calendar-plus"):
             self.assertIn(f'"{name}"', macro.split('<template id="gvp-icons">', 1)[1], name)
 

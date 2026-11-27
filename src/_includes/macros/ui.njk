@@ -496,7 +496,7 @@
     machine-translated).
       {{ ui.newcomerCard(lang, { id: "new-to-aa", note: "newcomer.meetings_note" | t(lang) }) }}
     Its home is /meetings/#new-to-aa. The 404 page shows the compact form in both languages (the page's first);
-    Home has one line to it (ui.newcomerLine). L = the card's language: the card says lang="…" itself, so a card in
+    Home's "I'm new to AA" button opens it. L = the card's language: the card says lang="…" itself, so a card in
     the other language (the 404 page's second) reads right; its link to the Meetings page then says hreflang.
     opts: id (the card's id; its heading's is id + "-h") · level (the heading: 2, default, or 3) · note (one more
     line under the text) · compact (aa.org's three links, then one link to the full card on Meetings instead of the
@@ -565,18 +565,6 @@
 </section>
 {% endmacro %}
 
-{#- Home's one line to the "New to AA?" card on the Meetings page (ui.newcomerCard): a flat panel, near the service
-    band at the end of the page (its icon from 640px: on a phone the words take the whole width). -#}
-{% macro newcomerLine(L) %}
-<div class="container-page pb-12 sm:pb-16">
-  <p class="panel-muted flex flex-wrap items-center gap-x-3 gap-y-1 leading-relaxed">
-    <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-vine-soft text-vine max-sm:hidden" aria-hidden="true">{% icon "hand-heart", "size-4" %}</span>
-    <span class="min-w-0 flex-1 basis-64"><strong class="font-semibold text-ink">{{ "newcomer.title" | t(L) }}</strong> <span class="text-muted">{{ "newcomer.line" | t(L) }}</span></span>
-    <a class="tap-link inline-flex items-center gap-1.5 font-semibold text-gv hover:underline" href="{{ '/meetings/' | lurl(L) }}#new-to-aa">{{ "newcomer.line_link" | t(L) }} {% icon "arrow-right", "size-4 shrink-0" %}</a>
-  </p>
-</div>
-{% endmacro %}
-
 {#- "For committee members" — a collapsed disclosure for committee-only how-tos (Drive folders,
     access, posting). Goes just before the page's closing block. The call body is the content:
       {% call ui.memberHelp(lang, "How to add documents", { id: "members" }) %}<ol>…</ol>{% endcall %} -#}
@@ -615,21 +603,6 @@
   {% if text %}<p class="mx-auto mt-1 max-w-md text-sm">{{ text | safe }}</p>{% endif %}
   {% if ctaHref %}<a class="btn-secondary btn-sm mt-4" href="{{ ctaHref }}"{% if ctaHref.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ ctaLabel }}</a>{% endif %}
 </div>
-{% endmacro %}
-
-{#- Source label + color for any item -#}
-{% macro sourceBadge(item, lang) %}
-{%- set src = item.source -%}
-{%- set refHost = (item.extra.referrers[0].url | hostname) if (item.extra and item.extra.external and item.extra.referrers and item.extra.referrers.length) else "" -%}
-{%- set isLv = ('lavina' in refHost) if refHost else (item.extra and item.extra.host and 'lavina' in item.extra.host) -%}
-{%- if src == "podcast" %}<span class="badge-grape">{% icon "headphones", "size-3" %} {{ "kind.episode" | t(lang) }}</span>
-{%- elif src == "youtube" %}<span class="badge-grape">{% icon "youtube", "size-3" %} YouTube</span>
-{%- elif src == "instagram" %}<span class="badge-grape">{% icon "instagram", "size-3" %} Instagram</span>
-{%- elif src == "drive" or src == "committee" %}<span class="badge-vine">{% icon "users", "size-3" %} NETA 65</span>
-{%- elif src == "crawl" %}<span class="{{ 'badge-lv' if isLv else 'badge-gv' }}">{% icon "file-text", "size-3" %} {{ "La Viña" if isLv else "Grapevine" }}</span>
-{%- elif src == "lavina" or item.category == "lv" or item.category == "lv-calendar" %}<span class="badge-lv">{% icon "grapes", "size-3" %} La Viña</span>
-{%- elif src == "grapevine" or item.category == "gv" or item.category == "gv-calendar" %}<span class="badge-gv">{% icon "grapes", "size-3" %} Grapevine</span>
-{%- else %}<span class="badge-muted">{{ src }}</span>{%- endif %}
 {% endmacro %}
 
 {#- Small "auto-translated" note when this language version is machine translated -#}

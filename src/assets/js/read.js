@@ -51,7 +51,7 @@
   /* ------------------------------------------------------------------
      "See who from our Area got published" card (/read/ and /contribute/): the numbers are
      counted when the site is built, so recount the "last N days" window here with the
-     visitor's date (Central time) — the same rule as the home page (home.js spotlight) and
+     visitor's date (Central time) — the same rule as
      /published/: story day >= today − N days. Each number carries one date per writer
      (data-dates: that writer's newest story) and each name chip its writer's date (data-date).
      Writers can only leave the window, so this only ever hides or lowers what the server drew:
@@ -393,6 +393,90 @@
   });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bindDeadlineCals);
   else bindDeadlineCals();
+
+  /* ------------------------------------------------------------------
+     /read/'s earlier issues hold their first few stories in the page (eleventy/filters/read.js SSR_ROWS); an
+     issue's "Show all N stories" button (data-read-more = the issue's id, data-json = /read-archive.json) adds the
+     rest under them from the file's `more` (src/pages/read-archive.11ty.js) — or, when the page and the file come
+     from different builds, from the file's older issues (`issues`: the stories after the ones the page holds) —
+     each row a copy of the page's
+     <template id="read-row-tpl"> filled in with plain DOM (the story lists are x-ignore: no Alpine in there). The
+     file is fetched once for every issue (moreJson). While it loads the button says so; if it can't be read, the
+     button says so and works again. Once the rows are in, the button goes and focus moves to the first new story
+     (its title link), so the keyboard goes on from there. Every value goes in as text, never as HTML. */
+  var moreJson = null;
+  function readMoreData(url) {
+    if (!moreJson) {
+      moreJson = fetch(window.GV && window.GV.url ? window.GV.url(url) : url, { cache: "no-cache" })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .catch(function (e) { moreJson = null; throw e; });
+    }
+    return moreJson;
+  }
+  function storyRow(tpl, a, is) {
+    var li = tpl.content.firstElementChild.cloneNode(true);
+    var f = function (k) { return li.querySelector('[data-f="' + k + '"]'); };
+    var link = li.querySelector("a");
+    var mag = is.pub === "lv" ? "La Viña" : "Grapevine";
+    link.href = /^https?:\/\//.test(a.u || "") ? a.u : "#";
+    var title = f("t");
+    title.textContent = a.t || "";
+    if (a.tl) title.setAttribute("lang", a.tl);
+    title.classList.add(is.pub === "lv" ? "group-hover:text-lv" : "group-hover:text-gv");
+    if (a.o) {
+      f("o").textContent = a.o;
+      if (a.ol) f("o").setAttribute("lang", a.ol);
+      if (!a.m) { f("mt").remove(); f("orig").removeAttribute("title"); }
+    } else f("orig").remove();
+    if (a.a) f("a").textContent = String(f("a").getAttribute("data-t") || "{name}").replace("{name}", a.a);
+    else f("a").remove();
+    if (a.f !== 1) f("free").remove();
+    if (a.f !== 0) f("sub").remove();
+    if (!a.a && a.f !== 1 && a.f !== 0) f("meta").remove();
+    var share = li.querySelector(".read-share");
+    share.setAttribute("data-share", link.href);
+    share.setAttribute("data-share-title", a.o || a.t || "");
+    share.setAttribute("data-share-text", "— " + mag + (is.ls ? ", " + is.ls : ""));
+    share.setAttribute("aria-label", (share.getAttribute("data-t") || "") + ": " + (a.t || ""));
+    return li;
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest("[data-read-more]") : null;
+    if (!b || b.getAttribute("aria-busy") === "true") return;
+    var tpl = document.getElementById("read-row-tpl");
+    var list = b.closest("[x-ignore], details");
+    list = list && list.querySelector("[data-read-rows]");
+    if (!tpl || !tpl.content || !list) return;
+    var label = b._label || (b._label = b.innerHTML);
+    b.setAttribute("aria-busy", "true");
+    b.textContent = b.getAttribute("data-t-loading") || "…";
+    readMoreData(b.getAttribute("data-json")).then(function (data) {
+      var id = b.getAttribute("data-read-more");
+      var is = data && data.more && data.more[id], items = is && is.items;
+      // (the page and the file from different builds — a page kept offline, a file saved at another time: the issue
+      //  may have moved on into the file's older issues, with all its stories — the ones after those the page holds)
+      if (!Array.isArray(items) && data && Array.isArray(data.issues)) {
+        is = data.issues.filter(function (x) { return x && x.id === id; })[0];
+        items = is && Array.isArray(is.items) ? is.items.slice(list.children.length) : null;
+      }
+      // (in neither: the next tap asks for the file again)
+      if (!Array.isArray(items)) { moreJson = null; throw new Error("no rows"); }
+      var first = null;
+      items.forEach(function (a) {
+        var li = storyRow(tpl, a, is);
+        if (!first) first = li;
+        list.appendChild(li);
+      });
+      var p = b.parentNode;
+      if (p && p.parentNode) p.parentNode.removeChild(p);
+      var fl = first && first.querySelector("a");
+      if (fl) fl.focus();
+    }).catch(function () {
+      b.removeAttribute("aria-busy");
+      b.innerHTML = label;
+      b.insertAdjacentText("beforeend", " — " + (b.getAttribute("data-t-failed") || ""));
+    });
+  });
 
   function refresh() { updateDeadlines(); recountSpots(); expireWorkshops(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", refresh);

@@ -42,6 +42,9 @@ class DeadlineCalendarMenu(unittest.TestCase):
                     self.assertTrue(menu.evaluate("d => d.open"))
                     panel = menu.locator(".cm-menu-panel")
                     self.assertTrue(panel.is_visible())
+                    # (the panel opens with a short scale-in, cm-pop: measured during it, a 44px row reads 43.12 =
+                    # 44 x 0.98 — so the sizes below are taken once its animations are over)
+                    panel.evaluate("p => Promise.all(p.getAnimations({ subtree: true }).map((a) => a.finished)).then(() => true)")
                     self.assertEqual(panel.evaluate("p => getComputedStyle(p).position"), "static", "it opens inside its row")
                     r = page.evaluate(SIDEWAYS)
                     self.assertFalse(r["moved"] > 0 or r["scrollWidth"] > r["width"], r)

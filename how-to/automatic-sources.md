@@ -672,9 +672,9 @@ channels' feeds; the full listing of older videos waits for a full update).
 
 **Where it shows.** `/watch/` · `/es/watch/`: the **featured** video at the top is always the newest
 video that is not a Short; then the grid (24 on the page, the rest from `/videos-index.json`) with type
-chips (Shorts, Open meetings, Podcast, Video), language chips and playlists. Home *Listen & Watch*: 5 of
-the newest non-Shorts, skipping YouTube copies of episodes already shown, with at least one La Viña
-video from the last year. Also `/about/#videos`, `/accessibility/` (ASL videos), What's New and the RSS
+chips (Shorts, Open meetings, Podcast, Video), language chips and playlists. Home *Listen & Watch*: the
+newest non-Short as one compact strip under the episodes (since November 2026), skipping YouTube copies of
+the episodes shown above it. Also `/about/#videos`, `/accessibility/` (ASL videos), What's New and the RSS
 feed, `/digest/`, search, and the booth display (`/about/#booth`: the `about_videos` first, then the newest 30
 Shorts and videos of 8 minutes or less — never a Weekly Open meeting or a live recording; they need internet).
 
@@ -912,7 +912,7 @@ the newest), search.
 **Code pointers.** `instagram.py` → `load_manual` (your list), `merge_post` (who wins), `build_item`
 (title, summary, `extra`), `prune`, class `Fetcher` (one method per way of reading). Display:
 `eleventy/filters/media.js` (filters `mediaIgFor`, `mediaIgCaption`, `mediaIgImage`),
-`src/pages/instagram.njk`, home `homeInstagram` in `eleventy/filters/home.js`. Test:
+`src/pages/instagram.njk` (the home page links it from *More on this site* since November 2026). Test:
 `tests/test_sync_pipeline.py`.
 
 ---
@@ -1914,7 +1914,7 @@ More on runs, the Morning check and the run summary: [Automation and troubleshoo
 
 | Page (English · Spanish) | What the automatic sources put there |
 |---|---|
-| Home `/` · `/es/` | daily quote card; *From the magazines* (5 stories per issue) and "this month in the Shop"; *Write for the magazines* (4 themes); *Listen & Watch* (a featured episode + 3, 5 videos, the weekly open line); *Published writers*; the next committee meeting and next Grapevine Meeting cards and a link to the Grapevine meetings; *Library* (the 6 newest documents); *Instagram* (6 posts) |
+| Home `/` · `/es/` | daily quote card; *From the magazines* (5 stories per issue) and "this month in the Shop"; *Write for the magazines* (4 themes); *Listen & Watch* (a featured episode + 3 more, the weekly open line, the newest video as a strip under them); *Published writers*; the next committee meeting and next Grapevine Meeting cards and a link to the Grapevine meetings; *Library* (the 6 newest documents); *Instagram* (6 posts) |
 | `/read/` · `/es/read/` | magazine stories: the current issues and the archive |
 | `/published/` · `/es/published/` | stories by writers from Area 65 and Texas; editorial themes; the Texas writers archive (`#archive`: the archive files + every captured Texas story) |
 | `/library/` · `/es/library/` | official documents (next to the committee's own documents from Drive) |

@@ -123,8 +123,8 @@
 
   "report.i_gv": { "en": "Grapevine, {issue}: “{theme}”", "es": "Grapevine, {issue} (en inglés): “{theme}”" },
   "report.i_lv": { "en": "La Viña, {issue} (in Spanish): “{theme}”", "es": "La Viña, {issue}: “{theme}”" },
-  "report.i_out_gv": { "en": "Already out online: the {issue} Grapevine, “{theme}”.", "es": "Ya salió en línea la edición de {issue} de Grapevine: “{theme}”." },
-  "report.i_out_lv": { "en": "Already out online: La Viña for {issue}, “{theme}”.", "es": "Ya salió en línea La Viña de {issue}: “{theme}”." },
+  "report.i_out_gv": { "en": "Already out online: the {issue} Grapevine, “{theme}”{orig}.", "es": "Ya salió en línea la edición de {issue} de Grapevine: “{theme}”{orig}." },
+  "report.i_out_lv": { "en": "Already out online: La Viña for {issue}, “{theme}”{orig}.", "es": "Ya salió en línea La Viña de {issue}: “{theme}”{orig}." },
   "report.i_none": { "en": "This month's themes aren't listed yet — see the current issues: {url}", "es": "Todavía no se publican los temas de este mes — mira las ediciones actuales: {url}" },
   "report.i_tips": { "en": "Put it to work this month:", "es": "Pónganla a trabajar este mes:" },
   "report.i_poster": { "en": "This month's poster and toolkit: {url}", "es": "El cartel y el kit de este mes: {url}" },

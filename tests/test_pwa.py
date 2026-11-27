@@ -199,11 +199,12 @@ class Worker(unittest.TestCase):
         self.assertNotIn("install-core", re.search(r"const required = \[(.*?)\];", self.tpl, re.S).group(1))
 
     def test_the_shell_keeps_every_latin_font(self):
-        # the normal AND italic faces main.css loads (a saved page's italics offline); the latin-ext files are left out
-        # on purpose — unicode-range fetches them only for rare letters, and every Spanish one is in latin
+        # the faces main.css loads — no Inter italic since November 2026 (its italic is the upright face slanted, offline
+        # too: tests/test_fonts.py), Fraunces' italic kept (Home's hero and quotes); the latin-ext files are left out on
+        # purpose — unicode-range fetches them only for rare letters, and every Spanish one is in latin
         css = read("src", "assets", "css", "main.css")
         fonts = sorted(set(re.findall(r'url\("\.\./fonts/([a-z0-9-]+\.woff2)"\)', css)) - {f for f in re.findall(r"[a-z0-9-]+-latin-ext-[a-z0-9-]+\.woff2", css)})
-        self.assertEqual(len(fonts), 4, fonts)
+        self.assertEqual(fonts, ["fraunces-latin-opsz-italic.woff2", "fraunces-latin-opsz-normal.woff2", "inter-latin-wght-normal.woff2"])
         shell = re.search(r"const shell = \[(.*?)\];", self.tpl, re.S).group(1)
         for f in fonts:
             self.assertIn(f'a("assets/fonts/{f}")', shell)

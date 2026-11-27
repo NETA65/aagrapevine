@@ -71,6 +71,15 @@ class Folder(unittest.TestCase):
 
 
 class NoHeader(Folder):
+    def test_the_summary_ends_a_heading_with_a_period(self):
+        """A post's summary (Home's card, What's New, the feed) is its text in one line: a heading in it ends its
+        sentence (PastedHtml.test_a_heading_ends_its_sentence_in_the_teaser; a Drive post's summary is made the
+        same way, scripts/sync/drive.py fill_announcements)."""
+        it = self.parse("why.md", "---\ntitle: Ways to help\n---\nIntro.\n\n# Why it matters\n\nA meeting in print.")
+        self.assertEqual(it["summary"], "Intro. Why it matters. A meeting in print.")
+        es = self.parse("por-que.md", "---\ntitle: Formas de ayudar\n---\nIntro.\n\n# Por qué importa\n\nUna reunión impresa.")
+        self.assertEqual(es["summary"], "Intro. Por qué importa. Una reunión impresa.")
+
     def test_title_from_the_first_heading(self):
         it = self.parse("welcome.md", "# Welcome, **new** GVRs!\n\nCome to our meeting.\n\n## Details\n\nSoon.")
         self.assertEqual(it["title"], "Welcome, new GVRs!")
@@ -153,6 +162,29 @@ class PastedHtml(unittest.TestCase):
     def test_a_teaser_is_prose(self):
         self.assertEqual(A.markdown_to_text("Intro.\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n- one\n    - two\n\n---\nEnd."),
                          "Intro. one two End.")
+
+    def test_a_heading_ends_its_sentence_in_the_teaser(self):
+        """Home's card read "…learn from it. Why it matters A meeting in print…": every block runs into one line,
+        so a heading with text after it ends with a period — unless it ends with a mark of its own (? ! : …) — in
+        English and in Spanish; a heading alone (a title's words) stays as it is."""
+        en = ("A living list of ways to support Grapevine and La Viña. Share what works.\n\n# Why it matters\n\n"
+              "- **A meeting in print, every day.** Grapevine and La Viña reach millions of people.\n\n"
+              "## What groups can do ##\n\n- **Subscribe as a group.** It is Seventh Tradition support.")
+        self.assertEqual(A.markdown_to_text(en),
+                         "A living list of ways to support Grapevine and La Viña. Share what works. Why it matters. "
+                         "A meeting in print, every day. Grapevine and La Viña reach millions of people. What groups "
+                         "can do. Subscribe as a group. It is Seventh Tradition support.")
+        es = ("Una lista viva de formas de apoyar a Grapevine y La Viña.\n\n# Por qué importa\n\n"
+              "- **Una reunión impresa, todos los días.** Llegan a millones de personas.\n\n"
+              "# ¿Qué pueden hacer los grupos?\n\nSuscribirse como grupo.\n\n### **En las reuniones:**\n\nMencionarlo.")
+        self.assertEqual(A.markdown_to_text(es),
+                         "Una lista viva de formas de apoyar a Grapevine y La Viña. Por qué importa. Una reunión "
+                         "impresa, todos los días. Llegan a millones de personas. ¿Qué pueden hacer los grupos? "
+                         "Suscribirse como grupo. En las reuniones: Mencionarlo.")
+        self.assertEqual(A.markdown_to_text("# Older news\n\nAn *older* post."), "Older news. An older post.")
+        self.assertEqual(A.markdown_to_text("# *Why?*\n\nText."), "Why? Text.")
+        self.assertEqual(A.markdown_to_text("# Big news"), "Big news")
+        self.assertEqual(A.markdown_to_text("#hashtag stays\n\nText."), "#hashtag stays Text.")
 
 
 class TitlesAndOldFolder(Folder):
@@ -304,15 +336,18 @@ class Rendering(unittest.TestCase):
         self.assertNotIn('href="javascript:', out["html"])
 
     def test_an_events_description_like_a_post(self):
-        """An event's description on /events/ (a content/events file's text) is committee Markdown too: under
-        the card's h3 title its headings start at h4, links to our pages lead to the page language's page, its
-        tables are named after the event, and .cm-md (committee.css) styles it as on the bulletin."""
-        page = (ROOT / "src/pages/events.njk").read_text(encoding="utf-8")
+        """An event's description (a content/events file's text) is committee Markdown too — on the event's own page
+        since the list's redesign (/events/' card shows its summary, three lines): under the page's h1 title its
+        headings start at h2, links to our pages lead to the page language's page, its tables are named after the
+        event, and .cm-md (committee.css) styles it as on the bulletin."""
+        page = (ROOT / "src/_includes/partials/event-page.njk").read_text(encoding="utf-8")
         m = re.search(r'<div class="([^"]*)"[^>]*>\{\{ ev\.body \| md(\([^)]*\))? (?:\| cmNoSnippet )?\| safe \}\}</div>', page)
         self.assertIsNotNone(m)
         self.assertIn("cm-md", m.group(1).split())
-        self.assertEqual(re.sub(r"\s+", "", m.group(2) or ""), "({h:4,lang:lang,name:ev.title})")
-        self.assertRegex(page, r'<h3 class="h-card[^"]*">\s*\{%-? if ev\.link')        # the card's title
+        self.assertEqual(re.sub(r"\s+", "", m.group(2) or ""), "({h:2,lang:lang,name:ev.title})")
+        self.assertNotIn("ev.body | md", (ROOT / "src/pages/events.njk").read_text(encoding="utf-8"))
+        self.assertRegex((ROOT / "src/pages/events.njk").read_text(encoding="utf-8"),
+                         r'<h3 class="h-card[^"]*">\s*\{%-? if ev\.link')        # the card's title
         out = run_js(self, """
           out(filters.md("Aprende.\\n\\n## Estacionamiento\\n\\nVer [reuniones](/meetings/).\\n\\n| Hora | Qué |\\n|---|---|\\n| 2:00 | Bienvenida |",
                          { h: 4, lang: "es", name: "Taller de Escritura" }));
@@ -507,20 +542,16 @@ class Layout(unittest.TestCase):
         # …and at 130 %+ text or relaxed spacing it stops sticking, like the other side columns
         self.assertRegex(self.main, r'\[data-spacing="relaxed"\]\) :is\([^)]*\.cm-ann-side\) \{\s*position: static !important;')
 
-    def test_the_post_left_takes_the_row_on_the_home_page(self):
-        # The home page's cards are teasers (a short post in full, a long one as its summary and "Read more" — not
-        # the bulletin's layout): the two newest posts, two a row from 1024px (lg:grid-cols-2, set by the build
-        # when there are two); once one has ended between builds (GV.expire hid it), the other takes the whole
-        # row, as a post alone does after the next build. lg:grid-cols-2 is a utility (Tailwind's last layer):
-        # the rule wins only because home.css is imported outside any layer.
+    def test_home_links_the_bulletin(self):
+        # Home's two bulletin cards went in the UX review of November 2026: the posts have one home, /bulletin/, which
+        # Home's "More on this site" row links (and the Committee menu, the footer, the phone menu). Only the pinned
+        # posts still on are on Home, as one short card (title, one line, "Read": tests/test_home_start.py
+        # PinnedBulletin) — the same list as the Bulletin's (cmAnnouncements), its pinned ones
         home = (ROOT / "src/pages/index.njk").read_text(encoding="utf-8")
-        self.assertIn("""<div class="home-ann-grid grid items-start gap-5 {{ 'lg:grid-cols-2' if anns.length > 1 }}">""", home)
-        self.assertRegex(home, r'<article class="home-ann[^"]*"[^>]*data-gv-expire-item')
-        hcss = (ROOT / "src/assets/css/areas/home.css").read_text(encoding="utf-8")
-        self.assertRegex(hcss, r"@media \(width >= 64rem\) \{\s*\.home-ann-grid:not\(:has\(> article:not\(\[hidden\]\) ~ "
-                               r"article:not\(\[hidden\]\)\)\) \{ grid-template-columns: minmax\(0, 1fr\); \}\s*\}")
-        self.assertNotIn("@layer", hcss)
-        self.assertIn('@import "./areas/home.css";\n', self.main)
+        self.assertNotIn("home-ann", home)
+        self.assertIn('{ url: "/bulletin/", icon: "megaphone", key: "nav.bulletin", desc: "nav.bulletin_desc" }', home)
+        self.assertIn('(D.announcements.items | cmAnnouncements) | selectattr("_pinned") | limit(2)', home)
+        self.assertNotIn("home-ann", (ROOT / "src/assets/css/areas/home.css").read_text(encoding="utf-8"))
 
     def test_in_this_post_follows_the_reading(self):
         js = self.js

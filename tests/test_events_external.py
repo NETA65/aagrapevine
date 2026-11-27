@@ -106,6 +106,102 @@ class InTexas(unittest.TestCase):
                 self.assertEqual(bool(E.decide(ev).get("texas")), known[ev["title"]], ev["title"])
 
 
+# --------------------------------------------------------------------------- the city and state of a place
+class CityAndState(unittest.TestCase):
+    def place(self, location: str) -> tuple:
+        loc = E.parse_location(location)
+        return loc["city"], loc["state"], loc["country"]
+
+    def test_a_city_in_capitals_before_the_state_and_zip(self):
+        """La Viña's calendar writes "Maude Cobb . Convenció center LONGVIEW TX 75604": no comma, the city in
+        capitals, the ZIP right after the state. It reads as Longview, TX (it read as no city and no state)."""
+        self.assertEqual(self.place("Maude Cobb . Convenció center LONGVIEW TX 75604"), ("Longview", "TX", "USA"))
+        self.assertEqual(self.place("Centro Comunitario KILGORE TX 75662-1234"), ("Kilgore", "TX", "USA"))
+        self.assertEqual(self.place("DALLAS TX 75201"), ("Dallas", "TX", "USA"))
+        self.assertEqual(self.place("DALLAS TX"), ("Dallas", "TX", "USA"))
+        self.assertEqual(self.place("FORT WORTH, TX 76102"), ("Fort Worth", "TX", "USA"))
+        self.assertEqual(self.place("TULSA OK 74103"), ("Tulsa", "OK", "USA"))
+        # the place as written stays the event's place: only its parts are read
+        self.assertEqual(E.parse_location("Maude Cobb . Convenció center LONGVIEW TX 75604")["display"],
+                         "Maude Cobb . Convenció center LONGVIEW TX 75604")
+
+    def test_a_bare_zip(self):
+        self.assertEqual(self.place("Dallas TX 75247"), ("Dallas", "TX", "USA"))
+        self.assertEqual(self.place("Longview, TX, 75604"), ("Longview", "TX", "USA"))
+        self.assertEqual(self.place("Tyler TX"), ("Tyler", "TX", "USA"))
+
+    def test_a_venues_name_is_never_the_city(self):
+        """With no comma before the state, a venue's name runs into the city: only what can only be the city is
+        read (the Texas city at its end, else one word in capitals after any acronym, or a "Las …" / "El …" place
+        name) — never the venue's words (they reached the events' JSON-LD addressLocality and their pages)."""
+        for loc, city in (("GRUPO NUEVA VIDA GARLAND TX", "Garland"), ("CENTRO HISPANO DALLAS TX", "Dallas"),
+                          ("Club AA DALLAS TX 75211", "Dallas"), ("First UMC GARLAND TX", "Garland"),
+                          ("Sheraton DALLAS HOTEL TX", None), ("Hotel Adolphus Dallas TX", "Dallas")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, "TX", "USA"))
+        for loc, city, state in (("LAS VEGAS NV 89109", "Las Vegas", "NV"), ("Las Vegas NV 89109", "Las Vegas", "NV"),
+                                 ("Caesars Palace LAS VEGAS NV 89109", "Las Vegas", "NV"),
+                                 ("Club AA TOPEKA KS 66603", "Topeka", "KS"),
+                                 ("CENTRO HISPANO DEL NORTE TULSA OK 74103", None, "OK")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, state, "USA"))
+
+    def test_a_citys_capitals_as_written(self):
+        """A city's name keeps the capitals it is written with ("McKinney", "DeSoto", "McAllen": never "Mckinney");
+        written all in capitals it reads as a name ("MCKINNEY" → "McKinney"), and an acronym stays one ("DFW")."""
+        for loc, city in (("McKinney TX 75069", "McKinney"), ("DeSoto TX 75115", "DeSoto"), ("McAllen TX", "McAllen"),
+                          ("Iglesia Cristiana DeSoto TX 75115", "DeSoto"), ("123 Main St McKinney TX 75069", "McKinney"),
+                          ("MCKINNEY TX 75069", "McKinney"), ("DESOTO TX", "DeSoto"), ("MCKINNEY, TX 75069", "McKinney"),
+                          ("DESOTO, TX", "DeSoto"), ("McKinney, TX 75069", "McKinney"), ("DFW, TX", "DFW"),
+                          ("FORT WORTH TX 76102", "Fort Worth"), ("Ft. Worth TX", "Ft. Worth"),
+                          ("Lake Dallas TX 75065", "Lake Dallas"), ("SOUTH HOUSTON TX", "South Houston")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, "TX", "USA"))
+
+    def test_every_texas_place_reads_as_itself(self):
+        """Every place of data/geo/texas_places.json, written "Name TX 75000" with no comma, reads as that place —
+        never a shorter city at its end ("Lake Dallas" is not Dallas, "Santa Anna" not Anna) nor other capitals;
+        written in capitals, as that place by name ("LAKE DALLAS" → "Lake Dallas", "MCGREGOR" → "McGregor") or as
+        no city (a name of three words or more), never a wrong one."""
+        import re
+        places = json.loads((ROOT / "data" / "geo" / "texas_places.json").read_text(encoding="utf-8"))
+        inner = {"desoto": "DeSoto", "decordova": "DeCordova", "dekalb": "DeKalb"}
+        def name(key: str) -> str:
+            return " ".join(inner.get(w) or (("Mc" + w[2].upper() + w[3:]) if re.match(r"mc[a-z]", w) else w[:1].upper() + w[1:])
+                            for w in key.split(" "))
+        wrong, caps = [], []
+        for key in places:
+            n = name(key)
+            if E.parse_location(f"{n} TX 75000")["city"] != n:
+                wrong.append((n, E.parse_location(f"{n} TX 75000")["city"]))
+            got = E.parse_location(f"{n.upper()} TX 75000")["city"]
+            if got is not None and got != n:
+                caps.append((n.upper(), got))
+        self.assertGreater(len(places), 1000)
+        self.assertEqual(wrong, [])
+        self.assertEqual(caps, [])
+
+    def test_two_capitals_at_the_end_are_not_always_a_state(self):
+        """After a word in capitals, two letters are a state only when they are a US state's code with a ZIP
+        after them, or TX: a text in capitals may end in any short word."""
+        self.assertEqual(self.place("SALON AB"), ("SALON AB", None, None))
+        self.assertEqual(self.place("COME ON IN"), ("COME ON IN", None, None))
+        self.assertEqual(self.place("SALON DE LA"), ("SALON DE LA", None, None))
+        self.assertEqual(self.place("Vancouver BC"), ("Vancouver", None, "Canada"))
+
+    def test_a_cached_event_gets_them_on_the_next_sync(self):
+        """decide() runs on every sync from the cache's raw fields (as data/raw/events_external.json keeps the
+        Longview page, November 2026): the cached event gets its city and state without its page fetched again."""
+        cached = {"title": "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )",
+                  "start": "2027-01-29", "end": "2027-01-31", "all_day": True, "lang": "es",
+                  "location_raw": "Maude Cobb . Convenció center LONGVIEW TX 75604",
+                  "location": "Maude Cobb . Convenció center LONGVIEW TX 75604", "online": False, "texas": True}
+        got = E.decide(cached)
+        self.assertEqual((got.get("city"), got.get("state"), got.get("country"), got.get("texas")),
+                         ("Longview", "TX", "USA", True))
+        self.assertEqual(E.build_item(LONGVIEW, got)["extra"]["city"], "Longview")
+
+
 # --------------------------------------------------------------------------- P3-11: dates
 def page(start: str, end: str | None, when: str, location: str = "Dallas, TX") -> str:
     ld = {"@type": "Event", "name": "Roundup", "startDate": start, "location": {"name": location}}
@@ -203,6 +299,7 @@ class SavedPages(unittest.TestCase):
         self.assertEqual(ev["title"], "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )")
         self.assertEqual((ev["start"], ev["end"], ev["all_day"]), ("2027-01-29", "2027-01-31", True))
         self.assertEqual(ev["location"], "Maude Cobb . Convenció center LONGVIEW TX 75604")
+        self.assertEqual((ev["city"], ev["state"], ev["country"]), ("Longview", "TX", "USA"))
         self.assertTrue(ev["texas"])
         self.assertEqual(ev["lang"], "es")
         self.assertNotIn("summary", ev, "only contacts' e-mail addresses: no description is kept")

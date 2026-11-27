@@ -66,18 +66,31 @@ a monthly series (`config/site.yml` → `recurring_events:`) get a page the same
 
 Every link to the event goes there: its card's title on the Events page and its **Share** button, the home page, the
 monthly toolkit, What's New, the site search, the RSS feed and the calendar entries ("Details: …"). The card's
-**Event details** button still opens the event's page on another site (`url:`), when it has one.
+**Organizer's page ↗** button (it said "Event details" before November 2026) still opens the event's page on another
+site (`url:`), when it has one.
+
+**The address of an event made from a dated flyer or an outside calendar** (since November 2026) is readable too: its
+day and its title, `/events/2026-10-31-grapevine-committee-crash/` (it used to be `/events/ev-flyer-<the Drive file's
+id>/`). It is made the first time the daily update sees the event and then **kept**: a title that changes later on the
+Drive or on the calendar leaves the address as it is, so a link shared earlier keeps working. Only a new **day** makes
+a new address (one that names the wrong day would mislead); the old one — and the old `ev-…` one — sends people on to
+the new page. An event of Grapevine's or La Viña's calendar that the magazine moves to another day usually gets a new
+page on their site too: it is still taken for the same event — and its old addresses still send people on — when it
+keeps its name there and moves by two months at most; one renamed **and** moved is a new event, and links to its old
+address no longer work. Two events of the same day and title: the second ends in `-2`. A long title is cut at a
+word, never on a little word such as "a" or "de". (`scripts/sync/build_data.py` `pin_event_slugs`.)
 
 What the page shows, from the top:
 
-- the title, the day, the time and the place, and one plain sentence that says what the event is — "La Viña Writing
-  Workshop (in Spanish) — Fort Worth is a writing workshop on Saturday, December 12, 2026, 7:00 – 9:00 PM CST, at
-  Grupo Nuevo Horizonte, …";
-- the event's card, as on the Events page: **Join online**, **Add to calendar**, **View flyer**, **Share** and the
-  whole description;
-- **Quick facts**: what, when, where (with a **Map** link for an event at a real address), the language, who
-  organizes it, "Free" for the committee's own events, who can come (workshops and GVR/RLV orientations), how often
-  it repeats (a monthly series) and whom to ask;
+- the title, the day and the time, and — above the fold on a phone — **Join online** (an online event), **Add to
+  calendar** and **Directions** (a map of a real address), then **See all events**;
+- one plain sentence that says what the event is — "La Viña Writing Workshop (in Spanish) — Fort Worth is a writing
+  workshop on Saturday, December 12, 2026, 7:00 – 9:00 PM CST, at Grupo Nuevo Horizonte, …";
+- the event's card, as on the Events page: **View flyer**, **Organizer's page ↗**, **Share** and the whole
+  description;
+- **Quick facts**: what, when, where (with a **Map** link for an event at a real address), the district (`district:`),
+  the language, who organizes it, "Free" for the committee's own events, who can come (workshops and GVR/RLV
+  orientations), how often it repeats (a monthly series) and whom to ask;
 - **Get ready**: the links that fit its kind (the table below), the presentation for it, and **Make a GVR/RLV Bingo
   card for this event** — the bingo builder opens with the event's name, day, magazine and kind already filled in;
 - the next event of the same kind, **Coming up** (the next three events and our next committee meeting), **Past
@@ -88,7 +101,7 @@ What the page shows, from the top:
 | Kind of event | What *Get ready* links |
 |---|---|
 | Writing workshop | the Writing Workshop presentation, Share your story, writing tips, how to send a story, the story deadlines (and their calendar), the workshop guides (PDF), recording your story (and the phone line), members of our Area in print, GVR / RLV 101's *Stories, audio and workshops*, the booth display |
-| Recording workshop | the Writing Workshop presentation (the closest one), recording your story, the workshop guides, the podcasts, members of our Area in print, writing tips, the booth display |
+| Recording workshop | the Recording Workshop presentation, recording your story, the workshop guides, the podcasts, members of our Area in print, writing tips, the booth display |
 | Information workshop | the Information Workshop presentation, magazine prices, GVR / RLV 101's *What Grapevine and La Viña are* and *Subscriptions and gifts*, the podcasts, the videos, the booth display, *Your literature table* |
 | GVR/RLV orientation | the Orientation Workshop presentation, GVR / RLV 101, the GVR / RLV corner (the job, first steps, kits), signing up as a GVR or an RLV, GVR / RLV 101's *The GVR / RLV service position* |
 | GSR/DCM orientation | our Area's website, GVR / RLV 101's *The GVR / RLV service position*, the GVR / RLV corner, the booth display, *Your literature table* |
@@ -112,6 +125,10 @@ to list it (`noindex`) and is not in the sitemap. Once an event is over, its pag
 its summary (without how to join) and the related links, but no Join or Add to calendar; it stays while the site still lists the event (the 12
 newest past events, a series' dates for 90 days). After that the address sends people to the Events page (a series'
 date: to its series' page).
+
+**The committee meeting's dates** (since round 38): `/events/series/committee-meeting/` lists every committee meeting
+still to come — 2028's too —, each with its guest speaker, its own Add to calendar, its flyer and Share. It is made by
+itself from `config/site.yml` → `meeting:` (nothing to write).
 
 **A monthly series' own page:** `/events/series/<key>/` (for example `/events/series/citywide-dallas/`), with how to
 join (online), its flyer, its quick facts, its next 6 dates — each linked to that date's page, a date the host
@@ -217,9 +234,12 @@ cancelled_note: "The host group could not hold it this month. See you at the nex
 
 **What happens at the next update** (about 3 minutes after you save):
 
-- The event leaves the Events page, the home page, the monthly toolkit (its dates, poster and message), the booth
-  display, What's New, the presentations, `/llms.txt` and the monthly e-mail. The site search keeps one result for
-  it, **"Cancelled: …"** (listed after the others), which opens the notice below, until its day is over.
+- The event leaves the home page, the monthly toolkit (its dates, poster and message), the booth display, What's
+  New, the presentations, `/llms.txt` and the monthly e-mail. The Events page keeps it in its month as a
+  **struck-through "Cancelled" card** (your note, or "This event has been cancelled. It will not take place.", and
+  **See the notice**), and the site search keeps one result for it, **"Cancelled: …"** (listed after the others) —
+  both open the notice below, until its day is over. (A cancelled date of a monthly series is a line on the series'
+  card instead: "Dec 12: cancelled".)
 - A flyer that only this event uses leaves the Portfolio and What's New by itself. (Moving it on the Drive into the
   Panel's `private` folder is tidy-up only.)
 - Its own page (`/events/<file name>/`, the link people may have shared) becomes a notice: **"This event has been
@@ -319,8 +339,8 @@ that event's `skip_dates:` and add the new day here, with the same Zoom link:
 ---
 title: "La Viña Monthly Virtual Workshop (in Spanish)"
 title_es: "Taller Mensual y Virtual de La Viña"
-start: 2026-11-19T14:00:00-06:00
-end: 2026-11-19T15:00:00-06:00
+start: 2026-11-18T14:00:00-06:00
+end: 2026-11-18T15:00:00-06:00
 online_url: "https://us06web.zoom.us/j/81595931777"
 meeting_id: "815 9593 1777"
 host: lv
@@ -357,6 +377,27 @@ with a web or e-mail address in it, a name longer than 100 characters, or a page
 `https://` is left out (search engines are then told what they were before) and the Status page lists the
 line to fix; the event still shows. Nothing else changes: the card, the calendars and the colour stay the
 same, and the group that hosts the event still goes in `location:` and the description.
+
+## The district and the language: `district:`, `language:` (optional)
+
+The Events page has filters (since November 2026): the kind of event, the language it is held in, in person or
+online, the city — and the district, once an event names one. Two optional lines feed them:
+
+```markdown
+district: 87            # the number of the district that holds it (also "District 87", "Distrito 87")
+language: es            # the language it is held in: en, es or both (also English, Spanish, bilingual, español …)
+```
+
+`language:` is not `lang:`: `lang:` says the language the file is **written** in (and how a date in numbers only
+is read), `language:` the language the event is **held** in — an English file about a Spanish-language workshop
+has `lang: en` and `language: es`. `district:` shows on the event's card ("District 87" / "Distrito 87") and in its
+page's quick facts. Write it only
+when you know it — never guess a district for an event. `language:` is needed only when the site's own guess is
+wrong: without it an event is "Spanish" when La Viña holds it, it comes from La Viña's calendar, its file is tagged
+`la-vina` or its title or summary says "(in Spanish)"; "Bilingual" when its title or summary says so ("bilingual",
+"in English and Spanish"); otherwise "English". A value the site cannot read (`district: north`, `language:
+french`) is left out and the Status page lists the line to fix; the event still shows. (The city comes from
+`location:` — "…, Garland, TX 75041" — by itself.)
 
 ## The same event on the NETA 65 calendar
 

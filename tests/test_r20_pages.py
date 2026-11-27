@@ -583,12 +583,16 @@ class BuiltPages(Untranslated):
                               ("/es/events/", "Orador(a) invitado(a): Ann B. — “Cómo trabaja la Conferencia”")):
                 page = self.pages(at)[url]
                 with self.subTest(at=at, url=url):
+                    # (since the list's redesign) ONE card for the committee meeting, every date's anchor on it; it shows
+                    # the speaker of the date it shows — none on December 16, Ann B. on January 20 (its countdown rolls
+                    # on to that date's speaker in the browser: its settings list both)
                     i = page.index('id="ev-committee-2027-01-20"')
                     card = page[i:page.index("</article>", i)]
-                    self.assertIn(line, text(card))
-                    dec = page.index('id="ev-committee-2026-12-16"') if at == NOV26 else -1
-                    if dec >= 0:
-                        self.assertNotIn("Ann", text(page[dec:page.index("</article>", dec)]))
+                    self.assertIn('<article class="cm-pinned', card)
+                    self.assertEqual(line in text(card), at == DEC17)
+                    if at == NOV26:
+                        self.assertIn('id="ev-committee-2026-12-16"', page[:i + len(card)])
+                        self.assertNotIn("Ann", text(card).split("—")[0])
                     pinned = part(page, '<article class="cm-pinned', 'class="cm-pinned-actions"')
                     cfg = x_data(page, '<article class="cm-pinned')
                     self.assertEqual(len(cfg["speakers"]), 2)
@@ -611,8 +615,12 @@ class BuiltPages(Untranslated):
                 pre = "/es" if lang == "es" else ""
                 with self.subTest(at=at, url=url):
                     pinned = part(page, '<section id="ev-pinned"', '<section id="ev-weekly"')
-                    self.assertNotIn("data-group", pinned)
-                    self.assertNotIn("x-show=\"filter", pinned, "shown whatever the filter")
+                    # (since the list's redesign: "Every month", each series a card of the list — the Grapevine
+                    # Meeting's an online meeting, in English, that the filters show or hide)
+                    li = re.search(r'<li data-group="neta" data-cm-expire="[^"]+" data-kind="online" data-lang="en" '
+                                   r'data-mode="online" x-show="show\(\$el\)">', pinned)
+                    self.assertTrue(li)
+                    self.assertNotIn("</li>", pinned[li.end():pinned.index('<article id="ev-next-gvm"')])
                     self.assertLess(pinned.index('<article class="cm-pinned'), pinned.index('id="ev-next-gvm"'))
                     card = part(pinned, '<article id="ev-next-gvm"', "</article>")
                     self.assertIn('class="card ev-accent ev-tone-other cm-event"', card)

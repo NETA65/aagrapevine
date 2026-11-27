@@ -492,6 +492,9 @@ pageScripts: ["/assets/js/committee.js"]
         </li>
         {% endfor %}
       </ol>
+      {#- (round 38) every date to come — 2028's too —, each with its own Add to calendar, flyer and Share: the committee
+          meeting's dates page (src/pages/events-committee.njk; committee.js COMMITTEE_DATES_PATH) -#}
+      <p class="mt-3"><a href="{{ '/events/series/committee-meeting/' | lurl(lang) }}" class="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-gv hover:underline">{% icon "calendar-range", "size-4" %} {{ "evlist.series_all" | t(lang) }} <span aria-hidden="true">→</span></a></p>
       {% else %}
       <p class="mt-5 text-sm text-muted">{{ "committee.meeting.no_next" | t(lang) }}</p>
       {% endif %}
@@ -504,7 +507,7 @@ pageScripts: ["/assets/js/committee.js"]
       <h3 class="card-h"><span class="text-vine!">{% icon "hand-heart", "size-5" %}</span>{{ "committee.meeting.who_title" | t(lang) }}</h3>
       {#- config/site.yml meeting.note (note_es on /es/): who may come, then who will find a place here -#}
       {%- set mNote = m | pick(lang, "note") -%}
-      <p class="mt-2 max-w-[65ch] leading-relaxed text-muted">{% if mNote %}{{ mNote }} {% endif %}{{ "committee.meeting.who_text" | t(lang) }}</p>
+      <p class="mt-2 max-w-[65ch] leading-relaxed text-muted">{% if mNote %}{{ mNote }} {% endif %}{{ "committee.meeting.who_text" | t(lang) | gloss(lang) | safe }}</p>
       <ul class="mt-4 flex flex-wrap gap-2">
         {% for k in ["gvr", "rlv", "dcm", "members"] %}<li class="badge-muted text-xs">{{ ("committee.meeting.who_" + k) | t(lang) }}</li>{% endfor %}
       </ul>

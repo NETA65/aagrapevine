@@ -527,7 +527,8 @@ class Pages(unittest.TestCase):
         self.assertIn('{%- set dlCal = db | mpDeadlineCals(site, lang) -%}', page)
         self.assertIn('data-dl-ics="{{ c.ics | json }}" data-js-only', page)
         self.assertIn('{% cmSubscribe lang, site, "deadlines" %}', page)
-        self.assertEqual(page.count("{{ dlCalMenu(r, c, lang, isLv"), 2, "each row and the next deadline's card")
+        # each row, each card's next deadline, and each magazine's next one in "Next story deadlines" under the page nav
+        self.assertEqual(page.count("{{ dlCalMenu(r, c, lang, isLv"), 3, "each row, the next deadline's card and #next-deadlines")
         self.assertIn('"committee.cal.reminder_day" | t(lang)', page)
         read_js = self.read("src/assets/js/read.js")
         self.assertIn('document.querySelectorAll("[data-dl-ics]")', read_js)
@@ -542,12 +543,19 @@ class Pages(unittest.TestCase):
 
     def test_every_add_to_calendar_menu_says_so(self):
         events, meetings = self.read("src/pages/events.njk"), self.read("src/pages/meetings.njk")
-        # /events/: an event's menu, the pinned committee meeting's and Grapevine Meeting's (#ev-pinned, round 30) and
-        # the weekly open meetings' (#ev-weekly)
-        self.assertEqual(events.count('class="cm-menu-note"'), 4)
+        # (since round 38 a card's menu is macros/events.njk calMenu: /events/' cards and the committee meeting's dates)
+        card = self.read("src/_includes/macros/events.njk")
+        # /events/: an event's menu (calMenu), the pinned committee meeting's and Grapevine Meeting's (#ev-pinned,
+        # round 30) and the weekly open meetings' (#ev-weekly)
+        self.assertEqual(events.count('class="cm-menu-note"') + card.count('class="cm-menu-note"'), 4)
         self.assertEqual(meetings.count('class="cm-menu-note"'), 2)
-        # (since round 35 a card's note gets its words from ONE copy on the agenda as its menu opens: events.njk calMenu)
-        self.assertIn("data-cm-note=\"{{ 'day' if ev.allDay else 'timed' }}\"", events)
+        # (since round 35 a card's note gets its words from ONE copy on the agenda as its menu opens: calMenu)
+        self.assertIn("data-cm-note=\"{{ 'day' if ev.allDay else 'timed' }}\"", card)
+        self.assertIn("evm.calMenu(ev)", events)
+        dates = self.read("src/pages/events-committee.njk")
+        self.assertIn("evm.calMenu(ev)", dates)
+        self.assertIn("data-cm-note-timed=\"{{ 'committee.cal.reminder_timed' | t(lang) }}\" "
+                      "data-cm-note-day=\"{{ 'committee.cal.reminder_day' | t(lang) }}\"", dates)
         self.assertIn("data-cm-note-timed=\"{{ 'committee.cal.reminder_timed' | t(lang) }}\" "
                       "data-cm-note-day=\"{{ 'committee.cal.reminder_day' | t(lang) }}\"", events)
 

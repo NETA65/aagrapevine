@@ -144,11 +144,20 @@ class BuiltHome(Untranslated):
                 self.assertLess(committee, gvm, "the committee meeting's card comes first")
                 # the committee meeting's card is still the page's first .home-meet--hero (other tests slice from it)
                 self.assertGreater(page.index('<div class="home-meet home-meet--hero"'), page.index('<div class="gv-hero-aside">'))
-                # below the hero: the same two, in that order, then the counters
-                under = part(page, '<div class="card home-under-card', '<div class="home-under-stats">')
-                self.assertLess(under.index('<div class="home-under-meet lg:hidden">'), under.index('<div class="home-under-gvm lg:hidden">'))
-                self.assertRegex(under, r'<div class="home-under-gvm lg:hidden">\s*<div class="home-gvm home-gvm--page"')
+                # below the hero (below 1024px: the card is lg:hidden): the same two, in that order, then the start buttons
+                # (the site counters that followed them went in the UX review of November 2026)
+                under = part(page, '<div class="card home-under-card', '<section class="card home-choose"')
+                self.assertLess(under.index('<div class="home-under-meet">'), under.index('<div class="home-under-gvm">'))
+                self.assertRegex(under, r'<div class="home-under-gvm">\s*<div class="home-gvm home-gvm--page"')
+                self.assertIn("lg:hidden", opening_tag(page, '<div class="card home-under-card'))
                 self.assertNotIn("max-sm:hidden", opening_tag(page, '<div class="card home-under-card'))
+                self.assertNotIn("home-under-stats", page)
+                # each card's title is a heading once: an <h2> below the hero, a <p> in the hero's copy (the same words
+                # twice in the page's outline before)
+                self.assertRegex(page, r'<p id="home-meeting-title" class="home-meet-eyebrow">')
+                self.assertRegex(page, r'<h2 id="home-meeting-title-2" class="home-meet-eyebrow">')
+                self.assertRegex(page, r'<p id="home-gvm-title" class="home-meet-eyebrow">')
+                self.assertRegex(page, r'<h2 id="home-gvm-title-2" class="home-meet-eyebrow">')
 
     def test_the_first_grapevine_meeting(self):
         for url, date, first, pre in (("/", "Wednesday, December 2", "First meeting", ""),

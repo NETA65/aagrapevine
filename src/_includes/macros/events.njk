@@ -1,5 +1,6 @@
 {#- Macros of the event pages: /events/ (src/pages/events.njk) and, since round 35, an event's own page
-    (src/pages/event-share-leaf.njk). Imported WITH CONTEXT ({% import "macros/events.njk" as evm with context %}, then
+    (src/pages/event-share-leaf.njk) — since round 38 the committee meeting's dates page too
+    (src/pages/events-committee.njk). Imported WITH CONTEXT ({% import "macros/events.njk" as evm with context %}, then
     evm.kindBadge(…)): they read the page's `lang`. -#}
 
 {#- The kind of an event, in words and in its colour (eventTone: eleventy/filters/event-tone.js; the
@@ -20,3 +21,23 @@
 {%- set ico = "video" if (kind == "other" and ev.isOnline and not ev.location) else kindIcon[kind] -%}
 <span class="badge ev-badge">{% icon ico, "size-3" %} {{ label }}</span>
 {%- endmacro %}
+
+{#- "Add to calendar" dropdown of a card (Google / Outlook links work without JS; .ics download needs JS) — /events/'
+    cards, and each date of the committee meeting's dates page. The page carries BRIEF Google / Outlook links — the
+    event's title, times and place, no description (committee.js calendarLinks brief: ev.gcalBrief / ev.outlookBrief)
+    — and committee.js puts the full ones in when the menu opens (CM.calLinks from the card's own .ics data,
+    data-cm-ics: the same addresses the build makes). Without JavaScript the brief links still add the event. The
+    menu's note (JS-only, like the .ics file) is ONE copy of its words on the list around the cards
+    (data-cm-note-timed / data-cm-note-day), written into a menu as it opens (data-cm-note). -#}
+{% macro calMenu(ev, dark=false) %}
+<details class="cm-menu">
+  {#- phones: the short visible label ("Calendar"), the full one for screen readers -#}
+  <summary class="{{ 'btn-on-dark' if dark else 'btn-secondary' }} btn-sm">{% icon "calendar-plus", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "committee.events.cal_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "common.add_to_calendar" | t(lang) }}</span></summary>
+  <div class="cm-menu-panel">
+    <a href="{{ ev.gcalBrief }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Google Calendar</a>
+    <a href="{{ ev.outlookBrief }}" target="_blank" rel="noopener">{% icon "calendar", "size-4" %} Outlook.com</a>
+    <button type="button" data-cm-ics="{{ ev.icsData | json }}" data-cm-js>{% icon "download", "size-4" %} {{ "committee.cal.ics_file" | t(lang) }}</button>
+    <p class="cm-menu-note" data-cm-js data-cm-note="{{ 'day' if ev.allDay else 'timed' }}"></p>
+  </div>
+</details>
+{% endmacro %}

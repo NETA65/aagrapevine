@@ -655,11 +655,14 @@ export default function (eleventyConfig) {
     [nm("wasm-media-encoders/dist/umd/WasmMediaEncoder.min.js")]: "assets/vendor/wasm-media-encoder.min.js",
     [nm("wasm-media-encoders/wasm/mp3.wasm")]: "assets/vendor/lame-mp3.wasm",
   });
-  for (const f of ["inter-latin-wght-normal", "inter-latin-ext-wght-normal", "inter-latin-wght-italic"]) {
+  // Inter: the upright faces only (main.css "Fonts": its italic is the upright face slanted — no Inter italic file
+  // since November 2026).
+  for (const f of ["inter-latin-wght-normal", "inter-latin-ext-wght-normal"]) {
     eleventyConfig.addPassthroughCopy({ [nm(`@fontsource-variable/inter/files/${f}.woff2`)]: `assets/fonts/${f}.woff2` });
   }
   // Fraunces "opsz" files (wght + opsz axes — all the CSS uses); the "full" files add the
-  // SOFT/WONK axes the site never sets and are ~45–70 KB bigger each.
+  // SOFT/WONK axes the site never sets and are ~45–70 KB bigger each. Its italic: Latin only (the display italic's
+  // words are English and Spanish; a rare letter falls back to the fallback face's italic).
   for (const f of ["fraunces-latin-opsz-normal", "fraunces-latin-ext-opsz-normal", "fraunces-latin-opsz-italic"]) {
     eleventyConfig.addPassthroughCopy({ [nm(`@fontsource-variable/fraunces/files/${f}.woff2`)]: `assets/fonts/${f}.woff2` });
   }

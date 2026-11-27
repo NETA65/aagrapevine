@@ -101,7 +101,7 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
     The actions: the sessions (start / continue), the presentations (#presentations) and the sessions' slide
     show — the third one from 768px, and not at 1024–1279px where the text column beside the card is narrow
     (orientation.css). Without presentations: start, the slide show and the handout, as before. -#}
-{% call(slot) ui.pageHero(lang, "nav.orientation" | t(lang), ("orientation.hero_sub_pres" if nDecks else "orientation.hero_sub") | t(lang), "sprout", "orientation.eyebrow" | t(lang), { side: "hide" }) %}
+{% call(slot) ui.pageHero(lang, "nav.orientation" | t(lang), (("orientation.hero_sub_pres" if nDecks else "orientation.hero_sub") | t(lang)) | gloss(lang), "sprout", "orientation.eyebrow" | t(lang), { side: "hide" }) %}
 {%- if slot == "side" %}
   {%- if total %}
   {% call ui.heroAside("orientation.hero_title" | t(lang), lang, { id: "o101-aside-title", icon: "list-checks", href: "#sessions", linkLabel: "orientation.hero_link" | t(lang), class: "o101-aside" }) %}
@@ -348,8 +348,11 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
           <p class="mt-1 text-xs leading-snug text-muted">{{ "orientation.pres_also" | t(lang, { list: alts | join(" · ") }) }}</p>
           {%- endif %}
         </div>
-        {%- if lang != "en" %}
-        <span class="badge-muted">{% icon "languages", "size-3" %} {{ "orientation.pres_english" | t(lang) }}</span>
+        {#- the presentation's own language, when it isn't the page's: "Presentación en inglés" on /es/ for an English
+            deck, "Presentation in Spanish" on the English page for La Viña's Spanish ones -#}
+        {%- set dLang = d.lang or "en" -%}
+        {%- if dLang != lang %}
+        <span class="badge-muted">{% icon "languages", "size-3" %} {{ ("orientation.pres_english" if dLang == "en" else "orientation.pres_spanish") | t(lang) }}</span>
         {%- endif %}
       </div>
       <h3 id="pres-{{ d.id }}-title" class="h-card mt-4 text-balance">{{ dTitle }}</h3>

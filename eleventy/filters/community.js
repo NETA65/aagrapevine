@@ -714,8 +714,7 @@ export const COUNT_ORDER = ["article", "episode", "video", "post", "pdf", "drive
 
 /** A magazine's front cover from the committee's Drive (drive.py extra.cover { pub "gv" | "lv", year, month, issue,
  *  months, key }) — build_data.is_cover and send_digest.py is_cover are the same test. The digest lists the covers
- *  of a month as ONE row per magazine, never per cover album (monthNews); Home's "Committee uploads" leaves them out
- *  (home.js homeDrive). */
+ *  of a month as ONE row per magazine, never per cover album (monthNews). */
 export const isCover = (it) => it?.source === "drive" && ["gv", "lv"].includes(it?.extra?.cover?.pub);
 /** A cover's news date: the day the site first had it (first_seen) — the day it was added, whatever issue it is of
  *  (a cover's `date` is its issue's first day: the back catalogue would land in 2015). send_digest.py cover_when. */
@@ -1349,14 +1348,22 @@ export function statusView(status, now = Date.now()) {
   // Optional outside calendars (config/site.yml sources.ics_feeds) — build_data's status.json `feeds`.
   // Kept apart from the content sources: a feed blocked by a site's bot protection is an extra that
   // does not work, not a source that "failed" (it is not in the counts above).
+  // A feed config/site.yml marks `paused:` (known not to work, e.g. a site that blocks automated readers) has the
+  // state "paused" in status.json (build_data.ics_events); `paused` = the reason, `pausedOnPurpose` = true. The
+  // Status page shows it with a "Paused" badge and line of its own (src/pages/status.njk: f.pausedOnPurpose) and
+  // leaves it out of the "calendars unavailable" count; `state` stays "blocked" for anything that knows only the
+  // four states (the blocked words, "can't be read right now", never "Not updated yet").
   const FEED_STATES = new Set(["ok", "blocked", "error", "never"]);
   const feeds = (Array.isArray(status?.feeds) ? status.feeds : []).filter((f) => f && f.url).map((f) => {
     let host = "";
     try { host = new URL(f.url).hostname.replace(/^www\./, ""); } catch { /* not a URL */ }
-    const state = FEED_STATES.has(f.state) ? f.state : "never";
+    const paused = f.state === "paused";
+    const state = paused ? "blocked" : FEED_STATES.has(f.state) ? f.state : "never";
     return {
       ...f,
       state,
+      pausedOnPurpose: paused,
+      paused: paused ? String(f.paused || "") : "",
       host,
       events: Math.max(0, Number(f.events_count) || 0),
       dups: Math.max(0, Number(f.duplicates) || 0),

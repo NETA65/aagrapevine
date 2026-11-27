@@ -44,15 +44,21 @@
    arrangement, so no column is left short and empty. */
 @custom-variant tall-2xl (@media (width >= 96rem) and (height >= 56rem));
 
-/* ---------- Fonts (self-hosted, OFL) ---------- */
+/* ---------- Fonts (self-hosted, OFL) ----------
+   Inter and Fraunces, Latin + Latin Extended (the extended files load only for a page that has such a letter:
+   unicode-range), and Fraunces' italic (Latin): the brand's display italic — the hero's "meeting in print", the
+   daily quotes, the magazines' names — whose letters are its own (a, g, p, the "Th" ligature), not the upright
+   slanted. A browser downloads a face only when some text on the page uses it, and none is preloaded (base.njk
+   preloads the upright Inter, and the upright Fraunces on Home): a page without Fraunces italic pays nothing.
+   No Inter italic file since the UX review of November 2026 (52 KB): its italic is the upright face slanted by the
+   browser (font-synthesis-style: auto, below) — Inter's own italic is very nearly that, the same widths and shapes.
+   (So there is no Inter fallback italic face either: what a slow page shows first is slanted the same way.) */
 @font-face { font-family: "Inter Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Inter Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Inter Variable"; font-style: italic; font-display: swap; font-weight: 100 900;
-  src: url("../fonts/inter-latin-wght-italic.woff2") format("woff2-variations"); }
 @font-face { font-family: "Fraunces Variable"; font-style: normal; font-display: swap; font-weight: 100 900;
   src: url("../fonts/fraunces-latin-opsz-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -60,7 +66,8 @@
   src: url("../fonts/fraunces-latin-ext-opsz-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2020, U+2113, U+A720-A7FF; }
 @font-face { font-family: "Fraunces Variable"; font-style: italic; font-display: swap; font-weight: 100 900;
-  src: url("../fonts/fraunces-latin-opsz-italic.woff2") format("woff2-variations"); }
+  src: url("../fonts/fraunces-latin-opsz-italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 /* Fallback faces with the web fonts' measurements (Georgia / Arial scaled to the same text width and
    line box — measured in Chrome over a line of English and Spanish at the sizes the site uses: Fraunces'
    optical-size axis makes it wider in small type), so the page doesn't move when the
@@ -78,8 +85,6 @@
   size-adjust: 97.78%; ascent-override: 100.22%; descent-override: 26.59%; line-gap-override: 0%; }
 @font-face { font-family: "Fraunces Fallback"; font-style: italic; font-weight: 501 900; src: local("Georgia Bold Italic"), local("Georgia-BoldItalic");
   size-adjust: 87.33%; ascent-override: 112.22%; descent-override: 29.77%; line-gap-override: 0%; }
-@font-face { font-family: "Inter Fallback"; font-style: italic; font-weight: 100 900; src: local("Arial Italic"), local("Arial-ItalicMT");
-  size-adjust: 106.99%; ascent-override: 90.57%; descent-override: 22.53%; line-gap-override: 0%; }
 
 /* ---------- Theme tokens ----------
    Use as Tailwind utilities: bg-paper, bg-surface, text-ink, text-muted,
@@ -176,7 +181,8 @@
 
 /* ---------- Base ---------- */
 @layer base {
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 1.5rem); }
+  /* font-synthesis-style: Inter's italic text is the upright face slanted (no Inter italic file: "Fonts" above) */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 1.5rem); font-synthesis-style: auto; }
   body { @apply bg-paper text-ink font-sans antialiased; font-feature-settings: "cv11", "ss01"; }
   h1, h2, h3, .font-display { font-family: var(--font-display); font-optical-sizing: auto; letter-spacing: -0.01em; }
   a { color: inherit; }
@@ -298,17 +304,16 @@
   }
   /* 130%+ on a laptop screen, like the browser's own zoom (which would show the tablet layout there): a
      card grid of four to six columns (lg:grid-cols-4/5/6) has two columns below 1440px at 150% (below
-     1280px at 130%), a three-column one (lg:grid-cols-3) below 1280px at 150% (the home page's Drive
-     thumbnails: three, areas/access.css) */
+     1280px at 130%), a three-column one (lg:grid-cols-3) below 1280px at 150% */
   /* (a card that spans three or more of the columns, lg:col-span-3…6, spans the two instead: a span
      wider than the grid would add an implicit column that takes the width from the others) */
   @media (64rem <= width < 90rem) {
-    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
+    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    :root:where(.gv-prefs)[data-text="150"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
   }
   @media (64rem <= width < 80rem) {
-    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(.home-drive-grid, :is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
+    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    :root:where(.gv-prefs)[data-text="130"] main :is(.lg\:grid-cols-4, .lg\:grid-cols-5, .lg\:grid-cols-6):not(:is(.mp-poster, .cm-frame) *) > :is([class*="lg:col-span-3"], [class*="lg:col-span-4"], [class*="lg:col-span-5"], [class*="lg:col-span-6"]) { grid-column: 1 / -1 !important; }
     :root:where(.gv-prefs)[data-text="150"] main .lg\:grid-cols-3:not(:is(.mp-poster, .cm-frame) *) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     :root:where(.gv-prefs)[data-text="150"] main .lg\:grid-cols-3:not(:is(.mp-poster, .cm-frame) *) > [class*="lg:col-span-3"] { grid-column: 1 / -1 !important; }
   }
@@ -514,6 +519,23 @@
 
 @utility link { @apply font-medium text-gv underline decoration-gv/30 underline-offset-2 hover:decoration-gv; }
 @utility icon { display: inline-block; flex-shrink: 0; }
+
+/* ---------- Service words: the glossary's dotted terms (eleventy/filters/glossary.js, app.js GV.glossary) ----------
+   abbr.gl-term: a dotted underline in the text's own colour (on the dark hero too) — the browser's tooltip without
+   JavaScript; with it, .gl-btn (the word as a button: no box, the same font, a 3px focus ring) opens .gl-pop, a small
+   card fixed to the window under the word (app.js places it, at most 320px wide, inside the screen). */
+@layer components {
+  abbr.gl-term { text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 0.2em; cursor: help; }
+  .gl-btn { display: inline; padding: 0; margin: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; border-radius: 0.25rem; }
+  .gl-btn abbr.gl-term { cursor: pointer; }
+  .gl-btn[aria-expanded="true"] abbr.gl-term { text-decoration-style: solid; }
+  .gl-pop {
+    position: fixed; z-index: 70; display: block; padding: 0.625rem 0.875rem; border: 1px solid var(--c-line);
+    border-radius: 0.875rem; background: var(--c-surface); color: var(--c-ink); box-shadow: var(--shadow-lift);
+    font: 400 0.875rem/1.45 var(--font-sans); letter-spacing: normal; text-align: left; text-transform: none; white-space: normal;
+  }
+  .gl-pop[hidden] { display: none; }
+}
 
 /* ---------- Card grids: more columns on wider screens, cards never narrower than --cards-min ----------
    Two limits decide the column count:
@@ -1191,18 +1213,20 @@ main > :not(script, template, dialog, style):not(:has(~ :not(script, template, d
 /* ---------- Page-area styles (one owner per file) ----------
    Imported here: the areas of many pages. The areas only one or two pages use — the booth display, the
    presentations' player, the Tracker, GVR / RLV 101, the Monthly toolkit's posters, the report editor, the bingo
-   cards — are stylesheets of their own instead (src/assets/css/<name>.css next to this file: booth, presentations,
-   expenses, orientation, monthly, report, bingo → /assets/css/<name>.css), each linked only by its pages
-   (pageStyles; base.njk links them after main.css), so every other page skips ~40 KB (compressed) of
-   rules it never uses. eleventy.config.js compiles every .css file at the top of src/assets/css.
-   A page that uses an area's classes lists its stylesheet (tests/test_page_weight.py checks every page). */
-@import "./areas/home.css";
-@import "./areas/library.css";
+   cards, and since November 2026 the home page, the Library with the site search, and Published writers — are
+   stylesheets of their own instead (src/assets/css/<name>.css next to this file: booth, presentations, expenses,
+   orientation, monthly, report, bingo, home, library, published → /assets/css/<name>.css), each linked only by its
+   pages (pageStyles; base.njk links them after main.css), so every other page skips the rules it never uses (the
+   last three: ~70 KB of main.css, 416 → ~345 KB). eleventy.config.js compiles every .css file at the top of
+   src/assets/css. A page that uses an area's classes lists its stylesheet (tests/test_page_weight.py checks every
+   page). A rule elsewhere in main.css for one of those areas' classes (access.css at larger text) starts with
+   :root:where(.gv-prefs)[data-…], so it still wins over the area's own, which now comes after it — unless the
+   area's rule is as specific (then the later one, the area's, wins): such a rule names one class more
+   (access.css .lib-btn.lib-btn-main). */
 @import "./areas/media.css";
 @import "./areas/committee.css";
 @import "./areas/read.css";
 @import "./areas/community.css";
-@import "./areas/published.css";
 @import "./areas/shop.css";
 @import "./areas/access.css";
 @import "./areas/pwa.css";

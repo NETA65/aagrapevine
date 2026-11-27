@@ -9,19 +9,10 @@
 // Podcast / video titles on the home page use the shared `mediaTitle` filter
 // (eleventy/filters/media.js), so they read exactly like /listen/ and /watch/.
 
-import fs from "node:fs";
-import path from "node:path";
-// The Library's own rules (which documents, which kit / type, which collections),
-// so the home page's quick links show the same numbers as /library/.
-import { libraryDocs, libraryCollections, docKitType, CATEGORIES, COLLECTIONS } from "./library.js";
 // The end of a Central-time day (an all-day event is upcoming through its last day), who holds an event and the time
 // range /events/ writes (clockRange). (Where a home event links: its own page — evHref, eleventy/filters/event-links.js,
 // since round 37.)
 import { eventEndMs, eventHost, clockRange } from "./committee.js";
-// The Texas writers archive's headline numbers, counted as /published/#archive counts them.
-import { pwArchiveTotals } from "./published.js";
-// a magazine cover from the committee's Drive (Home's "Committee uploads" leaves them out: homeDrive)
-import { isCover } from "./community.js";
 // the site's time zone: config/site.yml site.timezone (America/Chicago)
 import { TZ } from "../../eleventy.config.js";
 
@@ -50,77 +41,10 @@ function ymdCentral(ms) {
   } catch { /* fall through */ }
   return new Date(ms).toISOString().slice(0, 10);
 }
-// The day a spotlight story counts as published: extra.pub_date (build_data.py), else its date.
-function spotPubDate(i) {
-  const p = String((i && i.extra && i.extra.pub_date) || "").slice(0, 10);
-  return /^\d{4}-\d{2}-\d{2}$/.test(p) ? p : String((i && i.date) || "").slice(0, 10);
-}
 // "2026-09-23" minus 60 days → "2026-07-25"
 function ymdMinus(ymd, days) {
   const [y, m, d] = String(ymd).split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d - days)).toISOString().slice(0, 10);
-}
-
-/* Published-writers grid: how to close its last row at `cols` columns (home.css: 2 from 640px,
-   3 from 1024px, 4 from 1360px, 5 from 1800px). Replays the grid's `row dense` auto-placement:
-   `a` Area 65 cards two columns wide (or, when a = 0 and t > 0, the two-column "no Area 65
-   story" note), then `t` Texas cards one column wide.
-   → { span, full }: `span` = empty columns at the end of the last row, which the "see the full
-   list" tile fills (0 = the rows are full: no tile); `full` = true when Area 65 cards would
-   leave gaps higher up (too few Texas cards to sit beside them) — then every Area 65 card
-   takes a whole row at that width, which leaves no gap except at the end of the last row.
-   The SAME function is in src/assets/js/home.js (spotFill): keep the two in step. */
-function spotFill(a, t, cols) {
-  const run = (featSpan) => {
-    const rows = [];
-    const put = (span) => {
-      for (let r = 0; ; r++) {
-        if (!rows[r]) rows[r] = new Array(cols).fill(false);
-        for (let c = 0; c + span <= cols; c++) {
-          let ok = true;
-          for (let k = c; k < c + span; k++) if (rows[r][k]) { ok = false; break; }
-          if (ok) { for (let k = c; k < c + span; k++) rows[r][k] = true; return; }
-        }
-      }
-    };
-    if (a > 0) for (let i = 0; i < a; i++) put(featSpan);
-    else if (t > 0) put(Math.min(2, cols));
-    for (let i = 0; i < t; i++) put(1);
-    let free = 0, trailing = 0;
-    for (const row of rows) for (const used of row) if (!used) free++;
-    const last = rows[rows.length - 1] || [];
-    for (let k = last.length - 1; k >= 0 && !last[k]; k--) trailing++;
-    return { free, trailing };
-  };
-  a = Math.max(0, Math.floor(Number(a) || 0));
-  t = Math.max(0, Math.floor(Number(t) || 0));
-  cols = Math.max(1, Math.floor(Number(cols) || 1));
-  if (!a && !t) return { span: 0, full: false };
-  let r = run(Math.min(2, cols));
-  let full = false;
-  if (r.free !== r.trailing) { full = true; r = run(cols); }
-  return { span: r.trailing, full };
-}
-
-/* data/site/spotlight.json read straight from disk — only used while src/_data/db.js does not
-   load it yet (db.spotlight undefined). Links get the same treatment db.js gives every data
-   file: a story link must be http(s) and a picture http(s) or a site path, else it is dropped. */
-function readSpotlightFile() {
-  const p = path.join("data", "site", "spotlight.json");
-  let data = null;
-  try {
-    if (fs.existsSync(p)) data = JSON.parse(fs.readFileSync(p, "utf8"));
-  } catch (e) {
-    console.warn(`[home] could not read ${p}: ${e.message}`);
-  }
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { items: [] };
-  const web = (v) => (typeof v === "string" && /^https?:\/\/[^\s/\\?#]/i.test(v.trim()) ? v.trim() : "");
-  const pic = (v) => (typeof v === "string" && /^\/(?![/\\])/.test(v.trim()) ? v.trim() : web(v));
-  data.items = (Array.isArray(data.items) ? data.items : [])
-    .filter((i) => i && typeof i === "object")
-    .map((i) => ({ ...i, url: web(i.url), image: pic(i.image) }))
-    .filter((i) => i.url);
-  return data;
 }
 
 const MONTHS = {
@@ -154,13 +78,6 @@ export default function (eleventyConfig, helpers) {
   // Normalized title without the season/episode tail (to spot a podcast episode and its YouTube upload).
   const titleKey = (i) => String((i && i.title) || "").toLowerCase().replace(SEASON_TAIL, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 
-  // Best picture for an item (local cached thumb wins over remote URLs that expire).
-  function imageOf(i) {
-    if (!i) return "";
-    const x = i.extra || {};
-    return x.thumb || i.image || x.thumb_url || x.flyer_thumb || (Array.isArray(x.thumbs) && x.thumbs.find(Boolean)) || "";
-  }
-
   // Monday-based week number — used to rotate evergreen lists once a week
   // (stable within a week, so daily builds don't reshuffle the page).
   const weekSeed = () => Math.floor((Date.now() + 3 * DAY) / (7 * DAY));
@@ -171,82 +88,7 @@ export default function (eleventyConfig, helpers) {
     const out = {};
     for (const k of Object.keys(db || {})) out[k] = { updated: null, items: [] };
     out.status = { generated: null, sources: [], items: [] };
-    out.spotlight = { updated: null, items: [] }; // (also when db.js does not load it yet)
     return out;
-  });
-
-  /* PUBLISHED WRITERS spotlight: every Grapevine / La Viña story published in the last
-     `home_days` days (spotlight.json, default 60) whose writer is from Texas —
-     { days, listDays, maxDays, today, cutoff, a65: [Area 65 writers], tx: [rest of Texas], total }.
-     Area 65 (geo.scope "neta65") and the rest of Texas ("texas") are separate lists, each
-     newest first (extra.pub_date), then by title. The window is counted from TODAY in Central
-     time (pub_date >= today − days, inclusive), so a rebuild is always current; home.js
-     recounts it in the visitor's browser with the same rule, so the page stays right between
-     daily builds (stories drop out of the window as days pass — none can come in).
-     Reads db.spotlight; while src/_data/db.js does not load that file, reads it from disk. */
-  eleventyConfig.addFilter("homeSpotlight", (db, fallbackDays = 60, fallbackListDays = null) => {
-    const raw = db && db.spotlight !== undefined ? db.spotlight : readSpotlightFile();
-    const sp = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
-    const days = Math.max(1, Math.round(Number(sp.home_days) || Number(fallbackDays) || 60));
-    let listDays = (Array.isArray(sp.list_days) ? sp.list_days : Array.isArray(fallbackListDays) ? fallbackListDays : [])
-      .map(Number).filter((d) => d > 0);
-    if (!listDays.length) listDays = [60, 90];
-    const today = ymdCentral(Date.now());
-    const cutoff = ymdMinus(today, days);
-    const pubOfItem = spotPubDate;
-    const scopeOf = (i) => String((i.extra && i.extra.geo && i.extra.geo.scope) || "");
-    const seen = new Set();
-    const list = arr(sp.items).filter((i) => {
-      if (!alive(i) || !i.extra || !i.url || i.kind === "topic") return false;
-      const p = pubOfItem(i);
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(p) || p < cutoff) return false;
-      const key = i.id || i.url;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-    const order = (a, b) => pubOfItem(b).localeCompare(pubOfItem(a)) || String(a.title || "").localeCompare(String(b.title || ""));
-    const a65 = list.filter((i) => scopeOf(i) === "neta65").sort(order);
-    const tx = list.filter((i) => scopeOf(i) === "texas").sort(order);
-    // maxDays: the longest window on /published/ (named by the "see the full list" tile)
-    return { days, listDays, maxDays: Math.max(...listDays), today, cutoff, a65, tx, total: a65.length + tx.length };
-  });
-
-  /* The Texas writers archive under the Published-writers section (one line + a link to
-     /published/#archive): db (homeData) → { total, area (Area 65 stories), since (the first year) } —
-     the same numbers as the archive on /published/ (eleventy/filters/published.js); total 0 = no line. */
-  eleventyConfig.addFilter("homeArchive", (db) => pwArchiveTotals(db));
-
-  /* The day a spotlight story counts as published (YYYY-MM-DD): extra.pub_date, else its
-     date — the same rule as the /published/ page (eleventy/filters/published.js). */
-  eleventyConfig.addFilter("homePubDate", spotPubDate);
-
-  /* How the Published-writers grid closes its last row at each column count (see spotFill):
-     spot (homeSpotlight) → { f2, f3, f4, f5: tile span at 2 / 3 / 4 / 5 columns (0 = no tile),
-     full: "3 5" — the column counts at which Area 65 cards take a whole row ("" = none) }.
-     index.njk writes these as data-f2…data-f5 / data-full; home.css reads them;
-     home.js recomputes them when stories leave the window in the visitor's browser. */
-  eleventyConfig.addFilter("homeSpotFill", (spot) => {
-    const a = spot && Array.isArray(spot.a65) ? spot.a65.length : 0;
-    const t = spot && Array.isArray(spot.tx) ? spot.tx.length : 0;
-    const out = { full: "" };
-    const full = [];
-    for (const cols of [2, 3, 4, 5]) {
-      const r = spotFill(a, t, cols);
-      out["f" + cols] = r.span;
-      if (r.full) full.push(cols);
-    }
-    out.full = full.join(" ");
-    return out;
-  });
-
-  /* Initials for a writer's monogram, from the name as printed:
-     "Victor R." → "VR", "J.G." → "JG", "R. O." → "RO", "Mary Ann K." → "MK"; "" when none. */
-  eleventyConfig.addFilter("homeInitials", (name) => {
-    const parts = String(name || "").normalize("NFC").split(/[\s.·,-]+/).filter((p) => /\p{L}/u.test(p));
-    if (!parts.length) return "";
-    const first = (p) => p.match(/\p{L}/u)[0];
-    return (first(parts[0]) + (parts.length > 1 ? first(parts[parts.length - 1]) : "")).toLocaleUpperCase();
   });
 
   /* Next-meeting date for the compact meeting card, without the year (the next meeting is
@@ -474,19 +316,6 @@ export default function (eleventyConfig, helpers) {
     };
   });
 
-  /* The bulletin's posts: not expired, pinned first, then newest. */
-  eleventyConfig.addFilter("homeAnnouncements", (items) => {
-    const today = ymdCentral(Date.now()); // Central-time day, like /bulletin/
-    return arr(items).filter((a) => {
-      if (!alive(a)) return false;
-      const exp = a.extra && a.extra.expires;
-      return !exp || String(exp).slice(0, 10) >= today;
-    }).sort((a, b) => {
-      const pa = a.extra && a.extra.pinned ? 1 : 0, pb = b.extra && b.extra.pinned ? 1 : 0;
-      return pb - pa || byNewest(a, b);
-    });
-  });
-
   /* "Write for the magazines": half Grapevine, half La Viña, so both magazines are always invited.
      Grapevine's half: its themes with an upcoming deadline (soonest first), then its suggested topics (no
      deadline: its departments and what it always needs — only when it has fewer coming themes than places).
@@ -515,73 +344,6 @@ export default function (eleventyConfig, helpers) {
     const picks = [...gvPool.slice(0, ng), ...lvPool.slice(0, nl)];
     return [...picks.filter((t) => t.extra.deadline).sort((a, b) => due(a).localeCompare(due(b))),
       ...picks.filter((t) => !t.extra.deadline)];
-  });
-
-  /* Newest PDFs: dated ones only (an undated PDF isn't "new"), newest first, with a mix:
-     one per kind of document and magazine first (GV News, an LV order form, a workbook …),
-     preferring PDFs that have a thumbnail. */
-  eleventyConfig.addFilter("homeNewestPdfs", (items, n = 6) => {
-    const now = Date.now();
-    const list = arr(items).filter((i) => alive(i) && goodTitle(i) && time(i.date) && time(i.date) <= now + 2 * DAY)
-      .sort((a, b) => time(b.date) - time(a.date) || (imageOf(b) ? 1 : 0) - (imageOf(a) ? 1 : 0));
-    const typeOf = (p) => ((Array.isArray(p.tags) && p.tags[0]) || p.category || "other") + ":" + pubOf(p);
-    const out = [];
-    const used = new Map();
-    const passes = [
-      (p) => imageOf(p) && !used.has(typeOf(p)),
-      (p) => imageOf(p) && (used.get(typeOf(p)) || 0) < 2,
-      (p) => !used.has(typeOf(p)),
-      () => true,
-    ];
-    for (const ok of passes) {
-      for (const p of list) {
-        if (out.length >= n) break;
-        if (out.includes(p) || !ok(p)) continue;
-        out.push(p);
-        used.set(typeOf(p), (used.get(typeOf(p)) || 0) + 1);
-      }
-    }
-    return out.sort((a, b) => time(b.date) - time(a.date));
-  });
-
-  /* Library quick links, counted exactly like /library/ (same documents — crawled PDFs +
-     committee Drive files — and the same rules, from library.js):
-     1. the Library's own quick collections (GVR kit, RLV kit, catalogs, flyers & postcards,
-        news …) → /library/?col=<key>;
-     2. if no collection has anything yet: the kits and the most common document types.
-        A kit PDF counts in its kit AND in its own type (docKitType), like the Library's
-        filters → ?col=gvr-kit / ?col=rlv-kit / ?cat=<type>. */
-  const CAT_ICON = Object.fromEntries(CATEGORIES);
-  // UI string, or "" when the key does not exist (safe with I18N_STRICT=1)
-  const tryT = (key, lang) => { try { const v = translateKey(key, lang); return v === key ? "" : v; } catch { return ""; } };
-  const typeLabel = (type, lang) => tryT("library.cat." + type, lang)
-    || String(type).replace(/[-_]+/g, " ").replace(/^\p{Ll}/u, (m) => m.toUpperCase());
-  eleventyConfig.addFilter("homeLibChips", (db, lang = "en", n = 6) => {
-    let docs = null;
-    try { docs = libraryDocs(db, lang, helpers); } catch (e) { console.warn(`[home] library chips: ${e.message}`); }
-    if (docs) {
-      try {
-        const cols = libraryCollections(docs, lang, helpers).filter((c) => c && c.count > 0).slice(0, n);
-        if (cols.length) return cols.map((c) => ({ href: "/library/?col=" + encodeURIComponent(c.key), label: c.label, count: c.count, icon: c.icon || "folder-open" }));
-      } catch (e) { console.warn(`[home] library collections: ${e.message}`); }
-    }
-    const rows = docs ? docs.map((d) => ({ kit: d.kit, type: d.c })) : arr(db && db.pdfs && db.pdfs.items).filter(alive).map(docKitType);
-    const kits = new Map(), types = new Map();
-    for (const r of rows) {
-      if (r.kit) kits.set(r.kit, (kits.get(r.kit) || 0) + 1);
-      if (r.type && r.type !== "other") types.set(r.type, (types.get(r.type) || 0) + 1);
-    }
-    const chips = [];
-    for (const col of COLLECTIONS) {
-      const kit = col.key.replace(/-kit$/, "");
-      if (col.key.endsWith("-kit") && kits.get(kit)) {
-        chips.push({ href: "/library/?col=" + encodeURIComponent(col.key), label: tryT("library.col." + col.key, lang) || kit.toUpperCase(), count: kits.get(kit), icon: col.icon });
-      }
-    }
-    for (const [type, count] of [...types].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))) {
-      chips.push({ href: "/library/?cat=" + encodeURIComponent(type), label: typeLabel(type, lang), count, icon: CAT_ICON[type] || "file-text" });
-    }
-    return chips.slice(0, n);
   });
 
   /* Podcast episodes for "Listen & watch": { featured, more[] }.
@@ -634,39 +396,6 @@ export default function (eleventyConfig, helpers) {
     return out.sort(byNewest);
   });
 
-  /* Instagram posts: newest first, alternating the two accounts so both always show. */
-  eleventyConfig.addFilter("homeInstagram", (items, n = 6) => {
-    const list = arr(items).filter(alive).sort(byNewest);
-    const byAcc = new Map();
-    for (const p of list) {
-      const k = (p.extra && p.extra.account) || p.category || "gv";
-      if (!byAcc.has(k)) byAcc.set(k, []);
-      byAcc.get(k).push(p);
-    }
-    const queues = [...byAcc.values()];
-    const out = [];
-    for (let i = 0; out.length < n && queues.some((q) => q.length > i); i++) {
-      for (const q of queues) if (q[i] && out.length < n) out.push(q[i]);
-    }
-    return out.sort(byNewest);
-  });
-
-  /* Committee Drive uploads (documents/photos/slides…), newest first; `skip`: ids left out (a store offer's banners:
-     shop.js shopOfferBanners — they belong next to the offer's conditions on /shop/#offers). Never a magazine cover
-     (community.js isCover: drive.py extra.cover) — the covers are dated by their issue, so the newest ones would
-     take every tile; they are the magazines' work, not the committee's, and live on /photos/#covers. */
-  eleventyConfig.addFilter("homeDrive", (items, n = 6, skip = []) => arr(items)
-    .filter((i) => alive(i) && i.kind !== "event" && i.kind !== "announcement" && !(i.extra && i.extra.form_closed)
-      && !isCover(i) && !arr(skip).includes(i.id))
-    .sort((a, b) => time(b.date || b.first_seen) - time(a.date || a.first_seen))
-    .slice(0, n));
-
-  /* 1234 → "1,234" (en) / "1234" … "12 345" (es) */
-  eleventyConfig.addFilter("homeNum", (n, lang = "en") => {
-    const v = Number(n) || 0;
-    return new Intl.NumberFormat(LOCALES[lang] || "en-US").format(v);
-  });
-
   /* "7:00 – 8:00 PM CDT" in Central time (an end after midnight: "7:00 PM – 1:00 AM CST" — clockRange, with the
      site's Spanish "p. m.") */
   eleventyConfig.addFilter("homeTimeRange", (start, end, lang = "en") => {
@@ -716,59 +445,5 @@ export default function (eleventyConfig, helpers) {
         try { host = new URL(q.url).hostname.replace(/^www\./, ""); } catch { /* no host */ }
         return { ...q, date: ymd, day, host, fresh: ymd === today };
       });
-  });
-
-  /* Wrap a caption in curly quotes — without doubling quotes it already has
-     ("“Faith is…”" stays as is instead of becoming "““Faith is…””"). */
-  eleventyConfig.addFilter("homeQuote", (s) => {
-    const t = String(s || "").trim();
-    if (!t) return "";
-    if (/^["“«]/.test(t)) return t;
-    return "“" + t.replace(/["”»]+$/, "") + "”";
-  });
-
-  /* Lucide icon name for an item kind. */
-  eleventyConfig.addFilter("homeKindIcon", (kind) => ({
-    article: "book-open-text", pdf: "file-text", video: "circle-play", episode: "headphones", post: "instagram",
-    photo: "image", document: "file-text", slides: "presentation", form: "clipboard-list", announcement: "megaphone",
-    event: "calendar-days", video_file: "film", topic: "pen-line",
-  }[kind] || "sparkles"));
-
-  /* Colour family for an item: gv (blue) | lv (amber) | grape (media) | vine (committee). */
-  eleventyConfig.addFilter("homeTone", (i) => {
-    if (!i) return "gv";
-    const x = i.extra || {};
-    if (i.source === "lavina" || x.publication === "lv") return "lv";
-    if (i.source === "grapevine") return "gv";
-    if (i.source === "crawl") return String(x.host || "").includes("lavina") ? "lv" : "gv";
-    if (i.source === "drive" || i.source === "committee") return "vine";
-    if (i.source === "instagram") return i.category === "lv" ? "lv" : "grape";
-    if (i.source === "youtube") return i.category === "lv" ? "lv" : "grape";
-    return "grape";
-  });
-
-  /* Best picture for an item (see imageOf). */
-  eleventyConfig.addFilter("homeImage", imageOf);
-
-  /* Language of the content behind a card: a PDF's `lang` is its TITLE's language,
-     `extra.doc_lang` is the document's. "" for unknown. */
-  eleventyConfig.addFilter("homeDocLang", (i) => {
-    if (!i) return "";
-    const l = (i.kind === "pdf" && i.extra && i.extra.doc_lang) || i.lang || "";
-    return l === "und" ? "" : l;
-  });
-
-  /* Title in the page language, tidied when it is really a file name
-     ("La-Vin%CC%83a-Subscription-Form_2026" → "La Viña Subscription Form 2026").
-     (Episodes and videos use `mediaTitle` — the same titles as /listen/ and /watch/.) */
-  eleventyConfig.addFilter("homeTitle", (i, lang) => {
-    let t = String(pickLang(i, "title", lang) || "");
-    if (/%[0-9a-f]{2}/i.test(t)) { try { t = decodeURIComponent(t); } catch { /* keep as is */ } }
-    t = t.normalize("NFC");
-    // File-name style ("Back-Issue-30-Packs-Form_082026"): 2+ hyphen/underscore joins, or no spaces at all.
-    if ((t.match(/[\p{L}\p{N}][-_]+[\p{L}\p{N}]/gu) || []).length >= 2 || (!/\s/.test(t) && /[-_]/.test(t))) t = t.replace(/\.(pdf|docx?|pptx?|jpe?g|png)$/i, "").replace(/[-_]+/g, " ");
-    // Podcast/video titles (should one ever come here): drop the "[Season 11, Episode 12]" tail.
-    if (i && (i.kind === "episode" || i.kind === "video")) t = t.replace(SEASON_TAIL, "");
-    return t.trim();
   });
 }

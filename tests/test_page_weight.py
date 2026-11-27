@@ -12,7 +12,9 @@
                  stray ./_site).
   * Built site — one real build, as GitHub Pages builds it (PATH_PREFIX=/aagrapevine/, I18N_STRICT=1):
                  - every .css at the top of src/assets/css is in the output folder (--output), main.css without
-                   the seven page-area stylesheets' rules, each of those with its own;
+                   the page-area stylesheets' rules (the seven areas of one or two pages, and since November 2026
+                   the home page, the Library with the site search, and Published writers), each of those with its
+                   own;
                  - every page that uses an area's classes (its markup, or a script it loads) links that area's
                    stylesheet, right after main.css; a page that doesn't, doesn't;
                  - every <use> points at a symbol on its own page, every sprite symbol is used and draws something,
@@ -45,10 +47,13 @@ from nodejs import node_path, run_js  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "/aagrapevine/"
 # The page-area stylesheets (src/assets/css/<name>.css → /assets/css/<name>.css) and their class prefixes, in the
-# order main.css imported them (the order a page links them in); then the newer ones (bingo, round 34: /gvr/bingo/).
+# order main.css imported them (the order a page links them in); then the newer ones (bingo, round 34: /gvr/bingo/;
+# home, library — /library/ and /search/ — and published, November 2026).
 AREAS = {"monthly": "mp-", "report": "rp-", "expenses": "xp-", "orientation": "o101-", "presentations": "gvp-", "booth": "gvb-",
-         "bingo": "bgo-"}
-AREA_RE = re.compile(r"(?<![\w-])(" + "|".join(re.escape(p) for p in AREAS.values()) + r")[a-z0-9]")
+         "bingo": "bgo-", "home": "home-", "library": "lib-", "published": "pw-"}
+# (in a script, "home-" is a home-page class only when it is not "home-screen" / "home-page" — words in comments of
+# scripts every page loads: install-core.js, recorder.js)
+AREA_RE = re.compile(r"(?<![\w-])(" + "|".join(re.escape(p) for p in AREAS.values()) + r")(?!screen|page)[a-z0-9]")
 
 
 def css_stamps() -> dict[str, int]:
@@ -338,14 +343,11 @@ class BuiltSite(unittest.TestCase):
     def setUpClass(cls):
         if not has_modules():
             return
-        cls.tmp = Path(tempfile.mkdtemp(prefix="page-weight-"))
-        cls.site = cls.tmp / "site"
-        env = {**os.environ, "PATH_PREFIX": BASE, "I18N_STRICT": "1", "NODE_NO_WARNINGS": "1"}
-        env.pop("ONLY", None)
+        # (the whole site, built once and kept while nothing it is built from changes: tests/site_build.py)
+        from site_build import cached_build
         cls.stamps = css_stamps()
-        cls.built = subprocess.run([node_path(), str(ROOT / "node_modules" / "@11ty" / "eleventy" / "cmd.cjs"), "--quiet",
-                                  "--output", str(cls.site)], cwd=ROOT, env=env, capture_output=True, text=True,
-                                 encoding="utf-8", timeout=900)
+        cls.built = cached_build({"PATH_PREFIX": BASE, "I18N_STRICT": "1", "ONLY": None})
+        cls.site = cls.built.site
         cls.pages = {}
         if cls.built.returncode == 0:
             for f in sorted(cls.site.rglob("*.html")):
@@ -377,7 +379,8 @@ class BuiltSite(unittest.TestCase):
     def test_main_css_leaves_the_area_rules_to_their_stylesheets(self):
         main = self.css("main")
         own = {"booth": ".gvb-sec{", "presentations": ".gvp-progress{", "expenses": ".xp-root{", "orientation": ".o101-welcome{",
-               "monthly": ".mp-layout{", "report": ".rp-grid{", "bingo": ".bgo-layout{"}
+               "monthly": ".mp-layout{", "report": ".rp-grid{", "bingo": ".bgo-layout{", "home": ".home-choose-btn{",
+               "library": ".lib-find{", "published": ".pw-filter-row{"}
         for area, rule in own.items():
             with self.subTest(area=area):
                 self.assertNotIn(rule, main)
@@ -388,7 +391,7 @@ class BuiltSite(unittest.TestCase):
                 self.assertNotIn(".container-page{", sheet)
                 self.assertLess(len(sheet), len(main) / 4)
         # main.css keeps what every page needs: the theme, the shared components, the areas of many pages
-        for rule in ("--font-sans:", ".card{", ".site-header", ".gvlv-panel{", ".pwa-toast{", ".home-"):
+        for rule in ("--font-sans:", ".card{", ".site-header", ".gvlv-panel{", ".pwa-toast{", ".cm-subnav{"):
             self.assertIn(rule, main)
 
     def test_pages_link_exactly_the_area_stylesheets_they_use(self):
@@ -421,7 +424,8 @@ class BuiltSite(unittest.TestCase):
         for url, want in (("/about/index.html", {"booth"}), ("/es/tracker/index.html", {"expenses"}),
                           ("/orientation/index.html", {"orientation", "presentations"}),
                           ("/monthly/index.html", {"monthly", "report"}), ("/es/gvr/bingo/index.html", {"bingo"}),
-                          ("/gvr/index.html", set()), ("/index.html", set())):
+                          ("/gvr/index.html", set()), ("/index.html", {"home"}), ("/es/search/index.html", {"library"}),
+                          ("/library/index.html", {"library"}), ("/published/index.html", {"published"}), ("/read/index.html", set())):
             with self.subTest(page=url):
                 got = set(re.findall(r'assets/css/(\w+)\.css', self.pages[url])) - {"main"}
                 self.assertEqual(got, want)
@@ -476,7 +480,7 @@ class BuiltSite(unittest.TestCase):
         pages = {}
         for lang in ("", "es/"):
             for p in ("", "meetings/", "monthly/", months[0][1:-len("index.html")], "tracker/", "orientation/",
-                      "orientation/role/", "about/", "gvr/bingo/"):
+                      "orientation/role/", "about/", "gvr/bingo/", "library/", "published/"):
                 f = self.site / (lang + p) / "index.html"
                 if f.is_file():
                     pages[BASE + lang + p] = str(f)

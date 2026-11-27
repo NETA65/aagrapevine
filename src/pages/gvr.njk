@@ -39,7 +39,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     their one home (posters, tips, dates). Nothing on this page shows them. "below": the first card under
     the hero on smaller screens and at larger text (time-sensitive). No theme known → no card. -#}
 {%- set gm = (db | mpMonths(carry, site, lang))[0] -%}
-{% call(slot) ui.pageHero(lang, "nav.gvr" | t(lang), "read.gvr.subtitle" | t(lang), "badge-check", "read.gvr.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
+{% call(slot) ui.pageHero(lang, "nav.gvr" | t(lang), ("read.gvr.subtitle" | t(lang)) | gloss(lang), "badge-check", "read.gvr.eyebrow" | t(lang), { class: "read-hero", side: "below" }) %}
 {%- if slot == "side" %}
   {%- if gm and (gm.gv or gm.lv) %}
   {% call ui.heroAside("read.gvr.aside_title" | t(lang), lang, { id: "gvr-aside-title", icon: "megaphone", href: "/monthly/" | lurl(lang), linkLabel: "nav.monthly" | t(lang), class: "gvr-aside" }) %}
@@ -68,6 +68,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
   { href: "#position", label: "read.gvr.nav_job" | t(lang), icon: "hand-heart" },
   { href: "#steps", label: "read.gvr.nav_steps" | t(lang), icon: "list-checks" },
   { href: "#kits", label: "read.gvr.see_kits" | t(lang), icon: "folder-open" },
+  { href: "#glossary", label: "glossary.eyebrow" | t(lang), icon: "book-a" },
   { href: "#ideas", label: "read.gvr.nav_ideas" | t(lang), icon: "lightbulb" },
   { href: "#bingo", label: "read.gvr.nav_bingo" | t(lang), icon: "grid-3x3" },
   { href: "#pass-it-on", label: "read.gvr.nav_pass" | t(lang), icon: "handshake" },
@@ -277,6 +278,21 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
     {{ ui.emptyState("folder-open", "read.gvr.kits_empty" | t(lang), "read.gvr.kits_empty_text" | t(lang), L.gvr_resources, "read.gvr.kit_gvr" | t(lang)) }}
     <p class="mt-3 text-center text-sm"><a class="link tap-link" href="{{ L.rlv_resources }}" target="_blank" rel="noopener">{{ "read.gvr.kit_rlv" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a></p>
   {% endif %}
+</section>
+
+{#- ---------- Service words, in plain language (#glossary): every entry of the site's glossary (eleventy/filters/
+    glossary.js — the same words the dotted terms on Home, here, GVR / RLV 101 and Meetings open), two columns from
+    768px. A <dl>: the word and what it stands for, then one plain sentence. ---------- -#}
+<section id="glossary" class="section container-page pt-0" aria-labelledby="glossary-title">
+  {{ ui.sectionHead("glossary.title" | t(lang), "glossary.sub" | t(lang), "", "", "book-a", { eyebrow: "glossary.eyebrow" | t(lang), tone: "text-vine", id: "glossary-title", lang: lang }) }}
+  <dl class="gl-list card card-pad grid gap-x-10 gap-y-4 md:grid-cols-2">
+    {%- for g in lang | glossary %}
+    <div class="min-w-0">
+      <dt class="font-semibold text-ink"><abbr title="{{ g.name }}">{{ g.term }}</abbr><span class="font-normal text-muted"> — {{ g.name }}</span></dt>
+      <dd class="mt-0.5 text-sm leading-relaxed text-muted">{{ (g.def[0] | upper) + g.def.slice(1) }}</dd>
+    </div>
+    {%- endfor %}
+  </dl>
 </section>
 
 {#- ---------- Ideas for the home group ---------- -#}

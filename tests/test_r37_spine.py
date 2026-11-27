@@ -569,8 +569,8 @@ class TheKinds(Spine):
         self.assertEqual((lvw[2], lvw[3], lvw[5]), ("lv", True, "lv-monthly-workshop"))
         self.assertEqual(lvw[7], "taller mensual de prueba", "a series kind's flyers: its own flyer_match")
         self.assertEqual(flags("La Viña Writing Workshop (in Spanish) — Fort Worth")[6], "writing-workshop")
-        self.assertEqual(flags("La Viña Recording Workshop (in Spanish) — Duncanville")[6], "writing-workshop",
-                         "the closest deck")
+        self.assertEqual(flags("La Viña Recording Workshop (in Spanish) — Duncanville")[6], "recording-workshop",
+                         "its own deck (config/presentations/recording-workshop.yml)")
         self.assertEqual(r["rawNoSite"], "other", "without the site, a series' type: is not read")
 
     def test_the_pages_kinds_are_one_in_both_languages(self):
@@ -623,7 +623,8 @@ class TheKinds(Spine):
         self.assertEqual(kinds["writing-workshop"]["resources"][:3], ["contribute", "tips", "submit"])
         self.assertEqual(kinds["assembly"]["resourceFallback"], {"official": "area"})
         self.assertEqual(kinds["gsr-dcm-orientation"]["resourceAnchors"], {"gvr": ["job"]})
-        self.assertTrue(kinds["recording-workshop"]["deckClose"])
+        self.assertEqual(kinds["recording-workshop"]["deck"], "recording-workshop")
+        self.assertFalse(kinds["recording-workshop"]["deckClose"], "its own presentation, not the closest one")
         self.assertEqual(kinds["online-meeting"]["deckMag"], "gv")
         # the similar flyers: each workshop's own, never La Viña's monthly flyer ("taller informativo")
         self.assertEqual(r["flyers"]["writing-workshop"], ["Taller de Escritura de La Viña - Grupo Uno, Tyler", "Grapevine Writing Workshop flyer"])

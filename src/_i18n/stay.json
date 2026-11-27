@@ -1,0 +1,186 @@
+{
+  "stay.meta_desc": {
+    "en": "Every way to keep up with the NETA 65 Grapevine & La Viña committee: the monthly digest, phone calendars, the RSS feed, Instagram, the app and WhatsApp.",
+    "es": "Todas las formas de seguir al comité de Grapevine y La Viña de NETA 65: el resumen mensual, calendarios para el teléfono, RSS, Instagram, la app y WhatsApp."
+  },
+  "stay.eyebrow": {
+    "en": "NETA 65 · Grapevine & La Viña Committee",
+    "es": "NETA 65 · Comité de Grapevine y La Viña"
+  },
+  "stay.subtitle": {
+    "en": "Our news, meetings and story deadlines — in your inbox, your calendar, your feed reader or your group chat. Pick what suits you.",
+    "es": "Nuestras noticias, reuniones y fechas límite para historias, en tu correo, tu calendario, tu lector de noticias o el chat de tu grupo. Elige lo que te sirva."
+  },
+  "stay.email_title": {
+    "en": "By e-mail",
+    "es": "Por correo"
+  },
+  "stay.email_sub": {
+    "en": "Once a month, a short bilingual recap of everything that was new on this site.",
+    "es": "Una vez al mes, un resumen breve y bilingüe de todo lo nuevo en este sitio."
+  },
+  "stay.email_join": {
+    "en": "Get the monthly digest",
+    "es": "Recibe el resumen mensual"
+  },
+  "stay.email_join_text": {
+    "en": "Ask the chair to send it to you each month, ready to forward to your group. Any member is welcome: a short note is all it takes.",
+    "es": "Pide al coordinador(a) que te lo envíe cada mes, listo para reenviar a tu grupo. Cualquier miembro es bienvenido: basta con una nota breve."
+  },
+  "stay.email_ask": {
+    "en": "Ask to be added",
+    "es": "Pide que te agreguen"
+  },
+  "stay.email_to": {
+    "en": "Or write to",
+    "es": "O escribe a"
+  },
+  "stay.email_leave": {
+    "en": "To stop getting it, write to the same address and ask us to stop sending it.",
+    "es": "Para dejar de recibirlo, escribe a la misma dirección y pide que ya no te lo envíen."
+  },
+  "stay.email_subject": {
+    "en": "Please add me to the monthly digest",
+    "es": "Por favor, agréguenme al resumen mensual"
+  },
+  "stay.email_body": {
+    "en": "Hello, please add this address to the committee's monthly digest. Thank you!",
+    "es": "Hola, por favor agreguen este correo al resumen mensual del comité. ¡Gracias!"
+  },
+  "stay.email_read": {
+    "en": "Read this month's edition",
+    "es": "Lee la edición de este mes"
+  },
+  "stay.email_read_cta": {
+    "en": "Open the digest",
+    "es": "Abrir el resumen"
+  },
+  "stay.cal_eyebrow": {
+    "en": "Calendars",
+    "es": "Calendarios"
+  },
+  "stay.cal_title": {
+    "en": "In your calendar",
+    "es": "En tu calendario"
+  },
+  "stay.cal_sub": {
+    "en": "Subscribe once and new dates show up on your phone by themselves, in English or in Spanish.",
+    "es": "Suscríbete una vez y las fechas nuevas aparecen solas en tu teléfono, en español o en inglés."
+  },
+  "stay.cal_events": {
+    "en": "Events and meetings",
+    "es": "Eventos y reuniones"
+  },
+  "stay.cal_events_text": {
+    "en": "Our committee meetings, workshops, literature booths, assemblies and the weekly open meetings.",
+    "es": "Las reuniones de nuestro comité, talleres, mesas de literatura, asambleas y las reuniones abiertas semanales."
+  },
+  "stay.cal_deadlines": {
+    "en": "Story deadlines",
+    "es": "Fechas límite para historias"
+  },
+  "stay.cal_deadlines_text": {
+    "en": "Every Grapevine and La Viña story deadline on its day, with a reminder the day before.",
+    "es": "Cada fecha límite de La Viña y Grapevine en su día, con un aviso el día anterior."
+  },
+  "stay.cal_howto": {
+    "en": "Step-by-step help for each calendar app",
+    "es": "Ayuda paso a paso para cada app de calendario"
+  },
+  "stay.cal_files": {
+    "en": "Add once",
+    "es": "Agrégalos una vez"
+  },
+  "stay.cal_files_text": {
+    "en": "These are files to open once on your phone or computer: this month's dates, and each weekly open meeting, which repeats every week by itself.",
+    "es": "Son archivos que abres una vez en tu teléfono o computadora: las fechas de este mes, y cada reunión abierta semanal, que se repite sola cada semana."
+  },
+  "stay.cal_weekly_text": {
+    "en": "Every week, with the link to join",
+    "es": "Cada semana, con el enlace para entrar"
+  },
+  "stay.feeds_eyebrow": {
+    "en": "Feeds & social media",
+    "es": "Canales y redes sociales"
+  },
+  "stay.feeds_title": {
+    "en": "Follow along",
+    "es": "Síguenos"
+  },
+  "stay.feeds_sub": {
+    "en": "What's new on this site in your feed reader, and the magazines' own posts, videos and podcasts.",
+    "es": "Las novedades de este sitio en tu lector de noticias, y las publicaciones, videos y podcasts de las revistas."
+  },
+  "stay.rss_text": {
+    "en": "What's new on this site, for any feed reader. Copy the link into your app.",
+    "es": "Las novedades de este sitio, para cualquier lector de noticias. Copia el enlace en tu app."
+  },
+  "stay.ig_text": {
+    "en": "The latest posts from AA Grapevine and La Viña, gathered on one page.",
+    "es": "Las publicaciones más recientes de La Viña y AA Grapevine, en una sola página."
+  },
+  "stay.ig_cta": {
+    "en": "See the posts",
+    "es": "Ver las publicaciones"
+  },
+  "stay.yt_text": {
+    "en": "AA Grapevine's videos and the recordings of the weekly open meetings.",
+    "es": "Los videos de AA Grapevine y las grabaciones de las reuniones abiertas semanales."
+  },
+  "stay.pod_title": {
+    "en": "Podcasts",
+    "es": "Podcasts"
+  },
+  "stay.pod_text": {
+    "en": "AA Grapevine's Podcast and the weekly open meetings, to play here or in your podcast app.",
+    "es": "El podcast de AA Grapevine y las reuniones abiertas semanales, para escuchar aquí o en tu app de podcasts."
+  },
+  "stay.phone_eyebrow": {
+    "en": "On your phone",
+    "es": "En tu teléfono"
+  },
+  "stay.phone_title": {
+    "en": "Keep it close",
+    "es": "Tenlo a la mano"
+  },
+  "stay.phone_sub": {
+    "en": "Put the site on your home screen, read it without signal, and pass it on to your group.",
+    "es": "Pon el sitio en tu pantalla de inicio, léelo sin señal y pásalo a tu grupo."
+  },
+  "stay.app_title": {
+    "en": "Install the app · read offline",
+    "es": "Instala la app · lee sin conexión"
+  },
+  "stay.app_text": {
+    "en": "Add the site to your home screen and save key pages for when there is no signal.",
+    "es": "Agrega el sitio a tu pantalla de inicio y guarda las páginas clave para cuando no haya señal."
+  },
+  "stay.wa_title": {
+    "en": "Share on WhatsApp",
+    "es": "Compartir por WhatsApp"
+  },
+  "stay.wa_desc": {
+    "en": "Send this site's address to a group chat.",
+    "es": "Manda la dirección de este sitio al chat de un grupo."
+  },
+  "stay.wa_text": {
+    "en": "{name}: AA Grapevine and La Viña stories, podcasts, meetings and service tools in Northeast Texas —",
+    "es": "{name}: historias, podcasts, reuniones y recursos de servicio de La Viña y AA Grapevine en el noreste de Texas —"
+  },
+  "stay.qr_text": {
+    "en": "QR codes and a poster to print for your group's table.",
+    "es": "Códigos QR y un cartel para imprimir para la mesa de tu grupo."
+  },
+  "search.page_desc.stay-updated": {
+    "en": "The monthly digest by e-mail, calendars to subscribe to, the RSS feed, Instagram, the app and WhatsApp — every way to keep up.",
+    "es": "El resumen mensual por correo, calendarios para suscribirte, el canal RSS, Instagram, la app y WhatsApp: todas las formas de mantenerte al día."
+  },
+  "search.kw.stay-updated": {
+    "en": "stay updated subscribe newsletter email digest calendar ics ical webcal rss feed notifications instagram whatsapp app follow",
+    "es": "mantente al día suscribirse boletín correo resumen calendario ics ical webcal rss canal avisos notificaciones instagram whatsapp app seguir"
+  },
+  "stay.short_desc": {
+    "en": "The e-mail digest, calendars for your phone, RSS and the app",
+    "es": "El resumen por correo, calendarios para tu teléfono, RSS y la app"
+  }
+}

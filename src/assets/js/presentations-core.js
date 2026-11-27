@@ -22,7 +22,10 @@
    THE PRESENTER'S VERSION — localStorage["gv-presentations-v1"] (presentations.js reads and writes it; never sent
    anywhere):
      { v: 1, shared: { fill: { key: "text" } },                      the blanks marked `shared` (every deck)
-       decks: { <deck id>: { preset: "<version id>",                 Customize → Version ("" = the first, the full one)
+       decks: { <deck id>: { preset: "<version id>",                 Customize → Version, as chosen (the first one's id
+                                                                      too); "" = none chosen: the deck's default
+                                                                      (defaultPreset: the first one, or "No guest
+                                                                      speaker" for a meeting the site lists none for)
          hidden: [ids], shown: [ids],                                 turned off / on, on top of the version
          order: null | [ids],                                         moved slides (null = the deck's order)
          edits: { <slide id>: { <field>: value, _h: "<the slide's h when it was edited>",
@@ -39,7 +42,8 @@
    normState() makes any stored value safe to use (unknown or broken parts are dropped, never thrown on).
 
    THE CURRENT VERSION — current(deck, state, presetId, nowMs): every slide in the presenter's order with its edits
-   applied, and for each one whether it is in the show and why not:
+   applied, in the version presetId, else the one the presenter chose, else the deck's default at nowMs
+   (defaultPreset), and for each one whether it is in the show and why not:
      a facilitator slide never is (Customize → Prepare) · a slide outside its show_from / show_until days, or a
      `when: "price_notice"` slide while no notice is on, is left out by the clock (never by a switch) · otherwise the
      presenter's own switch (hidden / shown) wins · otherwise the version: `only` lists exactly its slides (also
@@ -109,9 +113,9 @@
   var LIMITS = { fileBytes: 2000000, text: 4000, long: 20000, list: 80, cells: 8, added: 60, ids: 800, fill: 400,
     fillText: 600, checks: 200, versions: 20 };
 
-  /* The words the player writes ON the slides and in the notes. The presentations' content stays English (the
-     owner's decision: on /es/ the controls are Spanish and the slides are marked "(en inglés)"), so these are
-     English on both pages — like the decks themselves. The controls' own words are src/_i18n/presentations.json. */
+  /* The words the player writes ON the slides and in the notes, in the language of the deck (its `lang`), never the
+     page's: an English deck says them in English on /es/ too (marked "(en inglés)"), a Spanish deck in Spanish (ES,
+     below: words(lang)). The controls' own words are src/_i18n/presentations.json. */
   var EN = {
     left_out: "(not in this version)",
     current_as_of: "Current as of {date}",
@@ -173,6 +177,52 @@
     carry_who: "{what} ({who})",
     carry_when: "{what} (by {when})",
   };
+  /* The same words for a deck written in Spanish (lang: "es": La Viña's writing workshop, the RLV orientation), as
+     the Spanish pages say them ("Detalles por confirmar", "Código de acceso", "Traducción automática"). The chair's
+     paperwork and the controls' names ({ui:…}) are not here: they come from EN and the page. */
+  var ES = {
+    left_out: "(no está en esta versión)",
+    current_as_of: "Datos al {date}",
+    minute: "minuto",
+    minutes: "minutos",
+    you_need: "Necesitarás",
+    none: "Por ahora no hay nada en la lista. Consulta {url}",
+    see: "consulta {where}",
+    online: "En línea",
+    online_on: "En línea por {platform}",
+    tentative: "Detalles por confirmar",
+    zoom_id: "ID de Zoom",
+    passcode: "Código de acceso",
+    meeting_id: "ID de la reunión",
+    meeting_code: "Código de la reunión",
+    contact: "Contacto",
+    gv: "Grapevine",
+    lv: "La Viña",
+    magazine: "Revista",
+    issue: "Edición",
+    theme: "Tema",
+    due: "Fecha límite",
+    print: "Impresa",
+    digital: "Digital",
+    one_year: "1 año, EE. UU.",
+    from_date: "desde el {date}",
+    new_prices: "Precios nuevos desde el {date}",
+    books_more: "Libros: {amount} más cada uno",
+    botm_also: "También",
+    auto_translated: "traducción automática",
+    // ("alrededor de", not "unos": "unos 1 minuto" is wrong Spanish, "alrededor de 1 minuto" is right)
+    time: "TIEMPO: alrededor de {about}{opt}. Al pasar a la siguiente deberías ir por {at}.",
+    time_optional: " (opcional: se puede quitar si vas con retraso)",
+    seconds: "{n} segundos",
+    about_minute: "1 minuto",
+    about_minutes: "{n} minutos",
+    disclaimer: [
+      "No es una presentación oficial de AA Grapevine, Inc.",
+      "Preparada por el Comité de Grapevine y La Viña de NETA 65 para el servicio local. No es literatura aprobada por la Conferencia de A.A. y no habla en nombre de A.A. en su conjunto ni de AA Grapevine, Inc.",
+    ],
+  };
+  /** The words the player writes on a deck's slides and in its notes: its language's (ES for "es"), else EN. */
+  function words(lang) { return lang === "es" ? ES : EN; }
   // A live block's rows when the slide names no `limit` (SPEC §1's live kinds)
   var LIMIT = { deadlines: 6, events: 5, meeting: 3, "lv-workshop": 3, monthly: 3, bulletin: 3 };
 
@@ -312,8 +362,12 @@
     if (isMap(raw.prev) && isStr(raw.prev.at) && raw.prev.at.length <= 40 && isFinite(ms(raw.prev.at))) {
       d.prev = { at: raw.prev.at, held: isStr(raw.prev.held) && YMD.test(raw.prev.held) ? raw.prev.held : "",
         fill: cleanFill(raw.prev.fill), checks: cleanChecks(raw.prev.checks) };
-      // ("" is the first version: "Start next month" may have left it for "No guest speaker")
-      if (isStr(raw.prev.preset) && (raw.prev.preset === "" || ID.test(raw.prev.preset))) d.prev.preset = raw.prev.preset;
+      if (isStr(raw.prev.preset) && ID.test(raw.prev.preset)) d.prev.preset = raw.prev.preset;
+      // "" there: a "Start next month" from before December 2026 chose "No guest speaker" by itself and kept the
+      // first version ("" then) for its Undo — the deck's default does that now (defaultPreset), so the version
+      // goes back to none chosen, and the Undo leaves it so. ("Start next month" never keeps "" there now: only
+      // that old automatic write leaves this pair.)
+      else if (raw.prev.preset === "") d.preset = "";
     }
     if (isNum(raw.last) && raw.last >= 1) d.last = Math.floor(raw.last);
     if (isNum(raw.last_of) && raw.last_of >= 1) d.last_of = Math.floor(raw.last_of);
@@ -344,12 +398,13 @@
   /** What the presenter changed in a deck (the page's status line, "Reset" shown or not). */
   function summary(ds, deck) {
     ds = ds || emptyDeck();
-    var firstPreset = deck && deck.presets && deck.presets[0] ? deck.presets[0].id : "";
     var details = Object.keys(ds.fill || {}).filter(function (k) { return String(ds.fill[k]).trim(); }).length;
     var checks = 0;
     Object.keys(ds.checks || {}).forEach(function (k) { checks += ds.checks[k].length; });
     var out = {
-      preset: ds.preset && ds.preset !== firstPreset ? ds.preset : "",
+      // (a version chosen, the first one too — none chosen, the deck's default is no change of the presenter's)
+      preset: ds.preset && (!deck || !Array.isArray(deck.presets) || deck.presets.some(function (p) { return p && p.id === ds.preset; }))
+        ? ds.preset : "",
       hidden: (ds.hidden || []).length,
       shown: (ds.shown || []).length,
       edited: Object.keys(ds.edits || {}).length,
@@ -542,6 +597,53 @@
     for (var i = 0; i < list.length; i++) if (list[i] && list[i].id === id) return list[i];
     return list[0] || { id: "", hide: [], only: null };
   }
+  /** When a paperwork meeting's day is over: its `over` (the build's midnight Central after it), else — a deck file
+   *  from before the build wrote it — 6 AM UTC the day after (midnight Central in winter, 1 AM in summer). */
+  function dayOver(r) {
+    var t = ms(r.over);
+    if (isFinite(t)) return t;
+    var p = r.ymd.split("-");
+    return Date.UTC(+p[0], +p[1] - 1, +p[2] + 1, 6);
+  }
+  /** The meeting the day's guest speaker facts are for ({live:speaker_…}: the build's meetingInfo) at nowMs: tonight's
+   *  until midnight Central after its day — during AND after the meeting —, then the next one. Never moved on by
+   *  "Start next month" (paperMeetings' `next` is: the agenda e-mail is next month's at once). null: none. */
+  function speakerMeeting(deck, nowMs) {
+    var now = isNum(nowMs) ? nowMs : Date.now();
+    var rows = meetingRows(deck);
+    for (var i = 0; i < rows.length; i++) if (dayOver(rows[i]) > now) return rows[i];
+    return null;
+  }
+  /**
+   * The version a deck opens on while the presenter has chosen none (ds.preset ""): its first one — and for a deck
+   * with the chair's paperwork, its "No guest speaker" (noSpeakerPreset) while the meeting the speaker facts are for
+   * (speakerMeeting: tonight's until midnight Central after it, whatever "Start next month" did) is one the site lists
+   * NO guest speaker for (its row's `no_speaker`: the meetings before January 20, 2027) — never for a speaker only not
+   * listed yet ("to be announced"), nor once the site lists one. So the slides and the version agree: the guest
+   * speaker's slides never come back saying "none tonight" after tonight's meeting. A version the presenter chose
+   * stays theirs. (`ds` is not read: the argument stays for the callers.)
+   */
+  function defaultPreset(deck, ds, nowMs) { return defaultFor(deck, speakerMeeting(deck, nowMs)); }
+  /** The version a deck opens on, none chosen, for one meeting (a row of meetingRows; null: none): "No guest
+   *  speaker" for a meeting the site lists NO guest speaker for, else the first version (defaultPreset is it for
+   *  speakerMeeting's meeting; the paperwork's texts for the meeting they are for). */
+  function defaultFor(deck, row) {
+    var first = presetOf(deck, "");
+    if (!paperOf(deck)) return first;
+    var listed = row && isMap(row.speaker) && isStr(row.speaker.name) && row.speaker.name;
+    return (row && row.no_speaker === true && !listed && noSpeakerPreset(deck)) || first;
+  }
+  /** The version the presenter chose (ds.preset: one the deck has), else "" (none: the deck's default shows). */
+  function chosenPreset(deck, ds) {
+    var id = ds && isStr(ds.preset) ? ds.preset : "";
+    return id && ((deck && deck.presets) || []).some(function (p) { return p && p.id === id; }) ? id : "";
+  }
+  /** The version the presenter's state shows at nowMs: the one they chose (one the deck has), else the default. */
+  function presetFor(deck, ds, nowMs) {
+    var id = ds && isStr(ds.preset) ? ds.preset : "";
+    var list = (deck && Array.isArray(deck.presets)) ? deck.presets : [];
+    return id && list.some(function (p) { return p && p.id === id; }) ? presetOf(deck, id) : defaultPreset(deck, ds, nowMs);
+  }
   /** Is a deck slide in this version before the presenter's own switches (facilitator slides never are)? */
   function inPreset(slide, preset) {
     if (!slide || slide.facilitator) return false;
@@ -631,7 +733,7 @@
         ds = raw;
       } else ds = state.decks[deck.id] = norm;
     }
-    var preset = presetOf(deck, isStr(presetId) && presetId ? presetId : ds.preset);
+    var preset = isStr(presetId) && presetId ? presetOf(deck, presetId) : presetFor(deck, ds, now);
     // lookups by id without a prototype: an id or key such as "constructor" is unknown, as any other would be
     var byDeck = Object.create(null);
     (deck.slides || []).forEach(function (s) { byDeck[s.id] = s; });
@@ -744,26 +846,30 @@
     var m = Math.max(0, Math.round(Number(min) || 0));
     return Math.floor(m / 60) + ":" + pad2(m % 60);
   }
-  /** "1½ minutes", "1 minute", "45 seconds" — the pptx notes' own way of saying it. */
-  function aboutText(min) {
+  /** "1½ minutes", "1 minute", "45 seconds" — the pptx notes' own way of saying it (in `lang`: "1½ minutos"). */
+  function aboutText(min, lang) {
+    var W = words(lang);
     var m = Number(min) || 0;
-    if (m < 1) return fmt(EN.seconds, { n: Math.max(5, Math.round((m * 60) / 5) * 5) });
+    if (m < 1) return fmt(W.seconds, { n: Math.max(5, Math.round((m * 60) / 5) * 5) });
     var whole = Math.floor(m);
     var q = Math.round((m - whole) * 4);
     if (q === 4) { whole += 1; q = 0; }
-    if (!q) return whole === 1 ? EN.about_minute : fmt(EN.about_minutes, { n: whole });
-    return fmt(EN.about_minutes, { n: whole + ["", "¼", "½", "¾"][q] });
+    if (!q) return whole === 1 ? W.about_minute : fmt(W.about_minutes, { n: whole });
+    return fmt(W.about_minutes, { n: whole + ["", "¼", "½", "¾"][q] });
   }
-  /** The notes' TIME line for a shown slide in the current version (English, like the notes). */
-  function timeLine(entry) {
+  /** The notes' TIME line for a shown slide in the current version, in the language of the notes (the deck's
+   *  `lang`: "TIEMPO: …" in a Spanish deck). */
+  function timeLine(entry, lang) {
     if (!entry || !entry.shown) return "";
-    return fmt(EN.time, { about: aboutText(entry.mins), opt: entry.slide.optional ? EN.time_optional : "", at: clock(entry.end) });
+    var W = words(lang);
+    return fmt(W.time, { about: aboutText(entry.mins, lang), opt: entry.slide.optional ? W.time_optional : "", at: clock(entry.end) });
   }
-  /** {slide:id} → its number in the current version, "(left out of this version)", or null for an unknown id. */
+  /** {slide:id} → its number in the current version, "(left out of this version)" (in the deck's language), or null
+   *  for an unknown id. */
   function slideRef(cur, id) {
     var e = cur && cur.byId[id];
     if (!e) return null;
-    return e.shown ? String(e.n) : EN.left_out;
+    return e.shown ? String(e.n) : words(cur.deck && cur.deck.lang).left_out;
   }
 
   /** An agenda slide's rows in the current version: [{ time, title, detail, from, auto }]. A row with `from` gets
@@ -914,18 +1020,24 @@
       var r = ctx.cur ? slideRef(ctx.cur, key) : null;
       return r === null ? m : r;
     });
-    return out.indexOf(EN.left_out) >= 0 ? tidyLeftOut(out) : out;
+    var lo = ctx.cur ? words(ctx.cur.deck && ctx.cur.deck.lang).left_out : EN.left_out;
+    return out.indexOf(lo) >= 0 ? tidyLeftOut(out, lo) : out;
   }
   // A sentence that pointed at slides the version leaves out ("Part 2's history (slides {slide:a}–{slide:b}; …)",
-  // "the tours ({slide:c}–{slide:d}, skip both)") reads as one "(not in this version)", not as a run of them.
-  var LO = EN.left_out.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  var LO_RANGE = new RegExp("(" + LO + ")\\s*[–-]\\s*" + LO, "g");
-  var LO_WORD = new RegExp("\\bslides?\\s+(" + LO + ")", "g");
-  var LO_WRAPPED = new RegExp("\\((" + LO + ")\\)", "g");
-  var LO_OPEN = new RegExp("\\(" + LO.replace(/\\\)$/, "") + "\\)([,;])", "g");
-  function tidyLeftOut(s) {
-    var inner = EN.left_out.slice(0, -1);              // "(not in this version"
-    return s.replace(LO_RANGE, "$1").replace(LO_WORD, "$1").replace(LO_WRAPPED, "$1").replace(LO_OPEN, inner + "$1");
+  // "the tours ({slide:c}–{slide:d}, skip both)") reads as one "(not in this version)", not as a run of them (in a
+  // Spanish deck: "diapositivas (no está en esta versión)" the same way).
+  function leftOutTidy(left, word) {
+    var LO = left.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return { inner: left.slice(0, -1),                 // "(not in this version"
+      range: new RegExp("(" + LO + ")\\s*[–-]\\s*" + LO, "g"),
+      word: new RegExp("\\b" + word + "\\s+(" + LO + ")", "g"),
+      wrapped: new RegExp("\\((" + LO + ")\\)", "g"),
+      open: new RegExp("\\(" + LO.replace(/\\\)$/, "") + "\\)([,;])", "g") };
+  }
+  var TIDY = [leftOutTidy(EN.left_out, "slides?"), leftOutTidy(ES.left_out, "diapositivas?")];
+  function tidyLeftOut(s, left) {
+    var T = TIDY[left === ES.left_out ? 1 : 0];
+    return s.replace(T.range, "$1").replace(T.word, "$1").replace(T.wrapped, "$1").replace(T.open, T.inner + "$1");
   }
 
   var LANG_OPEN = /^\{lang:(es|en)\}/;
@@ -947,10 +1059,22 @@
     }
     return null;
   }
-  /** An address as the slide writes it out: "aagrapevine.org/podcasts", "neta65.github.io/aagrapevine/events/". */
-  function showUrl(url, siteHost) {
+  /** The language of the site's pages a deck's links open: a Spanish deck's are the Spanish pages ("/contribute/"
+   *  → "/es/contribute/"), on the English page too; any other deck's, the page's own (`pageLang`). */
+  function linkLang(deck, pageLang) {
+    return deck && deck.lang === "es" ? "es" : pageLang === "es" ? "es" : "en";
+  }
+  /** safeHref's options for a link inside a slide's text (ctx: its deck and the page's `lang`): in a Spanish deck,
+   *  the Spanish page (linkLang). */
+  function linkOpts(opts) {
+    return isMap(opts) && isMap(opts.deck) && opts.deck.lang === "es" && opts.lang !== "es"
+      ? Object.assign({}, opts, { lang: "es" }) : opts;
+  }
+  /** An address as the slide writes it out: "aagrapevine.org/podcasts", "neta65.github.io/aagrapevine/events/" — a
+   *  page of the site in a Spanish deck (`lang` "es") with its "/es": "grapevine.neta65.org/es/contribute/". */
+  function showUrl(url, siteHost, lang) {
     var u = String(url || "").trim();
-    if (/^\/(?!\/)/.test(u)) return String(siteHost || "").replace(/\/+$/, "") + u;
+    if (/^\/(?!\/)/.test(u)) return String(siteHost || "").replace(/\/+$/, "") + (lang === "es" ? "/es" : "") + u;
     return u.replace(/^mailto:/i, "").replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
   }
 
@@ -1028,7 +1152,7 @@
         var m = /^\[([^\]\n]+)\]\(([^)\s]+)\)/.exec(s.slice(i));
         if (m) {
           flush();
-          var href = safeHref(m[2], opts);
+          var href = safeHref(m[2], linkOpts(opts));
           var label = parseInline(m[1], opts, depth + 1);
           if (href) out.push({ t: "a", href: href, c: label });
           else out.push.apply(out, label);
@@ -1259,7 +1383,7 @@
     (deck.slides || []).forEach(function (s) { if (s.id === id) src = s; });
     if (!src || !kindOf(src.layout, field)) return false;
     var e = ds.edits[id] || {};
-    var pid = isStr(presetId) && presetId ? presetId : presetOf(deck, ds.preset).id;
+    var pid = isStr(presetId) && presetId ? presetId : presetFor(deck, ds).id;
     var none = value === undefined || value === null || same(value, versionValue(src, field, pid));
     if (isStr(pid) && ID.test(pid) && versioned(src, field)) {
       delete e[field];                 // (an edit of every version, from before such edits were kept per version)
@@ -1638,7 +1762,9 @@
    *   · a paragraph that had blanks and is left with none of those lines, and nothing but its first line (a heading
    *     like "Old business"), is left out too;
    *   · {lang:es}…{/lang} marks go (a paragraph all in Spanish is a block with lang "es": the player marks it).
-   * `cur`: current(deck, state, …) — the presenter's version (the agenda's rows of the version being shown).
+   * `cur`: current(deck, state, …) — the presenter's version (the agenda's rows of the version being shown); with
+   * none chosen, the version the deck opens on for the meeting the text is for (defaultFor), which differs from the
+   * one shown only on a meeting night's evening, when the agenda is already next month's.
    */
   function paperText(deck, state, cur, which, nowMs) {
     var pw = paperOf(deck);
@@ -1649,6 +1775,14 @@
     var m = paperMeetings(deck, ds, now);
     var row = which === "minutes" ? m.held : m.next;
     var aft = which === "minutes" ? m.heldAfter : m.nextAfter;
+    // None chosen (the deck's default on screen): the text follows the version the deck opens on for the meeting it
+    // is for (defaultFor), not tonight's. On December 16, 2026 after 8 PM (or after "Start next month") the agenda
+    // and the reminder are already January 20's, which has a guest speaker, while tonight's "No guest speaker" stays
+    // on screen until midnight: the texts then name the speaker and give that version's agenda.
+    if (cur && row && cur.preset && !chosenPreset(deck, ds)) {
+      var want = defaultFor(deck, row);
+      if (want && want.id && cur.preset.id !== want.id) cur = current(deck, state, want.id, now);
+    }
     // that meeting's guest speaker (its row's `speaker`; none: "", and its lines are left out) — and the speaker facts
     // of the day ({live:speaker_…}, the agenda's rows too) say that meeting's, not tonight's: after "Start next month"
     // on a meeting night the agenda is already next month's
@@ -1786,9 +1920,9 @@
    * Starts next month in the presenter's version: the picked items (ids from nextMonthPlan; old business first, then
    * the action items; the old business rows' room at most) become old business (<row>_item, the status empty), the plan's blanks are
    * cleared, the minutes' month becomes the month of the meeting held, the listed checklists are unticked — and
-   * what was there before is kept in ds.prev (undoNextMonth puts it back). → { carried, held, version: "reset" (back
-   * to the first version: the next meeting has a guest speaker) | "without" (to "No guest speaker": the site lists
-   * none for the next meeting) | "" } (null: no plan).
+   * what was there before is kept in ds.prev (undoNextMonth puts it back). → { carried, held, version: "reset" (the
+   * version chosen goes back to the deck's default, the first version: the next meeting has a guest speaker) |
+   * "without" (…to the default "No guest speaker": the site lists none for the next meeting) | "" } (null: no plan).
    */
   function startNextMonth(deck, state, picks, nowMs) {
     var plan = nextMonthPlan(deck, state, nowMs);
@@ -1808,27 +1942,31 @@
     texts.forEach(function (text, i) { ds.fill[nm.old_business[i] + "_item"] = text.slice(0, LIMITS.fillText); });
     if (nm.minutes_month && plan.held && plan.held.month) ds.fill[nm.minutes_month] = plan.held.month;
     untick.forEach(function (id) { delete ds.checks[id]; });
-    // a version without the guest speaker ("No guest speaker", chosen for a month that had none) goes back to the
-    // first version when the next meeting has a speaker on the site's list and the first version shows their slide;
-    // and the other way round, a version with the speaker's part goes to the first one without it ("No guest
-    // speaker") when the site lists NO speaker for the next meeting (its row's `no_speaker`: after November 18,
-    // 2026, December 16 has none) — never for a speaker only not listed yet
+    // (first: the meeting the paperwork is for is now the one after the meeting it closes — pressed during tonight's
+    // meeting too)
+    ds.prev = before;
+    // A version the presenter chose goes back to none chosen — the deck's default (defaultPreset), which follows the
+    // site's list from then on — when it no longer fits the next meeting: one without the guest speaker ("No guest
+    // speaker", chosen for a month that had none) when the next meeting has a speaker on the site's list and the
+    // first version shows their slide ("reset"); one with the speaker's part when the site lists NO speaker for the
+    // next meeting (its row's `no_speaker`: after November 18, 2026, December 16 has none), where the default is "No
+    // guest speaker" ("without") — never for a speaker only not listed yet. None chosen: the default already fits.
     var spId = isStr(deck.paperwork.speaker_slide) ? deck.paperwork.speaker_slide : "";
     var spSrc = spId ? (deck.slides || []).filter(function (s) { return s.id === spId; })[0] : null;
     var coming = paperMeetings(deck, ds, now).next;
     var hasSpeaker = coming && isMap(coming.speaker) && isStr(coming.speaker.name) && coming.speaker.name;
-    var without = spSrc ? noSpeakerPreset(deck) : null;
+    var chosen = ds.preset && (deck.presets || []).some(function (p) { return p && p.id === ds.preset; }) ? ds.preset : "";
     var version = "";
-    if (spSrc && hasSpeaker && ds.preset && !inPreset(spSrc, presetOf(deck, ds.preset)) && inPreset(spSrc, presetOf(deck, ""))) {
-      before.preset = ds.preset;
-      ds.preset = "";
+    if (spSrc && hasSpeaker && chosen && !inPreset(spSrc, presetOf(deck, chosen)) && inPreset(spSrc, presetOf(deck, ""))) {
       version = "reset";
-    } else if (spSrc && without && !hasSpeaker && coming && coming.no_speaker === true && inPreset(spSrc, presetOf(deck, ds.preset))) {
-      before.preset = ds.preset;
-      ds.preset = without.id;
+    } else if (spSrc && chosen && !hasSpeaker && coming && coming.no_speaker === true && inPreset(spSrc, presetOf(deck, chosen))
+      && noSpeakerPreset(deck)) {
       version = "without";
     }
-    ds.prev = before;
+    if (version) {
+      before.preset = ds.preset;
+      ds.preset = "";
+    }
     return { carried: texts.length, held: plan.held, version: version };
   }
   /** The deck's first version that leaves out the guest speaker's slide (paperwork.speaker_slide): the committee
@@ -1876,21 +2014,23 @@
   /* ------------------------------------------------------------------ the module */
   root.GVP = {
     VERSION: VERSION, SCHEMA: SCHEMA, STORAGE_KEY: STORAGE_KEY, FILE_APP: FILE_APP, LAYOUTS: LAYOUTS, ADD_LAYOUTS: ADD_LAYOUTS,
-    ACCENTS: ACCENTS, PRINT_MODES: PRINT_MODES, LIMITS: LIMITS, EN: EN, LAYOUT_FIELDS: LAYOUT_FIELDS, ID: ID, MY_ID: MY_ID,
+    ACCENTS: ACCENTS, PRINT_MODES: PRINT_MODES, LIMITS: LIMITS, EN: EN, ES: ES, words: words, LAYOUT_FIELDS: LAYOUT_FIELDS, ID: ID, MY_ID: MY_ID,
     // facts of the day
     liveText: liveText, liveValues: liveValues, noticeOn: noticeOn, inWindow: inWindow, liveRows: liveRows, LIMIT: LIMIT,
     // the stored state
     emptyState: emptyState, emptyDeck: emptyDeck, normState: normState, normDeck: normDeck, deckState: deckState,
     summary: summary, sharedCount: sharedCount,
     // the current version, the clock
-    presetOf: presetOf, inPreset: inPreset, orderOf: orderOf, current: current, inVersion: inVersion,
+    presetOf: presetOf, defaultPreset: defaultPreset, presetFor: presetFor, speakerMeeting: speakerMeeting, inPreset: inPreset,
+    orderOf: orderOf,
+    current: current, inVersion: inVersion,
     versioned: versioned, versionValue: versionValue, minutesOf: minutesOf, schedule: schedule,
     clock: clock, aboutText: aboutText, timeLine: timeLine, slideRef: slideRef, agendaRows: agendaRows,
     agendaUnchanged: agendaUnchanged,
     // blanks
     fillDefs: fillDefs, fillValue: fillValue, fillsIn: fillsIn, fillGroups: fillGroups, emptyBlanks: emptyBlanks,
     // text
-    subst: subst, inline: inline, rich: rich, plain: plain, plainLines: plainLines, safeHref: safeHref, showUrl: showUrl, noteLines: noteLines,
+    subst: subst, inline: inline, rich: rich, plain: plain, plainLines: plainLines, safeHref: safeHref, showUrl: showUrl, linkLang: linkLang, noteLines: noteLines,
     fmt: fmt, BLANK_OPEN: BLANK_OPEN, BLANK_CLOSE: BLANK_CLOSE,
     // editing
     fieldsOf: fieldsOf, kindOf: kindOf, toText: toText, fromText: fromText, setField: setField, resetSlide: resetSlide,

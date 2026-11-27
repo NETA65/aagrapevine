@@ -11,9 +11,10 @@ monthly series (zz-booth) and the build's clock stopped on Sunday, November 22, 
         build, each /[es/]events/#<anchor> an id on that Events page; a series' page (/events/series/<key>/) too —
         PENDING while the build writes no series' page at all (round 37's unit U2 writes them: before its merge the
         test says so and is skipped; after it, every such link must resolve);
-      - each place links the event's page: the /events/ card titles (a series' date → its series' page, a committee
-        meeting → /meetings/#committee-meeting, an event with an outside page → its own page, that page its "Event
-        details" button), the "Save the date" card, Home, Contribute's workshops, the Bulletin's and Photos' next
+      - each place links the event's page: the /events/ card titles (a series' one card → its series' page, each of its
+        dates → the date's own page; the committee meeting's card → /meetings/#committee-meeting, its dates' anchors
+        on it; an event with an outside page → its own page, that page its "Organizer's page" button), the "Save the
+        date" card, Home, Contribute's workshops, the Bulletin's and Photos' next
         events, the month's dates, What's New, the digest's events, the RSS item, the district report's events;
       - the calendar entries: each one's URL — and its "Details:" line, and a card's .ics data — is the event's own
         page (a date of the series, an event that is over, one from the magazines' calendars, one with a page
@@ -76,8 +77,9 @@ HUB = f"/events/series/{BOOTH}/"
 RECURRING = [{"key": BOOTH, "title": "GV/LV booth at Test Hall", "title_es": "Mesa de GV/LV en Test Hall",
               "week_of_month": 2, "weekday": "saturday", "start": "17:00", "end": "19:00", "location": HALL["location"],
               "url": "https://example.org/zz-booth", "months_ahead": 3}]
-ONLY = ("index,events.njk,event-share,events-ics,contribute,bulletin,photos,monthly,whats-new,digest,search.njk,feed,"
-        "llms,sitemap")
+# (events-committee: the committee meeting's dates page, since round 38 — /events/ and /meetings/ link it)
+ONLY = ("index,events.njk,event-share,events-committee,events-ics,contribute,bulletin,photos,monthly,whats-new,digest,"
+        "search.njk,feed,llms,sitemap")
 
 
 def booth_day(d: date, past: bool) -> dict:
@@ -273,10 +275,19 @@ class TheLinks(unittest.TestCase):
                 self.assertEqual(h3_link(ev, CAL), f"{pre}/events/{CAL}/")
                 self.assertEqual(h3_link(ev, ACM), f"{pre}/events/{ACM}/")
                 self.assertIn('<a class="btn-secondary btn-sm" href="https://neta65.org/event/zz-acm/"', card_of(ev, ACM))
+                # a monthly series: ONE card, its title its series' page; each date to come an entry of it (its anchor),
+                # a link to the date's own page
+                self.assertEqual(h3_link(ev, f"ev-series-{BOOTH}"), pre + HUB)
+                series = card_of(ev, f"ev-series-{BOOTH}")
                 for d in BOOTH_DAYS[2:]:
-                    self.assertEqual(h3_link(ev, f"ev-recurring-{BOOTH}-{d.isoformat()}"), pre + HUB)
-                committee = re.search(r'<li id="(ev-committee-[0-9-]+)"', ev).group(1)
-                self.assertEqual(h3_link(ev, committee), f"{pre}/meetings/#committee-meeting")
+                    anchor = f"ev-recurring-{BOOTH}-{d.isoformat()}"
+                    self.assertRegex(series, f'<li id="{anchor}"[^>]*><a class="ev-series-date" href="{pre}/events/{anchor}/"')
+                # the committee meeting: its dates' anchors on its card, whose details go to its section of /meetings/
+                pinned = ev[ev.index('<section id="ev-pinned"'):]
+                pinned = pinned[:pinned.index('<article class="cm-pinned')]
+                pinned_card = ev[ev.index('<article class="cm-pinned'):]
+                self.assertRegex(pinned, r'<span id="ev-committee-[0-9-]+"></span>')
+                self.assertIn(f'href="{pre}/meetings/#committee-meeting"', pinned_card[:pinned_card.index("</article>")])
                 # "Save the date": the event's page, never a #card
                 aside = ev[ev.index('aria-labelledby="ev-aside-title"'):]
                 aside = aside[:aside.index("</section>")]

@@ -42,13 +42,6 @@
   }
   .cm-subnav-link:hover { background: var(--c-surface-2); color: var(--c-ink); }
   .cm-subnav-link.is-current { background: var(--c-gv); color: #fff; }
-  .cm-subnav-count {
-    display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.375rem;
-    border-radius: 9999px; font-size: 0.7rem; font-weight: 700; background: var(--c-surface-2); color: var(--c-muted);
-  }
-  /* Solid pill on the current (blue) tab, like the pressed filter chips below: a see-through
-     white pill with white text was 4.1:1 at 11px, below WCAG AA. */
-  .cm-subnav-link.is-current .cm-subnav-count { background: var(--c-surface); color: var(--c-gv); }
 
   /* ---------- /meetings/ board (the committee meeting) (one grid, so the cards line up) ----------
      Markup (= phone) order: countdown · how to join (.cm-join) · next dates (.cm-dates-card) ·
@@ -299,7 +292,7 @@
     .cm-pinned-grid { grid-template-columns: auto minmax(0, 1fr) auto; }
     .cm-pinned-actions { grid-column: auto; justify-content: flex-end; }
   }
-  /* "Our monthly meetings" (#ev-pinned, round 30): the pin sits close to its words, the rule line follows */
+  /* "Every month" (#ev-pinned — "Our monthly meetings" in round 30): the icon sits close to its words, the rule line follows */
   #ev-pinned > .cm-month-title { gap: 0.55rem; }
   /* "Show 2028 dates (87)" (.cm-ev-more — never .cm-more, the photo albums' "Show all" —, after the last open
      month: events.njk, committee.js cmEvents showMore) — the gap of a month above and below it, so the months it
@@ -405,7 +398,8 @@
     @media (width >= 120rem) { .cm-event { contain-intrinsic-block-size: auto 13.5rem; } }
     .cm-event:has(.cm-menu[open]) { content-visibility: visible; }
     /* (round 37's fixer) a link to a card far down the list: every card drawn for the jump (committee.js reveal),
-       so it lands where it is — a moment later each keeps the height it was drawn at */
+       so it lands where it is — a moment later each keeps the height it was drawn at. (round 38) The committee
+       meeting's dates page comes with it, for its landing, until committee.js datesSettle takes it off. */
     .cm-cv-all .cm-event { content-visibility: visible; }
   }
   @media print { .cm-event { content-visibility: visible; } }
@@ -948,7 +942,10 @@
      the kind badge, the title and the date · /portfolio/ "Flyers to share" and "Latest upload": the
      file's kind icon under its picture (a picture that fails leaves the icon). (/photos/ "Next chance
      for photos" and /bulletin/ "Coming up" are plain ui.heroAsideLink rows.) */
-  .cm-ha-ev { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0.875rem; }
+  /* (round 38) the title beside the tile while it has 8rem (it grows with the text size), else under it: on a small
+     phone at 130–150 % text the column beside the tile was 87px — "Sprin|g", "Asse|mbly", the badge past its pill */
+  .cm-ha-ev { display: flex; flex-wrap: wrap; align-items: center; gap: 0.875rem; }
+  .cm-ha-ev-body { flex: 1 1 8rem; min-width: 0; }
   .cm-ha-ev-tile {
     display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
     width: 4.25rem; min-height: 4.75rem; padding: 0.375rem 0.25rem; border-radius: 0.875rem;
@@ -1289,3 +1286,110 @@ html:not(.cm-js) [data-cm-js] { display: none !important; }
 @media (width < 40rem) {
   .evp-card.cm-event > .flex-1 { flex-basis: 100%; }
 }
+
+/* ---------- /events/ since the list's redesign (src/pages/events.njk; the list: eleventy/filters/event-list.js) ----------
+   · .ev-layout — the agenda and its two sidebar cards in ONE grid, so the DOM order is the phone's: the "Next 5
+     weeks" calendar (.ev-side-cal), the list (.ev-main), the calendar subscription (.ev-side-sub). From 1024px the
+     list is the left column over both rows, the calendar the right column's first row — 1fr: it takes the list's
+     height, so its sticky-aside wrapper keeps it in view all the way down — and the subscription its second (20rem,
+     24rem from 1536px, as layout-aside; one column at 150 % text).
+   · Below 1024px (with JavaScript) the calendar is folded under its heading ("Show the calendar": committee.js
+     calendar() sets .is-open); from 1024px it is always open and the button goes.
+   · "Next up" (#ev-nextup, below 1024px): one line per event — its day in its kind's colours, its title, when —, each
+     a 44px link to its card.
+   · The filters: a row of kind chips, then the menus (language, in person / online, city, district) side by side,
+     wrapping on a phone.
+   · A series' card (.ev-series): its next dates as small pills (the first one, .is-next, in its kind's colours), what
+     changed about its dates (.ev-series-notes).
+   · A cancelled event (.ev-cancelled): its card on the second surface, its date tile without its kind's colours (the
+     muted words on the surface, a dashed edge, the day struck through — never faded: every word keeps 4.5:1 in
+     every theme), its words struck through (<s>), the "Cancelled" badge in the danger colour — the badge says it in
+     words. */
+.ev-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+@media (width >= 64rem) {
+  .ev-layout { grid-template-columns: minmax(0, 1fr) 20rem; grid-template-rows: 1fr auto; column-gap: 2.5rem; row-gap: 1.5rem; }
+  .ev-main { grid-column: 1; grid-row: 1 / span 2; }
+  .ev-side-cal { grid-column: 2; grid-row: 1; }
+  .ev-side-sub { grid-column: 2; grid-row: 2; }
+  .ev-cal-toggle { display: none !important; }
+}
+@media (width >= 96rem) { .ev-layout { grid-template-columns: minmax(0, 1fr) 24rem; } }
+:root:where(.gv-prefs)[data-text="150"] .ev-layout { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none !important; }
+:root:where(.gv-prefs)[data-text="150"] .ev-layout > * { grid-column: auto !important; grid-row: auto !important; }
+/* (round 38) the button beside the heading while the heading keeps 12rem (it grows with the text size), else on a line
+   of its own under it: on a phone at 115–150 % text the heading was squeezed to a letter or two per line under it */
+.ev-cal-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+.ev-cal-hd { flex: 1 1 12rem; min-width: 0; }
+.ev-cal-toggle { flex-shrink: 0; }
+.ev-cal-toggle > svg { transition: transform 0.2s; }
+.cm-cal-card.is-open .ev-cal-toggle > svg { transform: rotate(180deg); }
+@media (width < 64rem) {
+  :root.js .cm-cal-card:not(.is-open) .ev-cal-body { display: none; }
+  :root.js .cm-cal-card:not(.is-open) .ev-cal-head .eyebrow { display: none; }
+  :root.js .cm-cal-card:not(.is-open) .ev-cal-head .card-h { margin-top: 0; }
+}
+.ev-nextup { margin-bottom: 1.5rem; }
+.ev-nextup-h { display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.6rem; font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-muted); }
+.ev-nextup-list { display: grid; gap: 0.5rem; }
+@media (width >= 40rem) { .ev-nextup-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.ev-nextup-item { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; height: 100%; padding: 0.55rem 0.75rem;
+  border: 1px solid var(--c-line); border-radius: 0.9rem; background: var(--c-surface); color: var(--c-ink); text-decoration: none;
+  box-shadow: inset 3px 0 0 var(--ev, var(--c-line)); }
+.ev-nextup-item:hover { border-color: var(--ev, var(--c-gv)); }
+.ev-nextup-day { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; width: 2.9rem;
+  padding: 0.3rem 0; border-radius: 0.6rem; background: var(--ev-soft, var(--c-surface-2)); color: var(--ev-ink, var(--c-muted));
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; line-height: 1.2; text-transform: uppercase; }
+.ev-nextup-n { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; letter-spacing: 0; line-height: 1.1; color: var(--c-ink); }
+.ev-nextup-t { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 0.92rem;
+  font-weight: 600; line-height: 1.3; }
+.ev-nextup-when { display: block; margin-top: 0.1rem; font-size: 0.78rem; line-height: 1.35; color: var(--c-muted); }
+.ev-filters { display: grid; gap: 0.75rem; }
+.ev-filter-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.6rem 0.75rem; }
+.ev-select { display: grid; gap: 0.25rem; flex: 1 1 9.5rem; min-width: 0; max-width: 16rem; }
+.ev-select-l { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
+.ev-select > select { width: 100%; min-height: 2.75rem; }
+.ev-series-sec { margin-top: 2.75rem; }
+.ev-series-next { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; margin-top: 0.8rem; font-size: 0.875rem; }
+.ev-series-next-l { font-weight: 600; color: var(--c-ink); }
+.ev-series-dates { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ev-series-date { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2rem; padding: 0.2rem 0.65rem; border-radius: 9999px;
+  border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-ink); font-weight: 500; white-space: nowrap; text-decoration: none; }
+a.ev-series-date:hover { border-color: var(--ev, var(--c-gv)); color: var(--c-gv); }
+.ev-series-dates > .is-next > .ev-series-date { border-color: transparent; background: var(--ev-soft, var(--c-surface-2)); color: var(--ev-ink, var(--c-ink)); font-weight: 700; }
+.ev-series-moved { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.ev-series-notes { display: grid; gap: 0.3rem; margin-top: 0.7rem; font-size: 0.85rem; line-height: 1.45; color: var(--c-ink); }
+.ev-series-notes > li { display: flex; align-items: flex-start; gap: 0.4rem; }
+.ev-series-notes > li > svg { color: var(--c-danger); }
+.ev-series-notes.is-dark { color: #fff; }
+.ev-series-notes.is-dark > li > svg, .ev-series-notes.is-dark .link { color: #fff; }
+.ev-cancelled { background: var(--c-surface-2); }
+.ev-cancelled .cm-date-tile { background: var(--c-surface); border: 1px dashed var(--c-faint); color: var(--c-muted); }
+.ev-cancelled .cm-tile-day, .ev-cancelled .cm-tile-wd { color: var(--c-muted); }
+.ev-cancelled .cm-tile-day { text-decoration: line-through; text-decoration-thickness: 2px; }
+.ev-cancelled s { text-decoration-thickness: 1.5px; }
+.ev-badge-cancelled { background: color-mix(in srgb, var(--c-danger) 12%, var(--c-surface)); color: var(--c-danger); font-weight: 700; }
+/* An event's own page (src/_includes/partials/event-page.njk): its "Add to calendar" menu in the hero — the hero clips
+   what leaves its box (overflow: hidden, for its art), so while the menu is open the hero lets it hang over the page
+   below, above what follows it */
+.gv-hero:has(.evp-hero-actions .cm-menu[open]) { overflow: visible; z-index: 30; }
+.evp-hero-actions .cm-menu-panel { z-index: 45; }
+/* /events/' filter menus on a phone: folded behind "More filters" (cmEvents moreOpen → .is-open); from 640px always
+   shown, the button gone. (The filters need JavaScript: without it the whole bar is hidden, every card shows.) */
+.ev-more-filters { justify-self: start; }
+.ev-more-filters[aria-expanded="true"] { background: var(--c-surface-2); }
+@media (width < 40rem) { .ev-filter-row:not(.is-open) { display: none; } }
+@media (width >= 40rem) { .ev-more-filters { display: none !important; } }
+.ev-filter-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+@media (width >= 40rem) { .ev-filter-tools { order: 3; } }
+/* A series' page: "All dates" (event-page.njk #evp-all-dates) — each year: what changed, then its dates as pills */
+.evp-all-notes { margin-top: 0; margin-bottom: 0.75rem; }
+.evp-all-year { margin-top: 1.5rem; margin-bottom: 0.6rem; font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; color: var(--c-ink); }
+/* (round 38) The committee meeting's dates page (events-committee.njk): at 150 % text on a phone under 360px a guest
+   speaker's line gives its words the card's whole width — the microphone steps aside ("hispanohablantes",
+   "representatives" were wider than the room beside it, and broke in two) */
+@media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"] .cm-spk-ic { display: none; } }
+/* (round 38) …and at 150 % text on 640–767px screens its cards leave out the flyer tile — the card's "View flyer" button
+   stays, the way to the flyer as on a phone. Beside the date tile and the flyer (7.5rem: 180px there) the words had
+   174–280px, and "representatives", "hispanohablantes", "Wednesday," broke in two at 656–728px. */
+@media (40rem <= width < 48rem) { :root:where(.gv-prefs)[data-text="150"] #evp-all-dates .cm-flyer-thumb { display: none; } }

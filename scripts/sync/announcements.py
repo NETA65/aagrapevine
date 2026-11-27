@@ -197,13 +197,26 @@ def lenient_header(header: str) -> dict | None:
     return meta
 
 
+# A heading's own end mark (its last character, before any closing ** _ ` ~~): "¿Por qué importa?", "Prices:"
+_ENDS_SENTENCE = re.compile(r"[.!?:;…][*_`~]*$")
+
+
+def _heading_sentence(m: re.Match) -> str:
+    """A heading with text after it ends a sentence in the teaser: "# Why it matters" → "Why it matters." (every
+    block runs into one line: "…learn from it. Why it matters A meeting in print…" read as one sentence)."""
+    words = m[1].rstrip()
+    return words if _ENDS_SENTENCE.search(words) else words + "."
+
+
 def markdown_to_text(md: str) -> str:
-    """Plain-text teaser from Markdown (links → their label, formatting marks removed)."""
+    """Plain-text teaser from Markdown (links → their label, formatting marks removed; a heading ends with a
+    period when it has none of its own and text follows it — one alone, a title's, stays as it is)."""
     t = re.sub(r"```.*?```", " ", md or "", flags=re.S)
     t = re.sub(r"(?m)^\s*\|.*$", " ", t)                            # tables (a teaser is prose)
     t = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", t)                     # images
     t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)                  # links → label
     t = re.sub(r"<(https?://[^>]+)>", r"\1", t)
+    t = re.sub(r"(?m)^[ \t]*#{1,6}[ \t]+(.+?)(?:[ \t]+#+)?[ \t]*$(?=\s*\S)", _heading_sentence, t)  # "Heading."
     t = re.sub(r"(?m)^\s*(#{1,6}|>|[-*+]|\d+[.)])\s+", "", t)       # headings, quotes, bullets (nested too)
     t = re.sub(r"(?m)^\s*(?:[-*_]\s*){3,}$", " ", t)                # --- / *** lines
     t = re.sub(r"(\*\*|__|\*|_|~~|`)(?=\S)(.+?)(?<=\S)\1", r"\2", t)
@@ -450,15 +463,28 @@ def as_bool(v) -> bool:
     return str(v or "").strip().lower() in ("1", "true", "yes", "y", "si", "sí", "on")
 
 
-def pick_lang(meta: dict, text: str) -> str:
-    lang = str(meta.get("lang") or meta.get("language") or "").strip().lower()[:2]
+# The header lines that say which language a file is WRITTEN in: `lang:` (a bulletin post's `language:` too). An event
+# file's `language:` is the language the event is HELD in (event_language) — never its words' or its dates' language:
+# parse_event reads only `lang:` (EVENT_LANG_KEYS).
+FILE_LANG_KEYS = ("lang", "language")
+EVENT_LANG_KEYS = ("lang",)
+
+
+def written_lang(meta: dict, keys: tuple[str, ...] = FILE_LANG_KEYS) -> str:
+    """The language a file's header says it is written in ("en" / "es"), else "": the first of `keys` it has."""
+    raw = next((meta.get(k) for k in keys if meta.get(k)), "")
+    return str(raw or "").strip().lower()[:2]
+
+
+def pick_lang(meta: dict, text: str, keys: tuple[str, ...] = FILE_LANG_KEYS) -> str:
+    lang = written_lang(meta, keys)
     return lang if lang in ("en", "es") else detect_language(text, "en")
 
 
-def date_lang(meta: dict, text: str) -> str | None:
+def date_lang(meta: dict, text: str, keys: tuple[str, ...] = FILE_LANG_KEYS) -> str | None:
     """The language a file's numbers-only dates are read in (common.date_from_text: "05/10/2026" is 5 October in
     Spanish): its `lang:`, else its words' when they tell (None: the words around each date decide)."""
-    lang = str(meta.get("lang") or meta.get("language") or "").strip().lower()[:2]
+    lang = written_lang(meta, keys)
     if lang in ("en", "es"):
         return lang
     found = detect_language(text)
@@ -605,6 +631,48 @@ def event_type(meta: dict) -> tuple[str | None, str | None]:
         return slug, None
     return None, (f"type: “{clean_text(raw)[:40]}” is not a kind the site knows, left out — write one of "
                   f"{', '.join(EVENT_TYPES)}, or delete the line")
+
+
+# Since the events list's redesign (November 2026): the district that holds an event — `district: 87` (also "District
+# 87", "Distrito 87", "D87") → extra.district "87": shown on the event's card and page, and a filter of /events/
+# (eleventy/filters/event-list.js). Only a district's number: any other value is left out and listed on /status/. Never
+# guessed: a file without the line has no district.
+_DISTRICT = re.compile(r"(?i)^(?:district|distrito|dist\.?|d)?\s*#?\s*(\d{1,3})$")
+
+
+def event_district(meta: dict) -> tuple[str | None, str | None]:
+    """A content/events file's `district:` (else `distrito:`) → (its number as text, problem): (None, None) without the
+    line; (None, a line for /status/) for a value that is not a district's number."""
+    raw = next((meta.get(k) for k in ("district", "distrito") if meta.get(k) not in (None, "")), None)
+    if raw is None:
+        return None, None
+    text = str(raw) if isinstance(raw, int) and not isinstance(raw, bool) else clean_text(raw) if isinstance(raw, str) else ""
+    m = _DISTRICT.match(text.strip())
+    if m and int(m.group(1)) > 0:
+        return str(int(m.group(1))), None
+    return None, (f"district: “{clean_text(str(raw))[:40]}” is not a district number, left out — write the number "
+                  "only (district: 87), or delete the line")
+
+
+# The language an event is held in — `language: es` (also English / Spanish / inglés / español, and `both` /
+# bilingual / bilingüe) → extra.language "en" | "es" | "both": the /events/ language filter (event-list.js heldIn).
+# Without the line the site works it out (La Viña's events, "(in Spanish)" in the title …); any other value is left
+# out and listed on /status/.
+EVENT_LANGUAGES = {"en": "en", "english": "en", "ingles": "en", "es": "es", "spanish": "es", "espanol": "es",
+                   "both": "both", "bilingual": "both", "bilingue": "both", "en-es": "both", "es-en": "both"}
+
+
+def event_language(meta: dict) -> tuple[str | None, str | None]:
+    """A content/events file's `language:` (else `idioma:`) → ("en" | "es" | "both", problem) — (None, None) without
+    the line."""
+    raw = next((meta.get(k) for k in ("language", "idioma") if meta.get(k) not in (None, "")), None)
+    if raw is None:
+        return None, None
+    key = slugify(clean_text(raw)) if isinstance(raw, str) else ""
+    if key in EVENT_LANGUAGES:
+        return EVENT_LANGUAGES[key], None
+    return None, (f"language: “{clean_text(str(raw))[:40]}” is not a language the site knows, left out — write en "
+                  "(English), es (Spanish) or both, or delete the line")
 
 
 # --------------------------------------------------------------------------- bulletin posts
@@ -899,7 +967,7 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
     stem = path.stem
     text = markdown_to_text(body)
     notes: list[str] = []
-    dlang = date_lang(meta, f"{clean_text(meta.get('title'))}. {text}")
+    dlang = date_lang(meta, f"{clean_text(meta.get('title'))}. {text}", EVENT_LANG_KEYS)
     name_notes: list[str] = []           # (said only when the name's date is the one used)
     file_date, file_end, rest = date_range_from_text(stem, dlang, name_notes)
     title = clean_text(meta.get("title")) or clean_text(re.sub(r"[-_]+", " ", rest or stem)).capitalize()
@@ -932,7 +1000,7 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
         extra["tentative"] = True        # details not final yet: "Details to be confirmed", STATUS:TENTATIVE
     if as_bool(meta.get("confirmed")):
         extra["confirmed"] = True        # the committee checked date, time and place: no calendar feed changes them
-    file_lang = pick_lang(meta, f"{title}. {text}")
+    file_lang = pick_lang(meta, f"{title}. {text}", EVENT_LANG_KEYS)        # (never `language:`: where it is held)
     if event_cancelled(meta):
         # it will not take place (since round 37): events.json `cancelled`, a "Cancelled" notice at its address,
         # STATUS:CANCELLED in the calendar feeds — never listed as an event (event_cancelled)
@@ -945,6 +1013,15 @@ def parse_event(path: Path, tz: ZoneInfo) -> dict:
         extra["type"] = kind             # its kind, when the site's own guess is wrong (event_type; since round 37)
     if type_problem:
         extra["type_problem"] = type_problem
+    # the district that holds it and the language it is held in (event_district / event_language): the /events/ filters
+    district, district_problem = event_district(meta)
+    if district:
+        extra["district"] = district
+    language, language_problem = event_language(meta)
+    if language:
+        extra["language"] = language
+    if district_problem or language_problem:
+        extra["line_problems"] = [p for p in (district_problem, language_problem) if p]
     host = event_host(meta.get("host"))
     if host is None:
         # A slip, not a reason to hide the event: "host: District 91" or "host: Grupo Libro Grande" (the group that
@@ -1023,6 +1100,10 @@ def collect(folder: Path, parser, label: str, keep: tuple[str, ...] = ()
         type_problem = (it.get("extra") or {}).pop("type_problem", None)
         if type_problem:
             errors.append(f"{folder.name}/{path.name}: {type_problem}"[:400])
+        # a `district:` or `language:` that cannot be used (event_district, event_language): the event shows, the line
+        # is listed
+        for line_problem in (it.get("extra") or {}).pop("line_problems", None) or ():
+            errors.append(f"{folder.name}/{path.name}: {line_problem}"[:400])
         # a date to check (a UTC offset that is not Central time's, "05-10-2026"): the item shows, the line is listed
         for note in (it.get("extra") or {}).pop("date_notes", None) or ():
             errors.append(f"{folder.name}/{path.name}: {note}"[:400])

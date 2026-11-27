@@ -1,6 +1,6 @@
-# Presentations: the five web slide decks on /orientation/
+# Presentations: the web slide decks on /orientation/
 
-This guide is about the five presentations on the GVR / RLV 101 page: the files in
+This guide is about the presentations on the GVR / RLV 101 page: the files in
 [`config/presentations/`](../config/presentations/), how to edit them, and what each change does on the website.
 The committee's own deck-writing guide is [`config/presentations/README.md`](../config/presentations/README.md).
 Read it too. This guide repeats its rules where you need them, adds what the code really does, and shows where to
@@ -25,8 +25,11 @@ change the code.
 
 ## 1. What this is
 
-The GVR / RLV 101 page has a "Presentations" section with five cards: three workshops and our two monthly meetings,
-the committee meeting (third Wednesday) and the Grapevine Meeting (first Wednesday), both on Google Meet. Each card
+The GVR / RLV 101 page has a "Presentations" section with a card per deck: four workshops (orientation, information,
+writing and recording), our two monthly meetings, the committee meeting (third Wednesday) and the Grapevine Meeting
+(first Wednesday), both on Google Meet, and three shorter sessions: the welcome for Panel 77's new GVRs and RLVs, a
+booth or group visit built around QR codes, and getting ready for the General Service Conference; and La Viña's two presentations in Spanish (its writing
+workshop and the orientation for new RLVs). Each card
 is made from **one YAML text file** in `config/presentations/`. Every build turns each file into
 a slide show that opens in a pop-up player, with speaker notes, a presenter view, shorter versions, four ways to
 print, and facts that stay current by themselves (meeting dates, story deadlines, prices, events). Presenters can
@@ -38,7 +41,7 @@ chair's monthly paperwork: the agenda e-mail, a reminder and the draft notes, fr
 
 | What | English | Spanish |
 |---|---|---|
-| The five cards | `/orientation/#presentations` | `/es/orientation/#presentations` |
+| The cards | `/orientation/#presentations` | `/es/orientation/#presentations` |
 | One card | `/orientation/#pres-information-workshop` | `/es/orientation/#pres-information-workshop` |
 | Open a deck straight away | `/orientation/?present=information-workshop` | `/es/orientation/?present=information-workshop` |
 | The file the player reads | `/orientation/presentations/information-workshop.json` (one file per deck, the same for both languages) | — |
@@ -59,9 +62,13 @@ More detail in [section 5](#5-where-it-shows-on-the-website).
   made from `content/booth/booth.csv`, the Drive booth folder and the site's live data (some of the same live facts:
   events, themes, prices, meetings). See [Booth display](booth.md).
 
-**Language.** The slides and the notes are in English (the owner's decision: every file must say `lang: "en"`). On
-the Spanish page the cards, buttons and menus are in Spanish, each card shows "Presentación en inglés", and the
-player adds "(en inglés)".
+**Language.** Each presentation is written in one language, its file's `lang`: English (`"en"`) for the committee's
+workshops and meetings, Spanish (`"es"`) for La Viña's two (`taller-de-escritura`, `orientacion-rlv`). The cards,
+buttons and menus are in the page's language. A presentation in another language than the page's says so: on the
+Spanish page an English one's card shows "Presentación en inglés" and the player adds "(en inglés)"; on the English
+page a Spanish one's card shows "Presentation in Spanish" and the player adds "(in Spanish)". A Spanish
+presentation's slides, notes, the player's own words on them and the day's facts are all Spanish
+([3.23](#323-a-presentation-in-spanish)).
 
 **Who can do it.** Editing these files needs only write access to the repository (the MKP715 login is enough).
 Nothing in this guide needs the NETA65 admin account.
@@ -73,7 +80,7 @@ Nothing in this guide needs the NETA65 admin account.
 This is the most common edit: fix a word, a sentence or a title.
 
 1. On GitHub, open the folder `config/presentations/` and click the file of the presentation
-   (the five files are listed in [3.1](#31-the-five-files)).
+   (the files are listed in [3.1](#31-the-files)).
 2. Click the pencil icon (**Edit this file**).
 3. Click inside the text and press **Ctrl+F**. Type a few words you see on the slide; the title is easiest.
 4. Change the text **between the double quotes**. Do not change the slide's `id:` line, and keep the spaces at the
@@ -119,27 +126,34 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 
 ## 3. Full reference with examples
 
-### 3.1 The five files
+### 3.1 The files
 
 | File | Card title (English / Spanish) | `order` | `minutes` | `tone` (card colour) | `icon` | Slides in the file / on the card | Versions |
 |---|---|---|---|---|---|---|---|
 | `orientation-workshop.yml` | GVR and RLV Orientation Workshop / Taller de orientación para RLV y GVR | 1 | 90 | `vine` (green) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop / Taller informativo de Grapevine y La Viña | 2 | 60 | `gv` (blue) | `book-open` | 53 / 49 | `full` (60), `late` (48), `visit` (20) |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
-| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 40 / 23 | `full` (60: with a guest speaker), `no-speaker` (60) |
+| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 41 / 23 | `full` (60: with a guest speaker), `no-speaker` (60) |
 | `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 19 / 15 | `full` (60) |
+| `welcome-panel-77.yml` | Welcome to Panel 77: New GVRs and RLVs / Bienvenida al Panel 77: nuevos RLV y GVR | 6 | 30 | `vine` (green) | `hand-heart` | 25 / 22 | `full` (30), `short` (15) |
+| `booth-visit.yml` | Booth or Group Visit: Scan, Read, Give, Write / Visita a la mesa o a un grupo: escanea, lee, regala, escribe | 7 | 10 | `lv` (orange) | `qr-code` | 13 / 10 | `full` (10), `short` (5) |
+| `conference-prep.yml` | Getting Ready for the Conference: Grapevine and La Viña / Preparándonos para la Conferencia: La Viña y Grapevine | 8 | 45 | `grape` (purple) | `landmark` | 23 / 20 | `full` (45), `short` (30) |
+| `recording-workshop.yml` | Grapevine and La Viña Recording Workshop / Taller de grabación de Grapevine y La Viña | 9 | 60 | `gv` (blue) | `mic` | 30 / 27 | `full` (60) |
+| `taller-de-escritura.yml` (**Spanish**) | La Viña Writing Workshop / Taller de escritura de La Viña | 10 | 115 | `lv` (orange) | `pen-line` | 55 / 47 | `full` (115), `short` (84) |
+| `orientacion-rlv.yml` (**Spanish**) | Orientation for New RLVs / Orientación para nuevos RLV | 11 | 90 | `lv` (orange) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 
 The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
-why the committee meeting shows 23 of its 40 slides (14 pages for the chair, and the AA Preamble and the two
-"Tonight's topic" slides, which start off).
+why the committee meeting shows 23 of its 41 slides (14 pages for the chair, the AA Preamble and the two "Tonight's
+topic" slides, which start off, and the 2027 price follow-up, which is in the show from January 1, 2027 only).
 
 **The committee meeting (November 2026).** It is not a business meeting (the committee's decision): no minutes to
 approve, no reports, no old or new business. Its first version, "With a guest speaker", is the hour from January
 2027: the opening (a moment of silence, the Serenity Prayer), four "Guest speaker" slides (the welcome and the
 topic's introduction, the talk of about 20 minutes from about 7:02, questions from about 7:22, the thanks: done by
 7:30), then the second half until 8:00 — coming up (events) and workshop requests, special offers (the stores'
-offers, both Books of the Month, the 2027 prices until January 31, 2027, Carry the Message described), magazine
+offers, both Books of the Month, the 2027 prices until December 31, 2026, Carry the Message described; from January 1
+through March 31, 2027, in their place, "New prices since January 1, 2027", just before them), magazine
 topics (the issues, the next ones, the deadlines), and GVR and RLV sharing (experience, not reports) — then the
 Responsibility Statement at 8:00 and, after the close, "The parking lot: what's on your mind?" (informal, at the
 least time a slide can have). The speaker's name, service position and topic come from `config/site.yml` →
@@ -147,7 +161,15 @@ least time a slide can have). The speaker's name, service position and topic com
 gives no speaker (November 18 and December 16, 2026: the guest speakers start on January 20, 2027) says so: "none
 tonight" on the speaker's slides, "Guest speaker: none this time" on "Next meeting"; "to be announced" is only for a
 speaker the list doesn't name yet (a month after its last one, or an entry the site leaves out). "No guest speaker"
-is the version for those nights: the chair introduces a topic and the members share on it until 7:30 (the slides
+is the version for those nights (on a device where no version was ever chosen, the deck opens on it by itself for
+a meeting the list gives no speaker, never for one "to be announced" — until midnight Central after the meeting's
+day, as the speaker's facts, so a reload after the meeting shows the same slides — and Customize → Version says it
+was chosen for you; another version picked there, the first one too, stays the presenter's, and picking the one the
+deck opened on by itself is "none chosen" again. A "With a guest speaker" picked on the site before this version went
+live (round 38) was stored exactly like no choice at all, so on December 16, 2026 that device opens on "No
+guest speaker" too: a chair who still wants the guest speaker's slides picks "With a guest speaker" once more, and
+it is kept from then on): the chair introduces a topic and the members share on it until
+7:30 (the slides
 `topic-of-the-month` and `topic-sharing`, which start off and are in its `only` list), then the same second half;
 its welcome and prayer get a minute each (`version_minutes`), its welcome and agenda their own words
 (`version_fields`). The AA Preamble's slide stays, switched off and in no version (`starts_off`, `optional`), for a
@@ -175,6 +197,35 @@ in the Google Meet chat during the announcements, with its **Copy** button
 ([3.14](#314-facilitator-pages-and-handouts)). Its dates come from `recurring_events:` → `grapevine-meeting`, as
 `/events/` lists them. Its PowerPoint copy, the Drive file `Grapevine Meeting.pptx` (`drive_title: "Grapevine
 Meeting"`), is being added to `slides` in November 2026: the card links it once it is there.
+
+**The four decks of November 2026** have no PowerPoint copy (no `drive_title`); each file's top comment explains its
+choices.
+
+- **Welcome to Panel 77** (`welcome-panel-77.yml`, for January 2027; 30 minutes, or 15 in `short`): what a GVR or RLV
+  does and how to register (the kits), what the committee is and does, the committee meeting (its next date, time,
+  Google Meet link and code) and its guest speakers from January 20, 2027 (`{live:meeting_day}` with
+  `{live:speaker_note}`, then `{live:meeting_after}` with `{live:speaker_after}`: the Meetings page's list), our
+  Grapevine Meeting from January 6, 2027, the weekly open meetings, the Area's three GSR/DCM orientations (January 17,
+  24 and 31, 2027, from `content/events`; their slide has `show_until: "2027-01-31"`), the Area's coming events (a
+  live list), the yearly prices of the day, the website's tools, a first-month checklist and how to reach us. No
+  agenda with times: the orientations' slide leaves the show by date ([3.13](#313-slides-that-come-and-go-by-date)).
+- **Booth or group visit** (`booth-visit.yml`; 10 minutes, or 5 in `short`): one QR code per slide (`live` slides of
+  kind `qr`): Grapevine's and La Viña's subscriptions, Carry the Message and Lleva el Mensaje (the addresses of
+  `config/site.yml` `links:`), Share your story (`/contribute/`) and the Events page with its calendar (`/events/`),
+  and the website on the closing slide (`qr: "/"`). No prices on a slide.
+- **Getting ready for the Conference** (`conference-prep.yml`, for February–March; 45 minutes, or 30 in `short`):
+  the General Service Conference, how a group's voice reaches it (GSR, DCM, the assembly, the delegate), the
+  Conference Committee on Grapevine and La Viña, the Advisory Actions that shaped our service, the Fellowship survey
+  the 75th Conference asked for (its final report expected on the 2027 agenda), the year's agenda items and a time to
+  talk them over, the Area's dates (a live list) and inviting the delegate (delegate@neta65.org, the Area's address).
+  The agenda items, the Conference's dates, the date the delegate needs the groups' input and the delegate's visit
+  are the presenter's blanks: nothing guesses at them.
+- **Recording Workshop** (`recording-workshop.yml`, 60 minutes): Grapevine's Audio Project and La Viña's Graba tu
+  historia (the story lines are `{live:gv_audio_phone}` and `{live:lv_audio_phone}`), one topic, what to say first,
+  anonymity on a recording, a quiet room, planning a share (an activity), the three ways to record — by phone, in the
+  browser with the committee's story recorder (a QR code to `/contribute/#record`), a file already made —, where to
+  send it, and the themes coming up. A recording workshop's own page links it (it used to link the writing workshop,
+  as "The closest presentation": [5](#5-where-it-shows-on-the-website)).
 
 Also in the folder: `README.md`, the committee's writing guide (saving it does not rebuild the site). Two sample
 decks are in [`tests/fixtures/presentations/`](../tests/fixtures/presentations/): `sample-workshop.yml` uses every
@@ -231,8 +282,8 @@ card:
 | Field | Rule (the checker) | What it does and where it shows |
 |---|---|---|
 | `id` | the file name without `.yml` | The card's anchor `#pres-<id>`, the address `?present=<id>`, the JSON file name, and the key under which presenters' own versions are kept. **Never rename a deck that is on the site**: presenters would lose their versions of it. |
-| `order` | a whole number 1–9, different in each deck | The order of the cards (then by id). |
-| `lang` | always `"en"` | — |
+| `order` | a whole number 1–99, different in each deck | The order of the cards (then by id). La Viña's Spanish decks come last (10, 11). |
+| `lang` | `"en"`, or `"es"` for a presentation written in Spanish | The language of its slides, notes, the player's words on them and its facts; the card's and the player's "(in Spanish)" / "(en inglés)"; its event pages' badge ([3.23](#323-a-presentation-in-spanish)). Anything else stops the build: `lang: "en" or "es" (the language the presentation is written in)`. |
 | `title` | text | The player's title, the print headings and the speaker script's heading. |
 | `short` | text | The player's header; the name in the "Print or save a copy" list on the English page; the start of the name of a saved printout ("Information Workshop – Handout for participants – 2026-10-02"). |
 | `eyebrow` | text | The small line above the titles before the first `section` slide. |
@@ -247,8 +298,8 @@ card:
 | `paperwork` | optional (today only in `committee-meeting.yml`, between `fillins:` and `slides:`) | The chair's agenda e-mail, reminder and draft notes, and what "Start next month" does: [3.22](#322-the-chairs-paperwork-agenda--notes). A deck without it has no **Agenda & notes** tab. |
 | `slides` | at least 5 | [3.6](#36-slides-the-fields-every-slide-can-have). |
 
-> **Note:** `README.md` says `order` is 1–4. The checker accepts 1–9; the test `tests/test_presentations.py` only
-> asks that each deck has its own number.
+> **Note:** The checker accepts 1–99; the test `tests/test_presentations.py` only asks that each deck has its own
+> number.
 
 **Example: change the card's summary.** Change both languages, in the same commit:
 
@@ -401,7 +452,7 @@ fillins:
 | `label` | `en` and `es` | The field's name in Customize → Your details (in the page's language). |
 | `hint` | required | What an empty blank shows on the slide, in orange brackets: `[Month DD, YYYY]`. |
 | `default` | text (optional) | What the slide says while the blank is empty, instead of the orange hint. |
-| `shared` | `true` / `false` | One answer for every deck whose blank has the same key and is shared (today `presenter` and `first_name`, in all five). |
+| `shared` | `true` / `false` | One answer for every deck whose blank has the same key and is shared (today `first_name` in every deck, `presenter` in the English ones and `puesto`, the service position in Spanish, in La Viña's two Spanish ones). |
 | `notes_only` | `true` / `false` | The answer may appear only in the speaker notes, never on a slide. On a slide the checker refuses it: `{fill:first_name} is notes_only (never on a slide)`. |
 
 Before the show starts, the player warns "3 of your details are still blank" and offers **Fill them in** or
@@ -445,7 +496,7 @@ A slide is a block that starts with `  - id:` under `slides:`. It ends where the
 | `handout` | `true` / `false` | Printed for the participants. On a slide of the show: shown AND printed. |
 | `print` | `"portrait"` or `"landscape"`, only with `handout: true` | How a handout page prints. Left out: landscape. |
 | `accent` | `gv` `lv` `vine` `grape` `navy` | On a `section` slide: the colour of its part (the slides after it take it). On any other slide: that slide's colour only. Before the first section, and on a section without one: `gv`. |
-| `lang` | `"es"` or `"en"` | `"es"`: a slide written in Spanish (a handout, an announcement to read aloud). The player marks it as Spanish for screen readers. |
+| `lang` | `"es"` or `"en"` | `"es"`: a slide written in Spanish in an English presentation (a handout, an announcement to read aloud). The player marks it as Spanish for screen readers. Left out: the presentation's own `lang`. |
 | `source` | text | The small line in italics at the bottom, exactly as written: the player adds no "Sources:" of its own, so write it yourself (most slides start it with "Sources:" or "Source:"). |
 | `takeaway` | text | The highlighted box at the bottom. |
 | `version_minutes`, `version_fields`, `version_notes` | version ids of this deck | [3.4](#34-versions-presets) |
@@ -895,7 +946,7 @@ Spanish takes `lang: "es"` instead. Mistakes: `{lang:es} without its {/lang} on 
 | `**bold**` | **bold** |
 | `_italic_` | _italic_ (an underscore inside a word, as in `@alcoholicsanonymous_gv`, stays as written) |
 | `[label](https://www.aagrapevine.org/contribute)` | a link to another site |
-| `[the deadlines](/contribute/#deadlines)` | a link to a page of this site: write it from its first slash, with no `/es/` and no `/aagrapevine/` (the player adds them; on the Spanish page it opens the Spanish page) |
+| `[the deadlines](/contribute/#deadlines)` | a link to a page of this site: write it from its first slash, with no `/es/` and no `/aagrapevine/` (the player adds them; on the Spanish page, and in a Spanish presentation on either page, it opens the Spanish page) |
 | `grapevine@neta65.org` as a link address | an e-mail link |
 | `<b>bold</b>` | refused: `no HTML in the text (use **bold**, _italic_, [label](url))` |
 | `[site](www.aagrapevine.org)` | refused: `link 'www.aagrapevine.org' — https://…, a site path or an e-mail` |
@@ -931,15 +982,36 @@ A seasonal slide (passes the checker):
 ```
 
 The real price heads-up of `committee-meeting.yml` uses both conditions: it shows while AA Grapevine's notice is
-current, and never after January 31, 2027, even if a later notice starts:
+current, and never after December 31, 2026, even if a later notice starts:
 
 ```yaml
   - id: "price-heads-up"
     layout: "table"
     title: "Heads-up: new prices from January 1, 2027"
     when: "price_notice"
-    show_until: "2027-01-31"
+    show_until: "2026-12-31"
 ```
+
+Its past-tense follow-up, "New prices since January 1, 2027" (`prices-since-january`, a block of its own just
+before "Special offers"), uses dates only, and the prices of the day ({live:price_gv_print} …, the new ones from
+January 1, 2027): it shows from January 1 through March 31, 2027, after the notice too. The no-speaker version names
+it in its `only` list, so it is in both versions. The two slides are never in the show together: the heads-up
+ends on December 31, 2026, and the follow-up starts the next day.
+
+```yaml
+  - id: "prices-since-january"
+    layout: "table"
+    title: "New prices since January 1, 2027"
+    optional: true
+    show_from: "2027-01-01"
+    show_until: "2027-03-31"
+```
+
+A slide that comes and goes by date moves the start of every slide after it, so the times an agenda works out
+(`from`) move too. In a deck with such an agenda, keep a dated slide after the slide of the agenda's last row, or
+write the agenda without `from` — the welcome for Panel 77 has no agenda for that reason (its GSR/DCM orientations'
+slide leaves the show after January 31, 2027). `tests/test_presentations_core.py` checks the full version's agenda
+times on the day it runs.
 
 Mistakes: `show_until must be a quoted "YYYY-MM-DD"`, `show_from is after show_until`,
 `when: "price_notice" is the only condition`.
@@ -1242,7 +1314,8 @@ Under each card, a status line sums it up: "Changed on this device: version “6
 | Renames the deck file | Their whole version of that deck is no longer found. |
 
 **Save my version.** Customize → Save & share → **Save my version (.json)** downloads a small file named like
-`orientation-workshop-my-version-2026-10-03.json`: the version, switches, order, edits, added slides, details and
+`orientation-workshop-my-version-2026-10-03.json` (the day it is saved, on the computer's own clock): the version,
+switches, order, edits, added slides, details and
 ticks. **Open a file…** on another computer puts it in place (it can be undone). The file is checked strictly: a file
 from another deck, a broken or very large file, or one with web code in it is refused with a reason ("It belongs to
 another presentation", "It contains web code, which these presentations never take" …). It is also the way to hand
@@ -1265,7 +1338,7 @@ changes … To keep them, save your version (Save & share)."
 
 - A deck opened once online also opens offline: the browser keeps a copy of its JSON file (the site's offline
   helper fetches it "network first", and uses the copy without a connection or after 6 seconds).
-- **Save key pages for offline** (in the Aa menu) keeps `/orientation/` and all five decks, even ones never opened.
+- **Save key pages for offline** (in the Aa menu) keeps `/orientation/` and every deck, even ones never opened.
 - The facts in a kept copy still move on by the viewer's clock (the next meeting after tonight's, the new prices on
   their day), for as far ahead as the build knew. Past that, a fact says where to look ("see the Meetings page").
 - A copy built more than 14 days earlier gets a notice once per visit: "The dates in this copy are from
@@ -1341,7 +1414,7 @@ business: the third text (`minutes:` in the file) is short draft notes.
 
 | Text | For which meeting | What is in it |
 |---|---|---|
-| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic (or the topic for sharing, when one is filled in); the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (its speaker row names that meeting's speaker); the second half (7:30–8:00) and what to bring; "Volunteers wanted" (the volunteer lines); the parking lot after the close; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
+| **Agenda e-mail** (*Correo con la agenda*) | the **next** meeting, until it is over | a greeting; date and time; that meeting's guest speaker and topic (or the topic for sharing, when one is filled in); the Google Meet link and its code; the agenda's times, from the agenda slide in the version you chose (none chosen: the version the deck opens on for that meeting — on a meeting night after 8 PM that is already next month's, while tonight's slides stay on screen until midnight; its speaker row names that meeting's speaker); the second half (7:30–8:00) and what to bring; "Volunteers wanted" (the volunteer lines); the parking lot after the close; the "your name in the chat" / no-photos reminder; a signature with the committee's e-mail and the Meetings page |
 | **Reminder** (*Recordatorio*) | the next meeting | a short note for an e-mail or a group chat: date, time, the Google Meet link and code, the guest speaker and topic (or the topic for sharing, when one is filled in), the second half and the parking lot in English, then a paragraph in Spanish (the date and time in Spanish, the Meet link and code, the guest speaker and topic in Spanish or the topic for sharing, the same line about the second half and "la reunión después de la reunión", "La reunión es en inglés", all AA members welcome) |
 | **Draft notes** (*Borrador de las notas*) | the **last meeting held**, from the moment it starts | "DRAFT NOTES of the meeting, for the committee's records (this is not a business meeting: nothing to approve). Service positions and counts only: no names, phone numbers or email addresses, and no attendance list."; the chair by service position; "Attended: about ___ members (by district: ___)"; the opening, the guest speaker by service position and topic (never by name) or the topic shared on; the events and workshop requests, the volunteers, the stories mentioned, the sharing's highlights and the follow-ups (what · who · by when) as blanks (___) to finish by hand; the next meeting; "Closed with the Responsibility Statement; the parking lot followed." |
 
@@ -1359,9 +1432,11 @@ come: the texts then agree with that version's agenda, even before the website's
 for that meeting but the version leaves them out (a "No guest speaker" kept from December), the panel says so above
 the text, and "Start next month" goes back to "With a guest speaker" when the next meeting has one (its Undo too).
 The other way round, when the website lists NO speaker for that meeting (November 18 and December 16, 2026) but the
-version is still the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
+version chosen is the first one, the panel warns too (the agenda's row then reads "Guest speaker: none at this
 meeting") and names the version to choose, and "Start next month" switches to "No guest speaker" by itself when the
-website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). A detail left empty beside a
+website lists no speaker for the next meeting (never for one only not listed yet; its Undo too). Either switch goes
+back to no version chosen, so the deck follows the website's list from then on: "No guest speaker" for a meeting
+with none, the first version again once a speaker is listed. A detail left empty beside a
 filled one shows in [brackets], so you notice it.
 
 **Start next month**, at the bottom of the tab, is pressed after the meeting, once the notes are drafted. The
@@ -1374,7 +1449,9 @@ month" box. It asks first. Then:
 - the **week-before checklist** (Customize → Prepare) is unticked;
 - the agenda and the reminder move on to the **next meeting date** at once, even if pressed before 8 PM on the
   meeting night; and the version follows the next meeting ("With a guest speaker" when it has one, "No guest
-  speaker" when the website lists none).
+  speaker" when the website lists none). Pressed on December 16, 2026, tonight's "No guest speaker" stays on
+  screen until midnight Central (the notice says so), and the agenda and the reminder already name January 20's
+  guest speaker.
 
 A deck whose `next_month` has `actions` and `old_business` rows (the sample deck in `tests/fixtures/presentations/`)
 still shows tick boxes: the ticked items become next month's old business, and its `minutes_month` blank takes the
@@ -1451,6 +1528,33 @@ still publishes your words (those tests are in `CONTENT_TESTS`).
 5. Glance at the Spanish names of the controls: "Agenda y notas", "Correo con la agenda", "Recordatorio", "Borrador
    de las notas", "Empezar el mes siguiente", "Abrir en mi correo", "Copiar el asunto" (CCO for BCC).
 
+### 3.23 A presentation in Spanish
+
+`taller-de-escritura.yml` (the writing workshop for La Viña) and `orientacion-rlv.yml` (the orientation for new RLVs)
+say `lang: "es"`. They were written by hand from `writing-workshop.yml` and `orientation-workshop.yml`: the same parts,
+the same versions and timing (their `version_minutes` add up to the same plans: 115 and 84 minutes, 90 and 60), the
+same slide ids where a slide matches one there, and La Viña first everywhere (its two-month rhythm, its themes, its
+suggested topics, aalavina.org/comparte and manuscritoslv@aagrapevine.org, Graba tu historia, the Manual del RLV,
+preguntas@aagrapevine.org). The deck-writing rules are in
+[`config/presentations/README.md`](../config/presentations/README.md#a-presentation-in-spanish). What the code does
+with `lang: "es"`:
+
+| Where | What changes | The code |
+|---|---|---|
+| The checker | `lang` is `"en"` or `"es"`; a Spanish deck's line "No es una presentación oficial de AA Grapevine, Inc." counts as the disclaimer; a `TIEMPO:` line is refused like a `TIME:` one | `eleventy/filters/presentations.js` `checkDeck`, `DISCLAIMER`, `TIME_LINE`; `tests/test_presentations.py` (the same) |
+| The deck's shape | `lang: "es"` on the deck and on every slide without its own; a part's eyebrow "Parte 3 · …" | `shapeDeck` (`PART_WORD`) |
+| The facts | every `{live:…}` and every live slide in Spanish: dates (`H.fmtDate`, `dayLabel`), the meeting's rule and time (`recurrenceText(…, "es")`), issues (`issueLabel`), events (`normalizeEvents(…, "es")`), the weekly open meetings, the stores' offers, the Books of the Month, a price notice; La Viña's themes without their English gloss; the fallbacks in `FALLBACKS_ES` (and `NO_SPEAKER_ES`); links to the Spanish pages | `context(ctx, deck.lang)` → `c.lang`, read by `liveFacts` and `liveData` (an English deck's facts are exactly as before) |
+| The player's words | "Datos al …", the TIEMPO line, "(no está en esta versión)", the live lists' heads, "Detalles por confirmar", "Código de acceso", the time card's "minutos", the printed pages' "Diapositiva 3 de 47" | `presentations-core.js` `ES` and `words(lang)`; `presentations.js` `W(deck)`, `deckLang(deck)`, `PRINT_WORDS` |
+| Links to the site | a link or a resources card to a page of the site (`/contribute/`) shows and opens the Spanish page (`grapevine.neta65.org/es/contribute/`), on the English page too; an English deck's follow the page, as before | `presentations-core.js` `linkLang`, `linkOpts` (inside `inline`), `showUrl(url, host, lang)`; `presentations.js` `resources()`; `tests/test_presentations_spanish.py` `SpanishPlayer` |
+| Language marks | every slide `lang="es"`, the notes `lang="es"`; "(in Spanish)" after the deck's name on the English page, "(en inglés)" only for an English deck on `/es/` | `presentations.js` `start()` (`[data-gvp-in]`); `macros/presentations.njk` |
+| The card | "Presentation in Spanish" on the English page (`orientation.pres_spanish`), no badge on `/es/` | `src/pages/orientation.njk` |
+| Event pages | an event held in Spanish (`heldInSpanish`: tagged `la-vina`, or La Viña's own) links the Spanish deck of its kind — writing workshops `taller-de-escritura` (a recording workshop has its own deck, `recording-workshop`, in English), orientations `orientacion-rlv` — while it is in `presentations.decks`, else the English one; its card says "Presentation in Spanish" on the English page | `eleventy/event-pages.js` `deckEs` (`EVENT_KINDS`); `eleventy/event-page-model.js` `deckOf`; `macros/event-page.njk` |
+
+Not in Spanish (on purpose): the chair's paperwork (only the committee meeting has it), Grapevine's themes and book
+titles (as Grapevine writes them), and the names of the player's buttons in the notes, `{ui:…}`, which follow the
+page's language as in every deck. A third Spanish deck needs no code: give it `lang: "es"`; to link it from an
+event kind, give that kind a `deckEs`.
+
 ---
 
 ## 4. What happens after you save
@@ -1506,17 +1610,18 @@ calendar, the weekly open meetings, the story lines), a change there shows up af
 
 | Where | English | Spanish | What |
 |---|---|---|---|
-| GVR / RLV 101, "Presentations" | `/orientation/#presentations` | `/es/orientation/#presentations` | the five cards, by `order`: icon in the deck's `tone`, "About 60 minutes · 49 slides", the "Also:" line, title, summary, "Who it's for", the "Stays current" chips, the device's status line, the buttons |
+| GVR / RLV 101, "Presentations" | `/orientation/#presentations` | `/es/orientation/#presentations` | a card per deck, by `order` (a deck in another language than the page's says so: "Presentación en inglés", "Presentation in Spanish"): icon in the deck's `tone`, "About 60 minutes · 49 slides", the "Also:" line, title, summary, "Who it's for", the "Stays current" chips, the device's status line, the buttons |
 | One card | `/orientation/#pres-<id>` | `/es/orientation/#pres-<id>` | — |
-| The player | `/orientation/?present=<id>` (+ `&mode=…`, `#slide-N`) | `/es/orientation/?present=<id>` | the slides (English), the notes, Customize, presenter view; on `/es/` the controls are Spanish |
+| The player | `/orientation/?present=<id>` (+ `&mode=…`, `#slide-N`) | `/es/orientation/?present=<id>` | the slides and notes (in the deck's language), Customize, presenter view; the controls in the page's language |
 | "Print or save a copy" | under the cards | same | the four print modes for any deck |
-| "Reset all 5 to the original" | under the cards, only after a change on that device | same | — |
+| "Reset all N to the original" (N: the number of decks) | under the cards, only after a change on that device | same | — |
 | "How presenting works" | `/orientation/#presenting` | `/es/orientation/#presenting` | keys, presenter view, versions, details, privacy, saving, offline, reset |
-| The hero | the "Committee presentations" button and the "5 presentations" figure | "Presentaciones del comité" | — |
+| The hero | the "Committee presentations" button and the "N presentations" figure | "Presentaciones del comité" | — |
 | "A longer workshop?" | `/orientation/#facilitators` | `/es/orientation/#facilitators` | a card that names the orientation workshop's length (90 minutes, or 60) and links to its card |
 | Portfolio | `/portfolio/`, the PowerPoint copy's card (none while the decks' `drive_title:` lines are comments) | `/es/portfolio/` | "Present on the web" → `/orientation/?present=<id>`, with "A fixed copy: the web version stays current and can be customized." |
 | The data file | `/orientation/presentations/<id>.json` | the same file | [3.21](#321-the-json-file) |
-| Offline | kept by "Save key pages for offline" | same | the five JSON files |
+| Offline | kept by "Save key pages for offline" | same | every deck's JSON file |
+| An event's own page | `/events/<event>/`, *Get ready* | `/es/events/<event>/` | "Start the presentation" and "About this presentation" for the deck of its kind (`eleventy/event-pages.js` `KINDS`, `deck:`): a writing workshop `writing-workshop`, a recording workshop `recording-workshop` (before November 2026 the writing one, as "The closest presentation"), an information workshop `information-workshop`, a GVR/RLV orientation `orientation-workshop`, the Grapevine Meeting `grapevine-meeting`; an event held in Spanish, La Viña's Spanish deck of its kind instead (`deckEs`: a writing workshop `taller-de-escritura`, an orientation `orientacion-rlv`); only while that file is here, and only for an event still to come |
 
 **Not shown in**: the site search (it finds the GVR / RLV 101 page, never a deck or its slides), What's New, the RSS feed, the calendar feed (`/events.ics`), the monthly digest
 e-mail, `/status/` and the Actions run summary. (The PowerPoint copies are Drive files: they appear on
@@ -1570,7 +1675,7 @@ In the browser:
 | [`src/_data/presentations.js`](../src/_data/presentations.js) | `PRESENTATIONS_DIR`, `I18N_STRICT` | which folder is read; stop or warn |
 | [`src/pages/presentations-json.11ty.js`](../src/pages/presentations-json.11ty.js) | `permalink` | the JSON's address |
 | [`src/pages/orientation.njk`](../src/pages/orientation.njk) | `id="presentations"`, `o101-pres-card`, `set modes`, `data-pres-reset="all"`, `"orientation-workshop"` | the cards, the print buttons, Reset all, the "A longer workshop?" card |
-| [`src/assets/js/presentations-core.js`](../src/assets/js/presentations-core.js) | `var EN = {` | the English words the player writes on slides ("Current as of {date}", "Details to be confirmed", "Online on {platform}", the TIME line) |
+| [`src/assets/js/presentations-core.js`](../src/assets/js/presentations-core.js) | `var EN = {`, `var ES = {` | the words the player writes on slides and in the notes, in the deck's language (`words(lang)`): "Current as of {date}" / "Datos al {date}", "Details to be confirmed" / "Detalles por confirmar", "Online on {platform}", the TIME / TIEMPO line |
 | same | `var LIMIT =`, `var LIMITS =`, `ADD_LAYOUTS`, `LAYOUT_FIELDS` | default list lengths; size limits; what Customize → Add and → Edit offer |
 | same | `function current`, `function schedule`, `function agendaRows`, `function subst`, `function reconcile`, `function validateImport` | what is in the show; times; tokens; updated decks; imported files |
 | same | `function paperMeetings`, `function paperText`, `function nextMonthPlan`, `function startNextMonth`, `function undoNextMonth`, `function lastStart` | Agenda & notes: which meeting a text is for, the texts, Start next month and its Undo (kept in the deck's stored state as `prev`) |
@@ -1628,18 +1733,27 @@ on made-up offers. It has no chip.
 
 ### 6.4 Example: another presentation
 
-The fifth, the Grapevine Meeting (`grapevine-meeting.yml`, November 2026), was added this way.
+The fifth, the Grapevine Meeting (`grapevine-meeting.yml`, November 2026), was added this way, and so were the four
+after it, later in November 2026 (`welcome-panel-77.yml`, `booth-visit.yml`, `conference-prep.yml`,
+`recording-workshop.yml`), and so were La Viña's two Spanish decks (`taller-de-escritura.yml`,
+`orientacion-rlv.yml`, with `lang: "es"`: [3.23](#323-a-presentation-in-spanish)).
 
 1. Copy a deck (the small sample `tests/fixtures/presentations/sample-meeting.yml` is a good start) to
-   `config/presentations/<new-id>.yml`. Set `id: "<new-id>"`, a new `order` (6), the titles, the card in both
+   `config/presentations/<new-id>.yml`. Set `id: "<new-id>"`, a new `order` (the next free one: with nine decks,
+   1–9 are taken, so a tenth needs the limit raised in both checkers — `order: a whole number 1–9` in
+   `tests/test_presentations.py` and `eleventy/filters/presentations.js`), the titles, the card in both
    languages, the versions and the slides. Keep the line "Not an official AA Grapevine, Inc. presentation".
 2. Run the checker on it.
 3. **`tests/test_presentations.py`**: add the id to `DECKS = (` (`test_the_decks` wants exactly these files, each
    with its own `order`).
 4. **`tests/test_presentations_core.py`**: search `{"orientation-workshop", "information-workshop",
-   "writing-workshop", "committee-meeting",` and add the id.
-5. **`config/presentations/README.md`**: add the file to the table at the top; and `scripts/ops/gate_tests.py`
-   names how many decks there are ("the five decks").
+   "writing-workshop", "committee-meeting",` and add the id (its real-deck test also takes every file of the folder).
+5. **`config/presentations/README.md`**: add the file to the table at the top, and to [3.1](#31-the-files) here.
+   A test of its own that reads the deck (as `tests/test_presentations_welcome_visit_prep_recording.py` does) judges
+   the committee's files: list it in `scripts/ops/gate_tests.py` `CONTENT_TESTS`.
+6. If events of a kind should link it ("Start the presentation" on their own page), set that kind's `deck:` in
+   `eleventy/event-pages.js` `KINDS` (the recording workshop's is `recording-workshop` since November 2026), and
+   update the kind's row in `tests/test_r37_spine.py` and `tests/test_r37_event_pages.py` (`EveryKind`).
 
 What follows by itself: the new card, its JSON file, the number of presentations in the hero and in "Reset all N to
 the original" (the player counts the decks: `pres.reset_all_note`, `_confirm` and `_done` take `{n}`), the shared
@@ -1688,9 +1802,12 @@ See [Pages and code](pages-and-code.md) for the i18n files in general.
 | Command (from the repository folder) | What it checks |
 |---|---|
 | `.venv\Scripts\python.exe tests\test_presentations.py config\presentations\writing-workshop.yml` | one deck, with readable messages |
-| `.venv\Scripts\python.exe -m unittest tests.test_presentations -v` | the five decks (exactly these files, each with its own `order`), and the checker itself |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations -v` | the decks (exactly the files `DECKS` names, each with its own `order`), and the checker itself |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_welcome_visit_prep_recording -v` | the four decks of November 2026: the checker, their versions' minutes add up exactly, notes on every slide each version shows, their sizes, cards and agenda times; their facts (the guest speakers' keys, the Area's GSR/DCM orientations, the booth's codes against `config/site.yml` `links:`, the Conference's blanks, the story lines); the build's loader and their JSON; and a recording workshop's page linking `recording-workshop` (the Code check only: it reads the committee's files) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_price_follow_up -v` | the committee meeting's 2027 price follow-up: in the show from January 1 through March 31, 2027 (the build's numbering and the player, by the viewer's clock), in both versions, with the prices of the day (the Code check only) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_spanish -v` | La Viña's two Spanish decks: their language, Spanish notes, versions (the same as their English sources'), register and quotations; the checker's language rules; the build's Spanish facts and the player's Spanish words; the event pages held in Spanish linking them (the Fort Worth workshop of December 12, 2026). In a real browser: `tests/browser/test_spanish_decks.py` |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_build -v` | the build side: the JavaScript checker gives the same lines as the Python one; the sample decks use everything; the JSON's shape; the facts at fixed dates; the README lists every fallback (builds the sample decks in a temporary folder) |
-| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the five real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
+| `.venv\Scripts\python.exe -m unittest tests.test_presentations_core -v` | the player's logic: facts switching on time, versions, the clock and the agenda, tokens, presenters' versions, "my version" files, Reset; and the real decks (every text shows, the numbering, the full version's agenda times, each version's length) |
 | `.venv\Scripts\python.exe -m unittest tests.test_r12_u9_meeting -v` | the chair's paperwork: the two checkers on a `paperwork:` block, the meetings in the JSON, the texts and Start next month on the sample deck, its Undo; and the committee's own block (`RealDeck`, `Texts`, `NextMonth`: the Code check only). In a real browser: `MeetingPaperwork` (`tests/browser/test_r12_u9_meeting_browser.py`) |
 | `.venv\Scripts\python.exe -m unittest tests.test_presentations_core.Text -v` | `test_plain_lines_to_copy`: what Prepare's **Copy** puts on the clipboard (a page's text, line by line). In a real browser (a built site: `tests/browser/__init__.py`): `ChatMessageCopy` (`tests/browser/test_r26_chat_message.py`), the Grapevine Meeting's chat message copied with its addresses in full and its facts filled in, English and Spanish pages |
 | `python -m unittest discover -s tests` | everything (what Code check runs) |

@@ -375,7 +375,9 @@ class ThePage(unittest.TestCase):
             page = main_of(self.pages()[url])
             with self.subTest(url=url):
                 cs = cards(page)
-                self.assertGreater(len(cs), 10)
+                # (since the list's redesign, a monthly series is one card — its next date's menu)
+                self.assertGreaterEqual(len(cs), 6)
+                self.assertIn("ev-series-zz-booth", cs)
                 for anchor, card in cs.items():
                     links = cal_hrefs(card)
                     self.assertEqual(len(links), 2, anchor)
@@ -395,8 +397,11 @@ class ThePage(unittest.TestCase):
                 full = [h for h in cal_hrefs(page) if any(k in ("details", "body") for k, _ in query(h))]
                 self.assertEqual(len(full), 2, full)
                 self.assertTrue(all("recur=RRULE" in h for h in full))
+                # the committee meeting's and the Grapevine Meeting's cards (and the series' cards beside them, each a
+                # card above)
                 pinned = page[page.index('<section id="ev-pinned"'):page.index('<section id="ev-weekly"')]
-                self.assertEqual(len(cal_hrefs(pinned)), 4)
+                series = sum(1 for a in cs if a.startswith("ev-series-"))
+                self.assertEqual(len(cal_hrefs(pinned)), 4 + 2 * series)
                 self.assertIn(':href="gcal" href="https://calendar.google.com/', pinned, "Alpine puts the full ones in")
 
     def test_the_menus_note_once(self):
@@ -436,20 +441,23 @@ class ThePage(unittest.TestCase):
 
     def test_an_outside_link_beside_a_flyer(self):
         """A leaf with a flyer: its card's title goes to its own page, so its outside link (not its flyer) is the
-        card's "Event details" button, as on its own page — the outside page is never left to that page alone."""
+        card's "Organizer's page ↗" button (since the list's redesign: it said "Event details", easily taken for the
+        title's own page), as on its own page — the outside page is never left to that page alone."""
         flyer, doc = FLYER_DOC
         for url, lang, pre in (("/events/", "en", ""), ("/es/events/", "es", "/es")):
             card = cards(main_of(self.pages()[url]))["zz-flyer-doc"]
             with self.subTest(url=url):
                 self.assertRegex(card, r'<h3 [^>]*><a href="' + re.escape(f"{pre}/events/zz-flyer-doc/") + '"')
                 self.assertRegex(card, r'<a class="btn-secondary btn-sm" href="' + re.escape(doc) + '" target="_blank"')
-                self.assertIn(T["committee.events.details"][lang], readable(card))
+                self.assertIn(T["evlist.organizer"][lang] + " ↗", readable(card))
+                self.assertIn("#i-external-link", card)
                 self.assertIn(flyer, card, "View flyer, as before")
         leaf = main_of(self.pages()["/events/zz-flyer-doc/"])
         self.assertIn(f'href="{doc}"', leaf)
-        # a card whose link is its own (no outside page): no "Event details", as before
+        self.assertIn(T["evlist.organizer"]["en"], readable(leaf))
+        # a card whose link is its own (no outside page): no "Organizer's page", as before
         acm = cards(main_of(self.pages()["/events/"]))["zz-acm"]
-        self.assertNotIn(T["committee.events.details"]["en"], readable(acm))
+        self.assertNotIn(T["evlist.organizer"]["en"], readable(acm))
 
     def test_join_values_are_never_quoted_by_search_engines(self):
         p = self.pages()
@@ -469,15 +477,19 @@ class ThePage(unittest.TestCase):
                 # the card's own line: the value, not its words
                 self.assertRegex(cs["zz-zoom"], r'translate="no" data-nosnippet>815 9593 1777</span>')
                 self.assertRegex(cs["zz-meet"], r'translate="no" data-nosnippet>qrs-tuvw-xyz</span>')
-                # the description's values (the card shows it whole: body_md), still there for people, word for word
+                # the summary's values (since the list's redesign a card shows its summary, three lines: the whole
+                # description is on its own page), still there for people, word for word
                 said = words(cs["zz-hybrid"])
                 self.assertIn("join on Zoom (meeting ID 123 456 7890, passcode zz65)", said)
-                self.assertIn("meet.google.com/qrs-tuvw-xyz (meeting code qrs-tuvw-xyz)", said)
                 self.assertIn("<span data-nosnippet>123 456 7890</span>", cs["zz-hybrid"])
                 self.assertIn("<span data-nosnippet>zz65</span>", cs["zz-hybrid"])
-                # a summary (no body): escaped first, then the values
+                # a summary: escaped first, then the values — a series' card's too
                 self.assertIn("(meeting ID <span data-nosnippet>123 456 7890</span>, passcode <span data-nosnippet>zz65</span>)",
-                              cs["ev-recurring-zz-booth-2026-12-12"])
+                              cs["ev-series-zz-booth"])
+        # the whole description (body_md) on the event's own page, its values shielded too
+        for url in ("/events/zz-hybrid/", "/es/events/zz-hybrid/"):
+            with self.subTest(url=url):
+                self.assertIn("meet.google.com/qrs-tuvw-xyz (meeting code qrs-tuvw-xyz)", words(main_of(p[url])))
         leaf = main_of(p["/events/zz-hybrid/"])
         self.assertIn("join on Zoom (meeting ID 123 456 7890, passcode zz65)", words(leaf))
         self.assertIn("<span data-nosnippet>https://us02web.zoom.us/j/1234567890</span>", leaf)
@@ -532,11 +544,14 @@ class Wiring(unittest.TestCase):
         toggle = js[js.index('document.addEventListener("toggle", function (e) {'):]
         # before the panel is placed (the note changes its size)
         self.assertLess(toggle.index("fillMenu(d);"), toggle.index('var panel = d.querySelector(".cm-menu-panel");'))
-        page = self.read("src/pages/events.njk")
-        self.assertIn('<a href="{{ ev.gcalBrief }}" target="_blank" rel="noopener">', page)
-        self.assertIn('<a href="{{ ev.outlookBrief }}" target="_blank" rel="noopener">', page)
-        self.assertNotIn("{{ ev.gcal }}", page)
-        self.assertNotIn("{{ ev.outlook }}", page)
+        # (the cards' menu: macros/events.njk calMenu since round 38 — /events/ and the committee meeting's dates)
+        for f in ("src/pages/events.njk", "src/_includes/macros/events.njk", "src/pages/events-committee.njk"):
+            page = self.read(f)
+            if f.endswith("macros/events.njk"):
+                self.assertIn('<a href="{{ ev.gcalBrief }}" target="_blank" rel="noopener">', page)
+                self.assertIn('<a href="{{ ev.outlookBrief }}" target="_blank" rel="noopener">', page)
+            self.assertNotIn("{{ ev.gcal }}", page, f)
+            self.assertNotIn("{{ ev.outlook }}", page, f)
 
     def test_the_covers_blocks_are_drawn_only_near_the_screen(self):
         css = self.read("src/assets/css/areas/committee.css")

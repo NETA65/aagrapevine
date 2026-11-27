@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from scripts.sync import common  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 
 def iso(dt: datetime) -> str:
@@ -680,7 +681,8 @@ class DriveSafety(TempRaw):
 
     def test_a_markdown_post_on_drive_has_a_plain_text_summary(self):
         """A bulletin post uploaded to Drive as Markdown (.md) gets the teaser rule of content/bulletin posts:
-        the home page card and the feed show its summary as text — never "**", "[label](url)" or "`" — and an
+        the home page card and the feed show its summary as text — never "**", "[label](url)" or "`", a heading
+        ending its sentence ("Why it matters.", never run into the text after it) — and an
         unchanged file (its body reused from the last run) gets it too."""
         from scripts.sync import drive as D
         body = ("A living list of ways to carry the message.\n\n# Why it matters\n\n"
@@ -691,8 +693,8 @@ class DriveSafety(TempRaw):
                                        "modified_text": "Sep 29", "body_md": ""}}
         prev = {"drive:md1": {"extra": {"body_md": body, "modified_text": "Sep 29"}}}
         self.assertEqual(D.fill_announcements([it], prev, http=None), {"reused": 1})
-        self.assertEqual(it["summary"], "A living list of ways to carry the message. Why it matters A meeting in print, "
-                                        "every day. Read the magazine. Most of it is free. Subscribe today now.")
+        self.assertEqual(it["summary"], "A living list of ways to carry the message. Why it matters. A meeting in "
+                                        "print, every day. Read the magazine. Most of it is free. Subscribe today now.")
         self.assertEqual(it["extra"]["body_md"], body)              # the page still renders the Markdown
 
     def test_a_clock_time_in_the_folder_view_is_pacific_time(self):
@@ -1364,7 +1366,7 @@ class RunAllPausedCrawl(TempRaw):
         import yaml
         wf = yaml.safe_load((ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8"))
         code = next(s for s in wf["jobs"]["sync"]["steps"] if s.get("name") == "Write run summary")["run"]
-        code = code.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+        code = step_code(code)
         work = self.tmp / "work"
         (work / "data" / "site").mkdir(parents=True)
         (work / "data" / "raw").mkdir(parents=True)

@@ -36,7 +36,7 @@ def params(href: str) -> list[tuple[str, str]]:
     return parse_qsl(urlparse(href).query, keep_blank_values=True)
 
 
-MENU = """(i) => { const d = [...document.querySelectorAll('li[data-group] .cm-event .cm-menu')][i];
+MENU = """(i) => { const d = [...document.querySelectorAll('li[data-group] .cm-event .cm-menu:has([data-cm-ics])')][i];
   const a = (h) => d.querySelector('a[href^="' + h + '"]');
   return { gcal: a('https://calendar.google.com/').getAttribute('href'), outlook: a('https://outlook.live.com/').getAttribute('href'),
            ics: JSON.parse(d.querySelector('[data-cm-ics]').getAttribute('data-cm-ics')),
@@ -58,7 +58,7 @@ class Menus(unittest.TestCase):
                     errors: list[str] = []
                     try:
                         page = open_page(ctx, ("es/" if lang == "es" else "") + "events/", errors)
-                        shown = page.evaluate("[...document.querySelectorAll('li[data-group] .cm-event .cm-menu')]"
+                        shown = page.evaluate("[...document.querySelectorAll('li[data-group] .cm-event .cm-menu:has([data-cm-ics])')]"
                                               ".map((d, i) => d.getClientRects().length ? i : -1).filter((i) => i >= 0)")
                         self.assertGreater(len(shown), 10)
                         for i in (shown[0], shown[len(shown) // 2], shown[-1]):
@@ -67,7 +67,7 @@ class Menus(unittest.TestCase):
                             for k, field in (("gcal", "details"), ("outlook", "body")):
                                 self.assertNotIn(field, dict(params(before[k])), f"menu {i}: the page's link is brief")
                             self.assertEqual(before["note"], "", "no words in the page")
-                            s = page.locator("li[data-group] .cm-event .cm-menu > summary").nth(i)
+                            s = page.locator("li[data-group] .cm-event .cm-menu:has([data-cm-ics]) > summary").nth(i)
                             s.scroll_into_view_if_needed()
                             s.tap() if touch else s.click()
                             page.wait_for_timeout(200)
@@ -87,7 +87,7 @@ class Menus(unittest.TestCase):
                             self.assertEqual(after["note"], t("committee.cal.reminder_" + after["kind"], lang))
                             self.assertTrue(after["noteShown"], "the note is on the screen")
                             page.keyboard.press("Escape")
-                            page.evaluate("(i) => { [...document.querySelectorAll('li[data-group] .cm-event .cm-menu')][i].open = false; }", i)
+                            page.evaluate("(i) => { [...document.querySelectorAll('li[data-group] .cm-event .cm-menu:has([data-cm-ics])')][i].open = false; }", i)
                         self.assertEqual(errors, [])
                     finally:
                         ctx.close()

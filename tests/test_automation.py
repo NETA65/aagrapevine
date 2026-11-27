@@ -50,6 +50,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from test_morning import bash_path, run_bash  # noqa: E402
 from scripts.ops import gate_tests as G  # noqa: E402
+from workflow_steps import step_code  # noqa: E402
 
 WF = ROOT / ".github" / "workflows"
 BOT = "github-actions[bot]"
@@ -66,8 +67,9 @@ def step(job: dict, name: str) -> dict:
 
 
 def python_of(run: str) -> str:
-    """The Python of a step's `python3 - <<'PY'` … `PY`."""
-    return run.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+    """The Python of a step: its `python3 - <<'PY'` … `PY`, or code that runs its `python3 -m scripts.ops.…`
+    (tests/workflow_steps.py)."""
+    return step_code(run)
 
 
 # --------------------------------------------------------------------------- publishing
@@ -196,6 +198,13 @@ class Publishing(unittest.TestCase):
                 self.assertEqual(r.returncode == 0, ok, r.stdout + r.stderr)
                 if not ok:
                     self.assertIn("::error title=Not published::", r.stdout)
+
+    def test_the_tests_have_room_on_a_slow_machine(self):
+        # about 9 to 14 minutes in November 2026 (setup included), up to about 17 on the slowest GitHub machine seen:
+        # 30 minutes (20 until November 2026) — a job that runs out of time is not published, and two in a row open
+        # "The website update keeps failing"
+        self.assertEqual(self.jobs["tests"]["timeout-minutes"], 30)
+        self.assertGreater(self.jobs["tests"]["timeout-minutes"], 17 + 5)
 
     def test_the_tests_run_only_for_new_code(self):
         tests = self.jobs["tests"]
@@ -481,9 +490,16 @@ class GateLists(unittest.TestCase):
     with tests/committee_edits.py's edits made (events, posts, the booth and bingo files, the archive, settings, the
     glossary and the overrides edited the way the committee edits them, slips made, the documentation deleted): each
     one must still pass (one that fails in the repository itself too is broken anyway: the suite reports it on its
-    own). Minutes of work, several copies at once — the Code check runs it, not the gate (LIST_CHECKS)."""
+    own). Minutes of work, several copies at once — .github/workflows/gate-lists.yml runs it (GV_GATE_LISTS=1, on
+    every pull request and every night), never the gate (LIST_CHECKS) nor the Code check's offline tests."""
 
     def test_no_gated_test_judges_the_committees_files(self):
+        # Minutes of work (every gated test again, in copies of the repository): since November 2026 it runs in its
+        # own workflow — on every pull request, on a push the Code check runs for, and every night
+        # (.github/workflows/gate-lists.yml) — and here only when asked:
+        # GV_GATE_LISTS=1 python -m unittest discover -s tests -p test_automation.py -k GateLists
+        if os.environ.get("GV_GATE_LISTS") != "1":
+            self.skipTest("the gate list check runs in .github/workflows/gate-lists.yml (set GV_GATE_LISTS=1 to run it here)")
         if not shutil.which("git") or not (ROOT / ".git").exists():
             self.skipTest("needs git and a git checkout (the copy is made of the files git knows)")
         import concurrent.futures
@@ -560,6 +576,52 @@ class GateLists(unittest.TestCase):
         self.assertGreater(sum(res["run"] for res in results), 1000, "the gate's tests ran")
 
 
+# --------------------------------------------------------------------------- the gate list check's own workflow
+class GateListsWorkflow(unittest.TestCase):
+    """GateLists (minutes of work) runs in .github/workflows/gate-lists.yml — on every pull request, on a push to main
+    that the Code check watches, every night, and by hand — and is skipped elsewhere (the Code check's offline tests,
+    a local run) unless GV_GATE_LISTS=1."""
+
+    def setUp(self):
+        self.text = (WF / "gate-lists.yml").read_text(encoding="utf-8")
+        self.wf = yaml.safe_load(self.text)
+        self.on = self.wf.get("on", self.wf.get(True))
+
+    def test_when_it_runs(self):
+        self.assertEqual(len(self.on["schedule"]), 1, "every night")
+        minute, hour, *rest = self.on["schedule"][0]["cron"].split()
+        self.assertEqual(rest, ["*", "*", "*"])
+        self.assertNotIn(minute, ("0", "*"))
+        self.assertIn("workflow_dispatch", self.on)
+        # every pull request — a change of the code alone (scripts/, eleventy/, src/) can make a gated test read the
+        # committee's files — and a push to main that the Code check watches too
+        self.assertIn("pull_request", self.on)
+        self.assertFalse((self.on["pull_request"] or {}).get("paths"), "no path filter for a pull request")
+        check = yaml.safe_load((WF / "check.yml").read_text(encoding="utf-8"))
+        check_on = check.get("on", check.get(True))
+        self.assertEqual(self.on["push"]["paths"], check_on["push"]["paths"])
+        self.assertEqual(self.on["push"]["branches"], ["main"])
+        self.assertEqual(self.wf["permissions"], {"contents": "read"})
+
+    def test_what_it_runs(self):
+        job = self.wf["jobs"]["gate-lists"]
+        run = step(job, "Run the gate list check")
+        self.assertEqual(run["env"], {"GV_GATE_LISTS": "1"})
+        self.assertEqual(run["run"].strip(), "python -m unittest discover -s tests -p test_automation.py -k GateLists -v")
+        uses = [s.get("uses", "").split("@")[0] for s in job["steps"] if s.get("uses")]
+        self.assertEqual(uses, ["actions/checkout", "actions/setup-python", "actions/setup-node"])
+        self.assertIn("npm ci", step(job, "Install site tools")["run"])
+        self.assertIn("pip install -r requirements.txt", step(job, "Install Python packages")["run"])
+
+    def test_elsewhere_it_is_skipped(self):
+        check = (WF / "check.yml").read_text(encoding="utf-8")
+        self.assertNotIn("GV_GATE_LISTS", check, "the Code check's offline tests skip it")
+        with mock.patch.dict(os.environ, {"GV_GATE_LISTS": ""}):
+            r = unittest.TextTestRunner(stream=io.StringIO(), verbosity=0).run(
+                unittest.defaultTestLoader.loadTestsFromName("test_no_gated_test_judges_the_committees_files", GateLists))
+        self.assertEqual((r.testsRun, len(r.skipped), r.failures, r.errors), (1, 1, [], []))
+
+
 # --------------------------------------------------------------------------- failing updates
 class FailingUpdates(unittest.TestCase):
     TITLE = "The website update keeps failing"
@@ -601,7 +663,7 @@ class FailingUpdates(unittest.TestCase):
     def test_the_step(self):
         self.assertEqual(self.job["needs"], ["sync", "tests", "build-deploy", "publish"])
         self.assertEqual(self.job["if"], "${{ !cancelled() && github.ref == 'refs/heads/main' }}")
-        self.assertEqual(self.job["permissions"], {"issues": "write", "actions": "read"})
+        self.assertEqual(self.job["permissions"], {"contents": "read", "issues": "write", "actions": "read"})
         self.assertTrue(self.step["continue-on-error"], "it never fails the run")
         for k, job in (("SYNC", "sync"), ("TESTS", "tests"), ("BUILD", "build-deploy"), ("PUBLISH", "publish")):
             self.assertEqual(self.step["env"][k], f"${{{{ needs.{job}.result }}}}")
@@ -828,21 +890,41 @@ class LinkCheck(unittest.TestCase):
 
 # --------------------------------------------------------------------------- outside actions
 class Pinned(unittest.TestCase):
-    def test_every_outside_action_is_pinned_to_a_commit(self):
-        seen = 0
+    """Every action a workflow runs — GitHub's own actions/* too — is pinned to a full commit id with its release as
+    a "# vX.Y.Z" note: a moved tag can never change what runs, and Dependabot's monthly "chore(actions)" pull request
+    moves the commit and the note together (it updates a note that names the pinned commit's release)."""
+
+    def uses(self):
         for f in sorted(WF.glob("*.yml")):
             for line in f.read_text(encoding="utf-8").splitlines():
                 m = re.match(r"^\s*(?:-\s+)?uses:\s*([^\s#]+)\s*(#.*)?$", line)
-                if not m:
-                    continue
-                action, note = m.group(1), (m.group(2) or "")
-                if action.startswith(("actions/", "./")):
-                    continue
-                seen += 1
-                with self.subTest(workflow=f.name, action=action):
-                    self.assertRegex(action, r"^[\w.-]+/[\w./-]+@[0-9a-f]{40}$", "a full commit id")
-                    self.assertRegex(note, r"^# v\d+\.\d+\.\d+$", "its release, for people and Dependabot")
-        self.assertGreaterEqual(seen, 1)
+                if m:
+                    yield f.name, m.group(1), (m.group(2) or "")
+
+    def test_every_action_is_pinned_to_a_commit(self):
+        seen, outside = 0, 0
+        for name, action, note in self.uses():
+            if action.startswith("./"):
+                continue
+            seen += 1
+            outside += not action.startswith("actions/")
+            with self.subTest(workflow=name, action=action):
+                self.assertRegex(action, r"^[\w.-]+/[\w./-]+@[0-9a-f]{40}$", "a full commit id")
+                self.assertRegex(note, r"^# v\d+\.\d+\.\d+$", "its release, for people and Dependabot")
+        self.assertGreaterEqual(outside, 1, "lychee's")
+        self.assertGreater(seen, outside, "and GitHub's own")
+
+    def test_one_commit_per_action_and_release(self):
+        # the same action at the same release is the same commit in every workflow (a half-done update would differ)
+        pins: dict[str, set] = {}
+        for _name, action, note in self.uses():
+            if not action.startswith("./"):
+                repo = "/".join(action.split("@")[0].split("/")[:2])      # actions/cache/save → actions/cache
+                pins.setdefault(repo, set()).add((action.split("@")[1], note))
+        self.assertIn("actions/checkout", pins)
+        for repo, seen in pins.items():
+            with self.subTest(action=repo):
+                self.assertEqual(len(seen), 1, f"{repo} at more than one commit or release: {sorted(seen)}")
 
 
 # --------------------------------------------------------------------------- Dependabot

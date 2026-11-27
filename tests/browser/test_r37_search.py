@@ -2,7 +2,7 @@
 how to run these; they share test_site_in_browser.py's site server and browser). The index's logic is in
 tests/test_r37_search.py.
 
-  * NewKinds — "presentation" (English) lists the five presentations, each labelled "Presentation" with its own icon
+  * NewKinds — "presentation" (English) lists every presentation (one per deck file), each labelled "Presentation" with its own icon
                (never the page's fall-back icon), its result opening its card on /orientation/ and, beside it (never
                inside its link), "Start the presentation" — the player's address, in the same tab; "volante" (Spanish)
                lists the flyers ("Volante"); "faq" lists the FAQ's sections, counted under the Pages filter; no script
@@ -12,9 +12,12 @@ tests/test_r37_search.py.
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 from .test_site_in_browser import S, SIDEWAYS, answered, new_context, open_page, url, setUpModule, tearDownModule  # noqa: F401 (its site server)
 
+# the decks the site is built with (config/presentations, one file each)
+N_DECKS = len(list((Path(__file__).resolve().parents[2] / "config" / "presentations").glob("*.yml")))
 RESULTS = """() => [...document.querySelectorAll('#ss-results li')].map((li) => {
   const a = li.querySelector('a[data-nav]'), alt = li.querySelector('a.ss-alt'), kind = li.querySelector('.ss-kind');
   return { href: a.getAttribute('href'), kind: kind ? kind.textContent.trim() : '', icon: !!(kind && kind.querySelector('svg')),
@@ -42,7 +45,7 @@ class NewKinds(unittest.TestCase):
     def test_presentations(self):
         rows, _, errors = self.run_query("search/?q=presentation")
         decks = [r for r in rows if r["kind"] == "Presentation"]
-        self.assertEqual(len(decks), 5, rows[:8])
+        self.assertEqual(len(decks), N_DECKS, rows[:N_DECKS + 3])
         prefix = S["server"].prefix
         for r in decks:
             self.assertTrue(r["href"].startswith(prefix + "orientation/#pres-"), r["href"])

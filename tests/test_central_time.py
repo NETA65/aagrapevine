@@ -962,12 +962,12 @@ class HomeCountdown(unittest.TestCase):
 class CommitteePage(unittest.TestCase):
     def test_counts_and_chips_follow_the_events_that_end(self):
         r = js(self, r"""
-          const chip = (f, n) => el("button", { "data-cm-filter": f }, f === "all" ? [] : [el("span", { class: "cm-chip-count" }, [], String(n))]);
-          const li = (g, end, extra) => el("li", Object.assign({ "data-group": g, "data-cm-expire": end }, extra || {}));
-          const chips = [chip("all"), chip("committee", 1), chip("neta", 3), chip("calendar", 1)];
-          // (a committee meeting is a NETA 65 event too: events.njk writes its card's data-group="committee neta")
-          const items = [li("committee neta", "2026-10-22T01:00:00Z"), li("neta", "2026-10-06T18:00:00Z"),
-                         li("neta", "2026-10-30T18:00:00Z"), li("calendar", "2026-10-06T19:00:00Z")];
+          // (since the list's redesign: the kind chips, data-ev-kind — the cards' data-kind)
+          const chip = (k) => el("button", { "data-ev-kind": k }, k ? [el("span", { class: "cm-chip-count" }, [], "0")] : []);
+          const li = (g, kind, end) => el("li", { "data-group": g, "data-kind": kind, "data-lang": "en", "data-mode": "inperson", "data-cm-expire": end });
+          const chips = [chip(""), chip("committee"), chip("workshop"), chip("calendar")];
+          const items = [li("committee neta", "committee", "2026-10-22T01:00:00Z"), li("neta", "workshop", "2026-10-06T18:00:00Z"),
+                         li("neta", "workshop", "2026-10-30T18:00:00Z"), li("calendar", "calendar", "2026-10-06T19:00:00Z")];
           const root = el("section", { "data-count-label": "Showing {n} events", "data-count-label-one": "Showing 1 event" },
                           [el("div", {}, chips), el("ol", {}, items)]);
           const p = page([root], { files: ["time", "src/assets/js/app.js", "src/assets/js/committee.js"], alpine: true, at: "2026-10-06T15:00:00Z" });
@@ -978,21 +978,19 @@ class CommitteePage(unittest.TestCase):
           const seen = new Set();
           const watched = new Proxy(c, { get(t, k, rcv) { seen.add(k); return Reflect.get(t, k, rcv); } });
           c.init();
-          c.set("calendar");
-          const snap = () => ({ counts: chips.slice(1).map((b) => [b.querySelector(".cm-chip-count").textContent, b.hidden]),
-                                text: c.countText(), filter: c.filter, tick: c.tick });
+          c.setKind("calendar");
+          const snap = () => ({ counts: ["committee", "workshop", "calendar"].map((k) => c.kindCount(k)),
+                                text: c.countText(), kind: c.f.kind, tick: c.tick });
           const before = snap();
-          p.clock.now = Date.parse("2026-10-06T19:30:00Z");       // the calendar event and one NETA event are over
+          p.clock.now = Date.parse("2026-10-06T19:30:00Z");       // the calendar event and one workshop are over
           p.minute();
           const after = snap();
           seen.clear(); watched.show(items[2]);
           out({ before, after, readsTick: seen.has("tick") });""")
-        # (NETA 65 events count the committee meeting too)
-        self.assertEqual(r["before"]["counts"], [["1", False], ["3", False], ["1", False]])
-        self.assertEqual(r["before"]["filter"], "calendar")
-        self.assertEqual(r["after"]["counts"], [["1", False], ["2", False], ["0", True]], "recounted; an empty chip hides")
-        self.assertEqual(r["after"]["filter"], "all", "its filter falls back to All")
-        # "All" shows every card still to come, the committee meeting's too (round 30)
+        self.assertEqual(r["before"]["counts"], [1, 2, 1])
+        self.assertEqual(r["before"]["kind"], "calendar")
+        self.assertEqual(r["after"]["counts"], [1, 1, 0], "counted again")
+        self.assertEqual(r["after"]["kind"], "", "a kind with no card left: every card again")
         self.assertEqual(r["after"]["text"], "Showing 2 events")
         self.assertEqual(r["after"]["tick"], r["before"]["tick"] + 1)
         self.assertTrue(r["readsTick"], "show() reads tick, so Alpine works the lists out again")

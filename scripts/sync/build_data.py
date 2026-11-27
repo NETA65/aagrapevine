@@ -43,7 +43,7 @@ from . import translate as T
 from . import writers_archive as WA
 from .common import (RAW_DIR, ROOT, SITE_DIR, STATE_DIR, as_json, clean_text, event_host, get_logger, load_config,
                      now_iso, parse_iso, read_capped, read_json, short_hash, slugify, strip_html, to_iso, truncate,
-                     unreadable_message, write_json)
+                     unreadable_message, with_run_stamps, write_json)
 # the magazine covers' labels, written by rule in both languages (drive.cover_of reads the covers' names)
 from .drive import COVER_MAG, cover_album, cover_label, cover_title
 from .events_external import platform_of
@@ -335,6 +335,15 @@ class Ctx:
                         log.error("raw file %s holds nothing since it went missing (its update failed: %s) — the site "
                                   "keeps the last build's %d item(s) of it", p.name, self.missing_failed[name], count)
                         env = {"source": name, "updated": None, "ok": False, "error": None, "stats": {}, "items": []}
+                    else:
+                        # The run's times: a raw file whose content did not change is not written again
+                        # (common.save_raw), so its `attempted` — and, once it has worked, its `updated` — come from this
+                        # run (common.RUN_STAMPS) or the last status.json, whichever is newest: status.json keeps them
+                        # from run to run.
+                        last_row = had.get(name) or {}
+                        times = {"attempted": last_row.get("attempted"),
+                                 "updated": last_row.get("updated") if env.get("updated") else None}
+                        env = with_run_stamps(p, env, times)
                 except Exception as e:
                     self.raw_problems[name] = f"unreadable: {type(e).__name__}: {e}"[:200]
                     self.unreadable.add(name)
@@ -1000,6 +1009,10 @@ ICS_STATE_FILE = "ics_feeds.json"
 ICS_TIMEOUT = 25                        # seconds for the one request
 ICS_RETRY_HOURS_AFTER_FAILURE = 20      # blocked / failing feed: at most one request a day
 ICS_RETRY_HOURS_AFTER_SUCCESS = 20      # working feed: likewise (the saved copy is used in between)
+# A feed marked `paused:` in config (a site known to block automated readers, e.g. neta65.org's bot check): asked
+# only once a week — to notice when it works again — and shown as "paused" (on purpose), never as a problem.
+ICS_RETRY_HOURS_WHEN_PAUSED = 7 * 24
+ICS_PAUSED_REASON = "the site blocks automated readers"
 ICS_MAX_BYTES = 3_000_000
 # Feed categories the site knows (config `category:`) → the group each one is shown with on /events/.
 ICS_CATEGORIES = {"neta65": "neta", "ics": "neta", "gv-calendar": "calendar", "lv-calendar": "calendar"}
@@ -1016,10 +1029,22 @@ def location_is_tba(v: Any) -> bool:
     return bool(clean_text(v)) and bool(_LOCATION_TBA.match(clean_text(v)))
 
 
+def paused_reason(v: Any) -> str:
+    """A feed's config `paused:` → why it is paused ("" = not paused): a text is the reason, `true` (or "yes")
+    the usual one (ICS_PAUSED_REASON); false, "no", "" or nothing = not paused."""
+    if isinstance(v, bool):
+        return ICS_PAUSED_REASON if v else ""
+    s = clean_text(v)
+    if s.lower() in ("", "no", "false", "off", "0"):
+        return ""
+    return ICS_PAUSED_REASON if s.lower() in ("yes", "true", "on", "1") else s
+
+
 def feed_specs(ctx: Ctx) -> list[dict]:
-    """config/site.yml `sources.ics_feeds:` → [{key, url, label, label_es, category, group, host}]. A plain
+    """config/site.yml `sources.ics_feeds:` → [{key, url, label, label_es, category, group, host, paused}]. A plain
     address (`- "https://…"`) works too; webcal:// is read as https://. An entry that cannot be used is
-    skipped and named in status.json problems.ics_feeds (→ the Actions run summary)."""
+    skipped and named in status.json problems.ics_feeds (→ the Actions run summary). `paused` = why the
+    feed is known not to work (paused_reason; "" = not paused)."""
     sources = ctx.cfg.get("sources") if isinstance(ctx.cfg.get("sources"), dict) else {}
     raw = sources.get("ics_feeds")
     if raw in (None, "", []):
@@ -1050,7 +1075,8 @@ def feed_specs(ctx: Ctx) -> list[dict]:
                          f"{', '.join(sorted(ICS_CATEGORIES))} — “ics” used")
             category = "ics"
         out.append({"key": key, "url": url, "label": label, "label_es": clean_text(spec.get("label_es")) or label,
-                    "category": category, "group": ICS_CATEGORIES[category], "host": host})
+                    "category": category, "group": ICS_CATEGORIES[category], "host": host,
+                    "paused": paused_reason(spec.get("paused"))})
     if notes:
         for m in notes:
             log.warning("config/site.yml %s", m)
@@ -1122,20 +1148,24 @@ def fetch_feed(url: str, user_agent: str) -> dict:
             "error": "the answer is not a calendar file (.ics)" if text else "the calendar file is too large"}
 
 
-def _feed_due(st: dict, now: datetime) -> bool:
-    """May the feed be asked again? About once a day (ICS_RETRY_HOURS_*), whether it worked or not."""
+def _feed_due(st: dict, now: datetime, paused: bool = False) -> bool:
+    """May the feed be asked again? About once a day (ICS_RETRY_HOURS_*), whether it worked or not; a paused feed
+    that did not work the last time only once a week (ICS_RETRY_HOURS_WHEN_PAUSED)."""
     last = parse_iso(st.get("attempted")) if st.get("attempted") else None
     if last is None:
         return True
     if last.tzinfo is None:
         last = last.replace(tzinfo=timezone.utc)
-    wait = ICS_RETRY_HOURS_AFTER_SUCCESS if st.get("state") == "ok" else ICS_RETRY_HOURS_AFTER_FAILURE
+    wait = (ICS_RETRY_HOURS_AFTER_SUCCESS if st.get("state") == "ok"
+            else ICS_RETRY_HOURS_WHEN_PAUSED if paused else ICS_RETRY_HOURS_AFTER_FAILURE)
     return (now - last).total_seconds() >= wait * 3600 - 300      # (5 min slack: the daily run drifts)
 
 
 def ics_events(ctx: Ctx) -> list[dict]:
     """Events of the optional .ics feeds (config sources.ics_feeds) + each feed's health in ctx.feeds
-    (→ status.json `feeds`, the /status/ page and the Actions run summary)."""
+    (→ status.json `feeds`, the /status/ page and the Actions run summary). A feed marked `paused:` in config that
+    does not answer with a calendar has the state "paused" (with `paused`, the reason) instead of "blocked" /
+    "error": known, on purpose — /status/ says so and counts it as no problem; it is asked once a week."""
     specs = feed_specs(ctx)
     ctx.feeds = []
     if not specs:
@@ -1156,11 +1186,12 @@ def ics_events(ctx: Ctx) -> list[dict]:
                   "state": st.get("state") or ("ok" if st.get("ics") else "never"),
                   "http_status": st.get("http_status"), "error": st.get("error"),
                   "last_success": st.get("fetched"), "last_attempt": st.get("attempted"),
-                  "checked_this_run": False, "from_copy": False, "events_count": 0, "duplicates": 0, "notes": []}
+                  "checked_this_run": False, "from_copy": False, "events_count": 0, "duplicates": 0, "notes": [],
+                  "paused": spec.get("paused") or None}
         fresh = None
         if ctx.offline:
             log.info("ics feed %s: offline run — not asked (last copy used)", spec["key"])
-        elif not _feed_due(st, ctx.now):
+        elif not _feed_due(st, ctx.now, paused=bool(spec.get("paused"))):
             log.info("ics feed %s: asked at %s (%s) — not again yet", spec["key"], st.get("attempted"), st.get("state"))
         else:
             res = fetch_feed(url, ua)
@@ -1175,12 +1206,15 @@ def ics_events(ctx: Ctx) -> list[dict]:
                     st.update({"fetched": st["attempted"], "ics": res["text"]})
                 except Exception as e:
                     st.update({"state": "error", "error": f"the calendar file could not be read ({type(e).__name__})"})
-            level = log.info if st["state"] == "ok" else log.warning
-            level("ics feed %s -> %s%s", spec["key"], st["state"], f" ({st['error']})" if st.get("error") else "")
+            level = log.info if st["state"] == "ok" or spec.get("paused") else log.warning
+            level("ics feed %s -> %s%s%s", spec["key"], st["state"], f" ({st['error']})" if st.get("error") else "",
+                  f" — paused in config: {spec['paused']}" if spec.get("paused") else "")
             state[url] = st
             changed = True
             health.update({"state": st["state"], "http_status": st["http_status"], "error": st["error"],
                            "last_success": st.get("fetched"), "last_attempt": st["attempted"], "checked_this_run": True})
+        if spec.get("paused") and health["state"] != "ok":
+            health["state"] = "paused"          # known not to work (config `paused:`): no problem, said so
         evs = fresh
         if evs is None and st.get("ics"):
             try:
@@ -2255,6 +2289,161 @@ def order_events(ctx: Ctx, events: Iterable[dict]) -> list[dict]:
     for e in kept:
         e["extra"]["past"] = True
     return upcoming + kept
+
+
+# Readable addresses (since the events list's redesign, November 2026): an event made from a dated Drive flyer or
+# taken from an outside calendar gets `extra.slug` — its day and its title, "2026-10-31-grapevine-committee-crash" —
+# so its page is /events/2026-10-31-grapevine-committee-crash/ instead of /events/ev-flyer-1cijzw73s0hbgb4wr6qosuit…/
+# (eleventy/filters/committee.js eventAnchor takes extra.slug as a content/events file's name). The address must not
+# move with every daily update, so a slug is PINNED: made once, the first time the event is seen, and kept from the
+# last events.json by the event's id (a flyer's Drive file, a calendar listing's own id) — a title the flyer's name or
+# the calendar changes later leaves it as it is. Only a new DAY makes a new slug (an address that names the wrong day
+# would mislead): the old one goes to `extra.slug_aliases` (the last READABLE_ALIASES_KEEP), and the site writes a
+# page at each old address — and at the event's old "ev-…" address — that sends the visitor on
+# (src/pages/event-share-redirect.njk). Two events of one day and one title: the later one ends in "-2", "-3" ….
+# A hand-written event (content/events: its file's name already), a monthly date and a committee meeting keep theirs.
+# (round 38) A listing of Grapevine's or La Viña's own calendar that the magazine moves to another day usually gets a
+# new page there too — its address holds the day, /get-involved/events/2027-01-08/64th-seta-convention —, so a new id
+# here (scripts/sync/events_external.py: a hash of that address). It is taken for the same event when a listing of the
+# same calendar that the last file had still to come is gone, and the new one has the same name there (its address's
+# last part, else its title) within CALENDAR_MOVE_DAYS days of it: the new one keeps the old one's addresses as its
+# aliases — its readable one and its "ev-gvcal-…" one —, so they send people on too. A listing renamed AND moved is a
+# new event: its old addresses lead nowhere (as before the readable addresses).
+READABLE_SLUG_TITLE_MAX = 60
+READABLE_ALIASES_KEEP = 5
+CALENDAR_MOVE_DAYS = 62
+_OWN_ADDRESS = ("manual", "recurring", "committee")
+_CALENDARS = ("gv-calendar", "lv-calendar")
+# (round 38) little words a title cut at READABLE_SLUG_TITLE_MAX does not end on ("…-un-camino-a-la" → "…-un-camino")
+_SLUG_TAIL_WORDS = frozenset("a an and at de del el en for in la las los of on or the to un una y".split())
+
+
+def readable_slug(day: str, title: str) -> str:
+    """An event's readable slug: its day ("YYYY-MM-DD") and its title in a few words — cut at a word, at most
+    READABLE_SLUG_TITLE_MAX characters, never ending on a little word such as "a", "la", "de", "the"
+    ("2027-01-29-xlii-reunion-de-a-a-zona-norte-de-texas-a-a-un-camino")."""
+    words = slugify(clean_text(title) or "event", 200)
+    if len(words) > READABLE_SLUG_TITLE_MAX:
+        cut = words[:READABLE_SLUG_TITLE_MAX + 1]
+        words = cut.rsplit("-", 1)[0] if "-" in cut else words[:READABLE_SLUG_TITLE_MAX]
+        parts = words.split("-")
+        while len(parts) > 1 and parts[-1] in _SLUG_TAIL_WORDS:
+            parts.pop()
+        words = "-".join(parts)
+    return f"{day}-{words.strip('-') or 'event'}"
+
+
+def _listing_name(it: dict) -> str:
+    """A calendar listing's own name on the magazine's site: the last part of its page's address
+    ("64th-seta-convention"), else its title — folded as a slug."""
+    path = urlsplit(str(it.get("url") or "")).path.rstrip("/")
+    last = unquote(path.rsplit("/", 1)[-1]) if path else ""
+    if last and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", last):
+        return slugify(last, 200)
+    return slugify(clean_text(it.get("title") or ""), 200)
+
+
+def _legacy_anchor(eid: str) -> str:
+    """An event's address before it had a readable one: "ev-" and its id ("ev:gvcal:10b73392e7d8" →
+    "ev-gvcal-10b73392e7d8" — eleventy/event-redirects.js oldAnchors' "legacy" one)."""
+    return "ev-" + slugify(re.sub(r"^ev:", "", eid), 200)
+
+
+def _moved_listings(ctx: Ctx, events: list[dict], prev_items: list[dict]) -> dict[str, dict]:
+    """The calendar listings of this update that are a listing of the last file moved to another day (see above) →
+    {new id: the old record}. Each old one at most once, to the new one nearest its day."""
+    ids = {str(ev.get("id")) for ev in events}
+    known = {str(it.get("id")) for it in prev_items}
+    gone = [it for it in prev_items if it.get("category") in _CALENDARS and str(it.get("id")) not in ids
+            and not (it.get("extra") or {}).get("past")]
+    out: dict[str, dict] = {}
+    for ev in events:
+        eid = str(ev.get("id"))
+        if ev.get("category") not in _CALENDARS or eid in known or not gone:
+            continue
+        day = _event_day(ctx, ev)
+        if not day:
+            continue
+        name = _listing_name(ev)
+        best, gap = None, None
+        for it in gone:
+            old_day = _event_day(ctx, it)
+            if it.get("category") != ev.get("category") or not old_day or _listing_name(it) != name:
+                continue
+            d = abs((date.fromisoformat(day) - date.fromisoformat(old_day)).days)
+            if d <= CALENDAR_MOVE_DAYS and (gap is None or d < gap):
+                best, gap = it, d
+        if best is not None:
+            out[eid] = best
+            gone.remove(best)
+    return out
+
+
+def pin_event_slugs(ctx: Ctx, events: list[dict], previous: Any) -> list[dict]:
+    """Give each event made from a flyer or an outside calendar its readable slug (see above), the last events.json's
+    one when it has one for that id and day (`previous`: that file, items and cancelled). → `events`, changed in
+    place. Every slug an event keeps is reserved BEFORE any new one is made — and so is every old one it sends people
+    on from (its aliases) —, so a new event of the same day and title never takes an address another event already
+    has, whatever the list's order: the new one is the one that ends in "-2" (and so is an event that moves onto a day
+    where another one holds the plain slug)."""
+    prev_doc = previous if isinstance(previous, dict) else {}
+    before: dict[str, dict] = {}
+    prev_items: list[dict] = []
+    for it in [*(prev_doc.get("items") or []), *(prev_doc.get("cancelled") or [])]:
+        if isinstance(it, dict) and it.get("id") and isinstance(it.get("extra"), dict):
+            before.setdefault(str(it["id"]), it["extra"])
+            prev_items.append(it)
+    # (a calendar listing the magazine moved to another day: its old addresses, as aliases — see above)
+    moved = _moved_listings(ctx, events, prev_items)
+    # who holds each address: "" for a content/events file, a monthly date, a committee meeting (their own names)
+    owner: dict[str, str] = {str((ev.get("extra") or {}).get("slug")): "" for ev in events
+                             if ev.get("category") in _OWN_ADDRESS and (ev.get("extra") or {}).get("slug")}
+    plans: list[list] = []                  # [event, its id, its day, the slug it keeps ("" none), its aliases]
+    for ev in events:
+        ev.setdefault("extra", {})
+        if ev.get("category") in _OWN_ADDRESS:
+            continue
+        day = _event_day(ctx, ev)
+        if not day:
+            continue
+        eid = str(ev.get("id"))
+        old = before.get(eid, {})
+        slug = str(old.get("slug") or "")
+        aliases = [a for a in (old.get("slug_aliases") or []) if isinstance(a, str) and a]
+        if eid in moved:                                # its listing moved: the old one's addresses send people on
+            gone = moved[eid]
+            gx = gone.get("extra") or {}
+            aliases = [*[a for a in (gx.get("slug_aliases") or []) if isinstance(a, str) and a],
+                       *([str(gx["slug"])] if gx.get("slug") else []), _legacy_anchor(str(gone["id"])), *aliases]
+        if slug and not slug.startswith(day + "-"):     # its day changed: a new address, the old one sends people on
+            aliases.append(slug)
+            slug = ""
+        plans.append([ev, eid, day, slug, aliases])
+    # 1) the slugs kept, first (a slug two events claim — a hand-edited file — stays with the first)
+    for plan in plans:
+        if plan[3] and plan[3] not in owner:
+            owner[plan[3]] = plan[1]
+        else:
+            plan[3] = ""
+    # …and the old addresses, each for the event that had it (it may come back to it)
+    alias_of = {a: plan[1] for plan in plans for a in plan[4] if a not in owner}
+    # 2) the new ones
+    for plan in plans:
+        ev, eid, day, slug, aliases = plan
+        if not slug:
+            base = readable_slug(day, ev.get("title") or "")
+            slug, n = base, 2
+            while slug in owner or alias_of.get(slug, eid) != eid:
+                slug, n = f"{base}-{n}", n + 1
+            owner[slug] = eid
+        ex = ev["extra"]
+        ex["slug"] = slug
+        aliases = [a for a in dict.fromkeys(aliases) if a != slug][-READABLE_ALIASES_KEEP:]
+        if aliases:
+            ex["slug_aliases"] = aliases
+        else:
+            ex.pop("slug_aliases", None)
+    return events
 
 
 # =========================================================================== translation
@@ -3762,6 +3951,22 @@ def full_update(sources: list[dict]) -> str | None:
     return to_iso(datetime.fromtimestamp(max(times), timezone.utc)) if times else None
 
 
+def morning_alarm_on(v: Any) -> bool:
+    """config site.morning_alarm → is the outside morning alarm set up? (true, "true", "yes", "on")"""
+    return v is True or str(v).strip().lower() in ("true", "yes", "on")
+
+
+def morning_alarm_since(ctx: Ctx, previous: dict | None) -> str | None:
+    """status.json → morning_alarm_since: when a build first saw config site.morning_alarm switched on — the last
+    build's value while it stays on, this build's time when it was off (or not known) before; None while it is off.
+    The issue about missed mornings (scripts/ops/report_issues.py mornings) counts only the mornings after it: the
+    mornings before the alarm was set up blame no alarm."""
+    if not morning_alarm_on((ctx.cfg.get("site") or {}).get("morning_alarm")):
+        return None
+    prev = (previous or {}).get("morning_alarm_since") if isinstance(previous, dict) else None
+    return prev if isinstance(prev, str) and ts(prev) is not None else to_iso(ctx.now)
+
+
 def kept_full_update(previous_status: Path, computed: str | None) -> str | None:
     """full_update for a quick or morning run (run_all passes --keep-full-update): the value of the last build's
     status.json, so only a full update moves it. A push run can also read a full-update-only source whose own input
@@ -3834,6 +4039,9 @@ def build_status(ctx: Ctx, translator: T.Translator | None, i18n: I18n, counts: 
         "quote_days": qdays,
         # When the last full daily update ran (→ /build.json `full` → the Morning check).
         "full_update": full_update(sources),
+        # When a build first saw config site.morning_alarm on (None: off) — the missed-mornings issue counts only
+        # the mornings after it (scripts/ops/run_summary.py → report_issues.py mornings).
+        "morning_alarm_since": morning_alarm_since(ctx, previous),
         "crawl": crawl_summary(ctx),
         "translations": {"cached": tr.get("cached", 0), "engine": T.ENGINE_VERSION,
                          "model_enabled": translation_enabled, "translated_this_run": n_tr,
@@ -3861,9 +4069,11 @@ def feed_status(h: dict) -> dict:
     request, when it last worked, how many events it gave (and how many of them were already on the
     calendar — content/events, a flyer, the committee's own events — shown once), and `notes`: what the
     feed says that a content/events file does not (another date or time, a venue now known), for the
-    chair to check (merge_feed_duplicates → the Actions run summary)."""
-    keys = ("key", "url", "label", "label_es", "category", "group", "state", "http_status", "error", "last_success",
-            "last_attempt", "checked_this_run", "from_copy", "events_count", "duplicates")
+    chair to check (merge_feed_duplicates → the Actions run summary). `paused` = config's reason for a feed marked
+    `paused:` (None when not paused) — kept also once the feed works again, so the run summary can say to delete
+    the line."""
+    keys = ("key", "url", "label", "label_es", "category", "group", "state", "paused", "http_status", "error",
+            "last_success", "last_attempt", "checked_this_run", "from_copy", "events_count", "duplicates")
     out = {k: h.get(k) for k in keys}
     out["notes"] = [str(n) for n in (h.get("notes") or [])]
     return out
@@ -4196,7 +4406,9 @@ def main(argv: list[str] | None = None) -> int:
             "editorial": simple(ctx, "editorial"),
             "weekly_open": weekly_open_items(ctx),
             "announcements": build_announcements(ctx),
-            "events": build_events(ctx),
+            # (an event made from a flyer or an outside calendar with its readable address, pinned from the last
+            # events.json: pin_event_slugs)
+            "events": pin_event_slugs(ctx, build_events(ctx), read_json(out_dir / "events.json")),
         }
         enrich_articles(ctx, cols["articles"])
         meta, meta_wanted = build_meta(ctx, i18n)

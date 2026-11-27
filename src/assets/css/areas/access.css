@@ -186,6 +186,9 @@ html:root.tts-bar-on {
    steps aside, so the label keeps whole words beside the switch ("Modo / oscuro", not "oscur-o") */
 @media (width < 22.5rem) {
   :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .site-theme > svg { display: none; }
+  /* …as do the folding groups' icons at 130%+ ("Get / involved", "Committee", "Participa" whole — beside the icon
+     and the chevron the label had 120px at 150%: "involve-d", "Committ-ee") */
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .site-drawer-group > summary > svg:first-child { display: none; }
 }
 
 /* From 640px the site name sits on one line with the committee line under it, cut with "…" when
@@ -271,11 +274,6 @@ html:root.tts-bar-on {
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.home-count-n, .cm-tile-num) { white-space: nowrap; overflow-wrap: normal !important; }
 @media (width < 40rem) {
   :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.home-meet-count, .cm-tiles) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* Home "On this site" numbers: one per row */
-  :root:where(.gv-prefs):is([data-text="150"], [data-spacing="relaxed"]) .home-stats { grid-template-columns: minmax(0, 1fr); }
-}
-@media (width >= 40rem) and (width < 96rem) {
-  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 /* Events: the date strip, and the "Add to calendar" button and its menu, wrap inside their card */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-date-strip { flex-wrap: wrap; white-space: normal; max-width: 100%; }
@@ -350,6 +348,11 @@ html:root.tts-bar-on {
 }
 @media (64rem <= width < 90rem) { :root:where(.gv-prefs)[data-text="130"] .site-footer-groups { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (80rem <= width < 90rem) { :root:where(.gv-prefs)[data-text="150"] .site-footer-groups { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* (round 38) At 115 % with relaxed spacing on 640–719px screens the four groups share one row (~130px each): there the
+   Stay updated column's first link (footer.njk .site-footer-hub) gives its words the column's whole width — its icon
+   steps aside. Beside it "mantenerte" ("Todas las formas de mantenerte al día") was wider than its line (109px for
+   101) and broke in two. */
+@media (40rem <= width < 45rem) { :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .site-footer-hub > .icon { display: none; } }
 /* Meetings, Grapevine meetings near you: the weekday over its times (the time chips get the card's
    width), and Directions | Details side by side only when both fit — else one per row, full width */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-gvg-rows { grid-template-columns: minmax(0, 1fr); }
@@ -366,8 +369,10 @@ html:root.tts-bar-on {
 }
 /* Library: a card's main button ("Preview" / "Vista previa") may wrap its label, the row of action
    buttons wraps instead of losing its last button at the card's edge, and the date · pages · size line
-   wraps inside its parts */
-:root:where(.gv-prefs):is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .lib-btn-main { flex: 1 1 auto; white-space: normal; min-width: 0; border-radius: 1.5rem; }
+   wraps inside its parts. (.lib-btn.lib-btn-main: one class more than the narrow list card's own
+   ".lib-results[data-view=list] .lib-btn-main { flex: none }" — since November 2026 that rule is in
+   /assets/css/library.css, after this file, and a tie went to it: the wide "Open" pill became a round icon) */
+:root:where(.gv-prefs):is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .lib-btn.lib-btn-main { flex: 1 1 auto; white-space: normal; min-width: 0; border-radius: 1.5rem; }
 :root:where(.gv-prefs):is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .lib-actions { flex-wrap: wrap; }
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .lib-meta > * { white-space: normal; }
 /* Events: a card's buttons (Add to calendar, Details, Flyer) may wrap their label */
@@ -378,14 +383,24 @@ html:root.tts-bar-on {
    beside it) */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .ct-cal-head { flex-direction: column; align-items: flex-start; }
 @media (width < 30rem) { :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .ct-cal-icon { display: none; } }
+/* …"Next story deadlines" (contribute.njk #next-deadlines): its title keeps whole words — at 115%+ "All deadlines ↓"
+   goes under it rather than squeezing it to 7 characters beside it ("deadline-s", the text-column rule in main.css);
+   at 150% below 360px the card has 1rem sides and "Add to my calendar" leaves its calendar icon out ("Próximas",
+   "Agregar", "calendario" whole) */
+:root:where(.gv-prefs):is([data-text="115"], [data-text="130"], [data-text="150"]) #nd-title { --text-col-min: 11em; }
+@media (width < 22.5rem) {
+  :root:where(.gv-prefs)[data-text="150"] .ct-nd :is(.px-5, .p-5) { padding-inline: 1rem; }
+  :root:where(.gv-prefs)[data-text="150"] .ct-nd .ct-dl-cal > summary > svg:first-child { display: none; }
+}
 /* GVR / RLV 101: a keyboard key's meaning goes under the keys when both don't fit on one line; the "live"
    card's link may break a long word */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-keys > div { flex-wrap: wrap; }
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .o101-live-link { overflow-wrap: anywhere; }
-/* Home "From the Drive": three cards to a row (not six) at 130%+ from 1024 to 1439px — six left
-   "DOCUMENT" and the titles a sliver */
-@media (64rem <= width < 90rem) {
-  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-drive-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* …and a presentation's card at 150% with relaxed spacing below 360px: 1rem sides and a 1rem title, so its longest
+   word stays whole ("Preparándonos" is 243px at 27px with the wider letter spacing; the title had 210px) */
+@media (width < 22.5rem) {
+  :root:where(.gv-prefs)[data-text="150"][data-spacing="relaxed"] .o101-pres-card { padding-inline: 1rem; }
+  :root:where(.gv-prefs)[data-text="150"][data-spacing="relaxed"] .o101-pres-card > h3 { font-size: 1rem; }
 }
 /* Buttons at 130%+ (or relaxed spacing): a label on two or three lines makes a rounded box, not a
    blob (a one-line button still looks like a pill: 1.5rem is at least half its height), and on phones a
@@ -440,18 +455,6 @@ html:root.tts-bar-on {
 /* Committee pages' tabs (Meetings · Events · … · Bulletin) below 360px at 150%: the tab icons go, so
    the current tab's name fits in its pill inside the row that scrolls sideways */
 @media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"] .cm-subnav-link > svg { display: none; } }
-/* Home Instagram tiles: the date on the picture may wrap onto two lines; from 1024 to 1279px, six tiles to
-   a row, the account's name ("Grapevine", "La Viña") is left to screen readers — the Instagram icon stays
-   (beside the date it ran past the tile's edge). In the base layer with !important: main.css un-truncates
-   .truncate at larger text the same way, and its one-line, overflow-hidden box must win here. */
-:root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-ig-meta time { flex-shrink: 1; min-width: 0; text-align: right; }
-@layer base {
-  @media (64rem <= width < 80rem) {
-    :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-ig-meta > span > .truncate {
-      position: absolute !important; width: 1px !important; height: 1px !important; margin: -1px !important; overflow: hidden !important;
-      clip-path: inset(50%) !important; white-space: nowrap !important; }
-  }
-}
 /* Home magazine columns: the name ("Grapevine", "La Viña") and the kicker never break inside a word next
    to the floated cover — a word that doesn't fit beside it moves below it — and the name is at most
    10% of the column's width (.home-mag-head is a size container: home.css) */

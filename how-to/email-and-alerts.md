@@ -717,13 +717,14 @@ A **yellow ⚠** note, for example one source having a bad day, never sends an e
 
 ### 3.17 The three automatic issues
 
-Two workflows keep three GitHub issues, one of each title. GitHub e-mails new issues and new comments to everyone who
+Two workflows keep these GitHub issues (three until November 2026, when the missed-mornings one was added), one of each title. GitHub e-mails new issues and new comments to everyone who
 **watches** the repository.
 
 | Issue title (exact) | Opened by | When | While it is open | It closes |
 |---|---|---|---|---|
 | **A content source has stopped updating** | Website update, job *"Report sources that stopped updating, and updates that keep failing"* | a source has failed, with no success for **7 days or more** (or never worked), or no run has even tried a working source for 7 days ("not checked"). The optional outside calendars never count. | Its text is updated silently after every run. A **comment**, which means an e-mail, is added only when a **new** source starts failing. | by itself: *"Every content source is updating again (…). Closing automatically."* |
 | **The website update keeps failing** (since October 2026) | the same job, its second step | a Website update run that **nobody started by hand** (GitHub's schedule, or the Morning check) fails right after another failed run. A run a person started never opens it: GitHub e-mails that person. | *"The website update has failed N times in a row"*, updated silently after each failure; a **comment** only when another job starts failing (*"Now also failing: …"*). It names the failing job and what to do. | by itself, after the next run in which every job worked: *"The website update works again: this run published the site (…). Closing automatically."* |
+| **The daily quote missed the morning goal** (since November 2026) | the same job, its third step — only once the morning alarm is set up (`config/site.yml` `morning_alarm: true`) | **two mornings in a row** whose Grapevine and La Viña quotes were not both in by the 5:30 AM goal (`/status/` → the last 7 mornings) — usually the morning alarm at cron-job.org stopped working ([Automation and troubleshooting §8.5](automation-and-troubleshooting.md#85-the-daily-quote-missed-the-morning-goal)) | its table is updated silently when another morning is missed | by itself, after the first morning on time: *"The daily quotes of … came in by the goal (…). Closing automatically."* |
 | **Broken links found by the weekly check** | Weekly link check, on Sundays (cron `40 8 * * 0` = 08:40 UTC, 4 hours early on purpose) | the check finds a broken link, a link in `config/site.yml` no longer answers, or the root robots.txt (https://neta65.github.io/robots.txt) keeps search engines out, lost its `Sitemap:` line or redirects (a 404 — not set up yet — never opens it) | a **new comment every Sunday** while problems remain | by itself: *"All links look good now (…). Closing automatically."* |
 
 This is what the first issue looks like, as the code writes it (example values):

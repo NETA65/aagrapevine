@@ -1,0 +1,128 @@
+---js
+// (JavaScript front matter, as the events' own pages: the pagination's `before` and the page's data are functions. The
+// imports are read from the project's top folder, where every build runs.)
+import { committeeDatesPage } from "./eleventy/filters/committee.js";
+
+// one page per language — and none while the committee meeting has no date to come (no meeting: in the settings)
+const pagination = {
+  data: "languages", size: 1, alias: "lang",
+  before: (langs, full) => langs.filter((l) => committeeDatesPage(full.db.events.items, full.site, l).dates.length),
+};
+const permalink = (data) => committeeDatesPage(data.db.events.items, data.site, data.lang).path + "index.html";
+const layout = "layouts/base.njk";
+// under Events in the menu and the breadcrumb (base.njk: Home → Events → this page)
+const pageKey = "events";
+// the "Add to calendar" menus, their .ics files, Share and the flyers' viewer (src/assets/js/committee.js)
+const pageScripts = ["/assets/js/committee.js"];
+// its title ("<the meeting's title> — Every third Wednesday of the month": no date, so it stays the same month after
+// month), the tab title's tail, its description (how often, where, its next date: ≤ 160 characters, never how to
+// join) and its share picture (the next date's flyer): committee.js committeeDatesPage. (Eleventy first runs these with
+// stand-in data to see what they read: no page then, so no head — "" until the real run.)
+const cdOf = (data) => committeeDatesPage(data.db?.events?.items, data.site, data.lang);
+const headOf = (data, k) => (cdOf(data).head || {})[k] || "";
+const eleventyComputed = {
+  cd: (data) => cdOf(data),
+  title: (data) => headOf(data, "title"),
+  titleTail: (data) => headOf(data, "titleTail"),
+  description: (data) => headOf(data, "description"),
+  ogImage: (data) => headOf(data, "ogImage") || null,
+};
+---
+{#- Round 38 · the committee meeting's "All dates" page, /events/series/committee-meeting/ (/es/…) — as each monthly
+    series has its page (/events/series/<key>/, event-share-series.njk). Since the events list's redesign /events/
+    shows the committee meeting as ONE card, its next date; its other dates — each with its own "Add to calendar",
+    flyer and Share — and every date of 2028 were on no page. Here: EVERY committee meeting still to come
+    (committee.js committeeDatesPage: the dates /events/ and the calendar files have, through config/site.yml
+    events_until's month), by year, each a card as /events/ had one: its date, its time, where (the platform's name),
+    its guest speaker and topic (config/site.yml meeting.speakers: on the page, never in the structured data), Add to
+    calendar (Google / Outlook — brief links in the page, the full ones once the menu opens — and the .ics file), View
+    flyer (its flyer from the Drive) and Share (a link to that date here: #ev-committee-YYYY-MM-DD; an old
+    /events/#ev-committee-… link is sent on here: committee.js cmEvents). How to join (the meeting's link) is the
+    hero's, once; /meetings/#committee-meeting says the rest (how it runs, who can come, the chair). A date over
+    between two builds goes from the page by itself (committee.js expire: data-cm-expire).
+    Indexable, in the sitemap with its twin, in the site search (eleventy/filters/library.js) — the rules of a series'
+    page; no Event markup (a monthly meeting online: /events/ gives none either). -#}
+{% import "macros/ui.njk" as ui with context %}
+{% import "macros/events.njk" as evm with context %}
+{% import "macros/event-page.njk" as evp with context %}
+{%- set m = site.meeting -%}
+{%- set pf = { platform: cd.platform } -%}
+{%- set next = cd.next -%}
+{%- set selfAbs = page.url | siteUrl(site) -%}
+{%- set tone = next | eventTone -%}
+{% call ui.pageHero(lang, next.title, (cd.rule + " · " + ("committee.events.online_on" | t(lang, pf))) | escape, "repeat", "evpage.sec.all_dates" | t(lang)) %}
+  <div class="hero-actions evp-hero-actions">
+    {%- if next.online %}
+    <a class="btn-light" href="{{ next.online }}" target="_blank" rel="noopener">{% icon "video", "size-4" %} {{ "committee.meeting.join" | t(lang, pf) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+    {%- endif %}
+    <a class="btn-on-dark" href="{{ '/meetings/#committee-meeting' | lurl(lang) }}">{% icon "info", "size-4" %} {{ "committee.events.meeting_details" | t(lang) }}</a>
+    <a class="btn-on-dark btn-sm evp-hero-all" href="{{ '/events/' | lurl(lang) }}">{% icon "calendar-days", "size-4" %} {{ "committee.events.page_all" | t(lang) }}</a>
+  </div>
+{% endcall %}
+
+<div class="container-page section pt-6 sm:pt-8">
+<div class="mx-auto max-w-5xl">
+  {{ evp.crumbs([{ key: "nav.home", href: "/" | lurl(lang) }, { key: "nav.events", href: "/events/" | lurl(lang) }], title) }}
+  {#- what the page is, and who may come (config/site.yml meeting.note) -#}
+  {%- set mNote = m | pick(lang, "note") -%}
+  <p class="evp-lede">{{ "evlist.cm_dates_lede" | t(lang, pf) }}{% if mNote %} {{ mNote }}{% endif %}</p>
+
+  {#- every date, by year: a card each (committee.css .cm-event — the cards of /events/). The cards' "Add to calendar"
+      note: ONE copy of its words, on the list (data-cm-note-timed; evm.calMenu). The page comes with every card drawn
+      (cm-cv-all: committee.css), not skipped until it comes near as on /events/: a link to a later date (its Share
+      button, an old /events/#ev-committee-… link sent on here) was placed by the skipped cards' guessed heights (23rem
+      on a phone, the real cards shorter) and landed up to 2,600px past its card, on another month. Once the landing
+      has settled (2 s after load) committee.js datesSettle takes the class off (data-cm-cv-settle): every card keeps
+      its drawn height, and a Dark / Light switch restyles only the cards near the screen again (~290 → ~116 ms).
+      Without JavaScript the class stays. -#}
+  <section id="evp-all-dates" class="mt-8 cm-cv-all" data-cm-cv-settle aria-labelledby="cm-dates-h" data-cm-note-timed="{{ 'committee.cal.reminder_timed' | t(lang) }}" data-cm-note-day="{{ 'committee.cal.reminder_day' | t(lang) }}">
+    {{ evp.head("cm-dates-h", "evpage.sec.all_dates" | t(lang), "", "calendar-days") }}
+    {%- for y in cd.years %}
+    <h3 class="evp-all-year">{{ y.year }}</h3>
+    <ol class="mt-3 grid gap-4" role="list">
+      {%- for ev in y.dates %}
+      {%- set shareUrl = selfAbs + "#" + ev.anchor %}
+      <li id="{{ ev.anchor }}" data-cm-expire="{{ ev.expireIso }}">
+        <article class="card cm-event ev-accent ev-tone-{{ tone }}">
+          <div class="cm-date-tile max-sm:hidden" aria-hidden="true">
+            <span class="cm-tile-mon">{{ ev.tile.mon }}</span>
+            <span class="cm-tile-day">{{ ev.tile.day }}</span>
+            <span class="cm-tile-wd">{{ ev.tile.wd }}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="mb-2.5 flex items-center justify-between gap-3 sm:hidden">
+              <p class="cm-date-strip" aria-hidden="true">{% icon "calendar", "size-3.5" %}<span>{{ ev.tile.wd }} · {{ ev.tile.mon }} {{ ev.tile.day }}</span></p>
+              <button type="button" class="btn-ghost -my-1 -mr-2 size-11 shrink-0 p-0" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}" aria-label="{{ 'common.share' | t(lang) }}: {{ ev.dateLabel }}">{% icon "share-2", "size-4" %}</button>
+            </div>
+            <h4 class="h-card text-lg sm:text-xl">{{ ev.dateLabel }}</h4>
+            <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
+              <li class="inline-flex items-center gap-1.5">{% icon "clock-3", "size-4 text-faint" %} {{ ev.timeLabel }}</li>
+              <li class="inline-flex items-center gap-1.5">{% icon "video", "size-4 text-faint" %} {{ cd.platform }}</li>
+              {#- its guest speaker and topic (committee.js normalizeEvents: ev.speaker — on the page, as the owner
+                  approved, never in structured data), on a line of its own at any text size ([--text-col-min:100%]:
+                  main.css lets a .min-w-0 column at 130 %+ or relaxed spacing sit beside "Google Meet" otherwise; its words
+                  keep the usual 7em beside the microphone, as the value is inherited) -#}
+              {% if ev.speaker %}<li class="flex min-w-0 basis-full items-start gap-1.5 [--text-col-min:100%]">{% icon "mic", "cm-spk-ic mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0 [--text-col-min:7em]"><span class="font-medium text-ink">{{ "committee.meeting.speaker" | t(lang, { name: ev.speaker.name }) }}</span>{% if ev.speaker.topic %} — “{{ ev.speaker.topic }}”{% endif %}</span></li>{% endif %}
+            </ul>
+            <div class="cm-ev-actions">
+              <div class="cm-ev-btns">
+              {{ evm.calMenu(ev) }}
+              {{ ui.flyerButton(ev.flyer, ev.title + " — " + ev.dateLabel, lang) }}
+              </div>
+              <button type="button" class="btn-ghost btn-sm max-xl:px-2.5 max-sm:hidden" data-js-only data-share="{{ shareUrl }}" data-share-title="{{ ev.title }}" data-share-text="{{ ev.shareWhen }}">{% icon "share-2", "size-4" %}<span class="max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>
+            </div>
+          </div>
+          {{ ui.flyerThumb(ev.flyer, ev.title + " — " + ev.dateLabel, lang) }}
+        </article>
+      </li>
+      {%- endfor %}
+    </ol>
+    {%- endfor %}
+  </section>
+
+  <div class="mt-12">{% cmSubscribe lang, site %}</div>
+  <p class="mt-6"><a class="link tap-link inline-flex items-center gap-1.5" href="{{ '/events/' | lurl(lang) }}">{% icon "arrow-left", "size-4 shrink-0" %}{{ "committee.events.page_all" | t(lang) }}</a></p>
+</div>
+</div>
+
+<div data-nosnippet>{% cmPreviewDialog lang %}</div>

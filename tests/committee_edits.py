@@ -265,8 +265,10 @@ def apply_committee_edits(root: Path) -> list[str]:
     # that names Grapevine first, a classroom word
     for p in sorted((root / "config" / "presentations").glob("*.yml")):
         name = f"config/presentations/{p.name}"
-        did(_edit(p, _sub(r"^(minutes:\s*)(\d+)", lambda m: m.group(1) + str(int(m.group(2)) + 15), count=1)),
-            f"{name}: the deck takes 15 minutes more")
+        # (a fifth more, as a deck writer would lengthen it and the checker still takes it: its slides' minutes stay
+        # within a quarter of the deck's — 15 minutes more would be a slip for the 10-minute booth visit)
+        did(_edit(p, _sub(r"^(minutes:\s*)(\d+)", lambda m: m.group(1) + str(round(int(m.group(2)) * 1.2)), count=1)),
+            f"{name}: the deck takes a fifth longer")
         did(_edit(p, _sub(r'^(  summary:\n    en: ")', r"\1In about an hour: ", count=1)),
             f"{name}: the card's summary says its length again (a slip)")
         did(_edit(p, _sub(r'^(  audience:\n    en: "[^"\n]*"\n    es: ")', r"\1Grapevine y La Viña: ", count=1)),

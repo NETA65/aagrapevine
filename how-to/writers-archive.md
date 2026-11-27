@@ -674,12 +674,12 @@ explains the files, the checks and the cleaning in plain words. The data files a
 | read in every kind of run | `scripts/sync/run_all.py` | `MODULES`, `QUICK_MODULES` |
 | the run summary block, the commit message, the issue's advice | `.github/workflows/update.yml` | step *Write run summary* (search `Writers archive`), step *Commit refreshed data* (search `+ writers archive`), job `report` → `HINTS` |
 | the page | `src/pages/published.njk` | the `#archive` section, macros `arcRow` and `arcChip`, `<script id="pw-arc-config">` |
-| the page's rows, counts, decades, hometowns | `eleventy/filters/published.js` | `pwArchive`, `pwArchiveTotals`, `PW_ARC_PAGE` (40), `ARC_TOP` (8), `ARC_URL`, `ARC_JS_KEYS` |
+| the page's rows, counts, decades, hometowns | `eleventy/filters/published.js` | `pwArchive`, `PW_ARC_PAGE` (40), `ARC_TOP` (8), `ARC_URL`, `ARC_JS_KEYS` |
 | the page's script | `src/assets/js/published-archive.js` | `buildRow` (the rows of the JSON file), `render`, `load` |
 | the rest of Texas | `src/pages/published-archive-json.11ty.js` | the short keys are listed at the top of the file |
 | the look | `src/assets/css/areas/published.css` | the `pw-arc-*` classes |
 | the words | `src/_i18n/published.json`; `src/_i18n/read.json` | `published.archive.*`, `published.cta_archive`, `published.btn.archive`, `published.how.archive`; the note over the list: `read.mt_note_es` (English page), `read.mt_note_en` (Spanish page) |
-| home, search, offline, status | `eleventy/filters/home.js`, `src/pages/index.njk`; `eleventy/filters/library.js`; `src/pages/sw.11ty.js`; `src/pages/status.njk` | `homeArchive` (`home.spot_archive`); `searchIndex` (the writers' hometowns, and the keywords `search.kw.published_archive` in `src/_i18n/library.json`; since round 37 also one entry per story, `published.js` `pwArchiveItems`); `save` and `files`; `srcIcons` (`community.status.src.writers_archive`) |
+| search, offline, status | `eleventy/filters/library.js`; `src/pages/sw.11ty.js`; `src/pages/status.njk` (the home page's line with the archive's numbers went with its Published writers section in November 2026) | `searchIndex` (the writers' hometowns, and the keywords `search.kw.published_archive` in `src/_i18n/library.json`; since round 37 also one entry per story, `published.js` `pwArchiveItems`); `save` and `files`; `srcIcons` (`community.status.src.writers_archive`) |
 
 **Small recipes:**
 
