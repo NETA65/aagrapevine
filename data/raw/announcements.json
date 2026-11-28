@@ -1,7 +1,7 @@
 {
  "source": "announcements",
- "updated": "2026-11-27T17:32:43Z",
- "attempted": "2026-11-27T17:32:43Z",
+ "updated": "2026-11-28T05:13:37Z",
+ "attempted": "2026-11-28T05:13:37Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -39,7 +39,7 @@
    "extra": {
     "body_md": "Since **January 1, 2027**, the new prices AA Grapevine announced are in effect: a yearly Grapevine subscription costs **$39.00** in print or **$34.00** digital, a yearly La Viña subscription **$19.50** in print or **$17.00** digital, and every Grapevine and La Viña book **$2.00 more**.\n\nAll current prices, and how to order from the official stores: [Shop — subscriptions and prices](/shop/#subscriptions). AA Grapevine's notice: [Grapevine & La Viña Pricing Update](https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view).",
     "expires": "2027-01-31",
-    "pinned": false,
+    "pinned": true,
     "slug": "2027-01-01-new-prices-in-effect",
     "file": "content/bulletin/2027-01-01-new-prices-in-effect.md",
     "link": null,
