@@ -1,7 +1,7 @@
 {
  "source": "podcasts",
- "updated": "2026-11-27T21:08:57Z",
- "attempted": "2026-11-27T21:08:57Z",
+ "updated": "2026-11-28T02:37:39Z",
+ "attempted": "2026-11-28T02:37:39Z",
  "ok": true,
  "error": null,
  "changes": {
@@ -22,28 +22,28 @@
     "name": "AA Grapevine's Podcast",
     "episodes": 271,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-27T21:08:57Z"
+    "updated": "2026-11-28T02:37:39Z"
    },
    "wo": {
     "ok": true,
     "name": "Grapevine Weekly Open AA Meeting",
     "episodes": 43,
     "latest": "2026-11-27T05:15:00Z",
-    "updated": "2026-11-27T21:08:57Z"
+    "updated": "2026-11-28T02:37:39Z"
    },
    "lvo": {
     "ok": true,
     "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
     "episodes": 3,
     "latest": "2026-11-23T05:15:00Z",
-    "updated": "2026-11-27T21:08:57Z"
+    "updated": "2026-11-28T02:37:39Z"
    }
   },
   "missing_from_feed": 0,
   "gone_checks": 0,
   "discovery_checked": "2026-11-27T17:33:32Z",
   "discovered_feeds": [],
-  "seconds": 3.2,
+  "seconds": 3.4,
   "artwork": 4,
   "artwork_missing": 0,
   "artwork_removed": 0
