@@ -1,11 +1,11 @@
 {
  "source": "drive",
- "updated": "2026-11-28T02:37:35Z",
- "attempted": "2026-11-28T02:37:35Z",
+ "updated": "2026-11-28T10:44:05Z",
+ "attempted": "2026-11-28T10:44:05Z",
  "ok": true,
  "error": null,
  "changes": {
-  "added": 0,
+  "added": 3,
   "removed": 0,
   "held": 0
  },
@@ -26,16 +26,16 @@
   "include_loose": false,
   "loose_skipped": 1,
   "skipped_panels": [],
-  "folders": 110,
-  "files": 1221,
-  "fetched": 1221,
-  "new": 0,
+  "folders": 111,
+  "files": 1224,
+  "fetched": 1224,
+  "new": 3,
   "removed": 0,
   "kept_unverified": 0,
   "by_category": {
    "photos": 1160,
    "flyers": 33,
-   "booth": 15,
+   "booth": 18,
    "slides": 5,
    "reports": 4,
    "notes": 2,
@@ -44,10 +44,10 @@
   },
   "by_kind": {
    "photo": 1202,
-   "document": 12,
+   "document": 13,
    "slides": 5,
-   "announcement": 1,
-   "video_file": 1
+   "video_file": 3,
+   "announcement": 1
   },
   "albums": {
    "2026 Displays": 67,
@@ -109,7 +109,7 @@
    "reused": 1
   },
   "forms": {},
-  "requests": 110,
+  "requests": 111,
   "truncated": false,
   "warnings": [],
   "booth_texts": {
@@ -176,6 +176,78 @@
      ],
      "key": "2026-12"
     }
+   }
+  },
+  {
+   "id": "drive:1I0pa8oucU7snsQoTgNCehJLFvfBIszlI",
+   "source": "drive",
+   "kind": "document",
+   "url": "https://drive.google.com/file/d/1I0pa8oucU7snsQoTgNCehJLFvfBIszlI/view",
+   "title": "LAVINA JANFEB20 Carrito chocon",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-11-28",
+   "first_seen": "2026-11-28T10:44:05Z",
+   "last_seen": "2026-11-28T10:44:05Z",
+   "image": "https://lh3.googleusercontent.com/d/1I0pa8oucU7snsQoTgNCehJLFvfBIszlI=w600",
+   "tags": [
+    "panel-77",
+    "mp3"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1I0pa8oucU7snsQoTgNCehJLFvfBIszlI",
+    "mime": "audio/mpeg",
+    "name": "01_LAVINA_JANFEB20_Carrito chocon.mp3",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth",
+     "Media"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1I0pa8oucU7snsQoTgNCehJLFvfBIszlI/view",
+    "preview_url": "https://drive.google.com/file/d/1I0pa8oucU7snsQoTgNCehJLFvfBIszlI/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1I0pa8oucU7snsQoTgNCehJLFvfBIszlI",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1I0pa8oucU7snsQoTgNCehJLFvfBIszlI=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": false,
+    "is_pdf": false,
+    "file_type": "MP3",
+    "folder_id": "1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1",
+    "folder_url": "https://drive.google.com/drive/folders/1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+     "1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1"
+    ],
+    "modified_text": "1:03 am",
+    "booth": {
+     "kind": "audio",
+     "pub": "both",
+     "langs": [],
+     "title": "LAVINA JANFEB20 Carrito chocon",
+     "caption": true,
+     "order": 1,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": null,
+     "collection": "media",
+     "collection_label": "Media",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-11-28"
    }
   },
   {
@@ -7087,6 +7159,150 @@
      "1PCtA8C1JzZfZ6kjqJwon__S35JYg1EA8"
     ],
     "modified_text": "Oct 31"
+   }
+  },
+  {
+   "id": "drive:1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g",
+   "source": "drive",
+   "kind": "video_file",
+   "url": "https://drive.google.com/file/d/1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g/view",
+   "title": "AA’S TWELFTH STEP TOOLS GRAPEVINE AND LA VIÑA",
+   "summary": "",
+   "lang": "en",
+   "date": "2026-10-31",
+   "first_seen": "2026-11-28T10:44:05Z",
+   "last_seen": "2026-11-28T10:44:05Z",
+   "image": "https://lh3.googleusercontent.com/d/1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g=w600",
+   "tags": [
+    "panel-77",
+    "mp4"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g",
+    "mime": "video/mp4",
+    "name": "AA’S TWELFTH STEP TOOLS GRAPEVINE AND LA VIÑA.mp4",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth",
+     "Media"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g/view",
+    "preview_url": "https://drive.google.com/file/d/1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g",
+    "thumb_url": "https://lh3.googleusercontent.com/d/1Q-44DGXePyyKnfrmivYMWDA87VgvBY-g=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": true,
+    "is_pdf": false,
+    "file_type": "MP4",
+    "folder_id": "1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1",
+    "folder_url": "https://drive.google.com/drive/folders/1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+     "1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1"
+    ],
+    "modified_text": "Oct 31",
+    "booth": {
+     "kind": "video",
+     "pub": "both",
+     "langs": [],
+     "title": "AA’S TWELFTH STEP TOOLS GRAPEVINE AND LA VIÑA",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "media",
+     "collection_label": "Media",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-31"
+   }
+  },
+  {
+   "id": "drive:12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe",
+   "source": "drive",
+   "kind": "video_file",
+   "url": "https://drive.google.com/file/d/12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe/view",
+   "title": "La Viña Su historia y el impacto en la Comunidad Hispana de AA",
+   "summary": "",
+   "lang": "es",
+   "date": "2026-10-31",
+   "first_seen": "2026-11-28T10:44:05Z",
+   "last_seen": "2026-11-28T10:44:05Z",
+   "image": "https://lh3.googleusercontent.com/d/12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe=w600",
+   "tags": [
+    "panel-77",
+    "mp4"
+   ],
+   "category": "booth",
+   "status": "ok",
+   "extra": {
+    "file_id": "12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe",
+    "mime": "video/mp4",
+    "name": "La Viña Su historia y el impacto en la Comunidad Hispana de AA.mp4",
+    "panel": 77,
+    "panel_label": "Panel 77 (2027–2028)",
+    "path": [
+     "booth",
+     "Media"
+    ],
+    "album": null,
+    "view_url": "https://drive.google.com/file/d/12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe/view",
+    "preview_url": "https://drive.google.com/file/d/12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe/preview",
+    "download_url": "https://drive.google.com/uc?export=download&id=12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe",
+    "thumb_url": "https://lh3.googleusercontent.com/d/12fuPZ66YHsrRelLpDYyf_paYDMp8HJIe=w600",
+    "image_url": null,
+    "is_image": false,
+    "is_video": true,
+    "is_pdf": false,
+    "file_type": "MP4",
+    "folder_id": "1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1",
+    "folder_url": "https://drive.google.com/drive/folders/1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1",
+    "folder_chain": [
+     "1cTCFxTujRm-m8Xn0OobJGH2EIWI753S1",
+     "1bebd9TAz1L3LHhbeKUSlcENndtqas5O0",
+     "1GtovWnlc3SEph1eL04iiKVG1j9PFxxr9",
+     "1Rqy3hL6eLRH2kQekTDNtYhN7XREpRbQ1"
+    ],
+    "modified_text": "Oct 31",
+    "booth": {
+     "kind": "video",
+     "pub": "both",
+     "langs": [],
+     "title": "La Viña Su historia y el impacto en la Comunidad Hispana de AA",
+     "caption": true,
+     "order": null,
+     "seconds": null,
+     "start": null,
+     "end": null,
+     "muted": false,
+     "weight": 1,
+     "first": false,
+     "from": null,
+     "until": null,
+     "off": false,
+     "fit": "contain",
+     "collection": "media",
+     "collection_label": "Media",
+     "text": null,
+     "problem": null
+    },
+    "modified": "2026-10-31"
    }
   },
   {

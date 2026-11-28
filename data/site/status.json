@@ -1,6 +1,6 @@
 {
- "generated": "2026-11-28T05:14:04Z",
- "updated": "2026-11-28T05:14:04Z",
+ "generated": "2026-11-28T10:44:30Z",
+ "updated": "2026-11-28T10:44:30Z",
  "fixture": false,
  "sources": [
   {
@@ -8,10 +8,10 @@
    "label": "Google Drive (committee uploads)",
    "label_es": "Google Drive (archivos del comité)",
    "ok": true,
-   "updated": "2026-11-28T05:13:37Z",
-   "attempted": "2026-11-28T05:13:37Z",
-   "count": 1221,
-   "new_7d": 0,
+   "updated": "2026-11-28T10:44:05Z",
+   "attempted": "2026-11-28T10:44:05Z",
+   "count": 1224,
+   "new_7d": 3,
    "error": null,
    "stats": {
     "mode": "html",
@@ -30,16 +30,16 @@
     "include_loose": false,
     "loose_skipped": 1,
     "skipped_panels": [],
-    "folders": 110,
-    "files": 1221,
-    "fetched": 1221,
-    "new": 0,
+    "folders": 111,
+    "files": 1224,
+    "fetched": 1224,
+    "new": 3,
     "removed": 0,
     "kept_unverified": 0,
     "by_category": {
      "photos": 1160,
      "flyers": 33,
-     "booth": 15,
+     "booth": 18,
      "slides": 5,
      "reports": 4,
      "notes": 2,
@@ -48,10 +48,10 @@
     },
     "by_kind": {
      "photo": 1202,
-     "document": 12,
+     "document": 13,
      "slides": 5,
-     "announcement": 1,
-     "video_file": 1
+     "video_file": 3,
+     "announcement": 1
     },
     "albums": {
      "2026 Displays": 67,
@@ -113,7 +113,7 @@
      "reused": 1
     },
     "forms": {},
-    "requests": 110,
+    "requests": 111,
     "truncated": false,
     "warnings": [],
     "booth_texts": {
@@ -121,7 +121,7 @@
     }
    },
    "changes": {
-    "added": 0,
+    "added": 3,
     "removed": 0,
     "held": 0
    },
@@ -132,8 +132,8 @@
    "label": "Bulletin (content/bulletin)",
    "label_es": "Boletín (content/bulletin)",
    "ok": true,
-   "updated": "2026-11-28T05:13:37Z",
-   "attempted": "2026-11-28T05:13:37Z",
+   "updated": "2026-11-28T10:44:06Z",
+   "attempted": "2026-11-28T10:44:06Z",
    "count": 2,
    "new_7d": 0,
    "error": null,
@@ -156,8 +156,8 @@
    "label": "Events (content/events)",
    "label_es": "Eventos (content/events)",
    "ok": true,
-   "updated": "2026-11-28T05:13:37Z",
-   "attempted": "2026-11-28T05:13:37Z",
+   "updated": "2026-11-28T10:44:06Z",
+   "attempted": "2026-11-28T10:44:06Z",
    "count": 21,
    "new_7d": 0,
    "error": null,
@@ -211,8 +211,8 @@
    "label": "Texas writers archive (content/archive)",
    "label_es": "Archivo de escritores de Texas (content/archive)",
    "ok": true,
-   "updated": "2026-11-28T05:13:51Z",
-   "attempted": "2026-11-28T05:13:51Z",
+   "updated": "2026-11-28T10:44:29Z",
+   "attempted": "2026-11-28T10:44:29Z",
    "count": 1261,
    "new_7d": 0,
    "error": null,
@@ -367,8 +367,8 @@
    "label": "Podcasts",
    "label_es": "Pódcasts",
    "ok": true,
-   "updated": "2026-11-28T05:13:41Z",
-   "attempted": "2026-11-28T05:13:41Z",
+   "updated": "2026-11-28T10:44:25Z",
+   "attempted": "2026-11-28T10:44:25Z",
    "count": 317,
    "new_7d": 3,
    "error": null,
@@ -385,28 +385,28 @@
       "name": "AA Grapevine's Podcast",
       "episodes": 271,
       "latest": "2026-11-23T05:15:00Z",
-      "updated": "2026-11-28T05:13:41Z"
+      "updated": "2026-11-28T10:44:25Z"
      },
      "wo": {
       "ok": true,
       "name": "Grapevine Weekly Open AA Meeting",
       "episodes": 43,
       "latest": "2026-11-27T05:15:00Z",
-      "updated": "2026-11-28T05:13:41Z"
+      "updated": "2026-11-28T10:44:25Z"
      },
      "lvo": {
       "ok": true,
       "name": "Reunión abierta semanal de Alcohólicos Anónimos de La Viña",
       "episodes": 3,
       "latest": "2026-11-23T05:15:00Z",
-      "updated": "2026-11-28T05:13:41Z"
+      "updated": "2026-11-28T10:44:25Z"
      }
     },
     "missing_from_feed": 0,
     "gone_checks": 0,
     "discovery_checked": "2026-11-27T17:33:32Z",
     "discovered_feeds": [],
-    "seconds": 3.2,
+    "seconds": 3.7,
     "artwork": 4,
     "artwork_missing": 0,
     "artwork_removed": 0
@@ -619,8 +619,8 @@
    "label": "Daily quote",
    "label_es": "Cita del día",
    "ok": true,
-   "updated": "2026-11-28T05:14:02Z",
-   "attempted": "2026-11-28T05:14:02Z",
+   "updated": "2026-11-28T10:44:21Z",
+   "attempted": "2026-11-28T10:44:21Z",
    "count": 2,
    "new_7d": 2,
    "error": null,
@@ -628,12 +628,12 @@
     "fetched": 2,
     "parsed": 2,
     "requests": 2,
-    "today": "2026-11-27",
-    "new": 0
+    "today": "2026-11-28",
+    "new": 2
    },
    "changes": {
-    "added": 0,
-    "removed": 0,
+    "added": 2,
+    "removed": 2,
     "held": 0
    },
    "held": null
@@ -650,6 +650,12 @@
  "quote_days": {
   "goal": "05:30",
   "days": [
+   {
+    "day": "2026-11-28",
+    "goal_at": "2026-11-28T11:30:00Z",
+    "gv": "2026-11-28T10:44:11Z",
+    "lv": "2026-11-28T10:44:21Z"
+   },
    {
     "day": "2026-11-27",
     "goal_at": "2026-11-27T11:30:00Z",
@@ -685,12 +691,6 @@
     "goal_at": "2026-11-22T11:30:00Z",
     "gv": "2026-11-22T09:57:20Z",
     "lv": "2026-11-22T09:57:30Z"
-   },
-   {
-    "day": "2026-11-21",
-    "goal_at": "2026-11-21T11:30:00Z",
-    "gv": "2026-11-21T11:26:32Z",
-    "lv": "2026-11-21T11:26:42Z"
    }
   ]
  },
@@ -721,7 +721,7 @@
   "from_cache": 4409,
   "pending": 0,
   "rejected_by_guard": 0,
-  "seconds": 0.3,
+  "seconds": 0.2,
   "model_seconds": 0.0,
   "texts_per_second": null,
   "glossary_entries": 269,
@@ -744,7 +744,7 @@
   "meetings": 23,
   "audio_project": 2,
   "quote": 2,
-  "booth": 14
+  "booth": 17
  },
  "problems": {},
  "feeds": [
@@ -770,7 +770,7 @@
  ],
  "items": [],
  "spotlight": {
-  "today": "2026-11-27",
+  "today": "2026-11-28",
   "home_days": 60,
   "list_days": [
    60,
