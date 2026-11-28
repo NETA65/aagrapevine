@@ -403,7 +403,9 @@
     Eyebrow form (opts.eyebrow): [icon] EYEBROW in the tone colour · h2 · one-line intro, with the
     "all" link (href + linkLabel) as a right-hand btn-secondary btn-sm with a trailing arrow, and
     an optional extra action from the call body. The legacy form (no opts.eyebrow) keeps the
-    icon inside the h2 — migrate those callers to the eyebrow form. -#}
+    icon inside the h2 — migrate those callers to the eyebrow form; there opts.foldIcon marks that
+    icon .lt-fold (it steps aside at 150 % on a phone narrower than 384px, areas/access.css: the
+    title's words are one piece beside it that can't be narrower than its longest word). -#}
 {% macro sectionHead(title, subtitle="", href="", linkLabel="", icon="", opts=null) %}
 {%- set o = opts or {} -%}
 {%- set tag = "h3" if o.level == 3 else "h2" -%}
@@ -415,7 +417,7 @@
     <p class="eyebrow flex items-center gap-2 {{ o.tone or 'text-gv' }}">{% if icon %}{% icon icon, "size-4 shrink-0" %}{% endif %}<span>{{ o.eyebrow }}</span></p>
     <{{ tag }}{% if o.id %} id="{{ o.id }}"{% endif %} class="h-section mt-2 text-balance">{{ title }}</{{ tag }}>
     {%- else %}
-    <{{ tag }}{% if o.id %} id="{{ o.id }}"{% endif %} class="h-section flex items-center gap-2.5">{% if icon %}<span class="text-gv">{% icon icon, "size-6" %}</span>{% endif %}{{ title }}</{{ tag }}>
+    <{{ tag }}{% if o.id %} id="{{ o.id }}"{% endif %} class="h-section flex items-center gap-2.5">{% if icon %}<span class="text-gv{{ ' lt-fold' if o.foldIcon }}">{% icon icon, "size-6" %}</span>{% endif %}{{ title }}</{{ tag }}>
     {%- endif %}
     {% if subtitle %}<p class="mt-2 max-w-2xl leading-relaxed text-muted">{{ subtitle | safe }}</p>{% endif %}
   </div>

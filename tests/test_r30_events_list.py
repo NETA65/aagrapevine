@@ -37,13 +37,18 @@ tests/test_events_filters.py. The checks below say what of round 30 still holds.
     alone; on load a link into a folded month opens it, one to a past event (its old anchor too) opens "Past events"
     and marks its row, and ?filter=committee / ?filter=calendar (the old chips) pick
     that kind, ?filter=neta shows what its chip showed (data-group~="neta": ours and the committee meetings) beside
-    the other filters, until it is let go; "No events match" waits while a folded card matches; the month chips' row
+    the menus, until it is let go; "No events match" waits while a folded card matches; the month chips' row
     goes while none of its chips shows. (Round 38) The "NETA 65 events" chip is on the page again: it picks ours and
-    the committee meetings (setGroup), counts them under the other filters (groupCount), lets go when picked again,
-    and "All" lets it and the kind go; a bilingual card (data-lang="both") shows under English and under Spanish; an
-    old #month-… anchor kept on "Every month" brings that section's heading; an old link to a committee meeting's
-    later date, opened, goes on to its dates page (data-ev-dates) — the date its card shows, or a link inside the
-    page, stays; a link to a past event's row brings it in view as a card is (reveal: marked, focused).
+    the committee meetings (setGroup), counts them under the menus (groupCount), lets go when picked again, and "All"
+    lets it and the kind go; a bilingual card (data-lang="both") shows under English and under Spanish; an old
+    #month-… anchor kept on "Every month" brings that section's heading; an old link to a committee meeting's later
+    date, opened, goes on to its dates page (data-ev-dates) — the date its card shows, or a link inside the page,
+    stays; a link to a past event's row brings it in view as a card is (reveal: marked, focused). (Round 38b) The
+    chips are one choice, as the old ones were: a kind picked lets the NETA 65 chip go and the NETA 65 chip lets the
+    kind go — the two together showed nothing ("No events match": no card of the GV & LV calendars is ours) —, each
+    chip counting what it shows once picked (the menus only); ?filter=neta&kind=… (an address of before) keeps the
+    kind; with committee.js not loaded (Alpine there) the page's stand-in for cmEvents (events.njk evStandIn) shows
+    every card and month — the folded ones too, as without JavaScript — and hides the filters (the list was blank).
   * (Round 38) The committee meeting's dates page (src/pages/events-committee.njk, committee.js datesSettle, on the
     same page stand-in): its list comes with every card drawn (class cm-cv-all, data-cm-cv-settle — the first landing
     works without JavaScript too); 2 s after the page has loaded, and only once no scroll has come for 300 ms (the
@@ -449,7 +454,7 @@ function setup(opts) {
   const past = el("details", { "data-cm-past": "" }, [el("ol", {}, [
     el("li", { id: "2026-11-07-zz-past" }, [el("span", { id: "ev-flyer-zzpast", class: "sr-only" })])])]);
   const root = el("section", { "data-count-label": "Showing {n} events", "data-count-label-one": "Showing 1 event" },
-                  [el("div", {}, chips.concat(menus))].concat(months, [series, weekly, past]));
+                  [el("div", { id: "ev-filters" }, chips.concat(menus))].concat(months, [series, weekly, past]));
   const p = page([root], { files: ["time", "src/assets/js/app.js", "src/assets/js/committee.js"], alpine: true, at: opts.at || "2026-11-13T18:00:00Z" });
   if (opts.hash) p.win.location.hash = opts.hash;
   if (opts.search) p.win.location.search = opts.search;
@@ -546,6 +551,8 @@ const res = {};
 }
 { // on load: a link into a folded month opens it; the filters from the address (only what the page offers); the old
   // ?filter= chips
+  // "No events match these filters" (its x-show, events.njk): not while "Show 2028 dates (n)" has a match
+  const empty = (t) => new Function("c", "with (c) { return !!(" + input.emptyShow + "); }")(t.c);
   const t = setup({ hash: "#zz-acm-2028" });
   res.load = { state: t.state(), scrolled: scrolled.slice(-1) };
   res.fromAddress = setup({ search: "?kind=workshop&lang=es&city=tyler&district=99&mode=boat" }).c.f;
@@ -554,7 +561,7 @@ const res = {};
   const n = setup({ search: "?filter=neta" });
   res.oldNeta = n.state();
   n.c.setKind("calendar");
-  res.oldNetaCalendar = n.state();
+  res.oldNetaCalendar = Object.assign(n.state(), { empty: empty(n) });
   n.c.setKind("calendar"); n.c.setKind("booth");
   res.oldNetaBooth = n.state();
   n.c.dropGroup();
@@ -563,8 +570,9 @@ const res = {};
   res.oldNetaSpanish = nc.state();
   nc.c.clear();
   res.oldNetaCleared = nc.state();
-  // "No events match these filters" (its x-show, events.njk): not while "Show 2028 dates (n)" has a match
-  const empty = (t) => new Function("c", "with (c) { return !!(" + input.emptyShow + "); }")(t.c);
+  // (round 38b) both in the address — shared while both chips could be picked: the kind
+  res.oldNetaAndKind = setup({ search: "?filter=neta&kind=calendar" }).state();
+  res.oldNetaAndNoKind = setup({ search: "?filter=neta&kind=boat" }).state();
   const fo = setup(); fo.c.setKind("area");
   res.emptyFolded = { shown: fo.state().shown, moreCount: fo.c.moreCount, empty: empty(fo) };
   fo.c.setKind("committee"); fo.c.f.lang = "es";
@@ -584,7 +592,10 @@ const res = {};
   t.c.setGroup("neta");
   res.netaOn = t.state();
   t.c.setKind("booth");
-  res.netaBooth = { shown: t.state().shown, neta: t.state().neta };
+  res.netaBooth = { shown: t.state().shown, neta: t.state().neta, group: t.state().group, kind: t.state().f.kind };
+  // (round 38b) …and the NETA 65 chip after a kind: the kind goes
+  t.c.setGroup("neta");
+  res.kindThenNeta = { shown: t.state().shown, group: t.state().group, kind: t.state().f.kind, booth: t.state().counts.booth };
   t.c.all();
   res.afterAll = { f: t.state().f, group: t.state().group, active: t.state().active };
   t.c.setGroup("neta"); t.c.setGroup("neta");
@@ -609,6 +620,25 @@ const res = {};
   inPage.hash("#ev-committee-2026-12-16");
   res.forward = went;
 }
+if (input.standIn) { // (round 38b) committee.js not loaded, Alpine there: the page's stand-in for cmEvents (events.njk
+  // evStandIn) — every card shows (a folded one, a cancelled one too) and every month (the fold open: `more`), its
+  // first-paint rule let go (.cm-ev-ready), the filters hidden; "No events match", "Show 2028 dates" and the empty
+  // states' tests answer no
+  const t = setup();
+  t.p.doc.documentElement.classList.remove("cm-ev-ready");
+  const s = new Function("document", "return (" + input.standIn + ");")(t.p.doc);     // (the page's document)
+  s.$el = t.root;
+  s.init();
+  const ask = (expr) => new Function("c", "with (c) { return !!(" + expr + "); }")(s);
+  res.standIn = {
+    cards: [...t.root.querySelectorAll("li[data-group]")].filter((li) => !s.show(li)).map(name),
+    months: [...t.root.querySelectorAll("[data-cm-month]")].filter((m) => !(s.monthVisible(m) && (s.more || !m.hasAttribute("data-cm-more")))).length,
+    folded: t.root.querySelectorAll("[data-cm-more]").length,
+    ready: t.p.doc.documentElement.classList.contains("cm-ev-ready"), filtersHidden: t.byId("ev-filters").hidden,
+    empty: ask(input.emptyShow), more: ask("!more && moreCount"), calendarsEmpty: ask("f.kind === 'calendar'"),
+    netaEmpty: ask("!active || group"), anyMonth: ask("anyMonth"),
+  };
+}
 out(res);
 """
 
@@ -622,7 +652,11 @@ class InTheBrowser(unittest.TestCase):
         if InTheBrowser.r is None:
             page = (Path(__file__).resolve().parents[1] / "src" / "pages" / "events.njk").read_text(encoding="utf-8")
             show = re.search(r'<div class="mt-2" data-js-only x-show="([^"]+)" x-cloak>\s*<div class="empty-state">', page)
-            InTheBrowser.r = TCT.js(self, LIST_JS, data={"emptyShow": show.group(1)})
+            # (round 38b) the stand-in for cmEvents when committee.js did not load: its JavaScript, as the template
+            # writes it into the list's x-data
+            stand_in = re.search(r'\{%- set evStandIn = "([^"]+)" %\}', page)
+            InTheBrowser.r = TCT.js(self, LIST_JS, data={"emptyShow": show.group(1), "standIn": stand_in.group(1) if stand_in else ""})
+            InTheBrowser.r["usesStandIn"] = """x-data="typeof cmEvents == 'function' ? cmEvents() : {{ evStandIn }}\"""" in page
         return InTheBrowser.r
 
     def test_chips_menus_and_the_fold(self):
@@ -693,14 +727,24 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual(r["oldCalendar"], "calendar")
         self.assertEqual(r["oldCommittee"], "booth", "?kind= wins over the old ?filter=")
         # ?filter=neta: what its chip showed — ours and the committee meetings, never the calendars' or the weekly
-        # meetings' —, kept in the address; the other filters beside it; let go by its chip or "Clear filters"
+        # meetings' —, kept in the address; the menus beside it; let go by its chip or "Clear filters"
         neta = r["oldNeta"]
         self.assertEqual((neta["group"], neta["active"], neta["f"]["kind"]), ("neta", True, ""))
         self.assertEqual(neta["shown"], ["zz-workshop", "zz-off", "committee", "ev-series-zz-booth"])
-        self.assertEqual(neta["counts"], {"workshop": 1, "area": 1, "booth": 1, "online": 0, "committee": 1, "calendar": 0})
+        # (round 38b) each kind chip counts what it shows once picked — the NETA 65 chip let go: the menus only
+        self.assertEqual(neta["counts"], {"workshop": 1, "area": 1, "booth": 1, "online": 1, "committee": 1, "calendar": 2})
         self.assertEqual(neta["moreCount"], 1, "the 2028 ACM, folded")
-        self.assertEqual(r["oldNetaCalendar"]["shown"], [])
+        # (round 38b) a kind picked after it: the kind's cards, the NETA 65 chip let go — it showed nothing, "No
+        # events match", both chips pressed
+        cal = r["oldNetaCalendar"]
+        self.assertEqual((cal["group"], cal["f"]["kind"], cal["shown"], cal["empty"]), ("", "calendar", ["ev-lv-calendar-zz-taller"], False))
+        self.assertEqual(cal["counts"]["calendar"], 2, "the open card and the folded one")
         self.assertEqual(r["oldNetaBooth"]["shown"], ["ev-series-zz-booth"])
+        # an address with both (shared while both could be picked): the kind (?kind= before ?filter=); a kind the page
+        # does not offer: the NETA 65 chip
+        both = r["oldNetaAndKind"]
+        self.assertEqual((both["group"], both["f"]["kind"], both["shown"]), ("", "calendar", ["ev-lv-calendar-zz-taller"]))
+        self.assertEqual((r["oldNetaAndNoKind"]["group"], r["oldNetaAndNoKind"]["f"]["kind"]), ("neta", ""))
         self.assertEqual((r["oldNetaDropped"]["group"], r["oldNetaDropped"]["f"]["kind"], r["oldNetaDropped"]["shown"]),
                          ("", "booth", ["ev-series-zz-booth"]))
         self.assertEqual((r["oldNetaSpanish"]["group"], r["oldNetaSpanish"]["shown"]), ("neta", ["zz-off"]))
@@ -715,6 +759,19 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual(r["toPast"], {"open": True, "marked": ["2026-11-07-zz-past"], "scrolled": ["2026-11-07-zz-past"],
                                        "focused": [["2026-11-07-zz-past", True]]})
 
+    def test_round38b_without_committee_js_every_card_shows(self):
+        """the stand-in for cmEvents (committee.js not loaded, Alpine there — the list was blank: every card's x-show
+        asked a cmEvents that was not there): every card and month, the folded ones too; the filters hidden"""
+        r = self.result()
+        self.assertTrue(r["usesStandIn"], "the list's x-data: cmEvents, else the stand-in")
+        st = r.get("standIn")
+        self.assertIsNotNone(st, "events.njk sets evStandIn")
+        self.assertGreater(st["folded"], 0, "(the page stand-in folds two months)")
+        self.assertEqual((st["cards"], st["months"]), ([], 0))
+        self.assertEqual((st["ready"], st["filtersHidden"]), (True, True))
+        self.assertEqual((st["empty"], st["more"], st["calendarsEmpty"]), (False, False, False))
+        self.assertEqual((st["netaEmpty"], st["anyMonth"]), (True, True))
+
     def test_round38_neta_chip_bilingual_old_links(self):
         r = self.result()
         # "NETA 65 events": ours and the committee meetings — the open ones and the folded 2028 ACM, never a calendar's
@@ -722,8 +779,13 @@ class InTheBrowser(unittest.TestCase):
         self.assertEqual(r["netaStart"], 4)
         self.assertEqual((r["netaOn"]["group"], r["netaOn"]["active"]), ("neta", True))
         self.assertEqual(r["netaOn"]["shown"], ["zz-workshop", "zz-off", "committee", "ev-series-zz-booth"])
-        self.assertEqual(r["netaOn"]["counts"], {"workshop": 1, "area": 1, "booth": 1, "online": 0, "committee": 1, "calendar": 0})
-        self.assertEqual(r["netaBooth"], {"shown": ["ev-series-zz-booth"], "neta": 1}, "its count under the kind picked")
+        # (round 38b) the kind chips count what each shows once picked: the menus only, the NETA 65 chip let go
+        self.assertEqual(r["netaOn"]["counts"], {"workshop": 1, "area": 1, "booth": 1, "online": 1, "committee": 1, "calendar": 2})
+        # (round 38b) the chips are one choice: a kind lets the NETA 65 chip go (its count: what it shows once picked
+        # again — the menus only), the NETA 65 chip lets the kind go
+        self.assertEqual(r["netaBooth"], {"shown": ["ev-series-zz-booth"], "neta": 4, "group": "", "kind": "booth"})
+        self.assertEqual(r["kindThenNeta"], {"shown": ["zz-workshop", "zz-off", "committee", "ev-series-zz-booth"],
+                                             "group": "neta", "kind": "", "booth": 1})
         self.assertEqual(r["afterAll"], {"f": {"kind": "", "lang": "", "mode": "", "city": "", "district": ""}, "group": "", "active": False})
         self.assertEqual(r["netaAgain"], "", "picked again: let go")
         self.assertEqual(r["netaEnglish"], 4)

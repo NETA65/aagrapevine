@@ -286,7 +286,9 @@ player leaves out the ones already past when the slide is shown (and keeps a mon
 - `**bold**`, `_italic_` and links: `[the guidelines](https://www.aagrapevine.org/guidelines-contributing-grapevine)`.
   A link (and a `url`) is an `https://` address, a page of the site written from its first slash
   (`/contribute/#deadlines` — no `/es/` and no `/aagrapevine/`: the site adds them; in a Spanish presentation the
-  link shows and opens the Spanish page, on the English page too), or an e-mail address.
+  link shows and opens the Spanish page, on the English page too), a file of the site written the same way
+  (anything under `/assets/`, or an address that ends in a file name: `/events.ics`, `/feed.xml` — opened as
+  written, never with an `/es/` added; the Spanish calendar is `/es/events.ics`), or an e-mail address.
 - `{fill:date}` — one of the presenter's blanks.
 - `{slide:history-1}` — "slide 12": that slide's number in the version being shown ("not in this version" when it is
   left out). Use it instead of writing slide numbers.
@@ -435,8 +437,11 @@ slide matches), not translated line by line. What is different in a file with `l
   anunciar" … (`FALLBACKS_ES` in `eleventy/filters/presentations.js`, the twin of the table's last column). Its
   links go to the Spanish pages (`/es/contribute/#deadlines`).
 - **Links to the site's pages open the Spanish pages**: write them as in any deck, `[aquí](/contribute/)` or a
-  card's `url: "/contribute/"` (never `/es/contribute/`: on the Spanish page that would become `/es/es/…`). The
-  player shows and opens `grapevine.neta65.org/es/contribute/`, on the Spanish page and on the English one alike.
+  card's `url: "/contribute/"` (without `/es/`: the player adds it — an address written with it keeps that one,
+  never `/es/es/…`). The player shows and opens `grapevine.neta65.org/es/contribute/`, on the Spanish page and on
+  the English one alike. A file of the site (`/assets/…`, `/events.ics`) opens as written, as in any deck. The
+  same goes for a QR code (`qr: "/contribute/"`, a `qr` slide's `url`): a page's code opens the Spanish page, a
+  file's opens it as written.
 - **Quotations**: only a Spanish text the committee has word for word (the Preamble from the Libro de trabajo de La
   Viña, the Responsibility Statement from the Manual del RLV), with its credit line. An English deck's A.A.W.S.
   quotation with no Spanish text here becomes a slide that says the same in our own words, with its source named

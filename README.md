@@ -308,8 +308,10 @@ publishes its quote later than that): at 4:30 AM the alarm starts the **Morning 
 **morning refresh** of the **Website update** job (the daily quote, Google Drive, the bulletin and the
 podcasts — on the 1st also the new magazine issues, on the 1st and the 15th the Book of the Month; about
 3 minutes) and checks the live site. If a magazine has not published its quote yet, it asks again every
-10 minutes until 7 AM (after that, each Morning check asks once). Without the alarm, GitHub's own hourly
-backstop starts the Morning check whenever GitHub gets to it — often hours late.
+10 minutes until 7 AM (after that, each Morning check asks once). Until the alarm is set up (November 2026),
+GitHub's own schedule does it: it starts the Morning check every hour from the early afternoon through the night,
+hours late as GitHub runs it, and a run that comes from 8:15 PM waits until 2 AM, then puts the new day up — so on
+some mornings the quote may arrive after 5:30 AM.
 
 The **full update** (every source, the PDF search) runs every night on GitHub's own schedule, and two short
 runs, the **midday refresh** and the **evening refresh**, bring the day's Drive files, bulletin posts, podcasts
@@ -689,7 +691,8 @@ breaks while you decide.
   open the bulletin at its top, where this post is first; it is in the e-mail of December 1 when it goes up by
   November 30, so merge it in November (the e-mail counts a post in the month it first shows: one that first shows
   in December is in no e-mail, since it is gone before January 1's), and it leaves by itself after December 31
-  (`2027-01-01-new-prices-in-effect.md` takes over on January 1).
+  (`2027-01-01-new-prices-in-effect.md` takes over on January 1 — pinned since November 27, so it is Home's
+  *Pinned on the Bulletin* card through January 31; from February 1 Home has no such card until a post is pinned).
 - **What's New:** the words ("New since your last visit", "New for you", "Mark all as read", "Forget my last
   visit"), the 30-minute "visit" rule, and the green label.
 - **Agenda & notes (committee meeting deck):** the reminder's Spanish paragraph ("La reunión es en inglés" —
@@ -890,7 +893,7 @@ All settings live in **one file**: [`config/site.yml`](config/site.yml). To edit
 3. Click **Commit changes…** → **Commit changes**.
 4. The site rebuilds automatically in **about 3 minutes** (watch it in the **Actions** tab; a page may take up
    to about 10 more minutes to show the change everywhere). The *Code check* tests your change meanwhile, in about
-   10 minutes: a red ✗ there means a slip to fix (the site was published without the part it could not use).
+   20–30 minutes: a red ✗ there means a slip to fix (the site was published without the part it could not use).
 
 Common changes:
 
@@ -1046,8 +1049,10 @@ that stays, `/events/series/<key>/` — for example
 how to join (online), its flyer, its next 6 dates (a moved date included, a skipped one never), the links that fit
 it and the month's magazines. That page is in the sitemap; its title has no date ("GV/LV booth at CityWide Dallas —
 Every second Saturday of the month"), and its description names the next one ("… — Next: Saturday, December 12,
-2026. …"), as its line in `/llms.txt` does. The key is its address: keep it the same once published. A block with
-`enabled: false`, or with no date still to come, gets no series page. The kind of event (which presentation, which
+2026. …"), as its line in `/llms.txt` does. The key is its address: keep it the same once published — and never
+`committee-meeting`, the committee meeting's own dates page since round 38 (two pages at one address stop the build;
+`tests/test_r20_meeting.py` RealSettings says so first). A block with `enabled: false`, or with no date still to come,
+gets no series page. The kind of event (which presentation, which
 bingo card, which links) comes from the key or the block's words; an optional `type: "booth"` (one of the 15 kinds
 in [content/events/README.md](content/events/README.md#the-kind-of-event-type-optional)) sets it.
 
@@ -1603,7 +1608,7 @@ saved (nothing has to be fetched again), but the website is only republished by 
   and, for a source that no run has even tried for 3 days, **NOT CHECKED** ("not checked for N days").
 - **The badge** at the top of this page is green when the last update succeeded.
 - **"Code check (tests and test build)" runs:** when a settings, content or code file is saved, a
-  **Code check** run also appears next to **Website update** (about 10 minutes). It builds a test copy of
+  **Code check** run also appears next to **Website update** (about 20–30 minutes). It builds a test copy of
   the site, opens it in a real browser and runs every automatic test; nothing is published. A red ✗ there
   means that change broke something: fix it, or undo it from the file's **History** (or send the run to whoever
   helps with the website). The live site keeps working either way. A change to the **code** that fails the tests
@@ -1614,10 +1619,10 @@ saved (nothing has to be fetched again), but the website is only republished by 
   "Only notify for failed workflows". **Good to know:** e-mails about the *timed* runs go to the
   person who last switched each workflow on (or last changed its schedule). To make sure they come to
   **you**: **Actions** → **Website update** → **⋯** (top right) → **Disable workflow**, then **Enable
-  workflow** — and the same for **Morning check (new day by 5:30 AM)** (its hourly backstop),
-  **Monthly e-mail digest** (if it is used) and **Weekly link check**. Do it again whenever someone
-  else changes a workflow's schedule (its `cron:` line). The runs the morning alarm starts e-mail the
-  owner of its key.
+  workflow** — and the same for **Morning check (new day by 5:30 AM)** (its hourly schedule),
+  **Monthly e-mail digest** (if it is used), **Weekly link check** and **Gate list check**. Do it
+  again whenever someone else changes a workflow's schedule (its `cron:` line). The runs the morning
+  alarm starts e-mail the owner of its key.
 - **An issue when a source stops updating:** if the same source (for example Google Drive) has not
   updated for **7 days**, the site opens one issue titled **"A content source has stopped
   updating"** in this repository's **Issues** tab, explaining what to check. GitHub e-mails it to
@@ -2428,8 +2433,8 @@ file use the new address by themselves.
 Settings never come along with the files. Done once, signed in to GitHub as **NETA65**:
 
 - [ ] **Failure e-mails:** **Actions → Website update → ⋯ → Disable workflow**, then **Enable
-  workflow**, and the same for **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and
-  **Weekly link check**, so the e-mails about their timed runs come to NETA65
+  workflow**, and the same for **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest**,
+  **Weekly link check** and **Gate list check**, so the e-mails about their timed runs come to NETA65
   ([section 8](#8-is-everything-working)). Do it after the last push that changed a schedule (the
   schedules moved 4 hours earlier on September 30, 2026, pushed from another account). Set **Watch** to
   **All Activity** (or *Custom* with *Issues*) so the automatic issues reach you too.
@@ -2453,25 +2458,30 @@ For a later move, follow
 - **The 60-day rule.** GitHub pauses scheduled workflows in a public repository after 60 days
   without activity. The daily data commit counts as activity, so this should never happen. If it
   ever does: **Actions → Website update → Enable workflow**, and the same for
-  **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and **Weekly link check** (a
-  switched-off Morning check also turns the morning alarm away: 422).
+  **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest**, **Weekly link check** and **Gate list
+  check** (a switched-off Morning check also turns the morning alarm away: 422).
 - **Dependabot pull requests.** Once a month GitHub may open a pull request titled
   `chore(actions)…` (the workflows' building blocks) or `chore(deps)…` (the site tools, and since October 2026 a
   new **major** version of a Python package: every run already installs the newest minor and patch releases,
   `requirements.txt` caps each package below its next major version, and `yt-dlp` has no cap; also each newer
   `playwright`, pinned in `scripts/ops/requirements-browser.txt` for the browser checks and the posters' share
-  pictures). About 10 minutes later the **Code check** has built the website with the update, opened it in a real
+  pictures). One package is held on purpose: **lite-youtube-embed stays on 0.3.x** (since November 2026
+  `.github/dependabot.yml` tells Dependabot not to offer 0.4 or any later release): version 0.4 would stop the
+  videos from staying on YouTube's privacy-enhanced youtube-nocookie.com, and would make iPhones and iPads load
+  YouTube (1–2 MB, with Google ad requests) before anyone taps play. Taking it later is a code change, not a merge:
+  [docs/OPERATIONS.md](docs/OPERATIONS.md#dependabotyml) says what it takes. About 20–30 minutes after GitHub opens a
+  pull request, the **Code check** has built the website with the update, opened it in a real
   browser and run the tests: **merge only if the pull request shows a green ✓**. If it shows a red ✗, leave it open (or close it) — the live site is not
   affected. After merging, glance at the next **Website update** run; if it is red, open the merged
   pull request and click **Revert**.
-- **Who gets the failure e-mails.** E-mails about the timed runs — Website update, the hourly backstop of
-  Morning check (new day by 5:30 AM), Monthly e-mail digest, Weekly link check — go to the person who
-  last switched each workflow on (or last changed its schedule). When a new chair takes over, after
-  moving the repository, or after someone else changed a schedule, the person who should receive them
-  opens **Actions → Website update → ⋯ → Disable workflow**, then **Enable workflow**, and does the same
-  for **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and **Weekly link check** (and
-  turns on the e-mails, see [section 8](#8-is-everything-working)). The runs the morning alarm starts
-  e-mail the owner of its key.
+- **Who gets the failure e-mails.** E-mails about the timed runs — Website update, the hourly schedule of
+  Morning check (new day by 5:30 AM), Monthly e-mail digest, Weekly link check, Gate list check — go to
+  the person who last switched each workflow on (or last changed its schedule). When a new chair takes
+  over, after moving the repository, or after someone else changed a schedule, the person who should
+  receive them opens **Actions → Website update → ⋯ → Disable workflow**, then **Enable workflow**, and
+  does the same for **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest**, **Weekly link
+  check** and **Gate list check** (and turns on the e-mails, see [section 8](#8-is-everything-working)).
+  The runs the morning alarm starts e-mail the owner of its key.
 - **Repository size** grows slowly (data files and small preview pictures). That is expected; see
   [docs/OPERATIONS.md](docs/OPERATIONS.md#repository-size) if it ever passes about 1 GB.
 - **Daily data commits** by `github-actions[bot]` ("chore(data): daily content sync …" — a full update, nightly or
@@ -2490,7 +2500,8 @@ For a later move, follow
   new owner as *Resource owner* and change the job's URL
   ([10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)).
 - **Many Morning check runs** in the Actions tab are normal: GitHub's own schedule starts it every hour
-  from the afternoon through the night as a backstop (it begins 4 hours early because GitHub runs late). A run that had nothing to do (today's update was already there, or it was
+  from the early afternoon through the night — the main way while the morning alarm is not set up (it begins hours
+  early because GitHub runs late). A run that had nothing to do (today's update was already there, or it was
   too early to ask a magazine) takes a few seconds and is deleted the next day; the others stay, so you can
   see what each morning did.
 
@@ -2503,7 +2514,7 @@ For a later move, follow
 | The site did not change today | The run failed, is still running, or the schedule was paused | **Actions** tab: open the latest **Website update** run. If the workflow shows "disabled", click **Enable workflow**. Then **Run workflow**. |
 | Today's quote is not on the site at 5:30 AM | The morning alarm is not set up or failed; the magazine had not published it yet; or the morning refresh failed | **Actions → Morning check (new day by 5:30 AM)**: the day's run says which (a yellow "late at the source" note says when the magazine was last asked — the site shows yesterday's quote, labelled "Yesterday", until an update brings the new one). No run at 4:30 AM: check the alarm (cron-job.org's e-mail or the job's *History*). To bring it now: **Morning check (new day by 5:30 AM) → Run workflow** — from 2 AM Central it asks the magazine and brings the quote if it is out. If an update is already running — on the 1st, the full daily update — it waits for that run first (it reads the quote too) and then brings whatever it did not. |
 | cron-job.org e-mails that the alarm failed (401, 403, 404 or 422) | The key expired or was deleted (401), its *Actions* permission is not *Read and write* (403), the address changed (404), or the request body is wrong (422) | See [10 d](#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended) → *If cron-job.org e-mails a failure*. Until it is fixed the site still updates, later in the day. |
-| Many **Morning check** runs in the Actions tab | Normal: GitHub's schedule starts it every hour from the afternoon through the night | Nothing to do: the runs that found nothing to do are deleted after a day. |
+| Many **Morning check** runs in the Actions tab | Normal: GitHub's schedule starts it every hour from the early afternoon through the night | Nothing to do: the runs that found nothing to do are deleted after a day. |
 | A bulletin post with `publish:` / "(from …)" is not on the site | Its day has not come yet (Central time), or its date could not be read | The **Website update** run summary lists it under *Scheduled bulletin posts*, or under *Bulletin files to fix* with the reason. |
 | One phone or computer shows an old page, or a page looks unstyled after an update | A copy the browser kept (the site works offline) | Reload the page; if the small "Updated" notice shows, choose **Reload**. Still wrong: close every tab of the site and open it again. Last resort on that device: browser settings → site data for the site → clear (its saved pages go too). |
 | Red ✗ right after editing a settings file | A typo in the YAML (usually indentation or a missing quote) | Open the failed run → the red step shows the line. Fix the file, or undo your change from the file's **History**. The live site is unaffected. |
@@ -2755,7 +2766,13 @@ visitor's own device; nothing is sent anywhere.
   `/events.ics` feeds and the story deadlines calendar, `/deadlines.ics`, are never kept).
   A page opened online but not saved keeps its own area stylesheet (the
   monthly toolkit's, the booth's, the Tracker's …) offline after a code update too: the new service worker carries
-  the old version's stylesheets over (nothing is downloaded for it). Offline, kept pages open normally under a small "You're offline" notice; any other
+  the old version's stylesheets over (nothing is downloaded for it) — and, since round 38b, its scripts (Events,
+  Meetings and Photos had lost their filters and lightbox offline), for as long as a page that needs them is kept
+  (also a script it shares with a saved page, after the saved pages are saved again). The scripts need the version
+  mark that the service worker of round 38b and later writes on each page it keeps (stylesheets don't: at most 3
+  copies of each go on either way). A page kept before that version has none, so it keeps its scripts for one update
+  only — until it is opened again online: then it is kept anew as the new version's page, with the mark and that
+  version's scripts. Offline, kept pages open normally under a small "You're offline" notice; any other
   page shows the Saved pages & app page (`/offline/`, also "See saved pages" in the menu) in its place,
   saying "You're offline — this page isn't saved on this device yet" above the list of saved pages, and
   reloads itself when the connection is back. That stand-in keeps up with the daily content (the **Join

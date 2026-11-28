@@ -16,7 +16,15 @@ tests/test_events_series_cards.py; the filters on a page stand-in: tests/test_r3
               The old ?filter=neta (its "NETA 65 events" chip) shows ours and the committee meetings, its chip
               pressed; pressing it shows every card and drops it from the address (round 38: the chip is always
               there, so it can be picked again). The old ?filter=calendar shows what its chip showed: every card of
-              the GV & LV calendars' group (La Viña's monthly workshop and the weekly open meetings too).
+              the GV & LV calendars' group (La Viña's monthly workshop and the weekly open meetings too). (Round 38b)
+              The chips are one choice, English and Spanish: "NETA 65 events" then "GV & LV calendars" shows the
+              calendars' cards (it showed "No events match", both chips pressed), and back; every kind's chip picked
+              after the NETA 65 chip shows as many cards as its count said; the address says the chip picked
+              (?filter=neta or ?kind=…, never both), an old one with both keeps the kind; away and back: as it was.
+  * Fallback — (round 38b) committee.js blocked while Alpine loads, English and Spanish, 1280 and 390px: every card,
+              every month, "Every month" and "Every week" show (the list was blank), the filters are hidden, no page
+              scrolls sideways and no expression of the list fails (Alpine's errors of other components — a card's
+              cmMeeting — aside); with committee.js, no expression error at all; without JavaScript every card shows.
   * Large   — (round 38) at 115 / 130 / 150 % text (and relaxed spacing) on 320–414px phones, English and Spanish:
               "Next 5 weeks" never sits under "Show the calendar" (the button goes under it) and keeps most of the
               card's width; the hero's "Save the date" title keeps at least 8rem or the whole width (its date tile
@@ -136,6 +144,14 @@ class Desktop(unittest.TestCase):
                         ctx.close()
 
 
+def unfold(page) -> None:
+    """A year folded behind "Show 2028 dates (n)" (none in some builds): opened, so every card a chip counts shows."""
+    more = page.locator(".cm-ev-more button")
+    if more.count() and more.is_visible():
+        more.click()
+        page.wait_for_timeout(200)
+
+
 class Filters(unittest.TestCase):
     def test_kind_language_and_the_address(self):
         ctx = new_context(1280, 900)
@@ -215,6 +231,166 @@ class Filters(unittest.TestCase):
             self.assertEqual(errors, [])
         finally:
             ctx.close()
+
+    def test_the_chips_are_one_choice(self):
+        """(round 38b) "NETA 65 events" and then "GV & LV calendars" pressed both chips and showed "No events match"
+        (?filter=neta&kind=calendar: no card of the calendars is ours) — the page's old chips replaced each other,
+        and so do these: each chip picked lets the other go, its count is what it then shows, the address says the
+        one picked; an address with both (shared before) keeps the kind and says so; back to the page: as it was."""
+        for pre in ("", "es/"):
+            with self.subTest(lang=pre or "en"):
+                ctx = new_context(1280, 900, lang="es" if pre else "en")
+                errors: list[str] = []
+                try:
+                    page = open_page(ctx, pre + "events/", errors)
+                    page.wait_for_timeout(300)
+                    neta, cal = page.locator('button.chip[data-ev-group="neta"]'), page.locator('button.chip[data-ev-kind="calendar"]')
+                    if not (neta.count() and cal.count()):
+                        self.skipTest("no NETA 65 chip or no GV & LV calendars chip in this build")
+                    pressed = lambda: page.evaluate("() => [...document.querySelectorAll('#ev-filters .chip[aria-pressed=\"true\"]')]"
+                                                    ".map((b) => b.dataset.evGroup ? 'neta' : b.dataset.evKind)")
+                    count = lambda chip: int(chip.locator(".cm-chip-count").inner_text())
+                    shown = lambda: [c for c in page.evaluate(CARDS) if not c["cancelled"]]
+                    empty = lambda: page.locator(".ev-main .empty-state").evaluate_all("(es) => es.filter((e) => e.getClientRects().length).length")
+                    unfold(page)
+                    n_neta, n_cal = count(neta), count(cal)
+                    neta.click()
+                    page.wait_for_timeout(200)
+                    self.assertEqual(pressed(), ["neta"])
+                    self.assertEqual(count(cal), n_cal, "the calendars' chip counts what it shows once picked")
+                    # the other chip: it alone, its cards, its count; the address says it
+                    cal.click()
+                    page.wait_for_timeout(200)
+                    self.assertEqual(pressed(), ["calendar"])
+                    got = shown()
+                    self.assertTrue(got)
+                    self.assertTrue(all("calendar" in c["kind"].split() for c in got), got)
+                    self.assertEqual(len(got), n_cal)
+                    self.assertEqual(empty(), 0, '"No events match" never shows for a chip with a count')
+                    self.assertIn("kind=calendar", page.url)
+                    self.assertNotIn("filter=", page.url)
+                    self.assertEqual(count(neta), n_neta)
+                    # and back: the NETA 65 chip lets the kind go
+                    neta.click()
+                    page.wait_for_timeout(200)
+                    self.assertEqual(pressed(), ["neta"])
+                    self.assertEqual(len(shown()), n_neta)
+                    self.assertIn("filter=neta", page.url)
+                    self.assertNotIn("kind=", page.url)
+                    # every kind's chip, picked after the NETA 65 chip: what its count said
+                    for k in page.evaluate("() => [...document.querySelectorAll('#ev-filters .chip[data-ev-kind]')].map((b) => b.dataset.evKind).filter(Boolean)"):
+                        neta.click() if pressed() != ["neta"] else None
+                        page.wait_for_timeout(100)
+                        chip = page.locator(f'button.chip[data-ev-kind="{k}"]')
+                        n = count(chip)
+                        chip.click()
+                        page.wait_for_timeout(150)
+                        self.assertEqual((k, pressed(), len(shown())), (k, [k], n))
+                    # "All": neither
+                    page.locator('button.chip[data-ev-kind=""]').click()
+                    page.wait_for_timeout(200)
+                    self.assertEqual(pressed(), [""])
+                    self.assertNotIn("?", page.url.split("#")[0])
+                    # an address with both (shared before round 38b): the kind, and the address says so
+                    page = open_page(ctx, pre + "events/?filter=neta&kind=calendar", errors)
+                    page.wait_for_timeout(300)
+                    unfold(page)
+                    self.assertEqual(pressed(), ["calendar"])
+                    self.assertEqual(len(shown()), n_cal)
+                    self.assertNotIn("filter=", page.url)
+                    self.assertIn("kind=calendar", page.url)
+                    # away and back: the chip picked, its cards
+                    page.locator('button.chip[data-ev-group="neta"]').click()
+                    page.wait_for_timeout(200)
+                    page.goto(url(pre + "about/"), wait_until="load")
+                    page.go_back(wait_until="load")
+                    page.wait_for_timeout(500)
+                    unfold(page)
+                    self.assertEqual(pressed(), ["neta"])
+                    self.assertEqual(len(shown()), n_neta)
+                    self.assertEqual(errors, [])
+                finally:
+                    ctx.close()
+
+
+# (round 38b) Alpine's expression errors, each with whether it is the list's own (its x-data element or an element
+# whose nearest x-data is the list — never one of another component inside it, a card's cmMeeting): recorded from the
+# page's first script on
+ALPINE_WARNINGS = """(() => { window.__gvAlpine = []; const warn = console.warn;
+  console.warn = function (msg, el) {
+    try { if (String(msg).startsWith('Alpine Expression Error')) {
+      const list = document.querySelector('section.ev-main'), own = el && el.closest ? el.closest('[x-data]') : null;
+      window.__gvAlpine.push({ text: String(msg).split('\\n')[0], list: !!list && own === list }); } } catch (e) {}
+    return warn.apply(this, arguments); }; })();"""
+# every card, month and section of the list: how many there are, how many show; the filters shown or not
+SHOWING = """() => { const vis = (e) => !!e && e.getClientRects().length > 0;
+  const all = (s) => [...document.querySelectorAll(s)];
+  return { cards: all('li[data-group]').length, shown: all('li[data-group]').filter(vis).length,
+           months: all('section.cm-month').length, monthsShown: all('section.cm-month').filter(vis).length,
+           series: vis(document.getElementById('ev-pinned')), weekly: vis(document.getElementById('ev-weekly')),
+           filters: vis(document.getElementById('ev-filters')), sw: document.documentElement.scrollWidth, vw: innerWidth,
+           warnings: window.__gvAlpine || [] }; }"""
+
+
+class Fallback(unittest.TestCase):
+    """(round 38b) committee.js not loaded while Alpine is (a download that failed or was blocked): the list was blank —
+    every card's x-show asked a cmEvents that was not there; the page's stand-in (events.njk evStandIn) shows every
+    card and month, as the page without JavaScript does, and hides the filters it cannot work."""
+
+    def test_without_committee_js_every_card_shows(self):
+        for pre in ("", "es/"):
+            for w, h in ((1280, 900), (390, 844)):
+                with self.subTest(lang=pre or "en", width=w):
+                    ctx = new_context(w, h, lang="es" if pre else "en")
+                    ctx.add_init_script(ALPINE_WARNINGS)
+                    ctx.route(lambda u: "/assets/js/committee.js" in u, lambda route: route.abort())
+                    try:
+                        page = open_page(ctx, pre + "events/")
+                        page.wait_for_timeout(500)
+                        self.assertFalse(page.evaluate("() => document.documentElement.classList.contains('cm-js')"),
+                                         "committee.js did not run")
+                        self.assertTrue(page.evaluate("() => !!window.Alpine"), "Alpine did")
+                        r = page.evaluate(SHOWING)
+                        self.assertGreater(r["cards"], 0)
+                        self.assertEqual((r["shown"], r["monthsShown"]), (r["cards"], r["months"]), "every card and month")
+                        self.assertEqual((r["series"], r["weekly"], r["filters"]), (True, True, False))
+                        self.assertLessEqual(r["sw"], r["vw"])
+                        self.assertEqual([x["text"] for x in r["warnings"] if x["list"]], [], "no expression of the list fails")
+                    finally:
+                        ctx.close()
+
+    def test_with_committee_js_the_list_is_its_own(self):
+        """…and with committee.js the list is cmEvents as before: its filters, no expression error anywhere"""
+        for pre in ("", "es/"):
+            with self.subTest(lang=pre or "en"):
+                ctx = new_context(1280, 900, lang="es" if pre else "en")
+                ctx.add_init_script(ALPINE_WARNINGS)
+                errors: list[str] = []
+                try:
+                    page = open_page(ctx, pre + "events/", errors)
+                    page.wait_for_timeout(500)
+                    r = page.evaluate(SHOWING)
+                    self.assertTrue(r["filters"])
+                    self.assertEqual(r["warnings"], [])
+                    self.assertTrue(page.evaluate("() => document.documentElement.classList.contains('cm-ev-ready')"))
+                    self.assertEqual(errors, [])
+                finally:
+                    ctx.close()
+
+    def test_without_javascript_every_card_shows(self):
+        for pre in ("", "es/"):
+            with self.subTest(lang=pre or "en"):
+                ctx = S["browser"].new_context(viewport={"width": 390, "height": 844}, java_script_enabled=False,
+                                               service_workers="block")
+                try:
+                    page = open_page(ctx, pre + "events/")
+                    r = page.evaluate(SHOWING)
+                    self.assertGreater(r["cards"], 0)
+                    self.assertEqual((r["shown"], r["monthsShown"]), (r["cards"], r["months"]))
+                    self.assertEqual((r["series"], r["weekly"], r["filters"]), (True, True, False))
+                    self.assertLessEqual(r["sw"], r["vw"])
+                finally:
+                    ctx.close()
 
 
 # (round 38) the "Next 5 weeks" heading beside its button, and the hero's "Save the date" title beside its tile

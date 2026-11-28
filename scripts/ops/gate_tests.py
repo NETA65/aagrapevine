@@ -175,7 +175,8 @@ CONTENT_TESTS: dict[str, str] = {
         "config/site.yml phone_access, the meeting ids and the accessibility links, as written",
     "test_r20_meeting.RealSettings.":
         "config/site.yml: the committee meeting on Google Meet, our Grapevine Meeting (1st Wednesday from Jan 6, 2027), "
-        "the CityWide booth's hours and venue, the 12 guest speakers of 2027 and the Drive flyer names they find",
+        "the CityWide booth's hours and venue, the 12 guest speakers of 2027 and the Drive flyer names they find; no "
+        "recurring_events key at the committee meeting's dates page (/events/series/committee-meeting/)",
     "test_r30_horizon.RealSettings.":
         "config/site.yml events_until, as written: every date through December 2028 (the end of Panel 77) — 26 committee "
         "meetings, 26 CityWide booths, 24 Grapevine Meetings (from Jan 6, 2027), 20 La Viña workshops on Nov 13, 2026 —, and every "
@@ -280,6 +281,9 @@ CONTENT_TESTS: dict[str, str] = {
     # ---- docs/
     "test_morning.AlarmDocs.":
         "docs/OPERATIONS.md (documentation): the section on setting up the morning alarm later",
+    "test_morning.ScheduleDocs.":
+        "README.md, docs/ and how-to/ (documentation): the timetables and the Disable / Enable steps name every timed "
+        "workflow and its cron lines as the workflow files have them",
     "test_seo_robots.UserSite.":
         "docs/user-site (documentation): the robots.txt and index.html for NETA65/neta65.github.io, against site.url",
 }

@@ -70,7 +70,7 @@ jobs:
     # (not "Build the website": that is the name of Website update's own build step)
     name: Test build of the website
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Check out the code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -128,7 +128,11 @@ jobs:
       # OPERATIONS.md lists them), the booth display's own window among them (since November 17, 2026: 12 more). The
       # 84 checks of October 16, 2026 took 6¾ minutes here (409 s); with 96 a little over 8; the 165 of November 19,
       # 2026 (the bingo cards' 16 among them, about 1½ minutes) 15 on a slow runner (900 s: they all passed, but the
-      # step ran out of time then), so the step may take 25 (the job's 30 still covers checkout, build and setup).
+      # step ran out of time then), so the step could take 25. Round 38b brings about 260 (234 before it): side by
+      # side on one PC the 234 took 1,081 s and 260 of them 1,296 s (the 26 new ones then about 226 s, the
+      # every-event-page sweep the longest, 44 s), so here they may take about 20–27 minutes — not yet timed on GitHub:
+      # the step may take 40, and the job's 45 still covers checkout, build and setup (about 5). Read the step's time
+      # on the next runs and update this (and docs/OPERATIONS.md → "Browser checks").
       - name: Set up Python (for the browser checks)
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -140,7 +144,7 @@ jobs:
         run: python -m pip install -r scripts/ops/requirements-browser.txt
 
       - name: Browser checks (focus ring, sticky bar, large text, offline update, script errors)
-        timeout-minutes: 25
+        timeout-minutes: 40
         env:
           GV_BROWSER_SITE: _site
           GV_BROWSER_CHANNEL: chrome

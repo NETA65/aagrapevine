@@ -1044,9 +1044,22 @@
   var WORD = /[\p{L}\p{N}_]/u;
   function isWord(c) { return !!c && WORD.test(c); }
   function isSpace(c) { return !c || /\s/.test(c); }
+  /** Has a site address written from its first slash a Spanish twin under /es/ — is it one of the site's PAGES
+   *  ("/contribute/#deadlines", "/", "/meetings/?x")? Not a file: anything under /assets/ (a flyer, a picture), or
+   *  an address whose last part has an extension ("/events.ics", "/feed.xml", "/orientation/presentations/x.json")
+   *  — linked as written, so a Spanish calendar or feed is written with its /es/ ("/es/events.ics") —, and not an
+   *  address already in Spanish ("/es/contribute/": never /es/es/). safeHref and showUrl add /es only to these, and
+   *  so does the build for a Spanish deck's own addresses (eleventy/filters/presentations.js context().abs: its QR
+   *  codes and its live slides' links). */
+  function hasEsTwin(u) {
+    var p = String(u || "").split(/[?#]/)[0];
+    if (/^\/(?:es|assets)(?:\/|$)/.test(p)) return false;
+    return !/\.[A-Za-z0-9]{1,10}$/.test(p.slice(p.lastIndexOf("/") + 1));
+  }
   /** A link's address → its href, or null when it is not one we follow: https://…, mailto:…, an e-mail, or a
    *  page of the site written from its first slash ("/contribute/#deadlines" → the site's base path, with /es/
-   *  on the Spanish page). opts: { base: "/aagrapevine/", lang }. */
+   *  on the Spanish page — a page only: a file of the site keeps its address, hasEsTwin). opts: { base:
+   *  "/aagrapevine/", lang }. */
   function safeHref(url, opts) {
     var u = String(url || "").trim();
     opts = opts || {};
@@ -1055,7 +1068,7 @@
     if (EMAIL_FULL.test(u)) return "mailto:" + u;
     if (/^\/(?!\/)[^\s"<>`\\]*$/.test(u)) {
       var base = String(opts.base || "/").replace(/\/+$/, "");
-      return base + (opts.lang === "es" ? "/es" : "") + u;
+      return base + (opts.lang === "es" && hasEsTwin(u) ? "/es" : "") + u;
     }
     return null;
   }
@@ -1071,10 +1084,11 @@
       ? Object.assign({}, opts, { lang: "es" }) : opts;
   }
   /** An address as the slide writes it out: "aagrapevine.org/podcasts", "neta65.github.io/aagrapevine/events/" — a
-   *  page of the site in a Spanish deck (`lang` "es") with its "/es": "grapevine.neta65.org/es/contribute/". */
+   *  page of the site in a Spanish deck (`lang` "es") with its "/es": "grapevine.neta65.org/es/contribute/" (a page
+   *  only, as safeHref: a file of the site as written, hasEsTwin). */
   function showUrl(url, siteHost, lang) {
     var u = String(url || "").trim();
-    if (/^\/(?!\/)/.test(u)) return String(siteHost || "").replace(/\/+$/, "") + (lang === "es" ? "/es" : "") + u;
+    if (/^\/(?!\/)/.test(u)) return String(siteHost || "").replace(/\/+$/, "") + (lang === "es" && hasEsTwin(u) ? "/es" : "") + u;
     return u.replace(/^mailto:/i, "").replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
   }
 
@@ -2030,7 +2044,7 @@
     // blanks
     fillDefs: fillDefs, fillValue: fillValue, fillsIn: fillsIn, fillGroups: fillGroups, emptyBlanks: emptyBlanks,
     // text
-    subst: subst, inline: inline, rich: rich, plain: plain, plainLines: plainLines, safeHref: safeHref, showUrl: showUrl, linkLang: linkLang, noteLines: noteLines,
+    subst: subst, inline: inline, rich: rich, plain: plain, plainLines: plainLines, safeHref: safeHref, showUrl: showUrl, hasEsTwin: hasEsTwin, linkLang: linkLang, noteLines: noteLines,
     fmt: fmt, BLANK_OPEN: BLANK_OPEN, BLANK_CLOSE: BLANK_CLOSE,
     // editing
     fieldsOf: fieldsOf, kindOf: kindOf, toText: toText, fromText: fromText, setField: setField, resetSlide: resetSlide,

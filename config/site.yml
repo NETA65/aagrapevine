@@ -295,8 +295,10 @@ events_until: "2028-12-31"
 #  6 dates (a moved date included, a cancelled one never), how to join,
 #  its flyer and the links that fit it; it is the one search engines
 #  keep. The key is that address: lowercase letters, digits and dashes,
-#  kept the same once published. A block with `enabled: false`, or with
-#  no date still to come, gets no series page (its dates still show).
+#  kept the same once published — never "committee-meeting" (the
+#  committee meeting's own dates page: two pages there stop the build).
+#  A block with `enabled: false`, or with no date still to come, gets no
+#  series page (its dates still show).
 #  Optional `type:` — the kind of event, when the site guesses wrong:
 #  one of the 15 kinds in content/events/README.md ("booth",
 #  "online-meeting", "magazine-workshop" …), written exactly.

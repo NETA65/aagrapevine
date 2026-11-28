@@ -190,15 +190,19 @@
        words), data-city (a slug), data-district (a number).
        The filters (f): the kind (a chip: setKind), the language, in person / online, the city and the district (the
        menus: x-model, changed()) — a card shows when it matches every one picked ("" = any: picked) — and `group`:
-       "NETA 65 events" (a chip of its own, setGroup: ours and the committee meetings, data-group~="neta"). Each kind
-       chip counts the cards it would show with the other filters as they are (kindCount), and so does the NETA 65
-       one (groupCount); "All" (all) lets the chips' filters go, "Clear filters" (clear) sets every filter back. The
-       filters picked are kept in the address (?kind=workshop&lang=es&mode=inperson&city=…&district=…, ?filter=neta
-       for the group; history.replaceState: no new history entry), so a filtered view can be shared and comes back on
-       reload; a value the page has no card for is left out. The page's old chips are still understood:
-       ?filter=committee (the committee meetings) and ?filter=calendar (the GV & LV calendars: SETA, the Zone's
-       gathering, La Viña's monthly workshop, the weekly open meetings — every card the old chip showed) set the
-       kind; ?filter=neta sets the group, the other filters beside it.
+       "NETA 65 events" (a chip of its own, setGroup: ours and the committee meetings, data-group~="neta"). The chips
+       are one choice, as the page's old chips were (round 38b): picking the NETA 65 chip lets the kind go, picking a
+       kind lets the NETA 65 chip go — the two together showed "No events match" (no card of the GV & LV calendars is
+       ours). Each chip counts the cards it would show with the menus as they are (kindCount, groupCount: the other
+       chip left out, as picking it lets that one go); "All" (all) lets the chips' filters go, "Clear filters"
+       (clear) sets every filter back. The filters picked are kept in the address (?kind=workshop&lang=es&mode=
+       inperson&city=…&district=…, ?filter=neta for the group; history.replaceState: no new history entry), so a
+       filtered view can be shared and comes back on reload; a value the page has no card for is left out. The page's
+       old chips are still understood: ?filter=committee (the committee meetings) and ?filter=calendar (the GV & LV
+       calendars: SETA, the Zone's gathering, La Viña's monthly workshop, the weekly open meetings — every card the
+       old chip showed) set the kind; ?filter=neta sets the group, the menus beside it — an address with a kind too
+       (?filter=neta&kind=…, shared before round 38b) keeps the kind (?kind= before ?filter=) and drops the group from
+       the address.
        The months: those of the years after the build's — after the next one from November on (eventsFold,
        eleventy/filters/committee.js) — are folded — the month section and its jump chip carry data-cm-more —, shown
        once `more` is true: "Show 2028 dates (n)" (showMore; n = the folded cards the filters would show: moreCount)
@@ -301,7 +305,8 @@
           return sel ? Array.prototype.map.call(sel.querySelectorAll("option"), function (o) { return o.getAttribute("value") || ""; }) : [];
         },
         /* the filters from the address (?kind=…&lang=… — ?filter=committee / calendar / neta too), each only when the
-           page offers it (?kind= before ?filter=) */
+           page offers it (?kind= before ?filter=). The chips are one choice: ?filter=neta beside a kind (an address
+           shared before round 38b, when both could be picked) keeps the kind, and the address says so at once. */
         fromAddress: function () {
           var q;
           try { q = new URLSearchParams(location.search); } catch (e) { return; }
@@ -310,7 +315,10 @@
             var k = FACETS[i], v = q.get(k) || (k === old[0] ? old[1] : "");
             if (v && this.offered(k).indexOf(v) !== -1) this.f[k] = v;
           }
-          if (old[0] === "group" && Array.prototype.some.call(cards(this.$root), function (li) { return words(li, "group").indexOf(old[1]) !== -1; })) this.group = old[1];
+          if (old[0] === "group" && Array.prototype.some.call(cards(this.$root), function (li) { return words(li, "group").indexOf(old[1]) !== -1; })) {
+            if (this.f.kind) this.toAddress();
+            else this.group = old[1];
+          }
         },
         /* the filters into the address: ?kind=…&lang=… (the other parameters and the #hash stay; the old ?filter= goes,
            but for ?filter=neta while `group` is on) */
@@ -325,9 +333,10 @@
             if (u.href !== location.href) history.replaceState(history.state, "", u.pathname + u.search + u.hash);
           } catch (e) { /* an old browser: the filters still work, the address stays */ }
         },
-        setKind: function (k) { this.f.kind = this.f.kind === k ? "" : k; this.toAddress(); },
-        /* the "NETA 65 events" chip: on, or off when it is picked again */
-        setGroup: function (g) { this.group = !g || this.group === g ? "" : g; this.toAddress(); },
+        /* a kind's chip: on — the NETA 65 chip let go (the chips are one choice) —, or off when it is picked again */
+        setKind: function (k) { this.f.kind = this.f.kind === k ? "" : k; this.group = ""; this.toAddress(); },
+        /* the "NETA 65 events" chip: on — the kind let go —, or off when it is picked again */
+        setGroup: function (g) { this.group = !g || this.group === g ? "" : g; this.f.kind = ""; this.toAddress(); },
         /* "All": neither a kind nor the NETA 65 chip (the menus stay as they are) */
         all: function () { this.f.kind = ""; this.group = ""; this.toAddress(); },
         changed: function () { this.toAddress(); },
@@ -342,13 +351,13 @@
           for (var i = 0; i < FACETS.length; i++) if (this.f[FACETS[i]]) return true;
           return false;
         },
-        /* the filters picked show this card (whatever the fold) — `skip`: one filter left out (a chip's count; "group":
-           the NETA 65 chip's) */
-        picked: function (el, skip) {
-          if (this.group && skip !== "group" && words(el, "group").indexOf(this.group) === -1) return false;
+        /* the filters picked show this card (whatever the fold) — `chips`: the chips' filters (the kind, the NETA 65
+           chip) left out, the menus only: a chip's count (picking a chip lets the other one go) */
+        picked: function (el, chips) {
+          if (this.group && !chips && words(el, "group").indexOf(this.group) === -1) return false;
           for (var i = 0; i < FACETS.length; i++) {
             var k = FACETS[i], v = this.f[k];
-            if (v && k !== skip && !matches(el, k, v)) return false;
+            if (v && !(chips && k === "kind") && !matches(el, k, v)) return false;
           }
           return true;
         },
@@ -371,21 +380,22 @@
             return (self.more || !m.hasAttribute("data-cm-more")) && self.monthVisible(m);
           });
         },
-        /* a kind chip's count: the cards of that kind the other filters show (the folded months' too — a click away),
-           never a cancelled one */
+        /* a kind chip's count: the cards of that kind the menus show (the folded months' too — a click away), never a
+           cancelled one — what the chip shows once picked (the NETA 65 chip let go) */
         kindCount: function (k) {
           void this.tick;
           var self = this;
           return Array.prototype.filter.call(cards(this.$root), function (li) {
-            return live(li) && !li.hasAttribute("data-ev-cancelled") && words(li, "kind").indexOf(k) !== -1 && self.picked(li, "kind");
+            return live(li) && !li.hasAttribute("data-ev-cancelled") && words(li, "kind").indexOf(k) !== -1 && self.picked(li, true);
           }).length;
         },
-        /* the NETA 65 chip's count: the cards of ours (data-group~="neta") the other filters show, never a cancelled one */
+        /* the NETA 65 chip's count: the cards of ours (data-group~="neta") the menus show, never a cancelled one — what
+           it shows once picked (the kind let go) */
         groupCount: function (g) {
           void this.tick;
           var self = this;
           return Array.prototype.filter.call(cards(this.$root), function (li) {
-            return live(li) && !li.hasAttribute("data-ev-cancelled") && words(li, "group").indexOf(g) !== -1 && self.picked(li, "group");
+            return live(li) && !li.hasAttribute("data-ev-cancelled") && words(li, "group").indexOf(g) !== -1 && self.picked(li, true);
           }).length;
         },
         get visibleCount() {

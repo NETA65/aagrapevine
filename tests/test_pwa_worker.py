@@ -36,7 +36,13 @@
                  or one whose new styles and scripts did not all come, keeps its copy; a save stops a running
                  round and none runs beside it; a page removed meanwhile stays removed (class Updates).
   * versions   — a page kept (opened, not saved) keeps its own area stylesheet offline after new versions:
-                 the old static cache's stylesheets go on into the new one (class Updates).
+                 the old static cache's stylesheets go on into the new one (class Updates) — and, since round 38b, its
+                 own scripts after an update, and a page kept while the new version waited its new ones: the old
+                 caches' scripts of their own version (and of the new one) go on for one update; further only while a
+                 kept copy names that version (x-gvlv-version), at most 3 copies of one file (the newest); never
+                 another project's or site's; the static cache's cap holds; a script a kept page shares with a saved
+                 page (it came from the saved pages' cache) goes into the static cache, not away, when the saved
+                 pages are saved again under the new version, while a kept copy names its version.
   * the page   — pwa.js's side, run against a pretend page and worker: "Save key pages" gives up only
                  after 45 s without news from the worker (a weak signal saves slowly, not never), ignores
                  what a save it gave up on still says (a worker ready only by then gets no SAVE) and saves
@@ -48,7 +54,9 @@
                  take or has one not saved yet, the "Updated" notice and its screen-reader line wait (said once it
                  shows, once per new version) and a "Reload" tapped just before never reloads under the take;
                  a YouTube preview is told to
-                 keep youtube-nocookie.com before it starts (a click, Enter or Space).
+                 keep youtube-nocookie.com before it starts (a click, Enter or Space) — and the preview the build
+                 ships (node_modules/lite-youtube-embed) still reads that switch (class ShippedPlayer: 0.4 does
+                 not; held on 0.3.x).
 
 Skipped without Node.js (tests/nodejs.py). The page-level checks (the panel, the banner) are in the
 browser QA scripts; the static contract checks are in tests/test_pwa.py.
@@ -57,6 +65,8 @@ browser QA scripts; the static contract checks are in tests/test_pwa.py.
 """
 from __future__ import annotations
 
+import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -64,9 +74,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nodejs import run_js  # noqa: E402
 
+ROOT = Path(__file__).resolve().parents[1]
+
 # The pretend world each worker script below starts with: /sw.js built for "/aagrapevine/", world() → a fresh
-# worker with its own pretend network and caches. (Two scripts, not one: Node gets each on its command line,
-# which Windows caps at 32 767 characters.)
+# worker with its own pretend network and caches. (Several scripts, not one: Node gets each on its command line,
+# which Windows caps at 32 767 characters — so class Updates runs two, UPDATE_JS and CARRY_JS.)
 HARNESS_JS = r"""
 import vm from "node:vm";
 const SW = await imp("src/pages/sw.11ty.js");
@@ -122,6 +134,7 @@ function world({ v = "t1", store: kept = null } = {}) {
     }
     async delete(r) { return this.m.delete(this.key(r)); }
     async keys() { return [...this.m.keys()].map((u) => new Request(u)); }
+    async matchAll() { return [...this.m].map(([k, e]) => make(k, e.status, e.body, e.headers)); }
   }
   const caches = {
     async open(n) { if (!store.has(n)) store.set(n, new FakeCache()); return store.get(n); },
@@ -646,6 +659,12 @@ const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gv
   R.removed = { asked: await pagesAsked(k, () => opened(k, B + "accessibility/")), saved: await savedNow(k) };
 }
 
+out(R);
+"""
+
+# What a new version carries on from the old ones (carryFiles; class Updates — its own script: UPDATE_JS alone would
+# pass the command line's cap).
+CARRY_JS = HARNESS_JS + r"""
 /* ---------------- a page kept (opened, not saved) keeps its own stylesheet offline after new versions ---------------- */
 {
   const a = world();
@@ -659,6 +678,9 @@ const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gv
   await a.request(B + "monthly/2026-11/", { navigate: true });
   await a.request(AREA);                                                               // (the page's files, as the
   await a.request(JS);                                                                 //  browser asks for them)
+  const POSTER = B + "assets/vendor/html-to-image.js";                                // (the poster's picture maker:
+  a.page(POSTER, { body: "/* html-to-image */", ct: "text/javascript" });             //  fetched on first use, no ?v=)
+  await a.request(POSTER);
   R.carry = {};
   let c = null;
   for (const v of ["t2", "t3"]) {                                                      // two new versions on this device
@@ -673,18 +695,186 @@ const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gv
   R.carry.css = await c.request(AREA);
   R.carry.main = (await c.request(B + "assets/css/main.css?v=t1")).body;
   R.carry.home = (await c.request(B + "assets/css/home.css?v=t1")).body;
+  R.carry.js = (await c.request(JS)).body;                                             // its scripts too, while it is kept
+  R.carry.app = (await c.request(B + "assets/js/app.js?v=t1")).body;
+  R.carry.poster = (await c.request(POSTER)).body;
+  R.carry.mark = (await a.store.get("gvlv-pages-v1").match(ORIGIN + B + "monthly/2026-11/")).headers.get("x-gvlv-version");
   R.carry.caches = [...a.store.keys()].filter((n) => /^gvlv-(shell|static)-/.test(n)).sort();
   R.carry.static = ((await c.keys("gvlv-static-t3")) || []).map((u) => u.slice(ORIGIN.length)).sort();
 }
 
-/* ---------------- at most three copies of one stylesheet go on, the newest ---------------- */
+/* ---------------- a page kept (opened, not saved) keeps its own scripts offline after an update ---------------- */
 {
   const a = world();
   shellOnline(a);
   await a.lifecycle("install");
   await a.lifecycle("activate");
+  const OWN = B + "assets/js/committee.js?v=t1", NEW = B + "assets/js/monthly.js?v=t2", LIB = B + "assets/js/library.js?v=t1";
+  const html2 = (title, extra) => html(title, extra).replaceAll("?v=t1", "?v=t2");     // a page of version t2
+  a.page(B + "events/", { body: html("Events", `<script src="${OWN}"></script>EVENTS`) });
+  a.page(OWN, { body: "/* committee t1 */", ct: "text/javascript" });
+  await a.request(B + "events/", { navigate: true });
+  await a.request(OWN);                                                                // (as the browser asks for it)
+  // a copy kept by a worker from before round 38b: it names no version
+  a.page(B + "library/", { body: html("Library", `<script src="${LIB}"></script>LIBRARY`) });
+  a.page(LIB, { body: "/* library t1 */", ct: "text/javascript" });
+  await a.request(B + "library/", { navigate: true });
+  await a.request(LIB);
+  const lib = a.store.get("gvlv-pages-v1").m.get(ORIGIN + B + "library/");
+  lib.headers = lib.headers.filter(([n]) => n !== "x-gvlv-version");
+  // a new version is deployed: it installs and waits — the old worker still answers, and the site sends the new pages
+  const b = world({ v: "t2", store: a.store });
+  shellOnline(b);
+  await b.lifecycle("install");
+  a.page(B + "monthly/2026-12/", { body: html2("December", `<script src="${NEW}"></script>DEC`) });
+  a.page(NEW, { body: "/* monthly t2 */", ct: "text/javascript" });
+  await a.request(B + "monthly/2026-12/", { navigate: true });
+  await a.request(NEW);                                                                // (into the old static cache)
+  // … kept by the worker live before round 38b (the first update after round 38b ships): its copy names no version
+  // either — only the new version's own rule (its V, `wanted`) carries its new monthly.js on
+  const dec = a.store.get("gvlv-pages-v1").m.get(ORIGIN + B + "monthly/2026-12/");
+  dec.headers = dec.headers.filter(([n]) => n !== "x-gvlv-version");
+  // never carried on: another GitHub Pages project's script and another site's (put into the old cache by hand)
+  const old = await a.cache("gvlv-static-t1");
+  await old.put(ORIGIN + "/another-project/assets/js/x.js?v=t1", new Response("/* x */"));
+  await old.put("https://elsewhere.test" + B + "assets/js/y.js?v=t1", new Response("/* y */"));
+  R.scripts = { activate: await b.lifecycle("activate") };
+  for (const u of [...b.net.keys()]) b.net.delete(u);                                  // then the signal is gone
+  const body = async (w, u) => { const r = await w.request(u); return r && (r.body || r.error); };
+  R.scripts.page = marker(await b.request(B + "events/", { navigate: true }));         // the copy kept from t1 …
+  R.scripts.own = await body(b, OWN);                                                  // … its own script
+  R.scripts.app = await body(b, B + "assets/js/app.js?v=t1");                          // … t1's app.js, not t2's
+  R.scripts.alpine = await body(b, B + "assets/vendor/alpine.min.js?v=t1");
+  R.scripts.unmarked = await body(b, LIB);
+  R.scripts.waited = { page: marker(await b.request(B + "monthly/2026-12/", { navigate: true })), js: await body(b, NEW) };
+  R.scripts.static = ((await b.keys("gvlv-static-t2")) || []).map((u) => u.startsWith(ORIGIN) ? u.slice(ORIGIN.length) : u).sort();
+  // Events is opened again online (kept anew, as a page of t2); then one more update: no page kept asks for t1 any more
+  // (the Library's copy names no version) — t1's scripts go no further, t2's go on
+  b.page(B + "events/", { body: html2("Events", `<script src="${OWN.replace("t1", "t2")}"></script>EVENTS-2`) });
+  b.page(OWN.replace("t1", "t2"), { body: "/* committee t2 */", ct: "text/javascript" });
+  await b.request(B + "events/", { navigate: true });
+  await b.request(OWN.replace("t1", "t2"));
+  const c = world({ v: "t3", store: a.store });
+  shellOnline(c);
+  await c.lifecycle("install");
+  await c.lifecycle("activate");
+  const t3 = ((await c.keys("gvlv-static-t3")) || []).map((u) => u.slice(ORIGIN.length));
+  R.scripts.next = { t1: t3.filter((u) => /\.js\?v=t1$/.test(u)).sort(), t2: t3.filter((u) => /\.js\?v=t2$/.test(u)).sort() };
+}
+
+/* ---------------- a script a kept page shares with a saved page: its own version still, once they are saved again ---------------- */
+{
+  const a = world();
+  shellOnline(a);
+  await a.lifecycle("install");
+  await a.lifecycle("activate");
+  const OWN = B + "assets/js/committee.js?v=t1", OWN2 = B + "assets/js/committee.js?v=t2";
+  const html2 = (title, extra) => html(title, extra).replaceAll("?v=t1", "?v=t2");     // a page of version t2
+  const rel = (u) => (u.startsWith(ORIGIN) ? u.slice(ORIGIN.length) : u);
+  const body = async (w, u) => { const r = await w.request(u); return r && (r.body || r.error); };
+  // Meetings saved for offline (its committee.js into gvlv-saved-assets-v1), then Events only opened (kept): the
+  // browser's committee.js comes from the saved pages' copy, so t1's static cache never holds it
+  a.page(B + "meetings/", { body: html("Meetings", `<script src="${OWN}"></script>MEETINGS`) });
+  a.page(OWN, { body: "/* committee t1 */", ct: "text/javascript" });
+  await a.message({ type: "SAVE", lang: "en" });
+  a.page(B + "events/", { body: html("Events", `<script src="${OWN}"></script>EVENTS`) });
+  await a.request(B + "events/", { navigate: true });
+  await a.request(OWN);                                                                // (as the browser asks for it)
+  R.shared = { t1static: ((await a.keys("gvlv-static-t1")) || []).includes(ORIGIN + OWN) };
+  // t2 takes over; then the saved pages are saved again, as t2's pages (their committee.js?v=t2) — with, in the saved
+  // pages' cache besides (put there by hand), a file of a version no copy names and another GitHub Pages project's
+  const b = world({ v: "t2", store: a.store });
+  shellOnline(b);
+  await b.lifecycle("install");
+  await b.lifecycle("activate");
+  b.page(B + "meetings/", { body: html2("Meetings", `<script src="${OWN2}"></script>MEETINGS-2`) });
+  b.page(OWN2, { body: "/* committee t2 */", ct: "text/javascript" });
+  const sa = await b.cache("gvlv-saved-assets-v1");
+  await sa.put(ORIGIN + B + "assets/js/old.js?v=t0", new Response("/* t0 */"));
+  await sa.put(ORIGIN + "/another-project/assets/js/x.js?v=t1", new Response("/* x */"));
+  await b.message({ type: "SAVE", lang: "en" });
+  R.shared.assets = ((await b.keys("gvlv-saved-assets-v1")) || []).map(rel).filter((u) => /\.js\?/.test(u)).sort();
+  R.shared.static = ((await b.keys("gvlv-static-t2")) || []).map(rel).filter((u) => /committee|old\.js|another-project/.test(u)).sort();
+  const net = new Map(b.net);
+  for (const u of [...b.net.keys()]) b.net.delete(u);                                  // then the signal is gone
+  R.shared.page = marker(await b.request(B + "events/", { navigate: true }));          // Events, kept from t1 …
+  R.shared.own = await body(b, OWN);                                                   // … its own committee.js
+  R.shared.saved = marker(await b.request(B + "meetings/", { navigate: true }));       // Meetings, saved as t2's page
+  R.shared.saved2 = await body(b, OWN2);
+  // the signal is back: Events opened again online (kept as t2's page); one more update — no copy names t1 any more
+  for (const [u, v] of net) b.net.set(u, v);
+  b.page(B + "events/", { body: html2("Events", `<script src="${OWN2}"></script>EVENTS-2`) });
+  await b.request(B + "events/", { navigate: true });
+  const c = world({ v: "t3", store: a.store });
+  shellOnline(c);
+  await c.lifecycle("install");
+  await c.lifecycle("activate");
+  R.shared.next = ((await c.keys("gvlv-static-t3")) || []).map(rel).filter((u) => /\.js\?v=t1$/.test(u));
+}
+
+/* ---------------- …and on a full device: the files the saved pages no longer ask for still go ---------------- */
+{
+  const a = world();
+  shellOnline(a);
+  await a.lifecycle("install");
+  await a.lifecycle("activate");
+  const OWN = B + "assets/js/committee.js?v=t1", OWN2 = B + "assets/js/committee.js?v=t2";
+  const html2 = (title, extra) => html(title, extra).replaceAll("?v=t1", "?v=t2");
+  const rel = (u) => (u.startsWith(ORIGIN) ? u.slice(ORIGIN.length) : u);
+  // the same start: Meetings saved, Events only opened (kept), both with committee.js?v=t1
+  a.page(B + "meetings/", { body: html("Meetings", `<script src="${OWN}"></script>MEETINGS`) });
+  a.page(OWN, { body: "/* committee t1 */", ct: "text/javascript" });
+  await a.message({ type: "SAVE", lang: "en" });
+  a.page(B + "events/", { body: html("Events", `<script src="${OWN}"></script>EVENTS`) });
+  await a.request(B + "events/", { navigate: true });
+  await a.request(OWN);
+  const b = world({ v: "t2", store: a.store });
+  shellOnline(b);
+  await b.lifecycle("install");
+  await b.lifecycle("activate");
+  b.page(B + "meetings/", { body: html2("Meetings", `<script src="${OWN2}"></script>MEETINGS-2`) });
+  b.page(OWN2, { body: "/* committee t2 */", ct: "text/javascript" });
+  await (await b.cache("gvlv-saved-assets-v1")).put(ORIGIN + B + "assets/js/old.js?v=t0", new Response("/* t0 */"));
+  (await b.cache("gvlv-static-t2")).room = 0;                                          // the device is full there
+  R.full = { reply: (await b.message({ type: "SAVE", lang: "en" })).at(-1).type };
+  R.full.assets = ((await b.keys("gvlv-saved-assets-v1")) || []).map(rel).filter((u) => /\.js\?/.test(u)).sort();
+  R.full.static = ((await b.keys("gvlv-static-t2")) || []).map(rel).filter((u) => /committee|old\.js/.test(u));
+}
+
+/* ---------------- many files going on: the static cache's cap holds, the newest stay ---------------- */
+{
+  const a = world();
+  shellOnline(a);
+  await a.lifecycle("install");
+  await a.lifecycle("activate");
+  const old = await a.cache("gvlv-static-t1");
+  for (let i = 0; i < 150; i++) await old.put(ORIGIN + B + `assets/js/p${i}.js?v=t1`, new Response(`/* p${i} */`));
+  const b = world({ v: "t2", store: a.store });
+  shellOnline(b);
+  await b.lifecycle("install");
+  R.cap = { activate: await b.lifecycle("activate") };
+  const kept = ((await b.keys("gvlv-static-t2")) || []).map((u) => u.slice(ORIGIN.length + B.length));
+  R.cap.n = kept.length;
+  R.cap.limit = b.run("LIMIT.static");
+  R.cap.first = kept.find((u) => u.startsWith("assets/js/p"));
+  R.cap.has = ["assets/js/p149.js?v=t1", "assets/js/app.js?v=t1", "assets/css/main.css?v=t1"].filter((u) => kept.includes(u));
+}
+
+/* ---------------- at most three copies of one stylesheet go on, the newest — and of one script ---------------- */
+// five new versions on one device; withPages: under each of t1 … t5 one page is opened online (kept, naming its
+// version), so every old version's scripts are still asked for when t6 takes over
+async function versions(withPages) {
+  const a = world();
+  shellOnline(a);
+  await a.lifecycle("install");
+  await a.lifecycle("activate");
   let c = a;
-  for (const v of ["t2", "t3", "t4", "t5", "t6"]) {                                    // five new versions
+  for (const v of ["t2", "t3", "t4", "t5", "t6"]) {
+    if (withPages) {
+      const was = c.CONFIG.version;
+      c.page(B + `kept-${was}/`, { body: html("Kept " + was, "KEPT").replaceAll("?v=t1", "?v=" + was) });
+      await c.request(B + `kept-${was}/`, { navigate: true });
+    }
     c = world({ v, store: a.store });
     shellOnline(c);
     await c.lifecycle("install");
@@ -692,9 +882,15 @@ const copyOf = (w, p) => marker({ body: new TextDecoder().decode(w.store.get("gv
   }
   for (const u of [...c.net.keys()]) c.net.delete(u);
   const kept = ((await c.keys("gvlv-static-t6")) || []).map((u) => u.slice(ORIGIN.length));
-  R.copies = { main: kept.filter((u) => /main\.css/.test(u)), home: kept.filter((u) => /home\.css/.test(u)),
-               t3: (await c.request(B + "assets/css/main.css?v=t3")).body };
+  const marks = [];
+  for (const r of await (await a.cache("gvlv-pages-v1")).matchAll()) marks.push(r.headers.get("x-gvlv-version"));
+  return { main: kept.filter((u) => /main\.css/.test(u)), home: kept.filter((u) => /home\.css/.test(u)),
+           t3: (await c.request(B + "assets/css/main.css?v=t3")).body,
+           scripts: kept.filter((u) => /\.js\?/.test(u)).sort(), app: kept.filter((u) => /\/app\.js\?/.test(u)),
+           marks: marks.sort() };
 }
+R.copies = await versions(false);
+R.copiesKept = await versions(true);
 out(R);
 """
 
@@ -1301,6 +1497,12 @@ ORIGIN = "https://example.test"
 B = "/aagrapevine/"
 
 
+def shell_scripts(v: str) -> list[str]:
+    """The app shell's scripts of version `v` (src/pages/sw.11ty.js `shell`), sorted."""
+    return sorted([*(B + f"assets/js/{n}.js?v={v}" for n in ("app", "pwa", "central-time", "install-core", "hero-canvas")),
+                   B + f"assets/vendor/alpine.min.js?v={v}"])
+
+
 class Worker(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -1451,7 +1653,8 @@ class Worker(unittest.TestCase):
 
 
 class Updates(unittest.TestCase):
-    """UPDATE_JS: a new version taking over; the saved pages kept fresh."""
+    """UPDATE_JS: a new version taking over; the saved pages kept fresh. CARRY_JS: what it carries on from the old
+    versions' caches (carryFiles)."""
 
     @classmethod
     def setUpClass(cls):
@@ -1459,7 +1662,8 @@ class Updates(unittest.TestCase):
 
     def setUp(self):
         if Updates.r is None:
-            Updates.r = run_js(self, UPDATE_JS, needs_modules=False, env={"PATH_PREFIX": B}, timeout=120)
+            Updates.r = {**run_js(self, UPDATE_JS, needs_modules=False, env={"PATH_PREFIX": B}, timeout=120),
+                         **run_js(self, CARRY_JS, needs_modules=False, env={"PATH_PREFIX": B}, timeout=120)}
         self.r = Updates.r
 
     def test_reload_never_waits_for_the_open_tabs(self):
@@ -1534,9 +1738,11 @@ class Updates(unittest.TestCase):
     def test_a_kept_pages_own_stylesheet_works_offline_after_new_versions(self):
         # Round-7 review (P5-2): a page area's own stylesheet (monthly.css …) came with a page opened online into the
         # static cache, which each new version replaced — offline, the page kept from before (not saved) lost its look.
-        # Its stylesheets now go on into each new version's static cache (scripts do not). Since November 2026 the
-        # old app shell's stylesheets go on too: main.css of a newer version is no stand-in (Home, the Library and
-        # Published writers have their rules in sheets of their own — the old Home came out unstyled offline)
+        # Its stylesheets now go on into each new version's static cache. Since November 2026 the old app shell's
+        # stylesheets go on too: main.css of a newer version is no stand-in (Home, the Library and Published writers
+        # have their rules in sheets of their own — the old Home came out unstyled offline). Since round 38b its scripts
+        # go on too, while it is kept: its copy names its version (x-gvlv-version), so t1's app shell scripts and its
+        # monthly.js are here two updates on — with t2's app shell scripts (the old cache's own version)
         r = self.r["carry"]
         self.assertEqual((r["t2"], r["t3"]), (["fulfilled"], ["fulfilled"]))
         self.assertTrue(r["page"].endswith("NOV"), r["page"])                             # the copy kept from t1
@@ -1544,17 +1750,105 @@ class Updates(unittest.TestCase):
         self.assertEqual(r["main"], "/* " + B + "assets/css/main.css?v=t1 */")            # the page's own version
         self.assertEqual(r["home"], "/* " + B + "assets/css/home.css?v=t1 */")
         self.assertEqual(r["caches"], ["gvlv-shell-t3", "gvlv-static-t3"])                 # the old versions' caches: gone
+        self.assertEqual(r["mark"], "t1")
+        self.assertEqual(r["js"], "/* monthly */")
+        self.assertEqual(r["app"], "/* " + B + "assets/js/app.js?v=t1 */")
+        self.assertEqual(r["poster"], "/* html-to-image */")                             # CARRY_TOO, like a stylesheet
         css = B + "assets/css/"
         self.assertEqual(r["static"], sorted([css + "home.css?v=t1", css + "home.css?v=t2", css + "main.css?v=t1",
-                                              css + "main.css?v=t2", css + "monthly.css?v=t1"]))
+                                              css + "main.css?v=t2", css + "monthly.css?v=t1", *shell_scripts("t1"),
+                                              *shell_scripts("t2"), B + "assets/js/monthly.js?v=t1",
+                                              B + "assets/vendor/html-to-image.js"]))
+
+    def test_a_kept_pages_own_scripts_work_offline_after_an_update(self):
+        # Round 38: after an update, a page kept from before (not saved: Events, Meetings, Photos, the Library …) opened
+        # offline with its look but without its own scripts — committee.js, monthly.js, booth.js, library.js were in
+        # the old version's static cache only, and a newer app.js stood in for its own (the last resort: any version of
+        # the same file). Now the scripts of the versions the kept copies name go on into the new static cache, and so
+        # do the old cache's own version's (a copy kept before round 38b names none) and the new version's that the old
+        # worker fetched while the new one waited (the site already sent the new pages — kept here, as by the worker
+        # live before round 38b, with no version named: only the new version's own rule carries its monthly.js); only
+        # the site's own — never another GitHub Pages project's file or another site's
+        r = self.r["scripts"]
+        self.assertEqual(r["activate"], ["fulfilled"])
+        self.assertTrue(r["page"].endswith("EVENTS"), r["page"])                          # the copy kept from t1
+        self.assertEqual(r["own"], "/* committee t1 */")
+        self.assertEqual(r["app"], "/* " + B + "assets/js/app.js?v=t1 */")                # its own version's, not t2's
+        self.assertEqual(r["alpine"], "/* " + B + "assets/vendor/alpine.min.js?v=t1 */")
+        self.assertEqual(r["unmarked"], "/* library t1 */")
+        self.assertTrue(r["waited"]["page"].endswith("DEC"), r["waited"])                  # kept while t2 waited
+        self.assertEqual(r["waited"]["js"], "/* monthly t2 */")
+        self.assertIn(B + "assets/js/committee.js?v=t1", r["static"])
+        self.assertEqual([u for u in r["static"] if "another-project" in u or "elsewhere" in u], [])
+
+    def test_old_scripts_never_pile_up(self):
+        # Events opened again online (kept anew, as t2's page), then the next update: no copy kept names t1 any more (the
+        # Library's names none: one update only) — t1's scripts go no further; t2's (its app shell's, the one a page
+        # kept while t2 waited asks for, Events' new one) go on into t3's static cache
+        r = self.r["scripts"]["next"]
+        self.assertEqual(r["t1"], [])
+        self.assertEqual(r["t2"], sorted([*shell_scripts("t2"), B + "assets/js/monthly.js?v=t2", B + "assets/js/committee.js?v=t2"]))
+
+    def test_a_script_shared_with_a_saved_page_goes_on_too(self):
+        # Round-38b review: Events kept (opened, not saved) beside Meetings saved — the browser's committee.js came from
+        # the saved pages' copy (gvlv-saved-assets-v1), so no static cache held it and carryFiles had none to carry;
+        # once the saved pages were saved again under the new version, the prune deleted it, and offline the old Events
+        # ran the NEW committee.js (the last resort: any version of the same file). Now the prune moves a ?v= file whose
+        # version a kept copy still names into the static cache instead; a file of a version no copy names, and another
+        # GitHub Pages project's, still go; and once no kept copy names t1, the next update takes it no further
+        r = self.r["shared"]
+        self.assertFalse(r["t1static"])                                                   # (the case itself)
+        self.assertTrue(r["page"].endswith("EVENTS"), r["page"])                          # the copy kept from t1 …
+        self.assertEqual(r["own"], "/* committee t1 */")                                  # … with its own script
+        self.assertTrue(r["saved"].endswith("MEETINGS-2"), r["saved"])
+        self.assertEqual(r["saved2"], "/* committee t2 */")
+        self.assertEqual(r["static"], [B + "assets/js/committee.js?v=t1"])
+        self.assertNotIn(B + "assets/js/committee.js?v=t1", r["assets"])
+        self.assertIn(B + "assets/js/committee.js?v=t2", r["assets"])
+        self.assertEqual([u for u in r["assets"] if "old.js" in u or "another-project" in u], [])
+        self.assertEqual(r["next"], [])
+
+    def test_a_full_device_still_lets_the_unneeded_files_go(self):
+        # Round-38b review (2nd): the same, but this version's static cache takes nothing more (QuotaExceededError).
+        # The move to it used to stop the whole prune at the first file (committee.js?v=t1): that file and every one
+        # after it (old.js?v=t0) stayed in the saved pages' cache. Before round 38b pruning only deleted, so it freed
+        # room exactly when room was short; now the move is best effort, file by file, and they still go
+        r = self.r["full"]
+        self.assertEqual(r["reply"], "SAVE_DONE")
+        self.assertEqual(r["static"], [])                                                 # (nothing could be moved)
+        self.assertNotIn(B + "assets/js/committee.js?v=t1", r["assets"])
+        self.assertNotIn(B + "assets/js/old.js?v=t0", r["assets"])
+        self.assertIn(B + "assets/js/committee.js?v=t2", r["assets"])
+
+    def test_the_static_cap_holds_when_many_files_go_on(self):
+        # 150 scripts of the old version and its app shell's: the static cache keeps its 120 — the oldest go first (the
+        # app shell's own files, carried last, stay)
+        r = self.r["cap"]
+        self.assertEqual(r["activate"], ["fulfilled"])
+        self.assertEqual((r["n"], r["limit"]), (120, 120))
+        self.assertEqual(r["first"], "assets/js/p38.js?v=t1")
+        self.assertEqual(r["has"], ["assets/js/p149.js?v=t1", "assets/js/app.js?v=t1", "assets/css/main.css?v=t1"])
 
     def test_old_stylesheets_never_pile_up(self):
         # after five new versions: the copies of the last three older ones (t6's own are in its shell), oldest first —
-        # the first to go at the static cache's cap
+        # the first to go at the static cache's cap; of the scripts only the last older version's (t5's app shell: no page
+        # kept names an older one)
         r = self.r["copies"]
         self.assertEqual(r["main"], [B + f"assets/css/main.css?v={v}" for v in ("t3", "t4", "t5")])
         self.assertEqual(r["home"], [B + f"assets/css/home.css?v={v}" for v in ("t3", "t4", "t5")])
         self.assertEqual(r["t3"], "/* " + B + "assets/css/main.css?v=t3 */")
+        self.assertEqual(r["scripts"], shell_scripts("t5"))
+
+    def test_old_scripts_go_on_at_most_three_copies(self):
+        # Round-38 review: pages kept under each of five versions (each copy naming its own) — every old version's
+        # scripts are still asked for, yet at most CARRY_COPIES (3) copies of one script go on, the newest, oldest
+        # first; the stylesheets as without those pages
+        r = self.r["copiesKept"]
+        self.assertEqual(r["marks"], ["t1", "t2", "t3", "t4", "t5"])
+        self.assertEqual(r["app"], [B + f"assets/js/app.js?v={v}" for v in ("t3", "t4", "t5")])
+        self.assertEqual(r["scripts"], sorted([*shell_scripts("t3"), *shell_scripts("t4"), *shell_scripts("t5")]))
+        self.assertEqual(r["main"], [B + f"assets/css/main.css?v={v}" for v in ("t3", "t4", "t5")])
+        self.assertEqual(r["home"], [B + f"assets/css/home.css?v={v}" for v in ("t3", "t4", "t5")])
 
 
 # A month page's calendar file (class MonthCalendar): its own world, same harness.
@@ -1993,6 +2287,32 @@ class ThePage(unittest.TestCase):
         # P5-6: lite-youtube switches to YouTube's full player (youtube.com) on phones and in Safari; pwa.js (on every
         # page: Home and About too) tells it not to just before it starts — a click, or Enter / Space on its button
         self.assertEqual(self.r["youtube"], {"click": False, "enter": False, "otherKey": True})
+
+
+class ShippedPlayer(unittest.TestCase):
+    """The YouTube preview the build ships: eleventy.config.js copies node_modules/lite-youtube-embed/src/
+    lite-yt-embed.js to /assets/vendor/lite-yt-embed.js. ThePage checks plainPlayer on a stand-in, which cannot see the
+    library change (lite-youtube-embed 0.4.0 passed it, November 2026): the copy still has the switch plainPlayer sets
+    (needsYTApi — set when a preview appears, read when it starts) and still builds the youtube-nocookie.com player
+    with it off; 0.4's playbackMode, which no longer reads it, is not there. Held on 0.3.x: .github/dependabot.yml,
+    docs/OPERATIONS.md → dependabot.yml; what a browser does with it: tests/browser/test_r12_u4_aa_browser.py
+    PrivacyPlayer."""
+
+    def test_the_switch_plain_player_sets_is_still_read(self):
+        lib = ROOT / "node_modules" / "lite-youtube-embed"
+        if not (lib / "src" / "lite-yt-embed.js").is_file():
+            self.skipTest("the site's npm packages are not installed (npm ci)")
+        # (each check says what it missed, never prints the whole file)
+        self.assertTrue('[nm("lite-youtube-embed/src/lite-yt-embed.js")]: "assets/vendor/lite-yt-embed.js"'
+                        in (ROOT / "eleventy.config.js").read_text(encoding="utf-8"), "the file the build ships")
+        js = (lib / "src" / "lite-yt-embed.js").read_text(encoding="utf-8")
+        version = json.loads((lib / "package.json").read_text(encoding="utf-8"))["version"]
+        self.assertTrue(re.search(r"this\.needsYTApi\s*=", js), f"{version}: the switch is set when a preview appears")
+        self.assertTrue(re.search(r"if\s*\(\s*this\.needsYTApi\s*\)", js), f"{version}: and read when it starts")
+        self.assertFalse("playbackMode" in js, f"{version}: lite-youtube-embed 0.4's mode — needsYTApi no longer counts")
+        self.assertTrue("iframeEl.src = `https://www.youtube-nocookie.com/embed/" in js, f"{version}: the plain player")
+        pwa = (ROOT / "src" / "assets" / "js" / "pwa.js").read_text(encoding="utf-8")
+        self.assertTrue("if (el) el.needsYTApi = false;" in pwa, "pwa.js plainPlayer sets the switch")
 
 
 if __name__ == "__main__":

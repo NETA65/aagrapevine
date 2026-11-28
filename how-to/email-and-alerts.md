@@ -76,7 +76,8 @@ secrets.
    `digest.html` in a browser ([3.10](#310-preview-it-no-secrets-needed)).
 5. **Make the failure e-mails come to NETA65.** Still signed in as NETA65, go to
    **Actions → Monthly e-mail digest → ⋯ (top right) → Disable workflow**, then press **Enable workflow**. Do the same
-   for the other three timed workflows ([3.16](#316-githubs-run-failed-e-mails)).
+   for the other four timed workflows ([3.16](#316-githubs-run-failed-e-mails)): Website update, Morning check (new
+   day by 5:30 AM), Weekly link check and Gate list check.
 6. **Done.** From now on the e-mail goes out by itself on the **1st** of each month, from **7 AM Central**. If the
    data is not ready, it goes out later, and at the latest from **noon on the 3rd**. To send last month's e-mail
    right away, run the workflow **once** with **Preview only** unticked ([3.12](#312-send-a-month-by-hand)). A month
@@ -687,9 +688,10 @@ started the run:
 | the **morning alarm** (cron-job.org) | the owner of the alarm's key ([3.18](#318-the-morning-alarm-cron-joborg)) |
 | the site itself (the Morning check's refreshes, the bot) | **nobody**. That is why the Morning check fails *itself* when a morning goes wrong, and why the issue *"The website update keeps failing"* exists ([3.17](#317-the-three-automatic-issues)). |
 
-The four **timed** workflows are **Website update**, **Morning check (new day by 5:30 AM)** (its hourly
-backstop), **Monthly e-mail digest** and **Weekly link check**. Their schedules were last pushed from the MKP715
-login, so their failure e-mails go to **MKP715** until the step below is done.
+The five **timed** workflows are **Website update**, **Morning check (new day by 5:30 AM)** (its hourly
+schedule), **Monthly e-mail digest**, **Weekly link check** and **Gate list check** (since November 2026). Their
+schedules were last pushed from the MKP715 login, so their failure e-mails go to **MKP715** until the step below is
+done.
 
 **The owner step**, done once while signed in as **NETA65**:
 
@@ -697,7 +699,8 @@ login, so their failure e-mails go to **MKP715** until the step below is done.
    for failed workflows**.
 2. Go to **github.com/NETA65/aagrapevine → Actions → Website update → ⋯** (top right) **→ Disable workflow**. Then
    press **Enable workflow** in the banner or in the same menu.
-3. Do the same for **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and **Weekly link check**.
+3. Do the same for **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest**, **Weekly link check** and
+   **Gate list check**.
 4. Repeat steps 2 and 3 whenever someone else changes a workflow's `cron:` line, and when a new chair takes over.
 
 > Never add an automatic "enable workflow" keep-alive through the GitHub API. The failure e-mails would then go to
@@ -711,6 +714,7 @@ What you would be e-mailed about (details in [Automation and troubleshooting](au
 | Morning check (new day by 5:30 AM) | today's update did not reach the site: *"❌ Today's update did not reach the site."* plus the error *"Morning update failed"* | keeps yesterday's day and quote |
 | Monthly e-mail digest | a send failed, the month box was mistyped, or the e-mail *may* have been sent ([3.14](#314-every-result-a-digest-run-can-show)) | unaffected |
 | Weekly link check | only when the site itself fails to build for the check. Broken links never turn it red: it reports them through an issue. | unaffected |
+| Gate list check (every night, and after a push or a pull request) | a test the publish gate runs fails once the committee's own files are edited or the documentation is deleted ([Automation and troubleshooting §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)). After a push, GitHub e-mails the person who pushed. | unaffected: it never touches the site |
 | Code check (tests and test build), after a push | a change broke the tests, the test build (a build warning too) or a browser check — also a slip in a settings or content file, which *Website update* publishes without the part it could not read. GitHub e-mails the person who pushed. | unaffected (or published without that part) |
 
 A **yellow ⚠** note, for example one source having a bad day, never sends an e-mail. Only red runs do.
@@ -783,8 +787,8 @@ GitHub starts the site's timed runs hours late. The **morning alarm** is a free 
 through GitHub's API. The check then puts the new day and both daily quotes on the site by the goal in
 `site.morning_goal`, which is 5:30 AM. The alarm runs **on time**. The "4 hours early" rule is only for GitHub's own
 `cron:` lines, so leave the alarm at 4:30. In the Actions list its runs are titled **"Morning check (started by
-…)"** with the login that owns the key (NETA65, when NETA65 made it); the hourly backstop's runs are "Morning check
-(GitHub schedule)".
+…)"** with the login that owns the key (NETA65, when NETA65 made it); the runs of GitHub's hourly schedule are
+"Morning check (GitHub schedule)".
 
 **Who is told what:**
 
@@ -792,7 +796,7 @@ through GitHub's API. The check then puts the new day and both daily quotes on t
 |---|---|
 | The alarm's call to GitHub fails, or works again after failing | cron-job.org e-mails **its own account**, as long as the job's notifications "execution fails" and "succeeds after previously failing" are ticked |
 | A Morning check **started by the alarm** goes red | GitHub e-mails the **owner of the alarm's key** (NETA65, when NETA65 made the key) |
-| A Morning check started by the hourly backstop goes red | GitHub e-mails whoever last switched **Morning check (new day by 5:30 AM)** on, or last changed its `cron:` line ([3.16](#316-githubs-run-failed-e-mails)) |
+| A Morning check started by GitHub's hourly schedule goes red | GitHub e-mails whoever last switched **Morning check (new day by 5:30 AM)** on, or last changed its `cron:` line ([3.16](#316-githubs-run-failed-e-mails)) |
 | Only a magazine's quote was late | nobody: the run stays green with a yellow note *"A daily quote is late at the source"* |
 
 **When cron-job.org e-mails a failure**, open the job's **History** to see GitHub's answer:

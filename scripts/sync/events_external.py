@@ -272,14 +272,16 @@ def safe_summary(text: str) -> str:
 
 # --------------------------------------------------------------------------- location
 # Place names with a capital inside that no rule gives ("DESOTO" → "DeSoto"); every "Mc…" has one by rule
-# ("MCKINNEY" → "McKinney", "MCALLEN" → "McAllen", "MCLENDON-CHISHOLM" → "McLendon-Chisholm")
-_INNER_CAPITALS = {"desoto": "DeSoto", "decordova": "DeCordova", "dekalb": "DeKalb"}
+# ("MCKINNEY" → "McKinney", "MCALLEN" → "McAllen", "MCLENDON-CHISHOLM" → "McLendon-Chisholm"). geo's table: since round
+# 38b the bylines' reader (geo._pretty_city) writes them so too.
+_INNER_CAPITALS = geo.INNER_CAPITALS
 
 
 def _title(s: str) -> str:
     """"FORT WORTH" → "Fort Worth" (a capital after a space or a hyphen: eventPlace's titleCase), for a name written
-    all in capitals or all in lower case: "MCKINNEY" → "McKinney", "DESOTO" → "DeSoto"; an acronym of two or three
-    letters with no vowel stays as it is ("DFW")."""
+    all in capitals or all in lower case — or, through _as_written, a Texas place with a word in lower case ("Fort
+    worth") —: "MCKINNEY" → "McKinney", "DESOTO" → "DeSoto"; an acronym of two or three letters with no vowel stays
+    as it is ("DFW")."""
     out = []
     for w in re.split(r"([\s-]+)", s):
         lw = w.lower()
@@ -301,12 +303,30 @@ def _title(s: str) -> str:
 _PLACE_FIRST = {"el", "la", "las", "los", "san", "santa", "new", "fort", "ft", "mount", "mt", "port", "saint", "st",
                 "north", "south", "east", "west", "lake"}
 
+# The little words a place's name writes in lower case ("Villa del Sol", "Isle of Palms")
+_LOWER_WORDS = {"de", "del", "la", "las", "los", "el", "y", "of", "the", "on", "and"}
+
+
+def _as_written(name: str) -> str:
+    """A place's name as `name` writes it when its capitals are a name's — every word but a little one (_LOWER_WORDS)
+    starts with one: "McKinney", "DeSoto", "Ft. Worth", "Villa del Sol" stay as they are —; else as a name (_title):
+    "MCKINNEY" → "McKinney", "fort worth" → "Fort Worth" and, since round 38b, "Fort worth" → "Fort Worth" (a name in
+    mixed case was kept whatever its capitals). For a Texas place only (the readers below)."""
+    words = [w for w in re.split(r"[\s-]+", name) if w]
+    mixed = any(ch.isupper() for ch in name) and any(ch.islower() for ch in name)
+    if mixed and all(w[:1].isupper() or not w[:1].isalpha() or w.lower() in _LOWER_WORDS for w in words):
+        return name
+    return _title(name)
+
 
 def _tx_city_at_end(part: str) -> str | None:
     """The longest well-known Texas city that ends `part` ("2010 Main St Tyler", "First UMC GARLAND" → "Garland"),
     spelled as `part` writes it ("Iglesia Cristiana DeSoto" → "DeSoto", "McKinney" stays "McKinney"); written all in
-    capitals or all in lower case, as a name (_title: "MCKINNEY" → "McKinney"). A longer Texas place that ends with
-    it (data/geo/texas_places.json: "Lake Dallas", "South Houston", "West Odessa") is that place, not the city."""
+    capitals or all in lower case — or, since round 38b, with a word in lower case: "Fort worth" —, as a name
+    (_as_written: "MCKINNEY" → "McKinney", "Fort worth" → "Fort Worth"). A longer Texas place that ends with it
+    (data/geo/texas_places.json: "Lake Dallas", "South Houston", "West Odessa") is that place, not the city. A city at
+    the end of a venue's name is read as the city ("Joe Allen TX" → "Allen", as "Hotel Adolphus Dallas TX" →
+    "Dallas"): with no comma, nothing tells a venue named after someone from a venue in that city."""
     fc = _fold(part)
     for c in sorted(TX_CITIES, key=len, reverse=True):
         c0 = re.sub(r" tx$", "", c)
@@ -320,8 +340,7 @@ def _tx_city_at_end(part: str) -> str | None:
                 if k <= len(words) and geo.normalize_place(" ".join(words[-k:])) in geo.gazetteer():
                     tail = " ".join(words[-k:])
                     break
-            mixed = any(ch.isupper() for ch in tail) and any(ch.islower() for ch in tail)
-            return tail if mixed else _title(tail)
+            return _as_written(tail)
     return None
 
 
@@ -414,15 +433,22 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
     if out["state"]:
         out["country"] = "USA"
     # City: the part just before the state, if it looks like a place (no street numbers); a city in capitals as a
-    # name ("DALLAS, TX" → "Dallas"). With no comma before the state, a venue's name and the city run together: only
-    # what can only be the city (_inline_city: "Maude Cobb . Convenció center LONGVIEW" → "Longview", never "GRUPO
-    # NUEVA VIDA GARLAND" as a whole). Else a well-known Texas city at its end ("2010 Main St, Tyler").
+    # name ("DALLAS, TX" → "Dallas"), and since round 38b a Texas place in mixed case too ("Fort worth, TX" → "Fort
+    # Worth": _as_written — a place elsewhere stays as written). With no comma before the state, a venue's name and
+    # the city run together: only what can only be the city (_inline_city: "Maude Cobb . Convenció center LONGVIEW" →
+    # "Longview", never "GRUPO NUEVA VIDA GARLAND" as a whole). Else a well-known Texas city at its end ("2010 Main St,
+    # Tyler").
     if state_idx is not None and state_idx > 0:
         cand = parts[state_idx - 1]
         if inline:
             out["city"] = _inline_city(cand, out["state"])
         elif not re.search(r"\d", cand) and len(cand.split()) <= 4:
-            out["city"] = _title(cand) if cand.isupper() and re.search(r"\w{2}", cand) else cand
+            if cand.isupper() and re.search(r"\w{2}", cand):
+                out["city"] = _title(cand)
+            elif out["state"] == "TX" and geo.normalize_place(cand) in geo.gazetteer():
+                out["city"] = _as_written(cand)
+            else:
+                out["city"] = cand
         else:
             out["city"] = _tx_city_at_end(cand)
     elif len(parts) == 1 and not re.search(r"\d", parts[0]) and len(parts[0].split()) <= 4 \
@@ -431,10 +457,11 @@ def parse_location(loc: str, title: str = "", website: str | None = None) -> dic
     elif len(parts) > 1 and not out["country"]:
         # "Iglesia San Juan Diego, Houston" / "Hotel Adolphus, 1321 Commerce St, Dallas": no state
         # written, but one part is exactly a well-known Texas city (ambiguous names such as Paris
-        # or Athens are not in TX_CITIES, so they never match here).
+        # or Athens are not in TX_CITIES, so they never match here) — as a name (_as_written, since round 38b:
+        # "2010 Main St, MCKINNEY" → "McKinney"; it stayed "MCKINNEY").
         for cand in reversed(parts):
             if _fold(cand) in TX_CITIES:
-                out["city"] = cand
+                out["city"] = _as_written(cand)
                 break
     return out
 

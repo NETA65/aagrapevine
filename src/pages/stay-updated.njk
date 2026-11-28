@@ -149,24 +149,24 @@ ldType: CollectionPage
   {{ ui.sectionHead("stay.feeds_title" | t(lang), "stay.feeds_sub" | t(lang), "", "", "rss", { eyebrow: "stay.feeds_eyebrow" | t(lang), tone: "text-grape", id: "feeds-title", lang: lang }) }}
   <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="list">
     <li class="card card-pad flex h-full flex-col">
-      <h3 class="card-h"><span class="text-lv!">{% icon "rss", "size-5" %}</span>{{ "feeds.rss" | t(lang) }}</h3>
+      <h3 class="card-h"><span class="text-lv! lt-fold">{% icon "rss", "size-5" %}</span>{{ "feeds.rss" | t(lang) }}</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.rss_text" | t(lang) }}</p>
       <p class="mt-auto flex flex-wrap gap-2 pt-4"><a class="btn-secondary btn-sm" href="{{ '/feed.xml' | lurl(lang) }}" type="application/rss+xml">{% icon "rss", "size-4" %} feed.xml</a><button type="button" class="btn-ghost btn-sm" data-js-only data-copy="{{ feedAbs }}">{% icon "copy", "size-4" %} {{ "common.copy_link" | t(lang) }}</button></p>
     </li>
     <li class="card card-pad flex h-full flex-col">
-      <h3 class="card-h"><span class="text-grape!">{% icon "instagram", "size-5" %}</span>{{ "nav.instagram" | t(lang) }}</h3>
+      <h3 class="card-h"><span class="text-grape! lt-fold">{% icon "instagram", "size-5" %}</span>{{ "nav.instagram" | t(lang) }}</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.ig_text" | t(lang) }}</p>
-      <p class="mt-auto pt-4"><a class="btn-secondary btn-sm" href="{{ '/instagram/' | lurl(lang) }}">{{ "stay.ig_cta" | t(lang) }} {% icon "arrow-right", "size-4" %}</a></p>
+      <p class="mt-auto pt-4"><a class="btn-secondary btn-sm" href="{{ '/instagram/' | lurl(lang) }}">{{ "stay.ig_cta" | t(lang) }} {% icon "arrow-right", "size-4 lt-fold" %}</a></p>
     </li>
     <li class="card card-pad flex h-full flex-col">
-      <h3 class="card-h"><span class="text-grape!">{% icon "youtube", "size-5" %}</span>YouTube</h3>
+      <h3 class="card-h"><span class="text-grape! lt-fold">{% icon "youtube", "size-5" %}</span>YouTube</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.yt_text" | t(lang) }}</p>
-      <p class="mt-auto flex flex-wrap gap-2 pt-4"><a class="btn-secondary btn-sm" href="{{ '/watch/' | lurl(lang) }}">{{ "nav.watch" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>{% if site.links.youtube_channel %}<a class="btn-ghost btn-sm" href="{{ site.links.youtube_channel }}" target="_blank" rel="noopener">{{ "home.youtube_subscribe" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}</p>
+      <p class="mt-auto flex flex-wrap gap-2 pt-4"><a class="btn-secondary btn-sm" href="{{ '/watch/' | lurl(lang) }}">{{ "nav.watch" | t(lang) }} {% icon "arrow-right", "size-4 lt-fold" %}</a>{% if site.links.youtube_channel %}<a class="btn-ghost btn-sm" href="{{ site.links.youtube_channel }}" target="_blank" rel="noopener">{{ "home.youtube_subscribe" | t(lang) }}<span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>{% endif %}</p>
     </li>
     <li class="card card-pad flex h-full flex-col">
-      <h3 class="card-h"><span class="text-grape!">{% icon "headphones", "size-5" %}</span>{{ "stay.pod_title" | t(lang) }}</h3>
+      <h3 class="card-h"><span class="text-grape! lt-fold">{% icon "headphones", "size-5" %}</span>{{ "stay.pod_title" | t(lang) }}</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">{{ "stay.pod_text" | t(lang) }}</p>
-      <p class="mt-auto pt-4"><a class="btn-secondary btn-sm" href="{{ '/listen/' | lurl(lang) }}">{{ "nav.listen" | t(lang) }} {% icon "arrow-right", "size-4" %}</a></p>
+      <p class="mt-auto pt-4"><a class="btn-secondary btn-sm" href="{{ '/listen/' | lurl(lang) }}">{{ "nav.listen" | t(lang) }} {% icon "arrow-right", "size-4 lt-fold" %}</a></p>
     </li>
   </ul>
 </section>

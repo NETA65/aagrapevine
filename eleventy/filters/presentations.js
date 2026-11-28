@@ -22,7 +22,13 @@
 //                                 MAX_ROWS) and the slide's `limit` — the player leaves out the rows already past,
 //                                 then applies the limit
 //   deckJson(deck, ctx)         → the whole /orientation/presentations/<id>.json object
-// Filter: presDeckJson(deck, data) → that file's text (data = the template's data: db, site, carry, meeting).
+//   cardStates(deck, ctx)       → what the deck's card on /orientation/ says of its length: the version the player
+//                                 opens it on and its number of slides, now and — for a deck that switches its
+//                                 version by itself (the committee meeting) — from the moment it switches
+//   presentationsCore()         → src/assets/js/presentations-core.js's GVP (the player's pure functions), for
+//                                 cardStates and for a Spanish deck's addresses (context().abs: hasEsTwin)
+// Filters: presDeckJson(deck, data) → that file's text (data = the template's data: db, site, carry, meeting);
+//          presCard(deck, data) → cardStates(deck, data).
 //
 // Every fact comes from the site's own data and functions — the same words and numbers the other pages show,
 // never typed in and never worked out a second way here: committee.js (the events of /events/, the committee
@@ -43,6 +49,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import vm from "node:vm";
 import * as yaml from "js-yaml";
 import { monthlyRule, ymdText, TZ } from "../../eleventy.config.js";
 import { normalizeEvents, meetingDates, meetingJoin, meetingSpeakers, recurrenceText, chicagoDayEndMs, announcementList, driveInfo,
@@ -1119,9 +1126,14 @@ function context(c = {}, lang) {
     db: c.db || {}, site, carry: c.carry || {}, meeting: c.meeting || null, now, lang: L,
     nowMs: now.getTime(), today: chicagoYmd(now), base,
     // an address on the site → absolute, with the base path ("/events/" → "https://…/aagrapevine/events/"), on the
-    // pages of the facts' language ("/es/events/" for a Spanish deck)
-    abs: (p) => (/^https?:\/\//.test(String(p)) ? String(p)
-      : base + (L === "en" ? "" : `/${L}`) + (String(p).startsWith("/") ? p : "/" + p)),
+    // pages of the facts' language ("/es/events/" for a Spanish deck) — a page only, as the player's links
+    // (presentations-core.js hasEsTwin): a file of the site ("/assets/…", "/events.ics") or an address already
+    // under /es/ stays as written, never /es/assets/… or /es/es/… (a Spanish deck's `qr:` and `qr` live slide)
+    abs: (p) => {
+      if (/^https?:\/\//.test(String(p))) return String(p);
+      const q = String(p).startsWith("/") ? String(p) : "/" + p;
+      return base + (L === "en" || !presentationsCore().hasEsTwin(q) ? "" : `/${L}`) + q;
+    },
     host: base.replace(/^https?:\/\//, ""),
     once: (key, fn) => {
       if (!memo.has(key)) memo.set(key, fn());
@@ -2124,8 +2136,65 @@ export function deckJson(deck, ctx) {
   };
 }
 
+let coreModule = null;
+/** src/assets/js/presentations-core.js's GVP (the player's pure functions), run once for the build in a vm context
+ *  (as bingo-sample.js bingoCore and booth.js boothCore run theirs): cardStates asks the player itself which version
+ *  a deck opens on and how many slides it shows, and context().abs which of a Spanish deck's addresses are pages
+ *  with a Spanish twin (hasEsTwin) — never a copy of its rules. */
+export function presentationsCore() {
+  if (!coreModule) {
+    const ctx = vm.createContext({ console });
+    vm.runInContext(fs.readFileSync(path.resolve(ROOT, "src/assets/js/presentations-core.js"), "utf8"), ctx, { filename: "presentations-core.js" });
+    coreModule = ctx.GVP;
+  }
+  return coreModule;
+}
+
+// cardStates' answers of this build (below)
+const cardMemo = new Map();
+/**
+ * What a deck's card on /orientation/ says of its length (src/pages/orientation.njk: "About 60 minutes · 21 slides",
+ * then "Also:" its other versions) — the version the deck opens on while the presenter has chosen none, and how many
+ * slides it shows then: the player's own answer (presentationsCore: GVP.current, its "1 / 21") for the deck's JSON
+ * file at the build's clock. Only a deck with the chair's paperwork opens on another version than its first, by
+ * itself: the committee meeting opens on "No guest speaker" until midnight Central after a meeting the site lists
+ * no guest speaker for (the player's defaultPreset; November 18 and December 16, 2026), then on the first version
+ * — so its card gets a second state from that moment (the meeting row's `over`: GVP.speakerMeeting), which the
+ * page swaps in by itself (ui.when → GV.expire). One switch ahead is enough: the site is rebuilt every morning.
+ *   → [{ preset: "<version id>", count, until: ISO }, { preset, count, from: ISO }] — or one state, without a moment
+ * Any other deck: [{ preset: its first version's id ("" without versions), count: deck.count }] — the build's own
+ * count, as before (the same number: the first version, today).
+ * (The deck's JSON takes about a second to make: one answer per deck, clock and data — the English and the Spanish
+ * page ask the same question, as the file is in the deck's own language.)
+ */
+export function cardStates(deck, ctx = {}) {
+  const presets = Array.isArray(deck && deck.presets) ? deck.presets : [];
+  const first = { preset: (presets[0] && presets[0].id) || "", count: deck && Number.isInteger(deck.count) ? deck.count : 0 };
+  if (!deck || !deck.paperwork) return [first];
+  const now = context(ctx).nowMs;
+  const key = `${deck.id}|${deck.version}|${now}`;
+  const same = (m) => ["db", "site", "meeting", "carry"].every((k) => m[k] === ctx[k]);
+  if (cardMemo.has(key) && same(cardMemo.get(key))) return cardMemo.get(key).states;
+  const G = presentationsCore();
+  const json = JSON.parse(JSON.stringify(deckJson(deck, ctx)));
+  const at = (ms) => {
+    const cur = G.current(json, null, "", ms);
+    return { preset: cur.preset.id || "", count: cur.shown.length };
+  };
+  const s0 = at(now);
+  const row = G.speakerMeeting(json, now);
+  const t = row ? Date.parse(row.over) : NaN;
+  const s1 = Number.isFinite(t) ? at(t) : null;
+  const states = !s1 || (s1.preset === s0.preset && s1.count === s0.count) ? [s0] : [{ ...s0, until: iso(t) }, { ...s1, from: iso(t) }];
+  if (cardMemo.size > 40) cardMemo.clear();
+  cardMemo.set(key, { db: ctx.db, site: ctx.site, meeting: ctx.meeting, carry: ctx.carry, states });
+  return states;
+}
+
 export default function (eleventyConfig, helpers) {
   if (helpers) H = { ...H, ...helpers };
   // {{ deck | presDeckJson(data) }} — src/pages/presentations-json.11ty.js: this.presDeckJson(data.deck, data)
   eleventyConfig.addFilter("presDeckJson", (deck, data) => JSON.stringify(deckJson(deck, data || {})) + "\n");
+  // {{ d | presCard({ site: site, db: db, meeting: meeting, carry: carry }) }} — src/pages/orientation.njk's cards
+  eleventyConfig.addFilter("presCard", (deck, data) => cardStates(deck, data || {}));
 }

@@ -12,9 +12,13 @@ written in Spanish (`lang: "es"`), shown and stood up like the English ones, wit
   * SpanishBuild    — the build shapes a Spanish deck in Spanish: its lang, each slide's, "Parte 1 · …" for a part's
                       eyebrow, and its facts in Spanish (dates, the meeting's rule and time, "Datos al …", La Viña's
                       themes without an English gloss, the fallbacks: "consulta la página de Reuniones") — the English
-                      decks' facts as before.
+                      decks' facts as before; its QR codes open the Spanish pages, and a file of the site as written
+                      (the player's rule, below).
   * SpanishPlayer   — the player's words on a Spanish deck's slides and in its notes are Spanish (presentations-core.js
-                      words): the TIEMPO line, "(no está en esta versión)", tidied after "diapositivas".
+                      words): the TIEMPO line, "(no está en esta versión)", tidied after "diapositivas"; a Spanish
+                      deck's links to the site's pages open the Spanish pages, while a link to a FILE of the site (a
+                      flyer under /assets/, a calendar or a feed: /events.ics) or to an address already under /es/ is
+                      opened and shown as written (round 38b: never /es/assets/…, never /es/es/…).
   * SpanishEvents   — a writing workshop held in Spanish (La Viña's: the Fort Worth workshop of December 12, 2026)
                       links taller-de-escritura, an orientation held in Spanish orientacion-rlv; an English one keeps
                       the English deck; without the Spanish deck the English one stands in.
@@ -220,6 +224,22 @@ EDITORIAL = [
     {"id": "ed:gv:2027-07", "lang": "en", "title": "Annual Prison Issue",
      "extra": {"publication": "gv", "issue_key": "2027-07", "deadline": "2026-12-01"}},
 ]
+# A Spanish deck and an English one built with a closing slide's `qr:` and a `qr` live slide for each address
+# (FILES, ES_ALREADY and PAGES, below): the absolute address each code opens (eleventy/filters/presentations.js qrData)
+QR_JS = r"""
+const P = await imp("eleventy/filters/presentations.js");
+const site = { url: "https://x.test/aagrapevine", built: input.now };
+const now = new Date(input.now);
+const { decks } = P.loadDecks("config/presentations", { now, shop: {} });
+const by = Object.fromEntries(decks.map((d) => [d.id, d]));
+const codes = (d) => { const extra = input.urls.flatMap((u, i) => [
+    { id: `zz-closing-${i}`, layout: "closing", message: "x", qr: u },
+    { id: `zz-live-${i}`, layout: "live", kind: "qr", options: { url: u, caption: "" } }]);
+  const j = P.deckJson({ ...d, slides: [...d.slides, ...extra] }, { db: {}, site, carry: {}, meeting: null, now });
+  const at = (id) => j.slides.find((s) => s.id === id).data.url;
+  return Object.fromEntries(input.urls.map((u, i) => [u, [at(`zz-closing-${i}`), at(`zz-live-${i}`)]])); };
+out({ es: codes(by["orientacion-rlv"]), en: codes(by["writing-workshop"]) });
+"""
 
 
 class SpanishBuild(unittest.TestCase):
@@ -270,6 +290,19 @@ class SpanishBuild(unittest.TestCase):
         self.assertTrue(en["rows"]["url"].endswith("/aagrapevine/contribute/#deadlines"))
         self.assertEqual(es["fbLv"], "consulta el calendario de eventos de La Viña en aalavina.org")
 
+    def test_a_qr_code_to_a_file_of_the_site_is_never_given_es(self):
+        """The build's own addresses for a Spanish deck (context().abs: a closing slide's `qr:`, a `qr` live slide's
+        url) follow the player's rule (presentations-core.js hasEsTwin, SpanishPlayer below): a page of the site gets
+        its Spanish twin, a file of the site (/assets/…, /events.ics) or an address already under /es/ is coded as
+        written — never /es/assets/… (a 404) or /es/es/…; an English deck's codes never get /es/."""
+        r = run_js(self, QR_JS, data={"now": "2026-11-26T18:00:00Z", "urls": FILES + ES_ALREADY + PAGES},
+                   now="2026-11-26T18:00:00Z")
+        for u in FILES + ES_ALREADY + PAGES:
+            with self.subTest(url=u):
+                es = "https://x.test/aagrapevine" + ("/es" if u in PAGES else "") + u
+                self.assertEqual(r["es"][u], [es, es])
+                self.assertEqual(r["en"][u], ["https://x.test/aagrapevine" + u] * 2)
+
     def test_every_fallback_has_its_spanish(self):
         r = self.got()
         self.assertEqual(set(r["fallbacksEs"]), set(r["fallbacks"]))
@@ -314,6 +347,27 @@ out({ es: G.timeLine(entry, "es"), en: G.timeLine(entry), enLang: G.timeLine(ent
 """
 
 
+# Addresses of the site as a deck may write them: files (no Spanish twin), addresses already in Spanish, and pages
+FILES = ["/assets/flyers/2026/taller-de-escritura.pdf", "/assets", "/events.ics", "/deadlines.ics", "/feed.xml",
+         "/meetings/weekly-open-lv.ics", "/orientation/presentations/taller-de-escritura.json", "/llms.txt?v=2"]
+ES_ALREADY = ["/es/events.ics", "/es/contribute/#deadlines", "/es"]
+PAGES = ["/contribute/", "/", "/events/#subscribe", "/meetings/?x=1", "/events/series/committee-meeting/"]
+FILES_JS = r"""
+import vm from "node:vm";
+const ctx = {};
+vm.createContext(ctx);
+vm.runInContext(fs.readFileSync("src/assets/js/presentations-core.js", "utf8"), ctx);
+const G = ctx.GVP;
+const hrefs = (nodes) => nodes.flatMap((n) => (n.t === "a" ? [n.href] : []).concat(n.c ? hrefs(n.c) : []));
+// [in a slide's text, on a resources card, as the card shows it] for a deck in `lang` on the `page`'s language
+const one = (lang, page, u) => { const d = { id: "x", lang, presets: [{ id: "full" }], fillins: [], live: {}, slides: [] };
+  return [hrefs(G.rich(`[x](${u})`, { deck: d, base: "/aagrapevine/", lang: page }))[0],
+          G.safeHref(u, { base: "/aagrapevine/", lang: G.linkLang(d, page) }), G.showUrl(u, "grapevine.neta65.org", d.lang)]; };
+out(Object.fromEntries(input.urls.map((u) => [u, { esOnEn: one("es", "en", u), esOnEs: one("es", "es", u),
+                                                   enOnEs: one("en", "es", u), enOnEn: one("en", "en", u) }])));
+"""
+
+
 class SpanishPlayer(unittest.TestCase):
     def test_the_players_words_in_the_decks_language(self):
         r = run_js(self, CORE_JS, needs_modules=False)
@@ -343,6 +397,23 @@ class SpanishPlayer(unittest.TestCase):
         self.assertEqual(r["links"]["enOnEs"]["text"][0], "/aagrapevine/es/contribute/")
         self.assertEqual((r["links"]["enOnEs"]["card"], r["links"]["enOnEs"]["shown"]),
                          ("/aagrapevine/es/contribute/", "grapevine.neta65.org/contribute/"))
+
+    def test_a_link_to_a_file_of_the_site_is_never_given_es(self):
+        """A file of the site has no Spanish twin under /es/ (/es/assets/… and /es/orientation/presentations/… are
+        404s; the Spanish calendar is its own address, /es/events.ics): a link to one — anything under /assets/, or an
+        address whose last part has an extension — opens and shows as written, in a slide's text and on a resources
+        card, for a deck in either language on either page; so does an address already under /es/ (never /es/es/).
+        The site's pages keep their Spanish twin (test above)."""
+        r = run_js(self, FILES_JS, data={"urls": FILES + ES_ALREADY + PAGES}, needs_modules=False)
+        for u in FILES + ES_ALREADY:
+            for combo, (text, card, shown) in r[u].items():
+                with self.subTest(url=u, deck_on_page=combo):
+                    self.assertEqual((text, card), ("/aagrapevine" + u, "/aagrapevine" + u))
+                    self.assertEqual(shown, "grapevine.neta65.org" + u)
+        for u in PAGES:
+            with self.subTest(url=u):
+                self.assertEqual(r[u]["esOnEn"], ["/aagrapevine/es" + u, "/aagrapevine/es" + u, "grapevine.neta65.org/es" + u])
+                self.assertEqual(r[u]["enOnEn"], ["/aagrapevine" + u, "/aagrapevine" + u, "grapevine.neta65.org" + u])
 
     def test_the_screen_marks_the_decks_language(self):
         js = (ROOT / "src" / "assets" / "js" / "presentations.js").read_text(encoding="utf-8")

@@ -1233,15 +1233,25 @@ html:not(.cm-js) [data-cm-js] { display: none !important; }
     .evp-top-main { grid-column: 1; grid-row: 1; }
   }
   .evp-facts { display: grid; gap: 0.75rem; margin-top: 1rem; }
-  .evp-facts > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.75rem; padding-top: 0.75rem;
-    border-top: 1px solid var(--c-line); }
+  /* a fact: its label (7.5rem) and its value side by side; the value goes under its label when it would get less
+     than 6rem beside it — (round 38b) at 115–150 % text on a phone the facts card's inner width (~210px at 150 % on
+     a 320px phone) left the value of a 7.5rem + 1fr grid 12–83px: its words broke into one letter per line, and
+     "Map" / "Online on Google Meet" pushed the page 14–76px sideways. rem: the same threshold at every text size, so
+     at 100 % every phone from 320px keeps the two columns (the value has 7rem there: 114px). From 64rem, beside the
+     card, one column: the label above its value. */
+  .evp-facts > div { display: flex; flex-wrap: wrap; gap: 0.15rem 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--c-line); }
   .evp-facts > div:first-child { padding-top: 0; border-top: 0; }
-  @media (width >= 64rem) { .evp-facts > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; } }
+  .evp-facts dt { flex: 0 0 7.5rem; }
+  .evp-facts dd { flex: 1 1 6rem; }
+  @media (width >= 64rem) { .evp-facts dt { flex-basis: 100%; } }
   .evp-facts dt { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-muted); padding-top: 0.15rem; }
   .evp-facts dd { min-width: 0; font-size: 0.95rem; line-height: 1.5; color: var(--c-ink); overflow-wrap: anywhere; }
+  /* (their lines — "Online on Google Meet", the map link — wrap inside the value, never past it) */
   .evp-fact-line { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.15rem; color: var(--c-muted); }
-  .evp-map { display: flex; width: fit-content; align-items: center; gap: 0.35rem; margin-top: 0.15rem; font-weight: 600; color: var(--c-gv);
+  .evp-fact-line > span { min-width: 0; }
+  .evp-map { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: 0.35rem; margin-top: 0.15rem; font-weight: 600; color: var(--c-gv);
     text-decoration: underline; text-underline-offset: 2px; }
+  .evp-map > span { min-width: 0; }
   .evp-map:hover { color: var(--c-gv-strong); }
   @media (width < 40rem), (pointer: coarse) { .evp-map { min-height: 2.75rem; } }
   .evp-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
@@ -1391,5 +1401,7 @@ a.ev-series-date:hover { border-color: var(--ev, var(--c-gv)); color: var(--c-gv
 @media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"] .cm-spk-ic { display: none; } }
 /* (round 38) …and at 150 % text on 640–767px screens its cards leave out the flyer tile — the card's "View flyer" button
    stays, the way to the flyer as on a phone. Beside the date tile and the flyer (7.5rem: 180px there) the words had
-   174–280px, and "representatives", "hispanohablantes", "Wednesday," broke in two at 656–728px. */
+   174–280px, and "representatives", "hispanohablantes", "Wednesday," broke in two at 656–728px. (The selector,
+   #evp-all-dates, is a series' page's "All dates" too — event-page.njk —, but its dates are pills with no flyer tile:
+   only the committee meeting's dates page has one to leave out.) */
 @media (40rem <= width < 48rem) { :root:where(.gv-prefs)[data-text="150"] #evp-all-dates .cm-flyer-thumb { display: none; } }

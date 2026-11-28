@@ -242,10 +242,13 @@
             <template x-for="m in mics" :key="m.id"><option :value="m.id" x-text="m.label" :selected="m.id === micId"></option></template>
           </select>
         </label>
+        {#- (its words a flex-1 column: at larger text or relaxed spacing, with less than ~7 characters' room beside the
+            switch, they go under it — main.css's rule for a text column — instead of running out of the card: round
+            38b, "background" was cut by 18px at 150 % with relaxed spacing on a 320px phone) -#}
         <div>
           <label class="inline-flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium text-ink">
             <input type="checkbox" class="cm-switch" x-model="noise" @change="reopen()" :disabled="rec() || state === 'countdown'" aria-describedby="rec-noise-help">
-            {{ "community.recorder.o_noise" | t(lang) }}
+            <span class="flex-1">{{ "community.recorder.o_noise" | t(lang) }}</span>
           </label>
           <p id="rec-noise-help" class="text-xs leading-relaxed text-muted">{{ "community.recorder.o_noise_help" | t(lang) }}</p>
         </div>

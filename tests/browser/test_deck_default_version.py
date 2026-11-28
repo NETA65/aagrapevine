@@ -9,7 +9,9 @@ __init__.py says how to run these; they share test_site_in_browser.py's site ser
                      is kept: after a reload the deck opens on it, without that line; picking "No guest speaker"
                      again is none chosen (nothing stored, "Chosen for you" back). Reloaded at 8:02 PM, after the
                      meeting, the deck shows the slides it showed at 7:58 PM. A week before a meeting with a guest
-                     speaker listed (January 20, 2027), the first version, with the speaker's slide.
+                     speaker listed (January 20, 2027), the first version, with the speaker's slide. (Round 38) The
+                     deck's card on /orientation/ says the number of slides the deck opens with, before and after
+                     the moment its version changes by itself (the card swaps its line then).
 The offline side (the core, the real deck at fixed clocks): tests/test_presentations_default_version.py.
 
 Nothing here depends on today's date: the browser's clock (Playwright's) is stopped a week before meetings taken
@@ -130,6 +132,47 @@ class DefaultVersion(unittest.TestCase):
                 ctx.close()
         self.assertEqual(seen[1], seen[0])
         self.assertFalse([t for t in seen[1] if SPEAKER_TITLE in t or "none tonight" in t], seen[1])
+        self.assertEqual(errors, [])
+
+    def test_the_card_counts_the_slides_the_deck_opens_on(self):
+        """The deck's card on /orientation/ (round 38: it said "23 slides" while the deck opened at "1 / 21") says the
+        number of slides the deck opens with — a minute before the moment its version changes by itself (the card's
+        first state ends then: data-gv-expire, the midnight after a meeting without a guest speaker) and a minute
+        after it, when the page has swapped in the card's second state; a card with one state, a minute after the
+        build. English and Spanish. The clocks come from the built card itself: nothing depends on today."""
+        errors: list[str] = []
+        for lang in ("en", "es"):
+            pre = "es/" if lang == "es" else ""
+            ctx = new_context(1280, 900, lang=lang)
+            try:
+                page = open_page(ctx, pre + "orientation/", errors)
+                moment = page.evaluate(f"""() => {{ const s = document.querySelector('#pres-{DECK} .o101-pres-head [data-gv-expire]');
+                    return s ? s.getAttribute('data-gv-expire') : ''; }}""")
+                page.close()
+            finally:
+                ctx.close()
+            if moment:
+                t = datetime.fromisoformat(moment.replace("Z", "+00:00"))
+                clocks = [t - timedelta(minutes=1), t + timedelta(minutes=1)]
+            else:
+                clocks = [datetime.fromisoformat(built_deck()["built"].replace("Z", "+00:00")) + timedelta(minutes=1)]
+            for at in clocks:
+                with self.subTest(lang=lang, at=at.isoformat()):
+                    ctx = new_context(1280, 900, lang=lang)
+                    try:
+                        ctx.clock.set_fixed_time(at.astimezone(timezone.utc).isoformat())
+                        page = open_page(ctx, pre + "orientation/", errors)
+                        heads = page.locator(f"#pres-{DECK} .o101-pres-head .eyebrow").evaluate_all(
+                            "(els) => els.filter((e) => e.getClientRects().length).map((e) => e.textContent.trim())")
+                        self.assertEqual(len(heads), 1, heads)
+                        page.close()
+                        page = open_page(ctx, pre + f"orientation/?present={DECK}", errors)
+                        count = page.locator("[data-gvp-count]")
+                        count.filter(has_text="1 /").wait_for(timeout=30_000)
+                        total = count.inner_text().split("/")[1].strip()
+                        self.assertRegex(heads[0], rf"· {total} (?:slides|diapositivas)$")
+                    finally:
+                        ctx.close()
         self.assertEqual(errors, [])
 
     def test_a_meeting_with_a_guest_speaker(self):

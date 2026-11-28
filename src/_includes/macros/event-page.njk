@@ -70,13 +70,16 @@
 {% endmacro %}
 
 {#- A section's heading: an eyebrow, the h2, an optional line under it and an optional link on its right
-    (ui.sectionHead's look, with an id for aria-labelledby). -#}
+    (ui.sectionHead's look, with an id for aria-labelledby). Its icon steps aside at 150 % on a phone narrower than
+    384px (foldIcon: round 38b, "Próximo: Orientación para RSG y MCD" beside it pushed the page 6px sideways). -#}
 {% macro head(id, title, eyebrow="", icon="", sub="", href="", linkLabel="") %}
-{{ ui.sectionHead(title, sub, href, linkLabel, icon, { eyebrow: eyebrow, id: id, lang: lang }) }}
+{{ ui.sectionHead(title, sub, href, linkLabel, icon, { eyebrow: eyebrow, id: id, lang: lang, foldIcon: true }) }}
 {% endmacro %}
 
 {#- Other events as small cards (their own pages): the date tile, the title, the day and time, the place or "Online on
-    …", "Details to be confirmed", the flyer's thumbnail when `thumbs`. The current date of a series is marked. -#}
+    …", "Details to be confirmed", the flyer's thumbnail when `thumbs`. The current date of a series is marked. At
+    115 %+ text or with relaxed spacing the words (a flex-1 column) go under the date tile when they'd get less than
+    7em beside it, 9em at 130 %+ (main.css's text-column rule, areas/access.css .cm-mini-card — round 38b). -#}
 {% macro minis(list, thumbs=false, cols="sm:grid-cols-2 lg:grid-cols-3") %}
 <ul class="mt-5 grid gap-3 {{ cols }}" role="list">
   {%- for r in list %}

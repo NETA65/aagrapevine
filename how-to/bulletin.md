@@ -544,7 +544,8 @@ the search or the digest. Each update's run summary lists it under **Scheduled b
 `- 2027-02-01 — Spring Assembly sign-ups are open (content/bulletin/2027-02-01-spring-assembly-sign-ups.md)`.
 On February 1 the day's first update (normally the morning refresh, by about 5:30 AM Central) puts it up, marked
 "New". After March 1 it is gone. The file itself is public on GitHub from the moment you save it. A real one waits
-in the folder now: `2027-01-01-new-prices-in-effect.md` goes up on January 1, 2027.
+in the folder now: `2027-01-01-new-prices-in-effect.md` goes up on January 1, 2027 — pinned (`pinned: true`), so
+from that morning through January 31 it is also the home page's *Pinned on the Bulletin* card.
 
 **Example 4 — your own Spanish, with sections (the real pinned post, shortened).**
 File `2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md` (it took the place of two pinned posts — the

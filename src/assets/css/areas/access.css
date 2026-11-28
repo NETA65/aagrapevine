@@ -275,6 +275,11 @@ html:root.tts-bar-on {
 @media (width < 40rem) {
   :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) :is(.home-meet-count, .cm-tiles) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+/* (round 38b) …and at 115 % below 360px Home's four tiles stay in one row, their labels with the tile's whole width (no
+   side padding inside the tile): "HOURS" is 45px wide at 115 %, its tile had 44.8px on a 320px phone and it broke as
+   "HOUR" / "S" ("HORAS", 44.9px, just fit); now 54px. The tiles are still one row: 62px (76 on a 320px phone in
+   English while "HOURS" broke). */
+@media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="115"] .home-count { padding-inline: 0; } }
 /* Events: the date strip, and the "Add to calendar" button and its menu, wrap inside their card */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-date-strip { flex-wrap: wrap; white-space: normal; max-width: 100%; }
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-menu { min-width: 0; max-width: 100%; }
@@ -353,6 +358,20 @@ html:root.tts-bar-on {
    steps aside. Beside it "mantenerte" ("Todas las formas de mantenerte al día") was wider than its line (109px for
    101) and broke in two. */
 @media (40rem <= width < 45rem) { :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .site-footer-hub > .icon { display: none; } }
+/* (round 38b) The same column's official sites ("aagrapevine.org", "aalavina.org": footer.njk .site-footer-official, a
+   <wbr> before ".org") break only there, never inside the name: beside the grapes icon and the small arrow
+   "aagrapevine" broke in two ("aagrapevi|ne") at 640–768px with 115 % text or relaxed spacing, at 1024–1100px at 115 %
+   with relaxed spacing, at 480 and 1440px at 150 % with relaxed spacing. Where the link's line is narrower than the
+   icon, "aagrapevine" and the arrow need (8.83em; 10.15em with relaxed spacing's wider letters) the icon steps aside,
+   and with relaxed spacing below 8.7em the arrow too (the link still tells screen readers it opens another site).
+   Each link's line is a size container, so the widths are in its own text size (em) and hold at every text size —
+   from 360px, where the arrow is shown (below it the name has room beside the icon: 7.54em in a 7.95em line). */
+.site-footer-official { container: ft-site / inline-size; }
+@media (width >= 22.5rem) {
+  @container ft-site (width < 9.1em) { .site-footer-official > a > .icon:first-child { display: none; } }
+  @container ft-site (width < 10.4em) { :root:where(.gv-prefs)[data-spacing="relaxed"] .site-footer-official > a > .icon:first-child { display: none; } }
+  @container ft-site (width < 8.7em) { :root:where(.gv-prefs)[data-spacing="relaxed"] .site-footer-official > a > .icon:last-of-type { display: none; } }
+}
 /* Meetings, Grapevine meetings near you: the weekday over its times (the time chips get the card's
    width), and Directions | Details side by side only when both fit — else one per row, full width */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-gvg-rows { grid-template-columns: minmax(0, 1fr); }
@@ -378,16 +397,25 @@ html:root.tts-bar-on {
 /* Events: a card's buttons (Add to calendar, Details, Flyer) may wrap their label */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-ev-btns > * { flex-shrink: 1; min-width: 0; max-width: 100%; }
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-ev-btns > a { white-space: normal; }
+/* …and (round 38b) "Organizer's page ↗" on a phone ("Organizer ↗" / "Organizador ↗": .ev-org-btn, events.njk
+   organizerButton and an event's own page): its icon steps aside — the ↗ still says it opens another site — and the
+   ↗ may go under the word, which never breaks ("Organizado|r" at 150 % with relaxed spacing on a 320px phone, and
+   with relaxed spacing alone on a 390px phone, two buttons to a row) */
+@media (width < 40rem) {
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .ev-org-btn { flex-wrap: wrap; }
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .ev-org-btn > svg { display: none; }
+}
 /* Share your story: a magazine's deadline card — "Calendar (document)" and "Full calendar" go under the
    magazine's name instead of squeezing beside it (a column: the row's text-column rule would keep them
    beside it) */
 :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .ct-cal-head { flex-direction: column; align-items: flex-start; }
 @media (width < 30rem) { :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .ct-cal-icon { display: none; } }
-/* …"Next story deadlines" (contribute.njk #next-deadlines): its title keeps whole words — at 115%+ "All deadlines ↓"
-   goes under it rather than squeezing it to 7 characters beside it ("deadline-s", the text-column rule in main.css);
-   at 150% below 360px the card has 1rem sides and "Add to my calendar" leaves its calendar icon out ("Próximas",
-   "Agregar", "calendario" whole) */
-:root:where(.gv-prefs):is([data-text="115"], [data-text="130"], [data-text="150"]) #nd-title { --text-col-min: 11em; }
+/* …"Next story deadlines" (contribute.njk #next-deadlines): its title keeps whole words — at 115%+ and with relaxed
+   spacing "All deadlines ↓" goes under it rather than squeezing it to 7 characters beside it ("deadline-s", the
+   text-column rule in main.css — which relaxed spacing turns on at 100 % text too: on a 360px phone "deadline / s",
+   round 38b); at 150% below 360px the card has 1rem sides and "Add to my calendar" leaves its calendar icon out
+   ("Próximas", "Agregar", "calendario" whole) */
+:root:where(.gv-prefs):is([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) #nd-title { --text-col-min: 11em; }
 @media (width < 22.5rem) {
   :root:where(.gv-prefs)[data-text="150"] .ct-nd :is(.px-5, .p-5) { padding-inline: 1rem; }
   :root:where(.gv-prefs)[data-text="150"] .ct-nd .ct-dl-cal > summary > svg:first-child { display: none; }
@@ -401,6 +429,46 @@ html:root.tts-bar-on {
 @media (width < 22.5rem) {
   :root:where(.gv-prefs)[data-text="150"][data-spacing="relaxed"] .o101-pres-card { padding-inline: 1rem; }
   :root:where(.gv-prefs)[data-text="150"][data-spacing="relaxed"] .o101-pres-card > h3 { font-size: 1rem; }
+}
+/* (round 38b) GVR / RLV page, "Your first steps": at 150 % below 360px a step's description and links start under its
+   checkbox, not indented under its title — indented they had 160px, and "Representante" (the Register links) and
+   "announcement" broke in two */
+@media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"] .read-check-body { padding-left: 0; } }
+/* (round 38b) A decorative icon marked .lt-fold — the panel titles' icons on /status/ (Document library, Machine
+   translation), /gvr/ (the help and contact cards) and /stay-updated/ (the feeds), the arrow of a feed card's button,
+   the section titles' icons on an event's own page (ui.sectionHead foldIcon) — steps aside at 150 % on a phone
+   narrower than 384px: beside it a word that fits the card broke in two ("Documen|t", "documen|tos", "committ|ee",
+   "Instagra|m", "publicacion|es" at 150 % on 320–375px phones), or a section title's longest word pushed the page
+   sideways ("Orientación" on the Spanish GSR/DCM orientation pages, 6px) */
+@media (width < 24rem) { :root:where(.gv-prefs)[data-text="150"] main .lt-fold { display: none; } }
+/* (round 38b) The small event cards (.cm-mini-card: Share your story's next workshops, an event page's other dates and
+   events, a cancelled event's notice): their words are a flex-1 column beside the date tile (and a flyer's thumbnail).
+   At 115 % (main.css's text-column rule starts at 130 %) the column goes under the tile when it would get less than
+   7em beside it — beside a tile and a thumbnail it had 75–82px, and "Workshop", "Arlington," broke in two on 320px
+   phones and in the two-column grid at 640px. At 130 %+ it needs 9em (the rule's default 7em left a title's word in
+   the larger display type wider than the column: "Intergroup", 152px in 149px at 130 % with relaxed spacing on a 340px
+   phone, "Intergrupo" at 150 % on a 390px phone); the rows inside (the place beside its pin) keep the default. */
+:root:where(.gv-prefs)[data-text="115"] .cm-mini-card { flex-wrap: wrap; }
+:root:where(.gv-prefs)[data-text="115"] .cm-mini-card > .min-w-0 { min-width: min(100%, 7em); }
+:root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .cm-mini-card > .min-w-0 { --text-col-min: 9em; }
+:root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .cm-mini-card > .min-w-0 * { --text-col-min: initial; }
+/* (round 38b) Status: a source's "Technical details" and "Notes" (for the maintainer, under its note: .cm-preview.ml-6)
+   lose their indent on phones at 130 %+ or with relaxed spacing — beside the summary's "+" the words had ~130px at
+   150 % on a 320px phone ("actualizaci|ón", "maintaine|r") */
+@media (width < 30rem) { :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-preview.ml-6 { margin-left: 0; } }
+/* …and every maintainer toggle's summary there (details[data-tech], Status only) takes a smaller inline padding and gap:
+   with the "+" beside them the words still had 112–114px at 150 % on a 340px phone, and "actualizació|n" (116px),
+   "maintaine|r" (114px) broke in two. (A source's row on a phone also puts its words under its icon below 9em,
+   status.njk.) Left: "maintainer)" of a calendar's toggle, nested in two panels, at 150 % with relaxed spacing on a
+   320px phone — 123px, wider than its whole column */
+@media (width < 30rem) { :root:where(.gv-prefs):is([data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .cm-preview[data-tech] > summary { padding-inline: 0.5rem; column-gap: 0.25rem; } }
+/* …and its three numbers under the hero (last published, items tracked, found this week: .cm-st-stats) one under the
+   other below 896px at 130 %+ — three to a row a column had 125–180px at 640–768px, and "4,20|8", "minut|es" broke in
+   two (the dividers between them turn with the layout) */
+@media (width < 56rem) {
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .cm-st-stats { grid-template-columns: minmax(0, 1fr); }
+  :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .cm-st-stats > :not(:last-child) {
+    border-inline-width: 0; border-bottom-width: 1px; border-bottom-style: solid; }
 }
 /* Buttons at 130%+ (or relaxed spacing): a label on two or three lines makes a rounded box, not a
    blob (a one-line button still looks like a pill: 1.5rem is at least half its height), and on phones a

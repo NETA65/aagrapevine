@@ -16,7 +16,9 @@ monthly.js, src/_data/meeting.js), which must agree with the sync's:
   * the link to join and the "Meeting code" in what search engines read (left out) and on a series' card.
 
 The settings are written here, with fixed clocks; RealSettings (the gate's CONTENT_TESTS) checks config/site.yml
-itself: the Grapevine Meeting, the CityWide booth, the 12 speakers of 2027 and the flyer names.
+itself: the Grapevine Meeting, the CityWide booth, the 12 speakers of 2027 and the flyer names — and (round 38b) that
+no recurring_events key, written or worked out from a title, is "committee-meeting", the committee meeting's own dates
+page (/events/series/committee-meeting/: two pages at one address stop the build).
 
     python -m unittest tests.test_r20_meeting -v      (or: python -m unittest discover -s tests)
 """
@@ -664,7 +666,8 @@ class RealSettings(unittest.TestCase):
     the first Wednesday in the committee meeting's Google Meet room from Jan 6, 2027 (the owner, Nov 19, 2026: no
     meeting on Dec 2, 2026); the CityWide booth 5:30–7:30 PM
     at Lovers Lane; the 12 guest speakers of 2027 on the 3rd Wednesdays, by first name and last initial; the flyer
-    names of the Drive found by the right setting."""
+    names of the Drive found by the right setting; (round 38b) no recurring_events block at the address of the
+    committee meeting's dates page."""
 
     @classmethod
     def setUpClass(cls):
@@ -695,6 +698,21 @@ class RealSettings(unittest.TestCase):
         self.assertEqual(sp["title"], ("Grapevine Meeting", "Reunión de Grapevine (en inglés)"))
         self.assertFalse([p for p in self.problems if "grapevine-meeting" in p], self.problems)
         self.assertNotRegex(json.dumps(self.cfg, ensure_ascii=False, default=str), r"(?i)hosted by")
+
+    def test_no_series_takes_the_committee_meetings_dates_page(self):
+        """(round 38b) /events/series/committee-meeting/ is the committee meeting's own dates page (round 38:
+        eleventy/filters/committee.js COMMITTEE_DATES_KEY, src/pages/events-committee.njk): a recurring_events block
+        with that key — or with no key and a title the sync turns into it ("Committee meeting") — would be a second
+        page at that address, and the build would stop."""
+        src = (ROOT / "eleventy" / "filters" / "committee.js").read_text(encoding="utf-8")
+        taken = re.search(r'export const COMMITTEE_DATES_KEY = "([^"]+)"', src).group(1)
+        self.assertEqual(taken, "committee-meeting")
+        written = [str(e.get("key") or "") for e in self.cfg.get("recurring_events") or [] if isinstance(e, dict)]
+        clash = sorted({k for k in written if B.slugify(k, B.RECURRING_KEY_MAX).strip("-") == taken}
+                       | {s["key"] for s in self.specs if s["key"] == taken})
+        self.assertEqual(clash, [], f'config/site.yml recurring_events: the key "{taken}" is taken — '
+                                    f'/events/series/{taken}/ is the committee meeting\'s own dates page. '
+                                    f'Give that block another key (lowercase letters, digits and dashes).')
 
     def test_the_citywide_booth(self):
         sp = next(s for s in self.specs if s["key"] == "citywide-dallas")

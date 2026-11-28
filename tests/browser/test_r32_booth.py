@@ -437,7 +437,14 @@ class PinBeside(unittest.TestCase):
             a.wait_for_timeout(700)
             self.assertEqual(pin_box(win), w("booth.pin_for_leave", "en"))
             with win.expect_event("close", timeout=10_000):
-                type_pin(win)
+                win.fill("[data-gvb-pin-input]", "1234")
+                try:
+                    win.press("[data-gvb-pin-input]", "Enter")
+                except Exception as e:
+                    # (the right PIN closes the window: on a busy PC it can close before press() has returned, and
+                    # Playwright then raises TargetClosedError — the close itself is what expect_event waits for)
+                    if type(e).__name__ != "TargetClosedError":
+                        raise
             a.wait_for_selector("[data-gvb-win]", state="hidden", timeout=5_000)
             win = start_window(a)
             win.on("pageerror", lambda e: errors.append(f"window: {str(e).splitlines()[0][:200]}"))

@@ -160,13 +160,13 @@
           <p class="mt-4 text-[0.95rem] leading-relaxed text-muted"{% if foreign %} lang="{{ ev.item.lang }}"{% endif %}>{{ ev.summary | excerpt(2000) | escape | cmNoSnippet | safe }}</p>
           {% endif %}
           {% if ev.item | machineFor(lang) %}<p class="mt-1.5">{{ ui.autoNote(ev.item, lang) }}</p>{% endif %}
-          {#- the card's buttons (committee.css .cm-ev-actions): its flyer, its outside page and Share — Join online and
-              Add to calendar are in the hero -#}
+          {#- the card's buttons (committee.css .cm-ev-actions): its flyer, its outside page (.ev-org-btn, as on /events/:
+              events.njk organizerButton) and Share — Join online and Add to calendar are in the hero -#}
           <div class="cm-ev-actions">
             <div class="cm-ev-btns">
             {{ ui.flyerButton(ev.flyer, ev.title, lang) }}
             {% if ev.link and ev.linkExternal and ev.link != (ev.flyer.view if ev.flyer else "") %}
-            <a class="btn-secondary btn-sm" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evlist.organizer_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.organizer" | t(lang) }}</span> <span aria-hidden="true">↗</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+            <a class="btn-secondary btn-sm ev-org-btn" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evlist.organizer_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.organizer" | t(lang) }}</span> <span aria-hidden="true">↗</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
             {% endif %}
             </div>
             <button type="button" class="btn-ghost btn-sm max-sm:mt-2 sm:max-xl:px-2.5" data-js-only data-share="{{ selfAbs }}" data-share-title="{{ ev.title }}" data-share-text="{{ when }}">{% icon "share-2", "size-4" %}<span class="sm:max-xl:sr-only">{{ "common.share" | t(lang) }}</span></button>

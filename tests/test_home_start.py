@@ -35,7 +35,10 @@ whole of something. One build of Home (English and Spanish) on the day's data:
                 card's arrow and "More on this site"'s icon tiles step aside, and that grid takes fewer columns, where
                 a word broke in two (what the browser draws: tests/browser/test_r38_home_layout.py WholeWords); the
                 meeting cards under the hero are one column at 150 % on tablets, and the Grapevine Meeting's time,
-                wrapped, keeps its first letters.
+                wrapped, keeps its first letters. (round 38b) Two in a row the start buttons are a flex row whose line
+                with the write button gives it the wider share; "Also on"'s buttons keep one line; the "More episodes"
+                heading's icon, the countdown tiles' padding and the video strip's side-by-side layout give way on
+                small phones at larger text; "Write for the magazines" keeps a 9em text column.
   * Weight    — the page links its own stylesheet (/assets/css/home.css) and no area's rules sit in main.css.
 
     python -m unittest tests.test_home_start -v        (or: python -m unittest discover -s tests)
@@ -261,8 +264,24 @@ class StripVideo(unittest.TestCase):
         # (round 38) at 115 % with relaxed spacing fewer columns where a word would break in two ("representante"):
         # one under the other below 672px, two in a row below 1440px — the 100 % row as it was
         relaxed115 = ':root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .home-choose-grid'
-        self.assertIn("@media (40rem <= width < 42rem) { " + relaxed115 + " { grid-template-columns: minmax(0, 1fr); } }", start)
+        self.assertIn("@media (40rem <= width < 42rem) { " + relaxed115 + " { display: grid; grid-template-columns: minmax(0, 1fr); } }", start)
         self.assertIn("@media (80rem <= width < 90rem) { " + relaxed115 + " { grid-template-columns: repeat(2, minmax(0, 1fr)); } }", start)
+        # (round 38b) two in a row (640–1279px) is a flex row that wraps two to a line: the line with the write button
+        # and its deadline gives that button the wider share ("I want to subscribe" beside it had 84–107px of nothing
+        # under its words); the one-column rules make it a grid again (what the browser draws:
+        # tests/browser/test_r38_home_layout.py StartButtons)
+        self.assertIn("@media (40rem <= width < 80rem) {\n  .home-choose-grid { display: flex; flex-wrap: wrap; }\n"
+                      "  .home-choose-grid > li { flex: 1 1 34%; }\n"
+                      "  .home-choose-grid > li:has(.home-choose-due:not([hidden])) { flex-grow: 10; }\n}", start)
+        # (round 38b review) …and from 896px, at 100 % text with normal spacing only, "I want to subscribe" (the button
+        # after the write button) keeps 29 % and does not grow (it had 26-45px of nothing under its words at 896-1279px)
+        plain = (':root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) '
+                 '.home-choose-grid > li:has(.home-choose-due:not([hidden]))')
+        self.assertIn("@media (56rem <= width < 80rem) {\n  " + plain + " { flex: 1 1 60%; }\n  " + plain + " + li { flex: 0 1 29%; }\n}",
+                      start)
+        self.assertIn(':root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-choose-grid { display: grid; '
+                      'grid-template-columns: minmax(0, 1fr); }', start)
+        self.assertNotIn("@media (width >= 40rem) { .home-choose-grid { grid-template-columns: repeat(2", start)
 
     def test_whole_words_at_larger_text(self):
         """(round 38) the Book of the Month card's arrow and "More on this site"'s icon tiles step aside, and its grid
@@ -276,6 +295,24 @@ class StripVideo(unittest.TestCase):
             self.assertIn(rule, css)
         page = (ROOT / "src" / "pages" / "index.njk").read_text(encoding="utf-8")
         self.assertIn('<span class="home-botm-go shrink-0', page)
+        # (round 38b) "Also on": each button keeps one line in the row that scrolls sideways below 1024px ("Pod|casts");
+        # "More episodes"' heading icon steps aside at 150 % with relaxed spacing below 360px ("episodios"); at 115 %
+        # below 360px — below 400px with relaxed spacing — the video strip is the video over its words (the badge
+        # wrapped beside a 95–124px video); "Write for the magazines" keeps a 9em text column ("magazi|nes" at
+        # 462–479px with relaxed spacing) (what the browser draws: tests/browser/test_r38_large_text.py HomeSmall,
+        # test_r38_home_layout.py WholeWords, VideoStrip)
+        for rule in ("@media (width < 64rem) { .home-episode .chip-row > * { white-space: nowrap; max-width: none; } }",
+                     '@media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"][data-spacing="relaxed"] .home-more-eps .card-h > span:first-child { display: none; } }',
+                     ':root:where(.gv-prefs)[data-text="115"] .home-video { grid-template-columns: minmax(0, 1fr); grid-template-areas: "yt" "info"; row-gap: 0.75rem; }',
+                     '@media (width < 25rem) {\n  :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .home-video { grid-template-columns: '
+                     'minmax(0, 1fr); grid-template-areas: "yt" "info"; row-gap: 0.75rem; }'):
+            self.assertIn(rule, css)
+        self.assertIn('<p class="home-write-line ', page)
+        self.assertIn('flex-1 basis-60 items-center gap-2 font-semibold text-ink [--text-col-min:9em]"', page)
+        # (round 38b) the committee meeting's countdown at 115 % below 360px: the four tiles' labels get the whole tile
+        # ("HOUR|S" on a 320px phone)
+        access = (ROOT / "src" / "assets" / "css" / "areas" / "access.css").read_text(encoding="utf-8")
+        self.assertIn('@media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="115"] .home-count { padding-inline: 0; } }', access)
 
     def test_the_meeting_cards_at_larger_text(self):
         """(round 38) the two meeting cards under the hero: one column at 150 % on 768–1023px (beside the countdown or

@@ -74,8 +74,17 @@ class Menus(unittest.TestCase):
         # (round 38) its icon steps aside at 115 % with relaxed spacing on 640–719px, where the four groups share a row:
         # beside it "mantenerte" broke in two (what the browser draws: tests/browser/test_r38_large_text.py FooterHub)
         self.assertIn('<a class="site-footer-hub inline-flex', footer)
+        access = read("src", "assets", "css", "areas", "access.css")
         self.assertIn('@media (40rem <= width < 45rem) { :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] '
-                      '.site-footer-hub > .icon { display: none; } }', read("src", "assets", "css", "areas", "access.css"))
+                      '.site-footer-hub > .icon { display: none; } }', access)
+        # (round 38b) the official sites after it: a <wbr> before ".org", and never a break inside "aagrapevine" — each
+        # link's line is a size container whose grapes icon (and, with relaxed spacing, arrow) steps aside where the line
+        # is narrower than the name beside them, in em (what the browser draws: tests/browser/test_r38_large_text.py
+        # FooterHub)
+        self.assertIn('<li class="site-footer-official flex"><a class="inline-flex', footer)
+        self.assertIn('{{ u | hostname | replace(".", "<wbr>.") | safe }}', footer)
+        self.assertIn(".site-footer-official { container: ft-site / inline-size; }", access)
+        self.assertIn("@container ft-site (width < 9.1em) { .site-footer-official > a > .icon:first-child { display: none; } }", access)
         header = read("src", "_includes", "partials", "header.njk")
         self.assertIn('{%- for f in nav.footer %}{% if f.page != "search" %}', header, "the phone menu's More lists every footer page")
         self.assertIn('{ url: "/stay-updated/", icon: "bell-ring", key: "nav.stay_updated", desc: "stay.short_desc" }', read("src", "pages", "index.njk"))

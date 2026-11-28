@@ -7,7 +7,7 @@
 // Worked out from the records alone, never from the event pages' plan: a pagination's `before` sees the data before
 // the computed `site` (a test's own recurring_events), and the plan is memoized for the whole build.
 // (A module of its own, not in eleventy/filters/ — every file there is loaded as a plugin — as eleventy/cancelled-pages.js.)
-import { eventAnchor, eventPagePath, eventCancelled, eventEndMs, slugify, EVENT_PAGE_ANCHOR } from "./filters/committee.js";
+import { eventAnchor, eventPagePath, eventCancelled, eventEndMs, slugify, tidyBrackets, EVENT_PAGE_ANCHOR } from "./filters/committee.js";
 
 const OWN_ADDRESS = new Set(["manual", "recurring", "committee"]);
 
@@ -25,8 +25,10 @@ export function oldAnchors(it) {
 /**
  * The redirect pages → [{ lang, path ("/[es/]events/<old anchor>/"), target (the event's page now: "/[es/]events/
  * <its anchor>/" — its own page, or the notice of a cancelled event still to come), title (its title in that
- * language) }]: for every event of events.json (items and cancelled) with an old address, but a cancelled one that is
- * over (it has no page any more); never at the address of an event of the file. COMMITTEE_EMPTY builds: none.
+ * language, as its page writes it: without the spaces a calendar left inside its brackets — tidyBrackets, "… ( A.A.
+ * Un camino a la vida )" → "… (A.A. Un camino a la vida)", since round 38b) }]: for every event of events.json (items
+ * and cancelled) with an old address, but a cancelled one that is over (it has no page any more); never at the
+ * address of an event of the file. COMMITTEE_EMPTY builds: none.
  * now: the build's moment (site.built).
  */
 export function eventRedirects(items, cancelled, site, langs = ["en", "es"]) {
@@ -44,7 +46,7 @@ export function eventRedirects(items, cancelled, site, langs = ["en", "es"]) {
     if (!olds.length || !EVENT_PAGE_ANCHOR.test(anchor)) continue;
     if (eventCancelled(it) && (it.extra?.past === true || (eventEndMs(it) ?? 0) <= now)) continue;
     for (const lang of langs) {
-      const title = String(it.i18n?.title?.[lang] || it.title || "").replace(/\s+/g, " ").trim();
+      const title = tidyBrackets(String(it.i18n?.title?.[lang] || it.title || "").replace(/\s+/g, " ").trim());
       for (const a of olds) {
         const path = eventPagePath({ anchor: a }, lang);
         if (seen.has(path)) continue;

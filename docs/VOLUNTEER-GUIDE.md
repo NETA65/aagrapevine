@@ -44,12 +44,15 @@ Look in this order — each takes a few seconds:
 
 | I want to add… | Where | Step-by-step guide |
 |---|---|---|
-| A flyer or an event | Drive `flyers` folder (file name starting with the date), or a file in `content/events/` | [Flyers and events](../how-to/flyers-and-events.md) · [content/events/README.md](../content/events/README.md) |
-| A bulletin post | Drive `bulletin` folder, or a file in `content/bulletin/` | [Bulletin](../how-to/bulletin.md) |
-| Photos, slides, a report | Drive folders | [Photos, slides and reports](../how-to/photos-slides-reports.md) |
-| Something for the booth display | Drive `booth` folder | [The booth display](../how-to/booth.md) |
+| A flyer or an event | Drive: **A65_GV › 2027-2028_Panel77_GVLV › flyers** (file name starting with the date), or a file in `content/events/` | [Flyers and events](../how-to/flyers-and-events.md) · [content/events/README.md](../content/events/README.md) |
+| A bulletin post | Drive: **A65_GV › 2027-2028_Panel77_GVLV › bulletin**, or a file in `content/bulletin/` | [Bulletin](../how-to/bulletin.md) |
+| Photos, slides, a report | Drive: the `photos`, `slides` and `reports` folders in **A65_GV › 2027-2028_Panel77_GVLV** | [Photos, slides and reports](../how-to/photos-slides-reports.md) |
+| Something for the booth display | Drive: **A65_GV › 2027-2028_Panel77_GVLV › booth** | [The booth display](../how-to/booth.md) |
 | A change to a setting (meeting time, a link) | `config/site.yml` | [Settings](../how-to/settings.md) |
 | A better Spanish wording | `data/translations/overrides.yml` | [Translations](../how-to/translations.md) |
+
+The site reads only the folders inside a Panel folder (today **2027-2028_Panel77_GVLV**, in the shared **A65_GV**
+folder): [The Drive panel folder](../how-to/drive-panel-folder.md) lists them all.
 
 All the guides: [how-to/README.md](../how-to/README.md) ("I want to… → read this"). A Drive file shows on the site
 after the next update (a few hours at most); a file saved in the repository starts an update within minutes.

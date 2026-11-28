@@ -133,7 +133,7 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `orientation-workshop.yml` | GVR and RLV Orientation Workshop / Taller de orientación para RLV y GVR | 1 | 90 | `vine` (green) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 | `information-workshop.yml` | Grapevine and La Viña Information Workshop / Taller informativo de Grapevine y La Viña | 2 | 60 | `gv` (blue) | `book-open` | 53 / 49 | `full` (60), `late` (48), `visit` (20) |
 | `writing-workshop.yml` | Grapevine and La Viña Writing Workshop / Taller de escritura de Grapevine y La Viña | 3 | 115 | `lv` (orange) | `pen-line` | 59 / 48 | `full` (115), `short` (84) |
-| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 41 / 23 | `full` (60: with a guest speaker), `no-speaker` (60) |
+| `committee-meeting.yml` | Grapevine and La Viña Monthly Committee Meeting / Reunión mensual del Comité de Grapevine y La Viña | 4 | 60 | `grape` (purple) | `users` | 41 / 21 (23 from December 17, 2026) | `full` (60: with a guest speaker), `no-speaker` (60) |
 | `grapevine-meeting.yml` | Grapevine Meeting / Reunión de Grapevine | 5 | 60 | `gv` (blue) | `book-heart` | 19 / 15 | `full` (60) |
 | `welcome-panel-77.yml` | Welcome to Panel 77: New GVRs and RLVs / Bienvenida al Panel 77: nuevos RLV y GVR | 6 | 30 | `vine` (green) | `hand-heart` | 25 / 22 | `full` (30), `short` (15) |
 | `booth-visit.yml` | Booth or Group Visit: Scan, Read, Give, Write / Visita a la mesa o a un grupo: escanea, lee, regala, escribe | 7 | 10 | `lv` (orange) | `qr-code` | 13 / 10 | `full` (10), `short` (5) |
@@ -142,10 +142,14 @@ with the slide's number and id. If you edit on GitHub only, the same check runs 
 | `taller-de-escritura.yml` (**Spanish**) | La Viña Writing Workshop / Taller de escritura de La Viña | 10 | 115 | `lv` (orange) | `pen-line` | 55 / 47 | `full` (115), `short` (84) |
 | `orientacion-rlv.yml` (**Spanish**) | Orientation for New RLVs / Orientación para nuevos RLV | 11 | 90 | `lv` (orange) | `compass` | 61 / 59 | `full` (90), `short` (60) |
 
-The number on the card ("About 90 minutes · 59 slides") counts the slides of the full version **on the day of the
+The number on the card ("About 90 minutes · 59 slides") counts the slides of the version the deck opens on when
+nobody has chosen one — the full version for every deck but the committee meeting (below) — **on the day of the
 build**: facilitator pages, slides that start switched off and slides outside their dates are not counted. That is
-why the committee meeting shows 23 of its 41 slides (14 pages for the chair, the AA Preamble and the two "Tonight's
-topic" slides, which start off, and the 2027 price follow-up, which is in the show from January 1, 2027 only).
+why the committee meeting's full version shows 23 of its 41 slides (14 pages for the chair, the AA Preamble and the
+two "Tonight's topic" slides, which start off, and the 2027 price follow-up, which is in the show from January 1,
+2027 only). Until midnight Central after December 16, 2026 its card says 21 instead: the deck opens on "No guest
+speaker" until then (round 38: the card said 23 while the deck opened at "1 / 21"), and at that moment the page
+swaps in "23 slides" by itself.
 
 **The committee meeting (November 2026).** It is not a business meeting (the committee's decision): no minutes to
 approve, no reports, no old or new business. Its first version, "With a guest speaker", is the hour from January
@@ -368,16 +372,20 @@ presets:
 Rules: **the first version is the full one** (no `hide`, no `only`); a version has `hide` OR `only`, never both;
 a facilitator page can be in neither list (it is never in the show).
 
-**On the card**, every version after the first is named on the "Also:" line, starting in lower case (unless it
-starts with a name such as Grapevine, La Viña, AA, Zoom or NETA, or an abbreviation such as GVR). A label ending in
-"(about … minutes)" loses that part, and gets the version's own minutes instead when they differ from the full
-version's:
+**On the card**, the length and the slide count are those of the version the deck opens on when nobody has chosen
+one. For every deck but one that is the first version. The committee meeting opens on "No guest speaker" for a
+meeting the site lists no guest speaker for, until midnight Central after it, and the page then swaps the card's
+line by itself. The other versions are named on the "Also:" line, starting in lower case (unless it starts with a
+name such as Grapevine, La Viña, AA, Zoom or NETA, or an abbreviation such as GVR). A label ending in "(about …
+minutes)" loses that part, and gets the version's own minutes instead when they differ from those of the version
+the card names:
 
 | Labels | The card says |
 |---|---|
 | "60-minute version" | `Also: 60-minute version` |
 | "Running late (about 48 minutes)", "20-minute version (a district or group visit)" | `Also: running late (48 min) · 20-minute version (a district or group visit)` |
-| "No guest speaker (about 60 minutes)" (same length as the full one) | `Also: no guest speaker` |
+| "With a guest speaker (about 60 minutes)", "No guest speaker (about 60 minutes)" (the same length), the deck opening on "No guest speaker" (until midnight after December 16, 2026) | `About 60 minutes · 21 slides`, then `Also: with a guest speaker` |
+| the same, the deck opening on its first version (from then on) | `About 60 minutes · 23 slides`, then `Also: no guest speaker` |
 
 **Example: add a 20-minute visit to the orientation workshop.** Put this after the `short` version. It passes the
 checker: its twelve slides add up to 14¼ minutes, and a 20-minute version may add up to anything from 14 to 26.

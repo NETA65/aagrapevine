@@ -87,7 +87,10 @@ const eleventyComputed = {
   </article>
 
   {#- data-lastmod="skip": these are other events — the block changes when they do, not when this notice does, so it
-      is left out of the page's sitemap date (eleventy/lastmod.js) -#}
+      is left out of the page's sitemap date (eleventy/lastmod.js). Their words are a flex-1 column, as on an event
+      page's own small cards (macros/event-page.njk minis): at 115 %+ or with relaxed spacing they go under the date
+      tile when they'd get less than 7em beside it, 9em at 130 %+ (main.css's text-column rule, areas/access.css
+      .cm-mini-card; round 38b: 100px at 150 % on a 320px phone, "Worksho|p") -#}
   {% if share.related | length %}
   <section class="mt-10" aria-labelledby="ev-cancel-next" data-lastmod="skip">
     <h2 id="ev-cancel-next" class="h-section">{{ "evcancel.next_h" | t(lang) }}</h2>
@@ -96,7 +99,7 @@ const eleventyComputed = {
       <li>
         <a href="{{ r.href }}" class="card card-link cm-mini-card ev-accent ev-tone-{{ r.tone }} group h-full">
           <span class="cm-date-tile{{ ' cm-tile-range' if r.ev.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ r.ev.tile.mon }}</span><span class="cm-tile-day">{{ r.ev.tile.day }}</span><span class="cm-tile-wd">{{ r.ev.tile.wd }}</span></span>
-          <span class="min-w-0">
+          <span class="min-w-0 flex-1">
             <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ r.ev.title }}</span>
             <span class="mt-0.5 block text-sm text-muted">{{ r.ev.rangeLabel if r.ev.multiDay else r.ev.shareWhen }}</span>
             {% if r.ev.location %}<span class="mt-1 flex items-start gap-1.5 text-sm text-muted{{ ' italic' if r.ev.locationTba }}">{% set rIcon = "hourglass" if r.ev.locationTba else "map-pin" %}{% icon rIcon, "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ r.ev.location }}</span></span>

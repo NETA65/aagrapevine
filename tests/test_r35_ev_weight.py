@@ -448,7 +448,7 @@ class ThePage(unittest.TestCase):
             card = cards(main_of(self.pages()[url]))["zz-flyer-doc"]
             with self.subTest(url=url):
                 self.assertRegex(card, r'<h3 [^>]*><a href="' + re.escape(f"{pre}/events/zz-flyer-doc/") + '"')
-                self.assertRegex(card, r'<a class="btn-secondary btn-sm" href="' + re.escape(doc) + '" target="_blank"')
+                self.assertRegex(card, r'<a class="btn-secondary btn-sm ev-org-btn" href="' + re.escape(doc) + '" target="_blank"')
                 self.assertIn(T["evlist.organizer"][lang] + " ↗", readable(card))
                 self.assertIn("#i-external-link", card)
                 self.assertIn(flyer, card, "View flyer, as before")

@@ -21,7 +21,9 @@
 // (eleventy/event-pages.js eventPagePlan — the same answer the page templates paginate over, and their heads: a
 // paginated page's own title and description, never its pagination's first page's, which the collections give for
 // every one of its addresses), each line "- [<the page's title>](<its address>): <its meta description>": the series'
-// pages first (config/site.yml's order), then the one-off events still to come whose page may be indexed (never a
+// pages first — the committee meeting's dates page (since round 38b: committee.js committeeDatesPage,
+// /events/series/committee-meeting/; its card comes first on /events/' "Every month" too), then config/site.yml's
+// series in its order —, then the one-off events still to come whose page may be indexed (never a
 // series' date, an event from the magazines' own calendars, one that is over or cancelled — a cancelled one's notice
 // is no event to come), soonest first; at most UPCOMING_MAX of them, and none once the file would pass
 // UPCOMING_BYTES (14 KB: the file stays well under 16 KB). Only pages this build writes (in its collections — a page
@@ -29,7 +31,7 @@
 // withoutJoinValues, plainLine), and each line is checked once more against its event's own (withoutJoinValues).
 // (Not named "sitemap…": ONLY=sitemap test builds pick src/pages files by the start of their names.)
 import { monthlyRule, TZ } from "../../eleventy.config.js";
-import { recurrenceText, withoutJoinValues } from "../../eleventy/filters/committee.js";
+import { recurrenceText, withoutJoinValues, committeeDatesPage } from "../../eleventy/filters/committee.js";
 import { ymdOf } from "../../eleventy/central-time.js";
 import { eventLinkPlan } from "../../eleventy/filters/event-links.js";
 
@@ -172,7 +174,8 @@ export function render(data) {
 
   // before them, the events still to come (see the top of this file): line by line while the file stays under
   // UPCOMING_BYTES
-  const events = upcomingLines(eventLinkPlan(data.db, site, data.languages), lang, built, abs);
+  const events = upcomingLines(eventLinkPlan(data.db, site, data.languages), lang, built, abs,
+    committeeDatesPage(data.db?.events?.items, site, lang));
   const size = (lines) => Buffer.byteLength(lines.join("\n") + "\n", "utf8");
   const kept = [];
   for (const line of events) {
@@ -185,16 +188,19 @@ export function render(data) {
   return out.join("\n") + "\n";
 }
 
-/** The "## Upcoming events" lines of a language, in order (see the top of this file): its series' pages (plan.hubs),
- *  then its pages of events still to come that may be indexed (plan.pages: index, not over — the plan has no
- *  ordinary page for a cancelled event) — each one this build writes (`built`: the collections' addresses) —, each
- *  "- [title](address): description" from its head (eventPageHead / seriesPageMeta), without a sentence that gives
- *  its meeting's own link, ID or code (withoutJoinValues: the event's, the series'). */
-function upcomingLines(plan, lang, built, abs) {
+/** The "## Upcoming events" lines of a language, in order (see the top of this file): its series' pages — the
+ *  committee meeting's dates page (`dates`: committeeDatesPage — not one of plan.hubs, which are config/site.yml's
+ *  series; none while it has no date to come: no head) and plan.hubs —, then its pages of events still to come that
+ *  may be indexed (plan.pages: index, not over — the plan has no ordinary page for a cancelled event) — each one
+ *  this build writes (`built`: the collections' addresses) —, each "- [title](address): description" from its head
+ *  (eventPageHead / seriesPageMeta / committeeDatesPage's), without a sentence that gives its meeting's own link, ID
+ *  or code (withoutJoinValues: the event's — the committee meeting's next date's —, the series'). */
+function upcomingLines(plan, lang, built, abs, dates) {
+  const committee = dates && dates.head && dates.next ? [{ path: dates.path, head: dates.head, next: dates.next }] : [];
   const hubs = (plan.hubs || []).filter((h) => h.lang === lang);
   const pages = (plan.pages || []).filter((p) => p.lang === lang && p.index && p.ev && !p.ev.past && !p.ev.cancelled);
   const lines = [];
-  for (const p of [...hubs, ...pages]) {
+  for (const p of [...committee, ...hubs, ...pages]) {
     if (!p.head || !built.has(p.path)) continue;
     const ev = p.ev || p.next || {};
     const join = (p.series && p.series.join) || {};

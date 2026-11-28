@@ -140,6 +140,17 @@
 .gvp-notice-h { font-size: 1.0625rem; font-weight: 700; }
 .gvp-notice-text { margin-top: 0.35rem; font-size: 0.9375rem; line-height: 1.5; color: #d6e2f3; }
 .gvp-notice-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+/* Over a reflowed stage (a phone held upright, a window zoomed far in — never the presenter view, nor the 16:9 slide a
+   projector shows: .gvp.is-reflow, presentations.js layoutStage) a notice's words can be taller than the room: at
+   130–150 % text, relaxed spacing or in Spanish on a 320–430px phone the notice scrolls, and its buttons ("Fill them
+   in", "Present anyway") were below its fold, out of sight (round 38). They stay in sight at its foot: sticky, on the
+   notice's own colour, while the words scroll under them. The same distances as before (the gap above them is
+   padding now; the row reaches over the notice's bottom padding, which a negative margin gives back), so a notice
+   that fits — 100 % text, any larger text that fits — is drawn exactly as before. Not in a window under 30rem high
+   (a phone held sideways at large text): there the buttons would leave the words no room, and all of it scrolls. */
+@media (height >= 30rem) {
+  .gvp.is-reflow .gvp-notice-actions { position: sticky; bottom: -1rem; margin: 0 0 -1rem; padding: 0.9rem 0 1rem; background: #16233a; }
+}
 /* The toast: its words, and its button (Undo, OK) beside them while the words keep a line of 16 em or so; on a phone or
    with large text the button goes under them (flex-wrap: the words never squeezed into a narrow column, the button
    never past the toast's edge). Never taller than the room above the control bar: past that it scrolls. */

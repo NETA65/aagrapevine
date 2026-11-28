@@ -1,10 +1,13 @@
 """The Morning check — the new day and both daily quotes on the site by 5:30 AM Central (config
 site.morning_goal) every day, while GitHub starts its own schedules hours late:
 
+  * RunBash          — the helper that runs the workflows' scripts here: a Python it starts writes UTF-8, on
+                       Windows too;
   * MorningWorkflow  — .github/workflows/morning.yml: a plain-UTC schedule (no `timezone:`, never on the
-                       hour, 01–11 UTC; firings on time and 4–6 hours late from 2 AM, when the magazines are
-                       first asked, to 5 AM Central), the one input, one check at a time, least privilege, the
-                       job names the script and the tidy job rely on, the packages it installs;
+                       hour, 19–11 UTC; firings on time and 4–6 hours late from 2 AM, when the magazines are
+                       first asked, to 5 AM Central, and every evening hour from 8:15 PM gets one 4 to 8 hours
+                       late), the one input, one check at a time, least privilege, the job names the script and
+                       the tidy job rely on, the packages it installs;
   * FastPathParity   — its first job's bash + curl + jq test of the live build.json says "done" exactly
                        when morning_check.is_done() does (skipped without bash, curl and jq);
   * Tidy             — its "tidy" job deletes only its own green no-op runs older than a day, at most 50
@@ -24,7 +27,10 @@ site.morning_goal) every day, while GitHub starts its own schedules hours late:
                        followed before any refresh, which would only wait in the queue behind it;
   * FullRun          — when it also starts the full daily update (the 1st; a skipped day);
   * BuildInfo        — /build.json (src/pages/build-info.11ty.js), run in Node.js;
-  * QuoteDays        — status.json quote_days (build_data) and the /status/ view of it (freshness.js).
+  * QuoteDays        — status.json quote_days (build_data) and the /status/ view of it (freshness.js);
+  * AlarmDocs, ScheduleDocs — the documentation (CONTENT_TESTS, never in the publish gate): how to set up the
+                       morning alarm later; the timetables and the Disable / Enable steps name every timed workflow
+                       and its cron lines as the workflow files have them.
 
     python -m unittest tests.test_morning -v        (or: python -m unittest discover -s tests)
 """
@@ -136,6 +142,12 @@ def run_bash(bash: str, script: str, env: dict, cwd: Path | None = None) -> subp
     # (a step runs `python -m scripts.ops.…` from the checkout's root; a test may run it elsewhere)
     full["PATH"] = os.pathsep.join([str(Path(sys.executable).parent), full.get("PATH", "")])
     full["PYTHONPATH"] = os.pathsep.join(p for p in (str(ROOT), full.get("PYTHONPATH", "")) if p)
+    # a Python the script starts writes UTF-8, as on GitHub's runner (Linux, a UTF-8 locale): on Windows it would write
+    # its output in the ANSI code page ("—" as the byte 0x97 of cp1252), which is read back here as UTF-8 — so the
+    # tests failed on a Windows PC unless the shell had PYTHONUTF8=1 (November 2026). Only on Windows, and only when
+    # the caller set no PYTHONUTF8 of its own: on Linux nothing changes
+    if os.name == "nt":
+        full.setdefault("PYTHONUTF8", "1")
     # as GitHub runs a step's script (`bash --noprofile --norc -eo pipefail {0}`): a command that fails stops it
     return subprocess.run([bash, "--noprofile", "--norc", "-eo", "pipefail", "-c", script], cwd=cwd or ROOT, env=full,
                           capture_output=True, text=True,
@@ -161,6 +173,20 @@ def outputs(path: Path) -> dict[str, str]:
             k, v = line.split("=", 1)
             out[k] = v
     return out
+
+
+class RunBash(unittest.TestCase):
+    def test_a_python_it_starts_writes_utf8(self):
+        # the workflows' scripts print "—", "≤", "✅" … through Python: read back as UTF-8 on any PC, whatever the
+        # shell that runs the tests sets (on Windows, a Python started without PYTHONUTF8 writes the ANSI code page)
+        b = bash_path()
+        if not b:
+            self.skipTest("needs bash")
+        with mock.patch.dict(os.environ):
+            for k in ("PYTHONUTF8", "PYTHONIOENCODING"):
+                os.environ.pop(k, None)
+            r = run_bash(b, "python -c 'print(\"\\u2014 \\u2264 \\u2705\")'", {})
+        self.assertEqual((r.returncode, r.stdout), (0, "\u2014 \u2264 \u2705\n"), r.stderr)
 
 
 # --------------------------------------------------------------------------- morning.yml
@@ -2603,3 +2629,109 @@ class AlarmDocs(unittest.TestCase):
         ops = (ROOT / "docs" / "OPERATIONS.md").read_text(encoding="utf-8")
         self.assertIn("### Set up the cron-job.org alarm later", ops)
 
+
+class ScheduleDocs(unittest.TestCase):
+    """The guides give every timed workflow (a `schedule:` in .github/workflows/) and its timetable as the workflow
+    files have them: how-to/automation-and-troubleshooting.md §4.1 (the timetable, with the on-time hours in summer
+    and in winter) and §13.1 (where each `cron:` line is), docs/OPERATIONS.md's architecture diagram (the Morning
+    check's UTC hours), and every place that tells whoever should get the timed runs' failure e-mails to Disable,
+    then Enable, each of them. It judges the documentation: listed in scripts/ops/gate_tests.py CONTENT_TESTS, so
+    the publish gate does not run it."""
+
+    # (file, the passage's first words, the words just after it — line breaks, the quote marks ">" and the bold or
+    # italic stars do not count): each names every timed workflow
+    STEPS = (
+        ("README.md", "- **E-mail when a run fails:**", "- **An issue when a source stops updating:**"),
+        ("README.md", "- [ ] **Failure e-mails:**", "- [ ] **The morning alarm**"),
+        ("README.md", "- **The 60-day rule.**", "- **Dependabot pull requests.**"),
+        ("README.md", "- **Who gets the failure e-mails.**", "- **Repository size**"),
+        ("docs/SETUP-GITHUB.md", "3. **Make the daily run's e-mails come to you.**", "4. On the repository page"),
+        ("docs/SETUP-GITHUB.md", "**New owner or new chair:**", "(Step 9)."),
+        ("docs/OPERATIONS.md", "GitHub's failure e-mails for the *scheduled* runs", "The runs the morning alarm starts"),
+        ("how-to/email-and-alerts.md", "5. **Make the failure e-mails come to NETA65.**", "6. **Done.**"),
+        ("how-to/email-and-alerts.md", "**timed** workflows are", "**The owner step**"),
+        ("how-to/email-and-alerts.md", "**The owner step**", "4. Repeat steps 2 and 3"),
+        ("how-to/automation-and-troubleshooting.md", "**Owner step still open", "A green run with yellow"),
+        ("how-to/automation-and-troubleshooting.md", "### 14.8 Nothing runs on schedule", "- GitHub skipped a firing"),
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        cls.timed: dict[str, list[str]] = {}            # workflow name → its cron lines
+        for f in sorted(WF.glob("*.yml")):
+            wf, on = load_wf(f.name)
+            if (on or {}).get("schedule"):
+                cls.timed[wf["name"]] = [s["cron"] for s in on["schedule"]]
+        cls.howto = (ROOT / "how-to" / "automation-and-troubleshooting.md").read_text(encoding="utf-8")
+
+    def section(self, heading: str) -> str:
+        at = self.howto.index(heading)
+        end = self.howto.find("\n### ", at + len(heading))
+        return self.howto[at:end if end > 0 else None]
+
+    @staticmethod
+    def on_time(cron: str, utc_offset: int) -> list[int]:
+        """The minutes of the Central day a cron line fires at, on time (UTC + utc_offset hours), in order."""
+        minute, hour = cron.split()[:2]
+        return sorted({((h + utc_offset) * 60 + m) % 1440 for h in expand(hour, 0, 23) for m in expand(minute, 0, 59)})
+
+    @staticmethod
+    def clock(m: int) -> str:
+        h = m // 60
+        return f"{(h - 1) % 12 + 1}:{m % 60:02d} {'AM' if h < 12 else 'PM'}"
+
+    @staticmethod
+    def span_of(fires: list[int]) -> tuple[int, int]:
+        """A span runs from the first firing after the longest pause to the last one before it."""
+        gaps = [((fires[(i + 1) % len(fires)] - fires[i]) % 1440, i) for i in range(len(fires))]
+        _gap, i = max(gaps)
+        return fires[(i + 1) % len(fires)], fires[i]
+
+    def test_the_timetable_has_every_schedule_at_its_hours(self):
+        rows = [[c.strip() for c in line.strip().strip("|").split("|")]
+                for line in self.section("### 4.1 ").splitlines() if line.startswith("| `")]
+        crons = {c: name for name, cs in self.timed.items() for c in cs}
+        self.assertEqual(sorted(r[0].strip("`") for r in rows), sorted(crons), "one row per cron line, no other")
+        for cron, what, summer, winter, *_ in ((r[0].strip("`"), *r[1:]) for r in rows):
+            with self.subTest(cron=cron):
+                self.assertTrue(what.startswith(crons[cron]), f"the row of {cron} names {crons[cron]}")
+                for cell, offset in ((summer, -5), (winter, -6)):
+                    fires = self.on_time(cron, offset)
+                    times = re.findall(r"\b\d{1,2}:\d{2} [AP]M\b", cell)
+                    self.assertTrue(times, cell)
+                    self.assertLessEqual(set(times), {self.clock(m) for m in fires}, (offset, cell))
+                    span = re.search(r"(\d{1,2}:\d{2} [AP]M)–(\d{1,2}:\d{2} [AP]M)", cell)
+                    if len(fires) > 1:
+                        self.assertTrue(span, cell)
+                        self.assertEqual(span.groups(), tuple(map(self.clock, self.span_of(fires))), (offset, cell))
+
+    def test_the_operations_diagram_gives_the_morning_check_hours(self):
+        # docs/OPERATIONS.md → Architecture: "morning.yml's own schedule (hourly, 19–11 UTC)"
+        text = (ROOT / "docs" / "OPERATIONS.md").read_text(encoding="utf-8")
+        said = re.findall(r"morning\.yml's own schedule \(hourly, (\d{1,2})–(\d{1,2}) UTC\)", text)
+        (cron,) = [c for name, cs in self.timed.items() if name.startswith("Morning check") for c in cs]
+        first, last = self.span_of(self.on_time(cron, 0))
+        self.assertEqual(said, [(str(first // 60), str(last // 60))], cron)
+
+    def test_where_each_timetable_is(self):
+        table = self.section("### 13.1 ")
+        found = re.findall(r'^\| ([^|]+?) \| [^|]*?`[^`|]*?- cron: "([^"]+)"', table, re.M)
+        crons = {c: name for name, cs in self.timed.items() for c in cs}
+        self.assertEqual(sorted(c for _w, c in found), sorted(crons), "one row per cron line, no other")
+        for workflow, cron in found:
+            self.assertTrue(workflow.startswith(crons[cron]), (workflow, cron))
+
+    def test_the_disable_enable_steps_name_every_timed_workflow(self):
+        # the guides say "five" (E-mail and alerts §3.16, OPERATIONS.md item 7): a new timed workflow changes them too
+        self.assertEqual(len(self.timed), 5, sorted(self.timed))
+        def plain(s: str) -> str:
+            return re.sub(r"\s+", " ", re.sub(r"\n[ \t]*>", "\n", s)).replace("*", "")
+        for name, start, end in self.STEPS:
+            text, start, end = plain((ROOT / name).read_text(encoding="utf-8")), plain(start), plain(end)
+            with self.subTest(file=name, passage=start):
+                self.assertEqual(text.count(start), 1, "the passage's first words, once")
+                at = text.index(start) + len(start)
+                self.assertIn(end, text[at:], "the words just after the passage")
+                passage = text[at - len(start):text.index(end, at)]
+                missing = [w for w in self.timed if w not in passage]
+                self.assertEqual(missing, [], passage[:300])

@@ -23,7 +23,9 @@ works in a temporary folder.
                      id, with its "# vX.Y.Z";
   * Dependabot     — it watches the Python packages too (new major versions only, one grouped pull request a month;
                      yt-dlp has no cap), and every other package in requirements.txt is capped below its next major;
-                     the browser driver pinned in scripts/ops/requirements-browser.txt gets every release.
+                     the browser driver pinned in scripts/ops/requirements-browser.txt gets every release; the site
+                     tools come as one grouped pull request of minor and patch releases, never lite-youtube-embed 0.4
+                     or later (held on 0.3.x since November 2026: docs/OPERATIONS.md → dependabot.yml).
 
     python -m unittest tests.test_automation -v        (or: python -m unittest discover -s tests)
 """
@@ -964,6 +966,25 @@ class Dependabot(unittest.TestCase):
         self.assertEqual(pip["commit-message"]["prefix"], "chore(deps)")
         self.assertNotIn("NOT listed here on purpose", self.text)
 
+    def test_the_site_tools_without_lite_youtube_embed_0_4(self):
+        # npm: one grouped pull request a month with the minor and patch releases (a major one is upgraded by hand) —
+        # and never lite-youtube-embed 0.4 or later: PR #24 (November 2026) was closed with "@dependabot ignore
+        # lite-youtube-embed minor version", and the file says so too, where it is seen and lasts. 0.4 renamed
+        # needsYTApi, which pwa.js plainPlayer sets to keep the videos on youtube-nocookie.com (what the browser does
+        # with the library the build ships: tests/browser/test_r12_u4_aa_browser.py PrivacyPlayer). Every release from
+        # 0.4.0 on, not "0.4.x": for a 0.x package Dependabot calls 0.5 a minor update (PR #24 came despite the
+        # semver-major entry), so 0.5.0 would otherwise come in the grouped site-tools pull request.
+        npm = self.updates["npm"]
+        self.assertEqual((npm["directory"], npm["schedule"]["interval"], npm["commit-message"]["prefix"]),
+                         ("/", "monthly", "chore(deps)"))
+        self.assertEqual(npm["groups"], {"site-tools": {"patterns": ["*"], "update-types": ["minor", "patch"]}})
+        self.assertEqual(npm["ignore"], [{"dependency-name": "*", "update-types": ["version-update:semver-major"]},
+                                         {"dependency-name": "lite-youtube-embed", "versions": [">=0.4.0"]}])
+        self.assertIn("needsYTApi", self.text, "the entry says why")
+        # package.json allows 0.3.x only (a caret on a 0.x version: patch releases) — the hold is the same there
+        pkg = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+        self.assertRegex(pkg["devDependencies"]["lite-youtube-embed"], r"^\^0\.3\.\d+$")
+
     def test_requirements_are_capped_but_yt_dlp(self):
         lines = [ln.split("#")[0].strip() for ln in (ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines()]
         reqs = {re.split(r"[<>=!~ ]", ln, maxsplit=1)[0].lower(): ln for ln in lines if ln}
@@ -983,7 +1004,8 @@ class Dependabot(unittest.TestCase):
 class BrowserChecksPackages(unittest.TestCase):
     """The Code check's browser job installs only scripts/ops/requirements-browser.txt (never requirements.txt): every
     package a tests/browser file imports — or a test module or helper it imports from tests/ or scripts/ — is listed
-    there, or the job fails at once with "No module named …" (round 12: a browser check that read config/site.yml)."""
+    there, or the job fails at once with "No module named …" (round 12: a browser check that read config/site.yml).
+    And (round 38b) its browser step has room for about 260 checks: 40 minutes, inside the job's 45."""
     LOCAL = {"browser", "nodejs", "scripts", "eleventy", "tests"}
     PACKAGE = {"yaml": "pyyaml", "PIL": "pillow", "playwright": "playwright"}
 
@@ -1028,6 +1050,15 @@ class BrowserChecksPackages(unittest.TestCase):
         self.assertIn("playwright", third, "the scan sees the browser checks' own imports")
         missing = {n: fs for n, fs in third.items() if self.PACKAGE.get(n, n).lower() not in listed}
         self.assertEqual(missing, {}, "imported by the browser checks but not in scripts/ops/requirements-browser.txt")
+
+    def test_the_browser_step_has_room(self):
+        # (round 38b) about 260 browser checks: 1,296 s on a busy PC where the 234 before took 1,081 — about 20–27 minutes on
+        # GitHub's runner, past the 25 the step had (165 took 900 s on a slow runner on November 19, 2026). The step
+        # may take 40, and the job keeps 5 more for checkout, the build and the set-up (docs/OPERATIONS.md)
+        job = yaml.safe_load((WF / "check.yml").read_text(encoding="utf-8"))["jobs"]["build"]
+        browser = step(job, "Browser checks (focus ring, sticky bar, large text, offline update, script errors)")
+        self.assertEqual((browser["timeout-minutes"], job["timeout-minutes"]), (40, 45))
+        self.assertGreaterEqual(job["timeout-minutes"], browser["timeout-minutes"] + 5)
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ You do not need to be a programmer. You need a GitHub login with access to
 1. [What this is](#1-what-this-is)
 2. [Quick start](#2-quick-start)
 3. [What happens next: how fast a change goes live](#3-what-happens-next-how-fast-a-change-goes-live)
-4. [The five workflows](#4-the-five-workflows)
+4. [The six workflows](#4-the-six-workflows)
 5. [Run a workflow by hand](#5-run-a-workflow-by-hand)
 6. [Read a run](#6-read-a-run)
 7. [Where it shows on the website: the Status page](#7-where-it-shows-on-the-website-the-status-page)
@@ -142,22 +142,25 @@ catch-up after weeks of new titles, or a lost crawl state).
 
 ---
 
-## 4. The five workflows
+## 4. The six workflows
 
-All five live in [`.github/workflows/`](../.github/workflows/). Their names in the Actions tab's left list:
+All six (five until the Gate list check came, in November 2026) live in
+[`.github/workflows/`](../.github/workflows/). Their names in the Actions tab's left list:
 
 | Name in the Actions tab | File | Starts on | What it does | Typical length | Leaves behind |
 |---|---|---|---|---|---|
 | **Website update** | [`update.yml`](../.github/workflows/update.yml) | 3 schedules (the nightly full update, the midday and evening refreshes), a push to a watched file, *Run workflow*, the Morning check | sync → translate → commit the data → build (with the posters' share pictures), and test the code at the same time → publish only when both worked; then reports sources that stopped updating and updates that keep failing | data-only runs and saves of content or settings: quick about 3 min, full 10–15 min (time box 2 h 10 min), a 300-minute PDF crawl about 6 h; a save of code about 5 min (the tests) | a data commit, the new website, a run summary, maybe an issue |
-| **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | an hourly backstop through the night, the morning alarm, *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do | a run summary; its no-op runs are deleted a day later |
-| **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the browser checks + every Python test + an e-mail dry run. Publishes nothing | about 10 minutes | a ✓ or ✗ on the commit or pull request |
+| **Morning check (new day by 5:30 AM)** | [`morning.yml`](../.github/workflows/morning.yml) | GitHub's schedule, every hour from the early afternoon through the night (the main way while no morning alarm is set up, November 2026); the morning alarm, once it is set up; *Run workflow* | makes sure the new day and both daily quotes are on the site by 5:30 AM Central | a few seconds when there is nothing to do; a scheduled run that comes from 8:15 PM Central waits until 2:00 AM (up to 5 h 45 min), then does the morning's work | a run summary; its no-op runs are deleted a day later |
+| **Code check (tests and test build)** | [`check.yml`](../.github/workflows/check.yml) | every pull request; a push that changes code, settings, content or a workflow; *Run workflow* | a strict test build + the browser checks + every Python test + an e-mail dry run. Publishes nothing | about 20–30 minutes | a ✓ or ✗ on the commit or pull request |
 | **Monthly e-mail digest** | [`monthly-digest.yml`](../.github/workflows/monthly-digest.yml) | 5 tries a day on the 1st–3rd; *Run workflow* | e-mails last month's bilingual digest, once. **Off until NETA65 adds the e-mail secrets** | seconds | the e-mail; the month's markers `digest-sending-YYYY-MM`, `digest-sent-YYYY-MM` or `digest-unsent-YYYY-MM`; a `digest-preview` download |
 | **Gate list check** (since November 2026) | [`gate-lists.yml`](../.github/workflows/gate-lists.yml) | every pull request; a push that changes code, settings, content or a workflow (as the Code check); every night; *Run workflow* | runs the tests the publish gate runs again, in copies of the repository with committee-like edits (4.8): a gated test that judges the committee's files fails here first | 5 to 10 min | a ✓ or ✗ (never touches the site) |
 | **Weekly link check** | [`link-check.yml`](../.github/workflows/link-check.yml) | Sundays; *Run workflow* | finds the address GitHub Pages serves (job *Find the site's address*), then checks every link on the site built for it, the official links in the settings and the root robots.txt (skipped with the custom domain: the site's own is that file) (job *Check links*), then keeps the issue (job *Report broken links (the issue)*) | up to 45 min | a summary; the `link-check-report` download (7 days); maybe the issue "Broken links found by the weekly check" |
 
 Plus **Dependabot** ([`.github/dependabot.yml`](../.github/dependabot.yml)): once a month it may open a pull
 request that updates the building blocks: `chore(actions)…` for the workflows' actions, `chore(deps)…` for the
-site tools (npm: minor and patch versions) and for the Python packages (pip: only a **new major version**, one
+site tools (npm: minor and patch versions — but never lite-youtube-embed 0.4 or later, held on 0.3.x since November
+2026 because 0.4 would take the videos off YouTube's privacy-enhanced mode:
+[docs/OPERATIONS.md](../docs/OPERATIONS.md#dependabotyml)) and for the Python packages (pip: only a **new major version**, one
 grouped pull request; every run already installs the newest minor and patch releases, and `yt-dlp` has no cap,
 so it is left out). Since October 2026 there is one more pip entry, for `scripts/ops/requirements-browser.txt`: it
 allows only `playwright` (pinned there to an exact version for the browser checks and the posters' share pictures)
@@ -168,12 +171,13 @@ keeps up with the runners' Chrome (the Code check's browser checks run with it).
 
 GitHub's timetable (`cron:` lines) runs in **UTC** here (no workflow adds a `timezone:` key), and GitHub
 starts this repository's timed runs **4 to 6 hours late, sometimes 8**. So every schedule is set about
-**4 hours before** the time it is meant for. The odd minutes (:07, :17, :25, :40) avoid GitHub's busy top of
-the hour.
+**4 hours before** the time it is meant for (the Gate list check's time does not matter). The odd minutes (:07, :17,
+:25, :40, :43) avoid GitHub's busy top of the hour.
 
 > **Keep it that way.** Do not "correct" a schedule back to the real time. The tests pin the exact strings
-> (all but the weekly link check's), so the Code check goes red if one changes without its test (section 13.1
-> shows how to move one safely).
+> (all but the weekly link check's and the gate list check's), and `ScheduleDocs` checks that this timetable and
+> the one in 13.1 list every `cron:` line, so the Code check goes red if one changes without its test and these
+> two tables (section 13.1 shows how to move one safely).
 
 Real example: on 2 October 2026 the nightly full update, then set for `17 6 * * *` (06:17 UTC), started at 12:36 UTC
 (7:36 AM CDT, 6 h 19 min late), and the midday refresh, then set for `7 8 * * *` (08:07 UTC), at 14:42 UTC (9:42 AM
@@ -190,10 +194,11 @@ or more hours late starts after the morning refresh is live, in summer and in wi
 | `17 7 * * *` | Website update, **nightly full update** | 2:17 AM | 1:17 AM | ~6–8 AM | every source + the PDF search |
 | `7 12 * * *` | Website update, **midday refresh** (quick) | 7:07 AM | 6:07 AM | ~11 AM–1 PM | Drive, bulletin, events files, podcasts, daily quote, writers archive files |
 | `7 20 * * *` | Website update, **evening refresh** (quick) | 3:07 PM | 2:07 PM | ~7–9 PM | the same as the midday refresh |
-| `25 0-11,21-23 * * *` | Morning check (new day by 5:30 AM), **backstop** | :25 past every hour, 4:25 PM–6:25 AM | 3:25 PM–5:25 AM | late firings land in the early morning; on-time ones find the work done | checks the live site, starts a morning refresh if needed |
+| `25 0-11,19-23 * * *` | Morning check (new day by 5:30 AM): GitHub's schedule, **the main way** while no morning alarm is set up | :25 past every hour, 2:25 PM–6:25 AM | 1:25 PM–5:25 AM | only 2–3 of them a day in November 2026 (GitHub drops the others), mostly late in the evening or after midnight | checks the live site; a run that comes from 8:15 PM Central waits until 2:00 AM (job *wait*), then puts the new day and the quotes up — any one late evening firing is enough; an on-time one in the afternoon finds the work done |
 | `7 8,11,14,17,20 1-3 * *` | Monthly e-mail digest | 3:07 AM–3:07 PM | 2:07 AM–2:07 PM | — | acts only from 7 AM Central on the 1st–3rd, once a month |
 | `40 8 * * 0` | Weekly link check (Sundays) | 3:40 AM | 2:40 AM | — | the link report |
-| outside GitHub | the **morning alarm** at cron-job.org → Morning check (new day by 5:30 AM) | 4:30 AM America/Chicago, **on time** | same | within seconds | the only sure way to the 5:30 AM goal ([README → 10 d](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)) |
+| `43 9 * * *` | Gate list check (every night) | 4:43 AM | 3:43 AM | — (hours late; it does not matter) | the publish gate's tests again, in copies with committee-like edits (4.8); never touches the site |
+| outside GitHub | the **morning alarm** at cron-job.org → Morning check (new day by 5:30 AM) — not set up yet (November 2026) | 4:30 AM America/Chicago, **on time** | same | within seconds | the only sure way to the 5:30 AM goal ([README → 10 d](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)) |
 
 CDT = UTC−5 (until 1 November 2026), CST = UTC−6. GitHub's timetable ignores daylight saving, so in winter
 every timed run is one hour earlier in Central time (the nightly update then usually starts around 5 to 7 AM, the
@@ -447,9 +452,12 @@ It puts the new day and both daily quotes on the site by the goal in `config/sit
    titles (`is_full_title` in `scripts/ops/morning_check.py`: a title that starts with "Full update" or "Nightly full
    update"); a quick, midday, evening or morning refresh never counts as one.
 
-What starts it: the **morning alarm** (an outside alarm clock at cron-job.org presses *Run workflow* at 4:30 AM
-Central with a key made by NETA65; set up in [README → 10 d](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)),
-GitHub's hourly backstop schedule, or anyone pressing *Run workflow* (tick **check_only** to only look).
+What starts it: GitHub's own schedule — every hour from the early afternoon through the night, the main way while
+no morning alarm is set up (November 2026): GitHub starts these runs hours late and drops most of them, so one that
+comes from 8:15 PM Central waits until 2:00 AM (job *Wait for the morning (a scheduled run that came early)*, up to
+5 h 45 min) and then does the morning's work —; the **morning alarm**, once it is set up (an outside alarm clock at
+cron-job.org presses *Run workflow* at 4:30 AM Central with a key made by NETA65; set up in [README → 10 d](../README.md#d-the-morning-alarm-todays-quote-on-the-site-by-530-am-recommended)),
+the sure way to 5:30; or anyone pressing *Run workflow* (tick **check_only** to only look).
 
 | Result | Meaning |
 |---|---|
@@ -459,9 +467,9 @@ GitHub's hourly backstop schedule, or anyone pressing *Run workflow* (tick **che
 | green ✓ with a yellow note "Cannot confirm" | the refresh finished but the live site did not show it within 5 minutes; never a reason for another run |
 | red ✗ "Morning update failed" | today's update did **not** reach the site; GitHub e-mails whoever started the check (for the alarm: the owner of its key) |
 
-Many *Morning check* runs in the Actions tab are normal: the backstop fires every hour through the night. The
-job "Tidy up old runs that had nothing to do" deletes the green runs that did nothing, a day later. The alarm
-and its key are covered in [E-mail and alerts](email-and-alerts.md).
+Many *Morning check* runs in the Actions tab are normal: the schedule fires every hour from the early afternoon
+through the night. The job "Tidy up old runs that had nothing to do" deletes the green runs that did nothing, a day
+later. The alarm and its key are covered in [E-mail and alerts](email-and-alerts.md).
 
 ### 4.5 Code check (tests and test build)
 
@@ -472,7 +480,7 @@ checks that the monthly e-mail still builds (`send_digest --dry-run`, nothing is
 two jobs run side by side: **Test build of the website** (steps *Build the website (as for GitHub Pages)*, *Check
 the build*, then *Set up Python (for the browser checks)*, *Install the browser checks' tools (Playwright, for the
 runner's Chrome)* and *Browser checks (focus ring, sticky bar, large text, offline update, script errors)*; time
-limit 30 minutes) and **Python tests (offline)** (about 6 to 25 minutes, depending on GitHub's machine; time limit
+limit 45 minutes, 40 of them for the browser checks, since round 38b) and **Python tests (offline)** (about 6 to 25 minutes, depending on GitHub's machine; time limit
 35 since November 2026). A push or a pull request keeps GitHub's own title (the commit message, the pull request's
 title); a run started by hand is "Code check (started by hand)". Besides code, settings, content and workflows, a
 change of `data/geo/**` (the Texas places list the place tests read) starts it too.
@@ -532,7 +540,8 @@ its device check, which never asks for the microphone (`RecorderTopicAndCheck`),
 links (`WallsLinks`) in `test_site_in_browser.py`; then one file each, `tests/browser/test_r12_*.py`: a shared
 Listen episode link and Home's *Resume* (`ListenSharedLink`, `HomeResumeFocus`), the deadlines' *Add to my
 calendar* menu (`DeadlineCalendarMenu`), read aloud's controls and video captions (`ReadAloudControls`,
-`VideoCaptions`), the question of the day and *Pass it on* (`QuestionOfTheDay`, `PassItOn`, `GvrPhone`), the
+`VideoCaptions`), the YouTube previews staying on youtube-nocookie.com until Play (`PrivacyPlayer`), the question of
+the day and *Pass it on* (`QuestionOfTheDay`, `PassItOn`, `GvrPhone`), the
 Shop's cost card and its sheet (`ShopCostCalculator`, `ShopCostSheet`), What's New's "New since your last visit"
 (`WhatsNewSince`), the committee meeting's *Agenda & notes* (`MeetingPaperwork`) and the Area report: For:
 Area, its Word file's dated name, the dates typed one at a time and a phone seen as Safari on an iPhone, with the
@@ -668,7 +677,7 @@ Actions**.
 | Put today's quote up | *Morning check (new day by 5:30 AM)*, no boxes | does only what is missing | seconds to a few minutes |
 | See what the Morning check would do | *Morning check (new day by 5:30 AM)*, tick **check_only** | it looks and reports, starts nothing | seconds |
 | The same refresh the Morning check starts | *Website update*, tick **morning** | morning refresh | ~3 min |
-| Run the tests, a test build and the browser checks | *Code check (tests and test build)* | ✓ or ✗ | ~10 min |
+| Run the tests, a test build and the browser checks | *Code check (tests and test build)* | ✓ or ✗ | ~20–30 min |
 | Preview the monthly e-mail | *Monthly e-mail digest*, keep **Preview only**, `month` empty or e.g. `2026-09` | the `digest-preview` download | ~1 min |
 | Send the monthly e-mail now | *Monthly e-mail digest*, untick **Preview only** | sends at once, unless that month was already sent (⚠ *Already sent*) or a send of it was not confirmed (4.6) | ~1 min |
 | Send a month's e-mail **again** | *Monthly e-mail digest*, untick **Preview only**, tick **force** | sends it a second time to everyone (check the group first) | ~1 min |
@@ -1120,11 +1129,11 @@ GitHub, not this repository, sends these. Its rules:
 Each person also needs the e-mails switched on: profile picture → **Settings** → **Notifications** → *System* →
 **Actions** → **Email**, and tick **Only notify for failed workflows**.
 
-> **Owner step still open (October 2026):** the scheduled runs list **MKP715** as their actor, so their failure
+> **Owner step still open (November 2026):** the scheduled runs list **MKP715** as their actor, so their failure
 > e-mails go to MKP715. To send them to NETA65 instead: sign in as **NETA65** → *Actions* → **Website update** →
-> **⋯** (top right) → **Disable workflow**, then **Enable workflow**. Do the same for
-> **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and **Weekly link check**. Repeat after
-> anyone else changes a `cron:` line.
+> **⋯** (top right) → **Disable workflow**, then **Enable workflow**. Do the same for the four other timed
+> workflows: **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest**, **Weekly link check** and **Gate
+> list check**. Repeat after anyone else changes a `cron:` line.
 
 A green run with yellow ⚠ never sends an e-mail. Neither does a failing source: that is what the issue in 8.1
 is for.
@@ -1278,7 +1287,7 @@ access.
 | Task | MKP715 (write) | NETA65 (owner) |
 |---|:---:|:---:|
 | Edit files on github.com, push from a PC, merge pull requests | yes | yes |
-| *Run workflow*, *Re-run*, *Cancel* (all five workflows) | yes | yes |
+| *Run workflow*, *Re-run*, *Cancel* (all six workflows) | yes | yes |
 | Download artifacts (the e-mail preview), delete old runs | yes | yes |
 | Comment on, close and reopen issues | yes | yes |
 | *Disable / Enable workflow* | yes, but then the failure e-mails go to MKP715 | yes: do it as NETA65 to get them (8.3) |
@@ -1561,9 +1570,21 @@ Where the timetables are:
 | Website update, nightly full update | `.github/workflows/update.yml`: `- cron: "17 7 * * *"`, **and** `FULL_CRON="17 7 * * *"` (step *Decide what to sync*), **and** `github.event.schedule == '17 7 * * *'` (the `run-name:` line) | `tests/test_morning.py` → `UpdateWorkflow.test_the_three_schedules_4_hours_early`, `test_the_nightly_full_update_keeps_clear_of_the_morning_alarm`, `test_plan_step`; `tests/test_run_wiring.py` → `Schedule.FULL_CRON` (`test_the_strings_agree`); `tests/test_run_names.py` → `UpdateTitles` |
 | Website update, midday refresh | `update.yml`: `- cron: "7 12 * * *"` only (and a comment) — the plan step, the title and the commit message treat it as "any other schedule" | `UpdateWorkflow.test_the_three_schedules_4_hours_early`; `Schedule.MIDDAY_CRON` (`test_the_strings_agree` checks that the plan step, the title and the commit step do not use it) |
 | Website update, evening refresh | `update.yml`: `- cron: "7 20 * * *"`, **and** `github.event.schedule == '7 20 * * *'` (the `run-name:` line), **and** `"${SCHEDULE:-}" = "7 20 * * *"` (step *Commit refreshed data*) | the same, plus `Schedule.EVENING_CRON`, `UpdateWorkflow.test_commit_messages`, `tests/test_run_names.py` |
-| Morning check (new day by 5:30 AM) | `.github/workflows/morning.yml`, `- cron: "25 0-11,21-23 * * *"` | `MorningWorkflow.test_schedule_is_plain_utc_off_the_hour_through_the_night` |
+| Morning check (new day by 5:30 AM) | `.github/workflows/morning.yml`, `- cron: "25 0-11,19-23 * * *"` | `MorningWorkflow.test_schedule_is_plain_utc_off_the_hour_through_the_night`, `test_an_evening_firing_is_enough_for_the_next_morning` (every evening hour from 8:15 PM Central gets a firing 4 to 8 hours late, in summer and in winter) |
 | Monthly e-mail digest | `.github/workflows/monthly-digest.yml`, `- cron: "7 8,11,14,17,20 1-3 * *"` | `tests/test_send_digest.py` → `WorkflowSchedule.test_when_it_tries` (the last try must stay after noon Central, even in winter) |
-| Weekly link check | `.github/workflows/link-check.yml`, `- cron: "40 8 * * 0"` | none |
+| Weekly link check | `.github/workflows/link-check.yml`, `- cron: "40 8 * * 0"` | only `tests/test_morning.py` → `ScheduleDocs` (the line must be in this table and in 4.1, at its on-time hours; the time itself is free) |
+| Gate list check | `.github/workflows/gate-lists.yml`, `- cron: "43 9 * * *"` | `tests/test_automation.py` → `GateListsWorkflow.test_when_it_runs` (once a night, off the hour — not the exact time); `ScheduleDocs`, as for the link check |
+
+**Every row also meets `tests/test_morning.py` → `ScheduleDocs`** (it judges the guides, so the Code check runs it
+and the publish gate does not): the 4.1 timetable must have one row per `cron:` line of `.github/workflows/`, no
+other, each naming its workflow and giving the hours it fires on time in summer (CDT) and in winter (CST)
+(`test_the_timetable_has_every_schedule_at_its_hours`), and this table must have one row per `cron:` line,
+in the column *File and search text* (`test_where_each_timetable_is`). So a moved `cron:` line turns it red until both
+rows say the new line. The Morning check's UTC hours are also in the diagram at the top of
+[docs/OPERATIONS.md](../docs/OPERATIONS.md#architecture) (`test_the_operations_diagram_gives_the_morning_check_hours`).
+And `test_the_disable_enable_steps_name_every_timed_workflow` expects five timed workflows and every *Disable
+workflow → Enable workflow* list naming each of them: a new or removed timed workflow changes those lists too
+(README, docs/SETUP-GITHUB.md, docs/OPERATIONS.md, [E-mail and alerts](email-and-alerts.md), 8.3 and 14.8 here).
 
 The arithmetic: **UTC hour = the Central hour you want it to really start − 4 (the early setting) + 5 (summer
 time)**, so in summer simply "wanted hour + 1". In winter the same line runs one hour earlier in Central time.
@@ -1598,18 +1619,28 @@ Example: let the evening refresh aim for about 8–10 PM Central instead of 7–
     EVENING_CRON = "7 21 * * *"
 ```
 
+```markdown
+<!-- how-to/automation-and-troubleshooting.md → 4.1: the row's line and its on-time hours (21 − 5 and 21 − 6) -->
+| `7 21 * * *` | Website update, **evening refresh** (quick) | 4:07 PM | 3:07 PM | ~8–10 PM | …
+<!-- → 13.1, the evening refresh row: the three strings, each "7 21 * * *" -->
+```
+
 Then:
 
-1. Run `python -m unittest tests.test_morning tests.test_run_wiring tests.test_run_names -v`.
-2. Update the comments above the `cron:` lines and the times quoted in the README (section 1), in this guide (4.1)
-   and in [docs/OPERATIONS.md → Workflows](../docs/OPERATIONS.md#workflows).
+1. Update the times in the guides: the row of the 4.1 timetable (the `cron:` line, and the on-time hours in CDT and
+   CST) and the row of the table above (its search texts), the comments above the `cron:` lines, the times quoted
+   in the README (section 1) and in [docs/OPERATIONS.md → Workflows](../docs/OPERATIONS.md#workflows).
+2. Run `python -m unittest tests.test_morning tests.test_run_wiring tests.test_run_names -v`. If `ScheduleDocs`
+   is red, a table still has the old line or hours: `test_the_timetable_has_every_schedule_at_its_hours` is 4.1,
+   `test_where_each_timetable_is` the table above.
 3. After the push, **as NETA65**: *Actions* → the workflow → **⋯** → *Disable workflow* → *Enable workflow*.
    Otherwise the failure e-mails of the timed runs go to whoever pushed the `cron:` change (8.3).
 
 **A fourth schedule** is a quick refresh by itself (only `FULL_CRON` is a full run), titled "Midday refresh (GitHub
 schedule)" and committed as "midday refresh" unless you give it a `run-name:` branch and a commit-message line of
 its own, like the evening one. The tests expect exactly three `cron:` lines: update
-`test_the_three_schedules_4_hours_early` with it.
+`test_the_three_schedules_4_hours_early` with it, and give the new line a row in 4.1 and in the table above
+(`ScheduleDocs`).
 
 ### 13.2 Make another kind of saved file rebuild the site
 
@@ -1858,7 +1889,7 @@ Status page row, maybe the e-mail). Follow
 | Red ✗ on *Morning check*, or no quote at 5:30 AM | the morning refresh failed, the alarm did not fire, or the magazine was late | 14.7 |
 | No timed runs for a day or more | the workflow is disabled, or GitHub skipped a firing | 14.8 |
 | A grey "cancelled" run nobody cancelled | a newer run took its place in the queue | nothing |
-| Dozens of *Morning check* runs | the hourly backstop | nothing; the no-op ones are deleted after a day |
+| Dozens of *Morning check* runs | GitHub's hourly schedule (the main way while no morning alarm is set up) | nothing; the no-op ones are deleted after a day |
 | Issue "A content source has stopped updating" | a source failed for 7+ days | follow its *What to do*; it closes itself (8.1) |
 | Issue "Broken links found by the weekly check" | a link in the settings or in `content/` moved, or the root robots.txt has a problem (the next row) | fix the address in `config/site.yml` or the `content/` file; it closes itself (8.2) |
 | That issue has a part *The root robots.txt* — "Fix it in **the NETA65/neta65.github.io repository**" | someone changed robots.txt there (a `Disallow` line, a lost `Sitemap:` line), set a custom domain on that repository (a redirect), or GitHub Pages did not answer | as **NETA65**: copy [`docs/user-site/robots.txt`](../docs/user-site/robots.txt) over robots.txt in that repository (and turn its optional AI-training block on again if the committee chose it); remove a custom domain there (*Settings → Pages*). "No answer" once: nothing. The issue closes itself on the next clean week (README → "Search engines") |
@@ -2054,8 +2085,8 @@ On a Dependabot pull request, a red ✗ simply means: do not merge it.
 - The workflow says **disabled**: GitHub turns timed workflows off after 60 days without repository activity
   (the daily data commits normally prevent that), or someone disabled it. *Actions* → the workflow →
   **Enable workflow**, preferably as **NETA65** so the failure e-mails go there. Do it for *Website update*,
-  *Morning check (new day by 5:30 AM)*, *Monthly e-mail digest* and *Weekly link check*. A disabled Morning
-  check also turns the morning alarm away (HTTP 422).
+  *Morning check (new day by 5:30 AM)*, *Monthly e-mail digest*, *Weekly link check* and *Gate list check*. A
+  disabled Morning check also turns the morning alarm away (HTTP 422).
 - GitHub skipped a firing on a busy day: the Morning check starts the full run after 30 hours without one, or
   press *Run workflow*.
 - Never add an automatic "enable workflow" keep-alive: GitHub would then send the failure e-mails to the robot.

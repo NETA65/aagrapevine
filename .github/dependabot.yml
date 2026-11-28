@@ -55,6 +55,18 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # lite-youtube-embed stays on 0.3.x (PR #24, November 2026: closed, and Dependabot told
+      # "@dependabot ignore lite-youtube-embed minor version" — this entry keeps that visible and lasting).
+      # 0.4 renamed needsYTApi to playbackMode, so pwa.js plainPlayer no longer keeps the videos on
+      # youtube-nocookie.com, and iPhone / iPad Safari would load YouTube's player (1–2 MB, Google ad
+      # requests) before a tap, ignoring Data saver and the Video captions setting. Every release from 0.4.0
+      # on (">=0.4.0", npm's range form): for a 0.x package Dependabot calls 0.4 and 0.5 minor updates — PR #24
+      # came despite the semver-major entry above — so "0.4.x" alone would let 0.5.0 into the grouped
+      # site-tools pull request. 0.3.x patch releases still come. Taking 0.4 or later on purpose:
+      # docs/OPERATIONS.md → "dependabot.yml" (tests/browser/test_r12_u4_aa_browser.py PrivacyPlayer fails
+      # on 0.4.0).
+      - dependency-name: "lite-youtube-embed"
+        versions: [">=0.4.0"]
     commit-message:
       prefix: "chore(deps)"
     open-pull-requests-limit: 2

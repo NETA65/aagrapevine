@@ -28,11 +28,13 @@ monthly series (zz-booth) and the build's clock stopped on Sunday, November 22, 
   * TheForwarder — src/assets/js/community.js on the 404 page: /events/series/<key>/ (a series that has no date to
     come) → /events/; /events/ev-recurring-<key>-YYYY-MM-DD/ (a date long over) → /events/series/<key>/; any other
     /events/<anchor>/ → /events/#<anchor> as before; the ?query kept, deeper addresses left to the 404 page.
-  * LlmsTxt — "## Upcoming events" just before "## Optional": the series' pages first, then the one-off events still
-    to come whose page may be indexed, soonest first — each a page of the build in the sitemap, its line
-    "- [<its title>](<its address>): <its meta description>"; never a series' date, an event that is over, one from
-    the magazines' calendars, a cancelled one or a committee meeting, never a meeting ID, code or link; at most 20
-    lines, and none that would take the file past 14 KB (src/pages/llms-txt.11ty.js render, on many events).
+  * LlmsTxt — "## Upcoming events" just before "## Optional": the series' pages first (since round 38b the committee
+    meeting's dates page, /events/series/committee-meeting/, before them), then the one-off events still to come
+    whose page may be indexed, soonest first — each a page of the build in the sitemap, its line "- [<its title>](<its
+    address>): <its meta description>" (in one line: every space a plain one); never a series' date, an event that is
+    over, one from the magazines' calendars, a cancelled one or a single committee meeting, never a meeting ID, code
+    or link; at most 20 lines, and none that would take the file past 14 KB (src/pages/llms-txt.11ty.js render, on
+    many events).
 
 Runs Eleventy with Node.js (tests/nodejs.py); skipped without Node.js or the site's npm packages.
 
@@ -274,7 +276,9 @@ class TheLinks(unittest.TestCase):
                 self.assertEqual(h3_link(ev, ONLINE), f"{pre}/events/{ONLINE}/")
                 self.assertEqual(h3_link(ev, CAL), f"{pre}/events/{CAL}/")
                 self.assertEqual(h3_link(ev, ACM), f"{pre}/events/{ACM}/")
-                self.assertIn('<a class="btn-secondary btn-sm" href="https://neta65.org/event/zz-acm/"', card_of(ev, ACM))
+                # (its outside page: "Organizer's page ↗" — .ev-org-btn, round 38b: on a phone at larger text its icon
+                # steps aside, areas/access.css)
+                self.assertIn('<a class="btn-secondary btn-sm ev-org-btn" href="https://neta65.org/event/zz-acm/"', card_of(ev, ACM))
                 # a monthly series: ONE card, its title its series' page; each date to come an entry of it (its anchor),
                 # a link to the date's own page
                 self.assertEqual(h3_link(ev, f"ev-series-{BOOTH}"), pre + HUB)
@@ -468,12 +472,18 @@ class LlmsTxt(unittest.TestCase):
                     page = p[path]
                     self.assertIn(f"<loc>{url}</loc>", sitemap, "a page search engines may list")
                     self.assertNotIn('content="noindex"', page)
-                    self.assertEqual(desc, html.unescape(re.search(r'<meta name="description" content="([^"]*)"', page).group(1)))
+                    # (its words — in one line, every space a plain one: llms-txt.11ty.js oneLine; the committee
+                    # meeting's dates page writes "7:00 – 8:00 PM" with thin spaces)
+                    self.assertEqual(desc, " ".join(html.unescape(re.search(r'<meta name="description" content="([^"]*)"', page).group(1)).split()))
                     self.assertEqual(title, html.unescape(re.search(r"<title>(.*?)</title>", page).group(1)).split(" · ")[0])
-                # the series' page first (once U2 writes it), then the one-off events to come, soonest first — each
-                # whose page this build lets search engines list
-                order = [pre + HUB] + [f"{pre}/events/{a}/" for a in (LEAF, ONLINE, TBA, ACM)]
+                # the series' pages first — (round 38b) the committee meeting's dates page, then the test's series (once
+                # U2 writes it) —, then the one-off events to come, soonest first — each whose page this build lets
+                # search engines list
+                order = [f"{pre}/events/series/committee-meeting/", pre + HUB] + [f"{pre}/events/{a}/" for a in (LEAF, ONLINE, TBA, ACM)]
                 self.assertEqual(got, [u for u in order if f"<loc>{BASE}{u}</loc>" in sitemap])
+                # (round 38b) the committee meeting's dates page is there (the build writes it: the settings' meeting
+                # has dates to come) — it was missing, the only series' page left out
+                self.assertIn(f"{pre}/events/series/committee-meeting/", got)
                 # (round 37's fixer) a series' line gives its next date, the day its page's lede names — never the
                 # rule alone, from which a reader works out a date that does not happen (a month it skips)
                 hub_desc = LINE.match(lines[got.index(pre + HUB)]).group(3)

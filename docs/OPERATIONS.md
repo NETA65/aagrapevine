@@ -26,7 +26,7 @@ scripts and the templates see [DATA_SCHEMA.md](DATA_SCHEMA.md); for first-time s
 
 ```
   the morning alarm (cron-job.org, 4:30 AM Central) ─────────────┐   POST …/actions/workflows/morning.yml/dispatches
-  morning.yml's own schedule (hourly, 21–11 UTC) ────────────────┤
+  morning.yml's own schedule (hourly, 19–11 UTC) ────────────────┤
   Actions → Morning check (new day by 5:30 AM) → Run workflow ───┘
         │
         ▼  .github/workflows/morning.yml — Morning check (new day by 5:30 AM), one at a time
@@ -117,7 +117,7 @@ the backup, and any past day can be inspected or restored.
 | `src/pages/build-info.11ty.js` | `/build.json`: this build's Central day, the days of its two quotes and when the last full update ran (read by the Morning check) | — |
 | `eleventy/seo-check.js`, `eleventy/lastmod.js` | After the pages are written (`eleventy.after`): the `[seo]` build check (the sitemap against the pages' heads; since round 35 also a sitemap page over 1.8 MB of HTML, structured data (`ld+json`) that ends past 1.5 MB — Googlebot reads only the first 2 MB —, and an `ai_training` setting that is neither `allow` nor `disallow`; since round 37 also the `[search]` check, `searchProblems`: a sitemap page no search entry links, a link to a page or `#anchor` the build lacks, a search index over 1,400,000 bytes), and — Website update only, `LASTMOD=1` — the sitemap's `<lastmod>` per page from content fingerprints against the last publish's `lastmod.json` (`LASTMOD_STORE`, from the Actions cache; else the live `/lastmod.json` — the store: [DATA_SCHEMA.md](DATA_SCHEMA.md#lastmodjson--the-sitemaps-dates-a-site-output-not-a-data-file)) and the IndexNow list | — |
 | `src/pages/indexnow-key.11ty.js`, `src/pages/opensearch.11ty.js` | `/<key>.txt` (IndexNow, `site.search_engines.indexnow_key`) and `/opensearch.xml` + `/es/opensearch.xml` (the site search as a browser search engine) | — |
-| `src/pages/llms-txt.11ty.js` | Since round 35: `/llms.txt` + `/es/llms.txt`, a plain-text guide to the site for AI tools (llmstxt.org layout: the site's name, who runs it, the committee's monthly online meetings as rules only, the menu pages with their meta descriptions, since round 37 the upcoming events — the series' pages, then the indexable one-off events' pages, at most 20, never a cancelled one, from the event pages' plan —, the sitemap and the other language's file; never a join link, ID, passcode or name), written at every build from `config/site.yml`, `src/_data/nav.js`, the events and the i18n strings — about 11 KB in each language on November 22, 2026 (never past 14 KB). Out of the collections (not in the sitemap, IndexNow, the search index or the offline worker's list); no `[seo]` check (it reads `.html` pages only) | — |
+| `src/pages/llms-txt.11ty.js` | Since round 35: `/llms.txt` + `/es/llms.txt`, a plain-text guide to the site for AI tools (llmstxt.org layout: the site's name, who runs it, the committee's monthly online meetings as rules only, the menu pages with their meta descriptions, since round 37 the upcoming events — the series' pages (since round 38b the committee meeting's dates page first), then the indexable one-off events' pages, at most 20, never a cancelled one, from the event pages' plan —, the sitemap and the other language's file; never a join link, ID, passcode or name), written at every build from `config/site.yml`, `src/_data/nav.js`, the events and the i18n strings — about 11 KB in each language on November 22, 2026 (never past 14 KB). Out of the collections (not in the sitemap, IndexNow, the search index or the offline worker's list); no `[seo]` check (it reads `.html` pages only) | — |
 | `src/robots.njk` | `/robots.txt`: everything allowed + the sitemap; since round 35 `site.search_engines.ai_training: "disallow"` adds the AI-training groups (README → "Search engines", step D) | — |
 | `eleventy/event-pages.js`, `eleventy/event-page-model.js`; `src/pages/event-share-leaf.njk`, `event-share-date.njk`, `event-share-series.njk`, `event-share-cancelled.njk` (+ `src/_includes/partials/event-page.njk`, `macros/event-page.njk`) | Since round 37 (the small `noindex` share pages of `event-share.11ty.js` are gone): a full page for every event of `/events/` but the committee meeting, `/events/<card anchor>/` + `/es/…`, and for every monthly series, `/events/series/<key>/` — one plan (`eventPagePlan`, read at `site.built`, once per build) gives each its kind, address and tier: indexable with its Event (a *leaf*: to come, at a real address, no page elsewhere — `committee.js` `eventLeaf`), indexable without (another one-off event to come; a series' page), `noindex` and out of the sitemap (a series' date, an outside calendar's event, an event that is over); a cancelled event's notice until its day (`eleventy/cancelled-pages.js`). The next build after an event turns its page `noindex` (and IndexNow reports the change). `src/_data/db.js` also prints the plain log line `[events] N cancelled event(s) left out of the lists — the next sync moves them…` on a build made before the sync has moved a newly cancelled event (`eleventy/cancelled-events.js`): normal, never a warning | — |
 | `scripts/ops/run_summary.py`, `scripts/ops/sync_steps.py`, `scripts/ops/report_issues.py` | Since November 2026 the Python that used to be written inside `update.yml` (moved out line for line, each step's former script a function): *Write run summary* (`python -m scripts.ops.run_summary`), the translation models' cache key and the data commit's message words (`python -m scripts.ops.sync_steps model-key | archive-taken | quote-words`), and the report job's three issues (`python3 -m scripts.ops.report_issues sources | updates | mornings`; standard library only, after a sparse checkout of `scripts/`). `tests/workflow_steps.py` lets the tests run and read a step's script the same way whether it is inline or a module; `tests/test_ops_scripts.py` tests the modules themselves. (`monthly-digest.yml`'s first step keeps its short script: it runs before the checkout on purpose, so that the many tries that only find it is not time yet stay a few seconds.) | — |
@@ -414,7 +414,7 @@ most work here is pushed straight to `main`, so without this the tests would nev
 on `workflow_dispatch` (run name "Code check (started by hand)"; a push or a pull request keeps GitHub's title).
 `permissions: contents: read`, nothing published; the bot's data commits never trigger it (pushed with
 `GITHUB_TOKEN`). Job `build` (shown as **Test build of the website** — not "Build the website", the name of
-Website update's own build step; 20 min): `npm ci` →
+Website update's own build step; 45 min since round 38b, 30 before): `npm ci` →
 `PATH_PREFIX=/<repository name>/ I18N_STRICT=1 STRICT_BUILD=1 npx @11ty/eleventy` (since October 2026
 `STRICT_BUILD` fails the build on any build warning — `[icon]`, `[community]` / `[media]` / `[read]` / `[published]`
 sprite icons, `[sitemap]`, `[seo]` and since round 37 `[search]` (`eleventy/seo-check.js`), `[links]`, `eleventy/build-warnings.js`:
@@ -426,7 +426,7 @@ stylesheet at the top of `src/assets/css` in `_site/assets/css/`), plus `build.j
 **browser checks**: Python 3.12, `pip install -r scripts/ops/requirements-browser.txt` (Playwright, pinned, + Pillow),
 then `python -m unittest discover -s tests/browser -t tests -v` with `GV_BROWSER_SITE=_site`,
 `GV_BROWSER_CHANNEL=chrome` (the runner's own Google Chrome, headless — nothing is downloaded) and
-`GV_BROWSER_REQUIRED=1` (a browser that cannot start fails, never a silent skip); 10 min. The build is served the
+`GV_BROWSER_REQUIRED=1` (a browser that cannot start fails, never a silent skip); 40 min (25 until round 38b). The build is served the
 way GitHub Pages serves it (`scripts/ops/serve_site.mjs`: no store cache, byte ranges, the 404 page, a 301 for a
 folder without its `/`; started by `scripts/ops/site_browser.py` with `--stop-with-parent`), every host name but
 127.0.0.1 fails to resolve, and the checks are: `HeaderFocusRing` (Search, ES / EN, Aa and theme at the top and
@@ -436,7 +436,8 @@ New's sticky filter bar never hides the focused element, 1280 × 800 English and
 relaxed spacing goes off), `LargeTextPhone` (no sideways scroll at 360 px with 150 % text, `LARGE_TEXT_PAGES`, both
 languages; Search with a podcast episode among its results, whose "Episode page" link must wrap),
 `OfflineUpdate` (a new `sw.js` activates in under 6 s while an open tab's page is held 20 s),
-`OfflineAreaStyles` (a page opened online, then a new version, then offline: it keeps its own area stylesheet),
+`OfflineAreaStyles` (a page opened online, then a new version, then offline: it keeps its own area stylesheet — and,
+since round 38b, its own scripts: Events' committee.js),
 `ScriptErrors` (no `pageerror` on `MAIN_PAGES` and this month's poster page, in both languages, and the phone menu),
 `PosterPicture` (one share picture at 1200 × 630), `TrackerPhotos` (two Tracker tabs: an entry deleted in one
 while the other edits it is saved again with its receipt photo, byte for byte; closing a tab whose entries the
@@ -464,7 +465,9 @@ deadline on a 360 px phone, its `.ics` with the 9 AM reminder and Escape, and on
 checks are skipped when no deadline is open, the second also with only one; `/deadlines.ics` and `/es/deadlines.ics`
 served as a calendar (200, `text/calendar`, `BEGIN:VCALENDAR`) is checked every time), `test_r12_u4_aa_browser.py`
 (`ReadAloudControls` with a stand-in voice: start on the screen, side columns, Previous / Next, speed;
-`VideoCaptions`), `test_r12_u5_gvr.py` (`QuestionOfTheDay`, `PassItOn`
+`VideoCaptions`; `PrivacyPlayer`: Home's and /watch/'s YouTube previews on an emulated Android phone, iPhone and
+Mac Safari ask nothing of YouTube or Google before Play, then open www.youtube-nocookie.com's player — see
+[dependabot.yml](#dependabotyml)), `test_r12_u5_gvr.py` (`QuestionOfTheDay`, `PassItOn`
 — the two printed sheets and the "Tell the office" e-mails —, `GvrPhone`), `test_r12_u7_shop.py`
 (`ShopCostCalculator`, `ShopCostSheet`; the browser's clock stopped; `OfferBannerGone`: a store banner that fails
 while a link to a section below it — `/shop/#offers-holiday-gifts-2026`, `#subscriptions` — still scrolls there
@@ -545,8 +548,12 @@ file must be named `test*.py` (discover's pattern) and take the same set-up. All
 Windows PC with Microsoft Edge (`GV_BROWSER_CHANNEL=msedge`, November 12, 2026, while another job ran; the poster
 file alone about 1 minute; 96 checks took about 8 minutes on October 16, 2026); on GitHub's runner, 84 checks
 (before the 105 above) took 6¾ minutes, and 165 checks (with Round 34's bingo cards) 15 minutes on a slow runner on
-November 19, 2026 (900 s, all passing); the step's limit is 25 minutes and the job's 30 (`check.yml`; the step's was
-10 until October 16, 2026 and 15 until November 19, 2026). Since November 17, 2026 `test_r32_booth.py` adds 12
+November 19, 2026 (900 s, all passing). Round 38b (November 2026) brings about 260 checks (234 before it): run side
+by side on one busy Windows PC with Chrome, the 234 took 1,081 s and 260 of them 1,296 s — the 26 new ones then about 226 s,
+the longest `EventPages.test_no_event_page_scrolls_sideways` (every event and series page, 44 s) —, so on GitHub's
+runner they may take about 20–27 minutes (not yet timed there: read the step's time on the next Code check runs
+and write it here). The step's limit is 40 minutes and the job's 45 (`check.yml`; the step's was 10 until October 16,
+2026, 15 until November 19, 2026 and 25 until round 38b; the job's 20, then 30). Since November 17, 2026 `test_r32_booth.py` adds 12
 checks: 18 files.
 
 Round 33 (November 17, 2026) adds 8 files, 30 checks — 149 checks in 26 files:
@@ -672,6 +679,29 @@ browser checks and the posters' share pictures; `requirements.txt` is unchanged 
 patch included, so it keeps up with the runners' Chrome; the Code check's browser checks run with it before it is
 merged. `tests/test_automation.py` → `Dependabot` checks the entries and that every package but yt-dlp is capped
 below its next major version.
+
+**lite-youtube-embed stays on 0.3.x** (since November 2026). Dependabot's pull request #24 (0.4.0) was closed and
+Dependabot was told `@dependabot ignore lite-youtube-embed minor version`; the npm entry's `ignore:` says the same
+(`dependency-name: "lite-youtube-embed"`, `versions: [">=0.4.0"]`: every release from 0.4.0 on — for a 0.x package
+Dependabot calls 0.4 and 0.5 minor updates, which is why PR #24 came at all, so `"0.4.x"` alone would let 0.5.0 into
+the grouped `site-tools` pull request; 0.3.x patch releases still come), so the hold is visible in the file and lasts
+even if Dependabot's own memory of that comment is lost. `package.json`'s `^0.3.5` keeps `npm` on 0.3.x as well (for a
+0.x version a caret allows only patch releases). Why: 0.4 renamed the element's `needsYTApi` to `playbackMode`.
+`src/assets/js/pwa.js` `plainPlayer` sets `needsYTApi = false` just before a preview starts, which 0.4 no longer
+reads, so on phones and in Safari the videos would leave YouTube's privacy-enhanced mode (youtube-nocookie.com) for
+its full player from youtube.com; and iPhone and iPad Safari would load YouTube's player (1–2 MB, with Google ad
+requests) as soon as a page shows a preview, before any tap, whatever Data saver and the Video captions setting
+say. The guards: `tests/test_pwa_worker.py` → `ShippedPlayer` (the copy the build ships,
+`node_modules/lite-youtube-embed/src/lite-yt-embed.js`, still reads `needsYTApi` and still builds the
+youtube-nocookie.com player) and, on the built site in a real browser, `tests/browser/test_r12_u4_aa_browser.py` →
+`PrivacyPlayer` (an Android phone, an iPhone and a Mac's Safari, emulated: nothing from YouTube or Google before the
+tap, then a youtube-nocookie.com player — it fails with 0.4.0). Taking 0.4 or later on purpose means, in one pull
+request: raise `package.json` and `package-lock.json` (`npm install --save-dev lite-youtube-embed@^0.4.0`); change
+`plainPlayer` (0.4 picks its mode when the preview appears, so a switch at the click is no longer enough), its test
+in `tests/test_pwa_worker.py` and `ShippedPlayer`, the privacy note on /watch/ (`media.privacy_yt`: "Videos load
+from YouTube's privacy-enhanced mode (youtube-nocookie.com) only when you press play."); remove the `ignore` entry,
+and change `tests/test_automation.py` → `Dependabot.test_the_site_tools_without_lite_youtube_embed_0_4` with it (it
+checks that entry and the `^0.3` in `package.json`) — and see `PrivacyPlayer` pass on the Code check.
 
 ## Sync modules
 
@@ -817,13 +847,23 @@ prices](../README.md#when-grapevine-announces-new-prices) is the chair's version
    Only what the announcement names: never add the 2- or 3-year, monthly or Complete plans by guesswork.
 3. The bulletin posts, written by hand with their own Spanish (`content/bulletin/`, `title_es` and a several-line
    `summary_es: |`): the heads-up (dated the day it was announced, `pinned`, `expires` the day before it takes
-   effect) and "now in effect" (`publish` and `date` on the day, `expires` with `notice_until`). Informative, never
+   effect) and "now in effect" (`publish` and `date` on the day, `expires` with `notice_until`). Home's *Pinned
+   on the Bulletin* card shows pinned posts only, and the heads-up's pin ends the day before, so Home has no
+   Bulletin card on the day unless "now in effect" is `pinned` too — the owner's choice for January 1, 2027
+   (2026-11-27): `2027-01-01-new-prices-in-effect.md` is pinned, and is Home's card from January 1 through 31,
+   2027. Informative, never
    a sales push: what changes, AA Grapevine's own reason, what it means for groups (the treasurer's budget, a
    heads-up at the business meeting), the links to `/shop/#subscriptions` and to the letter — and no claim the
    letter does not make (renewals bought before the day, other plans, other regions, "literature" when only
-   Grapevine and La Viña books change). Open each language with one sentence that holds every new price: the home
-   page's card, What's New and the feed show the first ~320 characters as plain text, where a list runs together
-   into one line (`2027-01-01-new-prices-in-effect.md` does this). A heads-up that shares a pinned post with other
+   Grapevine and La Viña books change). Open each language with one sentence that holds every new price: the
+   places that show a post's start show it as plain text, where a list runs together into one line, and they show
+   little — the feed its first 400 characters, What's New two lines (of at most 220 characters), Home's card two
+   lines on a phone and one from 768 px wide (of at most 160: `src/pages/index.njk`, since round 38) — so the
+   sooner the prices come in that sentence, the more of them Home and What's New show.
+   `2027-01-01-new-prices-in-effect.md` has its sentence (261 characters in English, 242 in Spanish) whole in the
+   feed; at 1280 px What's New shows its first two prices in English and three in Spanish, and Home's card the
+   first two (Grapevine's in English, La Viña's in Spanish); on a phone both show only its opening words
+   ("…announced are in effect: a yearly"); the rest is in the post. A heads-up that shares a pinned post with other
    notices gets a section of its own that opens with that sentence, after a short opening that names every section
    — and stays apart from any store offer, as facts side by side, never "before prices go up" (since November 11,
    2026 the heads-up of January 1, 2027 is the price section of
@@ -946,11 +986,12 @@ is no block), so adding the next block or deleting this one keeps the Code check
 7. **Health is visible**: `/status/` page, the run summary table, `::warning` annotations, the badge —
    and a source that has not updated for 7 days opens the issue *"A content source has stopped
    updating"* (the `report` job), because a run stays green while only one source fails.
-   GitHub's failure e-mails for the *scheduled* runs (Website update, the hourly backstop of
-   Morning check (new day by 5:30 AM), Monthly e-mail digest, Weekly link check) go to the user who
-   last enabled each workflow (or last edited its `cron:` line): after a hand-over, or after someone
-   else pushed a `cron:` change, the new chair disables and re-enables all four. The runs the morning
-   alarm starts e-mail the owner of its key. The runs the Morning check starts (as `github-actions[bot]`) e-mail
+   GitHub's failure e-mails for the *scheduled* runs (Website update, the hourly schedule of
+   Morning check (new day by 5:30 AM), Monthly e-mail digest, Weekly link check, Gate list check) go to
+   the user who last enabled each workflow (or last edited its `cron:` line): after a hand-over, or after
+   someone else pushed a `cron:` change, the new chair disables and re-enables all five (four until the
+   Gate list check came, in November 2026). The runs the morning alarm starts e-mail the owner of its key.
+   The runs the Morning check starts (as `github-actions[bot]`) e-mail
    nobody, and a timed run only that one user, so since October 2026 two such runs failing in a row open the
    issue *"The website update keeps failing"* (the `report` job's second step), which closes itself after the
    next run that works.

@@ -7,10 +7,12 @@ The hub also holds the committee's presentations (config/presentations/, SPEC §
 real (Eleventy, ONLY=orientation,sw,presentations-json,portfolio, as GitHub Pages builds it) with the four decks,
 with the two sample decks (tests/fixtures/presentations) and with none, and check the page's order and anchors
 (the owner's order: the sessions, their own slides and handout, the presentations, "How presenting works"
-closed), one card per deck with the hooks the player (src/assets/js/presentations.js) finds, the no-JavaScript
-fallback, "Print or save a copy", "How presenting works" — the service worker keeping the decks with "Save key
-pages for offline", and /portfolio/ linking each deck's PowerPoint file to its web presentation. Skipped without
-Node.js or node_modules (npm ci), as in tests/nodejs.py.
+closed), one card per deck with the hooks the player (src/assets/js/presentations.js) finds — its length that of
+the version the deck opens on (round 38b: the committee meeting's "No guest speaker" until midnight after a meeting
+without one, then the first version, swapped in by the page) —, the no-JavaScript fallback, "Print or save a
+copy", "How presenting works" — the service worker keeping the decks with "Save key pages for offline", and
+/portfolio/ linking each deck's PowerPoint file to its web presentation. Skipped without Node.js or node_modules
+(npm ci), as in tests/nodejs.py.
 """
 from __future__ import annotations
 
@@ -302,6 +304,20 @@ class HubTemplate(unittest.TestCase):
         self.assertEqual(text.count('<dl class="o101-keys'), 1)
 
 
+# The version a deck's JSON file opens on, and its slides, by the player itself (presentations-core.js, no choice
+# stored): at the instant the file was built, and at midnight Central after the meeting its speaker facts are for
+CARD_JS = r"""
+import vm from "node:vm";
+const ctx = vm.createContext({ console });
+vm.runInContext(fs.readFileSync("src/assets/js/presentations-core.js", "utf8"), ctx, { filename: "presentations-core.js" });
+const G = ctx.GVP;
+const D = JSON.parse(fs.readFileSync(input.file, "utf8"));
+const at = (ms) => { const cur = G.current(D, null, "", ms); return { preset: cur.preset.id, count: cur.shown.length }; };
+const built = Date.parse(D.built);
+const row = G.speakerMeeting(D, built);
+out({ now: at(built), over: row ? row.over : null, then: row ? at(Date.parse(row.over)) : null });
+"""
+
 class HubBuild(unittest.TestCase):
     """/orientation/ and /es/orientation/ (and /portfolio/, whose deck files link to the presentations) built three
     times: the four decks (config/presentations), the two sample decks (tests/fixtures/presentations) and none (an
@@ -354,7 +370,7 @@ class HubBuild(unittest.TestCase):
               const { loadDecks } = await imp("eleventy/filters/presentations.js");
               out(loadDecks(input.dir).decks.map((d) => ({ id: d.id, lang: d.lang, title: d.title, short: d.short, card: d.card,
                 minutes: d.minutes, count: d.count, kinds: d.kinds, presets: d.presets, drive_title: d.drive_title,
-                url: d.url })));""",
+                url: d.url, paperwork: !!d.paperwork })));""",
                 data={"dir": str(self.dirs[kind])})
         return self._decks[kind]
 
@@ -464,17 +480,22 @@ class HubBuild(unittest.TestCase):
                     with self.subTest(kind=kind, lang=lang, deck=d["id"]):
                         i = d["id"]
                         self.assertEqual(c.select_one("h3").get_text(strip=True), d["card"]["title"][lang])
-                        head = c.select_one(".o101-pres-head .eyebrow").get_text(" ", strip=True)
-                        self.assertIn(str(d["count"]), head)
-                        # "Also:" the other versions by a short name, in lower case after the colon (not the
-                        # Customize labels word for word: "Also: Running late (about 48 minutes)")
-                        also = c.select_one(".o101-pres-head .text-xs")
-                        others = [self.short_name(p["label"][lang], p.get("minutes"), d["minutes"]) for p in d["presets"][1:]]
-                        if others:
-                            self.assertEqual(also.get_text(" ", strip=True), {"en": "Also: ", "es": "También: "}[lang] + " · ".join(others))
-                            self.assertNotRegex(also.get_text(), r"\((?:about|unos|unas) ")
-                        else:
-                            self.assertIsNone(also)
+                        # (a deck with the chair's paperwork may open on another version, by the clock — its card's
+                        # length and versions: test_a_card_counts_the_slides_its_deck_opens_on)
+                        if not d["paperwork"]:
+                            self.assertEqual(len(c.select(".o101-pres-head .eyebrow")), 1)
+                            self.assertFalse(c.select(".o101-pres-head [data-gv-when]"))
+                            head = c.select_one(".o101-pres-head .eyebrow").get_text(" ", strip=True)
+                            self.assertIn(str(d["count"]), head)
+                            # "Also:" the other versions by a short name, in lower case after the colon (not the
+                            # Customize labels word for word: "Also: Running late (about 48 minutes)")
+                            also = c.select_one(".o101-pres-head .text-xs")
+                            others = [self.short_name(p["label"][lang], p.get("minutes"), d["minutes"]) for p in d["presets"][1:]]
+                            if others:
+                                self.assertEqual(also.get_text(" ", strip=True), {"en": "Also: ", "es": "También: "}[lang] + " · ".join(others))
+                                self.assertNotRegex(also.get_text(), r"\((?:about|unos|unas) ")
+                            else:
+                                self.assertIsNone(also)
                         # the deck's language where it isn't the page's: an English deck on /es/, a Spanish one
                         # (La Viña's) on the English page
                         dl = d.get("lang", "en")
@@ -528,6 +549,46 @@ class HubBuild(unittest.TestCase):
                 self.assertIn("JavaScript", nojs[0].get_text())
                 for el in soup.select("#presentations .o101-pres-nojs"):
                     self.assertNotIn("JavaScript", el.get_text(), "no per-card JavaScript line")
+
+    def test_a_card_counts_the_slides_its_deck_opens_on(self):
+        """A deck with the chair's paperwork (the committee meeting; the sample meeting) opens on the version the player
+        picks by itself for the meeting its speaker facts are for — "No guest speaker" until midnight Central after a
+        meeting the site lists no guest speaker for (presentations-core.js defaultPreset): its card says THAT
+        version's slides (round 38: it said 23 while the deck opened at "1 / 21") and names the others under "Also:";
+        and when the version (or its count) changes at that midnight, the card holds the second state too, swapped in
+        at that moment (data-gv-expire / data-gv-from, ui.when). Judged by the player itself (the core, in Node) on the
+        deck's JSON file of the same build, at the instant that file was built."""
+        checked = 0
+        for kind in ("real", "sample"):
+            for d in self.decks(kind):
+                if not d["paperwork"]:
+                    continue
+                f = self.tmp / kind / "orientation" / "presentations" / f"{d['id']}.json"
+                r = run_js(self, CARD_JS, data={"file": str(f)}, needs_modules=False)
+                first = d["presets"][0]["id"] if d["presets"] else ""
+                for lang in ("en", "es"):
+                    with self.subTest(kind=kind, deck=d["id"], lang=lang):
+                        card = self.pages[(kind, lang)].select_one(f"#pres-{d['id']}")
+                        box = card.select_one(".o101-pres-head > .min-w-0")
+                        states = box.select(":scope > div[data-gv-when]") or [box]
+                        want = [r["now"]] + ([r["then"]] if r["then"] and r["then"] != r["now"] else [])
+                        self.assertEqual(len(states), len(want))
+                        for el, st in zip(states, want):
+                            p = next(x for x in d["presets"] if x["id"] == st["preset"]) if st["preset"] else None
+                            sm = p["minutes"] if p and p["id"] != first and p.get("minutes") else d["minutes"]
+                            head = el.select_one(".eyebrow").get_text(" ", strip=True)
+                            self.assertRegex(head, rf"· {st['count']} (?:slides|diapositivas)$")
+                            others = [self.short_name(x["label"][lang], x.get("minutes"), sm) for x in d["presets"] if x["id"] != st["preset"]]
+                            also = el.select_one(".text-xs")
+                            self.assertEqual(also.get_text(" ", strip=True) if also else "",
+                                             ({"en": "Also: ", "es": "También: "}[lang] + " · ".join(others)) if others else "")
+                        if len(states) == 2:
+                            self.assertEqual(states[0].get("data-gv-expire"), r["over"])
+                            self.assertEqual(states[1].get("data-gv-from"), r["over"])
+                            self.assertFalse(states[0].has_attr("hidden"))
+                            self.assertTrue(states[1].has_attr("hidden"))
+                checked += 1
+        self.assertGreaterEqual(checked, 2, "the committee meeting and the sample meeting")
 
     def test_no_fact_twice_on_a_card(self):
         """A card says its length and versions in its head and what stays current in its chips — its summary and

@@ -185,7 +185,8 @@
   .home-under-meet + .home-under-gvm { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--c-line); }
 }
 /* ---------- 1d. "Where would you like to start?" (index.njk .home-choose): four big buttons ----------
-   One under the other on a phone, two columns from 640px, four in a row from 1280px. Each button is a whole
+   One under the other on a phone, two in a row from 640px (the write button the wider one on its line: round 38b,
+   below), four in a row from 1280px. Each button is a whole
    link (at least 4.5rem tall — far past the 44px touch size): its icon on a soft tile in its tone, its words
    (the label, one line under it, and — on "I want to write my story" — the next story deadline), an arrow.
    The arrow floats at the end of the label's first line (it is inside .home-choose-label), not in a column of its
@@ -194,20 +195,48 @@
    Four in a row (from 1280px) the buttons are the same height, the tallest one's. The third, "I want to write my
    story", has the most words and the deadline line (~265px, ~300 in Spanish), so its column is 1.45 times as wide as
    the others: at 1280px the four are 138px tall (160 in Spanish) instead of 206 (226), with little empty room left in
-   any (a button added, taken out or moved in index.njk's `choices`: change that 4-column line too). At 130–150% text
-   the buttons stay one under the other at every width (the rule under the 4-column one). */
+   any (a button added, taken out or moved in index.njk's `choices`: change that 4-column line too, and the
+   two-in-a-row rules below, which find the write button by its deadline line and "I want to subscribe" as the one
+   after it). At 130–150% text the buttons stay one under the other at every width (the rule under the 4-column one). */
 .home-choose { padding: 1rem; }
 @media (width >= 40rem) { .home-choose { padding: 1rem 1.25rem; } }
 .home-choose-title { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; line-height: 1.25; color: var(--c-ink); }
 .home-choose-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.625rem; margin-top: 0.75rem; }
-@media (width >= 40rem) { .home-choose-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* (round 38b) Two in a row (640–1279px) is a row that wraps two to a line (flex, not two grid columns), so that each
+   line shares out its own width: on the line of "I want to write my story" — while its deadline line shows — that
+   button gets about 63 % and "I want to subscribe" 37 % (each starts at 34 %, which keeps two to a line, and the
+   line's other 32 % goes 10 : 1); the first line stays two halves. With two grid columns both lines were halves, and
+   "I want to subscribe" had 84–107px of nothing under its words at 640–800px (45px at 900–1279px) beside the taller
+   write button; now 3–45px at 640–800px (English and Spanish, 100 %; from 896px the rule below: 0–26px), and the
+   buttons are never taller (Home at 100 % is 19–62px shorter at 640 and 768px). A button is never narrower than its
+   longest word (a flex item's own minimum: at 115 % with relaxed spacing on 672–719px "suscribirme" stays whole there). With no deadline line (none open, or it has
+   passed: app.js hides it) both lines are halves again. (Measured in Chrome, 640–1279px, 100 % and 115 % text, both
+   spacings: 59 % : 41 % left up to 65px; 10 : 1 is the share that never made a line taller.) */
+@media (40rem <= width < 80rem) {
+  .home-choose-grid { display: flex; flex-wrap: wrap; }
+  .home-choose-grid > li { flex: 1 1 34%; }
+  .home-choose-grid > li:has(.home-choose-due:not([hidden])) { flex-grow: 10; }
+}
+/* (round 38b review) From 896px, at 100 % text with normal spacing, "I want to subscribe" (the button after the write
+   button) keeps 29 % of that line and does not grow; the write button takes the rest (about 70 %: its basis of 60 %
+   still keeps it off the first line). With 10 : 1 the write button's words still took one or two lines more there,
+   and "I want to subscribe" had 26–45px of nothing under its words (45px at 960–1112px in English, 968–1200 in
+   Spanish); now 0–26px, mostly 3–6, and the line is never taller — 3–20px shorter at a third of those widths (Chrome,
+   896–1279px every 4px, English and Spanish). Not at 115 % or with relaxed spacing, where a narrower subscribe
+   button made the line taller (its own words wrapped more): those keep 10 : 1; nor below 896px, where 29 % moved the
+   empty room to the write button and made the line taller. */
+@media (56rem <= width < 80rem) {
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-choose-grid > li:has(.home-choose-due:not([hidden])) { flex: 1 1 60%; }
+  :root:not([data-text="115"], [data-text="130"], [data-text="150"], [data-spacing="relaxed"]) .home-choose-grid > li:has(.home-choose-due:not([hidden])) + li { flex: 0 1 29%; }
+}
 @media (width >= 80rem) { .home-choose-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.45fr) minmax(0, 1fr); } }
-:root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-choose-grid { grid-template-columns: minmax(0, 1fr); }
+/* (one column: a grid again — two in a row is a flex row) */
+:root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-choose-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
 /* (round 38) At 115 % with relaxed spacing the words are wider than the columns where two and four in a row begin:
    "representante" (Spanish) broke in two at 640–646px in two columns and at 1280–1386px in four. With both settings
    the buttons are one under the other below 672px and two in a row below 1440px. The 100 % row is as it was, and so
    are the other settings (the least room left beside a word there: 10px, Spanish at 115 % on a 1280px screen). */
-@media (40rem <= width < 42rem) { :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .home-choose-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (40rem <= width < 42rem) { :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .home-choose-grid { display: grid; grid-template-columns: minmax(0, 1fr); } }
 @media (80rem <= width < 90rem) { :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .home-choose-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .home-choose-btn {
   display: flex; align-items: flex-start; gap: 0.75rem; height: 100%; min-height: 4.5rem; padding: 0.875rem;
@@ -389,6 +418,17 @@
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(70% 90% at 100% 0%, color-mix(in srgb, var(--c-grape) 10%, transparent), transparent 70%);
 }
+/* (round 38b) "Also on" (the episode card's Apple Podcasts · Spotify · Amazon Music, index.njk): one line that scrolls
+   sideways below 1024px and wraps from there (main.css chip-row) — on purpose: three buttons in one short row. Each
+   button keeps its one-line width there at every text size and spacing: larger text and relaxed spacing let a label
+   wrap inside the row's visible width (main.css) and broke its words ("Pod|casts", "Spo|tify", "Ama|zon": 44 of 224
+   phone settings measured — 320–639px, 100–150 %, both spacings, English and Spanish), though the row scrolls. The
+   page never scrolls sideways: the row clips its buttons. */
+@media (width < 64rem) { .home-episode .chip-row > * { white-space: nowrap; max-width: none; } }
+/* (round 38b) "More episodes" at 150 % with relaxed spacing below 360px: its heading's icon steps aside, as other
+   headings' icons do on small phones — beside it "episodios" ("Más episodios") was wider than its line and broke in
+   two on a 320px phone */
+@media (width < 22.5rem) { :root:where(.gv-prefs)[data-text="150"][data-spacing="relaxed"] .home-more-eps .card-h > span:first-child { display: none; } }
 .home-audio { height: 3rem; border-radius: 9999px; }
 [data-theme="dark"] .home-audio { color-scheme: dark; }
 .home-play:hover, .home-play.is-playing { background: var(--c-grape); color: #fff; }
@@ -407,7 +447,7 @@
    left edge, at its top, 13rem wide (15rem — 135px tall — from 1024px) and always 16:9, its words beside it and the
    link under them; from 1024px the link is the strip's right end. The video plays right here, in its small frame
    (YouTube's full-screen button makes it big). At 130–150% text on a phone the words go under the video (beside it
-   they had ~9 characters a line). */
+   they had ~9 characters a line), and at 115 % below 360px (below 400px with relaxed spacing). */
 .home-video {
   display: grid; align-items: center; gap: 0.25rem 0.875rem; padding: 0.75rem; overflow: hidden;
   grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
@@ -423,6 +463,20 @@ lite-youtube.home-yt > .lyt-playbtn:focus-visible { outline: 3px solid #fff; out
   lite-youtube.home-yt > .lyt-playbtn { background-size: 46px 32px; } /* YouTube's button, in scale with a 130px video */
   :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) .home-video { grid-template-columns: minmax(0, 1fr); grid-template-areas: "yt" "info"; row-gap: 0.75rem; }
   :root:where(.gv-prefs):is([data-text="130"], [data-text="150"]) lite-youtube.home-yt > .lyt-playbtn { background-size: 68px 48px; }
+}
+/* (round 38b) …and at 115 % below 360px: beside the video the words had 143px — the "Nuevo en YouTube" / "New on
+   YouTube" badge (158px / 146px on one line) wrapped onto two lines, and on a 320px phone the 95 × 53px video sat
+   beside a strip 229px tall in Spanish (158 in English). Under it, the video has the strip's width. With relaxed
+   spacing the badge is wider still and wrapped up to 393px in Spanish (368 in English: a 111–124px-wide video beside
+   a strip 266px tall, 195 in English), so there the words go under the video below 400px, in both languages as at
+   320–359px (the strip is 327–373px tall there instead of 175–266). */
+@media (width < 22.5rem) {
+  :root:where(.gv-prefs)[data-text="115"] .home-video { grid-template-columns: minmax(0, 1fr); grid-template-areas: "yt" "info"; row-gap: 0.75rem; }
+  :root:where(.gv-prefs)[data-text="115"] lite-youtube.home-yt > .lyt-playbtn { background-size: 68px 48px; }
+}
+@media (width < 25rem) {
+  :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] .home-video { grid-template-columns: minmax(0, 1fr); grid-template-areas: "yt" "info"; row-gap: 0.75rem; }
+  :root:where(.gv-prefs)[data-text="115"][data-spacing="relaxed"] lite-youtube.home-yt > .lyt-playbtn { background-size: 68px 48px; }
 }
 @media (width >= 40rem) {
   .home-video { grid-template-columns: 13rem minmax(0, 1fr); grid-template-areas: "yt info" "yt act"; column-gap: 1.25rem; padding: 0; }

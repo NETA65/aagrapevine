@@ -308,10 +308,14 @@ pageScripts: ["/assets/js/read.js"]
     {% endif %}
 
     {#- Paywall note — kind and clear (a <div>: an <aside> in this named section was a landmark within a
-        landmark; its first line is its title) -#}
-    <div class="mt-8 flex flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-surface-2 p-5 sm:flex-row sm:items-center sm:p-6">
+        landmark; its first line is its title). From 640px one row: the key, the words, the button — which wraps
+        under the words when it has no room beside them (round 38b: at 150 % text on 640–720px tablets the button
+        kept its whole width and ran 20–79px past the screen); at 130 %+ or with relaxed spacing that happens once
+        the words would get less than 10em (main.css's text-column rule: 7em left "suscriptores" and
+        "autosuficiente," broken in two). At 100 % and 115 % it always has room: nothing changes there. -#}
+    <div class="mt-8 flex flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-surface-2 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:p-6">
       <span class="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-grape ring-1 ring-line">{% ricon "key-round", "size-5" %}</span>
-      <div class="flex-1">
+      <div class="flex-1 [--text-col-min:10em]">
         <p class="font-semibold text-ink">{{ "read.paywall_title" | t(lang) }}</p>
         <p class="measure mt-1 text-sm leading-relaxed text-muted">{{ "read.paywall_text" | t(lang) }}</p>
       </div>
@@ -349,12 +353,14 @@ pageScripts: ["/assets/js/read.js"]
           </ul>
           {#- …and without JavaScript (no "Show all"), the issue's other stories too, as plain links (title, original title,
               writer): in a <noscript>, which a browser that runs scripts never turns into elements — the page starts as
-              light as before for nearly everyone, and every story of every issue here is still reachable without it -#}
+              light as before for nearly everyone, and every story of every issue here is still reachable without it.
+              The original title's language is on the title alone (as in the rows above): the hidden "Auto-translated:"
+              before it is in the page's language, so a screen reader says it in that voice. -#}
           {%- if v.articles.length > SSR_ROWS %}
           <noscript><ul class="grid grid-cols-1 gap-x-3 px-3 pb-1 @xl:grid-cols-2 @5xl:grid-cols-3">
             {%- for a in v.articles.slice(SSR_ROWS) %}
             <li class="py-1.5 text-sm leading-snug"><a class="link font-semibold" href="{{ a.url }}" target="_blank" rel="noopener" lang="{{ a.titleLang }}">{{ a.title }}</a>
-              {%- if a.original %} <span class="text-xs italic text-muted" lang="{{ a.origLang }}">{% if a.machine %}{% ricon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}:</span> {% endif %}{{ a.original }}</span>
+              {%- if a.original %} <span class="text-xs italic text-muted">{% if a.machine %}{% ricon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}:</span> {% endif %}<span lang="{{ a.origLang }}">{{ a.original }}</span></span>
               {%- elif a.machine %} <span class="auto-note">{% ricon "languages", "size-3" %}<span class="sr-only">{{ "common.auto_translated" | t(lang) }}</span></span>{% endif %}
               {%- if a.author %} <span class="text-xs text-muted">· {{ "common.by" | t(lang, {name: a.author}) }}</span>{% endif %}</li>
             {%- endfor %}

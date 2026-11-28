@@ -321,21 +321,34 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
     {%- set dTitle = d.card.title[lang] or d.card.title.en or d.title -%}
     {%- set m = d.minutes or 0 -%}
     {%- set dIcon = d.icon or "presentation" -%}
-    {#- "About 60 minutes · 49 slides" (a long one in hours: "About 2 hours") + the other versions (below) -#}
-    {%- set head = [] -%}
-    {%- if m %}{% set _x = head.push(("orientation.pres_hours" | t(lang, { n: (m / 60) | round })) if (m >= 100 and ((m % 60) <= 10 or (m % 60) >= 50)) else ("orientation.pres_minutes" | t(lang, { n: m }))) %}{% endif -%}
-    {%- if d.count %}{% set _x = head.push("orientation.pres_slides" | t(lang, { n: d.count })) %}{% endif -%}
-    {#- "Also:" — the other versions by a short name, after a colon in lower case: the version's label without the
-        "(about 48 minutes)" it ends with, which becomes "(48 min)" — or nothing when it is the full version's
-        length ("A month with a topic of the month (about 60 minutes)" → "a month with a topic of the month").
-        A name that starts with a capital for a reason (GVR…, Grapevine, La Viña, AA, Zoom, Google Meet) keeps it. -#}
-    {%- set alts = [] -%}
-    {%- for p in d.presets | offset(1) %}
-      {%- set lbl = (p.label[lang] or p.label.en or "") | trim -%}
-      {%- set alt = lbl | replace(lengthRe, "") -%}
-      {%- if alt != lbl and p.minutes and p.minutes != m %}{% set alt = alt + " (" + ("orientation.minutes" | t(lang, { n: p.minutes })) + ")" %}{% endif -%}
-      {%- if not (namesRe.test(alt) or alt.charAt(1) != alt.charAt(1).toLowerCase()) %}{% set alt = alt.charAt(0).toLowerCase() + alt.slice(1) %}{% endif -%}
-      {%- if alt %}{% set _x = alts.push(alt) %}{% endif -%}
+    {#- What the card says of the deck's length, for the version the deck opens on (presCard → eleventy/filters/
+        presentations.js cardStates: the player's own default version and slide count — the "1 / 21" it opens on):
+        "About 60 minutes · 49 slides" (a long one in hours: "About 2 hours"), then "Also:" the other versions by a
+        short name, after a colon in lower case: the version's label without the "(about 48 minutes)" it ends with,
+        which becomes "(48 min)" — or nothing when it is the length of the version the card names ("A month with a
+        topic of the month (about 60 minutes)" → "a month with a topic of the month"). A name that starts with a
+        capital for a reason (GVR…, Grapevine, La Viña, AA, Zoom, Google Meet) keeps it. Nearly every deck opens on
+        its first version: its minutes (the deck's) and count, and "Also:" the others. The committee meeting opens
+        on "No guest speaker" until midnight after a meeting without a guest speaker (round 38: the card said 23
+        slides while the deck opened at "1 / 21"): "About 60 minutes · 21 slides · Also: with a guest speaker" until
+        that moment, then the first version's line — two states the page swaps by itself (ui.when). -#}
+    {%- set firstId = d.presets[0].id if (d.presets and d.presets.length) else "" -%}
+    {%- set lines = [] -%}
+    {%- for st in d | presCard({ site: site, db: db, meeting: meeting, carry: carry }) %}
+      {%- set sp = (d.presets | where("id", st.preset))[0] if st.preset != firstId else null -%}
+      {%- set sm = (sp.minutes or m) if sp else m -%}
+      {%- set head = [] -%}
+      {%- if sm %}{% set _x = head.push(("orientation.pres_hours" | t(lang, { n: (sm / 60) | round })) if (sm >= 100 and ((sm % 60) <= 10 or (sm % 60) >= 50)) else ("orientation.pres_minutes" | t(lang, { n: sm }))) %}{% endif -%}
+      {%- if st.count %}{% set _x = head.push("orientation.pres_slides" | t(lang, { n: st.count })) %}{% endif -%}
+      {%- set alts = [] -%}
+      {%- for p in d.presets %}{% if p.id != st.preset %}
+        {%- set lbl = (p.label[lang] or p.label.en or "") | trim -%}
+        {%- set alt = lbl | replace(lengthRe, "") -%}
+        {%- if alt != lbl and p.minutes and p.minutes != sm %}{% set alt = alt + " (" + ("orientation.minutes" | t(lang, { n: p.minutes })) + ")" %}{% endif -%}
+        {%- if not (namesRe.test(alt) or alt.charAt(1) != alt.charAt(1).toLowerCase()) %}{% set alt = alt.charAt(0).toLowerCase() + alt.slice(1) %}{% endif -%}
+        {%- if alt %}{% set _x = alts.push(alt) %}{% endif -%}
+      {%- endif %}{% endfor -%}
+      {%- set _x = lines.push({ head: head | join(" · "), alts: alts, win: ({ until: st.until } if st.until else ({ from: st.from, hidden: true } if st.from else null)) }) -%}
     {%- endfor -%}
     {%- set copy = (copies | where("id", d.id))[0] -%}
     {%- set copyUrl = copy.url if copy else "" -%}
@@ -343,10 +356,15 @@ pageStyles: ["/assets/css/orientation.css", "/assets/css/presentations.css"]
       <div class="o101-pres-head">
         <span class="grid size-11 shrink-0 place-items-center rounded-xl {{ toneCls[d.tone] or toneCls.gv }}" aria-hidden="true">{% icon dIcon, "size-5" %}</span>
         <div class="min-w-0 flex-1">
-          <p class="eyebrow">{{ head | join(" · ") }}</p>
-          {%- if alts.length %}
-          <p class="mt-1 text-xs leading-snug text-muted">{{ "orientation.pres_also" | t(lang, { list: alts | join(" · ") }) }}</p>
+          {%- for ln in lines %}{% if lines.length > 1 %}
+          <div{{ ui.when(ln.win) }}>{% endif %}
+
+          <p class="eyebrow">{{ ln.head }}</p>
+          {%- if ln.alts.length %}
+          <p class="mt-1 text-xs leading-snug text-muted">{{ "orientation.pres_also" | t(lang, { list: ln.alts | join(" · ") }) }}</p>
           {%- endif %}
+          {%- if lines.length > 1 %}</div>{% endif %}
+          {%- endfor %}
         </div>
         {#- the presentation's own language, when it isn't the page's: "Presentación en inglés" on /es/ for an English
             deck, "Presentation in Spanish" on the English page for La Viña's Spanish ones -#}

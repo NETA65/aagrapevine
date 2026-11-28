@@ -263,11 +263,15 @@
 
 @layer base {
   /* ---- relaxed text spacing (WCAG 1.4.12). Not inside the fixed-size printable posters and share
-     frames (.mp-poster, .cm-frame: artwork drawn to exact print sizes, kept as designed) ---- */
+     frames (.mp-poster, .cm-frame: artwork drawn to exact print sizes, kept as designed). The booth
+     display's screen (.gvb-screen, areas/booth.css: a 16:9 picture whose slides are sized in screen
+     units and space their lines with their own gaps) keeps the line height and the letter and word
+     spacing, but not the 2em under a paragraph: (round 38b) 2em of the page's text size under the
+     welcome slide's grape mark pushed its last line out of the About page's preview card ---- */
   :root:where(.gv-prefs)[data-spacing="relaxed"] body, :root:where(.gv-prefs)[data-spacing="relaxed"] body *:not(:is(.mp-poster, .cm-frame, .mp-poster *, .cm-frame *, .site-logo *, .cm-tile-num)) {
     line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
   :root:where(.gv-prefs)[data-spacing="relaxed"] body :is(p, li, dd, dt, td, th, blockquote, figcaption, label, summary):not(:is(.mp-poster, .cm-frame) *) { line-height: 1.7 !important; }
-  :root:where(.gv-prefs)[data-spacing="relaxed"] :is(main, footer, .gvlv-panel) p:not(:last-child):not(:is(.mp-poster, .cm-frame) *) { margin-bottom: 2em !important; }
+  :root:where(.gv-prefs)[data-spacing="relaxed"] :is(main, footer, .gvlv-panel) p:not(:last-child):not(:is(.mp-poster, .cm-frame, .gvb-screen) *) { margin-bottom: 2em !important; }
 
   /* ---- larger text or relaxed spacing: nothing is cut off, squeezed or pushed off the screen.
      · a word too long for its line breaks inside it (overflow-wrap: break-word — it never makes a

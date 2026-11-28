@@ -458,13 +458,32 @@ def reset_caches() -> None:
 
 
 # --------------------------------------------------------------------------- helpers
+# Place names with a capital inside that no rule gives ("DESOTO" → "DeSoto"); every "Mc…" has one by rule
+# ("MCKINNEY" → "McKinney") — events_external.py's city reader uses the same table
+INNER_CAPITALS = {"desoto": "DeSoto", "decordova": "DeCordova", "dekalb": "DeKalb"}
+
+
+def _name_word(w: str) -> str:
+    """A word of a place's name written all in capitals or all in lower case, as a name: "DALLAS" → "Dallas",
+    "MCKINNEY" → "McKinney", "DESOTO" → "DeSoto" (since round 38b: they read "Mckinney", "Desoto")."""
+    lw = w.lower()
+    if lw in INNER_CAPITALS:
+        return INNER_CAPITALS[lw]
+    if re.match(r"mc[a-z]", lw):
+        return "Mc" + lw[2].upper() + lw[3:]
+    return w[:1].upper() + lw[1:]
+
+
 def _pretty_city(s: str) -> str:
-    """Tidy a city as the writer gave it: "Ft. Worth" → "Fort Worth", "DALLAS" → "Dallas"."""
+    """Tidy a city as the writer gave it: "Ft. Worth" → "Fort Worth", "DALLAS" → "Dallas", "MCKINNEY" → "McKinney"
+    (a name all in capitals or all in lower case — as the writer gave it, before "Ft." becomes "Fort": "FT WORTH" →
+    "Fort Worth", since round 38b; it read "Fort WORTH"). Mixed capitals stay as written ("McKinney", "DeSoto")."""
     t = clean_text(s).strip(" .,-")
+    one_case = t.islower() or t.isupper()
     t = re.sub(r"(?i)^ft\.?\s+", "Fort ", t)
     t = re.sub(r"(?i)^mt\.?\s+", "Mount ", t)
-    if t and (t.islower() or t.isupper()) and len(t) > 3:
-        t = " ".join(w[:1].upper() + w[1:].lower() if w.isalpha() else w for w in t.split())
+    if t and one_case and len(t) > 3:
+        t = " ".join(_name_word(w) if w.isalpha() else w for w in t.split())
     return t
 
 

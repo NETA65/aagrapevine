@@ -64,10 +64,12 @@
           {%- endif %}{% endfor %}
           {#- The official sites next (La Viña first on the Spanish pages). They leave this site, among
               links that stay on it, so they carry a small arrow as well as the screen-reader note (not
-              below 360px, where the column has no room for it). A long name may wrap before ".org". -#}
+              below 360px, where the column has no room for it). A long name may wrap before ".org" — only
+              there: where the column is too narrow for "aagrapevine" beside the grapes and the arrow, they
+              step aside (site-footer-official, a size container: areas/access.css, the footer at larger text). -#}
           {%- set officialSites = [site.links.lv_home, site.links.gv_home] if L == "es" else [site.links.gv_home, site.links.lv_home] %}
           {%- for u in officialSites %}{% if u %}
-          <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ u }}" target="_blank" rel="noopener">{% icon "grapes", "size-4 shrink-0" %} <span class="min-w-0">{{ u | hostname | replace(".", "<wbr>.") | safe }}</span>{% icon "arrow-up-right", "size-3.5 shrink-0 -ml-1 text-faint max-[359px]:hidden" %}<span class="sr-only"> ({{ 'common.external' | t(L) }})</span></a></li>
+          <li class="site-footer-official flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ u }}" target="_blank" rel="noopener">{% icon "grapes", "size-4 shrink-0" %} <span class="min-w-0">{{ u | hostname | replace(".", "<wbr>.") | safe }}</span>{% icon "arrow-up-right", "size-3.5 shrink-0 -ml-1 text-faint max-[359px]:hidden" %}<span class="sr-only"> ({{ 'common.external' | t(L) }})</span></a></li>
           {%- endif %}{% endfor %}
           {%- for f in nav.footer %}{% if f.group == "stay" %}
           <li class="flex"><a class="inline-flex min-h-11 items-center gap-2 hover:text-gv sm:min-h-0" href="{{ f.url | lurl(L) }}"{% if pageKey == f.page %} aria-current="page"{% endif %}>{% icon f.icon, "size-4" %} {{ f.key | t(L) }}</a></li>

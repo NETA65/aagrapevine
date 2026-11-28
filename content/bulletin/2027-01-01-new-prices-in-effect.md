@@ -1,11 +1,17 @@
 ---
 # Scheduled: on the site from the morning update of January 1, 2027 (publish), through January 31 (expires).
+# Pinned (the owner, 2026-11-27): the holiday post's pin ends with December 31, and Home's "Pinned on the Bulletin"
+# card shows pinned posts only — so from January 1 through 31 that card shows this post (its title, one line of the
+# text and "Read"), /bulletin/ lists it first with the "Pinned" badge, and the "Our bulletin" card of the event pages
+# that have one (a booth's, as CityWide Dallas's dates) opens it. From February 1 it is off the site, and Home has no
+# Bulletin card until a post is pinned again.
 # The prices on /shop/ change by themselves that day (config/site.yml price_changes).
 # The first sentence holds every new price (What's New and the feed show the first lines of the text).
 title: "New Grapevine and La Viña prices are now in effect"
 date: 2027-01-01
 publish: 2027-01-01
 expires: 2027-01-31
+pinned: true
 lang: en
 tags: prices, subscriptions, books
 title_es: "Ya rigen los nuevos precios de La Viña y Grapevine"

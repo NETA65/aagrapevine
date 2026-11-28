@@ -239,9 +239,14 @@ class OfferBannerGone(unittest.TestCase):
             below = [i for i in re.findall(r'<section id="([^"]+)"', html[at:]) if i.startswith("offers-") or i == "subscriptions"]
             cls.pages[lang] = (srcs, below)
 
+    # the section (its id the argument) is where the link puts it: its top at the header's scroll-padding, ±2 px
+    AT_PLACE = """(id) => Math.abs(document.getElementById(id).getBoundingClientRect().top
+                                   - parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)) <= 2"""
+
     def arrive(self, size, lang: str, anchor: str, reader_scrolls: bool = False) -> dict:
         """/bulletin/ → /shop/#anchor with smooth scrolling (no reduced motion) and the banners held; they fail as
-        soon as the page has started to move (or, with reader_scrolls, after the reader turned the wheel)."""
+        soon as the page has started to move (or, with reader_scrolls, once the reader's wheel has scrolled the page
+        up and it has come to rest)."""
         srcs, _ = self.pages[lang]
         w, h = size
         ctx = S["browser"].new_context(viewport={"width": w, "height": h}, reduced_motion="no-preference",
@@ -264,14 +269,40 @@ class OfferBannerGone(unittest.TestCase):
             self.assertEqual(len(held), len(srcs), "the banners were asked for")
             before = None
             if reader_scrolls:
+                # The reader turns the wheel only once the link's smooth scroll has really ended where it puts the
+                # section (the banners' room still held), and the banners fail only once that wheel has really
+                # scrolled the page up. settle (300 ms without a move) alone was not enough: on a busy PC — the
+                # module's first page, in a browser just started — the link's scroll can pause for longer than that
+                # on its way (seen in November 2026: still at 3,756 px of 6,945 after 0.7 s), so the wheel turned
+                # mid-way and the rest of the link's scroll took the page to the section anyway ("87.65 not greater
+                # than 388", before = 6,945: the reader had not moved away).
+                page.wait_for_function(self.AT_PLACE, arg=anchor, timeout=20_000)
                 self.settle(page)
+                # a listener of the test's own sees the reader's wheel (the same event shop.js's listener notes:
+                # both capture it, so once this one has run, shop.js knows the reader moved)
+                y0 = page.evaluate("""() => { window.__gvWheel = false;
+                  addEventListener("wheel", () => { window.__gvWheel = true; },
+                                   { passive: true, capture: true, once: true });
+                  return scrollY; }""")
                 page.mouse.move(w // 2, h // 2)
                 page.mouse.wheel(0, -900)
+                page.wait_for_function("(y0) => window.__gvWheel && scrollY <= Math.max(0, y0 - 300)", arg=y0,
+                                       timeout=10_000)
                 self.settle(page)
                 before = page.evaluate("scrollY")
             for r in held:
                 r.abort()
             page.wait_for_function("!document.querySelector('.shop-offer-art')", timeout=10_000)
+            if not reader_scrolls:
+                # the section should end where the link puts it: give the page up to 10 s to get there — settle alone
+                # measured it on its way on a busy PC (November 2026: 614, −131 and 347 px from the top, at 88 px
+                # five seconds later); one that never gets there is measured all the same, and the caller's
+                # assertion says where it ended
+                from playwright.sync_api import TimeoutError as Timeout
+                try:
+                    page.wait_for_function(self.AT_PLACE, arg=anchor, timeout=10_000)
+                except Timeout:
+                    pass
             self.settle(page)
             out = page.evaluate("""(id) => ({ top: document.getElementById(id).getBoundingClientRect().top, y: scrollY,
                                      pad: parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) })""", anchor)

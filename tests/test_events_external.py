@@ -158,6 +158,27 @@ class CityAndState(unittest.TestCase):
             with self.subTest(loc=loc):
                 self.assertEqual(self.place(loc), (city, "TX", "USA"))
 
+    def test_a_texas_city_with_a_word_in_lower_case_or_no_state(self):
+        """(round 38b) A Texas city written with a word in lower case reads as a name ("Fort worth TX" → "Fort Worth":
+        it stayed "Fort worth", mixed case kept whatever its capitals); one with no state after it, found among the
+        well-known Texas cities, too ("2010 Main St, MCKINNEY" → "McKinney": it stayed "MCKINNEY"). A name's own
+        capitals stay ("McKinney", "DeSoto", "Ft. Worth", "DFW"), and so do its little words ("Villa del Sol"); a place
+        elsewhere is left as written."""
+        for loc, city in (("Fort worth TX", "Fort Worth"), ("Fort worth, TX", "Fort Worth"), ("fort worth, TX", "Fort Worth"),
+                          ("Grand prairie TX 75050", "Grand Prairie"), ("Iglesia Bautista Fort worth TX", "Fort Worth"),
+                          ("McKinney TX", "McKinney"), ("McKinney, TX", "McKinney"), ("DeSoto, TX", "DeSoto"),
+                          ("Ft. Worth, TX", "Ft. Worth"), ("DFW, TX", "DFW"), ("Villa del Sol, TX", "Villa del Sol")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, "TX", "USA"))
+        for loc, city in (("2010 Main St, MCKINNEY", "McKinney"), ("2010 Main St, mckinney", "McKinney"),
+                          ("Hotel Adolphus, 1321 Commerce St, Dallas", "Dallas"), ("Iglesia San Juan Diego, Houston", "Houston"),
+                          ("100 Elm St, DESOTO", "DeSoto"), ("100 Elm St, Fort worth", "Fort Worth")):
+            with self.subTest(loc=loc):
+                self.assertEqual(self.place(loc), (city, None, None))
+        self.assertEqual(self.place("Isle of Palms, SC"), ("Isle of Palms", "SC", "USA"))
+        # a venue's name and then a Texas city, no comma: the city ("Joe Allen" may be a person's name — nothing tells)
+        self.assertEqual(self.place("Joe Allen TX"), ("Allen", "TX", "USA"))
+
     def test_every_texas_place_reads_as_itself(self):
         """Every place of data/geo/texas_places.json, written "Name TX 75000" with no comma, reads as that place —
         never a shorter city at its end ("Lake Dallas" is not Dallas, "Santa Anna" not Anna) nor other capitals;

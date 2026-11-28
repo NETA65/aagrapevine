@@ -45,7 +45,8 @@
      FIRST, kept like the JSON indexes, and the booth's copy replaced too when there is one; offline,
      on a server error or after 6 s, the booth's copy (else the data cache's).
    Caches: gvlv-shell-<version> (app shell) and gvlv-static-<version> are replaced by each new
-   version (the old shell's and static cache's stylesheets go on into the new static cache: carryStyles); gvlv-pages-v1,
+   version (the old shell's and static cache's stylesheets go on into the new static cache, and so do the scripts of the
+   versions the pages kept ask for: carryFiles); gvlv-pages-v1,
    gvlv-saved-v1, gvlv-saved-assets-v1, gvlv-img-v1 and gvlv-data-v1 are kept across versions, so a site
    update never deletes what a visitor saved — including the styles and scripts a saved page asks for (its old
    ?v= address): gvlv-saved-assets-v1 holds exactly the files the saved pages use (pruneSavedAssets).
@@ -114,8 +115,9 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
     const keep = new Set(Object.values(CACHE));
-    // (an older version's stylesheets go on into this version's static cache first: carryStyles)
-    await carryStyles(keep).catch(() => {});
+    // (an older version's stylesheets, and the scripts of the versions the pages kept ask for, go on into this
+    // version's static cache first: carryFiles)
+    await carryFiles(keep).catch(() => {});
     for (const name of await caches.keys()) if (name.startsWith(PREFIX) && !keep.has(name)) await caches.delete(name);
     // No navigation preload: its request would use the browser's HTTP cache (up to 10 minutes old on
     // GitHub Pages); page() asks the site itself instead.
@@ -129,27 +131,54 @@ self.addEventListener("activate", (event) => {
 });
 
 /* A page kept from an older version (gvlv-pages-v1: the last 80 opened, not saved) still asks for that version's
-   stylesheets, by their old ?v= address: main.css and Home's home.css came with that version's app shell
-   (gvlv-shell-<v>), a page area's own sheet (monthly.css, booth.css, bingo.css, orientation.css, presentations.css,
-   report.css, expenses.css, library.css, published.css: the page's pageStyles) with the page into its static cache
-   — and both caches go with their version. This version's main.css is no stand-in for an older one: since November
-   2026 Home, the Library / Search and Published writers have their rules in sheets of their own, so an old Home given
-   the new main.css (staleWhileRevalidate's last resort offline: any version of the same file) came out unstyled. So
-   before an old version's shell and static caches go, their stylesheets — only the site's own .css, a copy from cache
-   to cache, nothing downloaded — go into this version's static cache, and on into the next version's after that: such
-   a page opened offline after an update keeps its look. At most CARRY_COPIES copies of one file go on (the newest:
-   main.css of the last three versions), so old copies never pile up; they are the static cache's oldest entries, the
-   first to go at its cap (LIMIT.static). The story recorder's MP3 encoder (CARRY_TOO: /contribute/ fetches it on first
-   use, named in no page's HTML) goes along the same way: a take still becomes an MP3 offline after an update. */
-const CARRY_TOO = /\/assets\/vendor\/(wasm-media-encoder\.min\.js|lame-mp3\.wasm)$/;
+   stylesheets and scripts, by their old ?v= address: main.css, Home's home.css and the scripts of every page (app.js,
+   pwa.js, central-time.js, Alpine …) came with that version's app shell (gvlv-shell-<v>), a page area's own sheet
+   (monthly.css, booth.css, bingo.css, orientation.css, presentations.css, report.css, expenses.css, library.css,
+   published.css: the page's pageStyles) and its own scripts (committee.js, monthly.js, booth.js, library.js …: its
+   pageScripts) with the page into its static cache — and both caches go with their version. This version's files are
+   no stand-in for an older one: since November 2026 Home, the Library / Search and Published writers have their rules
+   in sheets of their own, so an old Home given the new main.css (staleWhileRevalidate's last resort offline: any
+   version of the same file) came out unstyled; and a page's own script is in no cache at all until a page of the new
+   version asks for it — Events, Meetings and Photos kept from before an update opened offline without committee.js
+   (no filters, no lightbox; round 38). The same for a page kept while this version waited: the site already sent the
+   new pages, and their new ?v= files went into the old version's static cache.
+   So before an old version's shell and static caches go, their stylesheets and scripts — only the site's own files
+   (inScope), a copy from cache to cache: nothing downloaded, and no page read (activation stays quick — "Reload"
+   waits for it) — go into this version's static cache: such a page opened offline after an update keeps its look and
+   its scripts. A stylesheet goes on into the next version's after that too, at most CARRY_COPIES copies of one file
+   (the newest: main.css of the last three versions). A script goes on when its version (its ?v=) is one a page kept
+   still asks for — each kept copy names it (x-gvlv-version, stamp: only the copies' headers are read here) —, or the
+   old cache's own (the version in its name: what that version's pages asked for — also those kept before round 38b,
+   whose copies name none), or this version's (fetched while this one waited). So a version's scripts go on into the
+   next version's static cache, and further only while a page of that version is kept (the last 80 opened: a page
+   opened again online is kept anew, with the new version's addresses): they never pile up — and at most CARRY_COPIES
+   copies of one script go on too. They are the static cache's oldest entries, the first to go at its cap (LIMIT.static). (The saved pages
+   need none of this: their files are in gvlv-saved-assets-v1, which outlives versions — pruneSavedAssets. A kept page
+   may be given a file from there too — Events kept beside Meetings saved: the same committee.js?v=, never fetched
+   into a static cache —, so a file the saved pages no longer ask for, whose version a kept copy still names, goes into
+   the static cache instead of away when they are saved again: round 38b.) The story
+   recorder's MP3 encoder and the Monthly poster's picture maker (CARRY_TOO: /contribute/ and a month's page fetch them
+   on first use, from a script — no <script> or <link> of a page names them) go on like a stylesheet: a take still
+   becomes an MP3, and a poster still downloads, offline after an update. The encoder's two files carry the page's
+   ?v= (story-recorder.njk's rec-config: wasm-media-encoder.min.js?v=…, lame-mp3.wasm?v=…), so a carried copy only
+   answers its own version's /contribute/ — an old page opened offline; a new version's page asks for its new
+   address. The picture maker has none (monthly.js loads assets/vendor/html-to-image.js as it is), and that is the
+   price: the new version's month pages are handed the carried copy too, online as well — staleWhileRevalidate
+   answers from the cache and fetches the file again in the background once the copy is 6 h old (by its Date: when
+   it was first downloaded, so usually at that first use). After an update that brings a new html-to-image
+   (package-lock.json), the first poster may still use the old copy, the next one the new; monthly.js calls only what
+   the library keeps from version to version (its toBlob). */
+const CARRY_TOO = /\/assets\/vendor\/(wasm-media-encoder\.min\.js|lame-mp3\.wasm|html-to-image\.js)$/;
 const CARRY_COPIES = 3;
-async function carryStyles(keep) {
+async function carryFiles(keep) {
   const old = (kind) => (n) => n.startsWith(PREFIX + kind + "-") && !keep.has(n);
   const names = await caches.keys();
   // newest first: an old app shell holds its own version's files; an old static cache what it carried on (oldest
   // first) and then what its pages asked for — read from its end
   const olds = [...names.filter(old("shell")), ...names.filter(old("static"))];
   if (!olds.length) return;
+  // the versions the pages kept ask for — and this one's (the pages kept while it waited are this version's)
+  const wanted = await keptVersions();
   const into = await caches.open(CACHE.static);
   const copies = new Map();                     // a file's path → its copies in this version's static cache
   const seen = new Set();
@@ -160,10 +189,14 @@ async function carryStyles(keep) {
   }
   const carry = [];
   for (const name of olds) {
+    // the cache's own version: "gvlv-static-<v>", "gvlv-shell-<v>" → <v>
+    const own = name.slice(name.indexOf("-", PREFIX.length) + 1);
     const from = await caches.open(name);
     for (const req of (await from.keys()).reverse()) {
-      const path = new URL(req.url).pathname;
-      if (!(/\.css$/.test(path) || CARRY_TOO.test(path)) || seen.has(req.url) || (copies.get(path) || 0) >= CARRY_COPIES) continue;
+      const u = new URL(req.url), path = u.pathname, v = u.searchParams.get("v");
+      const script = /\.m?js$/.test(path) && !!v && (v === own || wanted.has(v));
+      if (!(/\.css$/.test(path) || CARRY_TOO.test(path) || script) || !inScope(req.url) || seen.has(req.url) ||
+          (copies.get(path) || 0) >= CARRY_COPIES) continue;
       const res = await from.match(req);
       if (!res) continue;
       carry.push([req, res]);
@@ -174,6 +207,20 @@ async function carryStyles(keep) {
   // (oldest first: the static cache's cap lets the oldest go first)
   for (const [req, res] of carry.reverse()) await into.put(req, res);
   await trim("static");
+}
+// The versions of the site's files the pages kept ask for (each kept copy's x-gvlv-version: only the headers are
+// read), and this version's — carryFiles, pruneSavedAssets. The copies can't be read: this version's alone.
+async function keptVersions() {
+  const wanted = new Set([V]);
+  try {
+    if (await caches.has(CACHE.pages)) {
+      for (const res of await (await caches.open(CACHE.pages)).matchAll()) {
+        const v = res.headers.get("x-gvlv-version");
+        if (v) wanted.add(v);
+      }
+    }
+  } catch (e) { /* the old caches' own versions still go on (carryFiles) */ }
+  return wanted;
 }
 
 /* The page(s) open while the worker takes over (a first visit) are kept too, with the styles and scripts they
@@ -271,8 +318,12 @@ function decode(s) { return s.replace(/&(#39|#x27|amp|lt|gt|quot|nbsp);/g, (m, k
 /* The copy we keep: the page's HTML + when it was saved + its title (the offline page lists both
    without reading every page again) + x-gvlv-moved when it is only a forwarding page (an old address
    whose meta refresh sends the visitor on — /meeting/, the old install page, a month gone from
-   /monthly/ …: kept, so an old link still works offline, but the offline page doesn't list it). Only
-   safe headers are carried over. */
+   /monthly/ …: kept, so an old link still works offline, but the offline page doesn't list it) +
+   x-gvlv-version, the version of the site's files it asks for (the ?v= of the first <link> in its <head>
+   that has one — main.css: every style and script of a page carries the same one; a forwarding page has
+   none), so an update carries that version's scripts on while the copy is kept, without reading it
+   (carryFiles). Only safe headers are carried over. */
+const VERSION_RE = /<link\b[^>]*?\bhref="[^"]*?[?&](?:amp;)?v=([\w.-]+)"/i;
 async function stamp(res) {
   const text = await res.text();
   const head = text.slice(0, 12000);
@@ -280,6 +331,8 @@ async function stamp(res) {
   const h = new Headers({ "content-type": res.headers.get("content-type") || "text/html; charset=utf-8", "x-gvlv-saved": new Date().toISOString() });
   if (m) h.set("x-gvlv-title", encodeURIComponent(decode(m[1]).trim()));
   if (/<meta\b[^>]*\bhttp-equiv=["']?refresh\b/i.test(head)) h.set("x-gvlv-moved", "1");
+  const v = VERSION_RE.exec(head);
+  if (v) h.set("x-gvlv-version", v[1]);
   return new Response(text, { status: 200, statusText: "OK", headers: h });
 }
 
@@ -762,7 +815,20 @@ async function calendarFile(event, url) {
 }
 
 /* Keep only the files the saved pages still ask for (older versions' files go once no saved copy
-   needs them any more). */
+   needs them any more). (round 38b) A page kept (opened, not saved) is given a file from here too when a saved page
+   uses the same one — Events kept beside Meetings saved: committee.js?v=<its version>, answered from this cache, so it
+   never went into a static cache and carryFiles has no copy of it. Such a file — the site's own (inScope) .css or .js
+   with a ?v= that a kept copy still names (keptVersions) — goes into this version's static cache instead of away:
+   offline, the kept page still runs its own version's script, not the newer one staleWhileRevalidate's last resort
+   (any version of the same file) would hand it. From there carryFiles takes it on, or not, like any other (a script
+   only while a kept page names its version; a stylesheet at most CARRY_COPIES copies of one file), and the static
+   cache's cap (LIMIT.static, trim) bounds it. This needs the version mark (x-gvlv-version, stamp) that this
+   version's worker writes on each copy it keeps: a page kept before round 38b has none, so its scripts go on for
+   one update only (carryFiles: the old cache's own version), and no move here keeps a file for it: once it is
+   opened again online it is kept anew, as this version's page with the mark, and runs this version's files. The
+   move is best effort, file by file: a full device (QuotaExceededError) or a copy that can't be read only means
+   that file is not moved — it still leaves this cache (as before round 38b, when pruning only deleted: it frees
+   room exactly when room is short), and the next files are still looked at. */
 let pruning = Promise.resolve();
 function pruneSavedAssets() {
   pruning = pruning.then(async () => {
@@ -776,7 +842,24 @@ function pruneSavedAssets() {
       }
     }
     const cache = await caches.open(CACHE.savedAssets);
-    for (const req of await cache.keys()) if (!need.has(req.url)) await cache.delete(req);
+    const gone = (await cache.keys()).filter((req) => !need.has(req.url));
+    if (!gone.length) return;
+    const wanted = await keptVersions();
+    const into = await caches.open(CACHE.static);
+    let moved = 0;
+    for (const req of gone) {
+      const u = new URL(req.url), v = u.searchParams.get("v");
+      if (v && wanted.has(v) && /\.(css|m?js)$/.test(u.pathname) && inScope(req.url)) {
+        try {
+          if (!(await into.match(req))) {
+            const res = await cache.match(req);
+            if (res) { await into.put(req, res); moved += 1; }
+          }
+        } catch (e) { /* not moved (a full device): it still goes, below */ }
+      }
+      await cache.delete(req);
+    }
+    if (moved) await trim("static");
   }).catch(() => {});
   return pruning;
 }

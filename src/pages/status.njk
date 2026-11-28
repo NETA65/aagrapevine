@@ -153,9 +153,10 @@ sitemap: false
 {%- endif %}
 {% endcall %}
 
-{#- ============ Three numbers (one card, tucked into the hero's faded edge) ============ -#}
+{#- ============ Three numbers (one card, tucked into the hero's faded edge) ============
+    (.cm-st-stats: one under the other below 896px at 130 %+ text — areas/access.css, round 38b) -#}
 <section class="container-page page-overlap" aria-label="{{ 'nav.status' | t(lang) }}">
-  <dl class="card grid divide-y divide-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+  <dl class="cm-st-stats card grid divide-y divide-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
     <div class="px-5 py-4 sm:px-6 sm:py-5">
       <dt class="text-sm text-muted">{{ "community.status.kpi_build" | t(lang) }}</dt>
       <dd class="mt-1 text-2xl font-semibold text-ink"><time datetime="{{ site.built }}" data-relative>{{ site.built | fmtDate(lang, "datetime") }}</time></dd>
@@ -239,13 +240,16 @@ sitemap: false
       </tbody>
     </table>
   </div>
-  {#- On a phone: compact rows — name + status on one line, the time and numbers as a second, muted line -#}
+  {#- On a phone: compact rows — name + status on one line, the time and numbers as a second, muted line.
+      [--text-col-min:9em]: at 130 %+ text or with relaxed spacing the row's words go under its icon when they'd get
+      less than 9em beside it (main.css's text-column rule; 7em left a maintainer toggle's words about 130px at 150 %
+      on 340–360px phones, and "actualizació|n" broke in two — round 38b) -#}
   <ul class="card divide-y divide-line md:hidden" role="list">
     {% for s in sv.sources %}
     {%- set label = ("community.status.src." + s.source) | cmTOr(lang, (s.label_es if lang == "es" and s.label_es else s.label) or s.source) -%}
     <li class="flex gap-3 px-4 py-3.5{{ ' bg-[color-mix(in_srgb,var(--c-danger)_6%,transparent)]' if s.state == 'failed' }}">
       <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-surface-2 text-muted">{% icon srcIcons[s.source] or "database", "size-4" %}</span>
-      <div class="min-w-0 flex-1">
+      <div class="min-w-0 flex-1 [--text-col-min:9em]">
         <p class="flex items-start justify-between gap-2"><span class="font-semibold leading-snug text-ink">{{ label }}</span><span class="shrink-0">{{ stateBadge(s) }}</span></p>
         <p class="meta-row mt-0.5 text-xs text-muted">
           {%- if s.updated %}<time datetime="{{ s.updated | isoDate }}" data-relative>{{ s.updated | fmtDate(lang, "datetime") }}</time>
@@ -333,7 +337,7 @@ sitemap: false
   {#- ============ Document library + translations ============ -#}
   <div class="cm-st-side grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]" role="group" aria-label="{{ 'community.status.crawl_title' | t(lang) }}">
     <article class="card card-pad flex flex-col">
-      <h2 class="card-h"><span>{% icon "scan-search", "size-5" %}</span>{{ "community.status.crawl_title" | t(lang) }}</h2>
+      <h2 class="card-h"><span class="lt-fold">{% icon "scan-search", "size-5" %}</span>{{ "community.status.crawl_title" | t(lang) }}</h2>
       <p class="measure mt-2 text-sm leading-relaxed text-muted">{{ "community.status.crawl_sub" | t(lang) }}</p>
       {% if sv.crawl.hasData %}
       {#- Document facts only: how many, and how many have a first-page preview -#}
@@ -345,7 +349,7 @@ sitemap: false
       {% endif %}
     </article>
     <article class="card card-pad">
-      <h2 class="card-h"><span class="text-grape!">{% icon "languages", "size-5" %}</span>{{ "community.status.tr_title" | t(lang) }}</h2>
+      <h2 class="card-h"><span class="text-grape! lt-fold">{% icon "languages", "size-5" %}</span>{{ "community.status.tr_title" | t(lang) }}</h2>
       <p class="mt-4 text-4xl font-semibold tabular-nums text-ink">{{ sv.translations.cached | cmNum(lang) }}</p>
       <p class="text-sm text-muted">{{ "community.status.tr_count" | t(lang) }}</p>
       <p class="mt-4 text-sm leading-relaxed text-muted">{{ "community.status.tr_text" | t(lang) }}</p>

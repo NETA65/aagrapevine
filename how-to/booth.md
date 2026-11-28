@@ -1590,7 +1590,7 @@ short guide, [content/booth/README.md](../content/booth/README.md), says the sam
 4. **Commit changes…** → a short message ("booth: a quiz about the 1949 masthead") → **Commit directly to the main
    branch** → **Commit changes**.
 5. Two runs start by themselves: **Code check (tests and test build)** (it checks every row; a green ✓ or a red
-   ✗ in about 10 minutes) and **Website update** (a quick run: the site is updated about 3 minutes after it starts —
+   ✗ in about 20–30 minutes) and **Website update** (a quick run: the site is updated about 3 minutes after it starts —
    it does not wait for the check of your rows; GitHub Pages may take a few minutes more to show it).
 6. A booth that is playing online picks the change up within half an hour, at its next slide; any other booth gets
    it the next time its About page is opened (or reloaded) with internet. To see it at once: open (or reload) the
@@ -2014,7 +2014,7 @@ booth.csv row 14 (quiz-12): correct "4": there are only 3 choices
 
 You see it in four places:
 
-1. **Code check** (GitHub → **Actions** → **Code check (tests and test build)**): a red ✗ about 10 minutes after
+1. **Code check** (GitHub → **Actions** → **Code check (tests and test build)**): a red ✗ about 20–30 minutes after
    the commit. Open the run → **Python tests (offline)** → **Run the tests**: the failing test
    (`test_no_problem_at_all` in `tests/test_booth_csv.py`) prints every line. GitHub e-mails the person who
    pushed, when that person has its failure e-mails switched on

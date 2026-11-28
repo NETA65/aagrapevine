@@ -52,7 +52,7 @@ Example: there is no committee meeting in December 2026.
    `settings: no committee meeting in December 2026`), keep **Commit directly to the main branch**, and
    click **Commit changes**.
 5. Open the **Actions** tab. Two runs start: **Website update** (rebuilds and publishes the site) and **Code
-   check (tests and test build)** (tests your file; about 10 minutes). When Website update shows a green check, the
+   check (tests and test build)** (tests your file; about 20–30 minutes). When Website update shows a green check, the
    new site is published. A browser may show the old page for up to about 10 more minutes; reload it.
 6. Check the result: open `/meetings/` and `/es/meetings/`. December 16 is gone from "Upcoming dates"
    ("Próximas fechas"), and
@@ -1338,7 +1338,7 @@ only Code check):
   meetings, the story lines, the meeting lists, the event calendars), that source runs in the same push run
   (`scripts/ops/push_modules.py` compares `config/site.yml` with its copy from before the save; the run summary
   says **Also run for this push**). It is listed in the Actions tab under your commit message.
-- **Code check (tests and test build)** — every test, a strict test build and the browser checks (about 10
+- **Code check (tests and test build)** — every test, a strict test build and the browser checks (about 20–30
   minutes). It publishes nothing; a red ✗ there means a test disagrees with the change
   ([section 7](#7-troubleshooting)). The push run has published it all the same, leaving out what the build
   could not use: fix the file soon. (What the build itself refuses — a `config/site.yml` YAML cannot read, a

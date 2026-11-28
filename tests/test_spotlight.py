@@ -145,6 +145,21 @@ class ClassifyLocation(unittest.TestCase):
         r = classify_location("Ft. Worth, Texas")
         self.assertEqual((r["scope"], r["city"], r["county"]), ("neta65", "Fort Worth", "Tarrant"))
 
+    def test_a_city_in_capitals_as_a_name(self):
+        """(round 38b) A byline's city in capitals (or all in lower case) reads as a name, its inner capitals too —
+        "MCKINNEY, TEXAS" → McKinney (it read "Mckinney"), "DESOTO" → DeSoto, "FT WORTH" → Fort Worth (it read "Fort
+        WORTH"); a name's own capitals stay ("McKinney", "DeSoto"), an acronym too ("DFW")."""
+        for text, city in (("MCKINNEY, TEXAS", "McKinney"), ("mckinney, texas", "McKinney"), ("McKinney, Texas", "McKinney"),
+                           ("DESOTO, TX", "DeSoto"), ("DeSoto, Texas", "DeSoto"), ("FT WORTH, TEXAS", "Fort Worth"),
+                           ("ft worth, texas", "Fort Worth"), ("DALLAS, TEXAS", "Dallas")):
+            with self.subTest(text=text):
+                r = classify_location(text)
+                self.assertEqual((r["city"], r["label_en"]), (city, f"{city}, Texas"))
+        for raw, city in (("MCKINNEY", "McKinney"), ("MCALLEN", "McAllen"), ("DESOTO", "DeSoto"), ("FT WORTH", "Fort Worth"),
+                          ("McKinney", "McKinney"), ("DFW", "DFW"), ("Ft. Worth", "Fort Worth"), ("fort worth", "Fort Worth")):
+            with self.subTest(raw=raw):
+                self.assertEqual(geo._pretty_city(raw), city)
+
     def test_texas_without_a_city(self):
         for text in ("Texas", "TX", "Tejas", "Texas, USA"):
             r = classify_location(text)

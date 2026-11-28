@@ -24,11 +24,22 @@ never knows.
                         open their players with captions in the page language (Spanish on /es/); Off, they don't. The
                         Accessibility page's one-tap button turns it on (saved; said to a screen reader; the panel shows
                         On) and off again.
+  * PrivacyPlayer     — (round 38b) the YouTube preview the build ships (lite-youtube-embed, /assets/vendor/
+                        lite-yt-embed.js) with pwa.js plainPlayer, on an Android phone, an iPhone's Safari and a Mac's
+                        Safari (emulated: their user agent and navigator.vendor, platform and maxTouchPoints — what 0.3
+                        and 0.4 look at): on Home and /watch/ nothing is asked of YouTube or Google before
+                        Play but the poster pictures (i.ytimg.com), and Play opens the privacy-enhanced player from
+                        www.youtube-nocookie.com, never youtube.com's, with no script error. YouTube and Google are
+                        stubbed (the browser reaches no other site anyway). tests/test_pwa_worker.py checks plainPlayer
+                        on a stand-in, which cannot see the library change: lite-youtube-embed 0.4.0 passed that and
+                        fails this (held on 0.3.x: .github/dependabot.yml, docs/OPERATIONS.md → dependabot.yml).
 """
 from __future__ import annotations
 
 import json
+import re
 import unittest
+from urllib.parse import urlsplit
 
 try:   # (the browser checks' module: its site server, browser and helpers — one of each for both files)
     from browser import test_site_in_browser as B
@@ -475,6 +486,92 @@ class VideoCaptions(unittest.TestCase):
             page.get_by_role("button", name="Activar subtítulos en todos los videos", exact=True).wait_for(state="visible", timeout=3000)
         finally:
             ctx.close()
+
+
+# The browsers lite-youtube-embed tells apart (0.3: needsYTApi — navigator.vendor "Apple", a user agent with "Mobi";
+# 0.4 adds navigator.platform and maxTouchPoints for iPhones and iPads): each one's user agent and those three values
+PLAYER_DEVICES = {
+    "Android phone": {"ua": "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) "
+                            "Chrome/129.0.0.0 Mobile Safari/537.36",
+                      "vendor": "Google Inc.", "platform": "Linux armv81", "touch": 5, "phone": True, "size": (412, 915)},
+    "iPhone Safari": {"ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like "
+                            "Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+                      "vendor": "Apple Computer, Inc.", "platform": "iPhone", "touch": 5, "phone": True, "size": (390, 844)},
+    "Mac Safari": {"ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                         "Version/17.5 Safari/605.1.15",
+                   "vendor": "Apple Computer, Inc.", "platform": "MacIntel", "touch": 0, "phone": False, "size": (1280, 800)},
+}
+# What a preview must not ask for before Play: YouTube's player and its script (youtube.com, youtube-nocookie.com),
+# its videos and Google's ad and bot-check hosts (lite-youtube's own preconnect list). The poster pictures
+# (i.ytimg.com) are the preview itself.
+PLAYER_HOSTS = re.compile(r"(?:^|\.)(?:youtube\.com|youtube-nocookie\.com|youtu\.be|googlevideo\.com|doubleclick\.net|"
+                          r"googlesyndication\.com|googleadservices\.com)$|^www\.google\.com$")
+NOCOOKIE = "www.youtube-nocookie.com"
+
+
+class PrivacyPlayer(unittest.TestCase):
+    """Home's video strip and /watch/'s latest video, played on each device: nothing from YouTube or Google before
+    Play, then the youtube-nocookie.com player — the library the build ships, as pwa.js plainPlayer steers it."""
+
+    def device_context(self, dev: dict):
+        d = PLAYER_DEVICES[dev]
+        ctx = B.S["browser"].new_context(viewport={"width": d["size"][0], "height": d["size"][1]}, user_agent=d["ua"],
+                                         is_mobile=d["phone"], has_touch=d["phone"], reduced_motion="reduce",
+                                         service_workers="block", timezone_id="America/Chicago", locale="en-US")
+        ctx.add_init_script("(d => { const P = Navigator.prototype;"
+                            " for (const [k, v] of [['vendor', d.vendor], ['platform', d.platform], ['maxTouchPoints', d.touch]])"
+                            "   Object.defineProperty(P, k, { get: () => v, configurable: true }); })("
+                            + json.dumps(d) + ");")
+        asked: list[tuple[str, str, str]] = []          # (when: "before" / "after" Play, host, path)
+        when = ["before"]
+
+        def answer(route):
+            u = urlsplit(route.request.url)
+            if u.hostname == "127.0.0.1":
+                return route.continue_()
+            asked.append((when[0], u.hostname or "", u.path))
+            if u.hostname == NOCOOKIE and u.path.startswith("/embed/"):     # the player: a blank page stands in
+                return route.fulfill(status=200, content_type="text/html", body="<!doctype html><title>player</title>")
+            return route.abort()
+        ctx.route("**/*", answer)
+        return ctx, asked, when
+
+    def test_nothing_from_youtube_before_play_then_the_privacy_player(self):
+        for dev, d in PLAYER_DEVICES.items():
+            for path, sel, required in (("", "lite-youtube.home-yt", False), ("watch/", "main lite-youtube.media-lyt", True)):
+                with self.subTest(device=dev, page="/" + path):
+                    ctx, asked, when = self.device_context(dev)
+                    errors: list[str] = []
+                    try:
+                        page = B.open_page(ctx, path, errors)
+                        if not page.locator(sel).count():
+                            if required:
+                                self.fail(f"/{path} has no video preview ({sel}): nothing to check the player on")
+                            self.skipTest(f"/{path} shows no video strip in this build")
+                        lyt = page.locator(sel).first
+                        lyt.scroll_into_view_if_needed()
+                        page.wait_for_timeout(1000)           # (a player loaded ahead would have asked by now)
+                        before = [a for a in asked if PLAYER_HOSTS.search(a[1])]
+                        when[0] = "after"
+                        play = lyt.locator(".lyt-playbtn")
+                        (play.tap if d["phone"] else play.click)()
+                        src = ""
+                        try:
+                            page.wait_for_selector(sel + " iframe", state="attached", timeout=5000)
+                            src = page.get_attribute(sel + " iframe", "src") or ""
+                        except Exception:  # (no player came: said below)
+                            pass
+                        page.wait_for_timeout(300)
+                        self.assertEqual(before, [], "asked of YouTube / Google before Play (only the posters may load)")
+                        after = [a[1:] for a in asked if a[0] == "after"]
+                        self.assertEqual(urlsplit(src).hostname, NOCOOKIE, f"the player after Play: {src or 'none'} "
+                                                                           f"(asked after Play: {after})")
+                        self.assertTrue(urlsplit(src).path.startswith("/embed/"), src)
+                        other = [a for a in asked if PLAYER_HOSTS.search(a[1]) and not (a[1] == NOCOOKIE and a[2].startswith("/embed/"))]
+                        self.assertEqual(other, [], "YouTube / Google asked for something else than the privacy player")
+                        self.assertEqual(errors, [])
+                    finally:
+                        ctx.close()
 
 
 if __name__ == "__main__":

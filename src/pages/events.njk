@@ -78,9 +78,11 @@ calendarFeed: "/events.ics"
     once the menu opens; its note's words ONE copy on the agenda's <section> (data-cm-note-timed / data-cm-note-day) -#}
 
 {#- An event's outside page (its organizers' — never its flyer): "Organizer's page ↗", so it is never taken for the
-    title's link, which goes to the event's own page here (since the list's redesign; it said "Event details") -#}
+    title's link, which goes to the event's own page here (since the list's redesign; it said "Event details").
+    .ev-org-btn: on a phone at larger text or relaxed spacing its icon steps aside and the ↗ may go under the word
+    (areas/access.css, round 38b) -#}
 {% macro organizerButton(ev, cls="btn-secondary btn-sm") %}
-<a class="{{ cls }}" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evlist.organizer_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.organizer" | t(lang) }}</span> <span aria-hidden="true">↗</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
+<a class="{{ cls }} ev-org-btn" href="{{ ev.link }}" target="_blank" rel="noopener">{% icon "external-link", "size-4" %} <span class="sm:hidden" aria-hidden="true">{{ "evlist.organizer_short" | t(lang) }}</span><span class="max-sm:sr-only">{{ "evlist.organizer" | t(lang) }}</span> <span aria-hidden="true">↗</span><span class="sr-only"> ({{ "common.external" | t(lang) }})</span></a>
 {% endmacro %}
 
 {#- The anchors of a series' dates that its card does not list (the committee meeting's and the Grapevine Meeting's
@@ -250,22 +252,32 @@ calendarFeed: "/events.ics"
 </aside>
 {% endif %}
 
+{#- (round 38b) The list's component: cmEvents (src/assets/js/committee.js) — or, when committee.js did not load but
+    Alpine did (a download that failed or was blocked, a saved copy without it), a stand-in that shows what the page
+    without JavaScript shows: every card (show) and every month (monthVisible; `more`: the fold open, and its
+    first-paint rule let go — .cm-ev-ready). The list was blank then: each card's x-show asked a cmEvents that was not
+    there. The filters need cmEvents, so the stand-in hides them (#ev-filters); its other names (f, group, active,
+    the counts …) answer what the filters, "Showing N events" and the empty states ask, so no expression of the list
+    fails. tests/browser/test_events_list_browser.py (Fallback) blocks committee.js; tests/test_r30_events_list.py runs
+    the stand-in on folded months. -#}
+{%- set evStandIn = "{ f: {}, group: '', active: false, moreOpen: false, more: true, anyMonth: true, show() { return true }, monthVisible() { return true }, kindCount() { return '' }, groupCount() { return '' }, countText() { return '' }, moreText() { return '' }, init() { document.documentElement.classList.add('cm-ev-ready'); (this.$el.querySelector('#ev-filters') || {}).hidden = true } }" %}
 {#- (data-cm-note-timed / -day: the words of the cards' "Add to calendar" note, once — evm.calMenu) -#}
-<section class="ev-main min-w-0" x-data="cmEvents()" data-count-label="{{ 'committee.events.showing' | t(lang) }}" data-count-label-one="{{ 'committee.events.showing_one' | t(lang) }}" data-cm-note-timed="{{ 'committee.cal.reminder_timed' | t(lang) }}" data-cm-note-day="{{ 'committee.cal.reminder_day' | t(lang) }}" aria-labelledby="ev-upcoming-title">
+<section class="ev-main min-w-0" x-data="typeof cmEvents == 'function' ? cmEvents() : {{ evStandIn }}" data-count-label="{{ 'committee.events.showing' | t(lang) }}" data-count-label-one="{{ 'committee.events.showing_one' | t(lang) }}" data-cm-note-timed="{{ 'committee.cal.reminder_timed' | t(lang) }}" data-cm-note-day="{{ 'committee.cal.reminder_day' | t(lang) }}" aria-labelledby="ev-upcoming-title">
   {{ ui.sectionHead("committee.events.upcoming" | t(lang), "committee.events.list_sub" | t(lang), "", "", "calendar-days", { eyebrow: "committee.events.list_eyebrow" | t(lang), tone: "text-vine", id: "ev-upcoming-title", lang: lang }) }}
 
   {#- ---------- The filters (JavaScript only: without it every card shows) — cmEvents (src/assets/js/committee.js):
-       the kind as chips (each with its count under the other filters picked) and, just before "GV & LV calendars",
-       "NETA 65 events" (the page's old chip, back in round 38: our events and the committee meeting — data-group~=
-       "neta"; netaChip), then the language, in person / online, the city and the district (only when an event names
-       one) as menus, and "Clear filters". Every card of the page carries its facets (evFacets: data-kind, data-lang,
-       data-mode, data-city, data-district) — the one-off events, the cancelled ones, the series' cards and the weekly
-       meetings alike. The filters picked are kept in the address (?kind=…&lang=…, ?filter=neta), so a filtered view
-       can be shared; ?filter=committee / ?filter=calendar / ?filter=neta (the page's old chips) still work — the GV &
-       LV calendars' chip shows what its old one did (La Viña's monthly workshop and the weekly open meetings are of
-       that kind too: event-list.js facetsOf). Then the months as jump chips (only those with something showing),
-       "Every month" and "Every week", and the colour key. ---------- -#}
-  {#- "NETA 65 events": its count the build's, then the browser's (groupCount, with the other filters picked) -#}
+       the kind as chips (each with its count under the menus picked) and, just before "GV & LV calendars", "NETA 65
+       events" (the page's old chip, back in round 38: our events and the committee meeting — data-group~="neta";
+       netaChip) — the chips one choice, as the old ones were (round 38b: picking one lets the other go) —, then the
+       language, in person / online, the city and the district (only when an event names one) as menus, and "Clear
+       filters". Every card of the page carries its facets (evFacets: data-kind, data-lang, data-mode, data-city,
+       data-district) — the one-off events, the cancelled ones, the series' cards and the weekly meetings alike. The
+       filters picked are kept in the address (?kind=…&lang=…, ?filter=neta), so a filtered view can be shared;
+       ?filter=committee / ?filter=calendar / ?filter=neta (the page's old chips) still work — the GV & LV calendars'
+       chip shows what its old one did (La Viña's monthly workshop and the weekly open meetings are of that kind too:
+       event-list.js facetsOf). Then the months as jump chips (only those with something showing), "Every month" and
+       "Every week", and the colour key. ---------- -#}
+  {#- "NETA 65 events": its count the build's, then the browser's (groupCount, with the menus picked) -#}
   {%- macro netaChip(g) %}{% if g %}<button type="button" class="chip" data-ev-group="neta" @click="setGroup('neta')" :aria-pressed="(group === 'neta').toString()" aria-pressed="false">{% icon "map-pin", "size-4" %} {{ "evlist.group.neta" | t(lang) }} <span class="cm-chip-count" x-text="groupCount('neta')">{{ g.n }}</span></button>{% endif %}{% endmacro -%}
   {%- set fold = L.oneOff | cmEventsFold -%}
   <div class="mb-8 grid grid-cols-1 gap-3">

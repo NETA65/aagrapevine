@@ -17,8 +17,8 @@
   * Report, Monthly, Digest — the GV/LV report (its shop section, and its text from the day: report.js
     swapTexts), the monthly toolkit's message, the monthly digest's pointer row and its e-mail twin
     (send_digest.py) in the months before and in January;
-  * Announcements — the bulletin post of January 1, 2027 (dates, publish, expires, its own Spanish over several
-    lines; the heads-up is the price section of the pinned post of November 11, 2026: test_r25_holiday_offers.py),
+  * Announcements — the bulletin post of January 1, 2027 (dates, publish, expires, pinned — Home's card from January 1
+    through 31 —, its own Spanish over several lines; the heads-up is the price section of the pinned post of November 11, 2026: test_r25_holiday_offers.py),
     the letter on Drive (its date and title), the hand translations in data/translations/overrides.yml.
 
     python -m unittest tests.test_price_changes -v        (or: python -m unittest discover -s tests)
@@ -45,6 +45,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tests"))
 
 from nodejs import run_js  # noqa: E402
+import test_home_start as HS  # noqa: E402  (its build of Home on data of the test's own)
 import test_monthly as TM  # noqa: E402  (its October 2026 data set and site settings)
 import test_send_digest as SD  # noqa: E402  (its e-mail digest fixture)
 from scripts.notify import send_digest as SDM  # noqa: E402
@@ -848,15 +849,17 @@ POST = ROOT / "content" / "bulletin" / "2027-01-01-new-prices-in-effect.md"
 
 
 def teaser(text: str, n: int = 320) -> str:
-    """What the home page's card shows of a long post (eleventy.config.js `excerpt`, 320 characters)."""
+    """The start of a long post as the site's `excerpt` filter cuts it (eleventy.config.js): n characters at most, at
+    a word. Of a post's summary (its first 400 characters: announcements.py), Home's card takes 160 (since round 38)
+    and What's New 220."""
     s = re.sub(r"\s+", " ", re.sub(r"<[^>]*>", " ", text or "")).strip()
     return re.sub(r"\s+\S*$", "", s[:n]) + "…" if len(s) > n else s
 
 
 class Bulletin(unittest.TestCase):
     """content/bulletin/2027-01-01-new-prices-in-effect.md: "now in effect" (scheduled for January 1, through January
-    31), with its own Spanish over several lines. (Content: once the post is deleted after its time, these checks are
-    skipped.)"""
+    31; pinned, so Home's card shows it all January), with its own Spanish over several lines. (Content: once the post
+    is deleted after its time, these checks are skipped.)"""
 
     @classmethod
     def setUpClass(cls):
@@ -867,14 +870,20 @@ class Bulletin(unittest.TestCase):
     def test_the_post(self):
         s = self.post
         self.assertEqual((s["title"], s["date"], s["extra"]["publish"], s["extra"]["expires"], s["extra"]["pinned"]),
-                         ("New Grapevine and La Viña prices are now in effect", "2027-01-01", "2027-01-01", "2027-01-31", False))
+                         ("New Grapevine and La Viña prices are now in effect", "2027-01-01", "2027-01-01", "2027-01-31", True))
         self.assertNotIn("missing_files", s["extra"])
         body, es = s["extra"]["body_md"], s["extra"]["own_i18n"]["body_md"]["es"]
-        # the teaser — the home page's card, What's New, the feed — is the start of the text: every new price is in
-        # its first sentence, in both languages (a list there would run together into one line)
+        # what the feed, What's New and Home's card show is the start of the text: every new price is in its first
+        # sentence, within its first 320 characters, in both languages (a list there would run together into one
+        # line). The feed shows that sentence whole; What's New and Home's card fewer of its prices — Home's card
+        # (160 characters) at least the first magazine's: Grapevine's in English, La Viña's in Spanish
+        # (docs/OPERATIONS.md, "When Grapevine announces new prices" step 3; the owner knows, 2026-11-27)
         for text in (s["summary"], s["extra"]["own_i18n"]["summary"]["es"]):
             for price in ("$39.00", "$34.00", "$19.50", "$17.00", "$2.00"):
                 self.assertIn(price, teaser(text).split(". ")[0])
+        for text, first in ((s["summary"], ("$39.00", "$34.00")), (s["extra"]["own_i18n"]["summary"]["es"], ("$19.50", "$17.00"))):
+            for price in first:
+                self.assertIn(price, teaser(text, 160))
         self.assertIn("(/shop/#subscriptions)", body)
         self.assertIn("https://drive.google.com/file/d/1S2PrbkYC4auxUSlgdwpoQKwZW3QeaI-p/view", body)
         self.assertIn("\n\n", es, "the Spanish text keeps its paragraphs")
@@ -906,6 +915,63 @@ class Bulletin(unittest.TestCase):
         self.assertEqual(shown("2027-01-01T11:00:00Z"), (["2027-01-01"], []), "the morning update of January 1")
         self.assertEqual(shown("2027-01-31T23:00:00Z"), (["2027-01-01"], []))
         self.assertEqual(shown("2027-02-01T11:00:00Z"), ([], []))
+
+    def test_pinned_on_home_in_january(self):
+        # pinned (the owner, 2026-11-27): Home's "Pinned on the Bulletin" card shows pinned posts only, and the holiday
+        # post's pin ends with December 31 — so from January 1 through 31 the card is this post's, in both languages,
+        # and from February 1 there is none. The site data of each day's morning update (build_data
+        # build_announcements, with the holiday post while it is in the folder) → the posts the card takes
+        # (cmAnnouncements | selectattr("_pinned"): tests/test_bulletin.py test_home_links_the_bulletin); then Home
+        # itself, built on January 1's data at 6:30 AM Central
+        holiday = POST.parent / "2026-11-11-holiday-gift-offers-free-shipping-and-new-prices.md"
+        posts = [self.post] + ([A.parse_announcement(holiday)] if holiday.exists() else [])
+        seen = {POST.stem: "2026-10-02T04:55:24Z", holiday.stem: "2026-11-11T22:59:13Z"}   # (as data/raw has them)
+
+        def data_at(now: str) -> list[dict]:
+            c = B.Ctx(offline=True)
+            c.now = datetime.fromisoformat(now.replace("Z", "+00:00"))
+            c.now_ts = c.now.timestamp()
+            c.today_local = c.now.astimezone(c.tz).date()
+            c.raw = {"announcements": {"items": [{**copy.deepcopy(p), "status": "ok", "first_seen": seen[p["extra"]["slug"]]}
+                                                 for p in posts]}, "drive": {"items": []}}
+            c.births = {"announcements": 0.0}
+            items = B.build_announcements(c)
+            for it in items:          # their own Spanish, as build_data gives it (own_words: never machine-translated)
+                own = B.own_words(it)
+                it["i18n"] = {f: {it["lang"]: it[f], **own.get(f, {})} for f in ("title", "summary")}
+                it["machine"] = []
+            return items
+
+        nows = ("2026-12-31T18:00:00Z", "2027-01-01T12:30:00Z", "2027-01-31T18:00:00Z", "2027-02-01T12:30:00Z")
+        days = {now: data_at(now) for now in nows}
+        r = run_js(self, r"""
+          const C = await imp("eleventy/filters/committee.js");
+          out(Object.fromEntries(Object.entries(input).map(([now, items]) =>
+            [now, C.announcementList(items, new Date(now)).filter((a) => a._pinned).slice(0, 2).map((a) => a._anchor)])));""",
+                   data=days)
+        self.assertEqual(r, {"2026-12-31T18:00:00Z": [holiday.stem] if holiday.exists() else [],
+                             "2027-01-01T12:30:00Z": [POST.stem], "2027-01-31T18:00:00Z": [POST.stem],
+                             "2027-02-01T12:30:00Z": []})
+        with tempfile.TemporaryDirectory(prefix="gv-january-pin-") as folder:
+            Path(folder, "announcements.json").write_text(json.dumps(
+                {"updated": "2027-01-01T11:00:00Z", "items": days["2027-01-01T12:30:00Z"]}), encoding="utf-8")
+            pages = run_js(self, HS.PAGES_JS, now="2027-01-01T12:30:00Z", timeout=600,
+                           env={"SITE_DATA": folder, "WRITERS_ARCHIVE": ""})
+        for url, lang, title, price in (("/", "en", self.post["title"], "$39.00"),
+                                        ("/es/", "es", self.post["extra"]["own_i18n"]["title"]["es"], "$19.50")):
+            with self.subTest(url=url):
+                page = HS.main_of(pages[url])
+                at = page.index('<section class="card home-pins"')
+                rows = re.findall(r'<li class="home-pin"([^>]*)>(.*?)</li>', page[at:page.index("</section>", at)], re.S)
+                self.assertEqual([HS.text(re.search(r"<h3[^>]*>(.*?)</h3>", body).group(1)) for _, body in rows], [title])
+                attrs, body = rows[0]
+                self.assertIn('data-gv-expire="2027-02-01T06:00:00.000Z"', attrs, "gone after January 31, Central time")
+                link = re.search(r'<a class="home-pin-read[^"]*" href="([^"]+)"', body).group(1)
+                self.assertEqual(link, ("/es" if lang == "es" else "") + f"/bulletin/#{POST.stem}")
+                # its text (the first 160 characters, shown in one line from 768 px wide and two on a phone) starts
+                # the first sentence, the one that holds every new price — the first price is in it (seen at 1280 px;
+                # at 390 and 768 px the lines end just before it: docs/OPERATIONS.md)
+                self.assertIn(price, HS.text(re.search(r'<p class="home-pin-text">(.*?)</p>', body, re.S).group(1)))
 
 
 class DriveLetter(unittest.TestCase):

@@ -433,8 +433,15 @@ pageStyles: ["/assets/css/home.css", "/assets/vendor/lite-yt-embed.css"]
         <span class="home-botm-go shrink-0 text-faint transition group-hover:translate-x-0.5 group-hover:text-lv" aria-hidden="true">{% icon "arrow-right", "size-4" %}</span>
       </a>
       {% endif %}
+      {#- (round 38b) [--text-col-min:9em]: at relaxed spacing and 130 %+ main.css's text-column rule lets the title
+          shrink to 7em beside "Upcoming themes and deadlines" — at 462–479px with relaxed spacing (100 %) that was
+          101–116px, and "magazines" with its icon needs 117px there: it broke in two. 9em is 126px there; with less
+          beside the link the title has a line of its own. (Measured in Chrome at every width from 320 to 1440px, both
+          languages, relaxed spacing and 130–150 %: no word broken; 8em still broke it at 477–479px. 15rem, its
+          basis-60, would have made the line taller at 483 of those settings, 9em at 62 — by 11–43px — and shorter at
+          107.) -#}
       <p class="home-write-line panel-muted flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-        <span class="inline-flex min-w-0 flex-1 basis-60 items-center gap-2 font-semibold text-ink"><span class="text-grape">{% icon "pen-line", "size-5 shrink-0" %}</span>{{ "home.write_title" | t(L) }}</span>
+        <span class="inline-flex min-w-0 flex-1 basis-60 items-center gap-2 font-semibold text-ink [--text-col-min:9em]"><span class="text-grape">{% icon "pen-line", "size-5 shrink-0" %}</span>{{ "home.write_title" | t(L) }}</span>
         <a class="link tap-link" href="{{ '/contribute/#deadlines' | lurl(L) }}">{{ "home.write_themes" | t(L) }}</a>
         {% if dlCalOpen %}
         <a class="link tap-link inline-flex items-center gap-1.5" href="{{ '/contribute/#deadlines-calendar' | lurl(L) }}">{% icon "calendar-sync", "size-4 shrink-0" %} {{ "home.write_dlcal" | t(L) }}</a>

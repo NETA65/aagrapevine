@@ -762,7 +762,10 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
     {#- The next writing / recording workshops (cmWorkshops): a date tile in the event's colour
         (eventTone), the title and the place; each opens its own page (since round 37: evHref,
         eleventy/filters/event-links.js). A workshop that has ended hides itself (data-cm-expire, read.js),
-        and the list with it when none is left. -#}
+        and the list with it when none is left. The words are a flex-1 column, as on an event page's own small
+        cards (macros/event-page.njk minis): at 115 %+ or with relaxed spacing they go under the date tile when
+        they'd get less than 7em beside it, 9em at 130 %+ (main.css's text-column rule, areas/access.css
+        .cm-mini-card; round 38b: at 150 % on a 320px phone they had 28px, one letter per line). -#}
     {% if workshops | length %}
     <div class="relative z-10 mt-8 border-t border-white/15 pt-6" data-ws-list>
       <h3 class="eyebrow flex items-center gap-2 font-sans text-white/75">{% icon "calendar-days", "size-4 shrink-0" %}<span>{{ "read.contrib.ws_next" | t(lang) }}</span></h3>
@@ -771,7 +774,7 @@ data-deadline="{{ r.deadline }}" data-t-days="{{ 'read.contrib.due_in' | t(lang)
         <li data-cm-expire="{{ ev.expireIso }}">
           <a href="{{ ev | evHref(lang, db, site) }}" class="card card-link cm-mini-card ev-accent ev-tone-{{ ev | eventTone }} group h-full">
             <span class="cm-date-tile{{ ' cm-tile-range' if ev.tile.range }}" aria-hidden="true"><span class="cm-tile-mon">{{ ev.tile.mon }}</span><span class="cm-tile-day">{{ ev.tile.day }}</span><span class="cm-tile-wd">{{ ev.tile.wd }}</span></span>
-            <span class="min-w-0">
+            <span class="min-w-0 flex-1">
               <span class="block font-display text-lg font-semibold leading-snug text-ink group-hover:text-gv">{{ ev.title }}</span>
               <span class="sr-only">{{ ev.dateLabel }}</span>
               {% if ev.location %}<span class="mt-1 flex items-start gap-1.5 text-sm text-muted{{ ' italic' if ev.locationTba }}">{% set wsIcon = "hourglass" if ev.locationTba else "map-pin" %}{% icon wsIcon, "mt-0.5 size-4 shrink-0 text-faint" %}<span class="min-w-0">{{ ev.location }}</span></span>

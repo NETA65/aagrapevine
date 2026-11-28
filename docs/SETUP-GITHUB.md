@@ -113,7 +113,7 @@ You can close the browser. What happens:
 | Part | Time | What it does |
 |---|---|---|
 | *Sync content + translate* | ~1–1½ hours (up to ~6 hours with `300`) | Fetches every source, downloads the free translation models (~175 MB, only the first time), translates new titles, commits the data |
-| *Build website* | ~3–4 minutes | Builds the site, and makes the monthly posters' share pictures (about a minute) |
+| *Build website* | ~1–2 minutes | Builds the site, and makes the monthly posters' share pictures (under a minute of it) |
 | *Test the code before publishing* | ~9–14 minutes, at the same time as the build | Runs the code's tests; the site is published only when they pass (later runs skip them in seconds while the code has not changed — the daily data and the committee's content and settings do not count) |
 | *Publish to GitHub Pages* | ~1 minute | Publishes the site built from that same commit |
 | *Report sources that stopped updating, and updates that keep failing* | seconds | Opens or closes the two automatic issues of Step 8 |
@@ -161,10 +161,10 @@ original language meanwhile.
    the workflow on (or last changed its schedule) — not automatically to whoever ticked step 2.
    Open the repository's **Actions** tab → **Website update** → **⋯** (top right) →
    **Disable workflow**, then the same menu (or the banner) → **Enable workflow**. Do the same for
-   **Morning check (new day by 5:30 AM)** (its hourly backstop is a timed run too), **Weekly link
-   check** and, once the monthly e-mail is set up, **Monthly e-mail digest**. Do it again whenever
-   someone else changes a workflow's schedule (`cron:` line). (The runs the morning alarm of Step 9
-   starts e-mail the owner of its key.)
+   **Morning check (new day by 5:30 AM)** (its hourly schedule is a timed run too), **Weekly link
+   check**, **Gate list check** and, once the monthly e-mail is set up, **Monthly e-mail digest**. Do
+   it again whenever someone else changes a workflow's schedule (`cron:` line). (The runs the morning
+   alarm of Step 9 starts e-mail the owner of its key.)
 4. On the repository page, check the **Watch** button (top right) is set to **All Activity**, or
    **Custom** with **Issues** ticked, so you receive the issues described below. (People who can
    push to the repository usually watch it already.)
@@ -241,7 +241,8 @@ small forwarding page on the old address can send visitors on).
 
 **New owner or new chair:** the failure e-mails of the timed runs keep going to the person who last
 switched each workflow on. Whoever should receive them now does Step 8, point 3 for
-**Website update**, **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest** and **Weekly
-link check** (**Actions → the workflow → ⋯ → Disable workflow**, then **Enable workflow**). The morning
-alarm's key belongs to the repository's owner (a key only reaches its owner's repositories): a new chair
-who does not own the repository leaves it with the owner; a new owner makes a new one (Step 9).
+**Website update**, **Morning check (new day by 5:30 AM)**, **Monthly e-mail digest**, **Weekly
+link check** and **Gate list check** (**Actions → the workflow → ⋯ → Disable workflow**, then
+**Enable workflow**). The morning alarm's key belongs to the repository's owner (a key only reaches its
+owner's repositories): a new chair who does not own the repository leaves it with the owner; a new owner
+makes a new one (Step 9).

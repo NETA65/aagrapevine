@@ -49,12 +49,16 @@ Revise en este orden (cada paso toma unos segundos):
 
 | Quiero agregar… | Dónde | Guía paso a paso (en inglés) |
 |---|---|---|
-| Un volante o un evento | La carpeta `flyers` de Drive (nombre de archivo que empieza con la fecha), o un archivo en `content/events/` | [Flyers and events](../how-to/flyers-and-events.md) · [content/events/README.md](../content/events/README.md) |
-| Una publicación del boletín | La carpeta `bulletin` de Drive, o un archivo en `content/bulletin/` | [Bulletin](../how-to/bulletin.md) |
-| Fotos, presentaciones, un informe | Carpetas de Drive | [Photos, slides and reports](../how-to/photos-slides-reports.md) |
-| Algo para la pantalla de la mesa (booth) | La carpeta `booth` de Drive | [The booth display](../how-to/booth.md) |
+| Un volante o un evento | En Drive: **A65_GV › 2027-2028_Panel77_GVLV › flyers** (nombre de archivo que empieza con la fecha), o un archivo en `content/events/` | [Flyers and events](../how-to/flyers-and-events.md) · [content/events/README.md](../content/events/README.md) |
+| Una publicación del boletín | En Drive: **A65_GV › 2027-2028_Panel77_GVLV › bulletin**, o un archivo en `content/bulletin/` | [Bulletin](../how-to/bulletin.md) |
+| Fotos, presentaciones, un informe | En Drive: las carpetas `photos`, `slides` y `reports` de **A65_GV › 2027-2028_Panel77_GVLV** | [Photos, slides and reports](../how-to/photos-slides-reports.md) |
+| Algo para la pantalla de la mesa (booth) | En Drive: **A65_GV › 2027-2028_Panel77_GVLV › booth** | [The booth display](../how-to/booth.md) |
 | Un cambio de ajuste (hora de la reunión, un enlace) | `config/site.yml` | [Settings](../how-to/settings.md) |
 | Una mejor traducción al español | `data/translations/overrides.yml` | [Translations](../how-to/translations.md) |
+
+El sitio lee solo las carpetas que están dentro de una carpeta de Panel (hoy **2027-2028_Panel77_GVLV**, en la
+carpeta compartida **A65_GV**): [The Drive panel folder](../how-to/drive-panel-folder.md) (en inglés) las enumera
+todas.
 
 Todas las guías: [how-to/README.md](../how-to/README.md) ("I want to… → read this"). Un archivo de Drive aparece en
 el sitio después de la siguiente actualización (unas horas como máximo); un archivo guardado en el repositorio

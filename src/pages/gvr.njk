@@ -98,26 +98,29 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           for both (@container, from 29rem: about 1220px and wider at 100 % text, 1440px at 115 %), each then a card
           like the duty cards beside it — icon and arrow on top, eyebrow, title, text —, so the column ends about
           where they do; in a narrow column (1024px, a phone, larger text) one under the other, each a row: icon ·
-          words · arrow. -#}
+          words · arrow — but (round 38b) in a column narrower than 17.5rem (the words would get less than 9rem: a
+          phone at 115 % text below 359px, at 130 % below 406px, at 150 % below 468px — rem grows with the text) the
+          card has its icon and arrow on top again: beside them the words had 66px at 150 % on a 320px phone and broke
+          into pieces ("Tra|cke|r", "reim|burs|emen|ts"). At 100 % every phone from 320px keeps the row. -#}
       <div class="@container mt-6">
         <ul class="grid grid-cols-1 gap-4 @min-[29rem]:grid-cols-2" role="list">
-          <li class="card card-link group relative grid grid-cols-[auto_minmax(0,1fr)_auto] content-start items-start gap-x-4 p-5 @min-[29rem]:grid-cols-[minmax(0,1fr)_auto] @min-[29rem]:gap-y-3">
+          <li class="card card-link group relative grid grid-cols-[auto_minmax(0,1fr)_auto] content-start items-start gap-x-4 p-5 @min-[29rem]:grid-cols-[minmax(0,1fr)_auto] @min-[29rem]:gap-y-3 @max-[17.5rem]:grid-cols-[minmax(0,1fr)_auto] @max-[17.5rem]:gap-y-3">
             <span class="grid size-11 place-items-center rounded-xl bg-grape-soft text-grape">{% icon "sprout", "size-5" %}</span>
-            <div class="min-w-0 @min-[29rem]:col-span-2 @min-[29rem]:row-start-2">
+            <div class="min-w-0 @min-[29rem]:col-span-2 @min-[29rem]:row-start-2 @max-[17.5rem]:col-span-2 @max-[17.5rem]:row-start-2">
               <p class="eyebrow text-grape">{{ "orientation.gvr_eyebrow" | t(lang) }}</p>
               <h3 class="h-card mt-1"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] group-hover:text-gv" href="{{ '/orientation/' | lurl(lang) }}">{{ "orientation.gvr_title" | t(lang) }}</a></h3>
               <p class="mt-1 text-sm leading-relaxed text-muted">{{ "orientation.gvr_text" | t(lang, { min: orientation.totalMinutes }) }}</p>
             </div>
-            {% icon "arrow-right", "mt-1 size-5 shrink-0 justify-self-end text-gv transition group-hover:translate-x-0.5 @min-[29rem]:col-start-2 @min-[29rem]:row-start-1 @min-[29rem]:mt-3" %}
+            {% icon "arrow-right", "mt-1 size-5 shrink-0 justify-self-end text-gv transition group-hover:translate-x-0.5 @min-[29rem]:col-start-2 @min-[29rem]:row-start-1 @min-[29rem]:mt-3 @max-[17.5rem]:col-start-2 @max-[17.5rem]:row-start-1 @max-[17.5rem]:mt-3" %}
           </li>
-          <li class="card card-link group relative grid grid-cols-[auto_minmax(0,1fr)_auto] content-start items-start gap-x-4 p-5 @min-[29rem]:grid-cols-[minmax(0,1fr)_auto] @min-[29rem]:gap-y-3">
+          <li class="card card-link group relative grid grid-cols-[auto_minmax(0,1fr)_auto] content-start items-start gap-x-4 p-5 @min-[29rem]:grid-cols-[minmax(0,1fr)_auto] @min-[29rem]:gap-y-3 @max-[17.5rem]:grid-cols-[minmax(0,1fr)_auto] @max-[17.5rem]:gap-y-3">
             <span class="grid size-11 place-items-center rounded-xl bg-vine-soft text-vine">{% icon "receipt", "size-5" %}</span>
-            <div class="min-w-0 @min-[29rem]:col-span-2 @min-[29rem]:row-start-2">
+            <div class="min-w-0 @min-[29rem]:col-span-2 @min-[29rem]:row-start-2 @max-[17.5rem]:col-span-2 @max-[17.5rem]:row-start-2">
               <p class="eyebrow text-vine">{{ "expenses.gvr_eyebrow" | t(lang) }}</p>
               <h3 class="h-card mt-1"><a class="no-underline after:absolute after:inset-0 after:rounded-[var(--radius-card)] group-hover:text-gv" href="{{ '/tracker/' | lurl(lang) }}">{{ "nav.expenses" | t(lang) }}</a></h3>
               <p class="mt-1 text-sm leading-relaxed text-muted">{{ "expenses.gvr_text" | t(lang) }}</p>
             </div>
-            {% icon "arrow-right", "mt-1 size-5 shrink-0 justify-self-end text-gv transition group-hover:translate-x-0.5 @min-[29rem]:col-start-2 @min-[29rem]:row-start-1 @min-[29rem]:mt-3" %}
+            {% icon "arrow-right", "mt-1 size-5 shrink-0 justify-self-end text-gv transition group-hover:translate-x-0.5 @min-[29rem]:col-start-2 @min-[29rem]:row-start-1 @min-[29rem]:mt-3 @max-[17.5rem]:col-start-2 @max-[17.5rem]:row-start-1 @max-[17.5rem]:mt-3" %}
           </li>
         </ul>
       </div>
@@ -214,7 +217,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           in this named section was a landmark within a landmark; its cards' headings name them. -#}
       <div class="sticky-aside space-y-5">
         <div class="card card-pad">
-          <h3 class="card-h"><span>{% icon "video", "size-5" %}</span>{{ "read.gvr.help_title" | t(lang) }}</h3>
+          <h3 class="card-h"><span class="lt-fold">{% icon "video", "size-5" %}</span>{{ "read.gvr.help_title" | t(lang) }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-muted">{{ "read.gvr.help_text" | t(lang) }}</p>
           {% if meeting.next %}
           {#- the next meeting of the build's day, rolled on in the browser once it is over (app.js GV.meetingLines) -#}
@@ -228,7 +231,7 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
           <a class="btn-primary mt-4" href="{{ '/meetings/' | lurl(lang) }}#committee-meeting">{{ "read.gvr.help_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>
         </div>
         <div class="card card-pad">
-          <h3 class="card-h"><span>{% icon "mail", "size-5" %}</span>{{ "read.gvr.contact_title" | t(lang) }}</h3>
+          <h3 class="card-h"><span class="lt-fold">{% icon "mail", "size-5" %}</span>{{ "read.gvr.contact_title" | t(lang) }}</h3>
           <p class="mt-2 text-sm text-muted">{{ "read.gvr.contact_text" | t(lang) }}</p>
           <a class="link tap-link mt-1 break-all" href="mailto:{{ site.meeting.chair_email or site.contact_email }}">{{ site.meeting.chair_email or site.contact_email }}</a>
         </div>
@@ -360,9 +363,12 @@ pageStyles: ["/assets/vendor/lite-yt-embed.css"]
   <div class="card card-pad @container overflow-hidden">
     <div class="grid grid-cols-1 items-center gap-8 @3xl:grid-cols-[minmax(0,32rem)_minmax(0,304px)] @3xl:justify-center @3xl:gap-16">
       <div class="min-w-0">
+        {#- (each line's words a flex-1 column: at larger text, with less than ~7 characters' room beside the icon tile,
+            they go under it — main.css's rule for a text column; round 38b: "assembl|y", "imprímel|as" at 150 % with
+            relaxed spacing on a 320px phone) -#}
         <ul class="grid gap-3" role="list">
           {%- for p in [["grid-3x3", "bg-grape-soft text-grape"], ["map-pin", "bg-gv-soft text-gv"], ["printer", "bg-lv-soft text-lv"]] %}
-          <li class="flex items-center gap-3"><span class="grid size-10 shrink-0 place-items-center rounded-xl {{ p[1] }}">{% icon p[0], "size-5" %}</span><span class="font-semibold text-ink">{{ ("read.gvr.bingo_p" + loop.index) | t(lang) }}</span></li>
+          <li class="flex items-center gap-3"><span class="grid size-10 shrink-0 place-items-center rounded-xl {{ p[1] }}">{% icon p[0], "size-5" %}</span><span class="flex-1 font-semibold text-ink">{{ ("read.gvr.bingo_p" + loop.index) | t(lang) }}</span></li>
           {%- endfor %}
         </ul>
         <a class="btn-primary mt-6" href="{{ '/gvr/bingo/' | lurl(lang) }}">{% icon "grid-3x3", "size-4" %} {{ "read.gvr.bingo_btn" | t(lang) }} {% icon "arrow-right", "size-4" %}</a>

@@ -16,7 +16,8 @@ can do):
   * OfflineUpdate     — a new version of the offline worker takes over at once, even while an open tab's page is slow
                         to download again ("Reload" used to wait for every open tab: 12 s on a weak signal).
   * OfflineAreaStyles — a page opened online (not saved), then a new version, then no signal: the page opens with its
-                        own stylesheet (the Monthly poster lost its look: its sheet went with the old version).
+                        own stylesheet (the Monthly poster lost its look: its sheet went with the old version) and,
+                        since round 38b, its own scripts (Events lost committee.js).
   * ScriptErrors      — the main pages, English and Spanish, run without a script error.
   * PosterPicture     — a month's poster share picture (scripts/ops/poster_share.py, made by Website update) can be
                         made with this browser: 1200 × 630.
@@ -525,10 +526,17 @@ def worker_rewritten() -> str:
             "a network filter on this computer (AdGuard?) rewrites service workers — GitHub's Code check runs this one")
 
 
+# The <script src> of the page that could not load (an 'error' event on the element, seen from the window as it goes by)
+SCRIPT_FAILS = ("(() => { window.__gvScriptFails = []; window.addEventListener('error', (e) => { const t = e.target;"
+                " if (t && t.tagName === 'SCRIPT' && t.src) window.__gvScriptFails.push(t.src); }, true); })();")
+
+
 class OfflineAreaStyles(unittest.TestCase):
     """A page opened online (not saved), then a new version of the site, then no signal: the page opens from the worker's
     copy WITH its own stylesheet (the round-7 review: the Monthly poster came out as a page-wide unstyled picture — the
-    stylesheet went with the old version's cache; the worker now carries an old version's stylesheets on)."""
+    stylesheet went with the old version's cache; the worker now carries an old version's stylesheets on) — and, since
+    round 38b, with its own scripts (Events, Meetings and Photos opened without committee.js: the worker now carries on the
+    scripts of the versions its kept pages name)."""
 
     def tearDown(self):
         S["overrides"].unlink(missing_ok=True)
@@ -572,6 +580,39 @@ class OfflineAreaStyles(unittest.TestCase):
             self.assertEqual(offline["href"], online["href"], "the copy kept before the update (its old ?v= address)")
             self.assertEqual(offline["rules"], online["rules"], "its own stylesheet, offline after the update")
             self.assertEqual(again.evaluate("getComputedStyle(document.querySelector('[data-mp-poster]')).display"), shape)
+        finally:
+            ctx.close()
+
+    def test_a_page_opened_before_an_update_keeps_its_own_scripts_offline(self):
+        # Round 38: Events kept from before an update opened offline styled, but without committee.js (its filters, its
+        # calendar menus: window.CM) — the script was only in the old version's static cache, which the update deletes.
+        prefix = S["server"].prefix
+        newer = newer_worker("scripts")
+        why = worker_rewritten()
+        if why:
+            self.skipTest(why)
+        ctx = new_context(1280, 800, service_workers="allow")
+        ctx.add_init_script(SCRIPT_FAILS)
+        try:
+            page = open_page(ctx, "")
+            page.wait_for_function(WORKER_READY, timeout=30_000)
+            page.wait_for_timeout(1500)                # (the first visit's own keeping of the open tab)
+            visit = open_page(ctx, "events/")          # opened online, not saved: the worker keeps it, and its scripts
+            self.assertTrue(visit.evaluate("!!window.CM"), "committee.js runs on Events")
+            own = visit.evaluate("document.querySelector('script[src*=\"/assets/js/committee.js\"]').src")
+            visit.wait_for_function(IN_CACHE, arg=url("events/"), timeout=10_000)
+            visit.wait_for_function(IN_CACHE, arg=own, timeout=10_000)
+            visit.close()                              # (closed: not an open tab the new version keeps again)
+            S["overrides"].write_text(json.dumps({"files": {prefix + "sw.js": str(newer)}}), encoding="utf-8")
+            self.assertEqual(page.evaluate(NEW_VERSION_WAITING), "installed", "the new version installed and waits")
+            took = page.evaluate(TAKE_OVER)
+            self.assertEqual(took["state"], "activated", took)
+            ctx.set_offline(True)
+            again = ctx.new_page()
+            answered(again.goto(url("events/"), wait_until="load", timeout=60_000), "events/")
+            self.assertEqual(again.evaluate("window.__gvScriptFails"), [], "every script of the copy kept before the update")
+            self.assertTrue(again.evaluate("!!window.CM"), "committee.js runs offline after the update")
+            self.assertEqual(again.evaluate("document.querySelector('script[src*=\"/assets/js/committee.js\"]').src"), own)
         finally:
             ctx.close()
 

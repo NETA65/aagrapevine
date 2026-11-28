@@ -7,7 +7,9 @@ on January 20, 2027 — config/site.yml `meeting: speakers:`), in the chair's de
                  which version to choose), never "to be announced" — that is only for a speaker the list doesn't
                  name yet: a month after its last one (January 2028), or a month whose entry the site leaves out (a
                  full last name); an empty list has no speakers at all. The paperwork's meetings carry `no_speaker`
-                 for those dates (the sample committee meeting of tests/fixtures/presentations).
+                 for those dates (the sample committee meeting of tests/fixtures/presentations), and its card on
+                 /orientation/ counts the slides of the version it opens on — its short version until midnight
+                 after December 16, then the first one, a second state from that moment (round 38b: cardStates).
 The others judge what the committee edits (scripts/ops/gate_tests.py CONTENT_TESTS): the real settings, the
 committee's deck and the lessons —
   * Deck       — the committee meeting's deck as the build writes it (deckJson) and the player draws it
@@ -190,6 +192,44 @@ class Facts(unittest.TestCase):
         late = {x["ymd"]: x for x in self.facts(DEC20_2027)["rows"]}
         self.assertNotIn("no_speaker", late["2028-01-19"])
         self.assertNotIn("speaker", late["2028-01-19"])
+
+    def test_the_card_counts_the_version_the_deck_opens_on(self):
+        """The card on /orientation/ (eleventy/filters/presentations.js cardStates → orientation.njk): the version the
+        sample meeting opens on by itself and its slides — its short version, without the guest speaker's slide, for
+        November 18 and December 16 (none listed), until midnight Central after December 16, then the first version
+        (January 20: Rick W.) — a second state from that moment when the version changes before the next meeting
+        (round 38: the committee's card said 23 slides while its deck opened at "1 / 21"); the sample workshop (no
+        paperwork) always its first version and the build's own count."""
+        if not node_path():
+            self.skipTest("Node.js is not installed")
+        dec9 = "2026-12-09T18:00:00Z"
+        got = {now: run_js(self, CARD_JS, data={"now": now, "site": SITE}, now=now) for now in (NOV11, dec9, DEC16_AFTER, JAN10)}
+        r = got[NOV11]
+        full = r["count"]
+        short = len([i for i in r["ids"] if i not in r["hide"]])
+        self.assertLess(short, full, "the short version leaves the guest speaker out")
+        self.assertEqual(r["meeting"], [{"preset": "short", "count": short}], "November 18, then December 16: none")
+        for now in (dec9, DEC16_AFTER):
+            with self.subTest(now=now):
+                self.assertEqual(got[now]["meeting"], [{"preset": "short", "count": short, "until": DEC16_OVER},
+                                                       {"preset": "full", "count": full, "from": DEC16_OVER}])
+        self.assertEqual(got[JAN10]["meeting"], [{"preset": "full", "count": full}])
+        for now, g in got.items():
+            with self.subTest(now=now, deck="sample-workshop"):
+                self.assertEqual(g["workshop"], [{"preset": g["wfirst"], "count": g["wcount"]}])
+
+
+# What the cards on /orientation/ say of the sample decks' length at a clock (cardStates), from the test's own settings
+CARD_JS = r"""
+const P = await imp("eleventy/filters/presentations.js");
+const at = new Date(input.now);
+const decks = P.loadDecks("tests/fixtures/presentations", { now: at }).decks;
+const ctx = { db: {}, site: input.site, carry: {}, meeting: { upcoming: [] }, now: at };
+const meeting = decks.find((d) => d.id === "sample-meeting"), workshop = decks.find((d) => d.id === "sample-workshop");
+out({ meeting: P.cardStates(meeting, ctx), workshop: P.cardStates(workshop, ctx), count: meeting.count,
+      ids: meeting.slides.filter((s) => s.n_default).map((s) => s.id), hide: meeting.presets.find((p) => p.id === "short").hide,
+      wcount: workshop.count, wfirst: workshop.presets[0].id });
+"""
 
 
 # The committee's deck as the build writes it and the player draws it (the real settings, the build's clock `now`)

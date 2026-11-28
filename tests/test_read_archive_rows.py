@@ -11,6 +11,9 @@ src/pages/read-archive.11ty.js `more`, src/assets/js/read.js:
               ones all the same, in a <noscript> list (plain links: title, writer — every story of the issue is on the
               page once, in order, no Alpine, no script button); the issue's link to its own page on the magazine's
               site stays, and says "All 15 stories on aagrapevine.org".
+  * NoScriptOriginal — (round 38b) in that <noscript> list, a machine-translated title's original keeps its language
+              on itself alone: the hidden "Auto-translated:" / "Traducción automática:" before it is in the page's
+              language (never inside lang="en" on /es/read/, nor lang="es" on /read/); the line looks the same.
   * Script  — read.js on a page of its own: "Show all" fetches the file once, adds each story as the page draws it
               (its title and original title with their languages, its writer, free / subscribers, its Share: the
               magazine's own title and "— Grapevine, June 2026"), every value as text; the button goes and focus moves
@@ -29,6 +32,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fakedom import PAGE_JS  # noqa: E402
@@ -129,6 +134,66 @@ class Built(unittest.TestCase):
                 self.assertNotRegex(tpl, r'\s(x-[a-z]+|@[a-z]+|:[a-z-]+)=')
                 for f in ("t", "orig", "mt", "o", "meta", "a", "free", "sub"):
                     self.assertIn(f'data-f="{f}"', tpl)
+
+
+# Stories whose titles the page shows machine-translated: an earlier Grapevine issue's in Spanish on /es/read/, an
+# earlier La Viña issue's in English on /read/ (SSR_ROWS + 2 stories each, every one translated: the last two are
+# in the <noscript> list), past the current issues
+def translated(pub: str, key: str, n: int, lang: str) -> dict:
+    s = story(pub, key, n)
+    s.update({"i18n": {"title": {lang: f"Machine {lang} {n:02d}"}}, "machine": [lang]})
+    return s
+
+
+MT_DATA = {"articles": {"updated": "2026-10-06T06:00:00Z", "issues": [], "items": [
+    *[story("gv", "2026-10", n) for n in range(1, 4)],
+    *[story("lv", "2026-09", n) for n in range(1, 4)],
+    *[translated("gv", "2026-06", n, "es") for n in range(1, SSR_ROWS + 3)],
+    *[translated("lv", "2026-05", n, "en") for n in range(1, SSR_ROWS + 3)],
+]}}
+
+
+class NoScriptOriginal(unittest.TestCase):
+    """Without JavaScript (the <noscript> list of an earlier issue's other stories): a machine-translated title's
+    original keeps its own language on itself alone — never on the hidden "Auto-translated:" / "Traducción
+    automática:" before it, which is in the page's language (as the rows above it have it: read.njk articleRow).
+    What a reader sees is the same: the label is screen-reader only, and both are in the same small italic line."""
+    built: dict | None = None
+
+    def pages(self) -> dict:
+        if NoScriptOriginal.built is None:
+            with tempfile.TemporaryDirectory(prefix="gv-read-rows-mt-") as folder:
+                for name, body in MT_DATA.items():
+                    Path(folder, name + ".json").write_text(json.dumps(body), encoding="utf-8")
+                NoScriptOriginal.built = run_js(self, PAGES_JS, now="2026-10-06T15:00:00Z", timeout=300,
+                                                env={"SITE_DATA": folder, "WRITERS_ARCHIVE": ""})
+        return NoScriptOriginal.built
+
+    def test_the_original_title_alone_carries_its_language(self):
+        label = json.loads((ROOT / "src" / "_i18n" / "common.json").read_text(encoding="utf-8"))["common.auto_translated"]
+        for url, page_lang, pub, orig_lang in (("/es/read/", "es", "gv", "en"), ("/read/", "en", "lv", "es")):
+            with self.subTest(url=url):
+                page = self.pages()[url]
+                i = page.index(f'<details class="read-past card @container group/past" data-pub="{pub}"')
+                issue = page[i:page.index("</details>", i)]
+                ns = re.findall(r"<noscript>(.*?)</noscript>", issue, re.S)
+                self.assertEqual(len(ns), 1)
+                rows = re.findall(r"<li[^>]*>(.*?)</li>", ns[0], re.S)
+                self.assertEqual(len(rows), 2)
+                row = rows[-1]
+                n = int(re.search(rf"Machine {page_lang} (\d+)", row).group(1))
+                orig = f"Story {n:02d} of {'2026-06' if pub == 'gv' else '2026-05'}"
+                li = BeautifulSoup(row, "html.parser")
+                # the original title in a span of its own language, holding nothing else
+                o = li.find("span", attrs={"lang": orig_lang})
+                self.assertEqual((o.get_text(), o.find("span")), (orig, None))
+                # the hidden label in the page's language: inside no element marked with another language
+                sr = li.find("span", class_="sr-only")
+                self.assertEqual(sr.get_text(), label[page_lang] + ":")
+                self.assertIsNone(sr.find_parent(attrs={"lang": True}), f"the label is inside a lang= element: {row[:400]}")
+                # both in the one small italic line, as before (what a reader sees does not change)
+                self.assertIs(sr.parent, o.parent)
+                self.assertEqual(o.parent.get("class"), ["text-xs", "italic", "text-muted"])
 
 
 SCRIPT_JS = r"""

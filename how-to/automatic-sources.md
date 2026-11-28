@@ -115,11 +115,11 @@ also the quick rebuild after you save a file, the midday and evening refreshes a
 | Source (code) | What the robot reads | Your settings | Read in | Main pages | Row on `/status/` |
 |---|---|---|---|---|---|
 | Magazine stories (`articles.py`) | Each magazine's current-issue page, its archive, each story page once | `sources.grapevine.magazine_hub`, `sources.lavina.magazine_hub` | Full; morning of the 1st (current-issue pages only) | `/read/`, home, `/published/` | Grapevine & La Viña articles |
-| Writer's place (`geo.py`) | Nothing online: the place in each byline | `spotlight:` | Every build | home *Published writers*, `/published/` | — |
+| Writer's place (`geo.py`) | Nothing online: the place in each byline | `spotlight:` | Every build | `/published/`, `/read/`, `/contribute/` | — |
 | Document Library (`crawl.py`) | Both magazine sites page by page; every official document | `sources.crawler`, `library.official_hosts` | Full only, up to 40 minutes a day | `/library/`, `/shop/`, `/gvr/` | Document library |
 | Podcasts (`podcasts.py`) | Each show's RSS feed | `sources.podcasts` | Every run | `/listen/`, home | Podcasts |
 | YouTube (`youtube.py`) | The channel's feeds (no key) | `sources.youtube.channels`; `site.watch`, `site.listen`, `site.about_videos` | Full + push | `/watch/`, home, `/about/#videos`, `/gvr/#ideas` | YouTube |
-| Instagram (`instagram.py`) | The two accounts' public embed pages (or the official API) + your list | `sources.instagram`, `content/instagram.yml` | Full + push | `/instagram/`, home | Instagram |
+| Instagram (`instagram.py`) | The two accounts' public embed pages (or the official API) + your list | `sources.instagram`, `content/instagram.yml` | Full + push | `/instagram/` | Instagram |
 | Shop (`shop.py`) | Book of the Month pages, subscription listings, specialty items | `sources.<pub>.botm`, `subscriptions`, `subscription_regions`, `specialty`, `specialty_skip` | Full; morning of the 1st and 15th; specialty items weekly | `/shop/`, home teaser | Book of the Month, prices & specialty items |
 | Price changes (`price_changes.py`) | Nothing online: your `price_changes:` block | `price_changes:` | Every build | `/shop/#price-changes` | — (mistakes show as a *Settings problem* in the run summary) |
 | Daily quote (`quote.py`) | The two magazines' home pages | `sources.<pub>.quote_page`, `site.morning_goal` | Every run (in the morning refresh, right after Drive and the bulletin) | home quote card | Daily quote |
@@ -129,7 +129,7 @@ also the quick rebuild after you save a file, the midday and evening refreshes a
 | Grapevine meetings (`meetings.py`) | 8 intergroup / central office meeting lists | `meetings:` (and `spotlight.neta65_counties`, `data/geo/texas_places.json` for "our Area") | Full + push | `/meetings/#grapevine-meetings` | Grapevine meetings (our Area and nearby) |
 | Committee meeting (`meeting.py`) | Nothing online: your `meeting:` block | `meeting:` | Every build | `/meetings/#committee-meeting`, home, `/events/` | — (a wrong skip date shows as a *Settings problem* in the run summary) |
 | GV/LV event calendars (`events_external.py`) | The magazines' shared event calendar | — (only the sites' `base` addresses) | Full + push | `/events/` | GV/LV event calendars |
-| Texas writers archive (`writers_archive.py`) | Nothing online: the two archive files in `content/archive/` | the files; `writers_archive.min_rows_ratio`; `spotlight.neta65_counties` | Every run | `/published/#archive`, home, search | Texas writers archive (content/archive) |
+| Texas writers archive (`writers_archive.py`) | Nothing online: the two archive files in `content/archive/` | the files; `writers_archive.min_rows_ratio`; `spotlight.neta65_counties` | Every run | `/published/#archive`, search | Texas writers archive (content/archive) |
 
 All code is in [`scripts/sync/`](../scripts/sync/). Each module's opening comment (its *docstring*) is
 the detailed technical reference, and every module can be tried without writing its data file
@@ -222,11 +222,12 @@ about 7 PM Central got the next day).
 
 - `/read/` · `/es/read/` — the current issue of each magazine and the archive (older issues load from
   `/read-archive.json`). La Viña comes first on the Spanish page.
-- Home page — *From the magazines*: the latest issue of each, five stories each, plus "this month in
-  the Shop".
+- Home page — *From the magazines*: the latest issue of each, three stories each (since November 2026; five
+  before), plus "this month in the Shop".
 - The front covers: `/read/`, the home page, `/shop/`, the month's toolkit pages (`/monthly/2026-11/`) and
   the monthly e-mail.
-- *Published writers* on the home page and `/published/` · `/es/published/` (see [3.2](#32-where-a-writer-is-from-the-spotlight)).
+- *Published writers*, `/published/` · `/es/published/` (see [3.2](#32-where-a-writer-is-from-the-spotlight)); since November 2026
+  the home page only links it, from *More on this site*.
 - The Texas writers archive, `/published/#archive`: every captured story by a writer from Texas, **of any age**.
   `data/raw/articles.json` keeps every story it ever found — nothing is removed by age; a story the magazine took
   down is only marked "gone" and left out of the pages — so each new Texas story joins the archive by itself,
@@ -304,9 +305,9 @@ Odd values fall back quietly: a number of days outside 1–366 is ignored (60, a
 | `Monterrey, N.L.` (a La Viña byline) | other | Nuevo León, Mexico |
 | (no place) | unknown | |
 
-**Where it shows.** Home *Published writers* (Area 65 writers first, then the rest of Texas, last 60
-days), `/published/` · `/es/published/` (60 or 90 days; Area 65 / Texas / everywhere), `/read/`,
-`/contribute/`, `/digest/` and the monthly e-mail. The Texas writers archive below the recent stories reads the
+**Where it shows.** `/published/` · `/es/published/` (Area 65 writers first, then the rest of Texas; 60 or 90
+days, opening on the last 60 — `home_days`, the window of the home page's *Published writers* section until
+November 2026; Area 65 / Texas / everywhere), `/read/`, `/contribute/`, `/digest/` and the monthly e-mail. The Texas writers archive below the recent stories reads the
 same counties, for the places of its old bylines too (with a few extra rules for typos and small places,
 `geo.classify_writer`: [Writers archive §7](writers-archive.md#7-how-area-65-is-decided)). The Meetings page uses
 the same county list for its "Our Area" group ([3.13](#313-grapevine-meetings-from-the-intergroup-lists)).
@@ -443,7 +444,7 @@ The run's log (step *Sync sources and translate*) sums this up in the crawl's li
 
 **Where it shows.** `/library/` · `/es/library/` (30 cards, the rest load from `/library-index.json`;
 filters by source, type, language and year; collections: GVR kit, RLV kit, catalogs, flyers, news,
-committee reports), the home page *Library* row (the 6 newest), `/shop/#catalogs` and the order forms,
+committee reports), `/shop/#catalogs` and the order forms,
 `/gvr/`, the writer kit on `/contribute/`, `/monthly/`, the GV/LV report, What's New and the RSS feed
 (dated documents only), `/digest/`, search. Visitors always read "document", never "PDF".
 
@@ -882,7 +883,7 @@ automatic check still reads it that day; then it stays like any other post (and 
 longer among the newest 130). Hand-added posts are never pruned by age.
 
 > Note: a hand-added post takes its place **by its own date** (newest first). `/instagram/` shows 12
-> posts per account (up to 48 with "show more") and the home page row only the 6 newest, so an
+> posts per account (up to 48 with "show more"), so an
 > **older** post you add is visible on `/instagram/` only while its account has fewer than 48 newer
 > posts on the site. Each account posts about 2 a day and the site keeps 130, so after a few weeks an
 > old post drops out of view there (it stays in the data and in the search).
@@ -895,7 +896,7 @@ caption → "AA Grapevine on Instagram" / "La Viña en Instagram". A real one (O
 
 **Where it shows.** `/instagram/` · `/es/instagram/`: one column per account, 12 posts shown and up to
 48 with "show more", the saved picture in a 4:5 frame; nothing loads from instagram.com until a visitor
-presses "Show post here". The home page Instagram row (6 posts, alternating accounts). What's New and
+presses "Show post here". What's New and
 the RSS feed, `/monthly/`, `/digest/` and the monthly e-mail (how many posts each account shared, and
 the newest), search.
 
@@ -1295,8 +1296,9 @@ lveditorial@aagrapevine.org).
 **How often.** The full daily update — and the quick run of a save that changed one of its settings
 (`sources.<pub>.contribute`, `themes_page`, `themes_link`, `rlv_resources`, a site's `base`).
 
-**Where it shows.** `/contribute/#deadlines` · `/es/contribute/#deadlines`; the home page *Write for
-the magazines* (4 themes); `/published/`; `/monthly/`; the GV/LV report; the workshop presentations;
+**Where it shows.** `/contribute/#deadlines` · `/es/contribute/#deadlines`; the home page (the next story
+deadline on its *I want to write my story* button, and the *Write for the magazines* line under the magazines,
+to the themes and deadlines); `/published/`; `/monthly/`; the GV/LV report; the workshop presentations;
 the GVR / RLV orientation; search; the booth display (the next 3 themes of each magazine whose deadline is still
 ahead). Themes are never "new" (their date is a deadline). Since October 2026 also:
 
@@ -1598,7 +1600,8 @@ when it lasts at most 3 hours; an end that would make it longer is dropped, as b
 
 **Where it shows.** `/meetings/#grapevine-meetings` · `/es/meetings/#grapevine-meetings` — their one
 home: our Area first, then each nearby region in your order, with filters for place, day, in person /
-online and "include nearby areas". One line on the home page, `/monthly/`, the GV/LV report, the
+online and "include nearby areas". A *Grapevine meetings near you* button in the home page's *Upcoming events*
+(while our Area has one), `/monthly/`, the GV/LV report, the
 orientation, and the search (one result per group and place: a group that meets several times a week
 is one result). The offices themselves (not their meetings) are also the "AA offices in our Area" buttons of the
 *New to AA?* card at the top of `/meetings/` (each office with `in_area: true`, by its own `site`):
@@ -1789,7 +1792,7 @@ min_rows_ratio` (0.8: a new file much smaller than the last one is not used) and
 the nightly full update and every push. A push of a new file shows it about 3 minutes later.
 
 **Where it shows.** `/published/#archive` · `/es/published/#archive` ("Texas writers through the years"), the
-JSON file of the rest of Texas (`/published/texas-archive.json`), one line on the home page, the site search
+JSON file of the rest of Texas (`/published/texas-archive.json`), the site search
 (the writers' towns and counties, never their names), and the row **Texas writers archive** on `/status/`. Its
 stories never go into the 60/90-day lists, the digest or the district report.
 
@@ -1851,7 +1854,7 @@ workflow (*Actions* tab on GitHub) can start in five ways:
 | **Midday refresh** (quick) | GitHub's schedule, set for 7:07 AM Central (6:07 AM in winter), also 4 hours early | about 11 AM–1 PM Central | Google Drive, the bulletin and event files, podcasts, the writers archive files, the daily quote | a few minutes |
 | **Evening refresh** (quick) | GitHub's schedule, set for 3:07 PM Central (2:07 PM in winter), also 4 hours early | about 7–9 PM Central | the same as the midday refresh | a few minutes |
 | **Quick rebuild after you save** | saving a file in `config/`, `content/`, `src/`, the code, `data/geo/`, `overrides.yml` or `glossary.yml` | right away | the same as the midday refresh, **plus** the sources only the full update reads whose own input you changed (YouTube, Instagram, editorial themes, weekly open meetings, record your story, Grapevine meetings, GV/LV event calendars — never the magazine stories, the shop or the document search) | about 3 minutes for settings and content; about 5 when the save changed the code, which the run tests before it publishes ([Automation §4.8](automation-and-troubleshooting.md#48-the-tests-before-publishing)); allow up to 10 more minutes before every copy of the page shows it |
-| **Morning refresh** | the Morning check (the 4:30 AM alarm, plus GitHub's hourly backstop) | before 5:30 AM Central | Drive (5 minutes at most), the bulletin, then the daily quote, then podcasts and the writers archive files; on the **1st** also the magazines' current-issue pages and the shop; on the **15th** the shop | about 3 minutes |
+| **Morning refresh** | the Morning check (GitHub's hourly schedule, the main way until the 4:30 AM alarm is set up — a run that comes from 8:15 PM waits until 2 AM —; then the alarm) | before 5:30 AM Central (without the alarm, on some mornings later) | Drive (5 minutes at most), the bulletin, then the daily quote, then podcasts and the writers archive files; on the **1st** also the magazines' current-issue pages and the shop; on the **15th** the shop | about 3 minutes |
 | **By hand** | *Actions → Website update → Run workflow* (your MKP715 login can do this) | when you click | all boxes empty = a full run; **skip_crawl** = quick; **morning** = morning | full: usually 10 to 15 minutes; quick: about 3 minutes |
 
 On the 1st of the month — and after a day GitHub skipped — the Morning check also starts the full update.
@@ -1914,7 +1917,7 @@ More on runs, the Morning check and the run summary: [Automation and troubleshoo
 
 | Page (English · Spanish) | What the automatic sources put there |
 |---|---|
-| Home `/` · `/es/` | daily quote card; *From the magazines* (5 stories per issue) and "this month in the Shop"; *Write for the magazines* (4 themes); *Listen & Watch* (a featured episode + 3 more, the weekly open line, the newest video as a strip under them); *Published writers*; the next committee meeting and next Grapevine Meeting cards and a link to the Grapevine meetings; *Library* (the 6 newest documents); *Instagram* (6 posts) |
+| Home `/` · `/es/` | (a short page since November 2026) the next committee meeting's and the next Grapevine Meeting's cards; *Where would you like to start?* (four buttons: the writing one with the next story deadline, the subscribing one "from $… a month" once the stores' prices are known); *Pinned on the Bulletin* (only the pinned posts, two at most, and only while one is on); the daily quote card; *From the magazines* (each magazine's current cover and 3 stories from its latest issue, the featured ones first), "this month in the Shop" (while the Book of the Month offer is on) and the *Write for the magazines* line (the themes and deadlines; the deadlines calendar while a deadline is open); *Listen & watch* (the newest episode, which plays there, beside *More episodes* — the next 3, 2 on phones — with the weekly open meetings' line under them, then the newest video as one compact strip); *Upcoming events* (the next 3 — our two monthly meetings are in the cards at the top — and a *Grapevine meetings near you* button while our Area has one); *More on this site*: links, no sections, to the Bulletin, the Library, Published writers, Instagram, the Portfolio, Photos and Stay updated |
 | `/read/` · `/es/read/` | magazine stories: the current issues and the archive |
 | `/published/` · `/es/published/` | stories by writers from Area 65 and Texas; editorial themes; the Texas writers archive (`#archive`: the archive files + every captured Texas story) |
 | `/library/` · `/es/library/` | official documents (next to the committee's own documents from Drive) |

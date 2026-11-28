@@ -14,7 +14,8 @@ content/events file (since the events list's redesign, November 2026).
     onto a day where another holds the plain slug, gets the "-2", whatever the list's order.
   * OldAnchors (eleventy/event-redirects.js oldAnchors, eventRedirects): the "ev-<its id>" address and the aliases,
     never the address it has now; one redirect page per old address and language, to its page now — none for a
-    cancelled event that is over, none for an event that keeps its address.
+    cancelled event that is over, none for an event that keeps its address; (round 38b) its title in each language
+    as its page writes it, without the spaces a calendar left inside its brackets (tidyBrackets).
   * Lines (scripts/sync/announcements.py event_district, event_language — through parse_event and collect): `district:`
     a district's number ("District 87", "Distrito 91", 87) → extra.district; `language:` en / es / both (English,
     español, bilingual …) → extra.language; anything else is left out and listed (the event still shows); no line, no
@@ -181,9 +182,14 @@ const items = [
 ];
 const cancelled = [ev("ev:flyer:off", "flyer", "2026-12-20", { slug: "2026-12-20-off", cancelled: true }),
                    ev("ev:flyer:over", "flyer", "2026-11-01", { slug: "2026-11-01-over", cancelled: true, past: true })];
+// (round 38b) a title from a calendar with spaces inside its brackets (La Viña's: "… ( A.A. Un camino a la vida )")
+const zone = Object.assign(ev("ev:lvcal:zone", "lv-calendar", "2027-01-29", { slug: "2027-01-29-xlii-reunion" }), {
+  title: "XLII REUNIÓN DE A.A. ZONA NORTE DE TEXAS ( A.A. Un Camino a la vida )",
+  i18n: { title: { en: "XLII North Texas Zone A.A. Gathering ( A.A. A Way of Life )", es: "XLII Reunión de A.A. Zona Norte de Texas ( A.A. Un camino a la vida )" } } });
 out({
   old: items.map(R.oldAnchors),
   redirects: R.eventRedirects(items, cancelled, { built: "2026-11-26T18:00:00Z" }, ["en", "es"]),
+  tidy: R.eventRedirects([zone], [], { built: "2026-11-26T18:00:00Z" }, ["en", "es"]).map((x) => [x.lang, x.title]),
 });
 """
 
@@ -202,6 +208,10 @@ class OldAnchors(unittest.TestCase):
             ("es", "/es/events/ev-flyer-off/"): "/es/events/2026-12-20-off/",
         })
         self.assertEqual({x["title"] for x in r["redirects"] if x["lang"] == "es" and "abc" in x["path"]}, {"T es"})
+        # (round 38b) its title as its page writes it — no space a calendar left inside the brackets (tidyBrackets):
+        # the Spanish page's tab read "… ( A.A. Un camino a la vida )"
+        self.assertEqual(r["tidy"], [["en", "XLII North Texas Zone A.A. Gathering (A.A. A Way of Life)"],
+                                     ["es", "XLII Reunión de A.A. Zona Norte de Texas (A.A. Un camino a la vida)"]])
 
 
 class Lines(unittest.TestCase):
